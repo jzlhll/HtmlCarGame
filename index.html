@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#142b2d">
+  <title>四季车途 · 本机赛车</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/src/style.css">
+  <script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js"}}</script>
+</head>
+<body>
+  <main id="game" tabindex="0" aria-label="四季车途赛车游戏">
+    <div id="scene"></div>
+    <header class="topbar">
+      <div class="brand"><span class="brand-icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 10 2-5h10l2 5M5 10h14l2 3v5H3v-5l2-3Z"/><path d="M3 18v2h3v-2m12 0v2h3v-2M7 14h1m8 0h1"/></svg></span><div>四季车途<small>FOUR SEASONS / ENDLESS ROAD</small></div></div>
+    </header>
+    <section id="hud" class="hud" aria-label="当前状态">
+      <div class="metric distance"><span>行驶距离 / 得分</span><strong id="distance">0</strong><small>米</small></div>
+      <div class="metric"><span>运行时间</span><strong id="elapsed">00:00</strong></div>
+      <div class="metric"><span>速度</span><strong id="speed">43</strong><small>km/h</small><div class="speed-track"><i id="speed-fill"></i></div></div>
+      <div class="metric growth"><span id="rank">01 / 自行车</span><strong id="progress">0 / 2</strong><div class="growth-track"><i id="growth-fill"></i></div></div>
+    </section>
+    <div id="road-alert" class="road-alert" hidden></div>
+    <div id="toast" class="toast" role="status" hidden></div>
+    <div id="storage-warning" class="storage-warning" hidden></div>
+    <div id="overlay" class="overlay"></div>
+  </main>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
