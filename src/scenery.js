@@ -20,7 +20,7 @@ export class RoadsideScenery {
   }
   begin(s,d,angle=0,pitch=false){
     const p=this.renderer.road.at(s,d),origin=this.layoutOrigin;
-    this.anchor.position.set(p.x-origin.x,p.y-origin.y,p.z-origin.z);this.anchor.rotation.set(pitch?p.pitch:0,-p.heading+angle,0,'YXZ');this.anchor.scale.setScalar(1);this.anchor.updateMatrix();this.root.copy(this.anchor.matrix);
+    this.anchor.position.set(p.x-origin.x,this.renderer.road.groundElevation(s)-origin.y,p.z-origin.z);this.anchor.rotation.set(pitch?p.pitch:0,-p.heading+angle,0,'YXZ');this.anchor.scale.setScalar(1);this.anchor.updateMatrix();this.root.copy(this.anchor.matrix);
   }
   add(color,size,position,shape='box',rotation=[0,0,0],animation=null){
     const key=shape+':'+color+':'+Boolean(animation);
@@ -102,6 +102,7 @@ export class RoadsideScenery {
   createLayout(block,plots,spacing){
     const station=(block+.5)*spacing,local=block%plots;
     const layout={origin:this.renderer.road.at(station),parts:[]};
+    if(this.renderer.road.forksRange(station-65,station+65).length)return layout;
     this.layout=layout;this.layoutOrigin=layout.origin;
     const rng=random(this.renderer.road.seed^(local*197));
     if(rng()>=SITE_CHANCE){this.layout=null;return layout;}

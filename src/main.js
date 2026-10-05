@@ -3,10 +3,12 @@ import { Input } from './input.js';
 import { Game } from './game.js';
 import { UI } from './ui.js';
 import { GameRenderer } from './render.js';
+import { GameAudio } from './audio.js';
 const container=document.getElementById('game');
 const store=new SaveStore(),input=new Input(container);
 let ui;
-const game=new Game(store,input,message=>ui?.notify(message));ui=new UI(game);
+const audio=new GameAudio();
+const game=new Game(store,input,message=>ui?.notify(message));game.audio=audio;ui=new UI(game);
 input.onSpace=()=>{if(!ui.resetConfirm)game.space();};input.onBlur=()=>game.pause();
 try{
   const renderer=new GameRenderer(document.getElementById('scene'));game.renderer=renderer;
@@ -20,7 +22,7 @@ try{
     }else accumulator=0;
     game.animate(dt);
     if(game.state==='RUNNING'||game.state==='DYING'||renderer.needsFrame(game))renderer.draw(game,dt);
-    ui.update(dt);inFrame=false;
+    ui.update(dt);audio.update(dt,game);inFrame=false;
     if(game.state==='RUNNING'||game.state==='DYING'||renderer.needsFrame(game))frameId=requestAnimationFrame(frame);
   };
   const wake=()=>{
@@ -29,7 +31,7 @@ try{
   };
   renderer.onInvalidate=wake;
   const onChange=game.onChange;
-  game.onChange=()=>{onChange();renderer.invalidate();};
+  game.onChange=()=>{onChange();renderer.invalidate();audio.setState(game.state);};
   wake();
 }catch(error){
   console.error('WebGL initialization failed',error);

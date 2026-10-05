@@ -1,8 +1,9 @@
-import { SEASONS } from './config.js';
+import { SEASONS, MAX_RANK, RULES_VERSION } from './config.js';
 const KEY='htmlCarGame.save.v1';
-const defaults=()=>({schemaVersion:1,rulesVersion:1,updatedAt:null,leaderboard:[]});
+const SCHEMA_VERSION=2;
+const defaults=()=>({schemaVersion:SCHEMA_VERSION,rulesVersion:RULES_VERSION,updatedAt:null,leaderboard:[]});
 const number=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0;
-const validRun=r=>r&&typeof r.runId==='string'&&r.runId.length<100&&number(r.runSeed)&&SEASONS.includes(r.startSeason)&&r.rulesVersion===1&&typeof r.endedAt==='string'&&Number.isFinite(Date.parse(r.endedAt))&&['death','quit'].includes(r.endReason)&&number(r.distanceMeters)&&number(r.activeSeconds)&&Number.isInteger(r.highestRank)&&r.highestRank>=1&&r.highestRank<=6&&Array.isArray(r.eatenByType)&&r.eatenByType.length===6&&r.eatenByType.every(v=>number(v)&&Number.isInteger(v))&&(r.deathCause===null||typeof r.deathCause==='string');
+const validRun=r=>r&&typeof r.runId==='string'&&r.runId.length<100&&number(r.runSeed)&&SEASONS.includes(r.startSeason)&&r.rulesVersion===RULES_VERSION&&typeof r.endedAt==='string'&&Number.isFinite(Date.parse(r.endedAt))&&['death','quit'].includes(r.endReason)&&number(r.distanceMeters)&&number(r.activeSeconds)&&Number.isInteger(r.highestRank)&&r.highestRank>=1&&r.highestRank<=MAX_RANK&&Array.isArray(r.eatenByType)&&r.eatenByType.length===MAX_RANK&&r.eatenByType.every(v=>number(v)&&Number.isInteger(v))&&(r.deathCause===null||typeof r.deathCause==='string');
 const order=(a,b)=>b.score-a.score||b.distanceMeters-a.distanceMeters||Date.parse(a.endedAt)-Date.parse(b.endedAt);
 export class SaveStore {
   constructor(){this.data=defaults();this.warning='';this.blocked=false;this.load();}
@@ -11,7 +12,9 @@ export class SaveStore {
       const raw=localStorage.getItem(KEY);
       if(!raw){this.data=defaults();this.warning='';this.blocked=false;return;}
       const data=JSON.parse(raw);
-      if(data.schemaVersion!==1||data.rulesVersion!==1||!Array.isArray(data.leaderboard)||data.leaderboard.length>10||!data.leaderboard.every(validRun)) throw new Error('Invalid save');
+      // 五级车型规则启用时清空旧版记录，不迁移旧等级或吞吃分类。
+      if(data.schemaVersion===1&&data.rulesVersion===1){localStorage.removeItem(KEY);this.data=defaults();this.warning='';this.blocked=false;this.write();return;}
+      if(data.schemaVersion!==SCHEMA_VERSION||data.rulesVersion!==RULES_VERSION||!Array.isArray(data.leaderboard)||data.leaderboard.length>10||!data.leaderboard.every(validRun)) throw new Error('Invalid save');
       for(const r of data.leaderboard)r.score=Math.floor(r.distanceMeters);
       data.leaderboard.sort(order);
       this.data={...defaults(),updatedAt:data.updatedAt||null,leaderboard:data.leaderboard};this.warning='';this.blocked=false;
