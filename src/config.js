@@ -7,6 +7,15 @@ export const VEHICLES = [
   {name:'坦克', length:2.5, width:1.875, min:25, max:55, playerMax:125, lateral:4.35, color:0x829b83},
 ];
 export const MAX_RANK=VEHICLES.length-1;
+// 玩家座驾涂装：yellow/blue/green 为纯色，rainbow 使用渐变贴图；默认绿色。
+export const CAR_COLORS=[
+  {id:'yellow',name:'黄色',hex:0xf5cc58,css:'#f5cc58'},
+  {id:'blue',name:'蓝色',hex:0x4f86d6,css:'#4f86d6'},
+  {id:'green',name:'绿色',hex:0x3fae6a,css:'#3fae6a'},
+  {id:'rainbow',name:'彩虹色',hex:'rainbow',css:'linear-gradient(135deg,#ff4d4d 0%,#ff9f2e 22%,#ffe14d 42%,#3ecf6a 60%,#2eb8ff 80%,#b05fff 100%)'},
+];
+export const DEFAULT_CAR_COLOR='green';
+export const carColor=id=>CAR_COLORS.find(c=>c.id===id)??CAR_COLORS.find(c=>c.id===DEFAULT_CAR_COLOR);
 export const RULES_VERSION=2;
 // 统一放大实体车身，渲染和碰撞共用尺寸；最宽坦克仍能通过 3.6 米车道。
 export const VEHICLE_LENGTH_SCALE=2.4;
@@ -41,11 +50,11 @@ export const REAR_END_INVINCIBLE_SECONDS=2;
 // 调试复活后保护两秒，包括截止墙和道路障碍；暂停不消耗。
 export const DEBUG_REVIVE_SECONDS=2;
 export const AUTO_ACCELERATION=6;
-// 低速按上键优先进行普通加速，不消耗氮气；到达正常最高速度的 60% 后改为喷气。
-export const MANUAL_ACCELERATION={maxRatio:.6,acceleration:35};
+// 上键普通加速可直接到车型最高速,不消耗氮气;氮气须停按后再按且已在最高速时才消耗。
+export const MANUAL_ACCELERATION={acceleration:35};
 export const NITRO={
   capacity:2, // 气量以管为单位，最多存两管，允许消耗或补充半管等部分气量。
-  eatCharge:.5, // 吞吃一辆车补充半管，与总容量及成长积分独立。
+  eatCharge:.5, // 吞吃回气按车型计算:eatCharge×被吃车辆等级(自行车半管,每高一级加半管,封顶两管)。
   eatSideSeconds:.4, // 同一方向连续侧移超过此时长吞吃，回气翻倍为一管；短按横移只得基础半管。
   speedMultiplier:1.66, // 喷气时正常上限提高 66%（63% 提升 5% 后取整），车型喷气上限按 km/h 四舍五入。
   boostAcceleration:70, // 喷气每秒额外提速，单位 km/h，低速同样有效。
@@ -59,24 +68,15 @@ export const UPGRADE_POINTS = XP.map((_,rank)=>rank===0?0:(rank>=MAX_RANK?XP[MAX
 export const HUNGER={intervalSeconds:10,bicycleDebtLimit:2};
 // 饥饿、同级追尾和奶牛接触共用扣分量：前一级车型价值，自行车为 1。
 export const POINT_LOSS=XP.map((_,rank)=>rank===0?0:XP[Math.max(1,rank-1)]);
-// 各车型使用整数防御刻度，按武器类型计算有效伤害，避免三分之一伤害的浮点误差。
+// 各车型使用整数防御刻度：max 为满防御,lightning 为闪电的单次伤害;炮弹等新伤害源按 max 的比例计算。
 // 抗击打能力由伤害 / 满防御决定，不同车型的刻度不直接比较。
 export const VEHICLE_DEFENSE=[null,
-  {max:1,bullet:1,rocket:1},
-  {max:2,bullet:1,rocket:2},
-  {max:2,bullet:1,rocket:2},
-  {max:15,bullet:3,rocket:5},
-  {max:10,bullet:1,rocket:2},
+  {max:1,lightning:1},
+  {max:2,lightning:2},
+  {max:2,lightning:2},
+  {max:15,lightning:5},
+  {max:10,lightning:2},
 ];
-// 武器只属于路边建筑，车辆不携带攻击系统。
-export const FORTIFICATIONS={
-  bunker:{interval:4,kind:'rocket',size:.44,height:3.1},
-  tower:{interval:6,kind:'bullet',size:.36,height:5.4},
-  spacing:120,range:260,offset:7,
-};
-export const PROJECTILES={bullet:{speed:75,radius:.12},rocket:{speed:55,radius:.32}};
-// 路边建筑按玩家车型抽取开火概率，统一乘以 0.9。
-export const COMBAT={unlockSeconds:75,tankChance:.8,chanceStep:.15,chanceMultiplier:.9,capacity:128,lifetime:8};
 export const ONCOMING_SPEED_SCALE=1.44; // 对向巡航速度为基础区间的 144%，生成时按 km/h 四舍五入。
 export const TRAFFIC_WEIGHTS={
   lower:.1,higher:.3,higherMax:.35,higherStep:.01,stepDistance:2000, // 后方车流的等级分布。
@@ -84,6 +84,8 @@ export const TRAFFIC_WEIGHTS={
   ahead:{oneLower:.6,otherLower:.1,higher:.1,higherMax:.15},
 };
 export const TRAFFIC_SPAWN_AHEAD={min:160,max:240};
+// 升至三轮车或小汽车时，立即在当前路线前方投放同级与低一级各五辆。
+export const UPGRADE_TRAFFIC={countPerRank:5,minAhead:80,maxAhead:150};
 // 后方车流覆盖本车道；新车远离玩家投放，超过保留距离才回收，距离单位为米。
 export const TRAFFIC_SPAWN_BEHIND={min:120,max:200,retainDistance:260,intervalSeconds:1};
 // 后车接近到至少 45 米或六秒追赶距离内时提示，不为玩家减速或避让。
@@ -105,14 +107,23 @@ export const ROAD_CURVES={extraPairChance:.75,minAngle:12,maxAngle:22,minLength:
 // 树木共用几何与实例批次，高度、冠幅及松树比例只在静态布局刷新时抽取。
 export const TREE_SCENERY={capacity:150,coniferChance:.3,minHeight:4.8,maxHeight:7.2,minRadius:1.3,maxRadius:1.9};
 export const ROAD_DIFFICULTY={
-  afterSeconds:150,warningDistance:60,taperLength:400,bulletChanceIncrease:.1,
-  // 玩家越过永久收窄过渡段后，同时提高建筑攻击与车流随机变道强度。
-  fourLane:{bulletChanceIncrease:.25,rocketChanceIncrease:.2,laneChangeChanceIncrease:.25,laneChangeIntervalMin:4,laneChangeIntervalMax:7,dangerousChance:.25},
+  afterSeconds:150,warningDistance:60,taperLength:400,
+  // 玩家越过永久收窄过渡段后，提高车流随机变道与危险车强度。
+  fourLane:{laneChangeChanceIncrease:.25,laneChangeIntervalMin:4,laneChangeIntervalMax:7,dangerousChance:.25},
 };
 // 施工只关闭一个车道，区间长度为米；与永久收窄保持独立。
 export const ROADWORKS={first:380,interval:400,chance:.5,minLength:30,maxLength:100,warningDistance:240,barrierWidth:3.4};
 // 减速倍率仅用于泥巴和河道谷底；建筑道路间距为加长分叉预留平地区间。
-export const ROAD_INFRASTRUCTURE={trainChance:.2,dipLength:20,slowMultiplier:.5,trainSpeed:22,trainLength:42,gapMin:1600,gapMax:2320};
+// 高架与低沉地形随机:高度/深度与坡长独立抽取,长坡高而平缓(顶峰较远),短坡高而陡(很快到顶);
+// 最小坡长按 maxGrade 反推(|高度|×1.5÷最大坡度,smooth 曲线峰值坡度为高度×1.5÷坡长),坡度不会越界。
+export const ROAD_INFRASTRUCTURE={
+  trainChance:.4,dipLength:20,slowMultiplier:.5,trainSpeed:22,trainLength:42,gapMin:800,gapMax:1160, // 间距由 1600–2320 缩半,起伏路段出现频率加倍;分叉只在较宽的间距区间(可用跨度≥minSpan)内安放。
+  viaductHeightMin:14,viaductHeightMax:40, // 桥面高度抽取范围(米),原 14–20 大幅上调。
+  viaductRampMin:120,viaductRampMax:400, // 引桥坡长抽取范围(米):400 米长坡配高桥即"高而缓",被坡度反推抬高后即"高而陡"。
+  dipDepthMin:3,dipDepthMax:16, // 谷底深度抽取范围(米,向下),原固定 3。
+  dipRampMin:40,dipRampMax:180, // 低沉坡长抽取范围(米)。
+  maxGrade:.35, // 坡度上限(垂直/水平),约 19°,防止短坡组合出失真的悬崖。
+};
 // 跨度按公共道路里程计，副路另校验实际弧长；分离距离为中段路面边缘的空隙。
 export const ROAD_FORKS={chance:.8,minSpan:880,maxSpan:1760,minLength:800,maxLength:2000,separationMin:40,separationMax:60,potholeSpacing:22,potholeChance:.7,weatherChance:.85,weatherIntervalMin:3,weatherIntervalMax:7};
 // 同一车队共享低速目标和短投放净距，普通车流使用独立的生成净距。
@@ -130,16 +141,59 @@ export const AUDIO={
   tank:{gain:.5,range:55,pan:.6},
   pass:{range:7,minSpeed:8,gain:.13},
   beep:{hz:880,gain:.05},
+  graze:{intervalSeconds:.16}, // 擦角噪声的最小间隔，避免持续接触时密集叠加。
+  // 警车警笛:低频单音按固定节奏往复脉冲,形成“嗯、嗯、嗯”的短促鸣响,每个脉冲带轻微下滑;
+  // 按距离衰减并随警车所在侧偏置声像。救护车的高低双音不在此列。
+  police:{hz:470,dropHz:110,pulseHz:3.1,gain:.4,range:170,pan:.7},
+  // 天降炮弹:下落啸声从高频滑向低频,命中为低频爆响;落点在玩家附近,不做距离衰减。
+  shell:{whistleHz:1300,whistleDropHz:320,gain:.3,boomGain:.6},
 };
 export const SEASONS = ['春','夏','秋','冬'];
-export const WEATHER={duration:9,windDuration:6,windSpeed:.5,freezeSeconds:3,fogNear:10,fogFar:50};
+// 非分叉路段天气按 intervalMin~intervalMax 秒随机投放,首次开场 firstMin~firstMax 秒;分叉路段使用 ROAD_FORKS 的天气字段。
+export const WEATHER={duration:9,windDuration:6,windSpeed:.5,freezeSeconds:3,fogNear:10,fogFar:50,intervalMin:31,intervalMax:45,firstMin:12,firstMax:25};
 // 白马按有效运行时间每分钟投放；保护总长 10 秒包含末尾 2 秒闪烁，回落另计。
 export const WHITE_HORSE={
   intervalSeconds:60,speed:60,minAhead:20,maxAhead:35,
   visibleSeconds:6,blinkSeconds:2,length:3.8,width:1.3,
   rampSeconds:1,shieldSeconds:10,shieldBlinkSeconds:2,recoverySeconds:2,speedMultiplier:2,
 };
+// 警车追击:无敌警车随机出现,速度自由——只按前方距离窗口调节车速并极速避让车流。
+// 进入撒网范围后周期性向玩家预判位置发射渔网,落地接触即被抓,随后弹出所选年级的答题(数学口算与语文古诗)。
+export const POLICE={
+  intervalMin:30,intervalMax:120, // 开局及撤离后随机等待 30~120 秒。
+  spawnAheadMin:35,spawnAheadMax:55, // 生成在玩家前方 35~55 米。
+  keepMin:15,keepMax:42, // 警车与玩家保持的前方距离窗口(米),保证始终在屏幕内且不太远。
+  keepGain:.9, // 窗口内距离保持的力度:每偏差 1 米修正 0.9 km/h,使间距收敛到窗口中点。
+  chaseRatio:1.5, // 间距小于 keepMin 时警车加速到玩家速度的该倍数拉开(速度自由,不拦截玩家)。
+  closeRatio:.7, // 间距超过 keepMax 时警车减速到玩家速度的该比例,让玩家跟上来。
+  dodgeSpeed:12,dodgeLookahead:26, // 极快避让车流:横向速度(米/秒)与前向观察距离(米)。
+  netRange:32, // 与玩家距离小于该值(米)才开始撒网。
+  netInterval:3, // 撒网间隔(秒,常量,后续可修改)。
+  netSizeBase:3, // 渔网初始边长(米,原 10 缩到 1/3 取整),3×3。
+  netSizeGrowth:.28, // 警车持续期间渔网边长每秒增长(米),增长力度常量。
+  netSizeMax:16, // 渔网边长上限,保证仍可躲。
+  netFallBase:2, // 渔网初始落下时长(秒)。
+  netFallGrowth:.14, // 落下时长每秒增长(秒),增长力度常量。
+  netFallMax:4, // 落下时长上限。
+  netKeep:6, // 渔网落地后存活时间(秒),期间接触即被抓。
+  catchSeconds:1.5, // 被抓动画时长:玩家缩小并被拉向警车。
+  maxChaseSeconds:45, // 警车持续时长上限,靠连续无敌加速消耗它即可甩掉。
+};
 export const LANE_WIDTH = 3.6;
+// 天降炮弹:开局 startSeconds 后按 intervalMin~intervalMax 秒随机投弹,落点取玩家前方并横向抖动;
+// fallSeconds 为预警圈+下落时长(留给玩家躲避),areaSize 为爆炸区域基础边长(米,常量,后续可调),
+// 炮击开始后每满 sizeGrowthSeconds 秒边长增大 sizeGrowthFactor 倍(复利,弹体携带生成时的尺寸)。
+// 玩家被直接命中即死亡;坦克只损失 tankDamageFraction 满防御、卡车损失 truckDamageFraction(取整后经统一防御流程)。
+export const SHELL={
+  startSeconds:120,
+  intervalMin:10,intervalMax:22,
+  fallSeconds:2.5,
+  areaSize:6, // 基础爆炸区域边长(米),由 7.5 缩小 25% 取整。
+  sizeGrowthSeconds:30,sizeGrowthFactor:1.2, // 炮击开始后每 30 秒爆炸边长增大 20%。
+  targetAheadMin:0,targetAheadMax:45,
+  targetJitter:7,
+  tankDamageFraction:1/3,truckDamageFraction:1/2,
+};
 export const laneD = (lane, direction = 1) => direction * (.4 + (lane + .5) * LANE_WIDTH);
 export const clamp = (v, low, high) => Math.max(low, Math.min(high, v));
 export const lerp = (a,b,t) => a+(b-a)*t;
@@ -154,3 +208,7 @@ export function random(seed) {
   };
 }
 export const approach = (value, target, delta) => value < target ? Math.min(target,value+delta) : Math.max(target,value-delta);
+// 启动早期应用 URL 测试参数(?fast=1 或 ?POLICE.intervalMin=3 等白名单字段),
+// 仅服务 Agent/人工快速验证随机事件;不带参数或 Node 端导入时默认值原样生效。
+import { applyTestOverrides } from './test-overrides.js';
+applyTestOverrides({POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});

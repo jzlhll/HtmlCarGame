@@ -1,15 +1,17 @@
-import { VEHICLES, MAX_RANK, RULES_VERSION, XP, POINT_LOSS, HUNGER, PROJECTILES, VEHICLE_DEFENSE, SEASONS, AUTO_ACCELERATION, MANUAL_ACCELERATION, NITRO, REAR_END_INVINCIBLE_SECONDS, DEBUG_REVIVE_SECONDS, ROAD_INFRASTRUCTURE, ROAD_DIFFICULTY, laneD, clamp, lerp, approach } from './config.js';
+import { VEHICLES, MAX_RANK, RULES_VERSION, XP, POINT_LOSS, HUNGER, VEHICLE_DEFENSE, SEASONS, AUTO_ACCELERATION, MANUAL_ACCELERATION, NITRO, REAR_END_INVINCIBLE_SECONDS, DEBUG_REVIVE_SECONDS, ROAD_INFRASTRUCTURE, ROAD_DIFFICULTY, POLICE, laneD, clamp, lerp, approach, random } from './config.js';
 import { Road } from './road.js';
 import { Traffic } from './traffic.js';
 import { RoadHazards, MUD_SECONDS, BUMP_SECONDS, surfaceContact } from './hazards.js';
 import { sweep, roadworkContact, classify, separation, bounceTravel, advanceBounce, startBounce } from './collision.js';
-import { Combat, projectileContact } from './combat.js';
 import { CrossingCows } from './crossings.js';
+import { Shelling } from './shell.js';
 import { Nitro } from './driving.js';
 import { WhiteHorseEvent } from './white-horse.js';
+import { PoliceEvent } from './police.js';
+import { makeQuestion } from './quiz.js';
 import { SeasonalWeather } from './weather.js';
 import { RoadInfrastructure } from './infrastructure.js';
-export const CAUSES={frontFatal:'撞击更高级车辆或追尾后积分耗尽',bicycleRearFatal:'自行车追尾自行车',sideFatal:'侧碰更高级车辆',wall:'撞上截止车道的墙',roadwork:'撞上施工封闭路段',projectile:'被子弹或火箭弹击毁',lightning:'被闪电击毁',cowFatal:'撞上横穿马路的奶牛',hunger:'饥饿死亡'}; // 火车仅在桥下装饰性经过，不参与碰撞判定。
+export const CAUSES={frontFatal:'撞击更高级车辆或追尾后积分耗尽',bicycleRearFatal:'自行车追尾自行车',sideFatal:'侧碰更高级车辆',wall:'撞上截止车道的墙',roadwork:'撞上施工封闭路段',lightning:'被闪电击毁',shell:'被天降炮弹炸毁',cowFatal:'撞上横穿马路的奶牛',hunger:'饥饿死亡',quizWrong:'答错警车追击题目'}; // 火车仅在桥下装饰性经过,不参与碰撞判定;警车无敌,接触只触发答题不直接致死。
 
 const maxVehicleLength=Math.max(...VEHICLES.slice(1).map(vehicle=>vehicle.length));
 const maxPlayerSpeed=Math.max(...VEHICLES.slice(1).map(vehicle=>vehicle.playerMax))*2;
@@ -21,9 +23,9 @@ function motionSnapshot(target,old,time,out){
 
 export class Game {
   constructor(store,input,notify){
-    this.store=store;this.input=input;this.notify=notify;this.state='READY';this.deathTime=0;this.debugMode=false;this.debugRun=false;this.debugInvincibleUntil=0;this.renderer=null;this.onChange=()=>{};this.collisionCandidates=[];this.collisionGroup=[];this.separatedCars=new Set();this.collisionBegin={};this.collisionShot={};this.collisionSites=[];this.collisionWalls=[];this.collisionWorks=[];this.collisionHazards=[];this.preview();
+    this.store=store;this.input=input;this.notify=notify;this.state='READY';this.carColor=store.getColor();this.deathTime=0;this.debugMode=false;this.debugRun=false;this.debugInvincibleUntil=0;this.renderer=null;this.onChange=()=>{};this.collisionCandidates=[];this.collisionGroup=[];this.separatedCars=new Set();this.collisionBegin={};this.collisionSites=[];this.collisionWalls=[];this.collisionWorks=[];this.collisionHazards=[];this.preview();
   }
-  preview(){this.renderer?.resetRun();this.seed=6183;this.whiteHorse=new WhiteHorseEvent(this.seed);this.weather=new SeasonalWeather(this.seed);this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.combat=new Combat(this.seed);this.crossings=new CrossingCows(this.road);this.nitro=new Nitro();this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:42.5,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};this.traffic=new Traffic(this.road,this.seed);this.activeSeconds=0;this.nextHungerAt=HUNGER.intervalSeconds;this.startSeason=0;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;this.scraping=false;this.debugRun=false;this.debugInvincibleUntil=0;}
+  preview(){this.renderer?.resetRun();this.seed=6183;this.whiteHorse=new WhiteHorseEvent(this.seed);this.police=new PoliceEvent(this.seed);this.quiz=null;this.caught=null;this.weather=new SeasonalWeather(this.seed);this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.nitroHeld=false;this.nitroHold=false;this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:42.5,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};this.traffic=new Traffic(this.road,this.seed);this.activeSeconds=0;this.nextHungerAt=HUNGER.intervalSeconds;this.startSeason=0;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;this.scraping=false;this.debugRun=false;this.debugInvincibleUntil=0;}
   async start(){
     if(this.state!=='READY'&&this.state!=='RESULT')return;
     this.audio?.ensure();
@@ -33,8 +35,8 @@ export class Game {
     await new Promise(resolve=>requestAnimationFrame(resolve));
     try{
       this.seed=crypto.getRandomValues(new Uint32Array(1))[0];this.runId=crypto.randomUUID();
-      this.whiteHorse=new WhiteHorseEvent(this.seed);this.weather=new SeasonalWeather(this.seed);
-      this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.combat=new Combat(this.seed);this.crossings=new CrossingCows(this.road);this.nitro=new Nitro();this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:42.5,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};
+      this.whiteHorse=new WhiteHorseEvent(this.seed);this.police=new PoliceEvent(this.seed);this.quiz=null;this.caught=null;this.weather=new SeasonalWeather(this.seed);
+      this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.nitroHeld=false;this.nitroHold=false;this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:42.5,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};
       this.traffic=new Traffic(this.road,this.seed);this.traffic.populate(this.player);
       this.startSeason=this.seed%4;this.activeSeconds=0;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;
       this.nextHungerAt=HUNGER.intervalSeconds;
@@ -44,16 +46,55 @@ export class Game {
       this.audio?.start();
     }catch(error){console.error('Game preparation failed',error);this.state='READY';this.notify('本局准备失败，请重新按空格。');this.onChange();}
   }
+  // 颜色在开场说明页直接切换：选择立即生效并写入本机，下次开局使用。
+  setColor(id){
+    if(!['READY','RESULT'].includes(this.state)||id===this.carColor||!this.store.setColor(id))return;
+    this.carColor=id;this.renderer?.setCarColor(id);this.onChange();
+  }
   space(){if(this.state==='READY'||this.state==='RESULT')this.start();else if(this.state==='RUNNING')this.pause();else if(this.state==='PAUSED'){this.input.clear();this.state='RUNNING';this.onChange();}}
+  policeContact(){
+    // 接触警车(或被抓动画结束):冻结当前局面,按所选年级生成题目,进入答题状态;时间与音效同步暂停。
+    // 题目随机走独立种子流(本局种子+接触时刻),不消耗各事件系统的随机序列,自动化验证可复现。
+    this.caught=null;
+    this.nitro.stop();this.input.clear();this.scraping=false;
+    this.quiz=makeQuestion(this.store.data.grade,random(this.seed^0x7ab91e^Math.floor(this.activeSeconds*1024)));
+    this.state='QUIZ';this.onChange();
+  }
+  caughtBy(net){
+    // 被渔网罩住:冻结局面,播放缩小并被拉向警车的动画(catchSeconds),随后弹出答题。
+    this.nitro.stop();this.input.clear();this.scraping=false;
+    const police=this.police.police;
+    this.caught={t:0,police:{s:police.s,d:police.d,route:police.route??null}};
+    this.audio?.netCatch();
+    this.state='CAUGHT';this.onChange();
+  }
+  answerQuiz(choice){
+    if(this.state!=='QUIZ'||!this.quiz)return;
+    const correct=choice===this.quiz.answer;
+    this.quiz=null;
+    if(correct){
+      this.police.dismiss(this.activeSeconds);
+      this.state=document.hasFocus()&&!document.hidden?'RUNNING':'PAUSED';
+      this.input.clear();this.onChange();
+      this.notify('回答正确 · 警车撤离');
+    }else this.die('quizWrong');
+  }
   pause(){if(this.state!=='RUNNING')return;this.state='PAUSED';this.input.clear();this.onChange();}
   ready(){if(this.state!=='RESULT')return;this.state='READY';this.preview();this.input.clear();this.onChange();}
   season(){const period=this.activeSeconds%120;return {index:(this.startSeason+Math.floor(this.activeSeconds/120))%4,blend:clamp((period-110)/10,0,1),remaining:Math.ceil(120-period)};}
+  normalCap(){
+    // 车型正常最高速,已计入泥巴、河道谷底与天气限速,不含氮气加成。
+    const p=this.player,penalty=(p.mud>0||this.road.dip(p.s)?.feature==='river')?ROAD_INFRASTRUCTURE.slowMultiplier:1;
+    return Math.min(VEHICLES[p.rank].playerMax*penalty,this.weather.speedLimit(p,this.activeSeconds));
+  }
   cap(){
-    const p=this.player,normal=VEHICLES[p.rank].playerMax,penalty=(p.mud>0||this.road.dip(p.s)?.feature==='river')?ROAD_INFRASTRUCTURE.slowMultiplier:1;
+    const p=this.player,normal=VEHICLES[p.rank].playerMax;
     const horseSpeed=this.horseSpeed(p,this.activeSeconds);
     if(horseSpeed!==null)return horseSpeed;
-    // 氮气允许突破车型正常上限，但不突破泥巴和河道谷底限速。
-    return Math.min(penalty<1?normal*penalty:this.nitro.limit(normal),this.weather.speedLimit(p,this.activeSeconds));
+    // 氮气允许突破车型正常上限,但不突破泥巴、河道谷底与天气限速。
+    const base=this.normalCap();
+    if(base<normal)return base;
+    return Math.min(this.nitro.limit(normal),this.weather.speedLimit(p,this.activeSeconds));
   }
   horseSpeed(player,now){
     const speed=this.whiteHorse.speed(player,now);
@@ -61,16 +102,24 @@ export class Game {
     return speed*(this.road.dip(player.s)?.feature==='river'?ROAD_INFRASTRUCTURE.slowMultiplier:1);
   }
   travel(player,now,dt){
-    const factor=this.whiteHorse.speed(player,now)!==null&&this.road.dip(player.s)?.feature==='river'?ROAD_INFRASTRUCTURE.slowMultiplier:1;
-    return this.whiteHorse.travel(player,now,dt)*factor/this.road.pathScale(player.s,player.route);
+    const active=this.whiteHorse.speed(player,now)!==null;
+    const factor=active&&this.road.dip(player.s)?.feature==='river'?ROAD_INFRASTRUCTURE.slowMultiplier:1;
+    let distance=this.whiteHorse.travel(player,now,dt);
+    // 无敌不免除行车约束：强化与回落期间擦边刮擦仍按固定速率扣减前进距离。
+    if(active&&this.scraping)distance=Math.max(0,distance-15/3.6*dt);
+    return distance*factor/this.road.pathScale(player.s,player.route);
   }
   releaseNitro(dt){
     const p=this.player;
-    if(this.whiteHorse.speed(p,this.activeSeconds)!==null||p.frozenUntil>this.activeSeconds){this.nitro.stop();return;}
-    const held=this.input.nitro&&!this.input.down&&!this.scraping,threshold=VEHICLES[p.rank].playerMax*MANUAL_ACCELERATION.maxRatio;
-    const accelerating=held&&p.speed<threshold;
-    const used=this.nitro.advance(dt,p.speed,held&&!accelerating&&p.speed>0);
-    if(accelerating)p.speed=Math.min(threshold,p.speed+MANUAL_ACCELERATION.acceleration*dt);
+    if(this.whiteHorse.speed(p,this.activeSeconds)!==null||p.frozenUntil>this.activeSeconds){this.nitro.stop();this.nitroHeld=false;this.nitroHold=false;return;}
+    const held=this.input.nitro&&!this.input.down&&!this.scraping;
+    // 上键普通加速直接到车型最高速;氮气只在"停按后再按"且已处于最高速时消耗,按住从低速升到最高速不触发。
+    if(!held)this.nitroHold=false;
+    else if(!this.nitroHeld)this.nitroHold=p.speed>0&&p.speed>=this.normalCap();
+    this.nitroHeld=held;
+    const accelerating=held&&p.speed<this.normalCap();
+    const used=this.nitro.advance(dt,p.speed,this.nitroHold&&!accelerating);
+    if(accelerating)p.speed=Math.min(this.normalCap(),p.speed+MANUAL_ACCELERATION.acceleration*dt);
     // 按实际消耗的喷气时长提速，避免反复点按叠加瞬时倍率。
     p.speed+=NITRO.boostAcceleration*used;
   }
@@ -96,23 +145,24 @@ export class Game {
     p.speed*=.5;
     p.speed=Math.min(p.speed,this.cap());
   }
-  hurtProjectile(damage,cause='projectile'){
+  hurt(damage,cause){
     const p=this.player;
     p.defense=Math.max(0,p.defense-damage);
     this.renderer?.effect(this.player.s,this.player.d,'hit');
     if(p.defense>0){this.audio?.impact();return;}
-    // 防御耗尽仅降一级，积分固定到下一级门槛；溢出弹伤不传递到新车型。
+    // 防御耗尽仅降一级，积分固定到下一级门槛；溢出伤害不传递到新车型。
     if(p.rank===1){this.die(cause);return;}
     p.xp=XP[p.rank-1];
+    this.grow(cause);
   }
   eat(car){
     this.eaten[car.rank-1]++;
     // 吞吃只增加成长积分，同车型吞吃不恢复防御。
     this.player.xp=Math.min(XP[MAX_RANK],this.player.xp+XP[car.rank]);
     this.nextHungerAt=this.activeSeconds+HUNGER.intervalSeconds;
-    // 吞吃即回气；同方向持续侧移超过阈值时奖励翻倍。
+    // 吞吃即按车型回气(等级越高越多);同方向持续侧移超过阈值时奖励翻倍。
     const sideEat=this.input.lateral!==0&&this.input.lateralSeconds>NITRO.eatSideSeconds;
-    this.nitro.charge(sideEat?NITRO.eatCharge*2:NITRO.eatCharge);
+    this.nitro.charge((sideEat?2:1)*NITRO.eatCharge*car.rank);
     car.remove=true;this.renderer?.effect(car.s,car.d,'eat',car);
   }
   grow(cause='hunger'){
@@ -124,6 +174,7 @@ export class Game {
     p.rank=rank;
     if(rank!==previousRank)p.defense=VEHICLE_DEFENSE[rank].max;
     if(rank>previousRank)this.audio?.upgrade();else if(rank<previousRank)this.audio?.downgrade();
+    if(rank>previousRank&&(rank===2||rank===3))this.traffic.spawnUpgrade(p);
     this.highestRank=Math.max(this.highestRank,rank);
     p.speed=Math.min(p.speed,this.cap());
     if(rank<previousRank)p.invincibleUntil=this.activeSeconds+REAR_END_INVINCIBLE_SECONDS;
@@ -156,7 +207,7 @@ export class Game {
     for(const cow of this.crossings.cows){cow.s=lerp(cow.previous.s,cow.s,time);cow.d=lerp(cow.previous.d,cow.d,time);}
     const horse=this.whiteHorse.horse;if(horse)horse.s=lerp(horse.previous.s,horse.s,time);
   }
-  die(cause){this.cause=cause;this.state='DYING';this.deathTime=0;this.nitro.stop();this.combat.clearProjectiles();this.input.clear();this.audio?.explosion();this.onChange();}
+  die(cause){this.cause=cause;this.state='DYING';this.deathTime=0;this.nitro.stop();this.input.clear();this.audio?.explosion();this.onChange();}
   revive(){
     const p=this.player;
     // 保留死亡位置与车型，将总积分恢复到当前车型门槛，保留更高的有效积分。
@@ -173,7 +224,6 @@ export class Game {
     if(this.saved)return;
     this.saved=true;
     this.nitro.stop();
-    this.combat.clearProjectiles();
     this.renderer?.resetEffects();
     this.result={runId:this.runId,runSeed:this.seed,startSeason:SEASONS[this.startSeason],rulesVersion:RULES_VERSION,endedAt:new Date().toISOString(),endReason:reason,deathCause:reason==='death'?this.cause:null,distanceMeters:this.player.distance,score:Math.floor(this.player.distance),activeSeconds:this.activeSeconds,highestRank:this.highestRank,eatenByType:[...this.eaten]};
     if(!this.debugRun)this.store.record(this.result);
@@ -189,7 +239,7 @@ export class Game {
     const from=Math.min(start.s,finish.s)-padding,to=Math.max(start.s,finish.s)+padding+maxTravel;
     const sites=this.road.infrastructure(from,to,this.collisionSites),walls=this.road.walls(from,to-from,this.collisionWalls);
     const works=this.road.roadworks(from,to,this.collisionWorks),hazards=this.hazards.range(from,to,this.collisionHazards);
-    while(cursor<1-1e-8&&iterations++<16+this.combat.projectiles.length+this.traffic.cars.length){
+    while(cursor<1-1e-8&&iterations++<16+this.traffic.cars.length){
       candidates.length=0;
       const playerSize=VEHICLES[start.rank],fork=this.road.fork(start.s);
       const horseProtected=this.whiteHorse.shielded(this.activeSeconds);
@@ -204,12 +254,6 @@ export class Game {
         const begin=motionSnapshot(car,old,cursor,this.collisionBegin);
         const event=sweep(start,finish,begin,car,this.road);
         if(event&&!(separated.has(car.id)&&(event.kind==='graze'||event.kind==='overlap'))){event.car=car;candidates.push(event);}
-      }
-      for(const shot of this.combat.projectiles){
-        if(shot.remove||shot.until<cursor||(protectedNow&&!horseProtected))continue;
-        const begin=this.collisionShot;begin.s=lerp(shot.previous.s,shot.s,cursor);begin.d=lerp(shot.previous.d,shot.d,cursor);
-        const event=projectileContact(begin,shot,start,finish,PROJECTILES[shot.kind].radius,start.route?this.road:null);
-        if(event&&cursor+(1-cursor)*event.time<=shot.until+1e-8){event.shot=shot;candidates.push(event);}
       }
       for(const site of sites){
         if(site.kind!=='dip'||site.feature!=='river'||this.infrastructure.dipHits.has(site.id)||start.s>site.flatStart||finish.s<site.flatStart||finish.s===start.s)continue;
@@ -228,6 +272,10 @@ export class Game {
       }
       const horseContact=this.whiteHorse.contact(start,finish,this.activeSeconds,dt*(1-cursor),cursor,this.road);
       if(horseContact)candidates.push(horseContact);
+      // 调试无敌期间不检测警车与渔网,避免复活保护被弹题打断。
+      if(!debugProtected){const policeContact=this.police.contact(start,finish,cursor,this.road);
+      if(policeContact)candidates.push(policeContact);
+      const netEvent=this.police.netContact(start,finish,this.activeSeconds,this.road);if(netEvent)candidates.push(netEvent);}
       if(!debugProtected)for(const wall of walls)for(const sign of [-1,1]){
         const obstacleKey='wall:'+wall.end+':'+sign;
         if(this.whiteHorse.smashed.has(obstacleKey))continue;
@@ -259,12 +307,20 @@ export class Game {
       group.length=0;for(const event of candidates){if(Math.abs(event.time-t)>=1e-6)break;group.push(event);}
       this.player.s=lerp(start.s,finish.s,t);this.player.d=lerp(start.d,finish.d,t);this.activeSeconds+=dt*(global-cursor);
       advanceBounce(this.player,dt*(global-cursor));
+      // 落地渔网接触:进入被抓动画;警车车身接触(兜底)直接弹题,均优先于同刻其他事件。
+      // 渔网的命中标记在事件真正入选结算时才落笔,查询阶段的候选不会提前消费渔网。
+      const netHit=group.find(e=>e.netCatch);
+      if(netHit){netHit.net.hit=true;this.freezeTraffic(global);this.caughtBy(netHit.net);return;}
+      const policeHit=group.some(e=>e.police);
+      if(policeHit){this.freezeTraffic(global);this.policeContact();return;}
       if(group.some(e=>e.immunityEnd))this.activeSeconds=this.player.invincibleUntil;
       const boundary=group.find(e=>e.horseBoundary);if(boundary)this.activeSeconds=boundary.horseBoundary;
       for(const event of group)if(event.dip){this.infrastructure.dipHits.add(event.dip.id);this.player.speed*=ROAD_INFRASTRUCTURE.slowMultiplier;this.audio?.splash();}
       if(group.some(e=>e.horse)){this.whiteHorse.collect(this);this.audio?.horse();}
       const horseSpeed=this.horseSpeed(this.player,this.activeSeconds);if(horseSpeed!==null)this.player.speed=horseSpeed;
       if(this.whiteHorse.shielded(this.activeSeconds)){
+        // 无敌只免伤不免则：断头路截止墙仍然致命，不撞破。
+        if(group.some(e=>e.wall)){this.freezeTraffic(global);this.die('wall');return;}
         this.deflect(group);
         const remaining=dt*(1-global);
         finish.s=this.player.s+this.travel(this.player,this.activeSeconds,remaining);
@@ -282,18 +338,17 @@ export class Game {
         else if(e.roadwork)e.action='roadwork';
         else if(e.hazard)e.action='hazard';
         else if(e.weatherHazard)e.action='weather';
-        else if(e.shot)e.action='shot';
         else if(e.cow)e.action=rank<=2?'cowFatal':'cowDowngrade';
         else e.action=classify(rank,e.car,e,this.nitro.boost>0);
       }
       for(const e of group)if(e.cow){e.cow.hit=true;this.renderer?.effect(e.cow.s,e.cow.d,'hit');}
       const fatal=group.find(e=>CAUSES[e.action]);
-      const incoming=group.reduce((sum,e)=>sum+(e.shot?VEHICLE_DEFENSE[rank][e.shot.kind]:e.weatherHazard?.kind==='lightning'?VEHICLE_DEFENSE[rank].rocket:0),0);
+      // 闪电伤害按车型防御刻度扣减;其余同刻事件不再有远程伤害源。
+      const incoming=group.reduce((sum,e)=>sum+(e.weatherHazard?.kind==='lightning'?VEHICLE_DEFENSE[rank].lightning:0),0);
       if(fatal){this.freezeTraffic(global);this.die(fatal.action);return;}
       const rearEnd=group.some(e=>e.action==='downgrade'),cowHit=group.some(e=>e.action==='cowDowngrade');
       const ate=group.some(e=>e.action==='eat'),fuel=this.nitro.tanks;
       for(const e of group){
-        if(e.shot)e.shot.remove=true;
         if(e.weatherHazard){
           e.weatherHazard.hits.add('player');
           if(e.weatherHazard.kind==='ice'){this.weather.freeze(this.player,this.activeSeconds);this.audio?.freeze();}
@@ -314,9 +369,13 @@ export class Game {
       this.audio?.collision(group);
       let contacts=0;for(const e of group)if(e.action==='downgrade'||e.action==='cowDowngrade')contacts++;
       this.player.xp-=contacts*POINT_LOSS[rank];
-      if(rearEnd)this.hurtSlow();
-      // 先处理本组弹伤；防御耗尽时固定下一级积分，吞吃不能抵消防御致命伤害。
-      if(incoming)this.hurtProjectile(incoming,group.some(e=>e.weatherHazard?.kind==='lightning')?'lightning':'projectile');
+      if(rearEnd){
+        // 同级追尾至少降一级，不能用门槛以上的积分抵消；保留原有扣分结果。
+        this.player.xp=Math.min(this.player.xp,XP[rank]-1);
+        this.hurtSlow();
+      }
+      // 先处理本组闪电伤害；防御耗尽时固定下一级积分，吞吃不能抵消防御致命伤害。
+      if(incoming)this.hurt(incoming,'lightning');
       if(this.state==='DYING'){this.nitro.tanks=fuel;this.freezeTraffic(global);return;}
       const cause=cowHit?'cowFatal':rearEnd?'frontFatal':'hunger';
       this.grow(cause);
@@ -325,7 +384,6 @@ export class Game {
       // 同刻伤害造成降级或死亡时不获得吞吃回气，积分仍按统一规则汇总。
       if(this.state==='DYING'||this.player.rank<rank)this.nitro.tanks=fuel;
       if(this.state==='DYING'){this.freezeTraffic(global);return;}
-      if(cowHit)this.notify('撞到奶牛');
       for(const e of group)if(e.action==='graze'){
         const target=motionSnapshot(e.car,e.car.previous||e.car,global,this.collisionBegin);
         this.player.d+=separation(this.player,target,this.road,e.direction);
@@ -346,7 +404,7 @@ export class Game {
     this.input.advance(dt);
     if(this.activeSeconds+dt>=ROAD_DIFFICULTY.afterSeconds)this.road.narrowAfter(this.player.s);
     this.infrastructure.advance(dt,this);
-    this.weather.advance(this);this.whiteHorse.advance(dt,this);
+    this.weather.advance(this);this.whiteHorse.advance(dt,this);this.police.advance(dt,this);
     const p=this.player,start={...p};
     p.mud=Math.max(0,p.mud-dt);p.bump=Math.max(0,p.bump-dt);
     this.releaseNitro(dt);
@@ -361,7 +419,6 @@ export class Game {
     next.d+=this.road.branchCenter(next.s,p.route)-this.road.branchCenter(p.s,p.route);
     this.crossings.step(dt,p);
     this.traffic.step(dt,p,this.activeSeconds+dt,this.weather,this.infrastructure,this);
-    this.combat.advance(dt,this);
     const startedAt=this.activeSeconds;
     this.collisionStep(start,next,dt);
     this.traffic.resolveContacts(this.activeSeconds-startedAt,this);
@@ -371,18 +428,25 @@ export class Game {
     if(this.state!=='RUNNING')return;
     const size=VEHICLES[p.rank],footprint=(size.width*Math.abs(Math.cos(p.yaw))+size.length*Math.abs(Math.sin(p.yaw)))/2;
     const bounds=this.road.drivableBounds(p.s,p.route);
-    if(this.whiteHorse.shielded(this.activeSeconds)&&!p.route){const edge=this.whiteHorse.edge(this.road,p.s,this.activeSeconds);bounds.min=Math.min(bounds.min,-edge);bounds.max=Math.max(bounds.max,edge);}
     const min=bounds.min+footprint,max=bounds.max-footprint;
     const scrape=p.d<=min+.012||p.d>=max-.012;
     if(scrape){
       p.d=clamp(p.d,min,max);
       if(this.road.segment(p.s).kind==='taper')p.d=approach(p.d,0,dt);
     }
-    this.scraping=scrape&&!this.whiteHorse.shielded(this.activeSeconds);
-    this.combat.finishStep(dt,this);
+    // 无敌期间擦边判定与普通行驶一致：夹回路面、标记刮擦减速。
+    this.scraping=scrape;
+    this.shell.advance(dt,this);
+    if(this.state!=='RUNNING')return;
     for(const [id,s]of this.hazards.hits)if(s<p.s-20)this.hazards.hits.delete(id);
   }
   animate(dt){
+    if(this.state==='CAUGHT'){
+      // 被抓动画计时;动画结束转入答题流程。
+      this.caught.t+=dt;
+      if(this.caught.t>=POLICE.catchSeconds)this.policeContact();
+      return;
+    }
     if(this.state!=='DYING')return;
     this.deathTime+=dt;
     if(this.deathTime>=1.2){if(this.debugRun)this.revive();else this.finish('death');}

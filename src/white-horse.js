@@ -75,5 +75,4 @@ export class WhiteHorseEvent {
   }
   boundary(now){return this.buff?[this.buff.from+WHITE_HORSE.rampSeconds,this.buff.shieldUntil,this.buff.until].find(time=>time>now+1e-10):undefined;}
   breakObstacle(key,s){if(!this.smashed.has(key)){this.smashed.set(key,s);this.revision++;}}
-  edge(road,s,now){return this.shielded(now)?Math.max(road.edge(s),.4+3*LANE_WIDTH):road.edge(s);}
 }

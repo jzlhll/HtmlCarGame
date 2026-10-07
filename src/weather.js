@@ -1,21 +1,43 @@
-import { WEATHER, ROAD_FORKS, laneD, random, lerp, clamp } from './config.js';
-import { projectileContact } from './combat.js';
+import { WEATHER, ROAD_FORKS, VEHICLES, laneD, random, lerp, clamp } from './config.js';
+
+// 天气落点(泥浆/冰面)与移动目标的连续接触检测:双方使用道路弧长及横向位置;可选按路线坐标系换算。
+export function projectileContact(from,to,target,targetNext,radius,road=null){
+  if(road){
+    const p=road.at(target.s,target.d,target.route),next=road.at(targetNext.s,targetNext.d,targetNext.route),a=road.at(from.s,from.d,from.route),b=road.at(to.s,to.d,to.route);
+    const heading=p.heading+(target.yaw||0),sin=Math.sin(heading),cos=Math.cos(heading);
+    const coordinates=point=>({s:(point.x-p.x)*sin-(point.z-p.z)*cos,d:(point.x-p.x)*cos+(point.z-p.z)*sin});
+    from=coordinates(a);to=coordinates(b);target={...target,s:0,d:0,yaw:0};targetNext={...targetNext,...coordinates(next),yaw:0};
+  }
+  const size=target.dimensions||VEHICLES[target.rank];
+  const yaw=target.yaw||0,sin=Math.sin(yaw),cos=Math.cos(yaw);
+  const ds=from.s-target.s,dd=from.d-target.d,ms=to.s-from.s-(targetNext.s-target.s),md=to.d-from.d-(targetNext.d-target.d);
+  let enter=0,exit=1;
+  for(let i=0;i<2;i++){
+    const half=(i===0?size.length:size.width)/2;
+    const position=i===0?ds*cos+dd*sin:dd*cos-ds*sin,motion=i===0?ms*cos+md*sin:md*cos-ms*sin,reach=half+radius;
+    if(Math.abs(motion)<1e-10){if(Math.abs(position)>reach)return null;continue;}
+    const a=(-reach-position)/motion,b=(reach-position)/motion;
+    enter=Math.max(enter,Math.min(a,b));exit=Math.min(exit,Math.max(a,b));
+    if(enter>exit+1e-8)return null;
+  }
+  return enter<=1&&exit>=0?{time:Math.max(0,enter)}:null;
+}
 
 // 天气按有效游戏时间推进，事件及落点使用稳定标识，暂停不消耗持续时间。
 export class SeasonalWeather {
   constructor(seed){
     this.rng=random(seed^0x6ac473b9);this.route=null;this.event=null;this.hazards=[];this.starts=[];this.nextId=1;
-    this.nextAt=lerp(12,25,this.rng());this.nextHazardAt=0;
+    this.nextAt=lerp(WEATHER.firstMin,WEATHER.firstMax,this.rng());this.nextHazardAt=0;
     this.contactStart={};this.contactFinish={};this.trafficStart={};
   }
   advance(game){
     const now=game.activeSeconds;this.road=game.road;
     const route=game.player.route??null;
-    if(route!==this.route){this.route=route;this.event=null;this.hazards=[];this.nextAt=now+(route ? .5 : lerp(12,25,this.rng()));}
+    if(route!==this.route){this.route=route;this.event=null;this.hazards=[];this.nextAt=now+(route ? .5 : lerp(WEATHER.firstMin,WEATHER.firstMax,this.rng()));}
     if(this.event&&now>=this.event.until){this.event=null;this.hazards=[];}
     this.starts=this.starts.filter(time=>now-time<60);
     if(!this.event&&now>=this.nextAt&&(route||this.starts.length<2)){
-      this.nextAt=now+lerp(route?ROAD_FORKS.weatherIntervalMin:31,route?ROAD_FORKS.weatherIntervalMax:45,this.rng());
+      this.nextAt=now+lerp(route?ROAD_FORKS.weatherIntervalMin:WEATHER.intervalMin,route?ROAD_FORKS.weatherIntervalMax:WEATHER.intervalMax,this.rng());
       if(!route||this.rng()<ROAD_FORKS.weatherChance){
         const season=route?Math.floor(this.rng()*4):game.season().index;
         this.event={id:this.nextId++,season,route,from:now,until:now+(season===2?WEATHER.windDuration:WEATHER.duration),wind:this.rng()<.5?-1:1,fogDistance:WEATHER.fogFar};

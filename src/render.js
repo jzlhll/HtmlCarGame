@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VEHICLES, COMBAT, TREE_SCENERY, ROAD_RENDER, laneD, random, clamp, lerp } from './config.js';
+import { VEHICLES, SHELL, TREE_SCENERY, ROAD_RENDER, POLICE, laneD, random, clamp, lerp, carColor, DEFAULT_CAR_COLOR } from './config.js';
 import { vehicleModel, cowModel, material, mudCoating } from './models.js';
 import { RoadsideScenery } from './scenery.js';
 import { RoadworksView } from './roadworks-view.js';
@@ -7,7 +7,7 @@ import { BUMP_SECONDS } from './hazards.js';
 import { WeatherView } from './weather-view.js';
 import { TrafficView } from './traffic-view.js';
 import { WhiteHorseView } from './white-horse-view.js';
-import { FortificationView } from './fortification-view.js';
+import { PoliceView } from './police-view.js';
 import { InfrastructureView } from './infrastructure-view.js';
 import { BranchRoadView } from './branch-road-view.js';
 import { treeGeometry } from './tree-model.js';
@@ -29,10 +29,9 @@ export class GameRenderer {
     container.append(this.renderer.domElement);
     this.scene=new THREE.Scene();this.scene.background=new THREE.Color(0xc5e0e9);this.scene.fog=new THREE.Fog(0xc5e0e9,240,560);
     this.camera=new THREE.PerspectiveCamera(55,1,.5,850);
-    this.weatherView=new WeatherView(this.scene,this.camera);this.whiteHorseView=new WhiteHorseView(this.scene);
+    this.weatherView=new WeatherView(this.scene,this.camera);this.whiteHorseView=new WhiteHorseView(this.scene);this.policeView=new PoliceView(this.scene);
     this.scene.add(new THREE.HemisphereLight(0xe3f0ff,0x668054,2.2));
-    const light=new THREE.DirectionalLight(0xfff1cb,2.6);light.position.set(-25,45,15);light.castShadow=true;light.shadow.mapSize.set(1024,1024);light.shadow.camera.left=-28;light.shadow.camera.right=28;light.shadow.camera.top=50;light.shadow.camera.bottom=-30;light.shadow.camera.far=130;light.shadow.normalBias=.08;this.scene.add(light);this.scene.add(light.target);light.target.position.set(0,0,-10);
-    this.fortifications=new FortificationView(this.scene);
+    const light=new THREE.DirectionalLight(0xfff1cb,2.6);light.position.set(-25,45,15);light.castShadow=true;light.shadow.mapSize.set(1024,1024);light.shadow.camera.left=-28;light.shadow.camera.right=28;light.shadow.camera.top=50;light.shadow.camera.bottom=-30;light.shadow.camera.far=130;light.shadow.normalBias=.08;    this.scene.add(light);this.scene.add(light.target);light.target.position.set(0,0,-10);
     this.light=light;this.trafficView=new TrafficView(this.scene);
     this.staticGroup=new THREE.Group();this.scene.add(this.staticGroup);this.infrastructure=new InfrastructureView(this.scene,this.staticGroup);this.staticStation=null;this.branchRoad=new BranchRoadView(this.staticGroup);
     this.groundMaterial=material(0x9bcb73);this.leafMaterial=material(0x91bf65).clone();this.leafMaterial.vertexColors=true;this.waterMaterial=material(0x8ac6d9);
@@ -57,7 +56,7 @@ export class GameRenderer {
     this.markers=new THREE.InstancedMesh(new THREE.BoxGeometry(.12,.65,.12),material(0xece4cc),110);this.scene.add(this.markers);
     this.roadside=new RoadsideScenery(this.scene);
     this.roadworks=new RoadworksView(this.staticGroup);
-    this.roadPoint={};this.localPoint={};this.carIds=new Set();this.cowIds=new Set();this.views=new Map();this.pools=new Map();this.player=vehicleModel(1,true);this.scene.add(this.player);this.playerRank=1;this.upgradeTime=0;
+    this.roadPoint={};this.localPoint={};this.carIds=new Set();this.cowIds=new Set();this.views=new Map();this.pools=new Map();this.carColorId=DEFAULT_CAR_COLOR;this.player=vehicleModel(1,true,carColor(this.carColorId).hex);this.scene.add(this.player);this.playerRank=1;this.upgradeTime=0;
     this.playerMud=mudCoating(this.player);
     this.exhaust=new THREE.Group();this.exhaust.visible=false;this.player.add(this.exhaust);
     const jetGeometry=new THREE.ConeGeometry(1,1,8).rotateX(Math.PI/2);
@@ -73,28 +72,13 @@ export class GameRenderer {
       wet:new THREE.InstancedMesh(new THREE.CircleGeometry(1,12).rotateX(-Math.PI/2),material(0x493a28),16),
     };
     for(const mesh of Object.values(this.hazardMeshes)){mesh.count=0;mesh.frustumCulled=false;mesh.receiveShadow=true;this.staticGroup.add(mesh);}
-    // 亮色弹芯与背面描边共用几何；不受季节灯光和远景雾色冲淡，仍正常被车辆遮挡。
-    const bulletGeometry=new THREE.SphereGeometry(1,10,8),rocketGeometry=new THREE.CylinderGeometry(1,1,1,12).rotateX(Math.PI/2);
-    const outline=new THREE.MeshBasicMaterial({color:0x17192f,side:THREE.BackSide,fog:false});
-    const fins=new THREE.BufferGeometry();
-    fins.setAttribute('position',new THREE.Float32BufferAttribute([
-      .8,0,-.3,.8,0,.42,1.9,0,.42, -.8,0,-.3,-1.9,0,.42,-.8,0,.42,
-      0,.8,-.3,0,1.9,.42,0,.8,.42, 0,-.8,-.3,0,-.8,.42,0,-1.9,.42,
-    ],3));
-    this.projectileMeshes={
-      bulletOutline:new THREE.InstancedMesh(bulletGeometry,outline,COMBAT.capacity),
-      bullet:new THREE.InstancedMesh(bulletGeometry,new THREE.MeshBasicMaterial({color:0xff238e,fog:false}),COMBAT.capacity),
-      bulletCore:new THREE.InstancedMesh(bulletGeometry,new THREE.MeshBasicMaterial({color:0xfff4fb,fog:false}),COMBAT.capacity),
-      rocketOutline:new THREE.InstancedMesh(rocketGeometry,outline,COMBAT.capacity),
-      rocket:new THREE.InstancedMesh(rocketGeometry,new THREE.MeshBasicMaterial({color:0xf2f7ff,fog:false}),COMBAT.capacity),
-      band:new THREE.InstancedMesh(rocketGeometry,new THREE.MeshBasicMaterial({color:0xff238e,fog:false}),COMBAT.capacity),
-      nose:new THREE.InstancedMesh(new THREE.ConeGeometry(1,1,12).rotateX(-Math.PI/2),new THREE.MeshStandardMaterial({color:0xff2878,emissive:0x7f0832,emissiveIntensity:.6,roughness:.45,fog:false}),COMBAT.capacity),
-      fins:new THREE.InstancedMesh(fins,new THREE.MeshBasicMaterial({color:0x16cfff,side:THREE.DoubleSide,fog:false}),COMBAT.capacity),
-      nozzle:new THREE.InstancedMesh(rocketGeometry,new THREE.MeshBasicMaterial({color:0x17192f,fog:false}),COMBAT.capacity),
-      flame:new THREE.InstancedMesh(new THREE.ConeGeometry(1,1,8).rotateX(Math.PI/2),new THREE.MeshBasicMaterial({color:0xff8c24,transparent:true,opacity:.8,depthWrite:false,fog:false}),COMBAT.capacity),
-      flameCore:new THREE.InstancedMesh(new THREE.ConeGeometry(1,1,8).rotateX(Math.PI/2),new THREE.MeshBasicMaterial({color:0xfff0a0,fog:false}),COMBAT.capacity),
-    };
-    for(const mesh of Object.values(this.projectileMeshes)){mesh.count=0;mesh.frustumCulled=false;this.scene.add(mesh);}
+    // 天降炮弹:下落弹体、地面红色预警圈与持久弹坑;弹坑用深色扁盒贴在路面。
+    this.shellBomb=new THREE.InstancedMesh(new THREE.SphereGeometry(.5,10,8),new THREE.MeshStandardMaterial({color:0x33383c,roughness:.5}),8);
+    this.craterMesh=new THREE.InstancedMesh(new THREE.BoxGeometry(1,1,1),material(0x2a251f),40);
+    for(const mesh of [this.shellBomb,this.craterMesh]){mesh.count=0;mesh.frustumCulled=false;this.scene.add(mesh);}
+    this.shellWarn=new THREE.InstancedMesh(new THREE.RingGeometry(SHELL.areaSize/2-.5,SHELL.areaSize/2,36).rotateX(-Math.PI/2),
+      new THREE.MeshBasicMaterial({color:0xff5340,transparent:true,opacity:.7,fog:false}),8);
+    this.shellWarn.count=0;this.shellWarn.frustumCulled=false;this.shellWarn.visible=false;this.scene.add(this.shellWarn);
     this.wallGroup=new THREE.Group();this.staticGroup.add(this.wallGroup);
     for(let i=0;i<4;i++){
       const wall=new THREE.Group();const base=new THREE.Mesh(new THREE.BoxGeometry(3.6,1.1,.7),material(0xd8ccaa));base.position.y=.55;wall.add(base);
@@ -162,7 +146,7 @@ export class GameRenderer {
     const sample=(station,edge)=>{
       const p=this.local(station),n=sampleCount++*10,sin=Math.sin(p.heading),cos=Math.cos(p.heading),pitchSin=Math.sin(p.pitch);
       samples[n]=p.x;samples[n+1]=p.y;samples[n+2]=p.z;samples[n+3]=edge;samples[n+4]=cos;samples[n+5]=sin;
-      samples[n+6]=-sin*pitchSin;samples[n+7]=Math.cos(p.pitch);samples[n+8]=cos*pitchSin;samples[n+9]=this.road.groundElevation(station)-this.road.at(station).y;
+      samples[n+6]=-sin*pitchSin;samples[n+7]=Math.cos(p.pitch);samples[n+8]=cos*pitchSin;samples[n+9]=this.road.groundElevation(station)-p.y-this.origin.y;
     };
     for(let i=0;i<roadPoints;i++){
       const station=firstStation+i*roadStep;
@@ -257,32 +241,40 @@ export class GameRenderer {
     }
     view.visible=true;view.rotation.set(0,0,0);view.scale.setScalar(1);view.userData.signal.visible=false;view.userData.queueLights.visible=false;view.userData.poolKey=key;this.views.set(car.id,view);return view;
   }
-  drawProjectiles(game){
-    let bullet=0,rocket=0;
-    for(const shot of game.combat.projectiles){
-      const p=this.local(shot.s,shot.d),aim=Math.atan2(shot.vd,shot.vs),angle=p.heading+aim,pitch=p.pitch*Math.cos(aim),size=shot.size,height=lerp(shot.height??.8,.8,clamp(shot.age/shot.targetTime,0,1));
-      const cosPitch=Math.cos(pitch),dx=Math.sin(angle)*cosPitch,dy=Math.sin(pitch),dz=-Math.cos(angle)*cosPitch;
-      if(shot.kind==='bullet'){
-        this.instance(this.projectileMeshes.bulletOutline,bullet,p.x,p.y+height,p.z,size*1.18,size*1.18,size*2.5,angle,pitch);
-        this.instance(this.projectileMeshes.bullet,bullet,p.x,p.y+height,p.z,size,size,size*2.2,angle,pitch);
-        // 露在弹体上方的白色弹芯形成高亮中线，俯视时同样可见。
-        this.instance(this.projectileMeshes.bulletCore,bullet++,p.x,p.y+height+size*.85,p.z,size*.35,size*.35,size*1.55,angle,pitch);
+  releaseCow(id){const view=this.cowViews.get(id);if(!view)return;this.scene.remove(view);this.cowViews.delete(id);this.cowPool.push(view);}
+  // 天降炮弹:下落弹体从高空按剩余时长线性下降,地面预警圈随落点脉冲闪烁(逐弹实例,多弹并存互不覆盖);
+  // 弹坑持久留在路面,按弹体生成时的实际尺寸缩放。
+  drawShells(game){
+    const shells=game.shell?.shells??[],craters=game.shell?.craters??[];
+    const live=game.state==='RUNNING'||game.state==='PAUSED';
+    let bomb=0,mark=0,warn=0;
+    const pulse=.55+Math.sin(game.activeSeconds*9)*.25;
+    for(const crater of craters){
+      const p=this.local(crater.s,crater.d,crater.route??null),size=crater.size??SHELL.areaSize;
+      this.instance(this.craterMesh,mark++,p.x,p.y+.04,p.z,size,.06,size,p.heading,p.pitch);
+    }
+    for(const shell of shells){
+      const p=this.local(shell.s,shell.d,shell.route??null);
+      if(bomb<8){
+        const ratio=1-shell.fall/shell.total;
+        this.instance(this.shellBomb,bomb++,p.x,p.y+lerp(70,1,ratio),p.z,1,1,1,0,0);
       }
-      else{
-        this.instance(this.projectileMeshes.rocketOutline,rocket,p.x,p.y+height,p.z,size*1.12,size*1.12,1.74,angle,pitch);
-        this.instance(this.projectileMeshes.rocket,rocket,p.x,p.y+height,p.z,size,size,1.7,angle,pitch);
-        this.instance(this.projectileMeshes.band,rocket,p.x+dx*.5,p.y+height+dy*.5,p.z+dz*.5,size*1.025,size*1.025,.16,angle,pitch);
-        this.instance(this.projectileMeshes.nose,rocket,p.x+dx*1.3,p.y+height+dy*1.3,p.z+dz*1.3,size,size,.9,angle,pitch);
-        this.instance(this.projectileMeshes.fins,rocket,p.x-dx*.65,p.y+height-dy*.65,p.z-dz*.65,size,size,1,angle,pitch);
-        this.instance(this.projectileMeshes.nozzle,rocket,p.x-dx*.94,p.y+height-dy*.94,p.z-dz*.94,size*.85,size*.85,.2,angle,pitch);
-        const pulse=1+Math.sin(game.activeSeconds*38+shot.id)*.1;
-        this.instance(this.projectileMeshes.flame,rocket,p.x-dx*1.65,p.y+height-dy*1.65,p.z-dz*1.65,size*.85,size*.85,1.25*pulse,angle,pitch);
-        this.instance(this.projectileMeshes.flameCore,rocket++,p.x-dx*1.43,p.y+height-dy*1.43,p.z-dz*1.43,size*.5,size*.5,.8*pulse,angle,pitch);
+      if(mark<40){
+        // 早期弹坑与当前预警圈同框时不再重复绘制弹坑(预警圈即落点)。
+        if(!craters.some(crater=>crater.id===shell.id)){
+          this.instance(this.craterMesh,mark++,p.x,p.y+.05,p.z,shell.size??SHELL.areaSize,.05,shell.size??SHELL.areaSize,p.heading,p.pitch);
+        }
+      }
+      if(live&&warn<8){
+        const scale=(shell.size??SHELL.areaSize)/SHELL.areaSize;
+        this.instance(this.shellWarn,warn++,p.x,p.y+.08,p.z,scale,1,scale,p.heading);
       }
     }
-    for(const [name,mesh]of Object.entries(this.projectileMeshes)){mesh.count=name.startsWith('bullet')?bullet:rocket;mesh.visible=mesh.count>0;if(mesh.count)mesh.instanceMatrix.needsUpdate=true;}
+    this.shellWarn.count=warn;this.shellWarn.visible=warn>0;
+    if(warn){this.shellWarn.instanceMatrix.needsUpdate=true;this.shellWarn.material.opacity=pulse;}
+    this.shellBomb.count=bomb;this.shellBomb.visible=bomb>0;if(bomb)this.shellBomb.instanceMatrix.needsUpdate=true;
+    this.craterMesh.count=mark;this.craterMesh.visible=mark>0;if(mark)this.craterMesh.instanceMatrix.needsUpdate=true;
   }
-  releaseCow(id){const view=this.cowViews.get(id);if(!view)return;this.scene.remove(view);this.cowViews.delete(id);this.cowPool.push(view);}
   drawDriving(game,dt){
     const p=game.player,live=game.state==='RUNNING',paused=game.state==='PAUSED',size=VEHICLES[p.rank];
     this.exhaust.visible=(live||paused)&&game.nitro.boost>0;
@@ -314,16 +306,24 @@ export class GameRenderer {
     record.view=null;
   }
   resetEffects(){
-    this.weatherView.reset();this.whiteHorseView.reset();
+    this.weatherView.reset();this.whiteHorseView.reset();this.policeView.reset();
     this.effectRecords.forEach(r=>this.returnEffect(r));this.effectRecords=[];this.effects.count=0;
     this.exhaust.visible=false;
   }
+  // 颜色选择页换色时重建玩家模型，尾焰与泥浆涂层跟随重建。
+  setCarColor(id){
+    if(this.carColorId===id)return;
+    this.carColorId=id;
+    this.playerMud.dispose();this.scene.remove(this.player);
+    this.player=vehicleModel(this.playerRank,true,carColor(id).hex);
+    this.playerMud=mudCoating(this.player);this.player.add(this.exhaust);
+    this.scene.add(this.player);this.invalidate();
+  }
   resetRun(){
     this.resetEffects();
-    for(const mesh of Object.values(this.projectileMeshes))mesh.count=0;
     for(const id of this.views.keys())this.release(id);
     for(const id of this.cowViews.keys())this.releaseCow(id);
-    this.traffic=null;this.staticStation=null;this.cameraPitch=0;this.cameraX=0;this.cameraZ=0;this.cameraHeading=0;this.upgradeTime=0;this.roadside.reset();this.fortifications.reset();this.infrastructure.reset();this.invalidate();
+    this.traffic=null;this.staticStation=null;this.cameraPitch=0;this.cameraX=0;this.cameraZ=0;this.cameraHeading=0;this.upgradeTime=0;this.roadside.reset();this.infrastructure.reset();this.invalidate();
   }
   invalidate(){this.dirty=true;this.onInvalidate();}
   needsFrame(game){return this.dirty||this.lastState!==game.state||this.traffic!==game.traffic||this.cameraSettling;}
@@ -348,21 +348,28 @@ export class GameRenderer {
     if(this.traffic!==game.traffic){this.resetRun();this.traffic=game.traffic;}
     const live=game.state==='RUNNING',dying=game.state==='DYING',simDt=live?dt:0,effectDt=live||dying?dt:0;
     this.updateQuality(dt,live);
-    const refresh=live||dying||this.dirty||this.lastState!==game.state;
+    const refresh=live||dying||game.state==='CAUGHT'||this.dirty||this.lastState!==game.state;
     this.lastState=game.state;this.dirty=false;
     if(!refresh){this.updateCamera(game,dt);this.renderer.render(this.scene,this.camera);return;}
     this.playerRoute=game.player.route;this.whiteHorse=game.whiteHorse;this.road=game.road;this.origin=this.road.at(game.player.s);
-    this.updateStatic(game);this.infrastructure.draw(this,game);this.fortifications.draw(this,game);this.drawProjectiles(game);this.drawCows(game);
+    this.updateStatic(game);this.infrastructure.draw(this,game);this.drawShells(game);this.drawCows(game);
     this.updateCamera(game,dt);this.trafficView.begin(this.camera,this.light);
     const season=game.season(),a=palette[season.index],b=palette[(season.index+1)%4];
     this.roadside.draw(this,game.player.s,season,game.activeSeconds);
     const blend=(out,key)=>out.setHex(a[key]).lerp(this.colorB.setHex(b[key]),season.blend);
     blend(this.groundMaterial.color,'ground');blend(this.leafMaterial.color,'leaf');blend(this.waterMaterial.color,'water');blend(this.scene.background,'sky');this.scene.fog.color.copy(this.scene.background);
-    if(this.playerRank!==game.player.rank){this.playerMud.dispose();this.scene.remove(this.player);this.player=vehicleModel(game.player.rank,true);this.playerMud=mudCoating(this.player);this.player.add(this.exhaust);this.scene.add(this.player);this.playerRank=game.player.rank;this.upgradeTime=.25;}
+    if(this.playerRank!==game.player.rank){this.playerMud.dispose();this.scene.remove(this.player);this.player=vehicleModel(game.player.rank,true,carColor(this.carColorId).hex);this.playerMud=mudCoating(this.player);this.player.add(this.exhaust);this.scene.add(this.player);this.playerRank=game.player.rank;this.upgradeTime=.25;}
     this.upgradeTime=Math.max(0,this.upgradeTime-simDt);
     const p=this.local(game.player.s,game.player.d,game.player.route),bump=Math.sin((1-game.player.bump/BUMP_SECONDS)*Math.PI);
     this.player.position.set(p.x,p.y+(game.player.bump>0?bump*.85:0),p.z);this.player.rotation.set(p.pitch+(game.player.bump>0?bump*.12:0),-p.heading,clamp(-(game.player.sidePush?0:game.input.lateral)*.035-game.player.push*.018,-.12,.12),'YXZ');
     this.playerMud.visible=game.player.mud>0;
+    if(game.state==='CAUGHT'&&game.caught){
+      // 被渔网罩住:catchSeconds 内缩小、旋转并被拉向警车位置。
+      const k=clamp(game.caught.t/POLICE.catchSeconds,0,1),cp=this.local(game.caught.police.s,game.caught.police.d,game.caught.police.route);
+      this.player.position.set(lerp(p.x,cp.x,k),lerp(p.y,cp.y,k)+Math.sin(k*Math.PI)*1.5,lerp(p.z,cp.z,k));
+      this.player.scale.setScalar(Math.max(.03,1-k));
+      this.player.rotation.z=k*2.4;
+    }
     const deathResult=game.state==='RESULT'&&game.result?.endReason==='death';
     const blink=!game.whiteHorse.shielded(game.activeSeconds)&&(live||game.state==='PAUSED')&&game.activeSeconds<game.player.invincibleUntil&&Math.floor(game.activeSeconds*12)%2===1;
     this.player.visible=!deathResult&&(!dying||game.deathTime<1.1)&&(!blink||dying);this.player.scale.setScalar(dying?Math.max(.01,1-game.deathTime*.85):1-this.upgradeTime);
@@ -419,7 +426,7 @@ export class GameRenderer {
     }
     this.effectRecords=this.effectRecords.filter(r=>r.time<(r.kind==='knockaway'?.75:.55));this.effects.count=effect;this.effects.instanceMatrix.needsUpdate=true;
     this.trafficView.finish();
-    this.weatherView.draw(this,game);this.whiteHorseView.draw(this,game);
+    this.weatherView.draw(this,game);this.whiteHorseView.draw(this,game);this.policeView.draw(this,game,simDt);
     this.renderer.render(this.scene,this.camera);
   }
   updateCamera(game,dt){

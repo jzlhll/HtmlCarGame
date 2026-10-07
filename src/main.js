@@ -9,9 +9,12 @@ const store=new SaveStore(),input=new Input(container);
 let ui;
 const audio=new GameAudio();
 const game=new Game(store,input,message=>ui?.notify(message));game.audio=audio;ui=new UI(game);
+// 暴露调试句柄,供 Agent 验证脚本读取状态与构造确定性场景;生产游玩不依赖它。
+window.__game=game;
 input.onSpace=()=>{if(!ui.resetConfirm)game.space();};input.onBlur=()=>game.pause();
+input.onQuiz=choice=>game.answerQuiz(choice);
 try{
-  const renderer=new GameRenderer(document.getElementById('scene'));game.renderer=renderer;
+  const renderer=new GameRenderer(document.getElementById('scene'));game.renderer=renderer;renderer.setCarColor(game.carColor);
   let last=performance.now(),accumulator=0,frameId=null,inFrame=false;
   const frame=now=>{
     frameId=null;inFrame=true;
@@ -21,9 +24,10 @@ try{
       while(accumulator>=1/120){game.step(1/120);accumulator-=1/120;if(game.state!=='RUNNING'){accumulator=0;break;}}
     }else accumulator=0;
     game.animate(dt);
-    if(game.state==='RUNNING'||game.state==='DYING'||renderer.needsFrame(game))renderer.draw(game,dt);
+    const animating=game.state==='RUNNING'||game.state==='DYING'||game.state==='CAUGHT';
+    if(animating||renderer.needsFrame(game))renderer.draw(game,dt);
     ui.update(dt);audio.update(dt,game);inFrame=false;
-    if(game.state==='RUNNING'||game.state==='DYING'||renderer.needsFrame(game))frameId=requestAnimationFrame(frame);
+    if(animating||renderer.needsFrame(game))frameId=requestAnimationFrame(frame);
   };
   const wake=()=>{
     if(frameId!==null||inFrame)return;

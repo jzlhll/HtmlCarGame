@@ -41,8 +41,18 @@ export class Road {
     const structureRng=random(seed^0x163fdab9);
     for(let start=300,index=0;start<s-500;index++){
       const kind=index===0?'viaduct':index===1?'dip':structureRng()<.55?'viaduct':'dip';
-      const ramp=kind==='viaduct'?180:70,flat=kind==='viaduct'?80:ROAD_INFRASTRUCTURE.dipLength;
-      const length=ramp*2+flat,height=kind==='viaduct'?14+structureRng()*6:-3;
+      const flat=kind==='viaduct'?80:ROAD_INFRASTRUCTURE.dipLength;
+      // 高度与坡长独立随机:可能抽出更高更缓的长坡(顶峰较远),也可能抽出更高且很快到顶的短坡;
+      // 最小坡长按最大坡度反推,保证 smooth 坡道的峰值坡度不越界。
+      const magnitude=kind==='viaduct'
+        ?ROAD_INFRASTRUCTURE.viaductHeightMin+structureRng()*(ROAD_INFRASTRUCTURE.viaductHeightMax-ROAD_INFRASTRUCTURE.viaductHeightMin)
+        :ROAD_INFRASTRUCTURE.dipDepthMin+structureRng()*(ROAD_INFRASTRUCTURE.dipDepthMax-ROAD_INFRASTRUCTURE.dipDepthMin);
+      const height=kind==='viaduct'?magnitude:-magnitude;
+      const rampBase=kind==='viaduct'
+        ?ROAD_INFRASTRUCTURE.viaductRampMin+structureRng()*(ROAD_INFRASTRUCTURE.viaductRampMax-ROAD_INFRASTRUCTURE.viaductRampMin)
+        :ROAD_INFRASTRUCTURE.dipRampMin+structureRng()*(ROAD_INFRASTRUCTURE.dipRampMax-ROAD_INFRASTRUCTURE.dipRampMin);
+      const ramp=Math.max(Math.ceil(Math.abs(height)*1.5/ROAD_INFRASTRUCTURE.maxGrade/5)*5,Math.round(rampBase/5)*5);
+      const length=ramp*2+flat;
       const choice=structureRng()<.55?'rail':'river',feature=kind==='dip'&&choice==='rail'?'valley':choice,trainChance=structureRng();
       this.structures.push({start,end:start+length,length,ramp,flat,height,kind,feature,
         center:start+length/2,flatStart:start+ramp,flatEnd:start+ramp+flat,

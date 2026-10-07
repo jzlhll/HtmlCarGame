@@ -1,4 +1,4 @@
-import { VEHICLES, MAX_RANK, TRAFFIC_COLORS, ONCOMING_SPEED_SCALE, TRAFFIC_WEIGHTS, TRAFFIC_SPAWN_AHEAD, TRAFFIC_SPAWN_BEHIND, TRAFFIC_DENSITY, TRAFFIC_LANE_CHANGE, TRAFFIC_DRIVING, ROAD_DIFFICULTY, SLOW_TRAFFIC, REAR_WARNING, LANE_WIDTH, ROAD_INFRASTRUCTURE, laneD, random, clamp, approach, lerp, smooth } from './config.js';
+import { VEHICLES, MAX_RANK, TRAFFIC_COLORS, ONCOMING_SPEED_SCALE, TRAFFIC_WEIGHTS, TRAFFIC_SPAWN_AHEAD, TRAFFIC_SPAWN_BEHIND, UPGRADE_TRAFFIC, TRAFFIC_DENSITY, TRAFFIC_LANE_CHANGE, TRAFFIC_DRIVING, ROAD_DIFFICULTY, SLOW_TRAFFIC, REAR_WARNING, LANE_WIDTH, ROAD_INFRASTRUCTURE, laneD, random, clamp, approach, lerp, smooth } from './config.js';
 import { sweep, roadworkContact, separation, startBounce, advanceBounce } from './collision.js';
 import { surfaceContact, MUD_SECONDS } from './hazards.js';
 const maxVehicleLength=Math.max(...VEHICLES.slice(1).map(vehicle=>vehicle.length));
@@ -56,6 +56,34 @@ export class Traffic {
     const colors=TRAFFIC_COLORS[rank];car.color=colors[Math.floor(this.rng()*colors.length)];
     this.configureDriving(car);
     this.cars.push(car);return true;
+  }
+  spawnUpgrade(player){
+    const settings=UPGRADE_TRAFFIC,count=settings.countPerRank*2,batch=[];
+    let s=player.s,distance=0,route=player.route??null;
+    for(let index=0;index<count;index++){
+      const ahead=lerp(settings.minAhead,settings.maxAhead,(index+.5)/count);
+      // 按当前路线实际弧长推进，副路出口后继续沿主路安排剩余车辆。
+      while(distance<ahead){
+        const step=Math.min(1,ahead-distance);
+        s+=step/this.road.pathScale(s,route);distance+=step;
+        if(route&&s>=this.road.route(route).end)route=null;
+      }
+      const rank=index%2===0?player.rank:player.rank-1,v=VEHICLES[rank],colors=TRAFFIC_COLORS[rank];
+      const lanes=[];
+      for(let lane=0;lane<this.road.available(s,route);lane++)if(route||this.road.laneOpen(s,lane,1,0,v.length/2))lanes.push(lane);
+      const lane=lanes[index%lanes.length],d=this.road.branchCenter(s,route)+laneD(lane);
+      const speed=lerp(v.min,v.max,this.rng())/3.6;
+      const car={id:this.nextId++,s,d,route,rank,lane,direction:1,speed,desired:speed,color:colors[Math.floor(this.rng()*colors.length)],merge:null,convoy:null,sidePush:0,sidePushTime:0};
+      this.configureDriving(car);batch.push(car);
+    }
+    // 此批次保证足量投放：只替换与新车重叠的普通车，满额时先回收最远车。
+    this.cars=this.cars.filter(car=>!car.remove&&!batch.some(target=>sweep(car,car,target,target,this.road)));
+    while(this.cars.length+batch.length>this.capacity){
+      let farthest=0;
+      for(let index=1;index<this.cars.length;index++)if(Math.abs(this.cars[index].s-player.s)>Math.abs(this.cars[farthest].s-player.s))farthest=index;
+      this.cars.splice(farthest,1);
+    }
+    this.cars.push(...batch);
   }
   replenish(player,direction,from,to){
     if(this.cars.length>=this.capacity)return false;

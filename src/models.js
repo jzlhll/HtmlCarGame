@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { VEHICLES, MAX_RANK, VEHICLE_LENGTH_SCALE, VEHICLE_WIDTH_SCALE, BICYCLE_WIDTH_SCALE, BICYCLE_TIRE_WIDTH } from './config.js';
+import { VEHICLES, MAX_RANK, VEHICLE_LENGTH_SCALE, VEHICLE_WIDTH_SCALE, BICYCLE_WIDTH_SCALE, BICYCLE_TIRE_WIDTH, carColor } from './config.js';
 const geometry={box:new THREE.BoxGeometry(1,1,1),wheel:new THREE.CylinderGeometry(1,1,1,12),sphere:new THREE.IcosahedronGeometry(1,0),cone:new THREE.ConeGeometry(.5,1,6)};
 geometry.bicycleTank=new THREE.SphereGeometry(.5,10,6);
 // 车身下缘与上缘轻微收角，保留独立发动机盖、座舱和尾厢的轿车轮廓。
@@ -31,13 +31,28 @@ geometry.handlebar=new THREE.TubeGeometry(new THREE.CatmullRomCurve3([[-.20,0,.0
 // 将握把角度烘焙到共享几何，横向加宽时不会同时拉长斜置的握把。
 for(const side of [-1,1])geometry[side<0?'bicycleLeftGrip':'bicycleRightGrip']=new THREE.BoxGeometry(.055,.05,.09).rotateY(side*.25);
 const materials=new Map();
-export function material(color){if(!materials.has(color))materials.set(color,new THREE.MeshStandardMaterial({color,roughness:.82,metalness:.08}));return materials.get(color);}
+let rainbowMaterial=null;
+// 彩虹涂装用共享渐变贴图材质；所有彩虹车共用一份，避免逐帧改色和材质缓存膨胀。
+function rainbowBodyMaterial(){
+  if(!rainbowMaterial){
+    const canvas=document.createElement('canvas');canvas.width=128;canvas.height=32;
+    const ctx=canvas.getContext('2d'),grad=ctx.createLinearGradient(0,0,128,0);
+    for(const [i,c] of ['#ff4d4d','#ff9f2e','#ffe14d','#3ecf6a','#2eb8ff','#b05fff'].entries())grad.addColorStop(i/5,c);
+    ctx.fillStyle=grad;ctx.fillRect(0,0,128,32);
+    const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.wrapS=THREE.RepeatWrapping;texture.repeat.set(2,1);
+    rainbowMaterial=new THREE.MeshStandardMaterial({map:texture,roughness:.6,metalness:.12});
+    materials.set('rainbow',rainbowMaterial);
+  }
+  return rainbowMaterial;
+}
+export function material(color){if(color==='rainbow')return rainbowBodyMaterial();if(!materials.has(color))materials.set(color,new THREE.MeshStandardMaterial({color,roughness:.82,metalness:.08}));return materials.get(color);}
 function part(group,color,size,position,shape='box'){
   const mesh=new THREE.Mesh(geometry[shape],material(color));mesh.scale.set(...size);mesh.position.set(...position);mesh.castShadow=true;mesh.receiveShadow=true;if(shape==='wheel')mesh.userData.wheelRadius=size[0]*1.6;group.add(mesh);return mesh;
 }
 const templates=new Map();
 export function vehicleModel(rank,player=false,bodyColor){
-  const c=player?0xf5cc58:bodyColor??VEHICLES[rank].color;
+  // 玩家颜色来自颜色选择页；未指定时回落默认涂装，车流仍按各自车色。
+  const c=player?bodyColor??carColor().hex:bodyColor??VEHICLES[rank].color;
   const key=rank+':'+player+':'+c;
   if(templates.has(key))return templates.get(key).clone(true);
   const v=VEHICLES[rank],g=new THREE.Group(),w=v.width/VEHICLE_WIDTH_SCALE,l=v.length/VEHICLE_LENGTH_SCALE;
@@ -97,7 +112,7 @@ export function vehicleModel(rank,player=false,bodyColor){
       const cabinSize=[w*.78,.32,l*.48],cabinPosition=[0,.70,l*.04];
       part(g,c,cabinSize,cabinPosition,'carCabin');
       for(const shape of ['carFront','carRear','carLeft','carRight'])part(g,0x365664,cabinSize,cabinPosition,shape);
-      const trim=new THREE.Color(c).lerp(new THREE.Color(0xffffff),.22).getHex();
+      const trim=c==='rainbow'?0xe8edf2:new THREE.Color(c).lerp(new THREE.Color(0xffffff),.22).getHex();
       part(g,trim,[w*.70,.025,l*.23],[0,.555,-l*.32]);
       part(g,0x263839,[w*.32,.065,.025],[0,.38,-l*.477]);
       for(const end of [-1,1])part(g,0xc4d1d4,[w*.72,.065,.035],[0,.27,end*l*.476]);
