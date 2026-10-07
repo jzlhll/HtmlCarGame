@@ -4,6 +4,8 @@
 
 ## 运行入口
 
+线上托管、独立博客入口和仅正式 Release 更新规则见 [GitHub Pages 发布](github-pages.md)。
+
 `npm ci` 安装锁定版本的 Three.js，`npm start` 启动内置 Node.js 静态服务，默认地址为 `http://localhost:5173`，可用 `PORT=5184 npm start` 指定其他端口，只监听本机回环地址。依赖安装完成后无需联网，无构建步骤，无外部模型或图片下载。macOS 提供根目录 `启动游戏.command`。
 
 通过 HTTP 服务加载 ES 模块，不直接双击 `index.html`。服务只提供入口页面、`src` 与依赖文件，不提供项目文档或隐藏文件。

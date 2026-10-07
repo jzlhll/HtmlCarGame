@@ -57,6 +57,7 @@ npm start
 
 ## 项目入口
 
+- [GitHub Pages 发布](docs/implementation/github-pages.md)：正式 Release 触发上线，Three.js 随游戏发布。
 - [设计总览与专题](docs/README.md)：最终玩法约定及分专题设计。
 - [实现说明](docs/implementation/README.md)：模块职责、运行方式与数值入口。
 - `src/main.js`：入口、显示循环和每秒 120 次的逻辑更新。
