@@ -49,6 +49,7 @@ export const SIDE_BOUNCE={
 export const REAR_END_INVINCIBLE_SECONDS=2;
 // 答题或调试复活后保护两秒，包括截止墙和道路障碍；暂停不消耗。
 export const DEBUG_REVIVE_SECONDS=2;
+export const RESCUE_LIMIT=2; // 每局非答题致命事件可触发的答题复活次数。
 export const REVIVE_CLEAR_AHEAD=50; // 原地复活时清理当前路线前方的车流距离(米)。
 export const PLAYER_START_SPEED=57.5;
 export const AUTO_ACCELERATION=20; // 松开刹车或加速键、解冻后自动提速，单位 km/h/秒。
@@ -119,7 +120,7 @@ export const ROADWORKS={first:380,interval:400,chance:.5,minLength:30,maxLength:
 // 高架与低沉地形随机:高度/深度与坡长独立抽取,长坡高而平缓(顶峰较远),短坡高而陡(很快到顶);
 // 最小坡长按 maxGrade 反推(|高度|×1.5÷最大坡度,smooth 曲线峰值坡度为高度×1.5÷坡长),坡度不会越界。
 export const ROAD_INFRASTRUCTURE={
-  trainLeadSeconds:1.5,dipLength:20,slowMultiplier:.5,trainSpeed:22,trainLength:42,gapMin:800,gapMax:1160, // 间距由 1600–2320 缩半,起伏路段出现频率加倍;分叉只在较宽的间距区间(可用跨度≥minSpan)内安放。
+  trainLeadSeconds:2.5,trainHornLeadSeconds:.6,dipLength:20,slowMultiplier:.5,trainSpeed:22,trainLength:42,gapMin:800,gapMax:1160, // 间距由 1600–2320 缩半,起伏路段出现频率加倍;分叉只在较宽的间距区间(可用跨度≥minSpan)内安放。
   viaductHeightMin:14,viaductHeightMax:40, // 桥面高度抽取范围(米),原 14–20 大幅上调。
   viaductRampMin:120,viaductRampMax:400, // 引桥坡长抽取范围(米):400 米长坡配高桥即"高而缓",被坡度反推抬高后即"高而陡"。
   dipDepthMin:3,dipDepthMax:16, // 谷底深度抽取范围(米,向下),原固定 3。
@@ -139,7 +140,19 @@ export const AUDIO={
   engine:{baseHz:44,speedHz:96,gain:.05,jetGain:.05,jetHz:1400},
   wind:{gain:.24,pan:.75},
   water:{gain:.22,range:70},
-  train:{gain:.6,range:170,pan:.75},
+  train:{
+    gain:.6,range:240,pan:.75,
+    // 按参考录音的撞缝分组：两对轮轴冲击及弱余振；各次依次为时间、重量、金属亮度。
+    clatter:{
+      period:1.315,hits:[[0,1,1],[.12,1.05,.2],[.29,.32,.08],[.43,.92,.9],[.55,1.08,.2],[.72,.3,.07]],
+      // 共鸣依次为频率、强度、衰减秒数；低频车轮震动与宽频金属冲击分层。
+      body:[[70,.65,.065],[117,.4,.045],[211,.7,.055],[258,.85,.04],[422,.5,.035],[516,.31,.025],[750,.26,.03]],
+      metal:[[1141,.25,.02],[1627,.3,.02],[1813,.22,.035],[1969,.34,.04],[2033,.4,.045],[2086,.54,.05],[2156,.43,.045],[2237,.29,.035],[2320,.31,.04],[2391,.29,.035],[2438,.31,.03],[2531,.23,.03],[2639,.25,.035],[2719,.38,.045],[2836,.29,.035],[2906,.27,.03],[3079,.18,.025],[3258,.22,.025],[3422,.23,.025],[3492,.18,.02],[4721,.66,.012],[6151,.39,.008]],
+      gain:.55,attack:.002,phaseStep:2.399963,bodyTail:.16,metalTail:.18,decayLimit:12,rateStart:.9,rateEnd:1.3,accelerateSeconds:5,
+    },
+    // 按鸣笛参考的谐波比例合成：440 Hz 基音，880 Hz 最突出，保留高频穿透感。
+    horn:{loopSeconds:1,hz:441,harmonics:[0,.566,1,.427,.591,.473,.625,.581,.449,.42,.305,.26,.202,.168,.143],phases:[0,2.88,0,-1.051,-1.956,2.856,1.651,3,-.031,-2.671,-3.095,2.483,1.439,.491,-.354],gain:.48,pulses:[[0,2.8]],attack:.12,release:.24,rise:.01,fall:.025,vibrato:.0007,vibratoHz:4.3,dopplerScale:.25},
+  },
   tank:{gain:.5,range:55,pan:.6},
   pass:{range:7,minSpeed:8,gain:.13},
   beep:{hz:880,gain:.05},

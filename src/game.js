@@ -1,4 +1,4 @@
-import { VEHICLES, MAX_RANK, RULES_VERSION, XP, POINT_LOSS, HUNGER, VEHICLE_DEFENSE, SEASONS, PLAYER_START_SPEED, AUTO_ACCELERATION, MANUAL_ACCELERATION, NITRO, REAR_END_INVINCIBLE_SECONDS, DEBUG_REVIVE_SECONDS, REVIVE_CLEAR_AHEAD, ROAD_INFRASTRUCTURE, ROAD_DIFFICULTY, POLICE, laneD, clamp, lerp, approach, random } from './config.js';
+import { VEHICLES, MAX_RANK, RULES_VERSION, XP, POINT_LOSS, HUNGER, VEHICLE_DEFENSE, SEASONS, PLAYER_START_SPEED, AUTO_ACCELERATION, MANUAL_ACCELERATION, NITRO, REAR_END_INVINCIBLE_SECONDS, DEBUG_REVIVE_SECONDS, RESCUE_LIMIT, REVIVE_CLEAR_AHEAD, ROAD_INFRASTRUCTURE, ROAD_DIFFICULTY, POLICE, laneD, clamp, lerp, approach, random } from './config.js';
 import { Road } from './road.js';
 import { Traffic } from './traffic.js';
 import { RoadHazards, MUD_SECONDS, BUMP_SECONDS, surfaceContact } from './hazards.js';
@@ -25,7 +25,7 @@ export class Game {
   constructor(store,input,notify){
     this.store=store;this.input=input;this.notify=notify;this.state='READY';this.carColor=store.getColor();this.deathTime=0;this.debugMode=false;this.debugRun=false;this.debugInvincibleUntil=0;this.renderer=null;this.onChange=()=>{};this.collisionCandidates=[];this.collisionGroup=[];this.separatedCars=new Set();this.collisionBegin={};this.collisionSites=[];this.collisionWalls=[];this.collisionWorks=[];this.collisionHazards=[];this.preview();
   }
-  preview(){this.renderer?.resetRun();this.seed=6183;this.whiteHorse=new WhiteHorseEvent(this.seed);this.police=new PoliceEvent(this.seed);this.quiz=null;this.failedQuiz=null;this.caught=null;this.rescueUsed=false;this.weather=new SeasonalWeather(this.seed);this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.nitroHeld=false;this.nitroHold=false;this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};this.traffic=new Traffic(this.road,this.seed);this.activeSeconds=0;this.nextHungerAt=HUNGER.intervalSeconds;this.startSeason=0;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;this.scraping=false;this.debugRun=false;this.debugInvincibleUntil=0;}
+  preview(){this.renderer?.resetRun();this.seed=6183;this.whiteHorse=new WhiteHorseEvent(this.seed);this.police=new PoliceEvent(this.seed);this.quiz=null;this.failedQuiz=null;this.caught=null;this.rescueUsed=0;this.weather=new SeasonalWeather(this.seed);this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.nitroHeld=false;this.nitroHold=false;this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};this.traffic=new Traffic(this.road,this.seed);this.activeSeconds=0;this.nextHungerAt=HUNGER.intervalSeconds;this.startSeason=0;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;this.scraping=false;this.debugRun=false;this.debugInvincibleUntil=0;}
   async start(){
     if(this.state!=='READY'&&this.state!=='RESULT')return;
     this.audio?.ensure();
@@ -35,7 +35,7 @@ export class Game {
     await new Promise(resolve=>requestAnimationFrame(resolve));
     try{
       this.seed=crypto.getRandomValues(new Uint32Array(1))[0];this.runId=crypto.randomUUID();
-      this.whiteHorse=new WhiteHorseEvent(this.seed);this.police=new PoliceEvent(this.seed);this.quiz=null;this.failedQuiz=null;this.caught=null;this.rescueUsed=false;this.weather=new SeasonalWeather(this.seed);
+      this.whiteHorse=new WhiteHorseEvent(this.seed);this.police=new PoliceEvent(this.seed);this.quiz=null;this.failedQuiz=null;this.caught=null;this.rescueUsed=0;this.weather=new SeasonalWeather(this.seed);
       this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.nitroHeld=false;this.nitroHold=false;this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};
       this.traffic=new Traffic(this.road,this.seed);this.traffic.populate(this.player);
       this.startSeason=this.seed%4;this.activeSeconds=0;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;
@@ -53,7 +53,7 @@ export class Game {
   }
   space(){if(this.state==='READY'||this.state==='RESULT')this.start();else if(this.state==='RUNNING')this.pause();else if(this.state==='PAUSED'){this.input.clear();this.state='RUNNING';this.onChange();}}
   policeContact(rescue=false){
-    // 警车拦查或首次致命救援共用题目流程；驾驶时间与音效暂停，答题按真实时间倒计时。
+    // 警车拦查或致命救援共用题目流程；驾驶时间与音效暂停，答题按真实时间倒计时。
     // 题目随机走独立种子流(本局种子+接触时刻),不消耗各事件系统的随机序列,自动化验证可复现。
     this.caught=null;
     this.nitro.stop();this.input.clear();this.scraping=false;
@@ -212,9 +212,9 @@ export class Game {
     const horse=this.whiteHorse.horse;if(horse)horse.s=lerp(horse.previous.s,horse.s,time);
   }
   die(cause){
-    // 每局首次致命事件提供一次答题救援，答题失败不能再触发救援。
-    if(cause!=='quizWrong'&&cause!=='quizTimeout'&&!this.rescueUsed){
-      this.rescueUsed=true;this.policeContact(true);return;
+    // 每局按次数提供答题救援，出题即消耗一次，答题失败不能再触发救援。
+    if(cause!=='quizWrong'&&cause!=='quizTimeout'&&this.rescueUsed<RESCUE_LIMIT){
+      this.rescueUsed++;this.policeContact(true);return;
     }
     if((cause==='quizWrong'||cause==='quizTimeout')&&this.quiz)this.failedQuiz=answeredQuestion(this.quiz);
     this.quiz=null;this.caught=null;this.cause=cause;this.state='DYING';this.deathTime=0;

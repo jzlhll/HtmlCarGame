@@ -16,7 +16,12 @@ export class RoadInfrastructure {
       if(event.site.end<p.s-420){this.events.delete(id);continue;}
       // 火车中心在提前量结束时到达公路中心，玩家保持当前速度时两者在桥顶交汇。
       const {site,start}=event,age=now-start,d=(age-ROAD_INFRASTRUCTURE.trainLeadSeconds)*ROAD_INFRASTRUCTURE.trainSpeed;
-      if(d<120)this.trains.push({id,s:site.center,d,previous:{s:site.center,d:d-ROAD_INFRASTRUCTURE.trainSpeed*dt},site,dimensions:{length:3.2,width:ROAD_INFRASTRUCTURE.trainLength}});
+      if(d<120){
+        // 按当前车速提前起音，留出汽笛包络和距离增益的渐入时间，氮气下也在桥顶前听到。
+        const hornAhead=p.speed/3.6*ROAD_INFRASTRUCTURE.trainHornLeadSeconds;
+        if(event.hornAt===undefined&&site.center-p.s<=hornAhead)event.hornAt=game.activeSeconds;
+        this.trains.push({id,age,hornAt:event.hornAt,s:site.center,d,previous:{s:site.center,d:d-ROAD_INFRASTRUCTURE.trainSpeed*dt},site,dimensions:{length:3.2,width:ROAD_INFRASTRUCTURE.trainLength}});
+      }
     }
     if(this.dipHits.size){
       const sites=this.road.infrastructure(p.s-30,p.s+30,this.hitSites);

@@ -1,10 +1,65 @@
 import { AUDIO, MAX_RANK, VEHICLES, clamp } from './config.js';
 
+// 游戏和试听共用的轮轨、汽笛波形；撞缝节奏与共鸣取自参考音频分析，不加载录音。
+export function trainSamples(sampleRate){
+  const beat=AUDIO.train.clatter,horn=AUDIO.train.horn;
+  const clatter=new Float32Array(Math.round(sampleRate*beat.period)),whistle=new Float32Array(Math.round(sampleRate*horn.loopSeconds));
+  for(let hit=0;hit<beat.hits.length;hit++){
+    const [offset,weight,brightness]=beat.hits[hit];
+    const layers=[[beat.body,weight,beat.bodyTail],[beat.metal,weight*brightness,beat.metalTail]];
+    // 两次冲击保持轮轨音色，靠低频重量和金属亮度形成“哐当”，不把第二下移调成鼓点。
+    for(const [modes,gain,tail]of layers){
+      for(let mode=0;mode<modes.length;mode++){
+        const [hz,strength,decay]=modes[mode],phase=(mode+hit)*beat.phaseStep;
+        const end=Math.min(clatter.length,Math.ceil((offset+decay*beat.decayLimit)*sampleRate));
+        for(let i=Math.ceil(offset*sampleRate);i<end;i++){
+          const time=i/sampleRate-offset,attack=Math.min(1,time/beat.attack);
+          const envelope=Math.exp(-time/decay)*(1+time/tail);
+          clatter[i]+=attack*gain*strength*Math.cos(2*Math.PI*hz*time+phase)*envelope;
+        }
+      }
+    }
+  }
+  // 同一基音的十四次谐波，第二次最强；整数周期保持循环接点连续。
+  const cycles=Math.round(horn.hz*horn.loopSeconds);
+  for(let i=0;i<whistle.length;i++)for(let harmonic=1;harmonic<horn.harmonics.length;harmonic++){
+    whistle[i]+=horn.harmonics[harmonic]*Math.cos(2*Math.PI*harmonic*cycles*i/whistle.length+horn.phases[harmonic]);
+  }
+  const mean=clatter.reduce((sum,value)=>sum+value,0)/clatter.length;
+  for(let i=0;i<clatter.length;i++)clatter[i]-=mean;
+  for(const data of [clatter,whistle]){
+    let peak=0;for(const value of data)peak=Math.max(peak,Math.abs(value));
+    if(peak>1)for(let i=0;i<data.length;i++)data[i]/=peak;
+  }
+  return {clatter,whistle};
+}
+export function trainHornEnvelope(age){
+  const horn=AUDIO.train.horn;let envelope=0;
+  for(const [offset,duration]of horn.pulses){
+    const time=age-offset;if(time<0||time>=duration)continue;
+    const attack=clamp(time/horn.attack,0,1),release=clamp((duration-time)/horn.release,0,1);
+    envelope=Math.max(envelope,Math.sin(attack*Math.PI/2)*Math.sin(release*Math.PI/2));
+  }
+  return envelope;
+}
+export function trainHornPitch(age){
+  const horn=AUDIO.train.horn;
+  for(const [offset,duration]of horn.pulses){
+    const time=age-offset;if(time<0||time>=duration)continue;
+    return 1-horn.rise*(1-clamp(time/horn.attack,0,1))-horn.fall*clamp((time-duration+horn.release)/horn.release,0,1)+horn.vibrato*Math.sin(2*Math.PI*horn.vibratoHz*time);
+  }
+  return 1;
+}
+export function trainClatterRate(age){
+  const beat=AUDIO.train.clatter;
+  return beat.rateStart+(beat.rateEnd-beat.rateStart)*clamp(age/beat.accelerateSeconds,0,1);
+}
+
 // 全部音效由 Web Audio 实时合成，不加载音频文件；上下文在首次用户手势（开始游戏）时创建。
 // 环境声（发动机、喷气、横风、流水、火车、坦克、掠过车流）按帧更新增益、声像与音高，
 // 火车、坦克与掠过车辆额外按接近速率做多普勒音高变化；事件声按次触发，暂停与结算立即静音。
 export class GameAudio {
-  constructor(){this.context=null;this.scrapeAt=0;this.grazeAt=0;this.trainDistance=Infinity;this.tankDistance=Infinity;this.policeDistance=Infinity;this.sites=[];this.passing=new Map();}
+  constructor(){this.context=null;this.scrapeAt=0;this.grazeAt=0;this.trainId=null;this.trainDistance=Infinity;this.tankDistance=Infinity;this.policeDistance=Infinity;this.sites=[];this.passing=new Map();}
   ensure(){
     if(this.context){this.context.resume();return;}
     const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)return;
@@ -61,19 +116,20 @@ export class GameAudio {
     return {gain};
   }
   trainLoop(){
-    // 方波幅度调制产生“哐当哐当”的行进节奏；声像随火车横穿桥下左右移动。
-    const ctx=this.context,out=ctx.createGain();out.gain.value=0;
-    const pulse=ctx.createGain();pulse.gain.value=.6;
-    const lfo=ctx.createOscillator();lfo.type='square';lfo.frequency.value=4.4;
-    const depth=ctx.createGain();depth.gain.value=.4;lfo.connect(depth);depth.connect(pulse.gain);lfo.start();
-    const rumble=ctx.createBiquadFilter();rumble.type='lowpass';rumble.frequency.value=130;rumble.Q.value=.8;
-    const clatter=ctx.createBiquadFilter();clatter.type='bandpass';clatter.frequency.value=1100;clatter.Q.value=1.2;
-    const clatterGain=ctx.createGain();clatterGain.gain.value=.16;
-    let last=pulse;
-    const pan=this.panner(0);if(pan){pulse.connect(pan);last=pan;}
-    const src=this.noiseSource();src.connect(rumble);src.connect(clatter);
-    clatter.connect(clatterGain);clatterGain.connect(pulse);rumble.connect(pulse);last.connect(out);out.connect(this.master);
-    return {gain:out,lfo,rumble,clatter,pan};
+    // 成对轮轨敲击和柔和汽笛分层混音，共用距离增益与声像。
+    const ctx=this.context,settings=AUDIO.train,out=ctx.createGain(),mix=ctx.createGain();out.gain.value=0;
+    const pan=ctx.createStereoPanner?ctx.createStereoPanner():null;
+    if(pan){mix.connect(pan);pan.connect(out);}else mix.connect(out);
+    out.connect(this.master);
+    const samples=trainSamples(ctx.sampleRate),clatterBuffer=ctx.createBuffer(1,samples.clatter.length,ctx.sampleRate),hornBuffer=ctx.createBuffer(1,samples.whistle.length,ctx.sampleRate);
+    clatterBuffer.getChannelData(0).set(samples.clatter);hornBuffer.getChannelData(0).set(samples.whistle);
+    const clatter=ctx.createBufferSource();clatter.buffer=clatterBuffer;clatter.loop=true;
+    const clatterGain=ctx.createGain();clatterGain.gain.value=settings.clatter.gain;
+    clatter.connect(clatterGain);clatterGain.connect(mix);clatter.start();
+    const hornGain=ctx.createGain();hornGain.gain.value=0;
+    const horn=ctx.createBufferSource();horn.buffer=hornBuffer;horn.loop=true;
+    horn.connect(hornGain);hornGain.connect(mix);horn.start();
+    return {gain:out,pan,clatter,horn:{gain:hornGain,source:horn}};
   }
   tankLoop(){
     // 低通履带噪声叠加慢速幅度调制，形成贴近的轰隆感；声像按坦克所在侧偏置。
@@ -134,21 +190,28 @@ export class GameAudio {
       }
     }
     this.ramp(this.water.gain.gain,water*water*AUDIO.water.gain,.2);
-    // 火车：按桥下火车与玩家的直线距离控制哐当声，声像随横穿方向移动并叠加多普勒。
+    // 火车：轮轨“哐当”逐渐加快，按车速提前起音，在桥顶前后悠长鸣笛一次。
     // 暂停后 trains 数组冻结滞留，计算必须随 run 门控，否则 setState 静音后又被拉高。
-    let train=0,trainPan=0,trainDistance=Infinity;
+    let train=0,trainPan=0,trainDistance=Infinity,trainItem=null;
     if(run)for(const item of game.infrastructure.trains){
       const distance=Math.hypot(item.site.center-p.s,item.d-p.d);
       const proximity=clamp(1-distance/AUDIO.train.range,0,1);
-      if(proximity>train){train=proximity;trainPan=clamp(item.d/50,-1,1)*AUDIO.train.pan*proximity;trainDistance=distance;}
+      if(proximity>train){train=proximity;trainPan=clamp((item.d-p.d)/50,-1,1)*AUDIO.train.pan*proximity;trainDistance=distance;trainItem=item;}
     }
+    if(this.trainId!==trainItem?.id)this.trainDistance=Infinity;
+    this.trainId=trainItem?.id??null;
+    let hornEnvelope=0;
     if(train){
       const factor=this.doppler(trainDistance,dt,this.trainDistance);
       this.trainDistance=trainDistance;
-      this.ramp(this.train.lfo.frequency,4.4*factor,.1);
-      this.ramp(this.train.rumble.frequency,130*factor,.1);this.ramp(this.train.clatter.frequency,1100*factor,.1);
+      const age=trainItem.hornAt===undefined?-Infinity:game.activeSeconds-trainItem.hornAt;
+      this.ramp(this.train.clatter.playbackRate,trainClatterRate(trainItem.age),.1);
+      const hornDoppler=1+(factor-1)*AUDIO.train.horn.dopplerScale;
+      this.ramp(this.train.horn.source.playbackRate,hornDoppler*trainHornPitch(age),.05);
+      hornEnvelope=trainHornEnvelope(age);
       if(this.train.pan)this.train.pan.pan.setTargetAtTime(trainPan,t,.12);
     }else this.trainDistance=Infinity;
+    this.ramp(this.train.horn.gain.gain,hornEnvelope*AUDIO.train.horn.gain,.02);
     this.ramp(this.train.gain.gain,train*train*AUDIO.train.gain,.15);
     // 坦克：附近系统坦克的履带低频轰隆，按距离与所在侧衰减，同样带多普勒；随 run 门控。
     let tank=0,tankPan=0,tankDistance=Infinity;
