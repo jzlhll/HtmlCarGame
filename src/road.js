@@ -53,10 +53,9 @@ export class Road {
         :ROAD_INFRASTRUCTURE.dipRampMin+structureRng()*(ROAD_INFRASTRUCTURE.dipRampMax-ROAD_INFRASTRUCTURE.dipRampMin);
       const ramp=Math.max(Math.ceil(Math.abs(height)*1.5/ROAD_INFRASTRUCTURE.maxGrade/5)*5,Math.round(rampBase/5)*5);
       const length=ramp*2+flat;
-      const choice=structureRng()<.55?'rail':'river',feature=kind==='dip'&&choice==='rail'?'valley':choice,trainChance=structureRng();
+      const choice=structureRng()<.55?'rail':'river',feature=kind==='dip'&&choice==='rail'?'valley':choice;
       this.structures.push({start,end:start+length,length,ramp,flat,height,kind,feature,
-        center:start+length/2,flatStart:start+ramp,flatEnd:start+ramp+flat,
-        hasTrain:kind==='viaduct'&&feature==='rail'&&trainChance<ROAD_INFRASTRUCTURE.trainChance});
+        center:start+length/2,flatStart:start+ramp,flatEnd:start+ramp+flat});
       // 建筑道路之间留出足够长的平地区间，容纳加长后的分叉及两端缓冲。
       start+=length+ROAD_INFRASTRUCTURE.gapMin+Math.floor(structureRng()*((ROAD_INFRASTRUCTURE.gapMax-ROAD_INFRASTRUCTURE.gapMin)/20+1))*20;
     }

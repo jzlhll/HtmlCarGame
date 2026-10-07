@@ -119,7 +119,7 @@ export const ROADWORKS={first:380,interval:400,chance:.5,minLength:30,maxLength:
 // 高架与低沉地形随机:高度/深度与坡长独立抽取,长坡高而平缓(顶峰较远),短坡高而陡(很快到顶);
 // 最小坡长按 maxGrade 反推(|高度|×1.5÷最大坡度,smooth 曲线峰值坡度为高度×1.5÷坡长),坡度不会越界。
 export const ROAD_INFRASTRUCTURE={
-  trainChance:.4,dipLength:20,slowMultiplier:.5,trainSpeed:22,trainLength:42,gapMin:800,gapMax:1160, // 间距由 1600–2320 缩半,起伏路段出现频率加倍;分叉只在较宽的间距区间(可用跨度≥minSpan)内安放。
+  trainLeadSeconds:1.5,dipLength:20,slowMultiplier:.5,trainSpeed:22,trainLength:42,gapMin:800,gapMax:1160, // 间距由 1600–2320 缩半,起伏路段出现频率加倍;分叉只在较宽的间距区间(可用跨度≥minSpan)内安放。
   viaductHeightMin:14,viaductHeightMax:40, // 桥面高度抽取范围(米),原 14–20 大幅上调。
   viaductRampMin:120,viaductRampMax:400, // 引桥坡长抽取范围(米):400 米长坡配高桥即"高而缓",被坡度反推抬高后即"高而陡"。
   dipDepthMin:3,dipDepthMax:16, // 谷底深度抽取范围(米,向下),原固定 3。
@@ -212,4 +212,4 @@ export const approach = (value, target, delta) => value < target ? Math.min(targ
 // 启动早期应用 URL 测试参数(?fast=1 或 ?POLICE.intervalMin=3 等白名单字段),
 // 仅服务 Agent/人工快速验证随机事件;不带参数或 Node 端导入时默认值原样生效。
 import { applyTestOverrides } from './test-overrides.js';
-applyTestOverrides({POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});
+applyTestOverrides({TRAFFIC_DENSITY,POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});

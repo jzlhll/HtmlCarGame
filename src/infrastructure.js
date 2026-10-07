@@ -5,16 +5,18 @@ export class RoadInfrastructure {
   constructor(road){this.road=road;this.events=new Map();this.dipHits=new Set();this.trains=[];this.nearby=[];this.hitSites=[];}
   advance(dt,game){
     const p=game.player,now=game.activeSeconds+dt;
+    // 主路里程包含坡道弧长；按当前车速将提前量换成到桥面中央铁路交叉点的路面距离。
+    const ahead=p.speed/3.6*ROAD_INFRASTRUCTURE.trainLeadSeconds;
     for(const site of this.road.infrastructure(p.s-420,p.s+480,this.nearby)){
-      if(site.kind!=='viaduct'||site.feature!=='rail'||this.events.has(site.id)||site.center>p.s+180||site.center<p.s-200)continue;
-      const start=now+Math.max(2,(site.center-p.s)/Math.max(8,p.speed/3.6)-5);
-      this.events.set(site.id,{site,start});
+      if(site.kind!=='viaduct'||site.feature!=='rail'||this.events.has(site.id)||p.speed<=0||site.center>p.s+ahead||site.center<p.s)continue;
+      this.events.set(site.id,{site,start:game.activeSeconds});
     }
     this.trains.length=0;
     for(const [id,event]of this.events){
       if(event.site.end<p.s-420){this.events.delete(id);continue;}
-      const {site,start}=event,age=now-start,d=-120+age*ROAD_INFRASTRUCTURE.trainSpeed;
-      if(site.hasTrain&&age>=0&&d<120)this.trains.push({id,s:site.center,d,previous:{s:site.center,d:d-ROAD_INFRASTRUCTURE.trainSpeed*dt},site,dimensions:{length:3.2,width:ROAD_INFRASTRUCTURE.trainLength}});
+      // 火车中心在提前量结束时到达公路中心，玩家保持当前速度时两者在桥顶交汇。
+      const {site,start}=event,age=now-start,d=(age-ROAD_INFRASTRUCTURE.trainLeadSeconds)*ROAD_INFRASTRUCTURE.trainSpeed;
+      if(d<120)this.trains.push({id,s:site.center,d,previous:{s:site.center,d:d-ROAD_INFRASTRUCTURE.trainSpeed*dt},site,dimensions:{length:3.2,width:ROAD_INFRASTRUCTURE.trainLength}});
     }
     if(this.dipHits.size){
       const sites=this.road.infrastructure(p.s-30,p.s+30,this.hitSites);

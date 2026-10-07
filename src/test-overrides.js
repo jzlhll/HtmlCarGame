@@ -4,8 +4,9 @@
 
 export const TEST_OVERRIDES={active:false,keys:[]};
 
-// 白名单开放事件节奏、概率及警车距离、网尺寸等字段，不开放车型尺寸与车辆碰撞阈值。
+// 白名单开放事件节奏、概率、车流容量及警车距离、网尺寸等字段，不开放车型尺寸与车辆碰撞阈值。
 const WHITELIST={
+  TRAFFIC_DENSITY:['capacity','maxCapacity','capacityPerStep'],
   POLICE:['intervalMin','intervalMax','spawnAheadMin','spawnAheadMax','keepMin','keepMax','keepGain','chaseRatio','closeRatio','netAheadMin','netLeadSeconds','netInterval','netSizeBase','netSizeGrowth','netSizeMax','netKeep','quizMathSeconds','quizChineseSeconds','quizEnglishSeconds','catchSeconds','maxChaseSeconds'],
   WHITE_HORSE:['intervalSeconds','visibleSeconds','rampSeconds','shieldSeconds','shieldBlinkSeconds','recoverySeconds'],
   COW_CROSSING:['minInterval','intervalRange','chance'],
