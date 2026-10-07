@@ -28,7 +28,7 @@ export class Nitro {
     return 0;
   }
   limit(normal){
-    const boosted=Math.round(normal*NITRO.speedMultiplier);
+    const boosted=NITRO.maxSpeed;
     if(this.boost>0)return boosted;
     if(this.recovery>0)return normal+Math.max(0,Math.min(this.recoverySpeed,boosted)-normal)*this.recovery/NITRO.recoverySeconds;
     return normal;

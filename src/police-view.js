@@ -1,18 +1,20 @@
 import * as THREE from 'three';
-import { POLICE, clamp, lerp } from './config.js';
+import { clamp } from './config.js';
 import { vehicleModel, material } from './models.js';
 
 // 警车使用小汽车底盘的白车身,车顶警灯红蓝交替闪烁;渔网用网格纹理面片渲染,
-// 下落阶段悬在半空并在地面显示预警圈,落地后平铺路面,过期前一直能抓人。
+// 捕捞网直接平铺路面，生成即生效，过期前接触即可抓人。
 function netTexture(){
   const canvas=document.createElement('canvas');canvas.width=canvas.height=128;
-  const ctx=canvas.getContext('2d');ctx.strokeStyle='rgba(248,246,238,.95)';ctx.lineWidth=7;
+  const ctx=canvas.getContext('2d');
+  ctx.fillStyle='rgba(18,29,38,.4)';ctx.fillRect(0,0,128,128);
+  ctx.strokeStyle='rgba(255,250,225,1)';ctx.lineWidth=7;
   for(let i=0;i<=4;i++){
     const p=i*32;
     ctx.beginPath();ctx.moveTo(p,0);ctx.lineTo(p,128);ctx.stroke();
     ctx.beginPath();ctx.moveTo(0,p);ctx.lineTo(128,p);ctx.stroke();
   }
-  const texture=new THREE.CanvasTexture(canvas);texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.repeat.set(4,4);
+  const texture=new THREE.CanvasTexture(canvas);texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.repeat.set(2,2);texture.colorSpace=THREE.SRGBColorSpace;
   return texture;
 }
 export class PoliceView {
@@ -34,17 +36,18 @@ export class PoliceView {
     }
     this.group.add(bar);
     this.group.visible=false;scene.add(this.group);
-    // 渔网实例池:网面 + 落地前的地面预警圈。
+    // 橙色外圈突出捕捞网位置，网面加深底色以适应浅色路面。
     const texture=netTexture();
+    const ringGeometry=new THREE.RingGeometry(.73,.8,48).rotateX(-Math.PI/2);
+    const ringMaterial=new THREE.MeshBasicMaterial({color:0xffa036,transparent:true,opacity:.9,side:THREE.DoubleSide,depthWrite:false,fog:false});
     this.netViews=[];
     for(let i=0;i<6;i++){
       const view=new THREE.Group();
       const mesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2),
-        new THREE.MeshBasicMaterial({map:texture,transparent:true,opacity:.85,side:THREE.DoubleSide,depthWrite:false}));
+        new THREE.MeshBasicMaterial({map:texture,transparent:true,opacity:.9,side:THREE.DoubleSide,depthWrite:false}));
       view.add(mesh);
-      const ring=new THREE.Mesh(new THREE.RingGeometry(.9,1,32).rotateX(-Math.PI/2),
-        new THREE.MeshBasicMaterial({color:0xffa036,transparent:true,opacity:.75,fog:false}));
-      ring.position.y=.06;view.add(ring);
+      const ring=new THREE.Mesh(ringGeometry,ringMaterial);
+      ring.position.y=.02;view.add(ring);
       view.userData.mesh=mesh;view.userData.ring=ring;
       view.visible=false;scene.add(view);this.netViews.push(view);
     }
@@ -65,23 +68,17 @@ export class PoliceView {
       const spin=dt>0&&game.state==='RUNNING'?police.speed/3.6*dt:0;
       for(const wheel of this.body.children)if(wheel.userData.wheelRadius)wheel.rotateY(-spin/clamp(wheel.userData.wheelRadius,.1,1));
     }
-    // 渔网:下落阶段从空中加速降落并显示地面预警圈,落地后平铺路面直到过期。
+    // 网面与捕捞范围一致，外圈仅作醒目标记；两者同步贴合道路并随尺寸增长。
     const nets=game.police?.nets??[];
     for(let i=0;i<this.netViews.length;i++){
       const view=this.netViews[i],net=nets[i];
       if(!visible||!net){view.visible=false;continue;}
-      const age=game.activeSeconds-net.born,ratio=clamp(age/net.fall,0,1);
       const point=renderer.local(net.s,net.d,net.route??null);
-      // 落下阶段高度按平方缓动(加速下坠),从空中收到路面。
-      const height=lerp(9,.12,ratio*ratio);
       view.visible=true;
-      view.position.set(point.x,point.y+height,point.z);
+      view.position.set(point.x,point.y+.12,point.z);
       view.rotation.set(point.pitch,-point.heading,0,'YXZ');
-      const mesh=view.userData.mesh,ring=view.userData.ring,landed=ratio>=1;
-      mesh.scale.setScalar(net.size);
-      ring.scale.setScalar(net.size);
-      ring.visible=!landed;
-      mesh.material.opacity=landed?.9:.85-ratio*.25;
+      view.userData.mesh.scale.setScalar(net.size);
+      view.userData.ring.scale.setScalar(net.size);
     }
   }
 }

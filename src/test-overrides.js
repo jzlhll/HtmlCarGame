@@ -6,7 +6,7 @@ export const TEST_OVERRIDES={active:false,keys:[]};
 
 // 白名单开放事件节奏、概率及警车距离、网尺寸等字段，不开放车型尺寸与车辆碰撞阈值。
 const WHITELIST={
-  POLICE:['intervalMin','intervalMax','spawnAheadMin','spawnAheadMax','keepMin','keepMax','keepGain','chaseRatio','closeRatio','netRange','netInterval','netSizeBase','netSizeGrowth','netSizeMax','netFallBase','netFallGrowth','netFallMax','netKeep','catchSeconds','maxChaseSeconds'],
+  POLICE:['intervalMin','intervalMax','spawnAheadMin','spawnAheadMax','keepMin','keepMax','keepGain','chaseRatio','closeRatio','netAheadMin','netLeadSeconds','netInterval','netSizeBase','netSizeGrowth','netSizeMax','netKeep','quizMathSeconds','quizChineseSeconds','quizEnglishSeconds','catchSeconds','maxChaseSeconds'],
   WHITE_HORSE:['intervalSeconds','visibleSeconds','rampSeconds','shieldSeconds','shieldBlinkSeconds','recoverySeconds'],
   COW_CROSSING:['minInterval','intervalRange','chance'],
   ROADWORKS:['first','interval','chance'],
@@ -21,7 +21,7 @@ const WHITELIST={
 
 // fast=1 一键测试档:把分钟级节奏压缩到秒级,便于快速触发警车、白马、天气、分叉候选、炮击等随机事件。
 const FAST_PRESET={
-  POLICE:{intervalMin:3,intervalMax:8},
+  POLICE:{intervalMin:3,intervalMax:8,quizMathSeconds:5,quizChineseSeconds:5,quizEnglishSeconds:5},
   WHITE_HORSE:{intervalSeconds:8},
   COW_CROSSING:{minInterval:4,intervalRange:4},
   ROADWORKS:{first:10},

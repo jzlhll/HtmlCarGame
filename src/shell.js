@@ -56,11 +56,11 @@ export class Shelling {
     const reach=shell.size/game.road.minimumPathScale;
     for(const hazard of game.hazards.range(shell.s-reach,shell.s+reach,[]))
       if(this.inArea(hazard,center,half,game.road))game.hazards.hits.set(hazard.id,hazard.s);
-    // 玩家判定:白马无敌与调试保护免伤;坦克损失 1/3 满防御、卡车 1/2,其余车型直接死亡。
+    // 玩家判定:白马无敌与复活保护免伤;坦克损失 1/3 满防御、卡车 1/2,其余车型直接死亡。
     const p=game.player;
     const horseProtected=game.whiteHorse.shielded(game.activeSeconds);
     const protectedNow=game.activeSeconds<p.invincibleUntil;
-    const debugProtected=game.debugRun&&game.activeSeconds<game.debugInvincibleUntil;
+    const debugProtected=game.activeSeconds<game.debugInvincibleUntil;
     if(horseProtected||protectedNow||debugProtected||!this.inArea(p,center,half,game.road))return;
     if(p.rank===5)game.hurt(Math.max(1,Math.round(VEHICLE_DEFENSE[5].max*SHELL.tankDamageFraction)),'shell');
     else if(p.rank===4)game.hurt(Math.max(1,Math.round(VEHICLE_DEFENSE[4].max*SHELL.truckDamageFraction)),'shell');

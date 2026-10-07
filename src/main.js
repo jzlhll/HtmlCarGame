@@ -27,7 +27,7 @@ try{
     const animating=game.state==='RUNNING'||game.state==='DYING'||game.state==='CAUGHT';
     if(animating||renderer.needsFrame(game))renderer.draw(game,dt);
     ui.update(dt);audio.update(dt,game);inFrame=false;
-    if(animating||renderer.needsFrame(game))frameId=requestAnimationFrame(frame);
+    if(animating||game.state==='QUIZ'||renderer.needsFrame(game))frameId=requestAnimationFrame(frame);
   };
   const wake=()=>{
     if(frameId!==null||inFrame)return;

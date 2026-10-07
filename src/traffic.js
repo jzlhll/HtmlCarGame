@@ -33,16 +33,22 @@ export class Traffic {
   }
   gap(a,b){return Math.abs(a.s-b.s)*this.road.pathScale((a.s+b.s)/2,a.route)-(VEHICLES[a.rank].length+VEHICLES[b.rank].length)/2;}
   clearance(direction,speed,otherSpeed=speed){return Math.max(direction<0?45:35,speed*2,otherSpeed*2)*this.gapScale;}
-  spawn(player,s,lane,direction,initial=false,convoy=null){
-    if(this.cars.length>=this.capacity||!this.road.laneOpen(s,lane,direction,300,10))return false;
-    const d=laneD(lane,direction),rank=convoy?.rank??this.rank(player.rank,direction,player.s,s>player.s),v=VEHICLES[rank];
+  spawnParameters(player,direction,ahead,convoy=null){
+    const rank=convoy?.rank??this.rank(player.rank,direction,player.s,ahead),v=VEHICLES[rank];
     let speed=convoy?.desired;
     if(speed==null){
       const cruise=v.min+this.rng()*(v.max-v.min);
       speed=(direction<0?Math.round(cruise*ONCOMING_SPEED_SCALE):cruise)/3.6;
     }
+    const safeDistance=Math.max(ahead?120:TRAFFIC_SPAWN_BEHIND.min,Math.abs(speed*direction-player.speed/3.6)*TRAFFIC_SPAWN_AHEAD.safetySeconds+v.length+VEHICLES[player.rank].length);
+    return {rank,speed,safeDistance};
+  }
+  spawn(player,s,lane,direction,initial=false,convoy=null,candidate=null){
+    if(this.cars.length>=this.capacity||!this.road.laneOpen(s,lane,direction,300,10))return false;
+    const {rank,speed,safeDistance}=candidate??this.spawnParameters(player,direction,s>player.s,convoy);
+    const d=laneD(lane,direction);
     const car={id:this.nextId++,s,d,rank,lane,direction,speed,desired:speed,merge:null,sidePush:0,sidePushTime:0,convoy};
-    if(Math.abs(s-player.s)<Math.max(s<player.s ? TRAFFIC_SPAWN_BEHIND.min:120,Math.abs(speed*direction-player.speed/3.6)*4+v.length+VEHICLES[player.rank].length))return false;
+    if(Math.abs(s-player.s)<safeDistance)return false;
     const ahead=this.road.available(s+direction*240);
     if(lane===2&&ahead<3)return false;
     // 开局跨车道也留出纵向层次，避免三条车道的车辆排成横线。
@@ -89,11 +95,19 @@ export class Traffic {
     if(this.cars.length>=this.capacity)return false;
     // 每次补车最多尝试两次，失败后重选距离、开放车道及车型；成功只投放一辆。
     for(let attempt=0;attempt<2;attempt++){
-      const s=player.s+lerp(from,to,this.rng()),lanes=[];
+      let candidate=null,min=from,max=to;
+      if(direction<0&&from>0){
+        // 先确定实际车型与速度，再推远投放窗口，避免高速对向车被固定近距窗口全部排除。
+        candidate=this.spawnParameters(player,direction,true);
+        min=Math.max(from,candidate.safeDistance);
+        max=Math.min(min+to-from,TRAFFIC_SPAWN_AHEAD.retainDistance);
+        if(min>=max)continue;
+      }
+      const s=player.s+lerp(min,max,this.rng()),lanes=[];
       for(let lane=0;lane<this.road.available(s);lane++)if(this.road.laneOpen(s,lane,direction,300,10))lanes.push(lane);
       if(!lanes.length)continue;
       const lane=lanes[Math.floor(this.rng()*lanes.length)];
-      if(this.spawn(player,s,lane,direction))return true;
+      if(this.spawn(player,s,lane,direction,false,null,candidate))return true;
     }
     return false;
   }
@@ -268,7 +282,7 @@ export class Traffic {
     const d=this.road.branchCenter(s,route)+laneD(lane,direction),rank=this.rank(player.rank,direction,player.s,s>player.s),v=VEHICLES[rank];
     const cruise=v.min+rng()*(v.max-v.min),colors=TRAFFIC_COLORS[rank];
     const speed=(direction<0?Math.round(cruise*ONCOMING_SPEED_SCALE):cruise)/3.6;
-    const safeDistance=Math.max(120,Math.abs(speed*direction-player.speed/3.6)*4+v.length+VEHICLES[player.rank].length);
+    const safeDistance=Math.max(120,Math.abs(speed*direction-player.speed/3.6)*TRAFFIC_SPAWN_AHEAD.safetySeconds+v.length+VEHICLES[player.rank].length);
     if(Math.abs(player.s-s)<safeDistance)return;
     if(this.cars.some(car=>Math.abs(car.s-s)<40&&((car.route??null)===route?Math.abs(car.d-d)<2.4:this.road.junction(s,fork.side))))return;
     const car={id:this.nextId++,s,d,route,rank,lane,direction,speed,desired:speed,color:colors[Math.floor(rng()*colors.length)],merge:null,convoy:null,sidePush:0,sidePushTime:0};this.configureDriving(car);this.cars.push(car);
@@ -433,7 +447,7 @@ export class Traffic {
       if(!car.merge&&!car.sidePush)car.lane=clamp(Math.round(((car.d-center)*car.direction-.4)/LANE_WIDTH-.5),0,this.road.available(car.s,car.route)-1);
     }
     let retained=0;
-    for(const car of this.cars)if(!car.remove&&car.s>game.player.s-TRAFFIC_SPAWN_BEHIND.retainDistance&&car.s<game.player.s+480)this.cars[retained++]=car;
+    for(const car of this.cars)if(!car.remove&&car.s>game.player.s-TRAFFIC_SPAWN_BEHIND.retainDistance&&car.s<game.player.s+TRAFFIC_SPAWN_AHEAD.retainDistance)this.cars[retained++]=car;
     this.cars.length=retained;
   }
 }

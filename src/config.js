@@ -1,10 +1,10 @@
 export const VEHICLES = [
   null,
-  {name:'自行车', length:1, width:.55, min:20, max:45, playerMax:90, lateral:6.6, color:0xf6cf57},
-  {name:'三轮车', length:1.55, width:.85, min:55, max:85, playerMax:110, lateral:6.3, color:0x62b59a},
-  {name:'小汽车', length:2, width:1, min:55, max:95, playerMax:125, lateral:6.15, color:0x68b6d7},
-  {name:'卡车', length:3.75, width:1.25, min:45, max:75, playerMax:125, lateral:5.1, color:0xe3945e},
-  {name:'坦克', length:2.5, width:1.875, min:25, max:55, playerMax:125, lateral:4.35, color:0x829b83},
+  {name:'自行车', length:1, width:.55, min:20, max:45, playerMax:110, lateral:6.6, color:0xf6cf57},
+  {name:'三轮车', length:1.55, width:.85, min:55, max:85, playerMax:130, lateral:6.3, color:0x62b59a},
+  {name:'小汽车', length:2, width:1, min:55, max:95, playerMax:145, lateral:6.15, color:0x68b6d7},
+  {name:'卡车', length:3.75, width:1.25, min:45, max:75, playerMax:145, lateral:5.1, color:0xe3945e},
+  {name:'坦克', length:2.5, width:1.875, min:25, max:55, playerMax:145, lateral:4.35, color:0x829b83},
 ];
 export const MAX_RANK=VEHICLES.length-1;
 // 玩家座驾涂装：yellow/blue/green 为纯色，rainbow 使用渐变贴图；默认绿色。
@@ -47,16 +47,18 @@ export const SIDE_BOUNCE={
 };
 // 总积分下降导致降级后的统一保护时间，暂停不消耗；不免疫道路障碍、截止墙和饥饿。
 export const REAR_END_INVINCIBLE_SECONDS=2;
-// 调试复活后保护两秒，包括截止墙和道路障碍；暂停不消耗。
+// 答题或调试复活后保护两秒，包括截止墙和道路障碍；暂停不消耗。
 export const DEBUG_REVIVE_SECONDS=2;
-export const AUTO_ACCELERATION=6;
+export const REVIVE_CLEAR_AHEAD=50; // 原地复活时清理当前路线前方的车流距离(米)。
+export const PLAYER_START_SPEED=57.5;
+export const AUTO_ACCELERATION=20; // 松开刹车或加速键、解冻后自动提速，单位 km/h/秒。
 // 上键普通加速可直接到车型最高速,不消耗氮气;氮气须停按后再按且已在最高速时才消耗。
 export const MANUAL_ACCELERATION={acceleration:35};
 export const NITRO={
   capacity:2, // 气量以管为单位，最多存两管，允许消耗或补充半管等部分气量。
   eatCharge:.5, // 吞吃回气按车型计算:eatCharge×被吃车辆等级(自行车半管,每高一级加半管,封顶两管)。
   eatSideSeconds:.4, // 同一方向连续侧移超过此时长吞吃，回气翻倍为一管；短按横移只得基础半管。
-  speedMultiplier:1.66, // 喷气时正常上限提高 66%（63% 提升 5% 后取整），车型喷气上限按 km/h 四舍五入。
+  maxSpeed:215, // 各车型无惩罚时统一的喷气最高速度(km/h)。
   boostAcceleration:70, // 喷气每秒额外提速，单位 km/h，低速同样有效。
   boostSeconds:3.5, // 每管可持续喷气的秒数，满两管可喷 7 秒，松开上箭头保留余量。
   recoverySeconds:.35, // 停喷后超出正常限速的速度平滑回落，可立即再次喷气。
@@ -83,7 +85,7 @@ export const TRAFFIC_WEIGHTS={
   // 前方以低一级为主要吞吃目标；距离增长只挤占同级比例，不削减可吞吃目标。
   ahead:{oneLower:.6,otherLower:.1,higher:.1,higherMax:.15},
 };
-export const TRAFFIC_SPAWN_AHEAD={min:160,max:240};
+export const TRAFFIC_SPAWN_AHEAD={min:160,max:240,safetySeconds:4,retainDistance:480};
 // 升至三轮车或小汽车时，立即在当前路线前方投放同级与低一级各五辆。
 export const UPGRADE_TRAFFIC={countPerRank:5,minAhead:80,maxAhead:150};
 // 后方车流覆盖本车道；新车远离玩家投放，超过保留距离才回收，距离单位为米。
@@ -158,7 +160,7 @@ export const WHITE_HORSE={
   rampSeconds:1,shieldSeconds:10,shieldBlinkSeconds:2,recoverySeconds:2,speedMultiplier:2,
 };
 // 警车追击:无敌警车随机出现,速度自由——只按前方距离窗口调节车速并极速避让车流。
-// 进入撒网范围后周期性向玩家预判位置发射渔网,落地接触即被抓,随后弹出所选年级的答题(数学口算与语文古诗)。
+// 追击期间每三秒在玩家当前路线、车道前方按两秒车程且至少四十米生成捕捞网，接触后进入答题。
 export const POLICE={
   intervalMin:30,intervalMax:120, // 开局及撤离后随机等待 30~120 秒。
   spawnAheadMin:35,spawnAheadMax:55, // 生成在玩家前方 35~55 米。
@@ -167,17 +169,16 @@ export const POLICE={
   chaseRatio:1.5, // 间距小于 keepMin 时警车加速到玩家速度的该倍数拉开(速度自由,不拦截玩家)。
   closeRatio:.7, // 间距超过 keepMax 时警车减速到玩家速度的该比例,让玩家跟上来。
   dodgeSpeed:12,dodgeLookahead:26, // 极快避让车流:横向速度(米/秒)与前向观察距离(米)。
-  netRange:32, // 与玩家距离小于该值(米)才开始撒网。
-  netInterval:3, // 撒网间隔(秒,常量,后续可修改)。
+  netAheadMin:40, // 生成位置与玩家的最小沿路线距离(米)。
+  netLeadSeconds:2, // 按生成时玩家车速预留的前方车程(秒)。
+  netInterval:3, // 追击期间的撒网间隔(有效运行秒数)，不受警车距离限制。
   netSizeBase:3, // 渔网初始边长(米,原 10 缩到 1/3 取整),3×3。
   netSizeGrowth:.28, // 警车持续期间渔网边长每秒增长(米),增长力度常量。
   netSizeMax:16, // 渔网边长上限,保证仍可躲。
-  netFallBase:2, // 渔网初始落下时长(秒)。
-  netFallGrowth:.14, // 落下时长每秒增长(秒),增长力度常量。
-  netFallMax:4, // 落下时长上限。
-  netKeep:6, // 渔网落地后存活时间(秒),期间接触即被抓。
+  netKeep:6, // 捕捞网生成后立即生效，存活时间(有效运行秒数)。
+  quizMathSeconds:45,quizChineseSeconds:30,quizEnglishSeconds:30, // 题目显示后按真实时间倒计时，超时结束本局。
   catchSeconds:1.5, // 被抓动画时长:玩家缩小并被拉向警车。
-  maxChaseSeconds:45, // 警车持续时长上限,靠连续无敌加速消耗它即可甩掉。
+  maxChaseSeconds:45, // 警车持续时长达到上限后自动撤离。
 };
 export const LANE_WIDTH = 3.6;
 // 天降炮弹:开局 startSeconds 后按 intervalMin~intervalMax 秒随机投弹,落点取玩家前方并横向抖动;

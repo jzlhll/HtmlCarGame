@@ -1,9 +1,11 @@
-import { POEMS, POEM_PAIRS, POEM_HALVES, POEM_AUTHORS } from './poems.js';
+import { POEMS, POEM_PAIRS, POEM_HALVES } from './poems.js';
+import { ENGLISH_BOOKS } from './english.js';
 
-// 警车拦查答题:数学与人教版语文古诗各约 50% 随机出现。
-// 数学:1–4、6 年级为通用口算;5 年级按北师大版设计(小数加减/乘除、分数加减、因数与倍数)。
-// 语文:诗句→朝代作者、上下句衔接、2/4 字挖空三种题型;题池覆盖本年级及前两个年级(如五年级考 3–5 年级)。
-// 选项以字符串表示,正确答案唯一,统一返回 {text, options:[4 个字符串], answer:正确下标}。
+// 警车拦查答题：数学、语文、英语各约三分之一，固定范围随机出题。
+// 数学:随机抽取三至五年级；五年级按北师大版设计(小数加减/乘除、分数加减、因数与倍数)。
+// 语文:诗句→朝代作者、上下句衔接、2/4 字挖空三种题型;题池固定为二至五年级。
+// 英语覆盖沪教牛津版三上、三下、四上、四下：单词缺两字母、句子选词两种题型。
+// 选项以字符串表示，正确答案唯一，统一返回 {subject, text, options:[4 个字符串], answer:正确下标}。
 // 题目随机统一走 rng():默认 Math.random,传入种子函数后自动化验证可复现具体题目;
 // rng 为模块级可替换引用,makeQuestion 同步生成完毕即返回,无并发问题。
 let rng=Math.random;
@@ -15,33 +17,17 @@ const fmtHundredths=h=>String(h/100); // 短表示自动去尾零,如 70 → "0.
 const fmtTenths=t=>String(t/10);
 const pick=array=>array[Math.floor(rng()*array.length)];
 
-// ---------- 数学:整数口算(1–4、6 年级) ----------
+// ---------- 数学:三、四年级整数口算 ----------
 function buildInteger(grade){
-  if(grade===1){
-    const a=ri(2,18),b=ri(1,15);
-    if(a>=b&&rng()<chance)return {text:a+' − '+b,answer:a-b};
-    return {text:a+' + '+b,answer:a+b};
-  }
-  if(grade===2){
-    if(rng()<chance){const a=ri(2,9),b=ri(2,9);return {text:a+' × '+b,answer:a*b};}
-    const a=ri(12,88),b=ri(3,20);
-    if(a>=b&&rng()<chance)return {text:a+' − '+b,answer:a-b};
-    return {text:a+' + '+b,answer:a+b};
-  }
   if(grade===3){
     if(rng()<chance){const b=ri(2,9),answer=ri(2,9);return {text:b*answer+' ÷ '+b,answer};}
     const a=ri(2,9),b=ri(2,9),c=ri(2,20);
     return {text:a+' × '+b+' + '+c,answer:a*b+c};
   }
-  if(grade===4){
-    if(rng()<chance){const b=ri(3,9),c=ri(2,9),d=ri(2,30);return {text:b+' × ('+c+' + '+d+')',answer:b*(c+d)};}
-    const a=ri(20,60),b=ri(2,15),c=ri(2,9);
-    if(a>=b*c)return {text:a+' − '+b+' × '+c,answer:a-b*c};
-    return {text:a+' + '+b+' × '+c,answer:a+b*c};
-  }
-  const a=ri(2,9),b=ri(2,12),c=ri(2,9),d=ri(2,9);
-  if(rng()<chance)return {text:'('+a+' + '+b+') × ('+c+' + '+d+')',answer:(a+b)*(c+d)};
-  return {text:'('+a+' + '+b+') × '+c+' − '+d+' × '+a,answer:(a+b)*c-d*a};
+  if(rng()<chance){const b=ri(3,9),c=ri(2,9),d=ri(2,30);return {text:b+' × ('+c+' + '+d+')',answer:b*(c+d)};}
+  const a=ri(20,60),b=ri(2,15),c=ri(2,9);
+  if(a>=b*c)return {text:a+' − '+b+' × '+c,answer:a-b*c};
+  return {text:a+' + '+b+' × '+c,answer:a+b*c};
 }
 
 // ---------- 数学:北师大版五年级口算 ----------
@@ -64,8 +50,8 @@ function decimalMultiply(){
 function decimalDivide(){
   const k=ri(2,12); // 商为整数,保证整除。
   if(rng()<chance){const d=ri(2,9);return {text:(d*k)+' ÷ '+d,answer:k};} // 整数 dividend,如 28 ÷ 4 = 7。
-  const d=ri(2,49); // 除数为一位小数,如 7.2 ÷ 0.8 = 9。
-  return {text:fmtTenths(d*k)+' ÷ '+fmtTenths(d),answer:k};
+  const d=ri(2,9),answer=ri(2,9); // 小数除法直接对应乘法口诀，如 5.6 ÷ 0.8 = 7。
+  return {text:fmtTenths(d*answer)+' ÷ '+fmtTenths(d),answer};
 }
 function fractionPart(){
   const den=[4,5,6,8,9,10,12][ri(0,6)];
@@ -104,8 +90,27 @@ function normalizeMath(question){
   }
   return {text:question.text,answer:String(question.answer),value:question.answer,integer:true};
 }
-// 干扰项与正确答案同数量级且互不相同;分数干扰项化简后数值也不得与答案相等。
+// 乘除题固定考查小数点错位、第二数位进退位和计算错误；按整数刻度保留相同尾数。
+function operationOptions(question){
+  const correct=question.answer,options=[correct];
+  const decimals=correct.split('.')[1]?.length??0,unit=10**decimals;
+  const count=Math.round(question.value*unit);
+  const push=value=>{const text=String(value);if(value>0&&!options.includes(text))options.push(text);};
+  const scaled=rng()<chance?count*10/unit:count/(unit*10);
+  // 题干与正确答案均为整数时不引入小数选项；整数相除得到小数时仍保留小数点错位干扰项。
+  push(!question.text.includes('.')&&Number.isInteger(question.value)&&!Number.isInteger(scaled)?question.value*10:scaled);
+  // 第二位按答案从右向左的数字位计数，跳过小数点；个位答案的第二位为十位。
+  const offsets=rng()<chance?[-10,10]:[10,-10];
+  for(const offset of offsets){if(options.length===3)break;push((count+offset)/unit);}
+  // 另设末位计算错误；小数乘法使用第二位偏差，保证至少一个错误选项与答案同尾数。
+  const sameTail=question.text.includes('×')&&question.text.includes('.');
+  const extras=sameTail?[20,-20,30,40]:[1,-1,2,3];
+  for(const offset of extras){if(options.length===4)break;push((count+offset)/unit);}
+  return {text:question.text,...shuffle(options,correct)};
+}
+// 加减题干扰项保持同数量级且互不相同；分数干扰项化简后数值也不得与答案相等。
 function mathOptions(question){
+  if(!question.fraction&&/[×÷]/.test(question.text))return operationOptions(question);
   const correct=question.answer,options=[correct];
   // 小数题候选项按刻度计数生成,再还原为短小数格式;整数题直接用数值。
   const format=value=>question.integer?String(value):question.unit===10?fmtTenths(value):fmtHundredths(value);
@@ -138,23 +143,22 @@ function shuffle(options,correct){
 }
 function makeMathQuestion(grade){
   if(grade===5)return mathOptions(normalizeMath(buildGrade5()));
-  return mathOptions(normalizeMath(buildInteger(grade)));
+  let question;
+  do{question=normalizeMath(buildInteger(grade));}while(/[×÷]/.test(question.text)&&question.value<=0);
+  return mathOptions(question);
 }
 
-// ---------- 语文:人教版古诗(题池覆盖本年级及前两个年级) ----------
-const poemPool=grade=>{
-  const low=Math.max(1,grade-2);
-  return {
-    poems:POEMS.filter(item=>item.grade>=low&&item.grade<=grade),
-    pairs:POEM_PAIRS.filter(item=>item.grade>=low&&item.grade<=grade),
-    halves:POEM_HALVES.filter(item=>item.grade>=low&&item.grade<=grade),
-  };
+// ---------- 语文:二至五年级人教版古诗 ----------
+const poemPool={
+  poems:POEMS.filter(item=>item.grade>=2&&item.grade<=5),
+  pairs:POEM_PAIRS.filter(item=>item.grade>=2&&item.grade<=5),
+  halves:POEM_HALVES.filter(item=>item.grade>=2&&item.grade<=5),
 };
 // 题型 1:给出诗句,答朝代与作者;干扰项取其他诗人的"朝代 · 作者"。
 function authorQuestion(pool){
   const poem=pick(pool.poems),half=poem.verse.split('，')[0];
   const correct=poem.dynasty+' · '+poem.author;
-  const candidates=[...new Set(POEM_AUTHORS.filter(name=>name!==correct))];
+  const candidates=[...new Set(pool.poems.map(item=>item.dynasty+' · '+item.author).filter(name=>name!==correct))];
   if(candidates.length<3)return null;
   const options=[correct];
   while(options.length<4){
@@ -197,8 +201,8 @@ function blankQuestion(pool){
   return {text:half.text.slice(0,start)+BLANK+half.text.slice(start+blank),...shuffle(options,correct)};
 }
 const CHINESE_TYPES=[authorQuestion,lineQuestion,blankQuestion];
-function makeChinese(grade){
-  const pool=poemPool(grade);
+function makeChinese(){
+  const pool=poemPool;
   // 依次尝试各题型,单个题型干扰项不足时自动换题或换题型;
   // 打乱副本而非原数组,模块级状态不残留,同种子重复出题结果一致。
   const types=[...CHINESE_TYPES];
@@ -222,9 +226,43 @@ function makeChinese(grade){
   return {text:'「'+given+'」的'+(askFirst?'下一句':'上一句')+'是？',...shuffle(options,answer)};
 }
 
-export function makeQuestion(grade,seedRng){
+// ---------- 英语：按册、单元均匀抽题，两种题型各半 ----------
+function makeEnglish(){
+  const book=pick(ENGLISH_BOOKS),unitIndex=ri(0,book.units.length-1);
+  const unit=book.units[unitIndex];
+  const source={book:book.id,bookTitle:book.title,unit:unitIndex+1,unitTitle:unit.title};
+  if(rng()<chance){
+    const {word,meaning}=pick(unit.words);
+    // 相邻两个字母分别显示下划线；中文释义明确所考词义，避免残词出现歧义。
+    const starts=[];
+    for(let i=0;i<word.length-1;i++)if(/^[a-z]{2}$/i.test(word.slice(i,i+2)))starts.push(i);
+    const start=pick(starts),correct=word.slice(start,start+2),candidates=[];
+    for(const letter of 'abcdefghijklmnopqrstuvwxyz'){
+      const first=letter+correct[1],second=correct[0]+letter;
+      if(first!==correct)candidates.push(first);
+      if(second!==correct)candidates.push(second);
+    }
+    const options=[correct];
+    while(options.length<4)options.push(candidates.splice(ri(0,candidates.length-1),1)[0]);
+    return {...source,type:'word',text:'单词补全（'+meaning+'）：'+word.slice(0,start)+'__'+word.slice(start+2),...shuffle(options,correct)};
+  }
+  const [sentence,...wrong]=pick(unit.sentences),correct=sentence.match(/\{([^{}]+)\}/)[1];
+  return {...source,type:'sentence',text:sentence.replace('{'+correct+'}','____'),...shuffle([correct,...wrong],correct)};
+}
+
+export function makeQuestion(seedRng){
   rng=seedRng??Math.random;
-  const g=Math.min(6,Math.max(1,grade|0||1));
-  if(rng()<chance)return makeMathQuestion(g);
-  return makeChinese(Math.min(5,g)); // 六年级语文使用五年级题池。
+  const subject=rng();
+  if(subject<1/3)return {subject:'math',...makeMathQuestion(ri(3,5))};
+  if(subject>=2/3)return {subject:'english',...makeEnglish()};
+  return {subject:'chinese',...makeChinese()};
+}
+
+// 结算只展示原题和填回的正确答案，不保留或重复列出四个选项。
+export function answeredQuestion(question){
+  const answer=question.options[question.answer];
+  if(question.subject==='math')return question.text+' = '+answer;
+  if(question.text.includes(BLANK))return question.text.replace(BLANK,'（'+answer+'）');
+  if(/_{2,}/.test(question.text))return question.text.replace(/_{2,}/,question.type==='word'?answer:'('+answer+')');
+  return question.text.replace(/[？?]$/,'')+'：'+answer;
 }
