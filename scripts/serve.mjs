@@ -22,6 +22,6 @@ server.on('error',error => {
   process.exitCode = 1;
 });
 server.listen(port,'127.0.0.1',() => {
-  console.log('Four Seasons Road: '+url+' (Ctrl+C to stop)');
+  console.log('Cloud Cockpit: '+url+' (Ctrl+C to stop)');
   if(process.argv.includes('--open')&&process.platform==='darwin')spawn('open',[url],{stdio:'ignore'});
 });
