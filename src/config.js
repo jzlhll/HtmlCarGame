@@ -53,7 +53,7 @@ export const RESCUE_LIMIT=2; // 每局非答题致命事件可触发的答题复
 export const REVIVE_CLEAR_AHEAD=50; // 原地复活时清理当前路线前方的车流距离(米)。
 export const PLAYER_START_SPEED=57.5;
 export const AUTO_ACCELERATION=20; // 松开刹车或加速键、解冻后自动提速，单位 km/h/秒。
-// 上键普通加速可直接到车型最高速,不消耗氮气;氮气须停按后再按且已在最高速时才消耗。
+// 上键普通加速到车型最高速后持续按住即可接续喷气，达到喷气上限仍消耗氮气。
 export const MANUAL_ACCELERATION={acceleration:35};
 // 触屏布局按实际可用窗口适配；窄桌面窗口也提供触屏操作入口。
 export const MOBILE={compactWidth:600,stickDeadZone:.18,stickTravelRatio:.32};

@@ -25,7 +25,7 @@ export class Game {
   constructor(store,input,notify){
     this.store=store;this.input=input;this.notify=notify;this.state='READY';this.carColor=store.getColor();this.deathTime=0;this.debugMode=false;this.debugRun=false;this.debugInvincibleUntil=0;this.renderer=null;this.onChange=()=>{};this.collisionCandidates=[];this.collisionGroup=[];this.separatedCars=new Set();this.collisionBegin={};this.collisionSites=[];this.collisionWalls=[];this.collisionWorks=[];this.collisionHazards=[];this.preview();
   }
-  preview(){this.renderer?.resetRun();this.seed=6183;this.whiteHorse=new WhiteHorseEvent(this.seed);this.police=new PoliceEvent(this.seed);this.quiz=null;this.failedQuiz=null;this.caught=null;this.rescueUsed=0;this.weather=new SeasonalWeather(this.seed);this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.nitroHeld=false;this.nitroHold=false;this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};this.traffic=new Traffic(this.road,this.seed);this.activeSeconds=0;this.nextHungerAt=HUNGER.intervalSeconds;this.startSeason=0;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;this.scraping=false;this.debugRun=false;this.debugInvincibleUntil=0;}
+  preview(){this.renderer?.resetRun();this.seed=6183;this.whiteHorse=new WhiteHorseEvent(this.seed);this.police=new PoliceEvent(this.seed);this.quiz=null;this.failedQuiz=null;this.caught=null;this.rescueUsed=0;this.weather=new SeasonalWeather(this.seed);this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};this.traffic=new Traffic(this.road,this.seed);this.activeSeconds=0;this.nextHungerAt=HUNGER.intervalSeconds;this.startSeason=0;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;this.scraping=false;this.debugRun=false;this.debugInvincibleUntil=0;}
   async start(){
     if(this.state!=='READY'&&this.state!=='RESULT')return;
     this.audio?.ensure();
@@ -36,7 +36,7 @@ export class Game {
     try{
       this.seed=crypto.getRandomValues(new Uint32Array(1))[0];this.runId=crypto.randomUUID();
       this.whiteHorse=new WhiteHorseEvent(this.seed);this.police=new PoliceEvent(this.seed);this.quiz=null;this.failedQuiz=null;this.caught=null;this.rescueUsed=0;this.weather=new SeasonalWeather(this.seed);
-      this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.nitroHeld=false;this.nitroHold=false;this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};
+      this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};
       this.traffic=new Traffic(this.road,this.seed);this.traffic.populate(this.player);
       this.startSeason=this.seed%4;this.activeSeconds=0;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;
       this.nextHungerAt=HUNGER.intervalSeconds;
@@ -119,14 +119,11 @@ export class Game {
   }
   releaseNitro(dt){
     const p=this.player;
-    if(this.whiteHorse.speed(p,this.activeSeconds)!==null||p.frozenUntil>this.activeSeconds){this.nitro.stop();this.nitroHeld=false;this.nitroHold=false;return;}
+    if(this.whiteHorse.speed(p,this.activeSeconds)!==null||p.frozenUntil>this.activeSeconds){this.nitro.stop();return;}
     const held=this.input.nitro&&!this.input.down&&!this.scraping;
-    // 上键普通加速直接到车型最高速;氮气只在"停按后再按"且已处于最高速时消耗,按住从低速升到最高速不触发。
-    if(!held)this.nitroHold=false;
-    else if(!this.nitroHeld)this.nitroHold=p.speed>0&&p.speed>=this.normalCap();
-    this.nitroHeld=held;
+    // 持续按住上键时，普通加速达到车型最高速后接续喷气；达到喷气上限仍持续耗气。
     const accelerating=held&&p.speed<this.normalCap();
-    const used=this.nitro.advance(dt,p.speed,this.nitroHold&&!accelerating);
+    const used=this.nitro.advance(dt,p.speed,held&&!accelerating);
     if(accelerating)p.speed=Math.min(this.normalCap(),p.speed+MANUAL_ACCELERATION.acceleration*dt);
     // 按实际消耗的喷气时长提速，避免反复点按叠加瞬时倍率。
     p.speed+=NITRO.boostAcceleration*used;

@@ -19,7 +19,7 @@
         <button id="restart-game" type="button" aria-label="重置本局，重新开始">↻ 重置</button>
       </nav>
     </header>
-    <section id="hud" class="hud" aria-label="当前状态">
+    <section id="hud" class="hud" aria-label="当前状态" hidden>
       <div class="hud-column">
         <div class="metric distance"><span>行驶距离</span><strong id="distance">0</strong><small>米</small></div>
         <div class="metric"><span>运行时间</span><strong id="elapsed">00:00</strong></div>
@@ -45,7 +45,7 @@
       </div>
       <div class="touch-pedals">
         <button id="touch-brake" class="touch-pedal brake-pedal" type="button" aria-label="按住刹车" aria-pressed="false"><span aria-hidden="true">Ⅱ</span>刹车</button>
-        <button id="touch-nitro" class="touch-pedal nitro-pedal" type="button" aria-label="按住加速，松开后再按喷气" aria-pressed="false"><span aria-hidden="true">»</span>加速 / 氮气</button>
+        <button id="touch-nitro" class="touch-pedal nitro-pedal" type="button" aria-label="按住加速，达到车型最高速后自动喷气，极速仍耗气" aria-pressed="false"><span aria-hidden="true">»</span>加速 / 氮气</button>
       </div>
     </section>
     <div id="overlay" class="overlay"></div>
