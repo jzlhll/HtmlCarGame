@@ -45,6 +45,8 @@ function addMesh(parent, geometry, material, position, rotation) {
 
 export function createAircraft() {
   const group = new THREE.Group();
+  group.userData.flaps = [];
+  group.userData.gearLegs = [];
   const white = new THREE.MeshStandardMaterial({ color: 0xe5e9e6, roughness: 0.48 });
   const wing = new THREE.MeshStandardMaterial({ color: 0xd0d8d7, roughness: 0.65 });
   const teal = new THREE.MeshStandardMaterial({ color: 0x244f60, roughness: 0.55 });
@@ -65,6 +67,11 @@ export function createAircraft() {
     const mainWing = wingGeometry([[0, -3], [4, -2.3], [17.5, 5.5], [17.5, 7.2], [5.5, 3], [0, 4.8]]
       .map(([x, z]) => [x * side, z]), 0.3);
     addMesh(group, mainWing, wing, [0, 3.05, 0]);
+    const flap = new THREE.Group();
+    flap.position.set(side * 7, 2.94, 3.7);
+    addMesh(flap, new THREE.BoxGeometry(6.4, 0.13, 1.2), wing, [0, 0, 0.5]);
+    group.add(flap);
+    group.userData.flaps.push(flap);
     addMesh(group, wingGeometry([[0, 0], [6.2, 3.1], [6.2, 4.2], [0, 3]]
       .map(([x, z]) => [x * side, z]), 0.16), wing, [0, 4.65, 12.3]);
     addMesh(group, new THREE.BoxGeometry(0.16, 1.2, 1.8), teal, [side * 17.4, 3.5, 6.2], [0, 0, side * -0.18]);
@@ -108,13 +115,28 @@ export function createAircraft() {
   }
   const tireGeometry = new THREE.CylinderGeometry(0.48, 0.48, 0.3, 16);
   const hubGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.32, 12);
-  for (const [x, z] of [[0, -12.2], [-2.7, 3.3], [2.7, 3.3]]) {
-    addMesh(group, new THREE.CylinderGeometry(0.1, 0.14, 1.6, 8), metal, [x, 1.55, z]);
+  for (const [x, z] of [[0, AIRCRAFT.noseWheelZ], [-AIRCRAFT.mainWheelX, AIRCRAFT.mainWheelZ], [AIRCRAFT.mainWheelX, AIRCRAFT.mainWheelZ]]) {
+    const leg = new THREE.Group();
+    leg.position.set(x, 0, z);
+    leg.userData.baseX = x;
+    group.add(leg);
+    group.userData.gearLegs.push(leg);
+    addMesh(leg, new THREE.CylinderGeometry(0.1, 0.14, 1.6, 8), metal, [0, 1.55, 0]);
     for (const offset of [-0.23, 0.23]) {
-      addMesh(group, tireGeometry, rubber, [x + offset, 0.48, z], [0, 0, Math.PI / 2]);
-      addMesh(group, hubGeometry, metal, [x + offset, 0.48, z], [0, 0, Math.PI / 2]);
+      addMesh(leg, tireGeometry, rubber, [offset, 0.48, 0], [0, 0, Math.PI / 2]);
+      addMesh(leg, hubGeometry, metal, [offset, 0.48, 0], [0, 0, Math.PI / 2]);
     }
   }
+  const navigationLights = new THREE.Group();
+  const lightGeometry = new THREE.SphereGeometry(AIRCRAFT.navigationLightRadius, 8, 6);
+  for (const light of AIRCRAFT.navigationLights) {
+    const marker = new THREE.Mesh(lightGeometry, new THREE.MeshBasicMaterial({ color: light.color, toneMapped: false }));
+    marker.position.set(...light.position);
+    navigationLights.add(marker);
+  }
+  navigationLights.visible = false;
+  group.add(navigationLights);
+  group.userData.navigationLights = navigationLights;
   group.scale.set(AIRCRAFT.wingspan / 35, 1, AIRCRAFT.length / 38);
   return group;
 }

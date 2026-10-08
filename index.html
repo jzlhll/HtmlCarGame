@@ -10,47 +10,67 @@
   <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
 </head>
 <body>
-  <main id="game" tabindex="0" aria-label="云端驾驶舱场景预览" data-view="EXTERIOR">
+  <main id="game" tabindex="0" aria-label="云端驾驶舱飞行游戏" data-view="EXTERIOR">
     <div id="scene"></div>
     <header class="topbar">
-      <div class="brand"><span class="brand-symbol" aria-hidden="true">✦</span><div>云端驾驶舱<small>CLOUD COCKPIT</small></div></div>
+      <div class="brand"><span class="brand-symbol" aria-hidden="true">✦</span><div>云端驾驶舱<small>Cloud cockpit</small></div></div>
       <div class="session"><span class="status-dot"></span><span id="phase-label">外部视角</span><span id="elapsed" hidden>00:00</span></div>
       <nav id="cockpit-actions" hidden aria-label="场景操作">
         <button class="text-button" data-action="pause">暂停 <kbd>空格</kbd></button>
-        <button class="text-button" data-action="exterior">返回外部</button>
       </nav>
     </header>
     <section id="welcome" class="welcome" aria-labelledby="welcome-title">
-      <p class="eyebrow">YOUR FIRST FLIGHT</p>
+      <p class="eyebrow">Your first flight</p>
       <h1 id="welcome-title">天空，<br>从这里开始。</h1>
       <p class="intro-copy">坐进驾驶舱，认识每一个按键。<br>从点亮灯光，到飞向天空。</p>
-      <div class="preview-note"><span class="status-dot"></span>场景预览 · 飞机静止，发动机关闭</div>
-      <button class="primary-button" data-action="enter">进入驾驶舱 <kbd>空格</kbd><span aria-hidden="true">↗</span></button>
-      <p class="availability">起飞准备与飞行操作将在后续开放</p>
+      <div class="preview-note"><span class="status-dot"></span>四秒开场 · 自由完成起飞准备</div>
+      <button class="primary-button" data-action="enter">开始体验 <kbd>空格</kbd><span aria-hidden="true">↗</span></button>
+      <p class="availability">当前体验：完整起飞与初始爬升</p>
       <div class="flight-facts"><div><span>机型</span><strong>双发民航客机</strong></div><div><span>停放位置</span><strong id="runway-number">36 号跑道</strong></div></div>
     </section>
-    <section id="preview-banner" class="preview-banner" hidden aria-label="当前任务">
-      <span class="eyebrow">IN THE COCKPIT</span><strong>驾驶舱预览</strong><span>飞机保持熄火 · 起飞准备尚未开放</span>
+    <aside id="attitude-preview" class="attitude-preview" hidden aria-label="机外飞机姿态">
+      <header>机外姿态 <small>Aircraft attitude</small></header>
+      <div id="attitude-preview-view" aria-hidden="true"></div>
+      <footer id="attitude-preview-label">俯仰 0° · 坡度 0°</footer>
+    </aside>
+    <section id="intro-sequence" class="intro-sequence" hidden aria-label="进入驾驶舱倒数">
+      <span class="eyebrow">Prepare for departure</span>
+      <strong id="countdown-number" aria-live="off">4</strong>
+      <span id="countdown-caption">跑道与起点</span>
+      <small>空格暂停 · 发动机保持关闭</small>
     </section>
-    <section id="instruments" class="instruments" hidden aria-label="驾驶舱仪表，当前均未通电">
-      <div class="instrument"><span>空速 <small>AIRSPEED</small></span><strong>OFF</strong><footer>kt <i>km/h</i></footer></div>
-      <div class="instrument"><span>高度 <small>ALTITUDE</small></span><strong>OFF</strong><footer>米 <i>AGL</i></footer></div>
-      <div class="instrument attitude"><span>姿态 <small>ATTITUDE</small></span><div class="attitude-mark" aria-hidden="true"><i></i><b></b></div><footer>仪表关闭</footer></div>
-      <div class="instrument"><span>垂直速度 <small>VERTICAL SPEED</small></span><strong>OFF</strong><footer>m/s <i>航向 360°</i></footer></div>
-      <div class="instrument"><span>发动机 <small>ENGINE</small></span><strong>OFF <em>OFF</em></strong><footer>油门 0% <i>驻车刹车 ON</i></footer></div>
+    <section id="preview-banner" class="preview-banner" hidden aria-label="起飞准备说明">
+      <span id="startup-hint-copy"></span>
     </section>
-    <section id="startup-strip" class="startup-strip" hidden aria-label="后续起飞准备按键，目前尚未开放"></section>
+    <div id="startup-prompt" class="startup-prompt" hidden role="status"></div>
+    <div id="aero-readout" class="aero-readout" hidden></div>
+    <section id="instruments" class="instruments" hidden aria-label="驾驶舱仪表">
+      <div class="instrument"><span>空速 <small>Airspeed</small></span><strong id="airspeed-value">OFF</strong><footer>kt <i id="ground-speed">km/h</i></footer></div>
+      <div class="instrument"><span>高度 <small>Altitude</small></span><strong id="altitude-value">OFF</strong><footer>米 <i>Above ground</i></footer></div>
+      <div class="instrument attitude"><span>姿态 <small>Attitude</small></span><div class="attitude-mark" aria-hidden="true"><i></i><b></b></div><footer id="attitude-label">仪表关闭</footer></div>
+      <div class="instrument"><span>垂直速度 <small>Vertical speed</small></span><strong id="vertical-speed-value">OFF</strong><footer>m/s <i id="heading-value">航向 360°</i></footer></div>
+      <div class="instrument"><span>发动机 <small>Engine</small></span><strong id="engine-value">OFF <em>OFF</em></strong><footer><span id="throttle-value">油门 0%</span> <i id="brake-state">驻车刹车 ON</i></footer></div>
+    </section>
+    <div id="flight-guide" class="flight-guide" hidden></div>
+    <section id="startup-strip" class="startup-strip" hidden aria-label="起飞准备按键及状态"></section>
     <div id="pause-overlay" class="overlay" hidden>
       <section class="pause-card" aria-labelledby="pause-title" role="dialog" aria-modal="true">
-        <p class="eyebrow">FLIGHT PAUSED</p><h2 id="pause-title">休息一下</h2><p>驾驶舱保持原位，准备好后继续。</p>
-        <button id="resume-button" class="primary-button" data-action="pause">继续预览 <kbd>空格</kbd></button>
-        <button class="secondary-button" data-action="exterior">返回外部视角</button>
+        <p class="eyebrow">Flight paused</p><h2 id="pause-title">休息一下</h2><p id="pause-copy">驾驶舱保持原位，准备好后继续。</p>
+        <button id="resume-button" class="primary-button" data-action="pause">继续体验 <kbd>空格</kbd></button>
+        <button class="secondary-button" data-action="exterior">重新开始</button>
+      </section>
+    </div>
+    <div id="result-overlay" class="overlay" hidden>
+      <section class="pause-card result-card" role="dialog" aria-modal="true" aria-labelledby="result-title">
+        <p class="eyebrow" id="result-caption">Flight complete</p><h2 id="result-title">起飞成功</h2><p id="result-reason"></p>
+        <dl id="result-stats" class="result-stats"></dl>
+        <button id="restart-button" class="primary-button" data-action="exterior">重新开始</button>
       </section>
     </div>
     <div id="error-overlay" class="overlay" hidden>
-      <section class="pause-card" role="alert"><p class="eyebrow">DISPLAY UNAVAILABLE</p><h2>三维画面暂不可用</h2><p id="error-message"></p></section>
+      <section class="pause-card" role="alert"><p class="eyebrow">Display unavailable</p><h2>三维画面暂不可用</h2><p id="error-message"></p></section>
     </div>
-    <footer id="exterior-caption" class="exterior-caption"><span>云湾机场</span><i id="runway-code">RUNWAY 36 / ENGINE OFF</i></footer>
+    <footer id="exterior-caption" class="exterior-caption"><span>云湾机场</span><i id="runway-code">Runway 36 / engine OFF</i></footer>
   </main>
   <script type="module" src="./src/main.js"></script>
 </body>

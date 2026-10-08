@@ -24,10 +24,28 @@ export class CockpitView extends THREE.Group {
     this.screens = Array.from({ length: 5 }, () => makeBox(screen));
     this.bolts = [];
     for (let i = 0; i < 8; i++) this.bolts.push(makeBox(trim));
+    this.materials = [dark, trim, screen];
+    this.backlight = trim;
+    this.screenMaterial = screen;
     this.visible = false;
   }
 
+  setSystems(systems) {
+    this.backlight.emissive.setHex(systems.lights ? 0xb3a269 : 0x000000);
+    this.backlight.emissiveIntensity = systems.lights ? 0.08 : 0;
+    this.screenMaterial.emissive.setHex(systems.avionics ? 0x255d65 : 0x000000);
+    this.screenMaterial.emissiveIntensity = systems.avionics ? 0.35 : 0;
+  }
+
+  setOpacity(opacity) {
+    this.visible = opacity > 0;
+    for (const material of this.materials) material.opacity = opacity;
+  }
+
   resize(aspect, fov) {
+    if (aspect === this.lastAspect && fov === this.lastFov) return;
+    this.lastAspect = aspect;
+    this.lastFov = fov;
     const slope = Math.tan(THREE.MathUtils.degToRad(fov / 2));
     const distance = COCKPIT.dashboardDistance;
     const halfHeight = slope * distance;

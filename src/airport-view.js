@@ -6,9 +6,13 @@ export class AirportView extends THREE.Group {
     super();
     const colors = SCENERY.colors;
     const ground = new THREE.MeshStandardMaterial({ color: colors.ground, roughness: 1 });
-    const pavement = new THREE.MeshStandardMaterial({ color: colors.runway, roughness: 1 });
-    const shoulder = new THREE.MeshStandardMaterial({ color: colors.runwayShoulder, roughness: 1 });
-    const marking = new THREE.MeshStandardMaterial({ color: colors.marking, roughness: 0.9 });
+    // 地表与标线按固定层级偏移深度，避免远处毫米级间距失去精度而闪烁。
+    const surface = (color, layer, roughness = 1) => new THREE.MeshStandardMaterial({
+      color, roughness, polygonOffset: true, polygonOffsetFactor: -layer, polygonOffsetUnits: -layer,
+    });
+    const pavement = surface(colors.runway, SCENERY.surfaceLayers.pavement);
+    const shoulder = surface(colors.runwayShoulder, SCENERY.surfaceLayers.shoulder);
+    const marking = surface(colors.marking, SCENERY.surfaceLayers.marking, 0.9);
     const building = new THREE.MeshStandardMaterial({ color: colors.terminal, roughness: 0.85 });
     const roof = new THREE.MeshStandardMaterial({ color: 0x697f86, roughness: 0.75 });
     const glass = new THREE.MeshStandardMaterial({ color: colors.glass, roughness: 0.4 });
@@ -60,7 +64,7 @@ export class AirportView extends THREE.Group {
     context.fillText(RUNWAY.designator, 128, 128);
     const numberTexture = new THREE.CanvasTexture(canvas);
     numberTexture.colorSpace = THREE.SRGBColorSpace;
-    slab(13, 16, 0.025, 35, new THREE.MeshStandardMaterial({ map: numberTexture, transparent: true, depthWrite: false }));
+    slab(13, 16, 0.025, 35, new THREE.MeshStandardMaterial({ map: numberTexture, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -SCENERY.surfaceLayers.marking, polygonOffsetUnits: -SCENERY.surfaceLayers.marking }));
     const lightMaterial = new THREE.MeshStandardMaterial({ color: 0xd8b97e, roughness: 0.6 });
     const lightGeometry = new THREE.CylinderGeometry(0.22, 0.32, 0.5, 8);
     const lights = new THREE.InstancedMesh(lightGeometry, lightMaterial, 120);

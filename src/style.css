@@ -33,11 +33,9 @@ kbd { font-family: inherit; font-size: 12px; font-weight: 500; display: inline-g
 .flight-facts strong { font-size: 12px; font-weight: 400; color: #d4dfd6; }
 .exterior-caption { position: absolute; bottom: 26px; right: 36px; display: flex; align-items: center; gap: 16px; color: #eef3e7; font-size: 12px; text-shadow: 0 1px 8px #142c3999; }
 .exterior-caption i { font-style: normal; font-size: 9px; letter-spacing: 2px; }
-.preview-banner { position: absolute; top: 114px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px 24px; border-radius: 10px; background: #193840b8; border: 1px solid #e2e8db29; backdrop-filter: blur(8px); white-space: nowrap; }
-.preview-banner .eyebrow { margin: 0; font-size: 8px; }
-.preview-banner strong { font-size: 16px; font-weight: 500; letter-spacing: 3px; }
-.preview-banner>span:last-child { font-size: 10px; color: #b9ccca; }
-.instruments { position: absolute; z-index: 2; left: 8%; right: 8%; top: 77.5%; bottom: 7.1%; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2.4%; pointer-events: none; }
+.preview-banner { position: absolute; top: 114px; left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100% - 48px); padding: 14px 24px; border-radius: 10px; background: #193840df; border: 1px solid #e2e8db29; font-size: 13px; line-height: 1.8; text-align: center; }
+#game[data-view="SEQUENCE"] .session { backdrop-filter: none; }
+.instruments { position: absolute; z-index: 2; left: 8%; right: 8%; top: 77.5%; bottom: 10.7%; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2.4%; pointer-events: none; }
 .instrument { border: 1px solid #91a4a41f; border-radius: 6px; background: linear-gradient(150deg, #0f1b21fa, #142329fc); display: flex; flex-direction: column; justify-content: space-between; padding: 10px 12px 8px; box-shadow: inset 0 0 15px #00000030; }
 .instrument>span { font-size: 11px; letter-spacing: 1px; color: #809391; }
 .instrument small { display: block; margin-top: 4px; font-size: 7px; letter-spacing: 1.4px; color: #526a6b; }
@@ -79,7 +77,7 @@ kbd { font-family: inherit; font-size: 12px; font-weight: 500; display: inline-g
   .instrument footer { font-size: 7px; }
   .startup-strip { left: 5%; right: 5%; gap: 6px; }
   .startup-key { gap: 5px; }
-  .startup-key small { display: none; }
+  .startup-key small { display: block; font-size: 6px; }
 }
 @media (max-width: 650px) {
   .brand small, .session #phase-label, .exterior-caption i, .text-button kbd { display: none; }
@@ -103,3 +101,65 @@ kbd { font-family: inherit; font-size: 12px; font-weight: 500; display: inline-g
   .attitude-mark i { top: 10px; }
   .startup-key kbd { height: 22px; width: 22px; }
 }
+
+.intro-sequence { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; text-shadow: 0 3px 22px #102b44aa; }
+.intro-sequence .eyebrow { margin: 0; color: #fff4d3; font-size: 10px; letter-spacing: 4px; }
+.intro-sequence strong { font-size: clamp(80px, 16vh, 150px); line-height: 1.25; font-weight: 300; color: #fff9e8; font-variant-numeric: tabular-nums; }
+.intro-sequence>span:not(.eyebrow) { letter-spacing: 4px; font-size: 15px; }
+.intro-sequence small { margin-top: 20px; padding: 7px 12px; border-radius: 20px; font-size: 10px; color: #d9e4de; background: #17343c99; letter-spacing: 1px; }
+
+.switch-state { font-size: 9px; font-weight: 500; color: #617878; }
+.startup-key { padding: 4px 5px; border: 1px solid transparent; border-radius: 6px; }
+.startup-key.is-on { background: #9cd8ad13; border-color: #a7dbb440; color: #d2e8c8; }
+.startup-key.is-on kbd { color: #ecf4c5; border-color: #c4e2a77d; background: #c4e2a71c; }
+.startup-key.is-on small { color: #90b8a7; }
+.startup-key.is-on .switch-state { color: #b9e9ad; }
+.startup-key.is-busy { border-color: #f4d97955; background: #f4d97910; }
+.startup-key.is-busy .switch-state { color: var(--gold); font-size: 8px; }
+.lights-on .startup-strip, .lights-on .instrument { box-shadow: 0 0 18px #e6c97614; }
+.lights-on .strip-label { color: #e0d5a3; }
+.avionics-on .instrument { background: linear-gradient(150deg, #15363bfa, #132a30fc); border-color: #8bad9a60; }
+.avionics-on .instrument strong { color: #d8efd6; }
+.avionics-on .instrument>span { color: #bad1c3; }
+.avionics-on .instrument small, .avionics-on .instrument footer { color: #98b5ae; }
+.avionics-on .attitude-mark { border-color: #a6c5af; background: linear-gradient(#3b788c 50%, #685e47 50%); }
+.avionics-on .attitude-mark i { background: #cdd9b1; }
+.startup-prompt { position: absolute; z-index: 3; top: 224px; left: 50%; transform: translateX(-50%); max-width: min(580px, 88%); width: max-content; padding: 10px 16px; color: #fff0b4; background: #283e3aee; border: 1px solid #f4d97966; border-radius: 9px; font-size: 12px; line-height: 1.7; text-align: center; }
+@media (max-width: 900px) { .startup-key { padding: 3px; gap: 4px; } }
+@media (max-width: 650px) { .startup-key { gap: 3px; } .startup-key kbd { width: 22px; min-width: 22px; } .switch-state { font-size: 8px; } .startup-key.is-busy .switch-state { font-size: 6px; } .startup-prompt { top: 195px; } }
+
+.flight-guide { position: absolute; left: 8%; right: 8%; bottom: 7%; height: 2.8%; display: flex; align-items: center; justify-content: center; color: #c5d9c4; font-size: clamp(8px, 0.9vw, 12px); text-align: center; }
+.flight-guide.is-warning { color: var(--gold); }
+.flight-controls .startup-key { flex: 1; justify-content: center; }
+.flight-controls .startup-key kbd { width: auto; min-width: 30px; padding: 0 5px; white-space: nowrap; }
+.flight-controls .startup-key .switch-state { font-size: 8px; white-space: nowrap; }
+.result-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 0 0 28px; }
+.result-stats dt { font-size: 11px; color: #9bb7af; margin-bottom: 5px; }
+.result-stats dd { margin: 0; color: #e9efda; font-size: 19px; }
+.attitude-mark { overflow: hidden; }
+.avionics-on .attitude-mark { background: none; }
+.avionics-on .attitude-mark::before { content: ''; position: absolute; inset: -50%; background: linear-gradient(#3b788c var(--horizon, 50%), #685e47 var(--horizon, 50%)); transform: rotate(var(--bank, 0deg)); }
+@media (max-width: 900px) {
+  .flight-guide { left: 5%; right: 5%; font-size: 8px; }
+  .flight-controls .startup-key { gap: 4px; }
+  .flight-controls .switch-state { font-size: 7px; }
+}
+@media (max-height: 620px) {
+  .instrument>span { font-size: 8px; }
+  .instrument strong { font-size: 20px; }
+  .attitude-mark { height: 18px; }
+  .flight-guide { bottom: 6.8%; }
+}
+
+.aero-readout { position: absolute; z-index: 3; top: 75.3%; left: 8%; right: 8%; text-align: center; font-size: 10px; color: #d4dfcd; font-variant-numeric: tabular-nums; }
+.aero-readout.is-warning { color: #ffe39b; }
+.startup-prompt.is-flight-warning { top: 38%; padding: 18px 26px; font-size: 17px; background: #4b3026ed; border-color: #f5bd72; }
+@media (max-width: 900px) { .aero-readout { font-size: 8px; } .startup-prompt.is-flight-warning { font-size: 14px; } }
+
+.attitude-preview { position: absolute; z-index: 3; right: 34px; top: 96px; width: 226px; border: 1px solid #bdd0ce55; border-radius: 12px; overflow: hidden; pointer-events: none; box-shadow: 0 10px 24px #152b3829; }
+.attitude-preview header, .attitude-preview footer { background: #18333ef5; padding: 8px 12px; font-size: 10px; color: #dce5d8; }
+.attitude-preview header { display: flex; align-items: center; justify-content: space-between; }
+.attitude-preview small { color: #9cb8b9; font-size: 8px; }
+#attitude-preview-view { height: 114px; }
+.attitude-preview footer { text-align: center; border-top: 1px solid #bfd2cb22; font-variant-numeric: tabular-nums; }
+@media (max-width: 900px) { .attitude-preview { right: 24px; top: 78px; width: 176px; } #attitude-preview-view { height: 88px; } .attitude-preview header, .attitude-preview footer { font-size: 8px; padding: 6px 9px; } .attitude-preview small { font-size: 6px; } }
