@@ -1,6 +1,6 @@
 import { SHELL, VEHICLE_DEFENSE, random, lerp } from './config.js';
 
-// 天降炮弹:开局 startSeconds 后按随机间隔从天空投下炮弹,落点取在玩家前方并带横向抖动;
+// 天降炮弹：开局 startSeconds 后按随机间隔检查，以 chance 概率从天空投弹，落点取在玩家前方并带横向抖动；
 // 爆炸区域边长从 areaSize 起,炮击开始后每满 sizeGrowthSeconds 秒增大 sizeGrowthFactor 倍,弹体携带生成时的尺寸;
 // 下落期间地面显示预警圈,落地炸毁弹体尺寸区域内的车流、奶牛、天气落点与路面障碍。
 // 玩家被直接命中即死亡;坦克只损失 1/3 满防御、卡车损失 1/2 满防御(按整数防御刻度取整)。
@@ -16,7 +16,7 @@ export class Shelling {
       if(this.nextAt>SHELL.startSeconds)this.nextAt=Math.min(this.nextAt,now+lerp(min,max,this.rng()));
     }
     if(now>=this.nextAt){
-      this.spawn(game);
+      if(this.rng()<SHELL.chance)this.spawn(game);
       this.nextAt=now+lerp(min,max,this.rng());
     }
     let kept=0,index=0;

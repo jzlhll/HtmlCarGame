@@ -14,11 +14,11 @@ const WHITELIST={
   ROADBLOCKS:['afterSeconds','first','interval','chance','warningDistance'],
   SLOW_TRAFFIC:['firstSeconds','intervalMin','intervalMax','chance'],
   HUNGER:['intervalSeconds'],
-  WEATHER:['duration','windDuration','freezeSeconds','intervalMin','intervalMax','firstMin','firstMax'],
+  WEATHER:['chance','duration','windDuration','freezeSeconds','intervalMin','intervalMax','firstMin','firstMax'],
   ROAD_FORKS:['chance','minSpan','maxSpan','weatherChance','weatherIntervalMin','weatherIntervalMax'],
   ROAD_INFRASTRUCTURE:['gapMin','gapMax'],
   ROAD_DIFFICULTY:['afterSeconds'],
-  SHELL:['startSeconds','intervalMin','intervalMax','frequencyAfterSeconds','lateIntervalMin','lateIntervalMax','fallSeconds','sizeGrowthSeconds'],
+  SHELL:['chance','startSeconds','intervalMin','intervalMax','frequencyAfterSeconds','lateIntervalMin','lateIntervalMax','fallSeconds','sizeGrowthSeconds'],
 };
 
 // fast=1 一键测试档:把分钟级节奏压缩到秒级,便于快速触发警车、白马、天气、分叉候选、炮击等随机事件。

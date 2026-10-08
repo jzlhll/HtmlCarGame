@@ -133,7 +133,7 @@ export const ROAD_INFRASTRUCTURE={
   maxGrade:.35, // 坡度上限(垂直/水平),约 19°,防止短坡组合出失真的悬崖。
 };
 // 跨度按公共道路里程计，副路另校验实际弧长；分离距离为中段路面边缘的空隙。
-export const ROAD_FORKS={chance:.8,minSpan:880,maxSpan:1760,minLength:800,maxLength:2000,separationMin:40,separationMax:60,potholeSpacing:22,potholeChance:.7,weatherChance:.85,weatherIntervalMin:3,weatherIntervalMax:7};
+export const ROAD_FORKS={chance:.8,minSpan:880,maxSpan:1760,minLength:800,maxLength:2000,separationMin:40,separationMax:60,potholeSpacing:22,potholeChance:.7,weatherChance:.8,weatherIntervalMin:3,weatherIntervalMax:7};
 // 同一车队共享低速目标和短投放净距，普通车流使用独立的生成净距。
 export const SLOW_TRAFFIC={minCount:3,maxCount:7,minSpeed:10,maxSpeed:30,minGap:2.5,maxGap:4,firstSeconds:8,intervalMin:14,intervalMax:24,chance:.65};
 // 横穿奶牛只在平地投放；结构缓冲额外覆盖队员错开与身体纵向范围。
@@ -167,9 +167,9 @@ export const AUDIO={
   shell:{whistleHz:1300,whistleDropHz:320,gain:.3,boomGain:.6},
 };
 export const SEASONS = ['春','夏','秋','冬'];
-// 非分叉路段天气按 intervalMin~intervalMax 秒随机投放,首次开场 firstMin~firstMax 秒;分叉路段使用 ROAD_FORKS 的天气字段。
+// 非分叉路段天气按 intervalMin~intervalMax 秒随机检查，以 chance 概率触发，首次检查在 firstMin~firstMax 秒；分叉路段使用 ROAD_FORKS 的天气字段。
 // 手机保持原有雨量，电脑端增加雨丝密度以加强宽屏遮挡；粒子缓冲按最大雨量复用。
-export const WEATHER={duration:9,windDuration:6,windSpeed:.5,freezeSeconds:3,fogNear:10,fogFar:50,intervalMin:31,intervalMax:45,firstMin:12,firstMax:25,rainCount:560,desktopRainMultiplier:3};
+export const WEATHER={chance:.4,duration:9,windDuration:6,windSpeed:.5,freezeSeconds:3,fogNear:10,fogFar:50,intervalMin:31,intervalMax:45,firstMin:12,firstMax:25,rainCount:560,desktopRainMultiplier:3};
 // 白马按有效运行时间每分钟投放；保护总长 10 秒包含末尾 2 秒闪烁，回落另计。
 export const WHITE_HORSE={
   intervalSeconds:60,speed:60,minAhead:20,maxAhead:35,
@@ -199,11 +199,12 @@ export const POLICE={
   maxChaseSeconds:45, // 警车持续时长达到上限后自动撤离。
 };
 export const LANE_WIDTH = 3.6;
-// 天降炮弹:开局 startSeconds 后按 intervalMin~intervalMax 秒随机投弹,落点取玩家前方并横向抖动;
+// 天降炮弹：开局 startSeconds 后按 intervalMin~intervalMax 秒随机检查，以 chance 概率投弹，落点取玩家前方并横向抖动；
 // fallSeconds 为预警圈+下落时长(留给玩家躲避),areaSize 为爆炸区域基础边长(米,常量,后续可调),
 // 炮击开始后每满 sizeGrowthSeconds 秒边长增大 sizeGrowthFactor 倍(复利,弹体携带生成时的尺寸)。
 // 玩家被直接命中即死亡;坦克只损失 tankDamageFraction 满防御、卡车损失 truckDamageFraction(取整后经统一防御流程)。
 export const SHELL={
+  chance:.4,
   startSeconds:120,
   intervalMin:10,intervalMax:22,
   frequencyAfterSeconds:150,lateIntervalMin:5,lateIntervalMax:10, // 满 2 分 30 秒后加密炮击。
