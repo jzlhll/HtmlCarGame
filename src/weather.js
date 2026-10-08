@@ -1,4 +1,4 @@
-import { WEATHER, ROAD_FORKS, VEHICLES, laneD, random, lerp, clamp } from './config.js';
+import { LEVELS, WEATHER, ROAD_FORKS, VEHICLES, laneD, random, lerp, clamp } from './config.js';
 
 // 天气落点(泥浆/冰面)与移动目标的连续接触检测:双方使用道路弧长及横向位置;可选按路线坐标系换算。
 export function projectileContact(from,to,target,targetNext,radius,road=null){
@@ -38,7 +38,7 @@ export class SeasonalWeather {
     this.starts=this.starts.filter(time=>now-time<60);
     if(!this.event&&now>=this.nextAt&&(route||this.starts.length<2)){
       this.nextAt=now+lerp(route?ROAD_FORKS.weatherIntervalMin:WEATHER.intervalMin,route?ROAD_FORKS.weatherIntervalMax:WEATHER.intervalMax,this.rng());
-      if(this.rng()<(route?ROAD_FORKS.weatherChance:WEATHER.chance)){
+      if(this.rng()<(route?(game.level===2?LEVELS.branchWeatherChance:ROAD_FORKS.weatherChance):(game.level===2?LEVELS.weatherChance:WEATHER.chance))){
         const season=route?Math.floor(this.rng()*4):game.season().index;
         this.event={id:this.nextId++,season,route,from:now,until:now+(season===2?WEATHER.windDuration:WEATHER.duration),wind:this.rng()<.5?-1:1,fogDistance:WEATHER.fogFar};
         if(!route)this.starts.push(now);this.nextHazardAt=now+.4;

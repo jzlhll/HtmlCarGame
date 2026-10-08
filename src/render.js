@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VEHICLES, SHELL, TREE_SCENERY, ROAD_RENDER, POLICE, CAMERA, laneD, random, clamp, lerp, carColor, DEFAULT_CAR_COLOR } from './config.js';
+import { VEHICLES, SECOND_LEVEL_SCENE, SHELL, TREE_SCENERY, ROAD_RENDER, RENDER_QUALITY, POLICE, CAMERA, laneD, random, clamp, lerp, carColor, DEFAULT_CAR_COLOR } from './config.js';
 import { vehicleModel, cowModel, material, mudCoating } from './models.js';
 import { RoadsideScenery } from './scenery.js';
 import { RoadworksView } from './roadworks-view.js';
@@ -11,6 +11,7 @@ import { PoliceView } from './police-view.js';
 import { InfrastructureView } from './infrastructure-view.js';
 import { BranchRoadView } from './branch-road-view.js';
 import { treeGeometry } from './tree-model.js';
+import { DinosaurView } from './dinosaur-view.js';
 
 const palette=[
   {ground:0x789e91,leaf:0x4d995e,water:0x3ca4b4,sky:0xc1dce6},
@@ -32,8 +33,13 @@ export class GameRenderer {
     this.weatherView=new WeatherView(this.scene,this.camera);this.whiteHorseView=new WhiteHorseView(this.scene);this.policeView=new PoliceView(this.scene);
     this.scene.add(new THREE.HemisphereLight(0xe3f0ff,0x668054,2.2));
     const light=new THREE.DirectionalLight(0xfff1cb,2.6);light.position.set(-25,45,15);light.castShadow=true;light.shadow.mapSize.set(1024,1024);light.shadow.camera.left=-28;light.shadow.camera.right=28;light.shadow.camera.top=50;light.shadow.camera.bottom=-30;light.shadow.camera.far=130;light.shadow.normalBias=.08;    this.scene.add(light);this.scene.add(light.target);light.target.position.set(0,0,-10);
-    this.light=light;this.trafficView=new TrafficView(this.scene);
+    this.light=light;this.trafficView=new TrafficView(this.scene);this.dinosaurView=new DinosaurView(this.scene);this.faunaSites=[];this.level=1;
     this.staticGroup=new THREE.Group();this.scene.add(this.staticGroup);this.infrastructure=new InfrastructureView(this.scene,this.staticGroup);this.staticStation=null;this.branchRoad=new BranchRoadView(this.staticGroup);
+    const soil=document.createElement('canvas');soil.width=128;soil.height=128;const soilCtx=soil.getContext('2d'),soilRng=random(84217);soilCtx.fillStyle=SECOND_LEVEL_SCENE.road;soilCtx.fillRect(0,0,128,128);
+    for(let i=0;i<2200;i++){soilCtx.fillStyle=soilRng()<.5?SECOND_LEVEL_SCENE.grainDark:SECOND_LEVEL_SCENE.grainLight;soilCtx.fillRect(soilRng()*128,soilRng()*128,1+soilRng()*3,1+soilRng()*2);}
+    for(const x of [28,87]){soilCtx.fillStyle=SECOND_LEVEL_SCENE.tracks;soilCtx.fillRect(x,0,10,128);}
+    const soilMap=new THREE.CanvasTexture(soil);soilMap.wrapS=soilMap.wrapT=THREE.RepeatWrapping;soilMap.colorSpace=THREE.SRGBColorSpace;
+    this.dirtMaterial=new THREE.MeshStandardMaterial({map:soilMap,roughness:1});
     this.groundMaterial=material(0x9bcb73);this.leafMaterial=material(0x91bf65).clone();this.leafMaterial.vertexColors=true;this.waterMaterial=material(0x8ac6d9);
     this.roadGroup=new THREE.Group();this.scene.add(this.roadGroup);this.strips=[];
     // 地面和路肩只铺在路面外，避免坡道三角面重叠产生横纹与闪烁。
@@ -56,7 +62,7 @@ export class GameRenderer {
     this.markers=new THREE.InstancedMesh(new THREE.BoxGeometry(.12,.65,.12),material(0xece4cc),110);this.scene.add(this.markers);
     this.roadside=new RoadsideScenery(this.scene);
     this.roadworks=new RoadworksView(this.staticGroup);
-    this.roadPoint={};this.localPoint={};this.carIds=new Set();this.cowIds=new Set();this.views=new Map();this.pools=new Map();this.carColorId=DEFAULT_CAR_COLOR;this.player=vehicleModel(1,true,carColor(this.carColorId).hex);this.scene.add(this.player);this.playerRank=1;this.upgradeTime=0;
+    this.roadPoint={};this.localPoint={};this.playerMotion={};this.vehicleMotion={};this.carIds=new Set();this.cowIds=new Set();this.views=new Map();this.pools=new Map();this.carColorId=DEFAULT_CAR_COLOR;this.player=vehicleModel(1,true,carColor(this.carColorId).hex);this.scene.add(this.player);this.playerRank=1;this.upgradeTime=0;
     this.playerMud=mudCoating(this.player);
     this.exhaust=new THREE.Group();this.exhaust.visible=false;this.player.add(this.exhaust);
     const jetGeometry=new THREE.ConeGeometry(1,1,8).rotateX(Math.PI/2);
@@ -111,7 +117,7 @@ export class GameRenderer {
   roadGeometry(capacity=ROAD_RENDER.sampleCapacity){
     const geometry=new THREE.BufferGeometry(),positions=new Float32Array(capacity*6),indices=[];
     for(let i=0;i<capacity-1;i++){const a=i*2;indices.push(a,a+1,a+2,a+1,a+3,a+2);}
-    geometry.setAttribute('position',new THREE.BufferAttribute(positions,3));geometry.setIndex(indices);geometry.setAttribute('normal',new THREE.BufferAttribute(new Float32Array(capacity*6),3));
+    geometry.setAttribute('position',new THREE.BufferAttribute(positions,3));geometry.setAttribute('uv',new THREE.BufferAttribute(new Float32Array(capacity*4),2));geometry.setIndex(indices);geometry.setAttribute('normal',new THREE.BufferAttribute(new Float32Array(capacity*6),3));
     const normals=geometry.attributes.normal.array;for(let i=1;i<normals.length;i+=3)normals[i]=1;
     return geometry;
   }
@@ -126,6 +132,11 @@ export class GameRenderer {
     for(const strip of this.strips){strip.mesh.geometry.dispose();strip.mesh.geometry=this.roadGeometry(capacity);}
   }
   local(s,d=0,route=null,out={}){const p=this.road.at(s,d,route,this.roadPoint),dx=p.x-this.origin.x,dz=p.z-this.origin.z,h=this.origin.heading;out.x=Math.cos(h)*dx+Math.sin(h)*dz;out.y=p.y-this.origin.y;out.z=-Math.sin(h)*dx+Math.cos(h)*dz;out.heading=p.heading-h;out.pitch=p.pitch;return out;}
+  motion(target,previous=target.previous,out=this.vehicleMotion){
+    // 只平滑第一关展示坐标，不回写逻辑状态；路线切换和车型变化直接显示新状态。
+    if(this.level!==1||!previous||this.motionAlpha===1||(previous.route??null)!==(target.route??null)||previous.rank!==undefined&&previous.rank!==target.rank)return target;
+    out.s=lerp(previous.s,target.s,this.motionAlpha);out.d=lerp(previous.d,target.d,this.motionAlpha);out.route=target.route;out.speed=target.speed;return out;
+  }
   localGround(s,d=0){const p=this.local(s,d);p.y+=this.road.groundElevation(s)-this.road.at(s,0,null,this.roadPoint).y;return p;}
   instance(mesh,index,x,y,z,sx,sy,sz,angle=0,pitch=0){temp.position.set(x,y,z);temp.rotation.set(pitch,-angle,0,'YXZ');temp.scale.set(sx,sy,sz);temp.updateMatrix();mesh.setMatrixAt(index,temp.matrix);}
   updateStatic(game){
@@ -164,12 +175,14 @@ export class GameRenderer {
       if(boundaries[boundaryIndex-1]?.end!==station)sample(station,this.road.edge(station));
     }
     for(const strip of this.strips){
+      const uv=strip.mesh.geometry.attributes.uv.array;
       const array=strip.mesh.geometry.attributes.position.array,normals=strip.mesh.geometry.attributes.normal.array;
       for(let i=0;i<sampleCount;i++){
         const sample=i*10,bounds=strip.bounds(samples[sample+3]);
-        for(let j=0;j<2;j++){const d=bounds[j],n=i*6+j*3;array[n]=samples[sample]+samples[sample+4]*d;array[n+1]=samples[sample+1]+strip.y+(strip.terrain?samples[sample+9]:0);array[n+2]=samples[sample+2]+samples[sample+5]*d;normals[n]=strip.terrain?0:samples[sample+6];normals[n+1]=strip.terrain?1:samples[sample+7];normals[n+2]=strip.terrain?0:samples[sample+8];}
+        for(let j=0;j<2;j++){const d=bounds[j],n=i*6+j*3;uv[i*4+j*2]=d*.15;uv[i*4+j*2+1]=(firstStation+i*roadStep)*.15;array[n]=samples[sample]+samples[sample+4]*d;array[n+1]=samples[sample+1]+strip.y+(strip.terrain?samples[sample+9]:0);array[n+2]=samples[sample+2]+samples[sample+5]*d;normals[n]=strip.terrain?0:samples[sample+6];normals[n+1]=strip.terrain?1:samples[sample+7];normals[n+2]=strip.terrain?0:samples[sample+8];}
       }
       strip.mesh.geometry.setDrawRange(0,(sampleCount-1)*6);
+      strip.mesh.geometry.attributes.uv.needsUpdate=true;
       strip.mesh.geometry.attributes.position.needsUpdate=true;
       strip.mesh.geometry.attributes.normal.needsUpdate=true;
     }
@@ -198,7 +211,7 @@ export class GameRenderer {
     this.wallGroup.children.forEach((w,i)=>{if(i>=wallIndex)w.visible=false;});this.signs.forEach((v,i)=>{if(i>=signIndex)v.visible=false;});
   }
   scenery(s){
-    let tree=0,broadleaf=0,conifer=0,rock=0,lake=0;
+    let tree=0,broadleaf=0,conifer=0,rock=0,lake=0;this.faunaSites=[];
     const first=Math.floor((s-80)/40);
     for(let block=first;block<=first+14;block++){
       const local=((block*40)%this.road.length+this.road.length)%this.road.length;
@@ -209,11 +222,12 @@ export class GameRenderer {
           const station=block*40+rng()*40,d=sign*(this.road.edge(station)+(k<2?5+rng()*3:48+rng()*24)),p=this.localGround(station,d),height=lerp(TREE_SCENERY.minHeight,TREE_SCENERY.maxHeight,rng());
           if(this.road.onPavement(station,d,3))continue;
           const radius=lerp(TREE_SCENERY.minRadius,TREE_SCENERY.maxRadius,rng()),angle=rng()*Math.PI*2,pine=rng()<TREE_SCENERY.coniferChance;
-          this.instance(this.trunks,tree++,p.x,p.y,p.z,1,height*.60,1,angle);
-          this.instance(pine?this.pines:this.trees,pine?conifer++:broadleaf++,p.x,p.y+height*(pine?.55:.72),p.z,radius,height*(pine?.28:.23),radius*(.85+rng()*.3),angle);
+          this.instance(this.trunks,tree++,p.x,p.y,p.z,this.level===2?.5:1,height*(this.level===2?.18:.60),this.level===2?.5:1,angle);
+          if(this.level!==2)this.instance(pine?this.pines:this.trees,pine?conifer++:broadleaf++,p.x,p.y+height*(pine?.55:.72),p.z,radius,height*(pine?.28:.23),radius*(.85+rng()*.3),angle);
         }
-        if(template===1&&lake<4&&rng()<.08){const station=block*40+20,p=this.localGround(station,sign*(this.road.edge(station)+65));if(Math.abs(p.pitch)<.025)this.instance(this.lakes,lake++,p.x,p.y-.018,p.z,9,1,17,p.heading);}
-        if(template===2&&rock<50){const station=block*40+rng()*40,d=sign*(this.road.edge(station)+4+rng()*3);if(!this.road.onPavement(station,d,3)){const p=this.localGround(station,d);this.instance(this.rocks,rock++,p.x,p.y+.5,p.z,1.5,.7,1.3);}}
+        if(template===1&&lake<4&&rng()<.08){const station=block*40+20,p=this.localGround(station,sign*(this.road.edge(station)+65));if(Math.abs(p.pitch)<.025){this.instance(this.lakes,lake++,p.x,p.y-.018,p.z,9,1,17,p.heading);if(this.level===2)this.faunaSites.push({id:block*2+(sign>0?1:0),s:station,d:sign*(this.road.edge(station)+65),kind:'diplodocus'});}}
+        if((template===2||this.level===2)&&rock<50){const station=block*40+rng()*40,d=sign*(this.road.edge(station)+4+rng()*3);if(!this.road.onPavement(station,d,3)){const p=this.localGround(station,d);this.instance(this.rocks,rock++,p.x,p.y+.5,p.z,this.level===2?2.7:1.5,this.level===2?1.5:.7,this.level===2?2.1:1.3);}}
+        if(this.level===2&&block%2===0&&rng()<.4){const station=block*40+20,d=sign*(this.road.edge(station)+23);if(!this.road.onPavement(station,d,10)&&!this.road.infrastructure(station).length)this.faunaSites.push({id:block*2+(sign>0?1:0)+100000,s:station,d,kind:block%4===0?'triceratops':'stegosaurus'});}
       }
     }
     for(const [mesh,count]of [[this.trees,broadleaf],[this.pines,conifer],[this.trunks,tree],[this.rocks,rock],[this.lakes,lake]]){mesh.count=count;mesh.instanceMatrix.clearUpdateRanges();if(count){mesh.instanceMatrix.addUpdateRange(0,count*16);mesh.instanceMatrix.needsUpdate=true;}mesh.computeBoundingSphere();}
@@ -289,12 +303,13 @@ export class GameRenderer {
     this.exhaust.children.forEach((jet,index)=>{jet.visible=p.rank>2||index===0;jet.position.x=p.rank>2?(index-.5)*size.width*.55:0;jet.scale.set(1,1,pulse);});
   }
   drawCows(game){
-    const ids=this.cowIds;ids.clear();for(const cow of game.crossings.cows)ids.add(cow.id);
+    const ids=this.cowIds;ids.clear();for(const cow of game.crossings.cows)if(cow.kind!=='dinosaur')ids.add(cow.id);
     for(const id of this.cowViews.keys())if(!ids.has(id))this.releaseCow(id);
     for(const cow of game.crossings.cows){
+      if(cow.kind==='dinosaur')continue;
       let view=this.cowViews.get(cow.id);
       if(!view){view=this.cowPool.pop()||cowModel();this.cowViews.set(cow.id,view);this.scene.add(view);}
-      const p=this.local(cow.s,cow.d+(cow.launched?cow.launchSide*cow.hitTime*9:0),null,this.localPoint),reaction=cow.hit?Math.sin(Math.min(1,cow.hitTime/.8)*Math.PI):0;
+      const motion=this.motion(cow),p=this.local(motion.s,motion.d+(cow.launched?cow.launchSide*cow.hitTime*9:0),null,this.localPoint),reaction=cow.hit?Math.sin(Math.min(1,cow.hitTime/.8)*Math.PI):0;
       view.position.set(p.x,p.y+reaction*(cow.launched?3:.3),p.z);view.rotation.set(cow.launched?cow.hitTime*3:0,-p.heading-cow.direction*Math.PI/2,cow.launched?cow.launchSide*cow.hitTime*4:reaction*.15);
       view.scale.setScalar(cow.hit?Math.max(.01,1-cow.hitTime/.8):1);
       for(const part of view.children){
@@ -326,20 +341,21 @@ export class GameRenderer {
     this.scene.add(this.player);this.invalidate();
   }
   resetRun(){
-    this.resetEffects();
+    this.resetEffects();this.dinosaurView.reset();
     for(const id of this.views.keys())this.release(id);
     for(const id of this.cowViews.keys())this.releaseCow(id);
     this.traffic=null;this.staticStation=null;this.cameraPitch=0;this.cameraX=0;this.cameraZ=0;this.cameraHeading=0;this.upgradeTime=0;this.roadside.reset();this.infrastructure.reset();this.invalidate();
   }
   invalidate(){this.dirty=true;this.onInvalidate();}
   needsFrame(game){return this.dirty||this.lastState!==game.state||this.traffic!==game.traffic||this.cameraSettling;}
-  updateQuality(dt,live){
+  updateQuality(dt,live,game){
     if(!live){this.qualitySeconds=0;this.qualityFrames=0;this.qualityWarmup=1;return;}
     // 跳过起步着色器编译；只根据持续两秒的帧间隔降档，避免偶发停顿改变画质。
     if(this.qualityWarmup>0){this.qualityWarmup-=dt;return;}
     this.qualitySeconds+=dt;this.qualityFrames++;
     if(this.qualitySeconds<2)return;
-    if(this.qualitySeconds/this.qualityFrames>1/45&&this.pixelRatio>.75){
+    const targetFps=game.level===1&&(game.nitro.boost>0||game.player.speed>=RENDER_QUALITY.firstLevelFastSpeed)?RENDER_QUALITY.firstLevelFastFps:45;
+    if(this.qualitySeconds/this.qualityFrames>1/targetFps&&this.pixelRatio>.75){
       this.pixelRatio=Math.max(.75,this.pixelRatio-.25);this.renderer.setPixelRatio(this.pixelRatio);
     }
     this.qualitySeconds=0;this.qualityFrames=0;
@@ -352,22 +368,30 @@ export class GameRenderer {
   }
   draw(game,dt){
     if(this.traffic!==game.traffic){this.resetRun();this.traffic=game.traffic;}
-    const live=game.state==='RUNNING',dying=game.state==='DYING',simDt=live?dt:0,effectDt=live||dying?dt:0;
-    this.updateQuality(dt,live);
-    const refresh=live||dying||game.state==='CAUGHT'||this.dirty||this.lastState!==game.state;
+    const live=game.state==='RUNNING',dying=game.state==='DYING',exiting=game.state==='LEVEL_EXIT',simDt=live?dt:0,effectDt=live||dying?dt:0;
+    this.updateQuality(dt,live,game);
+    const refresh=live||dying||exiting||game.state==='CAUGHT'||this.dirty||this.lastState!==game.state;
     this.lastState=game.state;this.dirty=false;
     if(!refresh){this.updateCamera(game,dt);this.renderer.render(this.scene,this.camera);return;}
-    this.playerRoute=game.player.route;this.whiteHorse=game.whiteHorse;this.road=game.road;this.origin=this.road.at(game.player.s);
+    if(this.level!==game.level){this.level=game.level;this.staticStation=null;this.roadside.reset();this.infrastructure.reset();}
+    this.motionAlpha=live&&this.level===1?clamp(game.renderAlpha??1,0,1):1;
+    this.renderPlayer=this.motion(game.player,game.renderPreviousPlayer,this.playerMotion);
+    this.strips[4].mesh.material=this.level===2?this.dirtMaterial:material(0x293e50);
+    for(const i of [2,3])this.strips[i].mesh.material=material(this.level===2?SECOND_LEVEL_SCENE.shoulder:0x8195a0);
+    this.playerRoute=game.player.route;this.whiteHorse=game.whiteHorse;this.road=game.road;this.origin=this.road.at(this.renderPlayer.s);
     this.updateStatic(game);this.infrastructure.draw(this,game);this.drawShells(game);this.drawCows(game);
-    this.updateCamera(game,dt);this.trafficView.begin(this.camera,this.light);
+    this.updateCamera(game,dt);this.trafficView.begin(this.camera,this.light,this.level===1);
     const season=game.season(),a=palette[season.index],b=palette[(season.index+1)%4];
     this.roadside.draw(this,game.player.s,season,game.activeSeconds);
     const blend=(out,key)=>out.setHex(a[key]).lerp(this.colorB.setHex(b[key]),season.blend);
-    blend(this.groundMaterial.color,'ground');blend(this.leafMaterial.color,'leaf');blend(this.waterMaterial.color,'water');blend(this.scene.background,'sky');this.scene.fog.color.copy(this.scene.background);
+    blend(this.groundMaterial.color,'ground');blend(this.leafMaterial.color,'leaf');blend(this.waterMaterial.color,'water');blend(this.scene.background,'sky');
+    this.light.color.setHex(this.level===2?SECOND_LEVEL_SCENE.sun:0xfff1cb);
+    if(this.level===2){this.groundMaterial.color.setHex(SECOND_LEVEL_SCENE.ground);this.waterMaterial.color.setHex(SECOND_LEVEL_SCENE.water);this.scene.background.setHex(SECOND_LEVEL_SCENE.sky);this.rocks.material.color.setHex(SECOND_LEVEL_SCENE.rock);this.trunks.material.color.setHex(SECOND_LEVEL_SCENE.trunk);}else this.rocks.material.color.setHex(0xa5b2a7);this.scene.fog.color.copy(this.scene.background);
     if(this.playerRank!==game.player.rank){this.playerMud.dispose();this.scene.remove(this.player);this.player=vehicleModel(game.player.rank,true,carColor(this.carColorId).hex);this.playerMud=mudCoating(this.player);this.player.add(this.exhaust);this.scene.add(this.player);this.playerRank=game.player.rank;this.upgradeTime=.25;}
     this.upgradeTime=Math.max(0,this.upgradeTime-simDt);
-    const p=this.local(game.player.s,game.player.d,game.player.route),bump=Math.sin((1-game.player.bump/BUMP_SECONDS)*Math.PI);
-    this.player.position.set(p.x,p.y+(game.player.bump>0?bump*.85:0),p.z);this.player.rotation.set(p.pitch+(game.player.bump>0?bump*.12:0),-p.heading,clamp(-(game.player.sidePush?0:game.input.lateral)*.035-game.player.push*.018,-.12,.12),'YXZ');
+    const departing=(exiting||game.state==='LEVEL_CLEAR')&&game.levelExit,visual=departing?game.levelExit:this.renderPlayer;
+    const p=this.local(visual.s,visual.d,visual.route),bump=Math.sin((1-game.player.bump/BUMP_SECONDS)*Math.PI);
+    this.player.position.set(p.x,p.y+(game.player.bump>0?bump*.85:0),p.z);this.player.rotation.set(p.pitch+(game.player.bump>0?bump*.12:0),-p.heading,!departing?clamp(-(game.player.sidePush?0:game.input.lateral)*.035-game.player.push*.018,-.12,.12):0,'YXZ');
     this.playerMud.visible=game.player.mud>0;
     if(game.state==='CAUGHT'&&game.caught){
       // 被渔网罩住:catchSeconds 内缩小、旋转并被拉向警车位置。
@@ -379,14 +403,14 @@ export class GameRenderer {
     const deathResult=game.state==='RESULT'&&game.result?.endReason==='death';
     const blink=!game.whiteHorse.shielded(game.activeSeconds)&&(live||game.state==='PAUSED')&&game.activeSeconds<game.player.invincibleUntil&&Math.floor(game.activeSeconds*12)%2===1;
     this.player.visible=!deathResult&&(!dying||game.deathTime<1.1)&&(!blink||dying);this.player.scale.setScalar(dying?Math.max(.01,1-game.deathTime*.85):1-this.upgradeTime);
-    for(const wheel of this.player.children)if(wheel.userData.wheelRadius)wheel.rotateY(-game.player.speed/3.6/wheel.userData.wheelRadius*simDt);
+    for(const wheel of this.player.children)if(wheel.userData.wheelRadius)wheel.rotateY(-visual.speed/3.6/wheel.userData.wheelRadius*(exiting?dt:simDt));
     if(dying){this.player.position.y=game.deathTime*.8;this.player.position.z-=game.deathTime*9;this.player.rotation.z=game.deathTime*2;}
     this.drawDriving(game,dt);
     const ids=this.carIds;ids.clear();for(const car of game.traffic.cars)if(!car.remove)ids.add(car.id);
     for(const id of this.views.keys())if(!ids.has(id))this.release(id);
     for(const car of game.traffic.cars){
       if(car.remove)continue;
-      const view=this.views.get(car.id)||this.acquire(car),point=this.local(car.s,car.d,car.route,this.localPoint);
+      const view=this.views.get(car.id)||this.acquire(car),motion=this.motion(car),point=this.local(motion.s,motion.d,motion.route,this.localPoint);
       view.position.set(point.x,point.y,point.z);view.rotation.set(point.pitch*car.direction,-point.heading+(car.direction<0?Math.PI:0),0,'YXZ');
       const signal=view.userData.signal;signal.visible=Boolean(car.merge)&&Math.floor(car.merge.time*6)%2===0;
       view.userData.queueLights.visible=Boolean(car.convoy||car.warning)&&Math.floor(game.activeSeconds*4)%2===0;
@@ -394,7 +418,7 @@ export class GameRenderer {
       for(const wheel of view.children[0].children)if(wheel.userData.wheelRadius)wheel.rotateY(-car.speed/wheel.userData.wheelRadius*simDt);
       this.trafficView.add(view);
     }
-    this.particles.visible=true;
+    this.particles.visible=this.level!==2;
     this.particles.material.color.setHex(season.index===2?0xf4bd6e:season.index===0?0xffe2eb:0xffffff);
     this.particles.material.opacity=season.index===3?.7:.32;
     for(let i=0;i<100;i++){
@@ -431,22 +455,24 @@ export class GameRenderer {
       for(let k=0;k<2;k++){const size=(duration-t)*.45;this.instance(this.effects,effect++,point.x+(k-.5)*t,point.y+.3+t,point.z,size,size,size);}
     }
     this.effectRecords=this.effectRecords.filter(r=>r.time<(r.kind==='knockaway'?.75:.55));this.effects.count=effect;this.effects.instanceMatrix.needsUpdate=true;
-    this.trafficView.finish();
+    this.dinosaurView.draw(this,game);this.trafficView.finish();
     this.weatherView.draw(this,game);this.whiteHorseView.draw(this,game);this.policeView.draw(this,game,simDt);
     this.renderer.render(this.scene,this.camera);
   }
   updateCamera(game,dt){
+    if(game.state==='LEVEL_EXIT'||game.state==='LEVEL_CLEAR'){this.cameraSettling=false;return;}
+    const player=this.renderPlayer??game.player;
     const shake=game.state==='DYING'?Math.max(0,.18-game.deathTime*.2)*Math.sin(game.deathTime*90):0;
-    const target=this.road.at(game.player.s,game.player.d,game.player.route).pitch*.35;
+    const target=this.road.at(player.s,player.d,player.route).pitch*.35;
     this.cameraPitch=lerp(this.cameraPitch||0,target,clamp(dt*3,0,1));
     this.cameraSettling=Math.abs(this.cameraPitch-target)>.0001;
     if(!this.cameraSettling)this.cameraPitch=target;
     const tilt=Math.sin(this.cameraPitch);
-    const center=this.road.branchCenter(game.player.s,game.player.route),p=this.local(game.player.s,center,game.player.route);
+    const center=this.road.branchCenter(player.s,player.route),p=this.local(player.s,center,player.route);
     const blend=clamp(dt*5,0,1);
     this.cameraX=lerp(this.cameraX||0,p.x,blend);this.cameraZ=lerp(this.cameraZ||0,p.z,blend);this.cameraHeading=lerp(this.cameraHeading||0,p.heading,blend);
     this.cameraSettling ||=Math.abs(this.cameraX-p.x)+Math.abs(this.cameraZ-p.z)+Math.abs(this.cameraHeading-p.heading)>.001;
-    const lateral=(game.player.d-center)*.13,cos=Math.cos(this.cameraHeading),sin=Math.sin(this.cameraHeading);
+    const lateral=(player.d-center)*.13,cos=Math.cos(this.cameraHeading),sin=Math.sin(this.cameraHeading);
     p.x=this.cameraX;p.z=this.cameraZ;
     this.camera.position.set(p.x+cos*lateral-sin*24+shake,p.y+24-24*tilt,p.z+sin*lateral+cos*(24+24*tilt));
     this.camera.lookAt(p.x+cos*lateral+sin*16,p.y+16*tilt,p.z+sin*lateral-cos*16);

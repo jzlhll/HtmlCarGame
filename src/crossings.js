@@ -1,4 +1,4 @@
-import { COW_CROSSING, random } from './config.js';
+import { COW_CROSSING, DINOSAURS, random } from './config.js';
 
 export { COW_CROSSING } from './config.js';
 
@@ -20,7 +20,7 @@ export class CrossingCows {
     // 整队及其身体范围都必须远离结构两端，避免队员错开后踏上坡道。
     const reach=COW_CROSSING.infrastructurePadding+COW_CROSSING.stationJitter/2+COW_CROSSING.dimensions.length/2;
     if(this.road.infrastructure(s-reach,s+reach).length)return;
-    const direction=this.rng()<.5?-1:1,speed=1.6+this.rng()*.6;
+    const direction=this.rng()<.5?-1:1,speed=DINOSAURS.cowSpeedMin+this.rng()*(DINOSAURS.cowSpeedMax-DINOSAURS.cowSpeedMin);
     const count=COW_CROSSING.minCount+Math.floor(this.rng()*(COW_CROSSING.capacity-COW_CROSSING.minCount+1));
     for(let i=0;i<count;i++){
       const station=s+(this.rng()-.5)*COW_CROSSING.stationJitter,d=-direction*(this.road.edge(station)+3+i*COW_CROSSING.spacing);

@@ -40,3 +40,11 @@
 实现见 `src/test-overrides.js`,由 `config.js` 末尾在启动早期应用;Node 端导入无 `location` 自动跳过。独立 X 路障可用 `ROADBLOCKS.afterSeconds`、`first`、`interval`、`chance`、`warningDistance` 覆盖启用及候选节奏；炮击加密阶段可用 `SHELL.frequencyAfterSeconds`、`lateIntervalMin`、`lateIntervalMax` 覆盖。新增随机事件时在 `WHITELIST` 登记节奏字段,并按需加入 `FAST_PRESET`。
 
 流程的效率改进与待验证建议见[开发与验证效率](development-workflow.md)，其中推测意见不作为默认执行要求。
+
+## 第二关验证参数
+
+`LEVELS.firstSeconds` 可缩短第一关通关门槛；取值至少 8 秒可检查完整 5 秒顶部倒计时。仍须实际行驶，检查到时清空车流、镜头固定、玩家模型前行 3 秒后显示通关界面，再点击或按空格切关，确认第二关自行车、时间、距离、资源与事件从零初始化；`LEVELS.weatherChance`、`branchWeatherChance` 只覆盖第二关天气概率；第二关关闭炮击调度。`DINOSAURS.smallFirstMin/Max`、`smallIntervalMin/Max`、`smallChance` 可加快横穿；`DINOSAURS.chaseAfterSeconds`、`chaseFirstMin/Max`、`chaseIntervalMin/Max`、`chaseChance`、`durationMin/Max` 可加快追行生命周期。其余尺寸、伤害及速度倍率不开放覆盖。
+
+示例：`?LEVELS.firstSeconds=2&DINOSAURS.smallFirstMin=1&DINOSAURS.smallFirstMax=2&DINOSAURS.smallChance=1&DINOSAURS.chaseAfterSeconds=8&DINOSAURS.chaseFirstMin=1&DINOSAURS.chaseFirstMax=2&DINOSAURS.chaseChance=1`。人工验证启用调试模式；去掉参数刷新后恢复3 分 30 秒通关及正常两分钟恐龙分界。
+
+`ROAD_DIFFICULTY.afterSeconds` 按第二关自身有效运行时间控制永久收窄，默认 120 秒；第一关不受该参数影响。

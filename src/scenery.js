@@ -145,7 +145,7 @@ export class RoadsideScenery {
     for(const {mesh,count,dynamic}of this.batches.values()){mesh.visible=count>0;mesh.count=count;if(count&&!dynamic)mesh.instanceMatrix.needsUpdate=true;}
   }
   draw(renderer,s,season,time){
-    this.renderer=renderer;
+    this.renderer=renderer;this.group.visible=renderer.level!==2;if(renderer.level===2)return;
     if(this.road!==renderer.road){this.reset();this.road=renderer.road;}
     if(this.seasonIndex!==season.index||this.seasonBlend!==season.blend){
       for(const key of ['field','crop','roof'])this.materials.get(key).color.setHex(seasons[season.index][key]).lerp(this.color.setHex(seasons[(season.index+1)%4][key]),season.blend);

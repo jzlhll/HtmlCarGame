@@ -50,6 +50,7 @@ export class GameAudio {
     this.noiseBuffer=noise;
     this.engine=this.engineLoop();this.jet=this.jetLoop();this.wind=this.windLoop();
     this.water=this.waterLoop();this.train=this.trainLoop();this.tank=this.tankLoop();this.police=this.policeLoop();
+    this.dinosaurVoices=Object.fromEntries(Object.entries(AUDIO.dinosaurs).filter(([key])=>key!=='step').map(([key,cfg])=>[key,this.dinosaurLoop(cfg)]));
   }
   noiseSource(){const src=this.context.createBufferSource();src.buffer=this.noiseBuffer;src.loop=true;src.start();return src;}
   ramp(param,value,time=.08){param.setTargetAtTime(value,this.context.currentTime,time);}
@@ -104,6 +105,39 @@ export class GameAudio {
     clatter.connect(clatterGain);clatterGain.connect(mix);clatter.start();
     return {gain:out,pan,clatter};
   }
+  dinosaurLoop(cfg){
+    const ctx=this.context,gain=ctx.createGain(),filter=ctx.createBiquadFilter();gain.gain.value=0;
+    filter.type='bandpass';filter.frequency.value=cfg.hz*4;filter.Q.value=1.4;
+    const voice=ctx.createOscillator();voice.type='sawtooth';voice.frequency.value=cfg.hz;
+    const breath=ctx.createBiquadFilter();breath.type='lowpass';breath.frequency.value=cfg.hz*7;
+    const noiseGain=ctx.createGain();noiseGain.gain.value=.14;
+    const noise=this.noiseSource();noise.connect(breath);breath.connect(noiseGain);noiseGain.connect(filter);voice.connect(filter);
+    const vibrato=ctx.createOscillator(),depth=ctx.createGain();vibrato.frequency.value=7;depth.gain.value=cfg.hz*.045;vibrato.connect(depth);depth.connect(voice.frequency);vibrato.start();
+    const pan=ctx.createStereoPanner?ctx.createStereoPanner():null;
+    if(pan){filter.connect(pan);pan.connect(gain);}else filter.connect(gain);
+    gain.connect(this.master);voice.start();return {gain,pan,voice,filter};
+  }
+  updateDinosaurs(game,run){
+    const p=game.player,now=game.activeSeconds,position=game.road.at(p.s,p.d,p.route);
+    for(const [type,voice]of Object.entries(this.dinosaurVoices)){
+      const cfg=AUDIO.dinosaurs[type];let strength=0,pan=0,phase=0;
+      if(run&&game.level===2)for(const source of game.renderer?.dinosaurView.sources??[]){
+        if(source.type!==type)continue;
+        const point=game.road.at(source.s,source.d),distance=Math.hypot(point.x-position.x,point.z-position.z,(source.y??point.y)-position.y),proximity=clamp(1-distance/cfg.range,0,1);
+        if(proximity>strength){strength=proximity;pan=clamp((source.d-p.d)/65,-1,1)*cfg.pan;phase=typeof source.id==='number'?source.id%7:source.id.length%7;}
+      }
+      const cycle=((now+phase)%cfg.period)/cfg.period,envelope=Math.pow(Math.max(0,Math.sin(cycle*Math.PI*2)),1.4);
+      this.ramp(voice.gain.gain,strength*strength*cfg.gain*envelope,.08);
+      this.ramp(voice.voice.frequency,cfg.hz*(.8+.35*Math.sin(cycle*Math.PI)),.1);
+      this.ramp(voice.filter.frequency,cfg.hz*(3+2*envelope),.12);
+      if(voice.pan)this.ramp(voice.pan.pan,pan,.1);
+    }
+  }
+  dinosaurStep(foot,game){
+    if(!this.context)return;
+    const cfg=AUDIO.dinosaurs.step,p=game.player,distance=Math.hypot(foot.s-p.s,foot.d-p.d),gain=cfg.gain*Math.pow(clamp(1-distance/cfg.range,0,1),2),pan=clamp((foot.d-p.d)/12,-1,1);
+    this.tone('sine',cfg.hz,cfg.hz*.4,.38,gain,0,pan);this.burst(260,75,'lowpass',.7,.3,gain*.8,0,pan);
+  }
   tankLoop(){
     // 低通履带噪声叠加慢速幅度调制，形成贴近的轰隆感；声像按坦克所在侧偏置。
     const ctx=this.context,out=ctx.createGain();out.gain.value=0;
@@ -142,6 +176,7 @@ export class GameAudio {
   update(dt,game){
     if(!this.context)return;
     const run=game.state==='RUNNING',p=game.player,t=this.context.currentTime;
+    this.updateDinosaurs(game,run);
     // 发动机：音高随车速抬升，喷气时叠加气流噪声。
     const ratio=clamp(p.speed/VEHICLES[p.rank].playerMax,0,1.7);
     const hz=AUDIO.engine.baseHz+ratio*AUDIO.engine.speedHz;
@@ -166,7 +201,7 @@ export class GameAudio {
     // 火车：只播放逐渐加快的轮轨“哐当”声，按距离与横穿位置淡入淡出。
     // 暂停后 trains 数组冻结滞留，计算必须随 run 门控，否则 setState 静音后又被拉高。
     let train=0,trainPan=0,trainItem=null;
-    if(run)for(const item of game.infrastructure.trains){
+    if(run&&game.level!==2)for(const item of game.infrastructure.trains){
       const distance=Math.hypot(item.site.center-p.s,item.d-p.d);
       const proximity=clamp(1-distance/AUDIO.train.range,0,1);
       if(proximity>train){train=proximity;trainPan=clamp((item.d-p.d)/50,-1,1)*AUDIO.train.pan*proximity;trainItem=item;}
@@ -179,7 +214,7 @@ export class GameAudio {
     // 坦克：附近系统坦克的履带低频轰隆，按距离与所在侧衰减，同样带多普勒；随 run 门控。
     let tank=0,tankPan=0,tankDistance=Infinity;
     if(run)for(const car of game.traffic.cars){
-      if(car.rank!==MAX_RANK||car.remove)continue;
+      if(car.rank<MAX_RANK||car.remove)continue;
       const distance=Math.hypot(car.s-p.s,car.d-p.d),proximity=clamp(1-distance/AUDIO.tank.range,0,1);
       if(proximity>tank){tank=proximity;tankPan=clamp((car.d-p.d)/10,-1,1)*AUDIO.tank.pan*proximity;tankDistance=distance;}
     }
@@ -226,9 +261,12 @@ export class GameAudio {
     if(run&&game.scraping&&t>=this.scrapeAt){this.scrape();this.scrapeAt=t+.13;}
   }
   setState(state){
-    if(!this.context||state==='RUNNING')return;
-    // 暂停、结算或返回首页立即静音全部环境声，事件声自然衰减。
-    for(const loop of [this.engine,this.jet,this.wind,this.water,this.train,this.tank,this.police])this.ramp(loop.gain.gain,0,.05);
+    if(!this.context)return;
+    this.master.gain.cancelScheduledValues(this.context.currentTime);
+    this.master.gain.setValueAtTime(state==='RUNNING'?AUDIO.master:0,this.context.currentTime);
+    if(state==='RUNNING')return;
+    // 暂停、结算或返回首页关闭总增益，已经发出的事件声同时静音。
+    for(const loop of [this.engine,this.jet,this.wind,this.water,this.train,this.tank,this.police,...Object.values(this.dinosaurVoices)])this.ramp(loop.gain.gain,0,.05);
   }
   tone(type,f0,f1,dur,gain,delay=0,pan=0){
     const ctx=this.context,t=ctx.currentTime+delay;
@@ -264,7 +302,7 @@ export class GameAudio {
       case 'eat':this.eat();break;
       case 'bounce':this.side();break;
       case 'graze':this.graze();break;
-      case 'cowDowngrade':this.side();break;
+      case 'cowDowngrade':case 'armorDowngrade':this.side();break;
       case 'knockaway':case 'downgrade':case 'wall':case 'roadwork':this.crash();break;
     }
   }

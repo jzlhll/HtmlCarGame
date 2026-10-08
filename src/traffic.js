@@ -1,4 +1,4 @@
-import { VEHICLES, MAX_RANK, TRAFFIC_COLORS, ONCOMING_SPEED_SCALE, TRAFFIC_WEIGHTS, TRAFFIC_SPAWN_AHEAD, TRAFFIC_SPAWN_BEHIND, UPGRADE_TRAFFIC, TRAFFIC_DENSITY, TRAFFIC_LANE_CHANGE, TRAFFIC_DRIVING, ROAD_DIFFICULTY, SLOW_TRAFFIC, REAR_WARNING, LANE_WIDTH, ROAD_INFRASTRUCTURE, laneD, random, clamp, approach, lerp, smooth } from './config.js';
+import { VEHICLES, MAX_RANK, ARMORED_RANK, ARMORED_TANK, TRAFFIC_COLORS, ONCOMING_SPEED_SCALE, TRAFFIC_WEIGHTS, TRAFFIC_SPAWN_AHEAD, TRAFFIC_SPAWN_BEHIND, UPGRADE_TRAFFIC, TRAFFIC_DENSITY, TRAFFIC_LANE_CHANGE, TRAFFIC_DRIVING, ROAD_DIFFICULTY, SLOW_TRAFFIC, REAR_WARNING, LANE_WIDTH, ROAD_INFRASTRUCTURE, laneD, random, clamp, approach, lerp, smooth } from './config.js';
 import { sweep, roadworkContact, separation, startBounce, advanceBounce } from './collision.js';
 import { surfaceContact, MUD_SECONDS } from './hazards.js';
 const maxVehicleLength=Math.max(...VEHICLES.slice(1).map(vehicle=>vehicle.length));
@@ -13,6 +13,7 @@ export class Traffic {
   constructor(road,seed){this.road=road;this.rng=random(seed^0x31f024b5);this.maneuverRng=random(seed^0x72a391c5);this.queueRng=random(seed^0x54a31c92);this.cars=[];this.branchRng=random(seed^0x195e839a);this.branchPlans=new Map();this.nextId=1;this.nextQueueId=1;this.timer=0;this.rearTimer=0;this.elapsedSeconds=0;this.capacity=TRAFFIC_DENSITY.capacity;this.gapScale=1;this.queueTimer=SLOW_TRAFFIC.firstSeconds+this.queueRng()*6;this.dangerousRng=random(seed^0x73af2c19);this.contacts=new Set();this.obstacles=[];this.staticObstacles=[];this.cowObstacles=new Map();this.obstacleStation=null;this.obstacleRoadRevision=-1;this.activeCars=[];this.orderedCars=[];this.contactEvents=[];this.nextContacts=new Set();this.branchForks=[];this.fourLane=false;}
   rank(playerRank,direction,distance,ahead=true){
     const weights=TRAFFIC_WEIGHTS;
+    const armor=this.level===2?(playerRank===5?ARMORED_TANK.tankChance:playerRank===4?ARMORED_TANK.truckChance:0):0;
     if(ahead){
       const settings=weights.ahead;
       const higher=playerRank<MAX_RANK?Math.min(settings.higherMax,settings.higher+Math.floor(distance/weights.stepDistance)*weights.higherStep):0;
@@ -22,14 +23,14 @@ export class Traffic {
       if(r<oneLower)return playerRank-1;
       if(r<oneLower+otherLower)return 1+Math.floor(this.rng()*(playerRank-2));
       if(r<oneLower+otherLower+higher)return playerRank+1+Math.floor(this.rng()*(MAX_RANK-playerRank));
-      return playerRank;
+      return r>=1-armor?ARMORED_RANK:playerRank;
     }
     const higher=playerRank<MAX_RANK ? Math.min(weights.higherMax,weights.higher+Math.floor(distance/weights.stepDistance)*weights.higherStep) : 0;
     const lower=playerRank>1 ? weights.lower-Math.max(0,higher-weights.higher) : 0;
     const r=this.rng();
     if(r<higher)return playerRank+1+Math.floor(this.rng()*(MAX_RANK-playerRank));
     if(r<higher+lower)return 1+Math.floor(this.rng()*(playerRank-1));
-    return playerRank;
+    return r>=1-armor?ARMORED_RANK:playerRank;
   }
   gap(a,b){return Math.abs(a.s-b.s)*this.road.pathScale((a.s+b.s)/2,a.route)-(VEHICLES[a.rank].length+VEHICLES[b.rank].length)/2;}
   clearance(direction,speed,otherSpeed=speed){return Math.max(direction<0?45:35,speed*2,otherSpeed*2)*this.gapScale;}
@@ -288,7 +289,7 @@ export class Traffic {
     const car={id:this.nextId++,s,d,route,rank,lane,direction,speed,desired:speed,color:colors[Math.floor(rng()*colors.length)],merge:null,convoy:null,sidePush:0,sidePushTime:0};this.configureDriving(car);this.cars.push(car);
   }
   stepMain(dt,player,activeSeconds=this.elapsedSeconds+dt,weather=null,infrastructure=null,game=null){
-    this.elapsedSeconds=activeSeconds;
+    this.elapsedSeconds=activeSeconds;this.level=game?.level??1;
     const change=TRAFFIC_LANE_CHANGE,difficulty=ROAD_DIFFICULTY.fourLane;
     const fourLane=this.road.isFourLanePhase(player.s),intervalMin=fourLane?difficulty.laneChangeIntervalMin:change.intervalMin,intervalMax=fourLane?difficulty.laneChangeIntervalMax:change.intervalMax;
     if(fourLane!==this.fourLane){

@@ -24,7 +24,7 @@ export class WhiteHorseView {
     const now=game.activeSeconds,event=game.whiteHorse,horse=event.horse,visible=['RUNNING','PAUSED','DYING'].includes(game.state);
     this.horse.visible=Boolean(visible&&horse&&now<horse.until&&(now-horse.from<WHITE_HORSE.visibleSeconds||Math.floor((now-horse.from-WHITE_HORSE.visibleSeconds)*8)%2===0));
     if(this.horse.visible){
-      const p=renderer.local(horse.s,horse.d,horse.route),phase=(now-horse.from)*14;
+      const motion=renderer.motion(horse),p=renderer.local(motion.s,motion.d,motion.route),phase=(now-horse.from)*14;
       this.horse.position.set(p.x,p.y+Math.sin(phase*2)*.07,p.z);this.horse.rotation.set(p.pitch,-p.heading,0,'YXZ');
       for(const leg of this.legs){
         const stride=phase+leg.userData.horsePhase;leg.rotation.x=Math.sin(stride)*.7;
@@ -35,7 +35,7 @@ export class WhiteHorseView {
     const buff=event.buff,shielded=event.shielded(now),blink=shielded&&now>=buff.shieldUntil-WHITE_HORSE.shieldBlinkSeconds;
     this.shield.visible=Boolean(visible&&shielded&&(!blink||Math.floor((now-buff.shieldUntil+WHITE_HORSE.shieldBlinkSeconds)*8)%2===0));
     if(this.shield.visible){
-      const p=renderer.local(game.player.s,game.player.d,game.player.route),size=VEHICLES[game.player.rank];
+      const player=renderer.renderPlayer??game.player,p=renderer.local(player.s,player.d,player.route),size=VEHICLES[game.player.rank];
       this.shield.position.set(p.x,p.y+1,p.z);this.shield.rotation.set(p.pitch,-p.heading-game.player.yaw,0,'YXZ');
       this.shield.scale.set(size.width*.65+.4,1.55,size.length*.58+.6);
       this.shell.material.opacity=.14+Math.sin(now*11)*.025;this.ring.rotation.z=now*2;

@@ -6,7 +6,20 @@ export const VEHICLES = [
   {name:'卡车', length:3.75, width:1.25, min:45, max:75, playerMax:145, lateral:5.1, color:0xe3945e},
   {name:'坦克', length:2.5, width:1.875, min:25, max:55, playerMax:145, lateral:4.35, color:0x829b83},
 ];
-export const MAX_RANK=VEHICLES.length-1;
+export const MAX_RANK=5; // 玩家最高车型与系统专属车型分开。
+export const ARMORED_RANK=6;
+VEHICLES.push({...VEHICLES[5],name:'装甲坦克',min:60,max:80,color:0xb29a66});
+export const SECOND_LEVEL_SCENE={road:'#858c90',grainDark:'rgba(53,62,66,.16)',grainLight:'rgba(214,219,218,.25)',tracks:'rgba(224,229,226,.12)',shoulder:0xa7aaa4,ground:0xaaa18b,water:0x438d8f,sky:0xcbd3d4,rock:0x958d7d,trunk:0x79694d,sun:0xf1f5ff};
+export const LEVELS={firstSeconds:210,countdownSeconds:5,exitSeconds:3,exitSpeed:100,weatherChance:.8,branchWeatherChance:1};
+export const ARMORED_TANK={truckChance:.05,tankChance:.15,heightMultiplier:2};
+export const DINOSAURS={
+  smallFirstMin:15,smallFirstMax:30,smallIntervalMin:25,smallIntervalMax:40,smallChance:.4,smallCountMin:1,smallCountMax:2,
+  cowSpeedMin:1.6,cowSpeedMax:2.2,crossingSpeedMultiplier:2,smallLength:2.4,smallWidth:.8,smallHeight:1.2,smallAheadMin:60,smallLeadSeconds:3,
+  chaseAfterSeconds:120,chaseFirstMin:4,chaseFirstMax:8,chaseIntervalMin:20,chaseIntervalMax:35,chaseChance:.7,
+  chaseBehindMin:30,chaseBehindMax:45,speedRatioMin:1,speedRatioMax:1.08,durationMin:12,durationMax:18,
+  stepDistanceMin:10,stepDistanceMax:14,footWidth:2.2,footLength:3.6,footWarning:.8,footDanger:.35,footFade:3,footCapacity:12,
+  bridgeLeadSeconds:2.5,bridgeSpeed:12,bridgeCount:4,bridgeSpacing:5,sceneryCapacity:32,
+};
 // 玩家座驾涂装：yellow/blue/green 为纯色，rainbow 使用渐变贴图；默认绿色。
 export const CAR_COLORS=[
   {id:'yellow',name:'黄色',hex:0xf5cc58,css:'#f5cc58'},
@@ -16,7 +29,7 @@ export const CAR_COLORS=[
 ];
 export const DEFAULT_CAR_COLOR='green';
 export const carColor=id=>CAR_COLORS.find(c=>c.id===id)??CAR_COLORS.find(c=>c.id===DEFAULT_CAR_COLOR);
-export const RULES_VERSION=2;
+export const RULES_VERSION=3;
 // 统一放大实体车身，渲染和碰撞共用尺寸；最宽坦克仍能通过 3.6 米车道。
 export const VEHICLE_LENGTH_SCALE=2.4;
 export const VEHICLE_WIDTH_SCALE=1.6;
@@ -34,6 +47,7 @@ export const TRAFFIC_COLORS=[
   [0xe3945e,0x5e9aaf,0xb6564e,0xd4caa9,0x7a9764,0x8d80a9],
   [0x829b83,0x667e58,0xa79770,0x788a98,0x746f60,0x9faaa1],
 ];
+TRAFFIC_COLORS.push([0xb29a66,0x655d4b,0x9b8056]);
 export const VEHICLE_CONTACT={
   endCoreFraction:.6, // 车头与车尾中央 60% 的宽度为正面撞击区，其余端角允许擦过。
   sideOverlapFraction:.1, // 侧碰至少重叠较短车辆车长的 10%，避免单点擦角直接吞吃。
@@ -108,12 +122,13 @@ export const TRAFFIC_DRIVING={dangerousChance:.15,avoidSeconds:3.5,minAvoidDista
 // 跨轮静态查询缓存按轮数限制，远离当前窗口的内容可重新生成。
 export const ROAD_CACHE={maxLaps:4};
 export const ROAD_RENDER={sampleCapacity:160};
+export const RENDER_QUALITY={firstLevelFastSpeed:160,firstLevelFastFps:58};
 // 每轮三个额外弯组候选；成对曲线保持出口方向，截止墙前后仍留直道。
 export const ROAD_CURVES={extraPairChance:.75,minAngle:12,maxAngle:22,minLength:240,maxLength:360,lengthStep:20,straightChance:.2,straightLength:60};
 // 树木共用几何与实例批次，高度、冠幅及松树比例只在静态布局刷新时抽取。
 export const TREE_SCENERY={capacity:150,coniferChance:.3,minHeight:4.8,maxHeight:7.2,minRadius:1.3,maxRadius:1.9};
 export const ROAD_DIFFICULTY={
-  afterSeconds:150,warningDistance:60,taperLength:400,
+  afterSeconds:120,warningDistance:60,taperLength:400, // 按第二关自身有效运行时间启用永久收窄。
   // 玩家越过永久收窄过渡段后，提高车流随机变道与危险车强度。
   fourLane:{laneChangeChanceIncrease:.25,laneChangeIntervalMin:4,laneChangeIntervalMax:7,dangerousChance:.25},
 };
@@ -142,6 +157,7 @@ export const COW_CROSSING={minCount:5,capacity:7,spacing:4.2,chance:.25,minInter
 // range 为声源可闻距离（米），pan 为声像摆动幅度，玩家自身发动机与喷气音量刻意低于环境声。
 export const AUDIO={
   master:.55,
+  dinosaurs:{bridge:{hz:105,range:180,gain:.3,pan:.8,period:4},lake:{hz:58,range:170,gain:.3,pan:.75,period:5.5},grazing:{hz:135,range:85,gain:.12,pan:.7,period:6},step:{hz:65,gain:.28,range:100}},
   engine:{baseHz:44,speedHz:96,gain:.05,jetGain:.05,jetHz:1400},
   wind:{gain:.24,pan:.75},
   water:{gain:.22,range:70},
@@ -167,6 +183,7 @@ export const AUDIO={
   shell:{whistleHz:1300,whistleDropHz:320,gain:.3,boomGain:.6},
 };
 export const SEASONS = ['春','夏','秋','冬'];
+export const SEASON_CYCLE={seconds:50,transitionSeconds:10};
 // 非分叉路段天气按 intervalMin~intervalMax 秒随机检查，以 chance 概率触发，首次检查在 firstMin~firstMax 秒；分叉路段使用 ROAD_FORKS 的天气字段。
 // 手机保持原有雨量，电脑端增加雨丝密度以加强宽屏遮挡；粒子缓冲按最大雨量复用。
 export const WEATHER={chance:.4,duration:9,windDuration:6,windSpeed:.5,freezeSeconds:3,fogNear:10,fogFar:50,intervalMin:31,intervalMax:45,firstMin:12,firstMax:25,rainCount:560,desktopRainMultiplier:3};
@@ -232,4 +249,4 @@ export const approach = (value, target, delta) => value < target ? Math.min(targ
 // 启动早期应用 URL 测试参数(?fast=1 或 ?POLICE.intervalMin=3 等白名单字段),
 // 仅服务 Agent/人工快速验证随机事件;不带参数或 Node 端导入时默认值原样生效。
 import { applyTestOverrides } from './test-overrides.js';
-applyTestOverrides({TRAFFIC_DENSITY,POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,ROADBLOCKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});
+applyTestOverrides({LEVELS,DINOSAURS,TRAFFIC_DENSITY,POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,ROADBLOCKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});

@@ -6,18 +6,20 @@ export const TEST_OVERRIDES={active:false,keys:[]};
 
 // 白名单开放事件节奏、概率、车流容量及警车距离、网尺寸等字段，不开放车型尺寸与车辆碰撞阈值。
 const WHITELIST={
+  LEVELS:['firstSeconds','weatherChance','branchWeatherChance'],
+  DINOSAURS:['smallFirstMin','smallFirstMax','smallIntervalMin','smallIntervalMax','smallChance','chaseAfterSeconds','chaseFirstMin','chaseFirstMax','chaseIntervalMin','chaseIntervalMax','chaseChance','durationMin','durationMax'],
   TRAFFIC_DENSITY:['capacity','maxCapacity','capacityPerStep'],
   POLICE:['intervalMin','intervalMax','spawnAheadMin','spawnAheadMax','keepMin','keepMax','keepGain','chaseRatio','closeRatio','netAheadMin','netLeadSeconds','netInterval','netSizeBase','netSizeGrowth','netSizeMax','netKeep','quizMathSeconds','quizChineseSeconds','quizEnglishSeconds','catchSeconds','maxChaseSeconds'],
   WHITE_HORSE:['intervalSeconds','visibleSeconds','rampSeconds','shieldSeconds','shieldBlinkSeconds','recoverySeconds'],
   COW_CROSSING:['minInterval','intervalRange','chance'],
   ROADWORKS:['first','interval','chance'],
   ROADBLOCKS:['afterSeconds','first','interval','chance','warningDistance'],
+  ROAD_DIFFICULTY:['afterSeconds'],
   SLOW_TRAFFIC:['firstSeconds','intervalMin','intervalMax','chance'],
   HUNGER:['intervalSeconds'],
   WEATHER:['chance','duration','windDuration','freezeSeconds','intervalMin','intervalMax','firstMin','firstMax'],
   ROAD_FORKS:['chance','minSpan','maxSpan','weatherChance','weatherIntervalMin','weatherIntervalMax'],
   ROAD_INFRASTRUCTURE:['gapMin','gapMax'],
-  ROAD_DIFFICULTY:['afterSeconds'],
   SHELL:['chance','startSeconds','intervalMin','intervalMax','frequencyAfterSeconds','lateIntervalMin','lateIntervalMax','fallSeconds','sizeGrowthSeconds'],
 };
 

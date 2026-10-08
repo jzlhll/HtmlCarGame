@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { VEHICLES, MAX_RANK, VEHICLE_LENGTH_SCALE, VEHICLE_WIDTH_SCALE, BICYCLE_WIDTH_SCALE, BICYCLE_TIRE_WIDTH, carColor } from './config.js';
+import { VEHICLES, MAX_RANK, ARMORED_RANK, ARMORED_TANK, VEHICLE_LENGTH_SCALE, VEHICLE_WIDTH_SCALE, BICYCLE_WIDTH_SCALE, BICYCLE_TIRE_WIDTH, carColor } from './config.js';
 const geometry={box:new THREE.BoxGeometry(1,1,1),wheel:new THREE.CylinderGeometry(1,1,1,12),sphere:new THREE.IcosahedronGeometry(1,0),cone:new THREE.ConeGeometry(.5,1,6)};
 geometry.bicycleTank=new THREE.SphereGeometry(.5,10,6);
 // 车身下缘与上缘轻微收角，保留独立发动机盖、座舱和尾厢的轿车轮廓。
@@ -102,7 +102,7 @@ export function vehicleModel(rank,player=false,bodyColor){
     part(g,c,[.85,.85,.85],[0,.61,-l*.34],'handlebar');
     part(g,0x263839,[w*.32,.07,l*.12],[0,.56,-l*.12]);
     part(g,0xffefb2,[.09,.09,.06],[0,.48,-l*.37]);
-  }else if(rank===MAX_RANK){
+  }else if(rank===MAX_RANK||rank===ARMORED_RANK){
     part(g,c,[w*.78,.39,l*.88],[0,.45,0]);
     for(const side of [-1,1]){part(g,0x273c33,[w*.2,.38,l],[side*w*.4,.22,0]);for(let z=-.85;z<=.85;z+=.34){const wheel=part(g,0x68816c,[.14,.15,.14],[side*w*.47,.24,z],'wheel');wheel.rotation.z=Math.PI/2;}}
     part(g,c,[w*.53,.3,l*.44],[0,.8,-.13]);
@@ -130,6 +130,12 @@ export function vehicleModel(rank,player=false,bodyColor){
     for(const side of [-1,1])for(const z of positions){const r=.19;const wheel=part(g,0x243334,[r,.13,r],[side*w*.43,r,z],'wheel');wheel.rotation.z=Math.PI/2;}
     for(const side of [-1,1]){part(g,rank===3?0xf5fbff:0xffefb2,[w*.18,.07,.035],[side*w*.3,.47,-l*.49]);part(g,0xf5704d,[w*.17,.06,.035],[side*w*.3,.45,l*.48]);}
   }
+  if(rank===ARMORED_RANK){
+    part(g,0x45463e,[w*.88,.28,l*.76],[0,1.13,0]);
+    part(g,c,[w*.58,.42,l*.48],[0,1.48,-.12]);
+    part(g,0xe5c16a,[w*.45,.06,l*.16],[0,1.78,-.12]);
+    for(const side of [-1,1])for(const z of [-.7,0,.7])part(g,0x4f5348,[w*.13,.45,.58],[side*w*.43,.65,z]);
+  }
   const widthScale=rank===1?BICYCLE_WIDTH_SCALE:1;
   const scale=new THREE.Vector3(VEHICLE_WIDTH_SCALE*widthScale,1.6,VEHICLE_LENGTH_SCALE);
   g.children.forEach(mesh=>{
@@ -140,6 +146,11 @@ export function vehicleModel(rank,player=false,bodyColor){
     }else mesh.scale.multiply(scale);
     mesh.position.multiply(scale);
   });
+  if(rank===ARMORED_RANK){
+    const base=new THREE.Box3().setFromObject(vehicleModel(MAX_RANK,false,c)),bounds=new THREE.Box3().setFromObject(g);
+    g.scale.y=(base.max.y-base.min.y)*ARMORED_TANK.heightMultiplier/(bounds.max.y-bounds.min.y);
+    g.position.y=base.min.y-bounds.min.y*g.scale.y;
+  }
   if(rank===1){
     // 摩托车细节按材质合并到模板，只有车轮保持独立，避免车流逐帧遍历所有小部件。
     const groups=new Map();

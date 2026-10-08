@@ -1,4 +1,4 @@
-import { VEHICLES, VEHICLE_CONTACT, SIDE_BOUNCE } from './config.js';
+import { VEHICLES, MAX_RANK, ARMORED_RANK, VEHICLE_CONTACT, SIDE_BOUNCE } from './config.js';
 
 const roadPoint={};
 const collisionBoxes=Array.from({length:6},()=>({center:{x:0,y:0},side:{x:0,y:0},front:{x:0,y:0},width:0,length:0}));
@@ -94,6 +94,7 @@ export function separation(player,target,road,direction){
 export function classify(rank,target,event,nitroActive=false) {
   if(event.kind==='overlap'||event.kind==='graze')return 'graze';
   if(event.kind==='side')return target.rank>rank?'sideFatal':target.rank===rank&&rank>1&&!nitroActive?'bounce':'eat';
+  if(target.rank===ARMORED_RANK&&rank===MAX_RANK&&nitroActive)return 'armorDowngrade';
   if(target.rank>rank)return 'frontFatal';
   if(target.rank<rank&&nitroActive)return 'eat';
   if(target.rank===rank&&nitroActive)return 'knockaway';

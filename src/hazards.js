@@ -1,4 +1,4 @@
-import { random, laneD, VEHICLES, MAX_RANK, VEHICLE_WIDTH_SCALE, BICYCLE_WIDTH_SCALE, BICYCLE_TIRE_WIDTH, ROAD_CACHE, ROAD_FORKS } from './config.js';
+import { random, laneD, VEHICLES, MAX_RANK, ARMORED_RANK, VEHICLE_WIDTH_SCALE, BICYCLE_WIDTH_SCALE, BICYCLE_TIRE_WIDTH, ROAD_CACHE, ROAD_FORKS } from './config.js';
 
 export const MUD_SECONDS=8;
 export const BUMP_SECONDS=.65;
@@ -8,7 +8,7 @@ const tireContacts=VEHICLES.map((vehicle,rank)=>{
   if(!vehicle)return [];
   if(rank===1)return [[0,-vehicle.length*.33],[0,vehicle.length*.33]];
   if(rank===2)return [[0,vehicle.length*.34],[-vehicle.width*.4,-vehicle.length*.34],[vehicle.width*.4,-vehicle.length*.34]];
-  const ends=rank===MAX_RANK?[-vehicle.length*.34,0,vehicle.length*.34]:[-vehicle.length*.33,vehicle.length*.33];
+  const ends=(rank===MAX_RANK||rank===ARMORED_RANK)?[-vehicle.length*.34,0,vehicle.length*.34]:[-vehicle.length*.33,vehicle.length*.33];
   return [-vehicle.width*.4,vehicle.width*.4].flatMap(side=>ends.map(end=>[side,end]));
 });
 
@@ -16,7 +16,7 @@ export function surfaceContact(start,finish,hazard,road){
   if((start.route??null)!==(hazard.route??null))return null;
   const scale=road.pathScale(hazard.s,hazard.route),startD=start.d-road.branchCenter(start.s,start.route),finishD=finish.d-road.branchCenter(finish.s,start.route);
   const hazardD=hazard.d-road.branchCenter(hazard.s,start.route),startS=start.s*scale,finishS=finish.s*scale,hazardS=hazard.s*scale;
-  const vehicle=VEHICLES[start.rank],tireWidth=start.rank===1?BICYCLE_TIRE_WIDTH*VEHICLE_WIDTH_SCALE*BICYCLE_WIDTH_SCALE/2:start.rank===MAX_RANK?vehicle.width*.1:.1;
+  const vehicle=VEHICLES[start.rank],tireWidth=start.rank===1?BICYCLE_TIRE_WIDTH*VEHICLE_WIDTH_SCALE*BICYCLE_WIDTH_SCALE/2:(start.rank===MAX_RANK||start.rank===ARMORED_RANK)?vehicle.width*.1:.1;
   const rx=hazard.dimensions.width/2+tireWidth,rz=hazard.dimensions.length/2+.15;
   const dx=(finishD-startD)/rx,dz=(finishS-startS)/rz,a=dx*dx+dz*dz;
   const contacts=tireContacts[start.rank];

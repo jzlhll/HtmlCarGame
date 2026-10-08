@@ -24,8 +24,9 @@ try{
       accumulator+=dt;
       while(accumulator>=1/120){game.step(1/120);accumulator-=1/120;if(game.state!=='RUNNING'){accumulator=0;break;}}
     }else accumulator=0;
+    game.renderAlpha=game.state==='RUNNING'?accumulator*120:1;
     game.animate(dt);
-    const animating=game.state==='RUNNING'||game.state==='DYING'||game.state==='CAUGHT';
+    const animating=game.state==='RUNNING'||game.state==='DYING'||game.state==='CAUGHT'||game.state==='LEVEL_EXIT';
     if(animating||renderer.needsFrame(game))renderer.draw(game,dt);
     ui.update(dt);audio.update(dt,game);inFrame=false;
     if(animating||game.state==='QUIZ'||renderer.needsFrame(game))frameId=requestAnimationFrame(frame);

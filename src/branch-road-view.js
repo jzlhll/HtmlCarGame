@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { SECOND_LEVEL_SCENE } from './config.js';
 import { material } from './models.js';
 
 // 两条路线使用相同的路面与标线，不通过外观暴露主副路线。
@@ -10,7 +11,7 @@ export class BranchRoadView {
       // 长分叉可覆盖完整 540 米可视区间，需要容纳最多 109 个五米采样点。
       const geometry=new THREE.BufferGeometry(),positions=new Float32Array(110*6),indices=[];
       for(let i=0;i<109;i++){const a=i*2;indices.push(a,a+1,a+2,a+1,a+3,a+2);}
-      geometry.setAttribute('position',new THREE.BufferAttribute(positions,3));geometry.setIndex(indices);
+      geometry.setAttribute('position',new THREE.BufferAttribute(positions,3));geometry.setAttribute('uv',new THREE.BufferAttribute(new Float32Array(110*4),2));geometry.setIndex(indices);
       const normals=new Float32Array(110*6);for(let i=1;i<normals.length;i+=3)normals[i]=1;
       geometry.setAttribute('normal',new THREE.BufferAttribute(normals,3));
       const mesh=new THREE.Mesh(geometry,material(color));mesh.frustumCulled=false;mesh.receiveShadow=true;group.add(mesh);strips.push({mesh,bounds,y});
@@ -35,13 +36,14 @@ export class BranchRoadView {
       const first=Math.max(fork.start,s-80),last=Math.min(fork.end,s+460),points=[];
       for(let station=first;station<=last;station+=5){const center=renderer.road.branchCenter(station,fork.id);points.push({...renderer.local(station,center,fork.id),edge:renderer.road.edge(station,fork.id)});}
       if(last>first&&(last-first)%5)points.push({...renderer.local(last,renderer.road.branchCenter(last,fork.id),fork.id),edge:renderer.road.edge(last,fork.id)});
+      view.strips[0].mesh.material=material(renderer.level===2?SECOND_LEVEL_SCENE.shoulder:0x8195a0);view.strips[1].mesh.material=renderer.level===2?renderer.dirtMaterial:material(0x293e50);
       for(const strip of view.strips){
         const positions=strip.mesh.geometry.attributes.position.array;
         for(let i=0;i<points.length;i++)for(let side=0;side<2;side++){
-          const p=points[i],d=strip.bounds(p.edge)[side],n=i*6+side*3;
+          const p=points[i],d=strip.bounds(p.edge)[side],n=i*6+side*3;strip.mesh.geometry.attributes.uv.array[i*4+side*2]=d*.15;strip.mesh.geometry.attributes.uv.array[i*4+side*2+1]=(first+i*5)*.15;
           positions[n]=p.x+Math.cos(p.heading)*d;positions[n+1]=p.y+strip.y;positions[n+2]=p.z+Math.sin(p.heading)*d;
         }
-        strip.mesh.geometry.setDrawRange(0,Math.max(0,points.length-1)*6);strip.mesh.geometry.attributes.position.needsUpdate=true;
+        strip.mesh.geometry.setDrawRange(0,Math.max(0,points.length-1)*6);strip.mesh.geometry.attributes.position.needsUpdate=true;strip.mesh.geometry.attributes.uv.needsUpdate=true;
       }
       let index=0;
       for(let station=Math.ceil(first/12)*12;station<=last;station+=12){

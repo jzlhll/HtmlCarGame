@@ -77,7 +77,7 @@ export class InfrastructureView {
       if(site.feature==='river'){
         this.box(renderer,site.center,0,[240,.08,site.flat],base+.06,0x248d9e);
         for(const end of [-1,1])this.box(renderer,site.center+end*(site.flat/2+1),0,[240,.45,1.8],base-.12,0xa5b3a4);
-      }else if(site.feature==='rail'&&site.kind==='viaduct'){
+      }else if(site.feature==='rail'&&site.kind==='viaduct'&&renderer.level!==2){
         this.box(renderer,site.center,0,[230,.15,4.2],base-.06,0x454c59);
         for(const end of [-1,1])this.box(renderer,site.center+end*1.1,0,[230,.12,.14],base+.12,0xc1c9ce);
         for(let d=-110;d<=110;d+=3)this.box(renderer,site.center,d,[.5,.18,3.4],base+.03,0x887661);
@@ -94,7 +94,7 @@ export class InfrastructureView {
         for(let i=0;i<12;i++)this.box(renderer,site.center+(i%3-1)*site.flat*.26,((i*19+now*2)%220)-110,[9,.025,.15],base+.115,0x79d7d7,0,false,true,true);
       }
     }
-    for(const train of game.infrastructure.trains){
+    if(game.level!==2)for(const train of game.infrastructure.trains){
       const site=train.site,base=site.kind==='viaduct'?-site.height:0;
       for(let car=0;car<6;car++){
         const d=train.d+(car-2.5)*7,color=car===5?0xeeb653:car%2?0x2d6579:0xdb6c53;

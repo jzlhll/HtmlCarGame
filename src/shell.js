@@ -7,6 +7,7 @@ import { SHELL, VEHICLE_DEFENSE, random, lerp } from './config.js';
 export class Shelling {
   constructor(seed){this.rng=random(seed^0x1c9e4b25);this.shells=[];this.craters=[];this.nextId=1;this.nextAt=SHELL.startSeconds;this.intensified=false;this.hitPoint={};}
   advance(dt,game){
+    if(game.level===2)return;
     const now=game.activeSeconds;
     const intensified=now>=SHELL.frequencyAfterSeconds;
     const min=intensified?SHELL.lateIntervalMin:SHELL.intervalMin,max=intensified?SHELL.lateIntervalMax:SHELL.intervalMax;
