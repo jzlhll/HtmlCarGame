@@ -32,11 +32,11 @@
 
 随机事件(警车、白马、奶牛、施工、低速车队、天气、断头路、天降炮击)默认节奏为分钟级,浏览器验证时通过 URL 查询参数在启动早期覆盖 `config.js` 白名单字段,不改代码、不落存档；移除 URL 参数后刷新恢复默认;生产环境不带参数即默认值。
 
-- `?fast=1`:一键测试档,主要随机事件压缩到秒级(警车 3–8 秒、数学/语文/英语答题均为 5 秒、白马每 8 秒、奶牛 4–8 秒、施工从道路 10 米处开始候选、低速车队 3 秒首现、天气 2–4 秒首现后每 6–10 秒、分叉候选概率为 100%、建筑间距压缩到 500–800 米；分叉仍受最小跨度与可用空间限制，不保证生成、炮弹 8 秒开始且每 3–5 秒一发、下落 1.5 秒)。
+- `?fast=1`:一键测试档,主要随机事件压缩到秒级(警车 3–8 秒、数学/语文/英语答题均为 5 秒、白马每 8 秒、奶牛 4–8 秒、施工从道路 10 米处开始候选、低速车队 3 秒首现、天气 2–4 秒首现后每 6–10 秒、分叉候选概率为 100%、建筑间距压缩到 500–800 米；分叉仍受最小跨度与可用空间限制，不保证生成、炮弹 8 秒开始且每 3–5 秒一发，15 秒后每 1.5–2.5 秒一发，下落 1.5 秒；独立 X 路障 15 秒后启用，每 240 米检查且候选概率为 100%，仍避开施工、道路过渡和桥梁分叉)。
 - 精确覆盖:`?POLICE.intervalMin=3&POLICE.intervalMax=8&WHITE_HORSE.intervalSeconds=5&WEATHER.intervalMin=6&ROAD_FORKS.chance=1&SHELL.intervalMin=3`,只接受白名单配置字段（含警车距离、倍率与网尺寸，不含车型尺寸与车辆碰撞阈值）,答题时限可用 `POLICE.quizMathSeconds`、`POLICE.quizChineseSeconds`、`POLICE.quizEnglishSeconds` 单独覆盖；非法 key 或非数值直接忽略并控制台告警,防止误改物理与碰撞参数。
 - 覆盖生效时页面右上角显示测试参数角标,截图即可确认当前处于测试节奏,避免把测试结果当默认行为;`?fast=0` 关闭预设。
 - 验证火车或其他环境事件时可用 `?TRAFFIC_DENSITY.capacity=0&TRAFFIC_DENSITY.maxCapacity=0` 清空普通车流；两个容量同时为零可避免运行中容量增长后重新补车。需要少量车流时将两者设为相同的小整数，例如 `6`；也可单独覆盖 `TRAFFIC_DENSITY.capacityPerStep` 调整增长量。不带这些参数即恢复正常车流，不写入存档。
 
-实现见 `src/test-overrides.js`,由 `config.js` 末尾在启动早期应用;Node 端导入无 `location` 自动跳过。新增随机事件时在 `WHITELIST` 登记节奏字段,并按需加入 `FAST_PRESET`。
+实现见 `src/test-overrides.js`,由 `config.js` 末尾在启动早期应用;Node 端导入无 `location` 自动跳过。独立 X 路障可用 `ROADBLOCKS.afterSeconds`、`first`、`interval`、`chance`、`warningDistance` 覆盖启用及候选节奏；炮击加密阶段可用 `SHELL.frequencyAfterSeconds`、`lateIntervalMin`、`lateIntervalMax` 覆盖。新增随机事件时在 `WHITELIST` 登记节奏字段,并按需加入 `FAST_PRESET`。
 
 流程的效率改进与待验证建议见[开发与验证效率](development-workflow.md)，其中推测意见不作为默认执行要求。

@@ -1,5 +1,6 @@
 import { POEMS, POEM_PAIRS, POEM_HALVES } from './poems.js';
 import { ENGLISH_BOOKS } from './english.js';
+import { POLICE } from './config.js';
 
 // 警车拦查答题：数学、语文、英语各约三分之一，固定范围随机出题。
 // 数学:随机抽取三至五年级；五年级按北师大版设计(小数加减/乘除、分数加减、因数与倍数)。
@@ -108,9 +109,30 @@ function operationOptions(question){
   for(const offset of extras){if(options.length===4)break;push((count+offset)/unit);}
   return {text:question.text,...shuffle(options,correct)};
 }
-// 加减题干扰项保持同数量级且互不相同；分数干扰项化简后数值也不得与答案相等。
+// 加减题按题干小数位对齐，至少两个错误选项保留末位，用第二数位偏差模拟漏进位、漏借位。
+function addSubOptions(question){
+  const correct=question.answer,options=[correct];
+  const decimals=Math.max(0,...Array.from(question.text.matchAll(/\d+(?:\.(\d+))?/g),match=>match[1]?.length??0)),unit=10**decimals;
+  const count=Math.round(question.value*unit),direction=rng()<chance?-1:1;
+  const push=offset=>{
+    const value=count+offset,text=String(value/unit);
+    if(value>=0&&!options.includes(text))options.push(text);
+  };
+  for(const offset of [10*direction,-10*direction,20*direction,-20*direction,30]){
+    if(options.length===3)break;
+    push(offset);
+  }
+  // 另保留一个末位计算错误；答案去掉尾零时仍按题干精度生成，避免干扰项偏离过大。
+  for(const offset of [direction,-direction,2*direction,-2*direction]){
+    if(options.length===4)break;
+    push(offset);
+  }
+  return {text:question.text,...shuffle(options,correct)};
+}
+// 分数干扰项化简后数值也不得与答案相等；因数与倍数题保持原有候选范围。
 function mathOptions(question){
   if(!question.fraction&&/[×÷]/.test(question.text))return operationOptions(question);
+  if(!question.fraction&&/[+−]/.test(question.text))return addSubOptions(question);
   const correct=question.answer,options=[correct];
   // 小数题候选项按刻度计数生成,再还原为短小数格式;整数题直接用数值。
   const format=value=>question.integer?String(value):question.unit===10?fmtTenths(value):fmtHundredths(value);
@@ -203,10 +225,11 @@ function blankQuestion(pool){
 const CHINESE_TYPES=[authorQuestion,lineQuestion,blankQuestion];
 function makeChinese(){
   const pool=poemPool;
-  // 依次尝试各题型,单个题型干扰项不足时自动换题或换题型;
-  // 打乱副本而非原数组,模块级状态不残留,同种子重复出题结果一致。
-  const types=[...CHINESE_TYPES];
-  for(let i=types.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[types[i],types[j]]=[types[j],types[i]];}
+  // 问作者权重为其他题型的一半；干扰项不足时，随机尝试其余题型。
+  const first=rng()<POLICE.quizChineseAuthorChance?authorQuestion:rng()<chance?lineQuestion:blankQuestion;
+  const types=CHINESE_TYPES.filter(build=>build!==first);
+  if(rng()<chance)types.reverse();
+  types.unshift(first);
   for(const build of types)for(let attempt=0;attempt<12;attempt++){
     const question=build(pool);
     if(question)return question;

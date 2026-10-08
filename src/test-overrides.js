@@ -11,13 +11,14 @@ const WHITELIST={
   WHITE_HORSE:['intervalSeconds','visibleSeconds','rampSeconds','shieldSeconds','shieldBlinkSeconds','recoverySeconds'],
   COW_CROSSING:['minInterval','intervalRange','chance'],
   ROADWORKS:['first','interval','chance'],
+  ROADBLOCKS:['afterSeconds','first','interval','chance','warningDistance'],
   SLOW_TRAFFIC:['firstSeconds','intervalMin','intervalMax','chance'],
   HUNGER:['intervalSeconds'],
   WEATHER:['duration','windDuration','freezeSeconds','intervalMin','intervalMax','firstMin','firstMax'],
   ROAD_FORKS:['chance','minSpan','maxSpan','weatherChance','weatherIntervalMin','weatherIntervalMax'],
   ROAD_INFRASTRUCTURE:['gapMin','gapMax'],
   ROAD_DIFFICULTY:['afterSeconds'],
-  SHELL:['startSeconds','intervalMin','intervalMax','fallSeconds','sizeGrowthSeconds'],
+  SHELL:['startSeconds','intervalMin','intervalMax','frequencyAfterSeconds','lateIntervalMin','lateIntervalMax','fallSeconds','sizeGrowthSeconds'],
 };
 
 // fast=1 一键测试档:把分钟级节奏压缩到秒级,便于快速触发警车、白马、天气、分叉候选、炮击等随机事件。
@@ -26,11 +27,12 @@ const FAST_PRESET={
   WHITE_HORSE:{intervalSeconds:8},
   COW_CROSSING:{minInterval:4,intervalRange:4},
   ROADWORKS:{first:10},
+  ROADBLOCKS:{afterSeconds:15,first:160,interval:240,chance:1},
   SLOW_TRAFFIC:{firstSeconds:3,intervalMin:5,intervalMax:8},
   WEATHER:{firstMin:2,firstMax:4,intervalMin:6,intervalMax:10},
   ROAD_FORKS:{chance:1},
   ROAD_INFRASTRUCTURE:{gapMin:500,gapMax:800},
-  SHELL:{startSeconds:8,intervalMin:3,intervalMax:5,fallSeconds:1.5},
+  SHELL:{startSeconds:8,intervalMin:3,intervalMax:5,frequencyAfterSeconds:15,lateIntervalMin:1.5,lateIntervalMax:2.5,fallSeconds:1.5},
 };
 
 export function applyTestOverrides(groups){

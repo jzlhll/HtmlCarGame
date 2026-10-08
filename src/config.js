@@ -64,7 +64,7 @@ export const NITRO={
   eatSideSeconds:.4, // 同一方向连续侧移超过此时长吞吃，回气翻倍为一管；短按横移只得基础半管。
   maxSpeed:215, // 各车型无惩罚时统一的喷气最高速度(km/h)。
   boostAcceleration:70, // 喷气每秒额外提速，单位 km/h，低速同样有效。
-  boostSeconds:3.5, // 每管可持续喷气的秒数，满两管可喷 7 秒，松开上箭头保留余量。
+  boostSeconds:2.8, // 每管可持续喷气的秒数，满两管可喷 5.6 秒，松开上箭头保留余量。
   recoverySeconds:.35, // 停喷后超出正常限速的速度平滑回落，可立即再次喷气。
 };
 export const XP = [0,1,2,6,18,54];
@@ -119,11 +119,13 @@ export const ROAD_DIFFICULTY={
 };
 // 施工只关闭一个车道，区间长度为米；与永久收窄保持独立。
 export const ROADWORKS={first:380,interval:400,chance:.5,minLength:30,maxLength:100,warningDistance:240,barrierWidth:3.4};
+// 独立 X 路障不铺施工路面；后期只启用玩家前方有足够反应距离的候选点。
+export const ROADBLOCKS={afterSeconds:150,first:300,interval:360,chance:.4,warningDistance:240,width:3.4,depth:.35,height:2.8};
 // 减速倍率仅用于泥巴和河道谷底；建筑道路间距为加长分叉预留平地区间。
 // 高架与低沉地形随机:高度/深度与坡长独立抽取,长坡高而平缓(顶峰较远),短坡高而陡(很快到顶);
 // 最小坡长按 maxGrade 反推(|高度|×1.5÷最大坡度,smooth 曲线峰值坡度为高度×1.5÷坡长),坡度不会越界。
 export const ROAD_INFRASTRUCTURE={
-  trainLeadSeconds:2.5,trainHornLeadSeconds:.6,dipLength:20,slowMultiplier:.5,trainSpeed:22,trainLength:42,gapMin:800,gapMax:1160, // 间距由 1600–2320 缩半,起伏路段出现频率加倍;分叉只在较宽的间距区间(可用跨度≥minSpan)内安放。
+  trainLeadSeconds:2.5,dipLength:20,slowMultiplier:.5,trainSpeed:22,trainLength:42,gapMin:800,gapMax:1160, // 间距由 1600–2320 缩半,起伏路段出现频率加倍;分叉只在较宽的间距区间(可用跨度≥minSpan)内安放。
   viaductHeightMin:14,viaductHeightMax:40, // 桥面高度抽取范围(米),原 14–20 大幅上调。
   viaductRampMin:120,viaductRampMax:400, // 引桥坡长抽取范围(米):400 米长坡配高桥即"高而缓",被坡度反推抬高后即"高而陡"。
   dipDepthMin:3,dipDepthMax:16, // 谷底深度抽取范围(米,向下),原固定 3。
@@ -153,8 +155,6 @@ export const AUDIO={
       metal:[[1141,.25,.02],[1627,.3,.02],[1813,.22,.035],[1969,.34,.04],[2033,.4,.045],[2086,.54,.05],[2156,.43,.045],[2237,.29,.035],[2320,.31,.04],[2391,.29,.035],[2438,.31,.03],[2531,.23,.03],[2639,.25,.035],[2719,.38,.045],[2836,.29,.035],[2906,.27,.03],[3079,.18,.025],[3258,.22,.025],[3422,.23,.025],[3492,.18,.02],[4721,.66,.012],[6151,.39,.008]],
       gain:.55,attack:.002,phaseStep:2.399963,bodyTail:.16,metalTail:.18,decayLimit:12,rateStart:.9,rateEnd:1.3,accelerateSeconds:5,
     },
-    // 按鸣笛参考的谐波比例合成：440 Hz 基音，880 Hz 最突出，保留高频穿透感。
-    horn:{loopSeconds:1,hz:441,harmonics:[0,.566,1,.427,.591,.473,.625,.581,.449,.42,.305,.26,.202,.168,.143],phases:[0,2.88,0,-1.051,-1.956,2.856,1.651,3,-.031,-2.671,-3.095,2.483,1.439,.491,-.354],gain:.48,pulses:[[0,2.8]],attack:.12,release:.24,rise:.01,fall:.025,vibrato:.0007,vibratoHz:4.3,dopplerScale:.25},
   },
   tank:{gain:.5,range:55,pan:.6},
   pass:{range:7,minSpeed:8,gain:.13},
@@ -168,7 +168,8 @@ export const AUDIO={
 };
 export const SEASONS = ['春','夏','秋','冬'];
 // 非分叉路段天气按 intervalMin~intervalMax 秒随机投放,首次开场 firstMin~firstMax 秒;分叉路段使用 ROAD_FORKS 的天气字段。
-export const WEATHER={duration:9,windDuration:6,windSpeed:.5,freezeSeconds:3,fogNear:10,fogFar:50,intervalMin:31,intervalMax:45,firstMin:12,firstMax:25};
+// 手机保持原有雨量，电脑端增加雨丝密度以加强宽屏遮挡；粒子缓冲按最大雨量复用。
+export const WEATHER={duration:9,windDuration:6,windSpeed:.5,freezeSeconds:3,fogNear:10,fogFar:50,intervalMin:31,intervalMax:45,firstMin:12,firstMax:25,rainCount:560,desktopRainMultiplier:3};
 // 白马按有效运行时间每分钟投放；保护总长 10 秒包含末尾 2 秒闪烁，回落另计。
 export const WHITE_HORSE={
   intervalSeconds:60,speed:60,minAhead:20,maxAhead:35,
@@ -193,6 +194,7 @@ export const POLICE={
   netSizeMax:16, // 渔网边长上限,保证仍可躲。
   netKeep:6, // 捕捞网生成后立即生效，存活时间(有效运行秒数)。
   quizMathSeconds:45,quizChineseSeconds:30,quizEnglishSeconds:30, // 题目显示后按真实时间倒计时，超时结束本局。
+  quizChineseAuthorChance:.2, // 语文问作者占 20%，上下句与挖空各占 40%。
   catchSeconds:1.5, // 被抓动画时长:玩家缩小并被拉向警车。
   maxChaseSeconds:45, // 警车持续时长达到上限后自动撤离。
 };
@@ -204,6 +206,7 @@ export const LANE_WIDTH = 3.6;
 export const SHELL={
   startSeconds:120,
   intervalMin:10,intervalMax:22,
+  frequencyAfterSeconds:150,lateIntervalMin:5,lateIntervalMax:10, // 满 2 分 30 秒后加密炮击。
   fallSeconds:2.5,
   areaSize:6, // 基础爆炸区域边长(米),由 7.5 缩小 25% 取整。
   sizeGrowthSeconds:30,sizeGrowthFactor:1.2, // 炮击开始后每 30 秒爆炸边长增大 20%。
@@ -228,4 +231,4 @@ export const approach = (value, target, delta) => value < target ? Math.min(targ
 // 启动早期应用 URL 测试参数(?fast=1 或 ?POLICE.intervalMin=3 等白名单字段),
 // 仅服务 Agent/人工快速验证随机事件;不带参数或 Node 端导入时默认值原样生效。
 import { applyTestOverrides } from './test-overrides.js';
-applyTestOverrides({TRAFFIC_DENSITY,POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});
+applyTestOverrides({TRAFFIC_DENSITY,POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,ROADBLOCKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});

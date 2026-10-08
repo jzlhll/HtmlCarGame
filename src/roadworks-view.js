@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { ROADWORKS } from './config.js';
+import { ROADWORKS, ROADBLOCKS } from './config.js';
 import { material } from './models.js';
 
 // 施工网格固定容量复用，锥桶和路面分块跟随弯道与坡度。
@@ -28,6 +28,16 @@ export class RoadworksView {
       for(const side of [-1,1])box(0xff9f32,[.25,.25,.25],side*1.4,1.3,0);
       group.visible=false;scene.add(group);this.barriers.push(group);
     }
+    this.blocks=[];
+    const beamLength=Math.hypot(ROADBLOCKS.width-.2,ROADBLOCKS.height-.2),beamAngle=Math.atan2(ROADBLOCKS.width-.2,ROADBLOCKS.height-.2);
+    for(let index=0;index<8;index++){
+      const group=new THREE.Group();
+      for(const direction of [-1,1]){
+        const beam=new THREE.Mesh(boxGeometry,material(0xe64737));
+        beam.scale.set(.2,beamLength,ROADBLOCKS.depth);beam.position.y=ROADBLOCKS.height/2;beam.rotation.z=direction*beamAngle;beam.castShadow=true;group.add(beam);
+      }
+      group.visible=false;scene.add(group);this.blocks.push(group);
+    }
     const canvas=document.createElement('canvas');canvas.width=256;canvas.height=192;
     const context=canvas.getContext('2d');context.fillStyle='#f4cf6c';context.beginPath();context.roundRect(0,0,256,192,16);context.fill();
     context.fillStyle='#df4434';context.font='bold 96px system-ui';context.textAlign='center';context.fillText('X',128,98);
@@ -36,9 +46,15 @@ export class RoadworksView {
     for(let index=0;index<4;index++){const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map}));sprite.scale.set(3.4,2.55,1);sprite.visible=false;scene.add(sprite);this.signs.push(sprite);}
   }
   draw(renderer,s){
-    let surface=0,cone=0,barrier=0,sign=0;
+    let surface=0,cone=0,barrier=0,sign=0,block=0;
     for(const site of renderer.road.roadworks(s-80-ROADWORKS.warningDistance,s+460+ROADWORKS.warningDistance)){
       if(renderer.whiteHorse.smashed.has('work:'+site.id))continue;
+      if(site.blockade){
+        if(site.s<s-80||site.s>s+460)continue;
+        const view=this.blocks[block++],point=renderer.local(site.s,site.d);
+        if(view){view.visible=true;view.position.set(point.x,point.y,point.z);view.rotation.set(point.pitch,-point.heading,0,'YXZ');}
+        continue;
+      }
       for(const station of [site.start,site.end]){
         if(station<s-80||station>s+460)continue;
         const view=this.barriers[barrier++],point=renderer.local(station,site.d);
@@ -66,6 +82,7 @@ export class RoadworksView {
       }
     }
     this.barriers.forEach((view,index)=>{if(index>=barrier)view.visible=false;});
+    this.blocks.forEach((view,index)=>{if(index>=block)view.visible=false;});
     this.signs.forEach((view,index)=>{if(index>=sign)view.visible=false;});
     for(const [name,mesh]of Object.entries(this.meshes)){mesh.count=name==='surface'?surface:cone;mesh.visible=mesh.count>0;if(mesh.count)mesh.instanceMatrix.needsUpdate=true;}
   }

@@ -1,4 +1,4 @@
-import { VEHICLES, MAX_RANK, RULES_VERSION, XP, POINT_LOSS, HUNGER, VEHICLE_DEFENSE, SEASONS, PLAYER_START_SPEED, AUTO_ACCELERATION, MANUAL_ACCELERATION, NITRO, REAR_END_INVINCIBLE_SECONDS, DEBUG_REVIVE_SECONDS, RESCUE_LIMIT, REVIVE_CLEAR_AHEAD, ROAD_INFRASTRUCTURE, ROAD_DIFFICULTY, POLICE, laneD, clamp, lerp, approach, random } from './config.js';
+import { VEHICLES, MAX_RANK, RULES_VERSION, XP, POINT_LOSS, HUNGER, VEHICLE_DEFENSE, SEASONS, PLAYER_START_SPEED, AUTO_ACCELERATION, MANUAL_ACCELERATION, NITRO, REAR_END_INVINCIBLE_SECONDS, DEBUG_REVIVE_SECONDS, RESCUE_LIMIT, REVIVE_CLEAR_AHEAD, ROAD_INFRASTRUCTURE, ROAD_DIFFICULTY, ROADBLOCKS, POLICE, laneD, clamp, lerp, approach, random } from './config.js';
 import { Road } from './road.js';
 import { Traffic } from './traffic.js';
 import { RoadHazards, MUD_SECONDS, BUMP_SECONDS, surfaceContact } from './hazards.js';
@@ -11,7 +11,7 @@ import { PoliceEvent } from './police.js';
 import { makeQuestion, answeredQuestion } from './quiz.js';
 import { SeasonalWeather } from './weather.js';
 import { RoadInfrastructure } from './infrastructure.js';
-export const CAUSES={frontFatal:'撞击更高级车辆或追尾后积分耗尽',bicycleRearFatal:'自行车追尾自行车',sideFatal:'侧碰更高级车辆',wall:'撞上截止车道的墙',roadwork:'撞上施工封闭路段',lightning:'被闪电击毁',shell:'被天降炮弹炸毁',cowFatal:'撞上横穿马路的奶牛',hunger:'饥饿死亡',quizWrong:'答题错误',quizTimeout:'答题超时'}; // 火车仅在桥下装饰性经过,不参与碰撞判定;警车无敌,接触只触发答题不直接致死。
+export const CAUSES={frontFatal:'撞击更高级车辆或追尾后积分耗尽',bicycleRearFatal:'自行车追尾自行车',sideFatal:'侧碰更高级车辆',wall:'撞上截止车道的墙',roadwork:'撞上施工封闭路段',roadblock:'撞上 X 路障',lightning:'被闪电击毁',shell:'被天降炮弹炸毁',cowFatal:'撞上横穿马路的奶牛',hunger:'饥饿死亡',quizWrong:'答题错误',quizTimeout:'答题超时'}; // 火车仅在桥下装饰性经过,不参与碰撞判定;警车无敌,接触只触发答题不直接致死。
 
 const maxVehicleLength=Math.max(...VEHICLES.slice(1).map(vehicle=>vehicle.length));
 const maxPlayerSpeed=Math.max(...VEHICLES.slice(1).map(vehicle=>vehicle.playerMax))*2;
@@ -197,7 +197,7 @@ export class Game {
       if(event.obstacleKey){this.whiteHorse.breakObstacle(event.obstacleKey,event.obstacleS);this.renderer?.invalidate();}
       if(event.car||event.cow||event.shot||event.hazard||event.obstacleKey||event.weatherHazard){
         const target=event.car||event.cow||event.shot||event.hazard;
-        this.renderer?.whiteHorseView?.hit(target?.s??this.player.s,target?.d??event.obstacleD??this.player.d,event.wall?'wall':event.roadwork?'roadwork':'hit',this.activeSeconds,event.direction||1,target?(target.route??null):this.player.route);
+        this.renderer?.whiteHorseView?.hit(target?.s??this.player.s,target?.d??event.obstacleD??this.player.d,event.wall?'wall':event.roadwork||event.roadblock?'roadwork':'hit',this.activeSeconds,event.direction||1,target?(target.route??null):this.player.route);
       }
     }
   }
@@ -309,7 +309,7 @@ export class Game {
       if(!debugProtected)for(const site of works){
         const obstacleKey='work:'+site.id;if(this.whiteHorse.smashed.has(obstacleKey))continue;
         const event=roadworkContact(start,finish,site);
-        if(event){event.roadwork=true;event.obstacleKey=obstacleKey;event.obstacleS=site.end;event.obstacleD=site.d;candidates.push(event);}
+        if(event){event.roadwork=!site.blockade;event.roadblock=!!site.blockade;event.obstacleKey=obstacleKey;event.obstacleS=site.end;event.obstacleD=site.d;candidates.push(event);}
       }
       if(!debugProtected)for(const hazard of hazards){
         if(this.hazards.hits.has(hazard.id))continue;
@@ -358,6 +358,7 @@ export class Game {
         else if(e.hunger)e.action='hungerTick';
         else if(e.wall)e.action='wall';
         else if(e.roadwork)e.action='roadwork';
+        else if(e.roadblock)e.action='roadblock';
         else if(e.hazard)e.action='hazard';
         else if(e.weatherHazard)e.action='weather';
         else if(e.cow)e.action=rank<=2?'cowFatal':'cowDowngrade';
@@ -425,6 +426,7 @@ export class Game {
     if(this.state!=='RUNNING')return;
     this.input.advance(dt);
     if(this.activeSeconds+dt>=ROAD_DIFFICULTY.afterSeconds)this.road.narrowAfter(this.player.s);
+    if(this.activeSeconds+dt>=ROADBLOCKS.afterSeconds)this.road.blockadesAfter(this.player.s);
     this.infrastructure.advance(dt,this);
     this.weather.advance(this);this.whiteHorse.advance(dt,this);this.police.advance(dt,this);
     const p=this.player,start={...p};

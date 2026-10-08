@@ -95,6 +95,8 @@ export function classify(rank,target,event,nitroActive=false) {
   if(event.kind==='overlap'||event.kind==='graze')return 'graze';
   if(event.kind==='side')return target.rank>rank?'sideFatal':target.rank===rank&&rank>1&&!nitroActive?'bounce':'eat';
   if(target.rank>rank)return 'frontFatal';
+  if(target.rank<rank&&nitroActive)return 'eat';
+  if(target.rank===rank&&nitroActive)return 'knockaway';
   if(target.rank===rank&&rank===1)return 'bicycleRearFatal';
   return target.rank===rank?'downgrade':'knockaway';
 }

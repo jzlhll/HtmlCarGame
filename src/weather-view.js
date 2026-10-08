@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VEHICLES, random, clamp } from './config.js';
+import { VEHICLES, WEATHER, random, clamp } from './config.js';
 import { DistanceFog } from './distance-fog.js';
 
 const transform=new THREE.Object3D(),point=new THREE.Vector3(),up=new THREE.Vector3(0,1,0),previousPoint=new THREE.Vector3(),nextPoint=new THREE.Vector3();
@@ -9,8 +9,9 @@ export class WeatherView {
   constructor(scene,camera){
     this.scene=scene;this.camera=camera;scene.add(camera);this.impacts=[];this.frozenCars=[];this.distanceFog=new DistanceFog(scene,camera);
     const rng=random(0x673ab891);
-    this.seeds=Array.from({length:700},()=>({x:rng(),y:rng(),z:rng(),phase:rng()*Math.PI*2}));
-    this.rain=this.lines(560,0xa9e8ff,.65);this.wind=this.lines(160,0xffedba,.45);
+    const rainCapacity=Math.ceil(WEATHER.rainCount*Math.max(1,WEATHER.desktopRainMultiplier));
+    this.seeds=Array.from({length:Math.max(700,rainCapacity)},()=>({x:rng(),y:rng(),z:rng(),phase:rng()*Math.PI*2}));
+    this.rain=this.lines(rainCapacity,0xa9e8ff,.65);this.wind=this.lines(160,0xffedba,.45);
     const snowGeometry=new THREE.BufferGeometry();snowGeometry.setAttribute('position',new THREE.BufferAttribute(new Float32Array(700*3),3));
     const snowflake=document.createElement('canvas');snowflake.width=32;snowflake.height=32;
     const context=snowflake.getContext('2d');context.strokeStyle='#ffffff';context.lineWidth=3;context.lineCap='round';
@@ -70,7 +71,11 @@ export class WeatherView {
     const now=game.activeSeconds,event=game.weather.event,active=event&&now<event.until&&['RUNNING','PAUSED','DYING'].includes(game.state);
     const season=active?event.season:-1;
     this.rain.visible=season===1;this.snow.visible=season===3;this.wind.visible=season===2;
-    if(this.rain.visible)this.precipitation(this.rain,560,now,'rain');
+    if(this.rain.visible){
+      const count=Math.ceil(WEATHER.rainCount*(game.input.touchMode?1:WEATHER.desktopRainMultiplier));
+      this.rain.geometry.setDrawRange(0,count*2);
+      this.precipitation(this.rain,count,now,'rain');
+    }
     if(this.snow.visible)this.precipitation(this.snow,700,now,'snow');
     if(this.wind.visible)this.precipitation(this.wind,160,now,'wind',event.wind);
     this.scene.fog.near=240;this.scene.fog.far=560;

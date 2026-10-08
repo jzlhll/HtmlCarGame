@@ -1,9 +1,9 @@
-import { ROAD_CACHE, ROAD_CURVES, ROADWORKS, ROAD_INFRASTRUCTURE, ROAD_FORKS, ROAD_DIFFICULTY, LANE_WIDTH, laneD, random, lerp, smooth, clamp } from './config.js';
+import { ROAD_CACHE, ROAD_CURVES, ROADWORKS, ROADBLOCKS, ROAD_INFRASTRUCTURE, ROAD_FORKS, ROAD_DIFFICULTY, LANE_WIDTH, laneD, random, lerp, smooth, clamp } from './config.js';
 
 // 有限种子计划重复使用，逻辑距离持续增长；每轮平移连接上一轮终点。
 export class Road {
   constructor(seed) {
-    this.seed = seed;this.narrowStart=Infinity;this.narrowEnd=Infinity;this.revision=0;this.lapCache=new Map();this.routeCache=new Map();
+    this.seed = seed;this.narrowStart=Infinity;this.narrowEnd=Infinity;this.blockadeStart=Infinity;this.revision=0;this.lapCache=new Map();this.routeCache=new Map();
     const rng = random(seed);
     this.segments = [];
     let s = 0;
@@ -111,6 +111,14 @@ export class Road {
       if(this.segments.some(seg=>['taper','wall','open'].includes(seg.kind)&&seg.end>=start-ROADWORKS.warningDistance&&seg.start<=end+180)||this.structures.some(site=>site.end>=start-100&&site.start<=end+100)||this.forks.some(fork=>fork.end>=start-ROADWORKS.warningDistance&&fork.start<=end+180))continue;
       const direction=worksRng()<.75?1:-1,lane=Math.floor(worksRng()*this.available(start));
       this.worksites.push({start,end,length,lane,direction,d:laneD(lane,direction),dimensions:{width:ROADWORKS.barrierWidth,length:length+.7}});
+    }
+    const blocksRng=random(seed^0x2b74e931);
+    for(let slot=ROADBLOCKS.first;slot<this.length-300;slot+=ROADBLOCKS.interval){
+      const start=slot+Math.floor(blocksRng()*80);
+      if(blocksRng()>=ROADBLOCKS.chance)continue;
+      if(!this.stable(start-ROADBLOCKS.warningDistance,start+180)||this.structures.some(site=>site.end>=start-100&&site.start<=start+100)||this.forks.some(fork=>fork.end>=start-ROADBLOCKS.warningDistance&&fork.start<=start+180)||this.worksites.some(site=>site.end>=start-120&&site.start<=start+120))continue;
+      const direction=blocksRng()<.75?1:-1,lane=Math.floor(blocksRng()*this.available(start));
+      this.worksites.push({start,end:start,length:0,blockade:true,lane,direction,d:laneD(lane,direction),dimensions:{width:ROADBLOCKS.width,length:ROADBLOCKS.depth}});
     }
   }
   buildForkSamples(fork){
@@ -304,6 +312,10 @@ export class Road {
     this.narrowClosure={kind:'taper',start:this.narrowStart,end:this.narrowEnd,length:ROAD_DIFFICULTY.taperLength,from:3,to:2,lanes:3};
   }
   isFourLanePhase(s){return Number.isFinite(this.narrowEnd)&&s>=this.narrowEnd;}
+  blockadesAfter(s){
+    if(Number.isFinite(this.blockadeStart))return;
+    this.blockadeStart=s+ROADBLOCKS.warningDistance;this.revision++;
+  }
   lanes(s) {
     if(s<0) return 3;
     const local=s%this.length,seg=this.localSegment(local),t=clamp((local-seg.start)/seg.length,0,1);
@@ -317,6 +329,7 @@ export class Road {
     list.length=0;
     for(let lap=Math.floor(Math.max(0,from)/this.length);lap<=Math.floor(Math.max(0,to)/this.length);lap++)for(let i=0;i<this.worksites.length;i++){
       const site=this.worksites[i],start=lap*this.length+site.start,end=lap*this.length+site.end;
+      if(site.blockade&&start<this.blockadeStart)continue;
       if(end+.35>=from&&start-.35<=to&&site.lane<this.available(start))list.push(this.lapData(lap).works[i]??=({...site,start,end,s:(start+end)/2,id:lap+':'+i}));
     }
     return list;
@@ -327,6 +340,7 @@ export class Road {
     const from=Math.min(s,end)-padding,to=Math.max(s,end)+padding;
     // 开放状态直接查询种子计划，避免每辆车每个逻辑步创建施工列表和副本。
     for(let lap=Math.floor(Math.max(0,from)/this.length);lap<=Math.floor(Math.max(0,to)/this.length);lap++)for(const site of this.worksites){
+      if(site.blockade&&lap*this.length+site.start<this.blockadeStart)continue;
       if(site.direction===direction&&site.lane===lane&&lap*this.length+site.end+.35>=from&&lap*this.length+site.start-.35<=to)return false;
     }
     return true;

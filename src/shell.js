@@ -5,12 +5,19 @@ import { SHELL, VEHICLE_DEFENSE, random, lerp } from './config.js';
 // 下落期间地面显示预警圈,落地炸毁弹体尺寸区域内的车流、奶牛、天气落点与路面障碍。
 // 玩家被直接命中即死亡;坦克只损失 1/3 满防御、卡车损失 1/2 满防御(按整数防御刻度取整)。
 export class Shelling {
-  constructor(seed){this.rng=random(seed^0x1c9e4b25);this.shells=[];this.craters=[];this.nextId=1;this.nextAt=SHELL.startSeconds;this.hitPoint={};}
+  constructor(seed){this.rng=random(seed^0x1c9e4b25);this.shells=[];this.craters=[];this.nextId=1;this.nextAt=SHELL.startSeconds;this.intensified=false;this.hitPoint={};}
   advance(dt,game){
     const now=game.activeSeconds;
+    const intensified=now>=SHELL.frequencyAfterSeconds;
+    const min=intensified?SHELL.lateIntervalMin:SHELL.intervalMin,max=intensified?SHELL.lateIntervalMax:SHELL.intervalMax;
+    if(intensified&&!this.intensified){
+      this.intensified=true;
+      // 进入加密阶段时缩短旧排程的剩余等待，保留更早到期的炮弹。
+      if(this.nextAt>SHELL.startSeconds)this.nextAt=Math.min(this.nextAt,now+lerp(min,max,this.rng()));
+    }
     if(now>=this.nextAt){
       this.spawn(game);
-      this.nextAt=now+lerp(SHELL.intervalMin,SHELL.intervalMax,this.rng());
+      this.nextAt=now+lerp(min,max,this.rng());
     }
     let kept=0,index=0;
     for(;index<this.shells.length;index++){
