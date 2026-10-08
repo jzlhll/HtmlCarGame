@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#142b2d">
   <title>四季车途 · 本机赛车</title>
   <link rel="icon" href="data:,">
@@ -14,20 +14,42 @@
     <div id="scene"></div>
     <header class="topbar">
       <div class="brand"><span class="brand-icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 10 2-5h10l2 5M5 10h14l2 3v5H3v-5l2-3Z"/><path d="M3 18v2h3v-2m12 0v2h3v-2M7 14h1m8 0h1"/></svg></span><div>四季车途<small>FOUR SEASONS / ENDLESS ROAD</small></div></div>
+      <nav id="mobile-toolbar" class="mobile-toolbar" aria-label="游戏操作" hidden>
+        <button id="pause-game" type="button" aria-label="暂停游戏">暂停</button>
+        <button id="restart-game" type="button" aria-label="重置本局，重新开始">↻ 重置</button>
+      </nav>
     </header>
     <section id="hud" class="hud" aria-label="当前状态">
-      <div class="metric distance"><span>行驶距离</span><strong id="distance">0</strong><small>米</small></div>
-      <div class="metric"><span>运行时间</span><strong id="elapsed">00:00</strong></div>
-      <div class="metric"><span>速度</span><strong id="speed">58</strong><small>km/h</small><div class="speed-track"><i id="speed-fill"></i></div></div>
-      <div class="metric nitro"><span>加速 / 氮气 · ↑</span><strong id="nitro">0 / 2 管</strong><small id="nitro-state">漂移吞吃回气</small><div class="nitro-tracks"><div class="nitro-track"><i id="nitro-fill"></i></div><div class="nitro-track"><i id="nitro-reserve-fill"></i></div></div></div>
-      <div class="metric defense"><span>防御力</span><strong id="defense">100%</strong><div class="defense-track" aria-hidden="true"><i id="defense-fill"></i></div></div>
-      <div class="metric growth"><span id="rank">自行车</span><strong id="progress">1 / 2</strong><div class="growth-track"><i id="growth-fill"></i></div></div>
+      <div class="hud-column">
+        <div class="metric distance"><span>行驶距离</span><strong id="distance">0</strong><small>米</small></div>
+        <div class="metric"><span>运行时间</span><strong id="elapsed">00:00</strong></div>
+        <div class="metric"><span>速度</span><strong id="speed">58</strong><small>km/h</small><div class="speed-track"><i id="speed-fill"></i></div></div>
+      </div>
+      <div class="hud-column">
+        <div class="metric nitro"><span id="nitro-label">加速 / 氮气 · ↑</span><strong id="nitro">0 / 2 管</strong><small id="nitro-state">漂移吞吃回气</small><div class="nitro-tracks"><div class="nitro-track"><i id="nitro-fill"></i></div><div class="nitro-track"><i id="nitro-reserve-fill"></i></div></div></div>
+        <div class="metric defense"><span>防御力</span><strong id="defense">100%</strong><div class="defense-track" aria-hidden="true"><i id="defense-fill"></i></div></div>
+        <div class="metric growth"><span id="rank">自行车</span><strong id="progress">1 / 2</strong><div class="growth-track"><i id="growth-fill"></i></div></div>
+      </div>
     </section>
     <div id="test-badge" class="test-badge" role="status" hidden>⚡ 测试参数</div>
     <div id="rear-alert" class="rear-alert" role="status" hidden></div>
     <div id="toast" class="toast" role="status" hidden></div>
     <div id="storage-warning" class="storage-warning" hidden></div>
+    <section id="touch-controls" class="touch-controls" aria-label="触屏驾驶操作" hidden>
+      <div class="joystick-area">
+        <div id="steering-stick" class="steering-stick" role="group" aria-label="方向摇杆，左右拖动横移">
+          <span class="stick-arrows" aria-hidden="true">‹ <span>›</span></span>
+          <span id="stick-thumb" class="stick-thumb" aria-hidden="true"></span>
+        </div>
+        <span class="control-caption">方向</span>
+      </div>
+      <div class="touch-pedals">
+        <button id="touch-brake" class="touch-pedal brake-pedal" type="button" aria-label="按住刹车" aria-pressed="false"><span aria-hidden="true">Ⅱ</span>刹车</button>
+        <button id="touch-nitro" class="touch-pedal nitro-pedal" type="button" aria-label="按住加速，松开后再按喷气" aria-pressed="false"><span aria-hidden="true">»</span>加速 / 氮气</button>
+      </div>
+    </section>
     <div id="overlay" class="overlay"></div>
+    <div id="portrait-hint" class="portrait-hint" role="status" hidden><span aria-hidden="true">▯ ↻</span><strong>请竖屏游玩</strong><p>转回竖屏后，点击开始或继续</p></div>
   </main>
   <script type="module" src="./src/main.js"></script>
 </body>

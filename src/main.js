@@ -11,8 +11,9 @@ const audio=new GameAudio();
 const game=new Game(store,input,message=>ui?.notify(message));game.audio=audio;ui=new UI(game);
 // 暴露调试句柄,供 Agent 验证脚本读取状态与构造确定性场景;生产游玩不依赖它。
 window.__game=game;
-input.onSpace=()=>{if(!ui.resetConfirm)game.space();};input.onBlur=()=>game.pause();
+input.onSpace=()=>{if(!ui.resetConfirm&&!input.landscape)game.space();};input.onBlur=()=>game.pause();
 input.onQuiz=choice=>game.answerQuiz(choice);
+input.onLayoutChange=()=>{if(input.landscape&&game.state==='RUNNING')game.pause();else ui.render();};
 try{
   const renderer=new GameRenderer(document.getElementById('scene'));game.renderer=renderer;renderer.setCarColor(game.carColor);
   let last=performance.now(),accumulator=0,frameId=null,inFrame=false;

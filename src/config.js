@@ -55,6 +55,9 @@ export const PLAYER_START_SPEED=57.5;
 export const AUTO_ACCELERATION=20; // 松开刹车或加速键、解冻后自动提速，单位 km/h/秒。
 // 上键普通加速可直接到车型最高速,不消耗氮气;氮气须停按后再按且已在最高速时才消耗。
 export const MANUAL_ACCELERATION={acceleration:35};
+// 触屏布局按实际可用窗口适配；窄桌面窗口也提供触屏操作入口。
+export const MOBILE={compactWidth:600,stickDeadZone:.18,stickTravelRatio:.32};
+export const CAMERA={fov:55,portraitMaxFov:90};
 export const NITRO={
   capacity:2, // 气量以管为单位，最多存两管，允许消耗或补充半管等部分气量。
   eatCharge:.5, // 吞吃回气按车型计算:eatCharge×被吃车辆等级(自行车半管,每高一级加半管,封顶两管)。

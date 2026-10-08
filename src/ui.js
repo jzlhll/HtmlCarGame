@@ -11,8 +11,13 @@ export class UI {
     // URL 测试参数生效时显示角标,Agent 截图可直接确认,避免把测试结果当默认行为。
     this.elements['test-badge'].hidden=!TEST_OVERRIDES.active;
     this.elements['test-badge'].title=TEST_OVERRIDES.keys.join('\n');
+    this.touchControls=document.getElementById('touch-controls');this.mobileToolbar=document.getElementById('mobile-toolbar');
+    this.pauseButton=document.getElementById('pause-game');this.restartButton=document.getElementById('restart-game');
+    this.pauseButton.addEventListener('click',()=>game.space());
+    this.restartButton.addEventListener('click',()=>game.restart());
     this.overlay.addEventListener('click',event=>{
       const action=event.target.closest('[data-action]')?.dataset.action;
+      if(action==='play')game.space();
       if(action==='quit'&&game.state==='PAUSED')game.finish('quit');
       if(action==='pick-color')game.setColor(event.target.closest('[data-color]')?.dataset.color);
       if(action==='back')game.ready();
@@ -38,7 +43,13 @@ export class UI {
     return '<details><summary>本机排行榜</summary>'+list+'</details>'+(this.game.store.warning?'<button class="reset-button" data-action="reset">重置本游戏记录</button>':'');
   }
   render(){
-    const g=this.game;
+    const g=this.game,mobile=g.input.touchMode;
+    this.touchControls.hidden=!mobile||g.input.landscape||g.state!=='RUNNING';
+    this.mobileToolbar.hidden=!mobile;
+    this.pauseButton.hidden=!['RUNNING','PAUSED'].includes(g.state);
+    this.pauseButton.textContent=g.state==='PAUSED'?'继续':'暂停';this.pauseButton.setAttribute('aria-label',g.state==='PAUSED'?'继续游戏':'暂停游戏');
+    this.restartButton.disabled=g.state==='PREPARING';
+    document.getElementById('nitro-label').textContent=mobile?'加速 / 氮气':'加速 / 氮气 · ↑';
     this.quizTimer=null;this.quizSeconds=null;
     const debugOption='<label class="debug-option"><input type="checkbox" data-action="debug"'+(g.debugMode?' checked':'')+'><span>调试模式 · 死亡后复活</span></label>';
     // 替换弹窗前保留游戏焦点，点击结束后仍能直接使用空格。
@@ -51,9 +62,9 @@ export class UI {
     }
     if(g.state==='READY'){
       const colorButtons=CAR_COLORS.map(c=>'<button class="color-chip'+(c.id===g.carColor?' selected':'')+'" data-action="pick-color" data-color="'+c.id+'" aria-label="汽车颜色 '+c.name+'" aria-pressed="'+(c.id===g.carColor)+'" title="'+c.name+'"><i style="background:'+c.css+'"></i></button>').join('');
-      this.overlay.innerHTML='<section class="card intro-card"><div class="eyebrow">FOUR SEASONS / ENDLESS ROAD</div><div class="intro-head"><h1>四季车途</h1><div class="head-pickers"><div class="color-picker"><span>汽车颜色：</span><div class="color-mini">'+colorButtons+'</div></div></div></div><blockquote class="intro-quote">从一辆自行车开始，穿过四季、高架与河谷，在分叉路口自行选择路线，跑得更远。</blockquote><p class="driving-help"><kbd>← / →</kbd> 左右横移 <kbd>↑</kbd> 加速 <kbd>↓</kbd> 刹车 <kbd>空格</kbd> 开始 / 暂停</p><div class="start-prompt">按 <kbd>空格</kbd> 开始这一程</div><div class="best"><span>最佳距离</span><strong>'+format(g.store.data.leaderboard[0]?.score||0)+' 米</strong></div>'+this.records()+'<div class="rules"><div class="rule"><b>侧碰吞吃</b>横向重叠足够即可吞吃低级车；自行车与喷气中的其他车型可吃同级，否则同级侧碰弹开并短暂无法转向，擦角只推开。</div><div class="rule"><b>警车追击</b>警车随机出现并保持距离，每3秒在玩家车道前方2秒车程处撒网，至少40米；网越撒越大，生成即生效，碰到即被抓并弹题，数学限时'+POLICE.quizMathSeconds+'秒、语文'+POLICE.quizChineseSeconds+'秒、英语'+POLICE.quizEnglishSeconds+'秒，答对放行，答错或超时结束。提前变道或刹车躲开。</div><div class="rule"><b>观察车流</b>追尾低级车将其撞飞；自行车追尾同级结束，其他同级追尾立即降级并减速。闪电伤害削减防御，防御耗尽降一级。前'+RESCUE_LIMIT+'次致命事件可答题复活，答题失败或机会用尽后再死亡则结束。</div><div class="rule"><b>天降炮击</b>有效运行 2 分钟后天空随机投弹：红色预警圈后炸毁 '+SHELL.areaSize+'×'+SHELL.areaSize+' 米起、每 30 秒增大 20% 的区域内的一切，被直接命中立即死亡，坦克只损失 1/3 防御、卡车 1/2。看到预警圈马上离开。</div></div>'+debugOption+'</section>';
+      this.overlay.innerHTML='<section class="card intro-card"><div class="eyebrow">FOUR SEASONS / ENDLESS ROAD</div><div class="intro-head"><h1>四季车途</h1><div class="head-pickers"><div class="color-picker"><span>汽车颜色：</span><div class="color-mini">'+colorButtons+'</div></div></div></div><blockquote class="intro-quote">从一辆自行车开始，穿过四季、高架与河谷，在分叉路口自行选择路线，跑得更远。</blockquote><p class="driving-help">'+(mobile?'左手摇杆左右横移，右手按住刹车或加速。<br>达到最高速后，松开加速再按即可喷气。':'<kbd>← / →</kbd> 左右横移 <kbd>↑</kbd> 加速 <kbd>↓</kbd> 刹车 <kbd>空格</kbd> 开始 / 暂停')+'</p><button type="button" class="start-prompt" data-action="play">'+(mobile?'开始这一程':'按 <kbd>空格</kbd> 开始这一程')+'</button><div class="best"><span>最佳距离</span><strong>'+format(g.store.data.leaderboard[0]?.score||0)+' 米</strong></div>'+this.records()+(mobile?'<details class="intro-rules"><summary>玩法说明</summary>':'')+'<div class="rules"><div class="rule"><b>侧碰吞吃</b>横向重叠足够即可吞吃低级车；自行车与喷气中的其他车型可吃同级，否则同级侧碰弹开并短暂无法转向，擦角只推开。</div><div class="rule"><b>警车追击</b>警车随机出现并保持距离，每3秒在玩家车道前方2秒车程处撒网，至少40米；网越撒越大，生成即生效，碰到即被抓并弹题，数学限时'+POLICE.quizMathSeconds+'秒、语文'+POLICE.quizChineseSeconds+'秒、英语'+POLICE.quizEnglishSeconds+'秒，答对放行，答错或超时结束。提前变道或刹车躲开。</div><div class="rule"><b>观察车流</b>追尾低级车将其撞飞；自行车追尾同级结束，其他同级追尾立即降级并减速。闪电伤害削减防御，防御耗尽降一级。前'+RESCUE_LIMIT+'次致命事件可答题复活，答题失败或机会用尽后再死亡则结束。</div><div class="rule"><b>天降炮击</b>有效运行 2 分钟后天空随机投弹：红色预警圈后炸毁 '+SHELL.areaSize+'×'+SHELL.areaSize+' 米起、每 30 秒增大 20% 的区域内的一切，被直接命中立即死亡，坦克只损失 1/3 防御、卡车 1/2。看到预警圈马上离开。</div></div>'+(mobile?'</details>':'')+debugOption+'</section>';
     }else if(g.state==='PREPARING')this.overlay.innerHTML='<section class="card"><h2>道路准备中</h2><p>正在分配本局的道路与车流。</p></section>';
-    else if(g.state==='PAUSED')this.overlay.innerHTML='<section class="card" role="dialog" aria-modal="true" aria-label="游戏已暂停"><div class="eyebrow">TAKE A BREATH</div><h2>游戏已暂停</h2><p>当前 '+format(g.player.distance)+' 米 · '+VEHICLES[g.player.rank].name+'<br>按空格继续，↓ 刹车，左右横移，↑ 加速到最高车速，停按后再按喷气，松开留气。</p><button class="button secondary" data-action="quit">结束游戏</button></section>';
+    else if(g.state==='PAUSED')this.overlay.innerHTML='<section class="card" role="dialog" aria-modal="true" aria-label="游戏已暂停"><div class="eyebrow">TAKE A BREATH</div><h2>游戏已暂停</h2><p>当前 '+format(g.player.distance)+' 米 · '+VEHICLES[g.player.rank].name+'<br>'+(mobile?'点击继续行驶；左侧摇杆横移，右侧刹车与加速 / 氮气。':'按空格继续，↓ 刹车，左右横移，↑ 加速到最高车速，停按后再按喷气，松开留气。')+'</p><button class="button" data-action="play">继续行驶</button><button class="button secondary" data-action="quit">结束游戏</button></section>';
     else if(g.state==='QUIZ'&&g.quiz){
       const question=g.quiz,seconds=Math.ceil(g.quizRemaining()),rescue=question.rescue;
       const subject={math:'数学',chinese:'语文',english:'英语'}[question.subject];
@@ -64,7 +75,7 @@ export class UI {
     else if(g.state==='RESULT'){
       const r=g.result,total=r.eatenByType.reduce((a,b)=>a+b,0);
       const solution=r.failedQuiz?'<div class="quiz-solution"><span>本题正确答案</span><p>'+escape(r.failedQuiz)+'</p></div>':'';
-      this.overlay.innerHTML='<section class="card" role="dialog" aria-modal="true" aria-label="本局结算"><div class="eyebrow">JOURNEY COMPLETE</div><h2>'+ (r.endReason==='quit'?'本局已结束':'旅程到这里')+'</h2><div class="result-score">'+format(r.score)+'<small>米 / 分</small></div><p class="fatal-mark">'+(r.endReason==='quit'?'主动结束':CAUSES[r.deathCause]||'车辆损毁')+'</p>'+solution+'<div class="result-grid"><div><span>最高车型</span><strong>'+VEHICLES[r.highestRank].name+'</strong></div><div><span>吞吃车辆</span><strong>'+total+' 辆</strong></div><div><span>行驶时间</span><strong>'+time(r.activeSeconds)+'</strong></div><div><span>起始季节</span><strong>'+r.startSeason+'</strong></div></div><p>按 <kbd>空格</kbd> 开始新一局</p><button class="button" data-action="back">返回</button>'+this.records()+'</section>';
+      this.overlay.innerHTML='<section class="card" role="dialog" aria-modal="true" aria-label="本局结算"><div class="eyebrow">JOURNEY COMPLETE</div><h2>'+ (r.endReason==='quit'?'本局已结束':'旅程到这里')+'</h2><div class="result-score">'+format(r.score)+'<small>米 / 分</small></div><p class="fatal-mark">'+(r.endReason==='quit'?'主动结束':CAUSES[r.deathCause]||'车辆损毁')+'</p>'+solution+'<div class="result-grid"><div><span>最高车型</span><strong>'+VEHICLES[r.highestRank].name+'</strong></div><div><span>吞吃车辆</span><strong>'+total+' 辆</strong></div><div><span>行驶时间</span><strong>'+time(r.activeSeconds)+'</strong></div><div><span>起始季节</span><strong>'+r.startSeason+'</strong></div></div><button class="button" data-action="play">'+(mobile?'再来一局':'按空格 / 点击开始新一局')+'</button><button class="button secondary" data-action="back">返回首页</button>'+this.records()+'</section>';
     }else this.overlay.replaceChildren();
   }
   update(dt){

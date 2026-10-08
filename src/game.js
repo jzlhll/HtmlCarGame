@@ -44,14 +44,18 @@ export class Game {
       this.renderer?.resetRun();
       this.state=document.hasFocus()?'RUNNING':'PAUSED';this.onChange();
       this.audio?.start();
-    }catch(error){console.error('Game preparation failed',error);this.state='READY';this.notify('本局准备失败，请重新按空格。');this.onChange();}
+    }catch(error){console.error('Game preparation failed',error);this.state='READY';this.notify('本局准备失败，请重新开始。');this.onChange();}
   }
   // 颜色在开场说明页直接切换：选择立即生效并写入本机，下次开局使用。
   setColor(id){
     if(!['READY','RESULT'].includes(this.state)||id===this.carColor||!this.store.setColor(id))return;
     this.carColor=id;this.renderer?.setCarColor(id);this.onChange();
   }
-  space(){if(this.state==='READY'||this.state==='RESULT')this.start();else if(this.state==='RUNNING')this.pause();else if(this.state==='PAUSED'){this.input.clear();this.state='RUNNING';this.onChange();}}
+  space(){if(this.state==='READY'||this.state==='RESULT')this.start();else if(this.state==='RUNNING')this.pause();else if(this.state==='PAUSED'){this.audio?.ensure();this.input.clear();this.state='RUNNING';this.onChange();}}
+  restart(){
+    if(this.state==='PREPARING')return;
+    this.input.clear();this.nitro.stop();this.state='READY';this.start();
+  }
   policeContact(rescue=false){
     // 警车拦查或致命救援共用题目流程；驾驶时间与音效暂停，答题按真实时间倒计时。
     // 题目随机走独立种子流(本局种子+接触时刻),不消耗各事件系统的随机序列,自动化验证可复现。

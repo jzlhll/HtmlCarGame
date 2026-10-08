@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VEHICLES, SHELL, TREE_SCENERY, ROAD_RENDER, POLICE, laneD, random, clamp, lerp, carColor, DEFAULT_CAR_COLOR } from './config.js';
+import { VEHICLES, SHELL, TREE_SCENERY, ROAD_RENDER, POLICE, CAMERA, laneD, random, clamp, lerp, carColor, DEFAULT_CAR_COLOR } from './config.js';
 import { vehicleModel, cowModel, material, mudCoating } from './models.js';
 import { RoadsideScenery } from './scenery.js';
 import { RoadworksView } from './roadworks-view.js';
@@ -28,7 +28,7 @@ export class GameRenderer {
     this.renderer.shadowMap.type=THREE.PCFShadowMap;this.renderer.outputColorSpace=THREE.SRGBColorSpace;
     container.append(this.renderer.domElement);
     this.scene=new THREE.Scene();this.scene.background=new THREE.Color(0xc5e0e9);this.scene.fog=new THREE.Fog(0xc5e0e9,240,560);
-    this.camera=new THREE.PerspectiveCamera(55,1,.5,850);
+    this.camera=new THREE.PerspectiveCamera(CAMERA.fov,1,.5,850);
     this.weatherView=new WeatherView(this.scene,this.camera);this.whiteHorseView=new WhiteHorseView(this.scene);this.policeView=new PoliceView(this.scene);
     this.scene.add(new THREE.HemisphereLight(0xe3f0ff,0x668054,2.2));
     const light=new THREE.DirectionalLight(0xfff1cb,2.6);light.position.set(-25,45,15);light.castShadow=true;light.shadow.mapSize.set(1024,1024);light.shadow.camera.left=-28;light.shadow.camera.right=28;light.shadow.camera.top=50;light.shadow.camera.bottom=-30;light.shadow.camera.far=130;light.shadow.normalBias=.08;    this.scene.add(light);this.scene.add(light.target);light.target.position.set(0,0,-10);
@@ -98,8 +98,14 @@ export class GameRenderer {
     this.particles=new THREE.Points(particleGeometry,new THREE.PointsMaterial({color:0xffffff,size:.12,transparent:true,opacity:.65,depthWrite:false}));this.particles.frustumCulled=false;this.scene.add(this.particles);
     this.colorA=new THREE.Color();this.colorB=new THREE.Color();this.lastScenery=-1;
     this.roadSamples=new Float64Array(ROAD_RENDER.sampleCapacity*10);this.dirty=true;this.cameraSettling=false;this.onInvalidate=()=>{};
-    this.resize=()=>{const w=container.clientWidth,h=container.clientHeight;this.renderer.setSize(w,h);this.camera.aspect=w/h;this.camera.updateProjectionMatrix();this.invalidate();};
-    window.addEventListener('resize',this.resize);this.resize();
+    this.resize=()=>{
+      const w=container.clientWidth,h=container.clientHeight;if(!w||!h)return;
+      this.renderer.setSize(w,h);this.camera.aspect=w/h;
+      // 竖屏扩大纵向视野，保留横向车道，同时把玩家留在底部触控区上方。
+      this.camera.fov=Math.min(CAMERA.portraitMaxFov,THREE.MathUtils.radToDeg(2*Math.atan(Math.tan(THREE.MathUtils.degToRad(CAMERA.fov/2))/Math.min(1,w/h))));
+      this.camera.updateProjectionMatrix();this.invalidate();
+    };
+    this.resizeObserver=new ResizeObserver(this.resize);this.resizeObserver.observe(container);this.resize();
   }
   signCanvas(){const c=document.createElement('canvas');c.width=256;c.height=160;const x=c.getContext('2d');x.fillStyle='#f2d478';x.beginPath();x.roundRect(0,0,256,160,18);x.fill();x.fillStyle='#273b33';x.font='bold 31px system-ui';x.textAlign='center';x.fillText('前方并道',128,59);x.font='bold 59px system-ui';x.fillText('↙  ↘',128,130);return c;}
   roadGeometry(capacity=ROAD_RENDER.sampleCapacity){
