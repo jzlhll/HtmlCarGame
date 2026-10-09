@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { VEHICLES, MAX_RANK, ARMORED_RANK, ARMORED_TANK, VEHICLE_LENGTH_SCALE, VEHICLE_WIDTH_SCALE, BICYCLE_WIDTH_SCALE, BICYCLE_TIRE_WIDTH, carColor } from './config.js';
-const geometry={box:new THREE.BoxGeometry(1,1,1),wheel:new THREE.CylinderGeometry(1,1,1,12),sphere:new THREE.IcosahedronGeometry(1,0),cone:new THREE.ConeGeometry(.5,1,6)};
+const geometry={box:new THREE.BoxGeometry(1,1,1),barrel:new THREE.CylinderGeometry(.5,.5,1,10).rotateX(Math.PI/2),wheel:new THREE.CylinderGeometry(1,1,1,12),sphere:new THREE.IcosahedronGeometry(1,0),cone:new THREE.ConeGeometry(.5,1,6)};
 geometry.bicycleTank=new THREE.SphereGeometry(.5,10,6);
 // 车身下缘与上缘轻微收角，保留独立发动机盖、座舱和尾厢的轿车轮廓。
 geometry.carBody=new THREE.BoxGeometry(1,1,1);
@@ -134,6 +134,8 @@ export function vehicleModel(rank,player=false,bodyColor){
     part(g,0x45463e,[w*.88,.28,l*.76],[0,1.13,0]);
     part(g,c,[w*.58,.42,l*.48],[0,1.48,-.12]);
     part(g,0xe5c16a,[w*.45,.06,l*.16],[0,1.78,-.12]);
+    const barrelLength=ARMORED_TANK.barrelLength/VEHICLE_LENGTH_SCALE,barrel=part(g,0x454b42,[.16,.16,barrelLength],[0,1.58,-.3-barrelLength/2],'barrel');barrel.name='armoredBarrel';
+    const muzzle=part(g,0x252e2a,[.24,.22,.20],[0,1.58,-.3-barrelLength]);muzzle.name='armoredMuzzle';
     for(const side of [-1,1])for(const z of [-.7,0,.7])part(g,0x4f5348,[w*.13,.45,.58],[side*w*.43,.65,z]);
   }
   const widthScale=rank===1?BICYCLE_WIDTH_SCALE:1;

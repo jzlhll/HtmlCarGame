@@ -48,3 +48,5 @@
 示例：`?LEVELS.firstSeconds=2&DINOSAURS.smallFirstMin=1&DINOSAURS.smallFirstMax=2&DINOSAURS.smallChance=1&DINOSAURS.chaseAfterSeconds=8&DINOSAURS.chaseFirstMin=1&DINOSAURS.chaseFirstMax=2&DINOSAURS.chaseChance=1`。人工验证启用调试模式；去掉参数刷新后恢复3 分 30 秒通关及正常两分钟恐龙分界。
 
 `ROAD_DIFFICULTY.afterSeconds` 按第二关自身有效运行时间控制永久收窄，默认 120 秒；第一关不受该参数影响。
+
+金币生成节奏可通过 `COINS.firstSeconds`、`intervalMin/Max`、`chance`、`aheadMin/Max` 加速，金币价值、价格、武器宽度和射程不开放 URL 覆盖。第二关启用调试后验证小／大金币累计、按 1／2 分别购买普通／高级、Shift／Z 消耗库存与三发并行，范围包含装甲坦克及警车；第一关通关后检查三项模型预览并进入第二关，确认余额与库存归零。

@@ -1,4 +1,4 @@
-import { VEHICLES, MAX_RANK, LEVELS, RULES_VERSION, XP, POINT_LOSS, HUNGER, VEHICLE_DEFENSE, SEASONS, SEASON_CYCLE, PLAYER_START_SPEED, AUTO_ACCELERATION, MANUAL_ACCELERATION, NITRO, REAR_END_INVINCIBLE_SECONDS, DEBUG_REVIVE_SECONDS, RESCUE_LIMIT, REVIVE_CLEAR_AHEAD, ROAD_INFRASTRUCTURE, ROAD_DIFFICULTY, ROADBLOCKS, POLICE, laneD, clamp, lerp, approach, random } from './config.js';
+import { VEHICLES, MAX_RANK, LEVELS, ROCKETS, RULES_VERSION, XP, POINT_LOSS, HUNGER, VEHICLE_DEFENSE, SEASONS, SEASON_CYCLE, PLAYER_START_SPEED, AUTO_ACCELERATION, MANUAL_ACCELERATION, NITRO, REAR_END_INVINCIBLE_SECONDS, DEBUG_REVIVE_SECONDS, RESCUE_LIMIT, REVIVE_CLEAR_AHEAD, ROAD_INFRASTRUCTURE, ROAD_DIFFICULTY, ROADBLOCKS, POLICE, laneD, clamp, lerp, approach, random } from './config.js';
 import { Road } from './road.js';
 import { Traffic } from './traffic.js';
 import { RoadHazards, MUD_SECONDS, BUMP_SECONDS, surfaceContact } from './hazards.js';
@@ -12,7 +12,8 @@ import { makeQuestion, answeredQuestion } from './quiz.js';
 import { SeasonalWeather } from './weather.js';
 import { RoadInfrastructure } from './infrastructure.js';
 import { DinosaurEvents } from './dinosaurs.js';
-export const CAUSES={frontFatal:'撞击更高级车辆或追尾后积分耗尽',bicycleRearFatal:'自行车追尾自行车',sideFatal:'侧碰更高级车辆',wall:'撞上截止车道的墙',roadwork:'撞上施工封闭路段',roadblock:'撞上 X 路障',lightning:'被闪电击毁',shell:'被天降炮弹炸毁',cowFatal:'撞上横穿马路的奶牛',dinosaurFatal:'撞上横穿的小恐龙',stomp:'被大型恐龙踩中',hunger:'饥饿死亡',quizWrong:'答题错误',quizTimeout:'答题超时'}; // 火车仅在桥下装饰性经过,不参与碰撞判定;警车无敌,接触只触发答题不直接致死。
+import { Arsenal } from './arsenal.js';
+export const CAUSES={frontFatal:'撞击更高级车辆或追尾后积分耗尽',bicycleRearFatal:'自行车追尾自行车',sideFatal:'侧碰更高级车辆',wall:'撞上截止车道的墙',roadwork:'撞上施工封闭路段',roadblock:'撞上 X 路障',lightning:'被闪电击毁',shell:'被天降炮弹炸毁',cowFatal:'撞上横穿马路的奶牛',dinosaurFatal:'撞上横穿的小恐龙',stomp:'被大型恐龙踩中',hunger:'饥饿死亡',quizWrong:'答题错误',quizTimeout:'答题超时'}; // 火车仅在桥下装饰性经过,不参与碰撞判定;警车普通接触只触发答题，第二关可用火箭击毁。
 
 const maxVehicleLength=Math.max(...VEHICLES.slice(1).map(vehicle=>vehicle.length));
 const maxPlayerSpeed=Math.max(...VEHICLES.slice(1).map(vehicle=>vehicle.playerMax))*2;
@@ -26,7 +27,7 @@ export class Game {
   constructor(store,input,notify){
     this.store=store;this.input=input;this.notify=notify;this.state='READY';this.carColor=store.getColor();this.deathTime=0;this.debugMode=false;this.debugSecondLevel=false;this.debugRun=false;this.debugInvincibleUntil=0;this.renderer=null;this.onChange=()=>{};this.collisionCandidates=[];this.collisionGroup=[];this.separatedCars=new Set();this.collisionBegin={};this.collisionSites=[];this.collisionWalls=[];this.collisionWorks=[];this.collisionHazards=[];this.preview();
   }
-  preview(){this.renderer?.resetRun();this.seed=6183;this.whiteHorse=new WhiteHorseEvent(this.seed);this.police=new PoliceEvent(this.seed);this.quiz=null;this.failedQuiz=null;this.caught=null;this.rescueUsed=0;this.weather=new SeasonalWeather(this.seed);this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};this.traffic=new Traffic(this.road,this.seed);this.level=1;this.levelStartedAt=0;this.levelExit=null;this.renderPreviousPlayer=null;this.dinosaurs=null;this.activeSeconds=0;this.nextHungerAt=HUNGER.intervalSeconds;this.startSeason=0;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;this.scraping=false;this.debugRun=false;this.debugInvincibleUntil=0;}
+  preview(){this.renderer?.resetRun();this.seed=6183;this.whiteHorse=new WhiteHorseEvent(this.seed);this.police=new PoliceEvent(this.seed);this.quiz=null;this.failedQuiz=null;this.caught=null;this.rescueUsed=0;this.weather=new SeasonalWeather(this.seed);this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};this.traffic=new Traffic(this.road,this.seed);this.level=1;this.levelStartedAt=0;this.levelExit=null;this.renderPreviousPlayer=null;this.dinosaurs=null;this.arsenal=null;this.activeSeconds=0;this.nextHungerAt=HUNGER.intervalSeconds;this.startSeason=0;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;this.scraping=false;this.debugRun=false;this.debugInvincibleUntil=0;}
   async start(level=this.debugSecondLevel?2:1){
     if(!['READY','RESULT'].includes(this.state)&&!(this.state==='LEVEL_CLEAR'&&level===2))return;
     this.audio?.ensure();
@@ -40,6 +41,7 @@ export class Game {
       this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};
       this.level=level;this.levelStartedAt=0;this.levelExit=null;this.renderPreviousPlayer=null;this.activeSeconds=0;
       this.dinosaurs=level===2?new DinosaurEvents(this.road,0):null;
+      this.arsenal=level===2?new Arsenal(this.road):null;
       if(this.dinosaurs){this.crossings=this.dinosaurs;this.shell.nextAt=Infinity;}
       this.traffic=new Traffic(this.road,this.seed);this.traffic.level=level;this.traffic.populate(this.player);
       this.startSeason=this.seed%4;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;
@@ -62,6 +64,14 @@ export class Game {
     return this.level===1&&remaining>0&&remaining<=LEVELS.countdownSeconds+1e-8?Math.ceil(remaining-1e-8):0;
   }
   enterSecondLevel(){return this.start(2);}
+  weaponAction(key){
+    if(this.state!=='RUNNING'||!this.arsenal)return;
+    if(key===1||key===2){
+      const type=key===2?'advanced':'normal';
+      const bought=this.arsenal.buy(type);this.notify(bought?'已购买'+(type==='advanced'?'高级火箭炮':'火箭炮'):'金币不足，需要 '+(type==='advanced'?ROCKETS.advancedCost:ROCKETS.normalCost)+' 金币。');
+    }else if(key==='fire'&&!this.arsenal.fire(this))this.notify(this.arsenal.normal+this.arsenal.advanced?'火箭正在发射，请稍候。':'没有可发射的火箭炮。');
+    this.renderer?.invalidate();
+  }
   beginLevelExit(){
     // 只推进驶离模型；逻辑位置、成绩和场景原点停在通关时刻。
     this.levelExit={time:0,s:this.player.s,d:this.player.d,route:this.player.route,speed:Math.max(this.player.speed,LEVELS.exitSpeed)};
@@ -466,7 +476,7 @@ export class Game {
     this.infrastructure.advance(dt,this);
     this.weather.advance(this);this.whiteHorse.advance(dt,this);this.police.advance(dt,this);
     const p=this.player,start={...p};
-    if(this.level===1)this.renderPreviousPlayer=start;
+    this.renderPreviousPlayer=start;
     p.mud=Math.max(0,p.mud-dt);p.bump=Math.max(0,p.bump-dt);
     this.releaseNitro(dt);
     const bouncing=Boolean(p.sidePush),lateral=bouncing?0:this.input.lateral;
@@ -498,6 +508,7 @@ export class Game {
     }
     // 无敌期间擦边判定与普通行驶一致：夹回路面、标记刮擦减速。
     this.scraping=scrape;
+    this.arsenal?.step(start,p,this);
     this.shell.advance(dt,this);
     if(this.state!=='RUNNING')return;
     if(this.level===1&&this.activeSeconds>=LEVELS.firstSeconds-1e-8){this.beginLevelExit();return;}

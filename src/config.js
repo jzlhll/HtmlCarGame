@@ -11,14 +11,17 @@ export const ARMORED_RANK=6;
 VEHICLES.push({...VEHICLES[5],name:'装甲坦克',min:60,max:80,color:0xb29a66});
 export const SECOND_LEVEL_SCENE={road:'#858c90',grainDark:'rgba(53,62,66,.16)',grainLight:'rgba(214,219,218,.25)',tracks:'rgba(224,229,226,.12)',shoulder:0xa7aaa4,ground:0xaaa18b,water:0x438d8f,sky:0xcbd3d4,rock:0x958d7d,trunk:0x79694d,sun:0xf1f5ff};
 export const LEVELS={firstSeconds:210,countdownSeconds:5,exitSeconds:3,exitSpeed:100,weatherChance:.8,branchWeatherChance:1};
-export const ARMORED_TANK={truckChance:.05,tankChance:.15,heightMultiplier:2};
+export const ARMORED_TANK={truckChance:.025,tankChance:.075,heightMultiplier:2,barrelLength:4.8};
+export const COINS={smallValue:3,largeValue:6,smallSize:1.68,largeSize:2.66,largeChance:.3,firstSeconds:2,intervalMin:2.5,intervalMax:4.5,chance:.8,aheadMin:50,aheadMax:90,batchMin:3,batchMax:5,capacity:40,recycleBehind:30};
+export const ROCKETS={normalCost:20,advancedCost:50,normalWidth:5,advancedWidth:12,range:80,flightSeconds:.45,capacity:6,modelLength:2.4,modelWidth:.45,launchHeight:1.2};
 export const DINOSAURS={
   smallFirstMin:15,smallFirstMax:30,smallIntervalMin:25,smallIntervalMax:40,smallChance:.4,smallCountMin:1,smallCountMax:2,
   cowSpeedMin:1.6,cowSpeedMax:2.2,crossingSpeedMultiplier:2,smallLength:2.4,smallWidth:.8,smallHeight:1.2,smallAheadMin:60,smallLeadSeconds:3,
   chaseAfterSeconds:120,chaseFirstMin:4,chaseFirstMax:8,chaseIntervalMin:20,chaseIntervalMax:35,chaseChance:.7,
-  chaseBehindMin:30,chaseBehindMax:45,speedRatioMin:1,speedRatioMax:1.08,durationMin:12,durationMax:18,
-  stepDistanceMin:10,stepDistanceMax:14,footWidth:2.2,footLength:3.6,footWarning:.8,footDanger:.35,footFade:3,footCapacity:12,
-  bridgeLeadSeconds:2.5,bridgeSpeed:12,bridgeCount:4,bridgeSpacing:5,sceneryCapacity:32,
+  chaseAheadMin:12,chaseAheadMax:18,followAheadMax:32,speedRatioMin:1,speedRatioMax:1.08,durationMin:12,durationMax:18,
+  chaserLength:22,chaserWidth:5.8,chaserHeight:10,footSpread:1.8,footBack:4,exitFadeSeconds:1,
+  stepDistanceMin:24,stepDistanceMax:32,stepSecondsMin:1,footWidth:2.2,footLength:3.6,footWarning:.8,footDanger:.35,footFade:1.8,footCapacity:12,
+  bridgeLeadSeconds:2.5,bridgeSpeed:12,bridgeCount:4,bridgeSpacing:5,sceneryCapacity:32,grazerScale:2.4,diplodocusScale:3.2,
 };
 // 玩家座驾涂装：yellow/blue/green 为纯色，rainbow 使用渐变贴图；默认绿色。
 export const CAR_COLORS=[
@@ -122,7 +125,7 @@ export const TRAFFIC_DRIVING={dangerousChance:.15,avoidSeconds:3.5,minAvoidDista
 // 跨轮静态查询缓存按轮数限制，远离当前窗口的内容可重新生成。
 export const ROAD_CACHE={maxLaps:4};
 export const ROAD_RENDER={sampleCapacity:160};
-export const RENDER_QUALITY={firstLevelFastSpeed:160,firstLevelFastFps:58};
+export const RENDER_QUALITY={firstLevelFastSpeed:160,firstLevelFastFps:58,secondLevelFps:58};
 // 每轮三个额外弯组候选；成对曲线保持出口方向，截止墙前后仍留直道。
 export const ROAD_CURVES={extraPairChance:.75,minAngle:12,maxAngle:22,minLength:240,maxLength:360,lengthStep:20,straightChance:.2,straightLength:60};
 // 树木共用几何与实例批次，高度、冠幅及松树比例只在静态布局刷新时抽取。
@@ -175,6 +178,8 @@ export const AUDIO={
   tank:{gain:.5,range:55,pan:.6},
   pass:{range:7,minSpeed:8,gain:.13},
   beep:{hz:880,gain:.05},
+  coin:{hz:1500,gain:.09,seconds:.12},
+  rocket:{hz:130,gain:.3,seconds:.4},
   graze:{intervalSeconds:.16}, // 擦角噪声的最小间隔，避免持续接触时密集叠加。
   // 警车警笛:低频单音按固定节奏往复脉冲,形成“嗯、嗯、嗯”的短促鸣响,每个脉冲带轻微下滑;
   // 按距离衰减并随警车所在侧偏置声像。救护车的高低双音不在此列。
@@ -249,4 +254,4 @@ export const approach = (value, target, delta) => value < target ? Math.min(targ
 // 启动早期应用 URL 测试参数(?fast=1 或 ?POLICE.intervalMin=3 等白名单字段),
 // 仅服务 Agent/人工快速验证随机事件;不带参数或 Node 端导入时默认值原样生效。
 import { applyTestOverrides } from './test-overrides.js';
-applyTestOverrides({LEVELS,DINOSAURS,TRAFFIC_DENSITY,POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,ROADBLOCKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});
+applyTestOverrides({LEVELS,DINOSAURS,COINS,TRAFFIC_DENSITY,POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,ROADBLOCKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});

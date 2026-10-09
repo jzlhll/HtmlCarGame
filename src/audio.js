@@ -123,7 +123,7 @@ export class GameAudio {
       const cfg=AUDIO.dinosaurs[type];let strength=0,pan=0,phase=0;
       if(run&&game.level===2)for(const source of game.renderer?.dinosaurView.sources??[]){
         if(source.type!==type)continue;
-        const point=game.road.at(source.s,source.d),distance=Math.hypot(point.x-position.x,point.z-position.z,(source.y??point.y)-position.y),proximity=clamp(1-distance/cfg.range,0,1);
+        const point=game.road.at(source.s,source.d,source.route),distance=Math.hypot(point.x-position.x,point.z-position.z,(source.y??point.y)-position.y),proximity=clamp(1-distance/cfg.range,0,1);
         if(proximity>strength){strength=proximity;pan=clamp((source.d-p.d)/65,-1,1)*cfg.pan;phase=typeof source.id==='number'?source.id%7:source.id.length%7;}
       }
       const cycle=((now+phase)%cfg.period)/cfg.period,envelope=Math.pow(Math.max(0,Math.sin(cycle*Math.PI*2)),1.4);
@@ -133,6 +133,8 @@ export class GameAudio {
       if(voice.pan)this.ramp(voice.pan.pan,pan,.1);
     }
   }
+  coinPickup(){if(!this.context)return;const cfg=AUDIO.coin;this.tone('sine',cfg.hz,cfg.hz*1.4,cfg.seconds,cfg.gain);}
+  rocketLaunch(){if(!this.context)return;const cfg=AUDIO.rocket;this.tone('sawtooth',cfg.hz,cfg.hz*.3,cfg.seconds,cfg.gain);this.burst(900,140,'lowpass',.7,cfg.seconds,cfg.gain);}
   dinosaurStep(foot,game){
     if(!this.context)return;
     const cfg=AUDIO.dinosaurs.step,p=game.player,distance=Math.hypot(foot.s-p.s,foot.d-p.d),gain=cfg.gain*Math.pow(clamp(1-distance/cfg.range,0,1),2),pan=clamp((foot.d-p.d)/12,-1,1);
