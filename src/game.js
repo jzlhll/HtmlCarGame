@@ -1,4 +1,4 @@
-import { VEHICLES, MAX_RANK, LEVELS, ROCKETS, RULES_VERSION, XP, POINT_LOSS, HUNGER, VEHICLE_DEFENSE, SEASONS, SEASON_CYCLE, PLAYER_START_SPEED, AUTO_ACCELERATION, MANUAL_ACCELERATION, NITRO, REAR_END_INVINCIBLE_SECONDS, DEBUG_REVIVE_SECONDS, RESCUE_LIMIT, REVIVE_CLEAR_AHEAD, ROAD_INFRASTRUCTURE, ROAD_DIFFICULTY, ROADBLOCKS, POLICE, laneD, clamp, lerp, approach, random } from './config.js';
+import { VEHICLES, MAX_RANK, LEVELS, RULES_VERSION, XP, POINT_LOSS, HUNGER, VEHICLE_DEFENSE, SEASONS, SEASON_CYCLE, PLAYER_START_SPEED, AUTO_ACCELERATION, MANUAL_ACCELERATION, NITRO, REAR_END_INVINCIBLE_SECONDS, DEBUG_REVIVE_SECONDS, RESCUE_LIMIT, REVIVE_CLEAR_AHEAD, ROAD_INFRASTRUCTURE, ROAD_DIFFICULTY, ROADBLOCKS, POLICE, laneD, clamp, lerp, approach, random } from './config.js';
 import { Road } from './road.js';
 import { Traffic } from './traffic.js';
 import { RoadHazards, MUD_SECONDS, BUMP_SECONDS, surfaceContact } from './hazards.js';
@@ -66,10 +66,8 @@ export class Game {
   enterSecondLevel(){return this.start(2);}
   weaponAction(key){
     if(this.state!=='RUNNING'||!this.arsenal)return;
-    if(key===1||key===2){
-      const type=key===2?'advanced':'normal';
-      const bought=this.arsenal.buy(type);this.notify(bought?'已购买'+(type==='advanced'?'高级火箭炮':'火箭炮'):'金币不足，需要 '+(type==='advanced'?ROCKETS.advancedCost:ROCKETS.normalCost)+' 金币。');
-    }else if(key==='fire'&&!this.arsenal.fire(this))this.notify(this.arsenal.normal+this.arsenal.advanced?'火箭正在发射，请稍候。':'没有可发射的火箭炮。');
+    if(key!==1&&key!==2)return;
+    this.arsenal.fire(this,key===2?'advanced':'normal');
     this.renderer?.invalidate();
   }
   beginLevelExit(){
@@ -243,7 +241,7 @@ export class Game {
   freezeTraffic(time){
     for(const car of this.traffic.cars){const old=car.previous||car;car.s=lerp(old.s,car.s,time);car.d=lerp(old.d,car.d,time);}
     for(const cow of this.crossings.cows){cow.s=lerp(cow.previous.s,cow.s,time);cow.d=lerp(cow.previous.d,cow.d,time);}
-    const chaser=this.dinosaurs?.chaser;if(chaser&&chaser.previousS!==undefined)chaser.s=lerp(chaser.previousS,chaser.s,time);
+    const chaser=this.dinosaurs?.chaser;if(chaser&&chaser.previousS!==undefined){chaser.s=lerp(chaser.previousS,chaser.s,time);chaser.d=lerp(chaser.previousD,chaser.d,time);}
     const horse=this.whiteHorse.horse;if(horse)horse.s=lerp(horse.previous.s,horse.s,time);
   }
   die(cause){

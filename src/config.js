@@ -10,17 +10,17 @@ export const MAX_RANK=5; // 玩家最高车型与系统专属车型分开。
 export const ARMORED_RANK=6;
 VEHICLES.push({...VEHICLES[5],name:'装甲坦克',min:60,max:80,color:0xb29a66});
 export const SECOND_LEVEL_SCENE={road:'#858c90',grainDark:'rgba(53,62,66,.16)',grainLight:'rgba(214,219,218,.25)',tracks:'rgba(224,229,226,.12)',shoulder:0xa7aaa4,ground:0xaaa18b,water:0x438d8f,sky:0xcbd3d4,rock:0x958d7d,trunk:0x79694d,sun:0xf1f5ff};
-export const LEVELS={firstSeconds:210,countdownSeconds:5,exitSeconds:3,exitSpeed:100,weatherChance:.8,branchWeatherChance:1};
+export const LEVELS={firstSeconds:180,countdownSeconds:5,exitSeconds:3,exitSpeed:100,weatherChance:.8,branchWeatherChance:1};
 export const ARMORED_TANK={truckChance:.025,tankChance:.075,heightMultiplier:2,barrelLength:4.8};
 export const COINS={smallValue:3,largeValue:6,smallSize:1.68,largeSize:2.66,largeChance:.3,firstSeconds:2,intervalMin:2.5,intervalMax:4.5,chance:.8,aheadMin:50,aheadMax:90,batchMin:3,batchMax:5,capacity:40,recycleBehind:30};
-export const ROCKETS={normalCost:20,advancedCost:50,normalWidth:5,advancedWidth:12,range:80,flightSeconds:.45,capacity:6,modelLength:2.4,modelWidth:.45,launchHeight:1.2};
+export const ROCKETS={normalCost:20,advancedCost:50,normalWidth:8,advancedWidth:25,range:140,flightSeconds:1.09375,capacity:6,modelLength:4.8,modelWidth:.9,launchHeight:1.2};
 export const DINOSAURS={
   smallFirstMin:15,smallFirstMax:30,smallIntervalMin:25,smallIntervalMax:40,smallChance:.4,smallCountMin:1,smallCountMax:2,
   cowSpeedMin:1.6,cowSpeedMax:2.2,crossingSpeedMultiplier:2,smallLength:2.4,smallWidth:.8,smallHeight:1.2,smallAheadMin:60,smallLeadSeconds:3,
   chaseAfterSeconds:120,chaseFirstMin:4,chaseFirstMax:8,chaseIntervalMin:20,chaseIntervalMax:35,chaseChance:.7,
   chaseAheadMin:12,chaseAheadMax:18,followAheadMax:32,speedRatioMin:1,speedRatioMax:1.08,durationMin:12,durationMax:18,
-  chaserLength:22,chaserWidth:5.8,chaserHeight:10,footSpread:1.8,footBack:4,exitFadeSeconds:1,
-  stepDistanceMin:24,stepDistanceMax:32,stepSecondsMin:1,footWidth:2.2,footLength:3.6,footWarning:.8,footDanger:.35,footFade:1.8,footCapacity:12,
+  chaserLength:22,chaserWidth:5.8,chaserHeight:10,footSpread:1.8,footBack:4,jumpHeight:3,jumpTilt:.12,exitFadeSeconds:1,
+  stepDistanceMin:24,stepDistanceMax:32,stepSecondsMin:1,footWidth:2.2,footLength:3.6,footWarning:.8,footDanger:.35,footFade:1.8,footCapacity:12, // footWarning 只控制起跳到接地的时长，不绘制预警。
   bridgeLeadSeconds:2.5,bridgeSpeed:12,bridgeCount:4,bridgeSpacing:5,sceneryCapacity:32,grazerScale:2.4,diplodocusScale:3.2,
 };
 // 玩家座驾涂装：yellow/blue/green 为纯色，rainbow 使用渐变贴图；默认绿色。
@@ -188,7 +188,7 @@ export const AUDIO={
   shell:{whistleHz:1300,whistleDropHz:320,gain:.3,boomGain:.6},
 };
 export const SEASONS = ['春','夏','秋','冬'];
-export const SEASON_CYCLE={seconds:50,transitionSeconds:10};
+export const SEASON_CYCLE={seconds:45,transitionSeconds:10};
 // 非分叉路段天气按 intervalMin~intervalMax 秒随机检查，以 chance 概率触发，首次检查在 firstMin~firstMax 秒；分叉路段使用 ROAD_FORKS 的天气字段。
 // 手机保持原有雨量，电脑端增加雨丝密度以加强宽屏遮挡；粒子缓冲按最大雨量复用。
 export const WEATHER={chance:.4,duration:9,windDuration:6,windSpeed:.5,freezeSeconds:3,fogNear:10,fogFar:50,intervalMin:31,intervalMax:45,firstMin:12,firstMax:25,rainCount:560,desktopRainMultiplier:3};
@@ -198,10 +198,10 @@ export const WHITE_HORSE={
   visibleSeconds:6,blinkSeconds:2,length:3.8,width:1.3,
   rampSeconds:1,shieldSeconds:10,shieldBlinkSeconds:2,recoverySeconds:2,speedMultiplier:2,
 };
-// 警车追击:无敌警车随机出现,速度自由——只按前方距离窗口调节车速并极速避让车流。
+// 警车追击:两关均按固定周期投放无敌警车,速度自由——只按前方距离窗口调节车速并极速避让车流。
 // 追击期间每三秒在玩家当前路线、车道前方按两秒车程且至少四十米生成捕捞网，接触后进入答题。
 export const POLICE={
-  intervalMin:30,intervalMax:120, // 开局及撤离后随机等待 30~120 秒。
+  intervalSeconds:75, // 按本关有效运行时间每 75 秒投放；撤离后仍对齐下一周期。
   spawnAheadMin:35,spawnAheadMax:55, // 生成在玩家前方 35~55 米。
   keepMin:15,keepMax:42, // 警车与玩家保持的前方距离窗口(米),保证始终在屏幕内且不太远。
   keepGain:.9, // 窗口内距离保持的力度:每偏差 1 米修正 0.9 km/h,使间距收敛到窗口中点。
@@ -251,7 +251,7 @@ export function random(seed) {
   };
 }
 export const approach = (value, target, delta) => value < target ? Math.min(target,value+delta) : Math.max(target,value-delta);
-// 启动早期应用 URL 测试参数(?fast=1 或 ?POLICE.intervalMin=3 等白名单字段),
+// 启动早期应用 URL 测试参数(?fast=1 或 ?POLICE.intervalSeconds=5 等白名单字段),
 // 仅服务 Agent/人工快速验证随机事件;不带参数或 Node 端导入时默认值原样生效。
 import { applyTestOverrides } from './test-overrides.js';
 applyTestOverrides({LEVELS,DINOSAURS,COINS,TRAFFIC_DENSITY,POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,ROADBLOCKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});

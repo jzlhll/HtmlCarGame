@@ -1,7 +1,7 @@
 import { POLICE, VEHICLES, laneD, clamp, lerp, approach, random } from './config.js';
 import { sweep } from './collision.js';
 
-// 无敌警车随机出现拦查:车速完全自由,始终与玩家保持前方距离窗口(屏幕内、相距不太远)——
+// 无敌警车按固定周期出现拦查:车速完全自由,始终与玩家保持前方距离窗口(屏幕内、相距不太远)——
 // 太远减速等待、太近加速拉开,不拦截玩家也不会被玩家追尾;横向上以极快速度避让车流。
 // 追击期间每隔 netInterval 秒，在玩家当前路线、车道前方按 netLeadSeconds 车程且至少 netAheadMin 米生成渔网,
 // 网边长随警车持续时长逐渐增大，生成即生效，接触即被抓,
@@ -12,7 +12,7 @@ export class PoliceEvent {
     this.police=null;this.nets=[];
     this.nextAt=this.nextWindow(0);
   }
-  nextWindow(now){return now+POLICE.intervalMin+this.rng()*(POLICE.intervalMax-POLICE.intervalMin);}
+  nextWindow(now){return (Math.floor(now/POLICE.intervalSeconds)+1)*POLICE.intervalSeconds;}
   dismiss(now){
     this.police=null;this.nets=[];
     this.nextAt=this.nextWindow(now);

@@ -40,6 +40,8 @@ export function dinosaurModel(kind='small'){
       part(root,0xd4c69a,[.65,.35,.55],[side*1.8,5.15,-3.1]);
     }
     normalize(root,DINOSAURS.chaserWidth,DINOSAURS.chaserHeight,DINOSAURS.chaserLength);
+    const content=root.children[0];
+    for(const leg of content.children)if(leg.userData.dinoLeg!==undefined)leg.position.x=(leg.userData.dinoLeg===0?1:-1)*DINOSAURS.footSpread/content.scale.x;
     templates.set(kind,root);return root.clone(true);
   }
   const root=new THREE.Group(),small=kind==='small',long=kind==='diplodocus',stego=kind==='stegosaurus';
@@ -81,11 +83,14 @@ function normalize(root,width,height,length){
   const scale=new THREE.Vector3(width/size.x,height/size.y,length/size.z);
   const content=new THREE.Group();for(const child of [...root.children])content.add(child);content.position.set(-center.x*scale.x,-bounds.min.y*scale.y,-center.z*scale.z);content.scale.copy(scale);root.add(content);
 }
-export function animateDinosaur(view,time,running=false,phase=0){
+export function animateDinosaur(view,time,running=false,phase=0,hop=0,jumpSide=0){
   let nodes=animations.get(view);
   if(!nodes){nodes=[];view.traverse(node=>{if(node.userData.dinoLeg!==undefined||node.userData.dinoTail||node.userData.dinoNeck)nodes.push(node);});animations.set(view,nodes);}
   for(const node of nodes){
-    if(node.userData.dinoLeg!==undefined)node.rotation.x=Math.sin((view.userData.dinoRunner?phase*Math.PI*2:time*(running?10:1.8)+phase)+node.userData.dinoLeg)*(view.userData.dinoRunner?.4:running?.65:.035);
+    if(node.userData.dinoLeg!==undefined){
+      if(view.userData.dinoRunner&&jumpSide)node.rotation.x=(node.userData.dinoLeg===0?1:-1)===jumpSide?-.25*hop:.65*hop;
+      else node.rotation.x=Math.sin((view.userData.dinoRunner?phase*Math.PI*2:time*(running?10:1.8)+phase)+node.userData.dinoLeg)*(view.userData.dinoRunner?.4:running?.65:.035);
+    }
     if(node.userData.dinoTail)node.rotation.y=Math.sin(view.userData.dinoRunner?phase*Math.PI*2:time*1.5+phase)*.12;
     if(node.userData.dinoNeck)node.rotation.x=node.userData.dinoNeck==='drink'?-.1+Math.sin(time*.35+phase)*.32:-.45+Math.sin(time*.35+phase)*.2;
   }

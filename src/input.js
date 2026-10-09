@@ -2,7 +2,7 @@ import { MOBILE } from './config.js';
 const keys=new Set(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space']);
 // 答题状态用数字键 1–4 或字母键 A–D 选择选项;不进入持续按下集合。
 const quizKeys={Digit1:0,Digit2:1,Digit3:2,Digit4:3,KeyA:0,KeyB:1,KeyC:2,KeyD:3,Numpad1:0,Numpad2:1,Numpad3:2,Numpad4:3};
-const weaponKeys={Digit1:1,Numpad1:1,Digit2:2,Numpad2:2,ShiftLeft:'fire',ShiftRight:'fire',KeyZ:'fire'};
+const weaponKeys={Digit1:1,Numpad1:1,Digit2:2,Numpad2:2};
 const editing=target=>target instanceof Element&&!!target.closest('input,textarea,select,[contenteditable]:not([contenteditable="false"])');
 export class Input {
   constructor(container){

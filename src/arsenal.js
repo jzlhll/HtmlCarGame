@@ -4,7 +4,7 @@ import { sweep } from './collision.js';
 // 金币与武器仅属于本局第二关，不进入成长积分或本机存档。
 export class Arsenal {
   constructor(road){
-    this.road=road;this.rng=random(road.seed^0x2357fa);this.coins=[];this.balance=0;this.normal=0;this.advanced=0;this.shots=[];this.nextId=1;this.nextAt=COINS.firstSeconds;
+    this.road=road;this.rng=random(road.seed^0x2357fa);this.coins=[];this.balance=0;this.shots=[];this.nextId=1;this.nextAt=COINS.firstSeconds;
   }
   step(start,player,game){
     const now=game.activeSeconds;
@@ -42,15 +42,11 @@ export class Arsenal {
       this.coins.push({id:this.nextId++,s,d,route,value:large?COINS.largeValue:COINS.smallValue,large,dimensions:{width:size,length:size}});
     }
   }
-  buy(type='normal'){
+  fire(game,type='normal'){
+    if(!['normal','advanced'].includes(type)||this.shots.length>=ROCKETS.capacity)return false;
     const cost=type==='advanced'?ROCKETS.advancedCost:ROCKETS.normalCost;
     if(this.balance<cost)return false;
-    this.balance-=cost;this[type]++;return true;
-  }
-  fire(game){
-    const type=this.advanced>0?'advanced':this.normal>0?'normal':null;
-    if(!type||this.shots.length>=ROCKETS.capacity)return false;
-    this[type]--;
+    this.balance-=cost;
     const p=game.player,origin={...this.road.at(p.s,p.d,p.route)},heading=origin.heading+(p.yaw||0),width=type==='advanced'?ROCKETS.advancedWidth:ROCKETS.normalWidth;
     const shot={id:this.nextId++,type,origin,heading,width,range:ROCKETS.range,born:game.activeSeconds};this.shots.push(shot);
     // 发射时固定正前方矩形，按真实车身盒体判定，不随弯道或玩家横移拐弯。

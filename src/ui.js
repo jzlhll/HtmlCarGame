@@ -1,17 +1,17 @@
 import { LEVELS, ROCKETS, COINS, VEHICLES, MAX_RANK, VEHICLE_DEFENSE, UPGRADE_POINTS, NITRO, CAR_COLORS, RESCUE_LIMIT } from './config.js';
 import { TEST_OVERRIDES } from './test-overrides.js';
 import { CAUSES } from './game.js';
-import { coinIcon, rocketIcon } from './arsenal-icons.js';
+import { coinIcon } from './arsenal-icons.js';
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const format=v=>Math.floor(v).toLocaleString('zh-CN');
 const time=s=>Math.floor(s/60)+' 分 '+Math.floor(s%60)+' 秒';
 export class UI {
   constructor(game){
     this.game=game;this.overlay=document.getElementById('overlay');this.toast=document.getElementById('toast');this.toastSeconds=0;this.resetConfirm=false;this.displayed={};
-    this.elements=Object.fromEntries(['distance','elapsed','speed','speed-fill','nitro','nitro-state','nitro-fill','nitro-reserve-fill','defense','defense-fill','rank','progress','growth-fill','rear-alert','storage-warning','hud','level-countdown','test-badge','arsenal-hud','coin-count','rocket-count','advanced-rocket-count','buy-rocket','buy-advanced-rocket','fire-rocket'].map(id=>[id,document.getElementById(id)]));
-    document.getElementById('coin-icon').innerHTML=coinIcon;document.getElementById('rocket-icon').innerHTML=rocketIcon(false);document.getElementById('advanced-rocket-icon').innerHTML=rocketIcon(true);
-    this.elements['buy-rocket'].textContent='1 · 普通 '+ROCKETS.normalCost+' 金币';this.elements['buy-advanced-rocket'].textContent='2 · 高级 '+ROCKETS.advancedCost+' 金币';
-    this.elements['buy-rocket'].addEventListener('click',()=>game.weaponAction(1));this.elements['buy-advanced-rocket'].addEventListener('click',()=>game.weaponAction(2));this.elements['fire-rocket'].addEventListener('click',()=>game.weaponAction('fire'));
+    this.elements=Object.fromEntries(['distance','elapsed','speed','speed-fill','nitro','nitro-state','nitro-fill','nitro-reserve-fill','defense','defense-fill','rank','progress','growth-fill','rear-alert','storage-warning','hud','level-countdown','test-badge','arsenal-hud','coin-count','buy-rocket','buy-advanced-rocket'].map(id=>[id,document.getElementById(id)]));
+    document.getElementById('coin-icon').innerHTML=coinIcon;
+    this.elements['buy-rocket'].textContent='1 · 普通炮 '+ROCKETS.normalCost+' 金币';this.elements['buy-advanced-rocket'].textContent='2 · 高级炮 '+ROCKETS.advancedCost+' 金币';
+    this.elements['buy-rocket'].addEventListener('click',()=>game.weaponAction(1));this.elements['buy-advanced-rocket'].addEventListener('click',()=>game.weaponAction(2));
     // URL 测试参数生效时显示角标,Agent 截图可直接确认,避免把测试结果当默认行为。
     this.elements['test-badge'].hidden=!TEST_OVERRIDES.active;
     this.elements['test-badge'].title=TEST_OVERRIDES.keys.join('\n');
@@ -74,7 +74,7 @@ export class UI {
       this.overlay.innerHTML='<section class="card intro-card"><div class="eyebrow">FOUR SEASONS / ENDLESS ROAD</div><div class="intro-head"><h1>四季车途</h1><div class="head-pickers"><div class="color-picker"><span>汽车颜色：</span><div class="color-mini">'+colorButtons+'</div></div></div></div><blockquote class="intro-quote">从一辆自行车开始，生存满'+time(LEVELS.firstSeconds)+'，驶入恐龙出没的荒原第二关。</blockquote><p class="driving-help">'+(mobile?'左手摇杆左右横移，右手按住刹车或加速。<br>持续按住加速，达到车型最高速后自动喷气，极速时仍耗气。':'<kbd>← / →</kbd> 左右横移 <kbd>↑</kbd> 加速 <kbd>↓</kbd> 刹车 <kbd>空格</kbd> 开始 / 暂停')+'</p><button type="button" class="start-prompt" data-action="play">'+(mobile?'开始这一程':'按 <kbd>空格</kbd> 开始这一程')+'</button><div class="best"><span>最佳距离</span><strong>'+format(g.store.data.leaderboard[0]?.score||0)+' 米</strong></div>'+this.records()+(mobile?'<details class="intro-rules"><summary>玩法说明</summary>':'')+'<div class="rules"><div class="rule"><b>侧碰吞吃</b>侧碰低级车可以吞吃升级，喷气时还能吞吃同级车。</div><div class="rule"><b>警车追击</b>警车会隔一会儿撒网捕捉，捉到后要答题，答对继续。</div><div class="rule"><b>观察车流</b>避开高级车，小心追尾；遇险时有答题复活的机会。</div><div class="rule"><b>天降炮击</b>看到红色预警圈及时躲开，第二关要小心大恐龙踩踏。</div></div>'+(mobile?'</details>':'')+debugOption+'</section>';
     }else if(g.state==='PREPARING')this.overlay.innerHTML='<section class="card"><h2>道路准备中</h2><p>正在分配本局的道路与车流。</p></section>';
     else if(g.state==='LEVEL_CLEAR'){
-      const images=g.renderer?.guideImages()??[],cards=[['大型恐龙踩踏','避开橙色脚印，恐龙落脚会致命。'],['装甲坦克','装甲坦克不能碰，请绕开行驶。'],['金币与火箭炮','小金币 '+COINS.smallValue+'、大金币 '+COINS.largeValue+'；'+ROCKETS.normalCost+' 买普通，'+ROCKETS.advancedCost+' 买高级；1 普通、2 高级，Shift / Z 发射。']];
+      const images=g.renderer?.guideImages()??[],cards=[['大型恐龙踩踏','恐龙左右跳跃踩向你，及时横移躲开。'],['装甲坦克','装甲坦克不能碰，请绕开行驶。'],['金币与火箭炮','小金币 '+COINS.smallValue+'、大金币 '+COINS.largeValue+'；按 1 消耗 '+ROCKETS.normalCost+' 金币发射普通炮，按 2 消耗 '+ROCKETS.advancedCost+' 金币发射高级炮。']];
       this.overlay.innerHTML='<section class="card level-guide" role="dialog" aria-modal="true" aria-label="第一关通关"><div class="eyebrow">LEVEL COMPLETE / NEXT LEVEL</div><h2>恭喜！通过第一关。</h2><div class="level-guide-grid">'+cards.map(([title,copy],i)=>'<article><img src="'+(images[i]??'')+'" alt="'+title+'模型"><h3>'+title+'</h3><p>'+copy+'</p></article>').join('')+'</div><p class="level-guide-hint">第二关从零开始 · 空格进入第二关</p><button class="button" data-action="play">进入第二关</button></section>';
     }
     else if(g.state==='PAUSED')this.overlay.innerHTML='<section class="card" role="dialog" aria-modal="true" aria-label="游戏已暂停"><div class="eyebrow">TAKE A BREATH</div><h2>游戏已暂停</h2><p>当前 '+format(g.player.distance)+' 米 · '+VEHICLES[g.player.rank].name+'<br>'+(mobile?'点击继续行驶；左侧摇杆横移，右侧刹车与加速 / 氮气。':'按空格继续，↓ 刹车，左右横移，↑ 持续加速到最高车速后自动喷气，极速时仍耗气，松开留气。')+'</p><button class="button" data-action="play">继续行驶</button><button class="button secondary" data-action="quit">结束游戏</button></section>';
@@ -122,13 +122,11 @@ export class UI {
       e['growth-fill'].style.width=Math.min(100,Math.max(0,p.xp)/threshold*100)+'%';shown.growthRank=p.rank;shown.xp=p.xp;
     }
     if(g.arsenal){
-      const inventory=g.arsenal,blocked=g.state!=='RUNNING',full=inventory.shots.length>=ROCKETS.capacity,mobile=g.input.touchMode;
-      if(shown['coin-count']!==inventory.balance||shown['rocket-count']!==inventory.normal||shown['advanced-rocket-count']!==inventory.advanced||shown.arsenalBlocked!==blocked||shown.arsenalFull!==full||shown.arsenalMobile!==mobile){
-        for(const [key,value]of [['coin-count',inventory.balance],['rocket-count',inventory.normal],['advanced-rocket-count',inventory.advanced]])if(shown[key]!==value){e[key].textContent='× '+format(value);shown[key]=value;}
-        const firing=(mobile?'发射':'Shift / Z · 发射')+(inventory.advanced?'高级':'');
-        if(shown['fire-rocket']!==firing){e['fire-rocket'].textContent=firing;shown['fire-rocket']=firing;}
-        e['buy-rocket'].disabled=blocked||inventory.balance<ROCKETS.normalCost;e['buy-advanced-rocket'].disabled=blocked||inventory.balance<ROCKETS.advancedCost;e['fire-rocket'].disabled=blocked||inventory.normal+inventory.advanced===0||full;
-        shown.arsenalBlocked=blocked;shown.arsenalFull=full;shown.arsenalMobile=mobile;
+      const inventory=g.arsenal,blocked=g.state!=='RUNNING',full=inventory.shots.length>=ROCKETS.capacity;
+      if(shown['coin-count']!==inventory.balance||shown.arsenalBlocked!==blocked||shown.arsenalFull!==full){
+        if(shown['coin-count']!==inventory.balance){e['coin-count'].textContent='× '+format(inventory.balance);shown['coin-count']=inventory.balance;}
+        e['buy-rocket'].disabled=blocked||full||inventory.balance<ROCKETS.normalCost;e['buy-advanced-rocket'].disabled=blocked||full||inventory.balance<ROCKETS.advancedCost;
+        shown.arsenalBlocked=blocked;shown.arsenalFull=full;
       }
     }
     if(g.state==='RUNNING'){

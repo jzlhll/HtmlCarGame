@@ -379,8 +379,11 @@ export class GameRenderer {
     if(this.level!==game.level){this.level=game.level;this.staticStation=null;this.roadside.reset();this.infrastructure.reset();}
     this.motionAlpha=live?clamp(game.renderAlpha??1,0,1):1;
     this.renderPlayer=this.motion(game.player,game.renderPreviousPlayer,this.playerMotion);
-    this.strips[4].mesh.material=this.level===2?this.dirtMaterial:material(0x293e50);
-    for(const i of [2,3])this.strips[i].mesh.material=material(this.level===2?SECOND_LEVEL_SCENE.shoulder:0x8195a0);
+    const roadMaterial=this.level===2?this.dirtMaterial:material(0x293e50),shoulderMaterial=material(this.level===2?SECOND_LEVEL_SCENE.shoulder:0x8195a0);
+    // 更换已有节点的材质不会触发 childadded，主副路共用的新材质必须显式接入浓雾。
+    this.weatherView.distanceFog.bind(roadMaterial);this.weatherView.distanceFog.bind(shoulderMaterial);
+    this.strips[4].mesh.material=roadMaterial;
+    for(const i of [2,3])this.strips[i].mesh.material=shoulderMaterial;
     this.playerRoute=game.player.route;this.whiteHorse=game.whiteHorse;this.road=game.road;this.origin=this.road.at(this.renderPlayer.s);
     this.updateStatic(game);this.infrastructure.draw(this,game);this.drawShells(game);this.drawCows(game);
     this.updateCamera(game,dt);this.trafficView.begin(this.camera,this.light,true);

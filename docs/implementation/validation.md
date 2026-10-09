@@ -32,12 +32,12 @@
 
 随机事件(警车、白马、奶牛、施工、低速车队、天气、断头路、天降炮击)默认节奏为分钟级,浏览器验证时通过 URL 查询参数在启动早期覆盖 `config.js` 白名单字段,不改代码、不落存档；移除 URL 参数后刷新恢复默认;生产环境不带参数即默认值。
 
-- `?fast=1`:一键测试档,主要随机事件压缩到秒级(警车 3–8 秒、数学/语文/英语答题均为 5 秒、白马每 8 秒、奶牛 4–8 秒、施工从道路 10 米处开始候选、低速车队 3 秒首现、天气 2–4 秒首次检查后每 6–10 秒检查，触发概率仍为主路 40%、副路 80%、分叉候选概率为 100%、建筑间距压缩到 500–800 米；分叉仍受最小跨度与可用空间限制，不保证生成、炮弹 8 秒开始检查且每 3–5 秒检查一次，15 秒后每 1.5–2.5 秒检查一次，每次投弹概率仍为 40%，下落 1.5 秒；独立 X 路障 15 秒后启用，每 240 米检查且候选概率为 100%，仍避开施工、道路过渡和桥梁分叉)。
-- 精确覆盖:`?POLICE.intervalMin=3&POLICE.intervalMax=8&WHITE_HORSE.intervalSeconds=5&WEATHER.intervalMin=6&ROAD_FORKS.chance=1&SHELL.intervalMin=3`,概率可用 `WEATHER.chance`、`ROAD_FORKS.weatherChance` 和 `SHELL.chance` 覆盖（例如 `1` 表示必定触发）。只接受白名单配置字段（含警车距离、倍率与网尺寸，不含车型尺寸与车辆碰撞阈值）,答题时限可用 `POLICE.quizMathSeconds`、`POLICE.quizChineseSeconds`、`POLICE.quizEnglishSeconds` 单独覆盖；非法 key 或非数值直接忽略并控制台告警,防止误改物理与碰撞参数。
+- `?fast=1`:一键测试档,主要随机事件压缩到秒级(警车每 5 秒、数学/语文/英语答题均为 5 秒、白马每 8 秒、奶牛 4–8 秒、施工从道路 10 米处开始候选、低速车队 3 秒首现、天气 2–4 秒首次检查后每 6–10 秒检查，触发概率仍为主路 40%、副路 80%、分叉候选概率为 100%、建筑间距压缩到 500–800 米；分叉仍受最小跨度与可用空间限制，不保证生成、炮弹 8 秒开始检查且每 3–5 秒检查一次，15 秒后每 1.5–2.5 秒检查一次，每次投弹概率仍为 40%，下落 1.5 秒；独立 X 路障 15 秒后启用，每 240 米检查且候选概率为 100%，仍避开施工、道路过渡和桥梁分叉)。
+- 精确覆盖:`?POLICE.intervalSeconds=5&WHITE_HORSE.intervalSeconds=5&WEATHER.intervalMin=6&ROAD_FORKS.chance=1&SHELL.intervalMin=3`,概率可用 `WEATHER.chance`、`ROAD_FORKS.weatherChance` 和 `SHELL.chance` 覆盖（例如 `1` 表示必定触发）。只接受白名单配置字段（含警车距离、倍率与网尺寸，不含车型尺寸与车辆碰撞阈值）,答题时限可用 `POLICE.quizMathSeconds`、`POLICE.quizChineseSeconds`、`POLICE.quizEnglishSeconds` 单独覆盖；非法 key 或非数值直接忽略并控制台告警,防止误改物理与碰撞参数。
 - 覆盖生效时页面右上角显示测试参数角标,截图即可确认当前处于测试节奏,避免把测试结果当默认行为;`?fast=0` 关闭预设。
 - 验证火车或其他环境事件时可用 `?TRAFFIC_DENSITY.capacity=0&TRAFFIC_DENSITY.maxCapacity=0` 清空普通车流；两个容量同时为零可避免运行中容量增长后重新补车。需要少量车流时将两者设为相同的小整数，例如 `6`；也可单独覆盖 `TRAFFIC_DENSITY.capacityPerStep` 调整增长量。不带这些参数即恢复正常车流，不写入存档。
 
-实现见 `src/test-overrides.js`,由 `config.js` 末尾在启动早期应用;Node 端导入无 `location` 自动跳过。独立 X 路障可用 `ROADBLOCKS.afterSeconds`、`first`、`interval`、`chance`、`warningDistance` 覆盖启用及候选节奏；炮击加密阶段可用 `SHELL.frequencyAfterSeconds`、`lateIntervalMin`、`lateIntervalMax` 覆盖。新增随机事件时在 `WHITELIST` 登记节奏字段,并按需加入 `FAST_PRESET`。
+实现见 `src/test-overrides.js`,由 `config.js` 末尾在启动早期应用;Node 端导入无 `location` 自动跳过。独立 X 路障可用 `ROADBLOCKS.afterSeconds`、`first`、`interval`、`chance`、`warningDistance` 覆盖启用及候选节奏；炮击加密阶段可用 `SHELL.frequencyAfterSeconds`、`lateIntervalMin`、`lateIntervalMax` 覆盖。警车固定周期使用 `POLICE.intervalSeconds` 覆盖，旧的 `POLICE.intervalMin/Max` 不再支持。新增随机事件时在 `WHITELIST` 登记节奏字段,并按需加入 `FAST_PRESET`。
 
 流程的效率改进与待验证建议见[开发与验证效率](development-workflow.md)，其中推测意见不作为默认执行要求。
 
@@ -45,8 +45,8 @@
 
 `LEVELS.firstSeconds` 可缩短第一关通关门槛；取值至少 8 秒可检查完整 5 秒顶部倒计时。仍须实际行驶，检查到时清空车流、镜头固定、玩家模型前行 3 秒后显示通关界面，再点击或按空格切关，确认第二关自行车、时间、距离、资源与事件从零初始化；`LEVELS.weatherChance`、`branchWeatherChance` 只覆盖第二关天气概率；第二关关闭炮击调度。`DINOSAURS.smallFirstMin/Max`、`smallIntervalMin/Max`、`smallChance` 可加快横穿；`DINOSAURS.chaseAfterSeconds`、`chaseFirstMin/Max`、`chaseIntervalMin/Max`、`chaseChance`、`durationMin/Max` 可加快追行生命周期。其余尺寸、伤害及速度倍率不开放覆盖。
 
-示例：`?LEVELS.firstSeconds=2&DINOSAURS.smallFirstMin=1&DINOSAURS.smallFirstMax=2&DINOSAURS.smallChance=1&DINOSAURS.chaseAfterSeconds=8&DINOSAURS.chaseFirstMin=1&DINOSAURS.chaseFirstMax=2&DINOSAURS.chaseChance=1`。人工验证启用调试模式；去掉参数刷新后恢复3 分 30 秒通关及正常两分钟恐龙分界。
+示例：`?LEVELS.firstSeconds=2&DINOSAURS.smallFirstMin=1&DINOSAURS.smallFirstMax=2&DINOSAURS.smallChance=1&DINOSAURS.chaseAfterSeconds=8&DINOSAURS.chaseFirstMin=1&DINOSAURS.chaseFirstMax=2&DINOSAURS.chaseChance=1`。人工验证启用调试模式；去掉参数刷新后恢复3 分钟通关及正常两分钟恐龙分界。
 
 `ROAD_DIFFICULTY.afterSeconds` 按第二关自身有效运行时间控制永久收窄，默认 120 秒；第一关不受该参数影响。
 
-金币生成节奏可通过 `COINS.firstSeconds`、`intervalMin/Max`、`chance`、`aheadMin/Max` 加速，金币价值、价格、武器宽度和射程不开放 URL 覆盖。第二关启用调试后验证小／大金币累计、按 1／2 分别购买普通／高级、Shift／Z 消耗库存与三发并行，范围包含装甲坦克及警车；第一关通关后检查三项模型预览并进入第二关，确认余额与库存归零。
+金币生成节奏可通过 `COINS.firstSeconds`、`intervalMin/Max`、`chance`、`aheadMin/Max` 加速，金币价值、价格、武器宽度和射程不开放 URL 覆盖。第二关启用调试后验证小／大金币累计、按 1／2 消耗 20／50 金币直接发射普通／高级炮，确认高级三发并行、金币不足或发射容量已满不扣款、不弹提示，按 3 不发射，范围包含装甲坦克及警车；第一关通关后检查三项模型预览并进入第二关，确认余额与火箭动画归零。

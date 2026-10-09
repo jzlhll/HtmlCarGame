@@ -1,6 +1,6 @@
 // 测试参数覆盖层:URL 查询参数在启动早期覆盖 config.js 白名单配置字段。
 // 仅用于 Agent 与人工快速验证随机事件;不带参数时生产默认值原样生效,移除 URL 参数后刷新恢复默认、零持久化。
-// 用法:?fast=1 应用一键测试档,或精确覆盖白名单字段,如 ?POLICE.intervalMin=3&WHITE_HORSE.intervalSeconds=8。
+// 用法:?fast=1 应用一键测试档,或精确覆盖白名单字段,如 ?POLICE.intervalSeconds=5&WHITE_HORSE.intervalSeconds=8。
 
 export const TEST_OVERRIDES={active:false,keys:[]};
 
@@ -10,7 +10,7 @@ const WHITELIST={
   COINS:['firstSeconds','intervalMin','intervalMax','chance','aheadMin','aheadMax'],
   DINOSAURS:['smallFirstMin','smallFirstMax','smallIntervalMin','smallIntervalMax','smallChance','chaseAfterSeconds','chaseFirstMin','chaseFirstMax','chaseIntervalMin','chaseIntervalMax','chaseChance','durationMin','durationMax'],
   TRAFFIC_DENSITY:['capacity','maxCapacity','capacityPerStep'],
-  POLICE:['intervalMin','intervalMax','spawnAheadMin','spawnAheadMax','keepMin','keepMax','keepGain','chaseRatio','closeRatio','netAheadMin','netLeadSeconds','netInterval','netSizeBase','netSizeGrowth','netSizeMax','netKeep','quizMathSeconds','quizChineseSeconds','quizEnglishSeconds','catchSeconds','maxChaseSeconds'],
+  POLICE:['intervalSeconds','spawnAheadMin','spawnAheadMax','keepMin','keepMax','keepGain','chaseRatio','closeRatio','netAheadMin','netLeadSeconds','netInterval','netSizeBase','netSizeGrowth','netSizeMax','netKeep','quizMathSeconds','quizChineseSeconds','quizEnglishSeconds','catchSeconds','maxChaseSeconds'],
   WHITE_HORSE:['intervalSeconds','visibleSeconds','rampSeconds','shieldSeconds','shieldBlinkSeconds','recoverySeconds'],
   COW_CROSSING:['minInterval','intervalRange','chance'],
   ROADWORKS:['first','interval','chance'],
@@ -26,7 +26,7 @@ const WHITELIST={
 
 // fast=1 一键测试档:把分钟级节奏压缩到秒级,便于快速触发警车、白马、天气、分叉候选、炮击等随机事件。
 const FAST_PRESET={
-  POLICE:{intervalMin:3,intervalMax:8,quizMathSeconds:5,quizChineseSeconds:5,quizEnglishSeconds:5},
+  POLICE:{intervalSeconds:5,quizMathSeconds:5,quizChineseSeconds:5,quizEnglishSeconds:5},
   WHITE_HORSE:{intervalSeconds:8},
   COW_CROSSING:{minInterval:4,intervalRange:4},
   ROADWORKS:{first:10},
@@ -45,6 +45,7 @@ export function applyTestOverrides(groups){
   const set=(group,name,key,raw)=>{
     const value=Number(raw);
     if(!Number.isFinite(value)){warn(name+'.'+key+'='+raw);return;}
+    if(name==='POLICE'&&key==='intervalSeconds'&&value<=0){warn(name+'.'+key+'='+raw);return;}
     group[key]=value;TEST_OVERRIDES.keys.push(name+'.'+key+'='+raw);
   };
   const applyPatch=patch=>{

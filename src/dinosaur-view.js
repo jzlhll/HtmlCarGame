@@ -6,27 +6,27 @@ const footShape=new THREE.Shape();
 footShape.moveTo(-.32,-.5);footShape.lineTo(.32,-.5);footShape.lineTo(.48,-.1);footShape.lineTo(.5,.35);footShape.lineTo(.28,.22);footShape.lineTo(.18,.5);footShape.lineTo(0,.29);footShape.lineTo(-.18,.5);footShape.lineTo(-.28,.22);footShape.lineTo(-.5,.35);footShape.lineTo(-.48,-.1);footShape.closePath();
 const footprint=new THREE.ShapeGeometry(footShape).rotateX(-Math.PI/2);
 
-// 完整恐龙使用共享模型与实例批次，踩踏预兆和残留脚印使用有限实例。
+// 完整恐龙使用共享模型与实例批次，接地脚印使用有限实例。
 export class DinosaurView {
   constructor(scene){
     this.models=new Map();this.pools=new Map();this.sources=[];this.seen=new Set();this.point={};
     this.plants=new THREE.InstancedMesh(new THREE.ConeGeometry(.5,1,5),new THREE.MeshStandardMaterial({color:0x7c8951,roughness:1}),96);this.plants.frustumCulled=false;scene.add(this.plants);this.plants.count=0;
     this.ripples=new THREE.InstancedMesh(new THREE.RingGeometry(.85,1,20).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({color:0xb8d4bd,transparent:true,opacity:.3,depthWrite:false}),12);this.ripples.frustumCulled=false;scene.add(this.ripples);this.ripples.count=0;
     this.prints=new THREE.InstancedMesh(footprint,new THREE.MeshBasicMaterial({color:0x65513b,transparent:true,opacity:.55,depthWrite:false}),DINOSAURS.footCapacity);
-    this.warning=new THREE.InstancedMesh(footprint,new THREE.MeshBasicMaterial({color:0xe18c37,transparent:true,opacity:.65,depthWrite:false}),DINOSAURS.footCapacity);
-    for(const mesh of [this.prints,this.warning]){mesh.frustumCulled=false;scene.add(mesh);mesh.visible=false;}
+    this.prints.frustumCulled=false;scene.add(this.prints);this.prints.visible=false;
   }
-  reset(){for(const item of this.models.values()){let pool=this.pools.get(item.kind);if(!pool){pool=[];this.pools.set(item.kind,pool);}pool.push(item.view);}this.models.clear();this.sources.length=0;this.seen.clear();for(const mesh of [this.prints,this.warning,this.plants,this.ripples])mesh.visible=false;}
+  reset(){for(const item of this.models.values()){let pool=this.pools.get(item.kind);if(!pool){pool=[];this.pools.set(item.kind,pool);}pool.push(item.view);}this.models.clear();this.sources.length=0;this.seen.clear();for(const mesh of [this.prints,this.plants,this.ripples])mesh.visible=false;}
   draw(renderer,game){
     this.sources.length=0;
     if(game.level!==2){if(this.models.size)this.reset();return;}
     const seen=this.seen,time=game.activeSeconds;seen.clear();let plants=0,ripples=0;
-    const add=(key,kind,s,d,route,angle=0,scale=1,ground=true,phase=0,hit=null)=>{
+    const add=(key,kind,s,d,route,angle=0,scale=1,ground=true,phase=0,hit=null,jump=null)=>{
       seen.add(key);let item=this.models.get(key);
       if(!item){const pool=this.pools.get(kind);item={kind,view:pool?.pop()??dinosaurModel(kind)};this.models.set(key,item);}
       const view=item.view,p=ground?renderer.localGround(s,d,this.point):renderer.local(s,d,route,this.point);
-      view.position.set(p.x,p.y+(hit?.hit?Math.sin(Math.min(1,hit.hitTime/.8)*Math.PI)*.5:0),p.z);view.rotation.set(ground?0:p.pitch,-p.heading+angle,0,'YXZ');view.scale.setScalar((view.userData.dinoScale??1)*scale*(hit?.hit?Math.max(.01,1-hit.hitTime/.8):1));
-      animateDinosaur(view,time,kind==='small'||kind==='chaser',phase);renderer.trafficView.add(view);
+      const progress=jump?Math.max(0,Math.min(1,(time-jump.startAt)/DINOSAURS.footWarning)):0,hop=Math.sin(progress*Math.PI);
+      view.position.set(p.x,p.y+hop*DINOSAURS.jumpHeight+(hit?.hit?Math.sin(Math.min(1,hit.hitTime/.8)*Math.PI)*.5:0),p.z);view.rotation.set(ground?0:p.pitch,-p.heading+angle,(jump?.side??0)*hop*DINOSAURS.jumpTilt,'YXZ');view.scale.setScalar((view.userData.dinoScale??1)*scale*(hit?.hit?Math.max(.01,1-hit.hitTime/.8):1));
+      animateDinosaur(view,time,kind==='small'||kind==='chaser',phase,hop,jump?.side??0);renderer.trafficView.add(view);
       return p;
     };
     for(const site of renderer.faunaSites??[]){
@@ -53,21 +53,18 @@ export class DinosaurView {
     }
     const chaser=game.dinosaurs.chaser;
     if(chaser){
-      const s=(chaser.previousRoute??null)===(chaser.route??null)?lerp(chaser.previousS,chaser.s,renderer.motionAlpha):chaser.s,d=game.dinosaurs.chaserD(chaser,s);
+      const sameRoute=(chaser.previousRoute??null)===(chaser.route??null),s=sameRoute?lerp(chaser.previousS,chaser.s,renderer.motionAlpha):chaser.s,d=game.dinosaurs.chaserD(chaser,s,sameRoute?lerp(chaser.previousD,chaser.d,renderer.motionAlpha):chaser.d);
       const fade=Math.min(1,(chaser.until-time)/DINOSAURS.exitFadeSeconds);
-      add('chaser:'+chaser.id,'chaser',s,d,chaser.route,0,Math.max(.01,fade),false,chaser.phase);
+      add('chaser:'+chaser.id,'chaser',s,d,chaser.route,0,Math.max(.01,fade),false,chaser.phase,null,chaser.jump);
       this.sources.push({id:'chaser:'+chaser.id,s,d,route:chaser.route,type:'bridge'});
     }
     for(const [key,item]of this.models)if(!seen.has(key)){let pool=this.pools.get(item.kind);if(!pool){pool=[];this.pools.set(item.kind,pool);}pool.push(item.view);this.models.delete(key);}
-    const cfg=DINOSAURS;let prints=0,warnings=0;
+    const cfg=DINOSAURS;let prints=0;
     for(const foot of game.dinosaurs.feet){
-      const p=renderer.local(foot.s,foot.d,foot.route,this.point),warning=time<foot.from;
-      if(warning){const pulse=.75+.2*Math.sin(time*12);renderer.instance(this.warning,warnings++,p.x,p.y+.04,p.z,cfg.footWidth*pulse,1,cfg.footLength*pulse,p.heading,p.pitch);}
-      else{
-        const fade=Math.max(.05,1-(time-foot.until)/cfg.footFade);
-        renderer.instance(this.prints,prints++,p.x,p.y+.03,p.z,cfg.footWidth*fade,1,cfg.footLength*fade,p.heading,p.pitch);
-      }
+      if(time<foot.from)continue;
+      const p=renderer.local(foot.s,foot.d,foot.route,this.point),fade=Math.max(.05,1-(time-foot.until)/cfg.footFade);
+      renderer.instance(this.prints,prints++,p.x,p.y+.03,p.z,cfg.footWidth*fade,1,cfg.footLength*fade,p.heading,p.pitch);
     }
-    for(const [mesh,count]of [[this.prints,prints],[this.warning,warnings]]){mesh.count=count;mesh.visible=count>0;if(count)mesh.instanceMatrix.needsUpdate=true;}
+    this.prints.count=prints;this.prints.visible=prints>0;if(prints)this.prints.instanceMatrix.needsUpdate=true;
   }
 }
