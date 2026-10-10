@@ -19,28 +19,32 @@
         <button id="restart-game" type="button" aria-label="重置本局，重新开始">↻ 重置</button>
       </nav>
     </header>
-    <div id="level-countdown" class="level-countdown" role="timer" aria-label="第一关通关倒计时" hidden></div>
-    <section id="hud" class="hud" aria-label="当前状态" hidden>
-      <div class="hud-column">
-        <div class="metric distance"><span>行驶距离</span><strong id="distance">0</strong><small>米</small></div>
-        <div class="metric"><span>运行时间</span><strong id="elapsed">00:00</strong></div>
-        <div class="metric"><span>速度</span><strong id="speed">58</strong><small>km/h</small><div class="speed-track"><i id="speed-fill"></i></div></div>
+    <div class="status-stack">
+      <section id="hud" class="hud" aria-label="当前状态" hidden>
+        <div class="hud-column">
+          <div class="metric distance"><span id="distance-label">行驶距离</span><strong id="distance">0</strong><small>米</small></div>
+          <div class="metric"><span id="elapsed-label">运行时间</span><strong id="elapsed">00:00</strong></div>
+          <div class="metric"><span>速度</span><strong id="speed">58</strong><small>km/h</small><div class="speed-track"><i id="speed-fill"></i></div></div>
+        </div>
+        <div class="hud-column">
+          <div class="metric nitro"><span id="nitro-label">加速 / 氮气 · ↑</span><strong id="nitro">0 / 2 管</strong><small id="nitro-state">漂移吞吃回气</small><div class="nitro-tracks"><div class="nitro-track"><i id="nitro-fill"></i></div><div class="nitro-track"><i id="nitro-reserve-fill"></i></div></div></div>
+          <div class="metric defense"><span id="defense-label">防御力</span><strong id="defense">100%</strong><div class="defense-track" aria-hidden="true"><i id="defense-fill"></i></div></div>
+          <div class="metric growth"><span id="rank">自行车</span><strong id="progress">1 / 2</strong><div class="growth-track"><i id="growth-fill"></i></div></div>
+        </div>
+      </section>
+      <section id="arsenal-hud" class="arsenal-hud" aria-label="金币与火箭炮发射" hidden>
+        <div class="inventory-row" aria-label="金币"><span id="coin-icon" class="inventory-icon"></span><strong id="coin-count">× 0</strong></div>
+        <button id="buy-rocket" type="button">1 · 发射普通炮</button>
+        <button id="buy-advanced-rocket" type="button">2 · 发射高级炮</button>
+      </section>
+      <div class="status-notices">
+        <div id="level-countdown" class="level-countdown" role="timer" aria-label="第一关通关倒计时" hidden></div>
+        <div id="rear-alert" class="rear-alert" role="status" hidden></div>
+        <div id="toast" class="toast" role="status" hidden></div>
+        <div id="storage-warning" class="storage-warning" hidden></div>
       </div>
-      <div class="hud-column">
-        <div class="metric nitro"><span id="nitro-label">加速 / 氮气 · ↑</span><strong id="nitro">0 / 2 管</strong><small id="nitro-state">漂移吞吃回气</small><div class="nitro-tracks"><div class="nitro-track"><i id="nitro-fill"></i></div><div class="nitro-track"><i id="nitro-reserve-fill"></i></div></div></div>
-        <div class="metric defense"><span>防御力</span><strong id="defense">100%</strong><div class="defense-track" aria-hidden="true"><i id="defense-fill"></i></div></div>
-        <div class="metric growth"><span id="rank">自行车</span><strong id="progress">1 / 2</strong><div class="growth-track"><i id="growth-fill"></i></div></div>
-      </div>
-    </section>
-    <section id="arsenal-hud" class="arsenal-hud" aria-label="金币与火箭炮发射" hidden>
-      <div class="inventory-row" aria-label="金币"><span id="coin-icon" class="inventory-icon"></span><strong id="coin-count">× 0</strong></div>
-      <button id="buy-rocket" type="button">1 · 发射普通炮</button>
-      <button id="buy-advanced-rocket" type="button">2 · 发射高级炮</button>
-    </section>
+    </div>
     <div id="test-badge" class="test-badge" role="status" hidden>⚡ 测试参数</div>
-    <div id="rear-alert" class="rear-alert" role="status" hidden></div>
-    <div id="toast" class="toast" role="status" hidden></div>
-    <div id="storage-warning" class="storage-warning" hidden></div>
     <section id="touch-controls" class="touch-controls" aria-label="触屏驾驶操作" hidden>
       <div class="joystick-area">
         <div id="steering-stick" class="steering-stick" role="group" aria-label="方向摇杆，左右拖动横移">

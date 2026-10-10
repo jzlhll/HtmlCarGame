@@ -227,7 +227,7 @@ export const POLICE={
   netSizeGrowth:.28, // 警车持续期间渔网边长每秒增长(米),增长力度常量。
   netSizeMax:16, // 渔网边长上限,保证仍可躲。
   netKeep:6, // 捕捞网生成后立即生效，存活时间(有效运行秒数)。
-  quizMathSeconds:45,quizChineseSeconds:30,quizEnglishSeconds:30, // 题目显示后按真实时间倒计时，超时结束本局。
+  quizMathSeconds:45,quizChineseSeconds:30,quizEnglishSeconds:45, // 题目显示后按真实时间倒计时，超时结束本局。
   quizChineseAuthorChance:.2, // 语文问作者占 20%，上下句与挖空各占 40%。
   catchSeconds:1.5, // 被抓动画时长:玩家缩小并被拉向警车。
   maxChaseSeconds:45, // 警车持续时长达到上限后自动撤离。

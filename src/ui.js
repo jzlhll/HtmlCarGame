@@ -10,7 +10,6 @@ export class UI {
     this.game=game;this.overlay=document.getElementById('overlay');this.toast=document.getElementById('toast');this.toastSeconds=0;this.resetConfirm=false;this.displayed={};
     this.elements=Object.fromEntries(['distance','elapsed','speed','speed-fill','nitro','nitro-state','nitro-fill','nitro-reserve-fill','defense','defense-fill','rank','progress','growth-fill','rear-alert','storage-warning','hud','level-countdown','test-badge','arsenal-hud','coin-count','buy-rocket','buy-advanced-rocket'].map(id=>[id,document.getElementById(id)]));
     document.getElementById('coin-icon').innerHTML=coinIcon;
-    this.elements['buy-rocket'].textContent='1 · 普通炮 '+ROCKETS.normalCost+' 金币';this.elements['buy-advanced-rocket'].textContent='2 · 高级炮 '+ROCKETS.advancedCost+' 金币';
     this.elements['buy-rocket'].addEventListener('click',()=>game.weaponAction(1));this.elements['buy-advanced-rocket'].addEventListener('click',()=>game.weaponAction(2));
     // URL 测试参数生效时显示角标,Agent 截图可直接确认,避免把测试结果当默认行为。
     this.elements['test-badge'].hidden=!TEST_OVERRIDES.active;
@@ -55,7 +54,11 @@ export class UI {
     this.pauseButton.hidden=!['RUNNING','PAUSED'].includes(g.state);
     this.pauseButton.textContent=g.state==='PAUSED'?'继续':'暂停';this.pauseButton.setAttribute('aria-label',g.state==='PAUSED'?'继续游戏':'暂停游戏');
     this.restartButton.disabled=g.state==='PREPARING';
-    document.getElementById('nitro-label').textContent=mobile?'加速 / 氮气':'加速 / 氮气 · ↑';
+    for(const [id,compact,full] of [['distance-label','距离','行驶距离'],['elapsed-label','时间','运行时间'],['defense-label','防御','防御力'],['nitro-label','氮气','加速 / 氮气 · ↑']])document.getElementById(id).textContent=mobile?compact:full;
+    for(const [id,key,name,cost] of [['buy-rocket',1,'普通炮',ROCKETS.normalCost],['buy-advanced-rocket',2,'高级炮',ROCKETS.advancedCost]]){
+      this.elements[id].textContent=mobile?name+' · '+cost:key+' · '+name+' '+cost+' 金币';
+      this.elements[id].setAttribute('aria-label','消耗 '+cost+' 金币发射'+name);
+    }
     g.input.container.classList.toggle('level-two',g.level===2);
     this.elements['arsenal-hud'].hidden=g.level!==2||['READY','PREPARING','RESULT'].includes(g.state);
     this.quizTimer=null;this.quizSeconds=null;
