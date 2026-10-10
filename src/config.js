@@ -124,8 +124,20 @@ export const TRAFFIC_LANE_CHANGE={enabledChance:.5,chanceMin:.3,chanceMax:.55,in
 export const TRAFFIC_DRIVING={dangerousChance:.15,avoidSeconds:3.5,minAvoidDistance:16,signalSeconds:1,changeSeconds:1.5};
 // 跨轮静态查询缓存按轮数限制，远离当前窗口的内容可重新生成。
 export const ROAD_CACHE={maxLaps:4};
-export const ROAD_RENDER={sampleCapacity:160};
-export const RENDER_QUALITY={firstLevelFastSpeed:160,firstLevelFastFps:58,secondLevelFps:58};
+export const ROAD_RENDER={sampleCapacity:160,sceneryBlock:40,sceneryBlocks:15,infrastructureBlock:80,roadsideMargin:65};
+export const MODEL_PREWARM={trafficExtra:16,targetSize:32,poolPerType:8};
+export const RENDER_QUALITY={
+  firstLevelFastSpeed:160,fastExitSpeed:145,firstLevelFastFps:58,secondLevelFps:58,normalFps:45,
+  maxPixelRatio:1.5,minPixelRatio:.75,pixelBudget:2200000,pixelStep:.25,
+  warmupSeconds:1,windowSeconds:2,slowFrameFactor:1.5,downFrameFactor:1.04,downSlowRatio:.2,downCooldown:4,
+  recoverSeconds:10,recoverCooldown:12,recoverFrameFactor:1.04,recoverSlowRatio:.02,recoverCpuFraction:.65,
+  lodHysteresis:20,smallPartSize:.16,
+  levels:[
+    {vehicleDetail:180,environmentDetail:130,environmentFar:440,animationHz:30,particles:1,shadowSize:1024,shadowDistance:85},
+    {vehicleDetail:120,environmentDetail:90,environmentFar:320,animationHz:20,particles:.6,shadowSize:512,shadowDistance:65},
+    {vehicleDetail:80,environmentDetail:60,environmentFar:240,animationHz:12,particles:.35,shadowSize:512,shadowDistance:45},
+  ],
+};
 // 每轮三个额外弯组候选；成对曲线保持出口方向，截止墙前后仍留直道。
 export const ROAD_CURVES={extraPairChance:.75,minAngle:12,maxAngle:22,minLength:240,maxLength:360,lengthStep:20,straightChance:.2,straightLength:60};
 // 树木共用几何与实例批次，高度、冠幅及松树比例只在静态布局刷新时抽取。

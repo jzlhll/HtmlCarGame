@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { random } from './config.js';
+import { ROAD_RENDER, random } from './config.js';
 
 const seasons=[
   {field:0x967449,crop:0x83aa43,roof:0x625e58},
@@ -15,10 +15,13 @@ export class RoadsideScenery {
     this.scene=scene;this.batches=new Map();this.materials=new Map();
     this.group=new THREE.Group();scene.add(this.group);this.layouts=new Map();this.animated=[];
     this.geometry={box:new THREE.BoxGeometry(1,1,1),cylinder:new THREE.CylinderGeometry(1,1,1,10),cone:new THREE.ConeGeometry(1,1,10),roof:new THREE.CylinderGeometry(1,1,1,3,1,false,Math.PI)};
-    this.root=new THREE.Matrix4();this.part=new THREE.Object3D();this.matrix=new THREE.Matrix4();this.anchor=new THREE.Object3D();this.color=new THREE.Color();
+    this.root=new THREE.Matrix4();this.part=new THREE.Object3D();this.matrix=new THREE.Matrix4();this.anchor=new THREE.Object3D();this.color=new THREE.Color();this.bounds=new THREE.Box3();
+    for(const geometry of Object.values(this.geometry))geometry.computeBoundingBox();
     for(const key of ['field','crop','roof'])this.materials.set(key,new THREE.MeshStandardMaterial({color:seasons[0][key],roughness:.95}));
   }
-  begin(s,d,angle=0,pitch=false){
+  begin(s,d,angle=0,pitch=false,object=null){
+    this.object=object??{parts:[],bounds:new THREE.Box3()};
+    if(!object)this.layout.objects.push(this.object);
     const p=this.renderer.road.at(s,d),origin=this.layoutOrigin;
     this.anchor.position.set(p.x-origin.x,this.renderer.road.groundElevation(s)-origin.y,p.z-origin.z);this.anchor.rotation.set(pitch?p.pitch:0,-p.heading+angle,0,'YXZ');this.anchor.scale.setScalar(1);this.anchor.updateMatrix();this.root.copy(this.anchor.matrix);
   }
@@ -33,7 +36,8 @@ export class RoadsideScenery {
     }
     this.part.position.set(...position);this.part.rotation.set(...rotation);this.part.scale.set(...size);this.part.updateMatrix();
     this.matrix.multiplyMatrices(this.root,this.part.matrix);
-    this.layout.parts.push({batch,matrix:this.matrix.clone(),motion:animation?{...animation,root:this.root.clone(),part:this.part.clone()}:null});
+    this.object.parts.push({batch,matrix:this.matrix.clone(),motion:animation?{...animation,root:this.root.clone(),part:this.part.clone()}:null});
+    this.bounds.copy(this.geometry[shape].boundingBox).applyMatrix4(this.matrix);this.object.bounds.union(this.bounds);
   }
   building(s,d,floors,width,depth,color,barn=false){
     this.begin(s,d);
@@ -80,12 +84,13 @@ export class RoadsideScenery {
     this.add(0x292e2c,[.16,.23,.16],[0,.62,1.15]);
   }
   fence(s,d,width,depth){
+    const object={parts:[],bounds:new THREE.Box3()};this.layout.objects.push(object);
     for(let i=0;i<=Math.floor(depth/4);i++)for(const side of [-1,1]){
-      this.begin(s-depth/2+i*4,d+side*width/2);this.add(0xd3b587,[.2,1.4,.2],[0,.7,0]);
+      this.begin(s-depth/2+i*4,d+side*width/2,0,false,object);this.add(0xd3b587,[.2,1.4,.2],[0,.7,0]);
       if(i<Math.floor(depth/4))for(const height of [.5,1.05])this.add(0xe2c8a0,[.13,.12,4.15],[0,height,-2]);
     }
     for(const end of [-1,1])for(let x=-width/2;x<width/2;x+=4){
-      this.begin(s+end*depth/2,d+x+2);for(const height of [.5,1.05])this.add(0xe2c8a0,[4.1,.12,.13],[0,height,0]);
+      this.begin(s+end*depth/2,d+x+2,0,false,object);for(const height of [.5,1.05])this.add(0xe2c8a0,[4.1,.12,.13],[0,height,0]);
     }
   }
   field(s,d,width,depth,rng){
@@ -101,8 +106,8 @@ export class RoadsideScenery {
   }
   createLayout(block,plots,spacing){
     const station=(block+.5)*spacing,local=block%plots;
-    const layout={origin:this.renderer.road.at(station),parts:[]};
-    if(this.renderer.road.forksRange(station-65,station+65).length)return layout;
+    const layout={origin:this.renderer.road.at(station),objects:[]};
+    if(this.renderer.road.forksRange(station-ROAD_RENDER.roadsideMargin,station+ROAD_RENDER.roadsideMargin).length)return layout;
     this.layout=layout;this.layoutOrigin=layout.origin;
     const rng=random(this.renderer.road.seed^(local*197));
     if(rng()>=SITE_CHANCE){this.layout=null;return layout;}
@@ -124,18 +129,19 @@ export class RoadsideScenery {
       for(let i=0;i<2;i++){this.begin(station-24,d+side*(7+i*2));this.add(0xd8b967,[1.2,1.2,1.2],[0,.7,0],'cylinder',[0,0,Math.PI/2]);}
       this.building(station+28,d+side*11,1,5,6,0xccb18b,true);
     }
-    this.layout=null;return layout;
+    for(const object of layout.objects){object.sphere=object.bounds.getBoundingSphere(new THREE.Sphere());object.sphere.radius+=1;}
+    this.layout=null;this.object=null;return layout;
   }
   reset(){
-    this.layouts.clear();this.animated=[];this.visibleKey=null;this.road=null;
+    this.layouts.clear();this.animated=[];this.visibleKey=null;this.road=null;this.revision=null;
     for(const batch of this.batches.values()){batch.count=0;batch.mesh.count=0;batch.mesh.visible=false;}
   }
   rebuild(blocks,s){
-    this.cacheOrigin=this.renderer.road.at(s);this.animated=[];
+    this.cacheOrigin=this.renderer.road.at(s);this.animated=[];this.animationDirty=true;
     for(const batch of this.batches.values())batch.count=0;
     for(const block of blocks){
       const layout=this.layouts.get(block),offset=new THREE.Vector3(layout.origin.x-this.cacheOrigin.x,layout.origin.y-this.cacheOrigin.y,layout.origin.z-this.cacheOrigin.z);
-      for(const item of layout.parts){
+      for(const object of layout.objects)if(object.visible)for(const item of object.parts){
         const batch=item.batch;if(batch.count>=INSTANCE_CAPACITY)continue;
         const index=batch.count++;
         if(item.motion)this.animated.push({batch,index,motion:item.motion,offset});
@@ -146,26 +152,41 @@ export class RoadsideScenery {
   }
   draw(renderer,s,season,time){
     this.renderer=renderer;this.group.visible=renderer.level!==2;if(renderer.level===2)return;
-    if(this.road!==renderer.road){this.reset();this.road=renderer.road;}
+    if(this.road!==renderer.road||this.revision!==renderer.road.revision){this.reset();this.road=renderer.road;this.revision=renderer.road.revision;}
     if(this.seasonIndex!==season.index||this.seasonBlend!==season.blend){
       for(const key of ['field','crop','roof'])this.materials.get(key).color.setHex(seasons[season.index][key]).lerp(this.color.setHex(seasons[(season.index+1)%4][key]),season.blend);
       this.seasonIndex=season.index;this.seasonBlend=season.blend;
     }
     const plots=Math.round(renderer.road.length/90),spacing=renderer.road.length/plots,first=Math.floor((s-90)/spacing),blocks=[];
-    for(let block=Math.max(0,first);block<=first+7;block++)if((block+.5)*spacing<=s+420){
+    // 为地块中心之外的完整建筑和围栏预留范围，避免缓存窗口先于距离筛选截断。
+    for(let block=Math.max(0,first);block<=first+7;block++)if((block+.5)*spacing<=s+renderer.quality.settings.environmentFar+ROAD_RENDER.roadsideMargin){
       blocks.push(block);if(!this.layouts.has(block))this.layouts.set(block,this.createLayout(block,plots,spacing));
     }
     const nearby=new Set(blocks);
     for(const block of this.layouts.keys())if(!nearby.has(block))this.layouts.delete(block);
-    const key=blocks.join(',');if(this.visibleKey!==key){this.visibleKey=key;this.rebuild(blocks,s);}
-    // 静态实例只在区块进出时改写，当前玩家参考系由一个父节点转换。
+    const key=blocks.join(',');let changed=this.visibleKey!==key;this.visibleKey=key;
+    // 布局缓存与距离可见性独立，完整建筑或动物的包围范围进入时一起提交。
+    for(const block of blocks){
+      const layout=this.layouts.get(block);
+      for(const object of layout.objects){
+        const sphere=object.sphere,dx=layout.origin.x+sphere.center.x-renderer.origin.x,dz=layout.origin.z+sphere.center.z-renderer.origin.z;
+        const range=renderer.quality.settings.environmentFar+sphere.radius,visible=dx*dx+dz*dz<=range*range;
+        if(object.visible!==visible){object.visible=visible;changed=true;}
+      }
+    }
+    if(changed)this.rebuild(blocks,s);
+    // 只有显示集合变化时改写静态实例，其余帧通过父节点转换玩家参考系。
     const origin=renderer.origin,cos=Math.cos(origin.heading),sin=Math.sin(origin.heading),dx=this.cacheOrigin.x-origin.x,dz=this.cacheOrigin.z-origin.z;
     this.group.position.set(cos*dx+sin*dz,this.cacheOrigin.y-origin.y,-sin*dx+cos*dz);this.group.rotation.y=origin.heading;
-    for(const {batch,index,motion,offset}of this.animated){
+    const animationTick=Math.floor(time*renderer.quality.settings.animationHz),animate=this.animationDirty||this.animationTick!==animationTick;
+    for(const batch of this.batches.values())batch.mesh.castShadow=renderer.quality.detailLevel===0;
+    if(animate)for(const {batch,index,motion,offset}of this.animated){
       motion.part.rotation.x=Math.sin(time*motion.frequency+motion.phase)*motion.amplitude;motion.part.updateMatrix();
       this.matrix.multiplyMatrices(motion.root,motion.part.matrix);this.matrix.elements[12]+=offset.x;this.matrix.elements[13]+=offset.y;this.matrix.elements[14]+=offset.z;
       batch.mesh.setMatrixAt(index,this.matrix);
     }
-    for(const {mesh,count,dynamic}of this.batches.values())if(dynamic&&count)mesh.instanceMatrix.needsUpdate=true;
+    for(const {mesh,count,dynamic}of this.batches.values())if(dynamic&&count&&animate)mesh.instanceMatrix.needsUpdate=true;
+    if(this.animationDirty){for(const {mesh,count}of this.batches.values())if(count){mesh.computeBoundingSphere();mesh.boundingSphere.radius+=1;mesh.frustumCulled=true;}}
+    this.animationDirty=false;this.animationTick=animationTick;
   }
 }

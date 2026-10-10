@@ -20,7 +20,8 @@ try{
   let last=performance.now(),accumulator=0,frameId=null,inFrame=false;
   const frame=now=>{
     frameId=null;inFrame=true;
-    const dt=Math.min(.05,(now-last)/1000);last=now;
+    const interval=(now-last)/1000,dt=Math.min(.05,interval);last=now;
+    const logicStart=performance.now();
     let animating=false,failed=false;
     try{
       if(game.state==='RUNNING'){
@@ -30,7 +31,10 @@ try{
       game.renderAlpha=game.state==='RUNNING'?accumulator*120:1;
       game.animate(dt);
       animating=game.state==='RUNNING'||game.state==='DYING'||game.state==='CAUGHT'||game.state==='LEVEL_EXIT';
-      if(animating||renderer.needsFrame(game))renderer.draw(game,dt);
+      if(animating||renderer.needsFrame(game)){
+        const drawStart=performance.now();renderer.draw(game,dt);
+        renderer.updateQuality(interval,game.state==='RUNNING',game,{logicMs:drawStart-logicStart,renderMs:performance.now()-drawStart,staticMs:renderer.staticMs??0});
+      }
       ui.update(dt);audio.update(dt,game);
     }catch(error){
       // 异常不能把 inFrame 留在锁定状态，暂停后仍可操作重置。

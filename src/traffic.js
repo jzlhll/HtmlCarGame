@@ -10,7 +10,7 @@ function snapshot(car,out){
 }
 
 export class Traffic {
-  constructor(road,seed){this.road=road;this.rng=random(seed^0x31f024b5);this.maneuverRng=random(seed^0x72a391c5);this.queueRng=random(seed^0x54a31c92);this.cars=[];this.branchRng=random(seed^0x195e839a);this.branchPlans=new Map();this.nextId=1;this.nextQueueId=1;this.timer=0;this.rearTimer=0;this.elapsedSeconds=0;this.capacity=TRAFFIC_DENSITY.capacity;this.gapScale=1;this.queueTimer=SLOW_TRAFFIC.firstSeconds+this.queueRng()*6;this.dangerousRng=random(seed^0x73af2c19);this.contacts=new Set();this.obstacles=[];this.staticObstacles=[];this.cowObstacles=new Map();this.obstacleStation=null;this.obstacleRoadRevision=-1;this.activeCars=[];this.orderedCars=[];this.contactEvents=[];this.nextContacts=new Set();this.branchForks=[];this.fourLane=false;}
+  constructor(road,seed){this.road=road;this.rng=random(seed^0x31f024b5);this.maneuverRng=random(seed^0x72a391c5);this.queueRng=random(seed^0x54a31c92);this.cars=[];this.branchRng=random(seed^0x195e839a);this.branchPlans=new Map();this.nextId=1;this.nextQueueId=1;this.timer=0;this.rearTimer=0;this.elapsedSeconds=0;this.capacity=TRAFFIC_DENSITY.capacity;this.gapScale=1;this.queueTimer=SLOW_TRAFFIC.firstSeconds+this.queueRng()*6;this.dangerousRng=random(seed^0x73af2c19);this.contacts=new Set();this.obstacles=[];this.orderedObstacles=[];this.obstacleExtent=0;this.staticObstacles=[];this.cowObstacles=new Map();this.obstacleStation=null;this.obstacleRoadRevision=-1;this.activeCars=[];this.orderedCars=[];this.contactEvents=[];this.nextContacts=new Set();this.branchForks=[];this.fourLane=false;}
   rank(playerRank,direction,distance,ahead=true){
     const weights=TRAFFIC_WEIGHTS;
     const armor=this.level===2?(playerRank===5?ARMORED_TANK.tankChance:playerRank===4?ARMORED_TANK.truckChance:0):0;
@@ -212,13 +212,23 @@ export class Traffic {
       const closing=distance>=0?car.speed-other.speed*other.direction*car.direction:other.speed*other.direction*car.direction-car.speed;
       if(Math.abs(distance)-(v.length+VEHICLES[other.rank].length)/2<Math.max(TRAFFIC_DRIVING.minAvoidDistance,Math.max(0,closing)*TRAFFIC_DRIVING.avoidSeconds))return false;
     }
-    return !this.obstacles.some(obstacle=>{
-      if((obstacle.route??null)!==route)return false;
+    const obstacles=this.orderedObstacles,obstacleReach=look+this.obstacleExtent;
+    for(let i=this.firstObstacle(car.s-obstacleReach);i<obstacles.length;i++){
+      const obstacle=obstacles[i];if(this.obstacleIndexActive&&obstacle.s>car.s+obstacleReach)break;
+      if((obstacle.route??null)!==route)continue;
       const distance=(obstacle.s-car.s)*car.direction;
       const center=this.road.branchCenter(obstacle.s,route),targetD=center+d-this.road.branchCenter(car.s,route);
-      return distance>=-obstacle.dimensions.length/2&&distance<=look+obstacle.dimensions.length/2&&Math.abs(obstacle.d-targetD)<(obstacle.dimensions.width+v.width)/2+.2;
-    });
+      if(distance>=-obstacle.dimensions.length/2&&distance<=look+obstacle.dimensions.length/2&&Math.abs(obstacle.d-targetD)<(obstacle.dimensions.width+v.width)/2+.2)return false;
+    }
+    return true;
   }
+  firstObstacle(station){
+    if(!this.obstacleIndexActive)return 0;
+    let low=0,high=this.orderedObstacles.length;
+    while(low<high){const middle=(low+high)>>>1;if(this.orderedObstacles[middle].s<station)low=middle+1;else high=middle;}
+    return low;
+  }
+
   prepareObstacles(player,game,infrastructure){
     const station=Math.floor(player.s/10)*10,obstacles=this.obstacles;
     // 静态候选窗口留出十米余量，缓存不会漏掉下一次重建之前的接触。
@@ -240,6 +250,14 @@ export class Traffic {
       Object.assign(record,cow);record.id='cow:'+cow.id;record.kind='cow';obstacles.push(record);
     }
     for(const id of this.cowObstacles.keys())if(!cows.some(cow=>cow.id===id&&!cow.hit))this.cowObstacles.delete(id);
+    const ordered=this.orderedObstacles;ordered.length=0;this.obstacleExtent=0;
+    for(let i=0;i<obstacles.length;i++){
+      const obstacle=obstacles[i];obstacle.order=i;ordered.push(obstacle);
+      this.obstacleExtent=Math.max(this.obstacleExtent,obstacle.dimensions.length/2+Math.abs(obstacle.s-(obstacle.previous?.s??obstacle.s)));
+    }
+    this.obstacleIndexActive=ordered.length>=12;
+    if(this.obstacleIndexActive)ordered.sort((a,b)=>a.s-b.s);
+
   }
   threatens(car,target,dimensions,closing){
     if(closing<=0)return false;
@@ -256,7 +274,11 @@ export class Traffic {
       if(distance<=0||other===car||other.remove||!this.samePath(car,other))continue;
       if(this.threatens(car,other,VEHICLES[other.rank],car.speed-other.speed*other.direction*car.direction))return true;
     }
-    for(const obstacle of this.obstacles)if((obstacle.route??null)===(car.route??null)&&this.threatens(car,obstacle,obstacle.dimensions,car.speed))return true;
+    const obstacles=this.orderedObstacles,obstacleReach=Math.max(TRAFFIC_DRIVING.minAvoidDistance,car.speed*TRAFFIC_DRIVING.avoidSeconds)+VEHICLES[car.rank].length*1.5+this.obstacleExtent*3;
+    for(let i=this.firstObstacle(car.s-obstacleReach);i<obstacles.length;i++){
+      const obstacle=obstacles[i];if(this.obstacleIndexActive&&obstacle.s>car.s+obstacleReach)break;
+      if((obstacle.route??null)===(car.route??null)&&this.threatens(car,obstacle,obstacle.dimensions,car.speed))return true;
+    }
     return false;
   }
   step(dt,player,activeSeconds=this.elapsedSeconds+dt,weather=null,infrastructure=null,game=null){
@@ -406,7 +428,9 @@ export class Traffic {
       const start=car.contactStart;
       car.obstacleHits??=new Map();
       for(const [id,s]of car.obstacleHits)if(Math.abs(car.s-s)>60)car.obstacleHits.delete(id);
-      for(const obstacle of this.obstacles){
+      const obstacles=this.orderedObstacles,reach=VEHICLES[car.rank].length+this.obstacleExtent+Math.abs(car.s-start.s)+3;
+      for(let i=this.firstObstacle(start.s-reach);i<obstacles.length;i++){
+        const obstacle=obstacles[i];if(this.obstacleIndexActive&&obstacle.s>start.s+reach)break;
         if(car.obstacleHits.has(obstacle.id)||(obstacle.route??null)!==(start.route??null))continue;
         if(Math.abs(obstacle.s-start.s)>VEHICLES[car.rank].length+obstacle.dimensions.length/2+Math.abs(car.s-start.s)+3)continue;
         let event;
@@ -419,7 +443,7 @@ export class Traffic {
         if(event){event.a=car;event.obstacle=obstacle;events.push(event);}
       }
     }
-    events.sort((a,b)=>a.time-b.time||a.a.id-b.a.id);
+    events.sort((a,b)=>a.time-b.time||a.a.id-b.a.id||(a.obstacle&&b.obstacle?a.obstacle.order-b.obstacle.order:0));
     const wreck=(car,time)=>{
       car.s=lerp(car.previous?.s??car.s,car.s,time);car.d=lerp(car.previous?.d??car.d,car.d,time);car.remove=true;
       game.renderer?.effect(car.s,car.d,'wreck',car);

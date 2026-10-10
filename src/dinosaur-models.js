@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { material } from './models.js';
+import { material, cacheModelBounds } from './models.js';
 import { DINOSAURS } from './config.js';
 
 const shapes={body:new THREE.IcosahedronGeometry(.5,1),box:new THREE.BoxGeometry(1,1,1),horn:new THREE.ConeGeometry(.5,1,7)};
@@ -42,7 +42,7 @@ export function dinosaurModel(kind='small'){
     normalize(root,DINOSAURS.chaserWidth,DINOSAURS.chaserHeight,DINOSAURS.chaserLength);
     const content=root.children[0];
     for(const leg of content.children)if(leg.userData.dinoLeg!==undefined)leg.position.x=(leg.userData.dinoLeg===0?1:-1)*DINOSAURS.footSpread/content.scale.x;
-    templates.set(kind,root);return root.clone(true);
+    cacheModelBounds(root,8);templates.set(kind,root);return root.clone(true);
   }
   const root=new THREE.Group(),small=kind==='small',long=kind==='diplodocus',stego=kind==='stegosaurus';
   const color=small?0xb9854f:long?0x89917b:stego?0x8d9860:0xa78c63;
@@ -76,7 +76,7 @@ export function dinosaurModel(kind='small'){
   if(small){
     normalize(root,DINOSAURS.smallWidth,DINOSAURS.smallHeight,DINOSAURS.smallLength);
   }else{root.userData.dinoScale=long?DINOSAURS.diplodocusScale:DINOSAURS.grazerScale;root.scale.setScalar(root.userData.dinoScale);}
-  templates.set(kind,root);return root.clone(true);
+  cacheModelBounds(root,3);templates.set(kind,root);return root.clone(true);
 }
 function normalize(root,width,height,length){
   root.updateMatrixWorld(true);const bounds=new THREE.Box3().setFromObject(root),size=bounds.getSize(new THREE.Vector3()),center=bounds.getCenter(new THREE.Vector3());

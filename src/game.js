@@ -48,6 +48,7 @@ export class Game {
       this.nextHungerAt=HUNGER.intervalSeconds;
       this.deathTime=0;this.scraping=false;this.saved=false;this.cause=null;this.result=null;this.input.clear();
       this.renderer?.resetRun();
+      await this.renderer?.prepare(this);
       this.state=document.hasFocus()&&!document.hidden?'RUNNING':'PAUSED';this.onChange();
       this.audio?.start();
     }catch(error){console.error('Game preparation failed',error);this.state='READY';this.notify('本局准备失败，请重新开始。');this.onChange();}

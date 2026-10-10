@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { VEHICLES, MAX_RANK, ARMORED_RANK, ARMORED_TANK, VEHICLE_LENGTH_SCALE, VEHICLE_WIDTH_SCALE, BICYCLE_WIDTH_SCALE, BICYCLE_TIRE_WIDTH, carColor } from './config.js';
+import { VEHICLES, RENDER_QUALITY, MAX_RANK, ARMORED_RANK, ARMORED_TANK, VEHICLE_LENGTH_SCALE, VEHICLE_WIDTH_SCALE, BICYCLE_WIDTH_SCALE, BICYCLE_TIRE_WIDTH, carColor } from './config.js';
 const geometry={box:new THREE.BoxGeometry(1,1,1),barrel:new THREE.CylinderGeometry(.5,.5,1,10).rotateX(Math.PI/2),wheel:new THREE.CylinderGeometry(1,1,1,12),sphere:new THREE.IcosahedronGeometry(1,0),cone:new THREE.ConeGeometry(.5,1,6)};
 geometry.bicycleTank=new THREE.SphereGeometry(.5,10,6);
 // 车身下缘与上缘轻微收角，保留独立发动机盖、座舱和尾厢的轿车轮廓。
@@ -30,6 +30,7 @@ for(const [name,points]of Object.entries(windows)){
 geometry.handlebar=new THREE.TubeGeometry(new THREE.CatmullRomCurve3([[-.20,0,.08],[-.18,.035,-.015],[-.10,.05,-.065],[.10,.05,-.065],[.18,.035,-.015],[.20,0,.08]].map(point=>new THREE.Vector3(...point))),16,.023,5,false);
 // 将握把角度烘焙到共享几何，横向加宽时不会同时拉长斜置的握把。
 for(const side of [-1,1])geometry[side<0?'bicycleLeftGrip':'bicycleRightGrip']=new THREE.BoxGeometry(.055,.05,.09).rotateY(side*.25);
+const lowGeometry={wheel:new THREE.CylinderGeometry(1,1,1,6),bicycleTank:new THREE.SphereGeometry(.5,6,4),barrel:new THREE.CylinderGeometry(.5,.5,1,6).rotateX(Math.PI/2)};
 const materials=new Map();
 let rainbowMaterial=null;
 // 彩虹涂装用共享渐变贴图材质；所有彩虹车共用一份，避免逐帧改色和材质缓存膨胀。
@@ -47,15 +48,30 @@ function rainbowBodyMaterial(){
 }
 export function material(color){if(color==='rainbow')return rainbowBodyMaterial();if(!materials.has(color))materials.set(color,new THREE.MeshStandardMaterial({color,roughness:.82,metalness:.08}));return materials.get(color);}
 function part(group,color,size,position,shape='box'){
-  const mesh=new THREE.Mesh(geometry[shape],material(color));mesh.scale.set(...size);mesh.position.set(...position);mesh.castShadow=true;mesh.receiveShadow=true;if(shape==='wheel')mesh.userData.wheelRadius=size[0]*1.6;group.add(mesh);return mesh;
+  const mesh=new THREE.Mesh(group.userData.lowDetail?(lowGeometry[shape]??geometry[shape]):geometry[shape],material(color));mesh.scale.set(...size);mesh.position.set(...position);mesh.castShadow=true;mesh.receiveShadow=true;if(shape==='wheel')mesh.userData.wheelRadius=size[0]*1.6;group.add(mesh);return mesh;
 }
 const templates=new Map();
-export function vehicleModel(rank,player=false,bodyColor){
+const mergedGeometry=new Map();
+// 模板保存根节点局部边界，克隆后不必重新遍历全部部件计算包围体。
+export function cacheModelBounds(model,padding=1){
+  model.updateMatrixWorld(true);
+  const inverse=model.matrixWorld.clone().invert(),box=new THREE.Box3();
+  model.traverse(part=>{
+    if(!part.isMesh)return;
+    if(!part.geometry.boundingBox)part.geometry.computeBoundingBox();
+    box.union(part.geometry.boundingBox.clone().applyMatrix4(new THREE.Matrix4().multiplyMatrices(inverse,part.matrixWorld)));
+  });
+  const sphere=box.getBoundingSphere(new THREE.Sphere());
+  model.userData.batchBounds={center:sphere.center.toArray(),radius:sphere.radius+padding};
+  return model;
+}
+export function vehicleModel(rank,player=false,bodyColor,lowDetail=false){
   // 玩家颜色来自颜色选择页；未指定时回落默认涂装，车流仍按各自车色。
   const c=player?bodyColor??carColor().hex:bodyColor??VEHICLES[rank].color;
-  const key=rank+':'+player+':'+c;
+  const key=rank+':'+c+':'+lowDetail;
   if(templates.has(key))return templates.get(key).clone(true);
   const v=VEHICLES[rank],g=new THREE.Group(),w=v.width/VEHICLE_WIDTH_SCALE,l=v.length/VEHICLE_LENGTH_SCALE;
+  g.userData.lowDetail=lowDetail;
   if(rank===1){
     // 粗轮胎、宽油箱和阶梯座垫形成摩托车轮廓，俯视时也能识别整块车身。
     for(const z of [-.33,.33]){
@@ -138,6 +154,11 @@ export function vehicleModel(rank,player=false,bodyColor){
     const muzzle=part(g,0x252e2a,[.24,.22,.20],[0,1.58,-.3-barrelLength]);muzzle.name='armoredMuzzle';
     for(const side of [-1,1])for(const z of [-.7,0,.7])part(g,0x4f5348,[w*.13,.45,.58],[side*w*.43,.65,z]);
   }
+  if(lowDetail)for(const mesh of [...g.children]){
+    // 车身、车窗、车轮、灯光及命名部件保持可识别，只去掉细小装饰。
+    const color=mesh.material.color.getHex(),light=color===0xffefb2||color===0xf5fbff||color===0xf5704d;
+    if(!mesh.name&&!light&&!mesh.userData.wheelRadius&&mesh.geometry===geometry.box&&Math.max(mesh.scale.x,mesh.scale.y,mesh.scale.z)<=RENDER_QUALITY.smallPartSize)g.remove(mesh);
+  }
   const widthScale=rank===1?BICYCLE_WIDTH_SCALE:1;
   const scale=new THREE.Vector3(VEHICLE_WIDTH_SCALE*widthScale,1.6,VEHICLE_LENGTH_SCALE);
   g.children.forEach(mesh=>{
@@ -149,7 +170,7 @@ export function vehicleModel(rank,player=false,bodyColor){
     mesh.position.multiply(scale);
   });
   if(rank===ARMORED_RANK){
-    const base=new THREE.Box3().setFromObject(vehicleModel(MAX_RANK,false,c)),bounds=new THREE.Box3().setFromObject(g);
+    const base=new THREE.Box3().setFromObject(vehicleModel(MAX_RANK,false,c,lowDetail)),bounds=new THREE.Box3().setFromObject(g);
     g.scale.y=(base.max.y-base.min.y)*ARMORED_TANK.heightMultiplier/(bounds.max.y-bounds.min.y);
     g.position.y=base.min.y-bounds.min.y*g.scale.y;
   }
@@ -161,18 +182,23 @@ export function vehicleModel(rank,player=false,bodyColor){
       mesh.updateMatrix();
       let group=groups.get(mesh.material);
       if(!group){group={parts:[],name:''};groups.set(mesh.material,group);}
-      const geometry=mesh.geometry.index?mesh.geometry.toNonIndexed():mesh.geometry.clone();
-      group.parts.push(geometry.applyMatrix4(mesh.matrix));
+      group.parts.push(mesh);
       if(mesh.name)group.name=mesh.name;
       g.remove(mesh);
     }
     for(const [mat,group]of groups){
-      const mesh=new THREE.Mesh(mergeGeometries(group.parts),mat);
-      for(const part of group.parts)part.dispose();
+      // 几何键只描述部件布局，车色与玩家身份不产生重复的顶点缓冲。
+      const geometryKey=group.parts.map(part=>part.geometry.id+':'+part.matrix.elements.join(',')).join('|');
+      let shared=mergedGeometry.get(geometryKey);
+      if(!shared){
+        const pieces=group.parts.map(part=>(part.geometry.index?part.geometry.toNonIndexed():part.geometry.clone()).applyMatrix4(part.matrix));
+        shared=mergeGeometries(pieces);for(const piece of pieces)piece.dispose();mergedGeometry.set(geometryKey,shared);
+      }
+      const mesh=new THREE.Mesh(shared,mat);
       mesh.name=group.name;mesh.castShadow=true;mesh.receiveShadow=true;g.add(mesh);
     }
   }
-  templates.set(key,g);return g.clone(true);
+  cacheModelBounds(g);templates.set(key,g);return g.clone(true);
 }
 
 export function cowModel(){

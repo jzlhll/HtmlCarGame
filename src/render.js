@@ -1,7 +1,9 @@
 import * as THREE from 'three';
-import { VEHICLES, SECOND_LEVEL_SCENE, SHELL, TREE_SCENERY, ROAD_RENDER, RENDER_QUALITY, POLICE, CAMERA, laneD, random, clamp, lerp, carColor, DEFAULT_CAR_COLOR } from './config.js';
-import { vehicleModel, cowModel, material, mudCoating } from './models.js';
+import { VEHICLES, TRAFFIC_COLORS, TRAFFIC_DENSITY, DINOSAURS, COINS, ROCKETS, MODEL_PREWARM, SECOND_LEVEL_SCENE, SHELL, TREE_SCENERY, ROAD_RENDER, RENDER_QUALITY, POLICE, CAMERA, laneD, random, clamp, lerp, carColor, DEFAULT_CAR_COLOR } from './config.js';
+import { vehicleModel, cowModel, material, mudCoating, cacheModelBounds } from './models.js';
 import { RoadsideScenery } from './scenery.js';
+import { SceneryWindow } from './scenery-window.js';
+import { RenderQuality } from './render-quality.js';
 import { RoadworksView } from './roadworks-view.js';
 import { BUMP_SECONDS } from './hazards.js';
 import { WeatherView } from './weather-view.js';
@@ -12,6 +14,8 @@ import { InfrastructureView } from './infrastructure-view.js';
 import { BranchRoadView } from './branch-road-view.js';
 import { treeGeometry } from './tree-model.js';
 import { DinosaurView } from './dinosaur-view.js';
+import { dinosaurModel } from './dinosaur-models.js';
+import { coinModel, rocketModel } from './arsenal-models.js';
 import { ArsenalView } from './arsenal-view.js';
 import { levelGuideImages } from './level-guide.js';
 
@@ -25,18 +29,20 @@ const temp=new THREE.Object3D();
 const signalGeometry=new THREE.BoxGeometry(.15,.12,.18),queueLightGeometry=new THREE.BoxGeometry(.16,.14,.08);
 export class GameRenderer {
   constructor(container){
-    this.renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
-    this.pixelRatio=Math.min(devicePixelRatio,1.5);this.renderer.setPixelRatio(this.pixelRatio);this.renderer.shadowMap.enabled=true;
-    this.qualityWarmup=1;this.qualitySeconds=0;this.qualityFrames=0;
+    const device={cores:navigator.hardwareConcurrency??0,memory:navigator.deviceMemory??0,pixelRatio:devicePixelRatio,width:container.clientWidth,height:container.clientHeight};
+    this.quality=new RenderQuality(device);
+    this.renderer=new THREE.WebGLRenderer({antialias:this.quality.initialLevel===0,powerPreference:'high-performance'});
+    this.quality=new RenderQuality({...device,maxTextureSize:this.renderer.capabilities.maxTextureSize});
+    this.pixelRatio=this.quality.ratio;this.renderer.setPixelRatio(this.pixelRatio);this.renderer.shadowMap.enabled=true;
     this.renderer.shadowMap.type=THREE.PCFShadowMap;this.renderer.outputColorSpace=THREE.SRGBColorSpace;
     container.append(this.renderer.domElement);
     this.scene=new THREE.Scene();this.scene.background=new THREE.Color(0xc5e0e9);this.scene.fog=new THREE.Fog(0xc5e0e9,240,560);
     this.camera=new THREE.PerspectiveCamera(CAMERA.fov,1,.5,850);
     this.weatherView=new WeatherView(this.scene,this.camera);this.whiteHorseView=new WhiteHorseView(this.scene);this.policeView=new PoliceView(this.scene);
     this.scene.add(new THREE.HemisphereLight(0xe3f0ff,0x668054,2.2));
-    const light=new THREE.DirectionalLight(0xfff1cb,2.6);light.position.set(-25,45,15);light.castShadow=true;light.shadow.mapSize.set(1024,1024);light.shadow.camera.left=-28;light.shadow.camera.right=28;light.shadow.camera.top=50;light.shadow.camera.bottom=-30;light.shadow.camera.far=130;light.shadow.normalBias=.08;    this.scene.add(light);this.scene.add(light.target);light.target.position.set(0,0,-10);
-    this.light=light;this.trafficView=new TrafficView(this.scene);this.dinosaurView=new DinosaurView(this.scene);this.arsenalView=new ArsenalView();this.faunaSites=[];this.level=1;
-    this.staticGroup=new THREE.Group();this.scene.add(this.staticGroup);this.infrastructure=new InfrastructureView(this.scene,this.staticGroup);this.staticStation=null;this.branchRoad=new BranchRoadView(this.staticGroup);
+    const light=new THREE.DirectionalLight(0xfff1cb,2.6);light.position.set(-25,45,15);light.castShadow=true;light.shadow.mapSize.set(this.quality.settings.shadowSize,this.quality.settings.shadowSize);light.shadow.camera.left=-28;light.shadow.camera.right=28;light.shadow.camera.top=50;light.shadow.camera.bottom=-30;light.shadow.camera.far=130;light.shadow.normalBias=.08;    this.scene.add(light);this.scene.add(light.target);light.target.position.set(0,0,-10);
+    this.preparedLevels=new Set();this.preparedColors=new Set();this.light=light;this.trafficView=new TrafficView(this.scene);this.dinosaurView=new DinosaurView(this.scene);this.arsenalView=new ArsenalView();this.faunaSites=[];this.level=1;
+    this.staticGroup=new THREE.Group();this.scene.add(this.staticGroup);this.infrastructure=new InfrastructureView(this.scene);this.staticStation=null;this.branchRoad=new BranchRoadView(this.staticGroup);
     const soil=document.createElement('canvas');soil.width=128;soil.height=128;const soilCtx=soil.getContext('2d'),soilRng=random(84217);soilCtx.fillStyle=SECOND_LEVEL_SCENE.road;soilCtx.fillRect(0,0,128,128);
     for(let i=0;i<2200;i++){soilCtx.fillStyle=soilRng()<.5?SECOND_LEVEL_SCENE.grainDark:SECOND_LEVEL_SCENE.grainLight;soilCtx.fillRect(soilRng()*128,soilRng()*128,1+soilRng()*3,1+soilRng()*2);}
     for(const x of [28,87]){soilCtx.fillStyle=SECOND_LEVEL_SCENE.tracks;soilCtx.fillRect(x,0,10,128);}
@@ -64,7 +70,7 @@ export class GameRenderer {
     this.markers=new THREE.InstancedMesh(new THREE.BoxGeometry(.12,.65,.12),material(0xece4cc),110);this.scene.add(this.markers);
     this.roadside=new RoadsideScenery(this.scene);
     this.roadworks=new RoadworksView(this.staticGroup);
-    this.roadPoint={};this.localPoint={};this.playerMotion={};this.vehicleMotion={};this.carIds=new Set();this.cowIds=new Set();this.views=new Map();this.pools=new Map();this.carColorId=DEFAULT_CAR_COLOR;this.player=vehicleModel(1,true,carColor(this.carColorId).hex);this.scene.add(this.player);this.playerRank=1;this.upgradeTime=0;
+    this.roadPoint={};this.localPoint={};this.playerMotion={};this.vehicleMotion={};this.carIds=new Set();this.cowIds=new Set();this.views=new Map();this.pools=new Map();this.viewBounds=new Map();this.carColorId=DEFAULT_CAR_COLOR;this.player=vehicleModel(1,true,carColor(this.carColorId).hex);this.scene.add(this.player);this.playerRank=1;this.upgradeTime=0;
     this.playerMud=mudCoating(this.player);
     this.exhaust=new THREE.Group();this.exhaust.visible=false;this.player.add(this.exhaust);
     const jetGeometry=new THREE.ConeGeometry(1,1,8).rotateX(Math.PI/2);
@@ -96,7 +102,8 @@ export class GameRenderer {
     this.signs=[];
     const signMap=new THREE.CanvasTexture(this.signCanvas());
     for(let i=0;i<4;i++){const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:signMap}));sprite.scale.set(3.4,2.1,1);this.staticGroup.add(sprite);this.signs.push(sprite);}
-    this.staticGroup.add(this.roadGroup,this.lines,this.markers,this.trunks,this.trees,this.pines,this.rocks,this.lakes);
+    this.staticGroup.add(this.roadGroup,this.lines,this.markers);
+    this.sceneryWindow=new SceneryWindow(this.scene,{trunks:this.trunks,trees:this.trees,pines:this.pines,rocks:this.rocks,lakes:this.lakes});
     this.effects=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1,0),material(0xf29f41),56);this.effects.frustumCulled=false;this.scene.add(this.effects);this.effects.count=0;
     this.effectRecords=[];
     const particleGeometry=new THREE.BufferGeometry();this.particlePositions=new Float32Array(100*3);
@@ -105,9 +112,10 @@ export class GameRenderer {
     particleGeometry.setAttribute('position',new THREE.BufferAttribute(this.particlePositions,3));
     this.particles=new THREE.Points(particleGeometry,new THREE.PointsMaterial({color:0xffffff,size:.12,transparent:true,opacity:.65,depthWrite:false}));this.particles.frustumCulled=false;this.scene.add(this.particles);
     this.colorA=new THREE.Color();this.colorB=new THREE.Color();this.lastScenery=-1;
-    this.roadSamples=new Float64Array(ROAD_RENDER.sampleCapacity*10);this.dirty=true;this.cameraSettling=false;this.onInvalidate=()=>{};
+    this.roadSampleCache=new Map();this.roadSamples=new Float64Array(ROAD_RENDER.sampleCapacity*10);this.dirty=true;this.cameraSettling=false;this.onInvalidate=()=>{};
     this.resize=()=>{
       const w=container.clientWidth,h=container.clientHeight;if(!w||!h)return;
+      this.quality.resize(w,h);this.pixelRatio=this.quality.ratio;this.renderer.setPixelRatio(this.pixelRatio);
       this.renderer.setSize(w,h);this.camera.aspect=w/h;
       // 竖屏扩大纵向视野，保留横向车道，同时把玩家留在底部触控区上方。
       this.camera.fov=Math.min(CAMERA.portraitMaxFov,THREE.MathUtils.radToDeg(2*Math.atan(Math.tan(THREE.MathUtils.degToRad(CAMERA.fov/2))/Math.min(1,w/h))));
@@ -146,7 +154,7 @@ export class GameRenderer {
     if(this.staticStation!==s||this.staticBreakRevision!==game.whiteHorse.revision||this.staticRoadRevision!==this.road.revision){
       this.staticBreakRevision=game.whiteHorse.revision;this.staticRoadRevision=this.road.revision;
       this.staticStation=s;this.staticOrigin=this.road.at(s);this.origin=this.staticOrigin;
-      this.updateRoad(s);this.infrastructure.rebuild(this,s);this.branchRoad.draw(this,s);this.roadworks.draw(this,s);this.scenery(s);this.drawHazards({player:{s},hazards:game.hazards});
+      this.updateRoad(s);this.infrastructure.rebuild(this,s);this.branchRoad.draw(this,s);this.roadworks.draw(this,s);this.drawHazards({player:{s},hazards:game.hazards});
       this.origin=origin;
     }
     // 静态场景每十米更新一次几何，其余帧只转换父节点，弯道和坡道仍连续移动。
@@ -160,12 +168,17 @@ export class GameRenderer {
     const boundaries=this.road.walls(firstStation,lastStation-firstStation).filter(wall=>wall.end>=firstStation&&wall.end<=lastStation);
     // 先按最坏点数扩容，采样、顶点及索引始终共用容量，避免密集截止点静默越界。
     this.ensureRoadCapacity(roadPoints+boundaries.length*2);
+    if(this.sampleRoad!==this.road||this.sampleRevision!==this.road.revision){this.roadSampleCache.clear();this.sampleRoad=this.road;this.sampleRevision=this.road.revision;}
+    for(const station of this.roadSampleCache.keys())if(station<firstStation||station>lastStation)this.roadSampleCache.delete(station);
     const samples=this.roadSamples;
     let sampleCount=0,boundaryIndex=0;
     const sample=(station,edge)=>{
-      const p=this.local(station),n=sampleCount++*10,sin=Math.sin(p.heading),cos=Math.cos(p.heading),pitchSin=Math.sin(p.pitch);
+      let world=this.roadSampleCache.get(station);
+      if(!world){world={...this.road.at(station),ground:this.road.groundElevation(station)};this.roadSampleCache.set(station,world);}
+      const h=this.origin.heading,dx=world.x-this.origin.x,dz=world.z-this.origin.z;
+      const p={x:Math.cos(h)*dx+Math.sin(h)*dz,y:world.y-this.origin.y,z:-Math.sin(h)*dx+Math.cos(h)*dz,heading:world.heading-h,pitch:world.pitch},n=sampleCount++*10,sin=Math.sin(p.heading),cos=Math.cos(p.heading),pitchSin=Math.sin(p.pitch);
       samples[n]=p.x;samples[n+1]=p.y;samples[n+2]=p.z;samples[n+3]=edge;samples[n+4]=cos;samples[n+5]=sin;
-      samples[n+6]=-sin*pitchSin;samples[n+7]=Math.cos(p.pitch);samples[n+8]=cos*pitchSin;samples[n+9]=this.road.groundElevation(station)-p.y-this.origin.y;
+      samples[n+6]=-sin*pitchSin;samples[n+7]=Math.cos(p.pitch);samples[n+8]=cos*pitchSin;samples[n+9]=world.ground-world.y;
     };
     for(let i=0;i<roadPoints;i++){
       const station=firstStation+i*roadStep;
@@ -212,28 +225,7 @@ export class GameRenderer {
     }
     this.wallGroup.children.forEach((w,i)=>{if(i>=wallIndex)w.visible=false;});this.signs.forEach((v,i)=>{if(i>=signIndex)v.visible=false;});
   }
-  scenery(s){
-    let tree=0,broadleaf=0,conifer=0,rock=0,lake=0;this.faunaSites=[];
-    const first=Math.floor((s-80)/40);
-    for(let block=first;block<=first+14;block++){
-      const local=((block*40)%this.road.length+this.road.length)%this.road.length;
-      const rng=random(this.road.seed^(local*137));
-      const template=this.road.segment(Math.max(0,block*40)).scene;
-      for(const sign of [-1,1]){
-        for(let k=0;k<4;k++){
-          const station=block*40+rng()*40,d=sign*(this.road.edge(station)+(k<2?5+rng()*3:48+rng()*24)),p=this.localGround(station,d),height=lerp(TREE_SCENERY.minHeight,TREE_SCENERY.maxHeight,rng());
-          if(this.road.onPavement(station,d,3))continue;
-          const radius=lerp(TREE_SCENERY.minRadius,TREE_SCENERY.maxRadius,rng()),angle=rng()*Math.PI*2,pine=rng()<TREE_SCENERY.coniferChance;
-          this.instance(this.trunks,tree++,p.x,p.y,p.z,this.level===2?.5:1,height*(this.level===2?.18:.60),this.level===2?.5:1,angle);
-          if(this.level!==2)this.instance(pine?this.pines:this.trees,pine?conifer++:broadleaf++,p.x,p.y+height*(pine?.55:.72),p.z,radius,height*(pine?.28:.23),radius*(.85+rng()*.3),angle);
-        }
-        if(template===1&&lake<4&&rng()<.08){const station=block*40+20,p=this.localGround(station,sign*(this.road.edge(station)+65));if(Math.abs(p.pitch)<.025){this.instance(this.lakes,lake++,p.x,p.y-.018,p.z,9,1,17,p.heading);if(this.level===2)this.faunaSites.push({id:block*2+(sign>0?1:0),s:station,d:sign*(this.road.edge(station)+65),kind:'diplodocus'});}}
-        if((template===2||this.level===2)&&rock<50){const station=block*40+rng()*40,d=sign*(this.road.edge(station)+4+rng()*3);if(!this.road.onPavement(station,d,3)){const p=this.localGround(station,d);this.instance(this.rocks,rock++,p.x,p.y+.5,p.z,this.level===2?2.7:1.5,this.level===2?1.5:.7,this.level===2?2.1:1.3);}}
-        if(this.level===2&&block%2===0&&rng()<.4){const station=block*40+20,d=sign*(this.road.edge(station)+23);if(!this.road.onPavement(station,d,10)&&!this.road.infrastructure(station).length)this.faunaSites.push({id:block*2+(sign>0?1:0)+100000,s:station,d,kind:block%4===0?'triceratops':'stegosaurus'});}
-      }
-    }
-    for(const [mesh,count]of [[this.trees,broadleaf],[this.pines,conifer],[this.trunks,tree],[this.rocks,rock],[this.lakes,lake]]){mesh.count=count;mesh.instanceMatrix.clearUpdateRanges();if(count){mesh.instanceMatrix.addUpdateRange(0,count*16);mesh.instanceMatrix.needsUpdate=true;}mesh.computeBoundingSphere();}
-  }
+  scenery(s){this.sceneryWindow.draw(this,s);}
   drawHazards(game){
     let pit=0,mud=0;
     for(const hazard of game.hazards.range(game.player.s-80,game.player.s+460)){
@@ -250,18 +242,20 @@ export class GameRenderer {
       const mesh=this.hazardMeshes[key];mesh.count=count;mesh.visible=count>0;if(count)mesh.instanceMatrix.needsUpdate=true;
     }
   }
-  acquire(car){
-    const key=car.rank+':'+car.color,pool=this.pools.get(key)||[];let view=pool.pop();this.pools.set(key,pool);
+  acquire(car,lowDetail=false){
+    const key=car.rank+':'+car.color+':'+lowDetail,pool=this.pools.get(key)||[];let view=pool.pop();this.pools.set(key,pool);
     if(!view){
-      view=new THREE.Group();view.add(vehicleModel(car.rank,false,car.color));
+      view=new THREE.Group();view.add(vehicleModel(car.rank,false,car.color,lowDetail));
       const signal=new THREE.Group(),v=VEHICLES[car.rank];
       for(const sign of [-1,1]){const lamp=new THREE.Mesh(signalGeometry,material(0xffce4c));lamp.position.set(0,.5,sign*v.length*.35);signal.add(lamp);}
       view.add(signal);
       const queueLights=new THREE.Group();
       for(const side of [-1,1]){const lamp=new THREE.Mesh(queueLightGeometry,material(0xffa538));lamp.position.set(side*v.width*.38,.6,v.length/2+.02);queueLights.add(lamp);}
       view.add(queueLights);view.userData.signal=signal;view.userData.queueLights=queueLights;
+      const bounds=this.viewBounds.get(key);
+      if(bounds)view.userData.batchBounds=bounds;else{cacheModelBounds(view);this.viewBounds.set(key,view.userData.batchBounds);}
     }
-    view.visible=true;view.rotation.set(0,0,0);view.scale.setScalar(1);view.userData.signal.visible=false;view.userData.queueLights.visible=false;view.userData.poolKey=key;this.views.set(car.id,view);return view;
+    view.visible=true;view.rotation.set(0,0,0);view.scale.setScalar(1);view.userData.signal.visible=false;view.userData.queueLights.visible=false;view.userData.poolKey=key;view.userData.lowDetail=lowDetail;view.userData.wheelTime=null;this.views.set(car.id,view);return view;
   }
   releaseCow(id){const view=this.cowViews.get(id);if(!view)return;this.scene.remove(view);this.cowViews.delete(id);this.cowPool.push(view);}
   // 天降炮弹:下落弹体从高空按剩余时长线性下降,地面预警圈随落点脉冲闪烁(逐弹实例,多弹并存互不覆盖);
@@ -320,12 +314,12 @@ export class GameRenderer {
       }
     }
   }
-  release(id){const view=this.views.get(id);if(!view)return;view.visible=false;this.scene.remove(view);this.views.delete(id);this.pools.get(view.userData.poolKey).push(view);}
+  release(id){const view=this.views.get(id);if(!view)return;view.visible=false;this.scene.remove(view);this.views.delete(id);const pool=this.pools.get(view.userData.poolKey);if(pool.length<MODEL_PREWARM.poolPerType)pool.push(view);}
   returnEffect(record){
     if(!record.view)return;
     record.view.visible=false;record.view.scale.setScalar(1);record.view.userData.signal.visible=false;record.view.userData.queueLights.visible=false;
     this.scene.remove(record.view);
-    this.pools.get(record.view.userData.poolKey).push(record.view);
+    const pool=this.pools.get(record.view.userData.poolKey);if(pool.length<MODEL_PREWARM.poolPerType)pool.push(record.view);
     record.view=null;
   }
   resetEffects(){
@@ -342,27 +336,77 @@ export class GameRenderer {
     this.playerMud=mudCoating(this.player);this.player.add(this.exhaust);
     this.scene.add(this.player);this.invalidate();
   }
+  configureRoadMaterials(level){
+    const roadMaterial=level===2?this.dirtMaterial:material(0x293e50),shoulderMaterial=material(level===2?SECOND_LEVEL_SCENE.shoulder:0x8195a0);
+    // 更换已有节点的材质不会触发 childadded，准备与运行共用最终材质及浓雾处理。
+    this.weatherView.distanceFog.bind(roadMaterial);this.weatherView.distanceFog.bind(shoulderMaterial);
+    this.strips[4].mesh.material=roadMaterial;
+    for(const i of [2,3])this.strips[i].mesh.material=shoulderMaterial;
+    for(const view of this.branchRoad.views){view.strips[0].mesh.material=shoulderMaterial;view.strips[1].mesh.material=roadMaterial;}
+  }
+  async prepare(game){
+    this.configureRoadMaterials(game.level);
+    const colorKey=game.level+':'+this.carColorId;
+    if(this.preparedLevels.has(game.level)&&this.preparedColors.has(colorKey))return;
+    this.warming=true;
+    const warmGroup=new THREE.Group();this.scene.add(warmGroup);
+    const frame=()=>new Promise(resolve=>requestAnimationFrame(resolve));
+    const target=new THREE.WebGLRenderTarget(MODEL_PREWARM.targetSize,MODEL_PREWARM.targetSize),previousTarget=this.renderer.getRenderTarget();
+    try{
+      if(!this.preparedLevels.has(game.level)){
+        for(let rank=1;rank<VEHICLES.length;rank++){
+          if(rank>5&&game.level!==2)continue;
+          for(const color of TRAFFIC_COLORS[rank])for(const lowDetail of [false,true]){
+            const car={id:-1,rank,color},view=this.acquire(car,lowDetail);
+            view.userData.signal.visible=true;view.userData.queueLights.visible=true;
+            this.trafficView.prewarm(view,TRAFFIC_DENSITY.maxCapacity+MODEL_PREWARM.trafficExtra);this.release(car.id);
+            await frame();
+          }
+        }
+        if(game.level===2){
+          for(const kind of ['small','triceratops','stegosaurus','diplodocus','chaser']){
+            const view=dinosaurModel(kind),bounds=view.userData.batchBounds;this.dinosaurView.bounds.set(kind,(Math.hypot(...bounds.center)+bounds.radius)*(view.userData.dinoScale??1));this.trafficView.prewarm(view,DINOSAURS.sceneryCapacity+DINOSAURS.bridgeCount+DINOSAURS.smallCountMax+3);this.dinosaurView.pools.set(kind,[view]);await frame();
+          }
+          for(const large of [false,true]){
+            const view=coinModel(large);this.trafficView.prewarm(view,COINS.capacity);this.arsenalView.pools[large?'large':'small'].push(view);
+          }
+          for(const advanced of [false,true]){
+            const view=rocketModel(advanced);this.trafficView.prewarm(view,ROCKETS.capacity*(advanced?3:1));this.arsenalView.rockets[advanced?'advanced':'normal'].push(view);
+          }
+        }else{const cow=cowModel();this.cowPool.push(cow);warmGroup.add(cow.clone(true));}
+      }
+      if(!this.preparedColors.has(colorKey))for(let rank=1;rank<=5;rank++){
+        const model=vehicleModel(rank,true,carColor(this.carColorId).hex),mud=mudCoating(model);mud.visible=true;warmGroup.add(model);await frame();
+      }
+      // 编译真实实例材质，并用小离屏目标触发顶点、纹理及阴影缓冲上传。
+      for(const batch of this.trafficView.batches.values()){batch.mesh.count=1;batch.mesh.visible=true;batch.mesh.instanceMatrix.needsUpdate=true;if(batch.mesh.instanceColor)batch.mesh.instanceColor.needsUpdate=true;}
+      // 即使准备场景尚无可绘制的路面三角形，也在进入运行前上传砂土纹理。
+      if(game.level===2)this.renderer.initTexture(this.dirtMaterial.map);
+      await this.renderer.compileAsync(this.scene,this.camera);
+      this.renderer.setRenderTarget(target);this.renderer.render(this.scene,this.camera);
+      this.preparedLevels.add(game.level);this.preparedColors.add(colorKey);
+    }finally{
+      this.renderer.setRenderTarget(previousTarget);target.dispose();
+      warmGroup.traverse(part=>{if(part.isInstancedMesh)part.dispose();});this.scene.remove(warmGroup);
+      for(const batch of this.trafficView.batches.values())batch.count=0;this.trafficView.finish();
+      this.warming=false;this.invalidate();
+    }
+  }
   resetRun(){
-    this.resetEffects();this.dinosaurView.reset();this.arsenalView.reset();
+    this.quality.reset();this.applyQuality();this.resetEffects();this.dinosaurView.reset();this.arsenalView.reset();
     for(const id of this.views.keys())this.release(id);
     for(const id of this.cowViews.keys())this.releaseCow(id);
     this.traffic=null;this.staticStation=null;this.cameraPitch=0;this.cameraX=0;this.cameraZ=0;this.cameraHeading=0;this.upgradeTime=0;this.roadside.reset();this.infrastructure.reset();this.invalidate();
   }
   guideImages(){return this.guidePreviews??=levelGuideImages(this.renderer);}
   invalidate(){this.dirty=true;this.onInvalidate();}
-  needsFrame(game){return this.dirty||this.lastState!==game.state||this.traffic!==game.traffic||this.cameraSettling;}
-  updateQuality(dt,live,game){
-    if(!live){this.qualitySeconds=0;this.qualityFrames=0;this.qualityWarmup=1;return;}
-    // 跳过起步着色器编译；只根据持续两秒的帧间隔降档，避免偶发停顿改变画质。
-    if(this.qualityWarmup>0){this.qualityWarmup-=dt;return;}
-    this.qualitySeconds+=dt;this.qualityFrames++;
-    if(this.qualitySeconds<2)return;
-    const targetFps=game.level===2?RENDER_QUALITY.secondLevelFps:game.nitro.boost>0||game.player.speed>=RENDER_QUALITY.firstLevelFastSpeed?RENDER_QUALITY.firstLevelFastFps:45;
-    if(this.qualitySeconds/this.qualityFrames>1/targetFps&&this.pixelRatio>.75){
-      this.pixelRatio=Math.max(.75,this.pixelRatio-.25);this.renderer.setPixelRatio(this.pixelRatio);
-    }
-    this.qualitySeconds=0;this.qualityFrames=0;
+  needsFrame(game){return !this.warming&&(this.dirty||this.lastState!==game.state||this.traffic!==game.traffic||this.cameraSettling);}
+  applyQuality(){
+    if(this.pixelRatio!==this.quality.ratio){this.pixelRatio=this.quality.ratio;this.renderer.setPixelRatio(this.pixelRatio);}
+    const shadow=this.light.shadow,size=this.quality.settings.shadowSize;
+    if(shadow.mapSize.x!==size){shadow.map?.dispose();shadow.map=null;shadow.mapSize.set(size,size);}
   }
+  updateQuality(interval,live,game,cost){this.quality.sample(interval,live,game,cost);this.applyQuality();}
   effect(s,d,kind='eat',car=null,launchSide=1){
     const view=car?this.views.get(car.id):null;
     if(view){this.views.delete(car.id);view.userData.signal.visible=false;}
@@ -370,23 +414,19 @@ export class GameRenderer {
     if(this.effectRecords.length>8)this.returnEffect(this.effectRecords.shift());
   }
   draw(game,dt){
+    if(this.warming)return;
     if(this.traffic!==game.traffic){this.resetRun();this.traffic=game.traffic;}
     const live=game.state==='RUNNING',dying=game.state==='DYING',exiting=game.state==='LEVEL_EXIT',simDt=live?dt:0,effectDt=live||dying?dt:0;
-    this.updateQuality(dt,live,game);
     const refresh=live||dying||exiting||game.state==='CAUGHT'||this.dirty||this.lastState!==game.state;
     this.lastState=game.state;this.dirty=false;
     if(!refresh){this.updateCamera(game,dt);this.renderer.render(this.scene,this.camera);return;}
     if(this.level!==game.level){this.level=game.level;this.staticStation=null;this.roadside.reset();this.infrastructure.reset();}
     this.motionAlpha=live?clamp(game.renderAlpha??1,0,1):1;
     this.renderPlayer=this.motion(game.player,game.renderPreviousPlayer,this.playerMotion);
-    const roadMaterial=this.level===2?this.dirtMaterial:material(0x293e50),shoulderMaterial=material(this.level===2?SECOND_LEVEL_SCENE.shoulder:0x8195a0);
-    // 更换已有节点的材质不会触发 childadded，主副路共用的新材质必须显式接入浓雾。
-    this.weatherView.distanceFog.bind(roadMaterial);this.weatherView.distanceFog.bind(shoulderMaterial);
-    this.strips[4].mesh.material=roadMaterial;
-    for(const i of [2,3])this.strips[i].mesh.material=shoulderMaterial;
+    this.configureRoadMaterials(this.level);
     this.playerRoute=game.player.route;this.whiteHorse=game.whiteHorse;this.road=game.road;this.origin=this.road.at(this.renderPlayer.s);
-    this.updateStatic(game);this.infrastructure.draw(this,game);this.drawShells(game);this.drawCows(game);
-    this.updateCamera(game,dt);this.trafficView.begin(this.camera,this.light,true);
+    const staticStart=performance.now();this.updateStatic(game);this.scenery(game.player.s);this.staticMs=performance.now()-staticStart;this.infrastructure.draw(this,game);this.drawShells(game);this.drawCows(game);
+    this.updateCamera(game,dt);this.trafficView.begin(this.camera,this.light,true,this.quality.settings.shadowDistance);
     const season=game.season(),a=palette[season.index],b=palette[(season.index+1)%4];
     this.roadside.draw(this,game.player.s,season,game.activeSeconds);
     const blend=(out,key)=>out.setHex(a[key]).lerp(this.colorB.setHex(b[key]),season.blend);
@@ -416,18 +456,28 @@ export class GameRenderer {
     for(const id of this.views.keys())if(!ids.has(id))this.release(id);
     for(const car of game.traffic.cars){
       if(car.remove)continue;
-      const view=this.views.get(car.id)||this.acquire(car),motion=this.motion(car),point=this.local(motion.s,motion.d,motion.route,this.localPoint);
+      const motion=this.motion(car),point=this.local(motion.s,motion.d,motion.route,this.localPoint),size=VEHICLES[car.rank];
+      if(!this.trafficView.visibleAt(point,Math.hypot(size.length,size.width,8)))continue;
+      const existing=this.views.get(car.id),distance=Math.hypot(point.x,point.z),threshold=this.quality.settings.vehicleDetail;
+      const lowDetail=distance>threshold+(existing?.userData.lowDetail?-RENDER_QUALITY.lodHysteresis:RENDER_QUALITY.lodHysteresis);
+      if(existing&&existing.userData.lowDetail!==lowDetail)this.release(car.id);
+      const view=this.views.get(car.id)||this.acquire(car,lowDetail);
       view.position.set(point.x,point.y,point.z);view.rotation.set(point.pitch*car.direction,-point.heading+(car.direction<0?Math.PI:0),0,'YXZ');
       const signal=view.userData.signal;signal.visible=Boolean(car.merge)&&Math.floor(car.merge.time*6)%2===0;
       view.userData.queueLights.visible=Boolean(car.convoy||car.warning)&&Math.floor(game.activeSeconds*4)%2===0;
       if(car.merge)signal.position.x=Math.sign(car.merge.lane-car.lane)*(VEHICLES[car.rank].width/2+.07);
-      for(const wheel of view.children[0].children)if(wheel.userData.wheelRadius)wheel.rotateY(-car.speed/wheel.userData.wheelRadius*simDt);
-      this.trafficView.add(view);
+      this.trafficView.add(view,()=>{
+        const now=game.activeSeconds,hz=this.quality.settings.animationHz;
+        if(lowDetail&&view.userData.wheelTime!==null&&now-view.userData.wheelTime<1/hz)return;
+        const elapsed=view.userData.wheelTime===null?simDt:Math.min(.1,now-view.userData.wheelTime);view.userData.wheelTime=now;
+        for(const wheel of view.children[0].children)if(wheel.userData.wheelRadius)wheel.rotateY(-car.speed/wheel.userData.wheelRadius*elapsed);
+      });
     }
     this.particles.visible=this.level!==2;
     this.particles.material.color.setHex(season.index===2?0xf4bd6e:season.index===0?0xffe2eb:0xffffff);
     this.particles.material.opacity=season.index===3?.7:.32;
-    for(let i=0;i<100;i++){
+    const particleCount=Math.ceil(100*this.quality.settings.particles);this.particles.geometry.setDrawRange(0,particleCount);
+    for(let i=0;i<particleCount;i++){
       this.particlePositions[i*3+1]-=simDt*(season.index===3?1.6:.7);
       this.particlePositions[i*3+2]+=simDt*(game.player.speed/3.6);
       if(this.particlePositions[i*3+1]<0)this.particlePositions[i*3+1]=16;

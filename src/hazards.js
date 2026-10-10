@@ -52,6 +52,7 @@ export class RoadHazards {
       const lane=Math.floor(rng()*fork.lanes),direction=rng()<.5?-1:1;
       this.plan.push({s,d:laneD(lane,direction),fork:fork.index,kind:'pothole',drift:rng()<.5?-1:1,dimensions:{width:2.1+rng()*.7,length:2.6+rng()*1.2}});
     }
+    this.orderedPlan=this.plan.map((hazard,index)=>({hazard,index})).sort((a,b)=>a.hazard.s-b.hazard.s);
   }
   range(from,to,result=[]){
     result.length=0;
@@ -62,9 +63,15 @@ export class RoadHazards {
         if(this.lapCache.size>=ROAD_CACHE.maxLaps)this.lapCache.delete(this.lapCache.keys().next().value);
         records=[];this.lapCache.set(lap,records);
       }
-      for(let i=0;i<this.plan.length;i++){
-        const hazard=this.plan[i],s=lap*length+hazard.s;
-        if(s<from||s>to)continue;
+      let low=0,high=this.orderedPlan.length;
+      const offset=lap*length;
+      while(low<high){const middle=(low+high)>>>1;if(this.orderedPlan[middle].hazard.s<from-offset)low=middle+1;else high=middle;}
+      const selected=[];
+      for(let n=low;n<this.orderedPlan.length&&this.orderedPlan[n].hazard.s<=to-offset;n++)selected.push(this.orderedPlan[n]);
+      // 同刻接触仍按原计划顺序结算，索引只收窄候选范围。
+      selected.sort((a,b)=>a.index-b.index);
+      for(const {hazard,index:i}of selected){
+        const s=offset+hazard.s;
         let record=records[i];
         if(!record){
           const route=hazard.fork===undefined?null:lap+':'+hazard.fork;

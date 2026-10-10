@@ -60,7 +60,7 @@ export class WeatherView {
         positions[index+4]=y+(kind==='rain'?height*.11:Math.sin(seed.phase+now)*height*.015);positions[index+5]=-depth;
       }
     }
-    view.geometry.attributes.position.needsUpdate=true;
+    const attribute=view.geometry.attributes.position;attribute.clearUpdateRanges();attribute.addUpdateRange(0,count*(kind==='snow'?3:6));attribute.needsUpdate=true;
   }
   segment(mesh,index,from,to,radius){
     transform.position.copy(from).add(to).multiplyScalar(.5);
@@ -72,12 +72,12 @@ export class WeatherView {
     const season=active?event.season:-1;
     this.rain.visible=season===1;this.snow.visible=season===3;this.wind.visible=season===2;
     if(this.rain.visible){
-      const count=Math.ceil(WEATHER.rainCount*(game.input.touchMode?1:WEATHER.desktopRainMultiplier));
+      const count=Math.ceil(WEATHER.rainCount*(game.input.touchMode?1:WEATHER.desktopRainMultiplier)*renderer.quality.settings.particles);
       this.rain.geometry.setDrawRange(0,count*2);
       this.precipitation(this.rain,count,now,'rain');
     }
-    if(this.snow.visible)this.precipitation(this.snow,700,now,'snow');
-    if(this.wind.visible)this.precipitation(this.wind,160,now,'wind',event.wind);
+    if(this.snow.visible){const count=Math.ceil(700*renderer.quality.settings.particles);this.snow.geometry.setDrawRange(0,count);this.precipitation(this.snow,count,now,'snow');}
+    if(this.wind.visible){const count=Math.ceil(160*renderer.quality.settings.particles);this.wind.geometry.setDrawRange(0,count*2);this.precipitation(this.wind,count,now,'wind',event.wind);}
     this.scene.fog.near=240;this.scene.fog.far=560;
     if(season===0){
       this.scene.fog.color.setHex(0xdde9e5);this.scene.background.copy(this.scene.fog.color);

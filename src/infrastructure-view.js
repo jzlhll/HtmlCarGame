@@ -1,24 +1,26 @@
 import * as THREE from 'three';
 import { material } from './models.js';
+import { ROAD_RENDER } from './config.js';
 
 const capacity=2048;
 
-// 道路结构按十米区间缓存，动态部件独立更新；实例只上传实际使用的矩阵范围。
+// 道路结构按区块缓存布局，动态部件独立更新；不同区块仍共用实例批次。
 export class InfrastructureView {
-  constructor(scene,staticGroup=scene){
-    this.group=new THREE.Group();staticGroup.add(this.group);this.dynamicGroup=new THREE.Group();scene.add(this.dynamicGroup);
-    this.batches=new Map();this.dynamicBatches=new Map();this.sites=[];this.geometry=new THREE.BoxGeometry(1,1,1);this.temp=new THREE.Object3D();
+  constructor(scene){
+    this.group=new THREE.Group();scene.add(this.group);this.dynamicGroup=new THREE.Group();scene.add(this.dynamicGroup);
+    this.batches=new Map();this.dynamicBatches=new Map();this.sites=[];this.layouts=new Map();this.matrix=new THREE.Matrix4();this.geometry=new THREE.BoxGeometry(1,1,1);this.temp=new THREE.Object3D();
   }
   box(renderer,s,d,size,height,color,angle=0,pitch=false,castShadow=true,dynamic=false){
     const key=color+':'+castShadow,batches=dynamic?this.dynamicBatches:this.batches;
     let batch=batches.get(key);
     if(!batch){const mesh=new THREE.InstancedMesh(this.geometry,material(color),capacity);mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);mesh.frustumCulled=false;mesh.castShadow=castShadow;mesh.receiveShadow=true;(dynamic?this.dynamicGroup:this.group).add(mesh);batch={mesh,count:0};batches.set(key,batch);}
-    if(batch.count>=capacity)return;
+    if(batch.count>=capacity&&(!this.layout||dynamic))return;
     const p=renderer.local(s,d),temp=this.temp;
-    temp.position.set(p.x,p.y+height,p.z);temp.rotation.set(pitch?p.pitch:0,-p.heading+angle,0,'YXZ');temp.scale.set(...size);temp.updateMatrix();batch.mesh.setMatrixAt(batch.count++,temp.matrix);
+    temp.position.set(p.x,p.y+height,p.z);temp.rotation.set(pitch?p.pitch:0,-p.heading+angle,0,'YXZ');temp.scale.set(...size);temp.updateMatrix();
+    if(this.layout&&!dynamic)this.layout.parts.push({batch,matrix:temp.matrix.clone()});else batch.mesh.setMatrixAt(batch.count++,temp.matrix);
   }
   reset(){
-    this.sites=[];
+    this.sites=[];this.layouts.clear();this.visibleKey=null;
     for(const batches of [this.batches,this.dynamicBatches])for(const batch of batches.values()){
       batch.count=0;batch.mesh.count=0;batch.mesh.visible=false;batch.mesh.instanceMatrix.clearUpdateRanges();
     }
@@ -31,11 +33,31 @@ export class InfrastructureView {
     }
   }
   rebuild(renderer,station){
-    for(const batch of this.batches.values())batch.count=0;
-    const road=renderer.road;
+    const road=renderer.road,size=ROAD_RENDER.infrastructureBlock,first=Math.floor((station-100)/size),last=Math.floor((station+460)/size);
     this.sites=road.infrastructure(station-100,station+460);
+    if(this.road!==road||this.revision!==road.revision||this.level!==renderer.level){this.reset();this.road=road;this.revision=road.revision;this.level=renderer.level;this.sites=road.infrastructure(station-100,station+460);}
+    const key=first+':'+last;if(this.visibleKey===key)return;this.visibleKey=key;
+    for(const block of this.layouts.keys())if(block<first||block>last)this.layouts.delete(block);
+    const origin=renderer.origin;
+    try{
+      for(let block=first;block<=last;block++)if(!this.layouts.has(block)){
+        const layout={origin:{...road.at(block*size),heading:0},parts:[]};this.layout=layout;renderer.origin=layout.origin;
+        this.buildChunk(renderer,block*size,(block+1)*size);this.layouts.set(block,layout);
+      }
+    }finally{renderer.origin=origin;this.layout=null;}
+    this.cacheOrigin=road.at(station);
+    for(const batch of this.batches.values())batch.count=0;
+    for(const layout of this.layouts.values())for(const part of layout.parts){
+      const batch=part.batch;if(batch.count>=capacity)continue;
+      this.matrix.copy(part.matrix);this.matrix.elements[12]+=layout.origin.x-this.cacheOrigin.x;this.matrix.elements[13]+=layout.origin.y-this.cacheOrigin.y;this.matrix.elements[14]+=layout.origin.z-this.cacheOrigin.z;
+      batch.mesh.setMatrixAt(batch.count++,this.matrix);
+    }
+    this.updateBatches(this.batches);
+  }
+  buildChunk(renderer,first,last){
+    const road=renderer.road;
     // 分叉的连接处留出护栏缺口，玩家可从主路驶入另一条道路。
-    for(let s=Math.floor((station-80)/20)*20;s<station+450;s+=20){
+    for(let s=Math.ceil(first/20)*20;s<last;s+=20){
       if(road.infrastructure(s).length)continue;
       const edge=road.edge(s);
       for(const side of [-1,1]){
@@ -53,9 +75,9 @@ export class InfrastructureView {
         }
       }
     }
-    for(const site of this.sites){
-      const from=Math.max(site.start,station-100),to=Math.min(site.end,station+460);
-      for(let s=from+5;s<to;s+=10){
+    for(const site of road.infrastructure(first,last)){
+      const from=Math.max(site.start+5,first),to=Math.min(site.end,last);
+      for(let s=site.start+5+Math.ceil((from-site.start-5)/10)*10;s<to;s+=10){
         const elevation=road.elevation(s).y,edge=road.edge(s);
         if(site.kind==='viaduct'){
           this.box(renderer,s,0,[edge*2+2.8,.7,10.2],-.4,0x7d8b95,0,true);
@@ -73,6 +95,7 @@ export class InfrastructureView {
           this.box(renderer,s,side*(edge+1.4),[.9,.22,10.2],height-.2,0xe8b75d);
         }
       }
+      if(site.center<first||site.center>=last)continue;
       const base=site.kind==='viaduct'?-site.height:0;
       if(site.feature==='river'){
         this.box(renderer,site.center,0,[240,.08,site.flat],base+.06,0x248d9e);
@@ -83,9 +106,12 @@ export class InfrastructureView {
         for(let d=-110;d<=110;d+=3)this.box(renderer,site.center,d,[.5,.18,3.4],base+.03,0x887661);
       }
     }
-    this.updateBatches(this.batches);
   }
   draw(renderer,game){
+    if(this.cacheOrigin){
+      const origin=renderer.origin,dx=this.cacheOrigin.x-origin.x,dz=this.cacheOrigin.z-origin.z,cos=Math.cos(origin.heading),sin=Math.sin(origin.heading);
+      this.group.position.set(cos*dx+sin*dz,this.cacheOrigin.y-origin.y,-sin*dx+cos*dz);this.group.rotation.y=origin.heading;
+    }
     for(const batch of this.dynamicBatches.values())batch.count=0;
     const now=game.activeSeconds;
     for(const site of this.sites){
