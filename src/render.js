@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VEHICLES, TRAFFIC_COLORS, TRAFFIC_DENSITY, DINOSAURS, COINS, ROCKETS, MODEL_PREWARM, SECOND_LEVEL_SCENE, SHELL, TREE_SCENERY, ROAD_RENDER, RENDER_QUALITY, POLICE, CAMERA, laneD, random, clamp, lerp, carColor, DEFAULT_CAR_COLOR } from './config.js';
+import { VEHICLES, TRAFFIC_COLORS, TRAFFIC_DENSITY, DINOSAURS, COINS, ROCKETS, MODEL_PREWARM, SECOND_LEVEL_SCENE, SHELL, TREE_SCENERY, ROAD_RENDER, RENDER_QUALITY, POLICE, CAMERA, SIDE_IMPACT, laneD, random, clamp, lerp, carColor, DEFAULT_CAR_COLOR } from './config.js';
 import { vehicleModel, cowModel, material, mudCoating, cacheModelBounds } from './models.js';
 import { RoadsideScenery } from './scenery.js';
 import { SceneryWindow } from './scenery-window.js';
@@ -142,10 +142,24 @@ export class GameRenderer {
     for(const strip of this.strips){strip.mesh.geometry.dispose();strip.mesh.geometry=this.roadGeometry(capacity);}
   }
   local(s,d=0,route=null,out={}){const p=this.road.at(s,d,route,this.roadPoint),dx=p.x-this.origin.x,dz=p.z-this.origin.z,h=this.origin.heading;out.x=Math.cos(h)*dx+Math.sin(h)*dz;out.y=p.y-this.origin.y;out.z=-Math.sin(h)*dx+Math.cos(h)*dz;out.heading=p.heading-h;out.pitch=p.pitch;return out;}
+  belowScreen(car){
+    const size=VEHICLES[car.rank],point=new THREE.Vector3();
+    this.camera.updateMatrixWorld();
+    for(const along of [-1,1])for(const across of [-1,1]){
+      const s=car.s+along*size.length/2/this.road.pathScale(car.s,car.route),p=this.local(s,car.d+across*size.width/2,car.route);
+      point.set(p.x,p.y+size.height,p.z).applyMatrix4(this.camera.matrixWorldInverse);
+      if(point.z>=0)continue;
+      point.applyMatrix4(this.camera.projectionMatrix);
+      if(point.y>=-1-SIDE_IMPACT.screenMargin)return false;
+    }
+    return true;
+  }
   motion(target,previous=target.previous,out=this.vehicleMotion){
     // 只平滑展示坐标，不回写逻辑状态；路线切换和车型变化直接显示新状态。
     if(!previous||this.motionAlpha===1||(previous.route??null)!==(target.route??null)||previous.rank!==undefined&&previous.rank!==target.rank)return target;
-    out.s=lerp(previous.s,target.s,this.motionAlpha);out.d=lerp(previous.d,target.d,this.motionAlpha);out.route=target.route;out.speed=target.speed;return out;
+    out.s=lerp(previous.s,target.s,this.motionAlpha);out.d=lerp(previous.d,target.d,this.motionAlpha);out.route=target.route;out.speed=target.speed;
+    const yaw=(target.yaw||0)-(previous.yaw||0);
+    out.yaw=(previous.yaw||0)+Math.atan2(Math.sin(yaw),Math.cos(yaw))*this.motionAlpha;return out;
   }
   localGround(s,d=0,out={}){const p=this.local(s,d,null,out);p.y+=this.road.groundElevation(s)-this.road.at(s,0,null,this.roadPoint).y;return p;}
   instance(mesh,index,x,y,z,sx,sy,sz,angle=0,pitch=0){temp.position.set(x,y,z);temp.rotation.set(pitch,-angle,0,'YXZ');temp.scale.set(sx,sy,sz);temp.updateMatrix();mesh.setMatrixAt(index,temp.matrix);}
@@ -437,7 +451,7 @@ export class GameRenderer {
     this.upgradeTime=Math.max(0,this.upgradeTime-simDt);
     const departing=(exiting||game.state==='LEVEL_CLEAR')&&game.levelExit,visual=departing?game.levelExit:this.renderPlayer;
     const p=this.local(visual.s,visual.d,visual.route),bump=Math.sin((1-game.player.bump/BUMP_SECONDS)*Math.PI);
-    this.player.position.set(p.x,p.y+(game.player.bump>0?bump*.85:0),p.z);this.player.rotation.set(p.pitch+(game.player.bump>0?bump*.12:0),-p.heading,!departing?clamp(-(game.player.sidePush?0:game.input.lateral)*.035-game.player.push*.018,-.12,.12):0,'YXZ');
+    this.player.position.set(p.x,p.y+(game.player.bump>0?bump*.85:0),p.z);this.player.rotation.set(p.pitch+(game.player.bump>0?bump*.12:0),-p.heading-(visual.yaw||0),!departing?clamp(-(game.player.sidePush||game.player.spin?0:game.input.lateral)*.035-game.player.push*.018,-.12,.12):0,'YXZ');
     this.playerMud.visible=game.player.mud>0;
     if(game.state==='CAUGHT'&&game.caught){
       // 被渔网罩住:catchSeconds 内缩小、旋转并被拉向警车位置。

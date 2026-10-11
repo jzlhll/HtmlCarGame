@@ -13,15 +13,15 @@ export const SECOND_LEVEL_SCENE={road:'#858c90',grainDark:'rgba(53,62,66,.16)',g
 export const LEVELS={firstSeconds:180,countdownSeconds:5,exitSeconds:3,exitSpeed:100,weatherChance:.8,branchWeatherChance:1};
 export const ARMORED_TANK={truckChance:.025,tankChance:.075,heightMultiplier:2,barrelLength:4.8};
 export const COINS={smallValue:3,largeValue:6,smallSize:1.68,largeSize:2.66,largeChance:.3,firstSeconds:2,intervalMin:2.5,intervalMax:4.5,chance:.8,aheadMin:50,aheadMax:90,batchMin:3,batchMax:5,capacity:40,recycleBehind:30};
-export const ROCKETS={normalCost:20,advancedCost:50,normalWidth:8,advancedWidth:25,range:140,flightSeconds:1.09375,capacity:6,modelLength:4.8,modelWidth:.9,launchHeight:1.2};
+export const ROCKETS={normalCost:20,advancedCost:50,normalSideLanes:1,range:100,normalDinosaurDamage:1/3,advancedDinosaurDamage:.5,flightSeconds:.78125,capacity:6,modelLength:4.8,modelWidth:.9,launchHeight:1.2};
 export const DINOSAURS={
-  smallFirstMin:15,smallFirstMax:30,smallIntervalMin:25,smallIntervalMax:40,smallChance:.4,smallCountMin:1,smallCountMax:2,
-  cowSpeedMin:1.6,cowSpeedMax:2.2,crossingSpeedMultiplier:2,smallLength:2.4,smallWidth:.8,smallHeight:1.2,smallAheadMin:60,smallLeadSeconds:3,
+  smallFirstMin:15,smallFirstMax:30,smallIntervalMin:25,smallIntervalMax:40,smallChance:.4,smallCountMin:3,smallCountMax:6,
+  cowSpeedMin:1.6,cowSpeedMax:2.2,crossingSpeedMultiplier:2,smallLength:4.8,smallWidth:1.6,smallHeight:2.4,smallSpacing:5.6,smallRowSpacing:2.6,smallAheadMin:60,smallLeadSeconds:3,
   chaseAfterSeconds:120,chaseFirstMin:4,chaseFirstMax:8,chaseIntervalMin:20,chaseIntervalMax:35,chaseChance:.7,
   chaseAheadMin:12,chaseAheadMax:18,followAheadMax:32,speedRatioMin:1,speedRatioMax:1.08,durationMin:12,durationMax:18,
   chaserLength:22,chaserWidth:5.8,chaserHeight:10,footSpread:1.8,footBack:4,jumpHeight:3,jumpTilt:.12,exitFadeSeconds:1,
-  stepDistanceMin:24,stepDistanceMax:32,stepSecondsMin:1,footWidth:2.2,footLength:3.6,footWarning:.8,footDanger:.35,footFade:1.8,footCapacity:12, // footWarning 只控制起跳到接地的时长，不绘制预警。
-  bridgeLeadSeconds:2.5,bridgeSpeed:12,bridgeCount:4,bridgeSpacing:5,sceneryCapacity:32,grazerScale:2.4,diplodocusScale:3.2,
+  defense:100,firstJumpSeconds:1.2,stepDistanceMin:36,stepDistanceMax:48,stepSecondsMin:2.4,footWidth:1.8,footLength:3,footWarning:1.2,footDanger:.2,footCapacity:12,baseRingRadius:4.5, // 仅在实际接地时判定踩踏；底圈跟随身体，不保留脚印或绘制预警。
+  bridgeLeadSeconds:2.5,bridgeSpeed:12,bridgeCount:4,bridgeSpacing:5,bridgeScale:.8,sceneryCapacity:32,grazerScale:2.4,diplodocusScale:3.2,lakeOffset:35,waterBankOffset:9,waterRoadOffset:32,
 };
 // 玩家座驾涂装：yellow/blue/green 为纯色，rainbow 使用渐变贴图；默认绿色。
 export const CAR_COLORS=[
@@ -61,6 +61,15 @@ export const SIDE_BOUNCE={
   impactSeconds:.65, // 主弹开阶段，横向速度线性降低至收尾速度。
   settleSeconds:.85, // 收尾继续缓慢偏移至停止，总时长 1.5 秒；全程锁定左右控制。
   settleSpeedRatio:.12, // 收尾起始速度占初始弹开速度的比例，收尾路程额外计算。
+};
+export const SIDE_IMPACT={
+  seconds:1.5, // 高级车侧撞后的失控旋转时长，暂停冻结。
+  speedMultiplier:.6, // 接触时保留 60% 速度。
+  minLanes:.8,
+  maxLanes:2, // 横向冲量最多偏转两条车道，实际位移受路缘限制。
+  rearClosingSpeed:8, // 后车投放时至少比玩家快 8 米/秒，之后使用普通驾驶逻辑。
+  rearMinDistance:20,
+  screenMargin:.1,
 };
 // 总积分下降导致降级后的统一保护时间，暂停不消耗；不免疫道路障碍、截止墙和饥饿。
 export const REAR_END_INVINCIBLE_SECONDS=2;
@@ -119,7 +128,7 @@ export const TRAFFIC_DENSITY={
   gapReductionPerStep:.02,minGapScale:.65, // 每档缩短初始系统车距的 2%，最低保留 65%；不缩短玩家生成安全距离。
 };
 // 生成时固定 0 或 1 的随机变道开关；启用车辆每隔 6–10 秒按 30%–55% 概率尝试。
-export const TRAFFIC_LANE_CHANGE={enabledChance:.5,chanceMin:.3,chanceMax:.55,intervalMin:6,intervalMax:10};
+export const TRAFFIC_LANE_CHANGE={enabledChance:.5,chanceMin:.3,chanceMax:.55,secondLevelMultiplier:1.2,intervalMin:6,intervalMax:10};
 // 危险车辆独立抽取，随机变道忽略目标空隙；普通车辆只在碰撞临近时主动避让。
 export const TRAFFIC_DRIVING={dangerousChance:.15,avoidSeconds:3.5,minAvoidDistance:16,signalSeconds:1,changeSeconds:1.5};
 // 跨轮静态查询缓存按轮数限制，远离当前窗口的内容可重新生成。
@@ -228,7 +237,7 @@ export const POLICE={
   netSizeMax:16, // 渔网边长上限,保证仍可躲。
   netKeep:6, // 捕捞网生成后立即生效，存活时间(有效运行秒数)。
   quizMathSeconds:45,quizChineseSeconds:30,quizEnglishSeconds:45, // 题目显示后按真实时间倒计时，超时结束本局。
-  quizChineseAuthorChance:.2, // 语文问作者占 20%，上下句与挖空各占 40%。
+  quizChineseExtraChance:.1, // 语文题中课外诗词的比例，错误选项仍来自二至五年级课内题库。
   catchSeconds:1.5, // 被抓动画时长:玩家缩小并被拉向警车。
   maxChaseSeconds:45, // 警车持续时长达到上限后自动撤离。
 };

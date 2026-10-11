@@ -1,4 +1,4 @@
-import { VEHICLES, MAX_RANK, ARMORED_RANK, VEHICLE_CONTACT, SIDE_BOUNCE } from './config.js';
+import { VEHICLES, MAX_RANK, ARMORED_RANK, VEHICLE_CONTACT, SIDE_BOUNCE, SIDE_IMPACT, LANE_WIDTH, clamp } from './config.js';
 
 const roadPoint={};
 const collisionBoxes=Array.from({length:6},()=>({center:{x:0,y:0},side:{x:0,y:0},front:{x:0,y:0},width:0,length:0}));
@@ -80,7 +80,7 @@ export function sweep(player,next,target,targetNext,road) {
     const overlap=Math.min(a.length,center+extent)-Math.max(-a.length,center-extent);
     if(overlap>=Math.min(a.length,b.length)*2*VEHICLE_CONTACT.sideOverlapFraction)kind='side';
   }else if(endCoreOverlap(at,bt,axisIndex))kind='straight';
-  return {time,kind,direction,contact};
+  return {time,kind,direction,contact,normal:{x:axis.x*normalSign,y:axis.y*normalSign},motion};
 }
 const roadCoordinates={at:(s,d,route,out)=>{out.x=d;out.z=-s;out.heading=0;out.pitch=0;return out;}};
 // 施工占用沿道路弧长延伸，避免长矩形在弯道上切入邻道或漏掉封闭区。
@@ -93,11 +93,10 @@ export function separation(player,target,road,direction){
 }
 export function classify(rank,target,event,nitroActive=false) {
   if(event.kind==='overlap'||event.kind==='graze')return 'graze';
-  if(event.kind==='side')return target.rank>rank?'sideFatal':target.rank===rank&&rank>1&&!nitroActive?'bounce':'eat';
+  if(event.kind==='side')return target.rank>rank?'spin':'eat';
   if(target.rank===ARMORED_RANK&&rank===MAX_RANK&&nitroActive)return 'armorDowngrade';
   if(target.rank>rank)return 'frontFatal';
   if(target.rank<rank&&nitroActive)return 'eat';
-  if(target.rank===rank&&nitroActive)return 'knockaway';
   if(target.rank===rank&&rank===1)return 'bicycleRearFatal';
   return target.rank===rank?'downgrade':'knockaway';
 }
@@ -107,18 +106,41 @@ export function startBounce(car,direction){
   car.sidePush=direction*2*distance/(settings.impactSeconds*(1+settings.settleSpeedRatio));
   car.sidePushTime=0;
 }
+export function startSpin(car,event,road){
+  const p=road.at(car.s,car.d,car.route),normal=event.normal;
+  const force={x:-normal.x,y:-normal.y},arm=event.contact?{x:event.contact.x-p.x,y:event.contact.y-p.z}:{x:0,y:0};
+  // 接触点到重心的力臂与碰撞法线构成转矩；斜向撞击同时影响弹开距离。
+  const torque=(arm.x*force.y-arm.y*force.x)/(VEHICLES[car.rank].length/2);
+  const motionLength=Math.hypot(event.motion.x,event.motion.y);
+  const incidence=motionLength?Math.abs(dot(event.motion,normal))/motionLength:1;
+  const strength=clamp((Math.abs(torque)+incidence)/2,0,1);
+  const distance=-event.direction*LANE_WIDTH*(SIDE_IMPACT.minLanes+(SIDE_IMPACT.maxLanes-SIDE_IMPACT.minLanes)*strength);
+  const hits=car.spin?.hits??new Set();hits.add(event.car.id);
+  car.spin={time:0,distance,turn:(Math.sign(torque)||-event.direction)*Math.PI*2,power:2+Math.abs(torque),hits,initialYaw:car.yaw||0};
+  car.sidePush=0;car.sidePushTime=0;car.push=0;
+  car.speed*=SIDE_IMPACT.speedMultiplier;
+  return distance;
+}
+const spinProgress=time=>1-Math.pow(1-clamp(time/SIDE_IMPACT.seconds,0,1),3);
 function bounceIntegral(t){
   const settings=SIDE_BOUNCE,main=Math.min(t,settings.impactSeconds),tail=Math.min(Math.max(0,t-settings.impactSeconds),settings.settleSeconds);
   return main-(1-settings.settleSpeedRatio)*main*main/(2*settings.impactSeconds)
     +settings.settleSpeedRatio*(tail-tail*tail/(2*settings.settleSeconds));
 }
 export function bounceTravel(car,dt){
+  if(car.spin)return car.spin.distance*(spinProgress(car.spin.time+dt)-spinProgress(car.spin.time));
   if(!car.sidePush)return 0;
   const time=car.sidePushTime||0;
   return car.sidePush*(bounceIntegral(time+dt)-bounceIntegral(time));
 }
 export function advanceBounce(car,dt){
   const distance=bounceTravel(car,dt);
+  if(car.spin){
+    const spin=car.spin;spin.time+=dt;
+    const progress=clamp(spin.time/SIDE_IMPACT.seconds,0,1);
+    car.yaw=spin.initialYaw*(1-progress)+spin.turn*(1-Math.pow(1-progress,spin.power));
+    if(spin.time>=SIDE_IMPACT.seconds-1e-10){car.spin=null;car.yaw=0;}
+  }
   if(car.sidePush){
     car.sidePushTime=(car.sidePushTime||0)+dt;
     if(car.sidePushTime>=SIDE_BOUNCE.impactSeconds+SIDE_BOUNCE.settleSeconds-1e-10){car.sidePush=0;car.sidePushTime=0;}

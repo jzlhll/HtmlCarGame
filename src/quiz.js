@@ -1,11 +1,11 @@
-import { POEMS, POEM_PAIRS, POEM_HALVES } from './poems.js';
-import { ENGLISH_BOOKS } from './english.js';
+import { POEM_PAIRS, POEM_HALVES } from './poems.js';
 import { POLICE } from './config.js';
+import { ENGLISH_BOOKS } from './english.js';
 
 // 警车拦查答题：数学、语文、英语各约三分之一，固定范围随机出题。
 // 数学:随机抽取三至五年级；五年级按北师大版设计(小数加减/乘除、分数加减、因数与倍数)。
-// 语文:诗句→朝代作者、上下句衔接、2/4 字挖空三种题型;题池固定为二至五年级。
-// 英语覆盖沪教牛津版三上、三下、四上、四下：单词缺两字母、句子选词两种题型。
+// 语文：展示朝代、作者与两句诗，九成课内、一成课外，错误选项始终来自二至五年级课内题库。
+// 英语覆盖沪教牛津版三上、三下、四上、四下：元音或辅音组合补全、句子选词两种题型。
 // 选项以字符串表示，正确答案唯一，统一返回 {subject, text, options:[4 个字符串], answer:正确下标}。
 // 题目随机统一走 rng():默认 Math.random,传入种子函数后自动化验证可复现具体题目;
 // rng 为模块级可替换引用,makeQuestion 同步生成完毕即返回,无并发问题。
@@ -32,7 +32,7 @@ function buildInteger(grade){
 }
 
 // ---------- 数学:北师大版五年级口算 ----------
-// 全程用整数刻度计算避免浮点误差:十分/百分之一刻度表示小数,分数化简后按 "a/b" 输出。
+// 全程用整数刻度计算避免浮点误差；分数化简后保留 a/b 计算表示，界面转换为上下分式。
 function decimalAddSub(){
   const scale=rng()<.5?1:10; // 一位小数按十分刻度,两位小数按百分刻度。
   const a=ri(15,990)*scale,b=ri(15,990)*scale; // 均为百分之一刻度。
@@ -68,17 +68,17 @@ function fractionPart(){
 function factorQuestion(){
   if(rng()<chance){ // 最大公因数(五上第三单元"倍数与因数")。
     const a=ri(2,24),b=ri(2,24);
-    return {text:a+' 和 '+b+' 的最大公因数',answer:gcd(a,b)};
+    return {text:a+' 和 '+b+' 的最大公因数',answer:gcd(a,b),helpTopic:'gcd'};
   }
   const a=ri(2,12),b=ri(2,12);
-  return {text:a+' 和 '+b+' 的最小公倍数',answer:a*b/gcd(a,b)};
+  return {text:a+' 和 '+b+' 的最小公倍数',answer:a*b/gcd(a,b),helpTopic:'lcm'};
 }
 function buildGrade5(){
   const kind=rng();
-  if(kind<.22)return decimalAddSub();
-  if(kind<.42)return decimalMultiply();
-  if(kind<.62)return decimalDivide();
-  if(kind<.82)return fractionPart();
+  if(kind<.22)return {...decimalAddSub(),helpTopic:'decimal-add'};
+  if(kind<.42)return {...decimalMultiply(),helpTopic:'decimal-multiply'};
+  if(kind<.62)return {...decimalDivide(),helpTopic:'division'};
+  if(kind<.82)return {...fractionPart(),helpTopic:'fraction'};
   return factorQuestion();
 }
 // 统一数学题格式:把刻度结果折算为字符串答案与数值,便于生成同数量级的干扰项。
@@ -164,36 +164,28 @@ function shuffle(options,correct){
   return {options,answer:options.indexOf(correct)};
 }
 function makeMathQuestion(grade){
-  if(grade===5)return mathOptions(normalizeMath(buildGrade5()));
-  let question;
-  do{question=normalizeMath(buildInteger(grade));}while(/[×÷]/.test(question.text)&&question.value<=0);
-  return mathOptions(question);
+  let source,question;
+  do{source=grade===5?buildGrade5():buildInteger(grade);question=normalizeMath(source);}while(/[×÷]/.test(question.text)&&question.value<=0);
+  return {...mathOptions(question),helpTopic:source.helpTopic??(question.text.includes('÷')?'division':'order')};
 }
 
-// ---------- 语文:二至五年级人教版古诗 ----------
+// ---------- 语文：二至五年级课内古诗与少量课外拓展 ----------
 const poemPool={
-  poems:POEMS.filter(item=>item.grade>=2&&item.grade<=5),
   pairs:POEM_PAIRS.filter(item=>item.grade>=2&&item.grade<=5),
   halves:POEM_HALVES.filter(item=>item.grade>=2&&item.grade<=5),
 };
-// 题型 1:给出诗句,答朝代与作者;干扰项取其他诗人的"朝代 · 作者"。
-function authorQuestion(pool){
-  const poem=pick(pool.poems),half=poem.verse.split('，')[0];
-  const correct=poem.dynasty+' · '+poem.author;
-  const candidates=[...new Set(pool.poems.map(item=>item.dynasty+' · '+item.author).filter(name=>name!==correct))];
-  if(candidates.length<3)return null;
-  const options=[correct];
-  while(options.length<4){
-    const name=pick(candidates);
-    if(!options.includes(name))options.push(name);
-  }
-  return {text:'「'+half+'」的作者是？',...shuffle(options,correct)};
+const extraPoemPool={
+  pairs:POEM_PAIRS.filter(item=>item.poem.extracurricular),
+  halves:POEM_HALVES.filter(item=>item.pair.poem.extracurricular),
+};
+function poemQuestion(pair,first,second){
+  return {poemSource:pair.poem.dynasty+'，'+pair.poem.author+'的诗句：',text:first+'，\n'+second+'。'};
 }
-// 题型 2:上下句衔接,干扰项为其他同字数诗句。
+// 上下句补全保留两个诗句位置，其中一句整句挖空。
 function lineQuestion(pool){
   const pair=pick(pool.pairs),askFirst=rng()<chance;
   const given=askFirst?pair.first:pair.second,answer=askFirst?pair.second:pair.first;
-  const candidates=[...new Set(pool.halves.map(item=>item.text).filter(text=>text!==answer&&text!==given&&text.length===answer.length))];
+  const candidates=[...new Set(poemPool.halves.map(item=>item.text).filter(text=>text!==answer&&text!==given&&text.length===answer.length))];
   if(candidates.length<3)return null;
   const options=[answer];
   while(options.length<4&&candidates.length){
@@ -201,16 +193,15 @@ function lineQuestion(pool){
     if(!options.includes(value))options.push(value);
   }
   if(options.length<4)return null;
-  return {text:'「'+given+'」的'+(askFirst?'下一句':'上一句')+'是？',...shuffle(options,answer)};
+  return {...poemQuestion(pair,askFirst?pair.first:BLANK,askFirst?BLANK:pair.second),...shuffle(options,answer)};
 }
-// 题型 3:挖空填写 2 或 4 个字,干扰项为题池其他诗句中的同长度片段。
+// 词组挖空只改选中的诗句，另一句完整展示；干扰项同样来自完整词组。
 function blankQuestion(pool){
-  const half=pick(pool.halves),length=half.text.length;
-  if(length<5||length>7)return null;
-  const blank=length===5?2:rng()<chance?2:4;
-  const start=ri(0,length-blank),correct=half.text.slice(start,start+blank);
+  const half=pick(pool.halves.filter(item=>item.blanks.length));
+  if(!half)return null;
+  const {start,text:correct}=pick(half.blanks),blank=correct.length;
   const segments=new Set();
-  for(const item of pool.halves)for(let i=0;i+blank<=item.text.length;i++)segments.add(item.text.slice(i,i+blank));
+  for(const item of poemPool.halves)for(const phrase of item.blanks)if(phrase.text.length===blank)segments.add(phrase.text);
   segments.delete(correct);
   const candidates=[...segments];
   if(candidates.length<3)return null;
@@ -220,15 +211,15 @@ function blankQuestion(pool){
     if(!options.includes(value))options.push(value);
   }
   if(options.length<4)return null;
-  return {text:half.text.slice(0,start)+BLANK+half.text.slice(start+blank),...shuffle(options,correct)};
+  const masked=half.text.slice(0,start)+BLANK+half.text.slice(start+blank),pair=half.pair;
+  return {...poemQuestion(pair,half.part===0?masked:pair.first,half.part===1?masked:pair.second),...shuffle(options,correct)};
 }
-const CHINESE_TYPES=[authorQuestion,lineQuestion,blankQuestion];
+const CHINESE_TYPES=[lineQuestion,blankQuestion];
 function makeChinese(){
-  const pool=poemPool;
-  // 问作者权重为其他题型的一半；干扰项不足时，随机尝试其余题型。
-  const first=rng()<POLICE.quizChineseAuthorChance?authorQuestion:rng()<chance?lineQuestion:blankQuestion;
+  const pool=rng()<POLICE.quizChineseExtraChance?extraPoemPool:poemPool;
+  // 已注明作者，不再重复考查作者；两种补全题型各半。
+  const first=rng()<chance?lineQuestion:blankQuestion;
   const types=CHINESE_TYPES.filter(build=>build!==first);
-  if(rng()<chance)types.reverse();
   types.unshift(first);
   for(const build of types)for(let attempt=0;attempt<12;attempt++){
     const question=build(pool);
@@ -237,16 +228,13 @@ function makeChinese(){
   // 兜底:上下句衔接不限同字数,题池必然存在配对。
   const pair=pick(pool.pairs),askFirst=rng()<chance;
   const given=askFirst?pair.first:pair.second,answer=askFirst?pair.second:pair.first;
-  const candidates=[...new Set(pool.halves.map(item=>item.text).filter(text=>text!==answer&&text!==given))];
+  const candidates=[...new Set(poemPool.halves.map(item=>item.text).filter(text=>text!==answer&&text!==given))];
   const options=[answer];
   while(options.length<4&&candidates.length){
     const [value]=candidates.splice(Math.floor(rng()*candidates.length),1);
     if(!options.includes(value))options.push(value);
   }
-  // 候选耗尽时用递增问号占位,保证四个选项互不相同。
-  let marks=1;
-  while(options.length<4)options.push(answer+'？'.repeat(marks++));
-  return {text:'「'+given+'」的'+(askFirst?'下一句':'上一句')+'是？',...shuffle(options,answer)};
+  return {...poemQuestion(pair,askFirst?pair.first:BLANK,askFirst?BLANK:pair.second),...shuffle(options,answer)};
 }
 
 // ---------- 英语：按册、单元均匀抽题，两种题型各半 ----------
@@ -256,18 +244,18 @@ function makeEnglish(){
   const source={book:book.id,bookTitle:book.title,unit:unitIndex+1,unitTitle:unit.title};
   if(rng()<chance){
     const {word,meaning}=pick(unit.words);
-    // 相邻两个字母分别显示下划线；中文释义明确所考词义，避免残词出现歧义。
-    const starts=[];
-    for(let i=0;i<word.length-1;i++)if(/^[a-z]{2}$/i.test(word.slice(i,i+2)))starts.push(i);
-    const start=pick(starts),correct=word.slice(start,start+2),candidates=[];
-    for(const letter of 'abcdefghijklmnopqrstuvwxyz'){
-      const first=letter+correct[1],second=correct[0]+letter;
-      if(first!==correct)candidates.push(first);
-      if(second!==correct)candidates.push(second);
+    // 优先完整元音组合、辅音连缀、双写和二合字母；无组合时只挖一个字母，保留拼写边界。
+    const groups=Array.from(word.matchAll(/tch|dge|thr|shr|scr|spr|str|spl|squ|th|ch|sh|ph|wh|ck|ng|qu|[aeiou]+y?|([bcdfghjklmnpqrstvwxyz])\1|bl|br|cl|cr|dr|fl|fr|gl|gr|pl|pr|sc|sk|sl|sm|sn|sp|st|sw|tr|tw|[a-z]/gi),match=>({start:match.index,text:match[0]}));
+    const combinations=groups.filter(group=>group.text.length>1);
+    const {start,text:correct}=pick(combinations.length?combinations:groups),candidates=new Set();
+    for(let i=0;i<correct.length;i++)for(const letter of 'abcdefghijklmnopqrstuvwxyz'){
+      const replacement=correct[i]===correct[i].toUpperCase()?letter.toUpperCase():letter;
+      const candidate=correct.slice(0,i)+replacement+correct.slice(i+1);
+      if(candidate!==correct)candidates.add(candidate);
     }
-    const options=[correct];
-    while(options.length<4)options.push(candidates.splice(ri(0,candidates.length-1),1)[0]);
-    return {...source,type:'word',text:'单词补全（'+meaning+'）：'+word.slice(0,start)+'__'+word.slice(start+2),...shuffle(options,correct)};
+    const options=[correct],wrong=[...candidates];
+    while(options.length<4)options.push(wrong.splice(ri(0,wrong.length-1),1)[0]);
+    return {...source,type:'word',text:'单词补全（'+meaning+'）：'+word.slice(0,start)+'_'.repeat(correct.length)+word.slice(start+correct.length),...shuffle(options,correct)};
   }
   const [sentence,...wrong]=pick(unit.sentences),correct=sentence.match(/\{([^{}]+)\}/)[1];
   return {...source,type:'sentence',text:sentence.replace('{'+correct+'}','____'),...shuffle([correct,...wrong],correct)};
@@ -285,7 +273,8 @@ export function makeQuestion(seedRng){
 export function answeredQuestion(question){
   const answer=question.options[question.answer];
   if(question.subject==='math')return question.text+' = '+answer;
-  if(question.text.includes(BLANK))return question.text.replace(BLANK,'（'+answer+'）');
-  if(/_{2,}/.test(question.text))return question.text.replace(/_{2,}/,question.type==='word'?answer:'('+answer+')');
+  if(question.text.includes(BLANK))return (question.poemSource?question.poemSource+'\n':'')+question.text.replace(BLANK,answer);
+  if(question.type==='word')return question.text.replace(/_+/,answer);
+  if(/_{2,}/.test(question.text))return question.text.replace(/_{2,}/,'('+answer+')');
   return question.text.replace(/[？?]$/,'')+'：'+answer;
 }

@@ -302,7 +302,7 @@ export class GameAudio {
     // 闪电等远程命中音由 Game.hurt 播放（按同刻事件组只响一次），此处不重复触发。
     for(const e of group)switch(e.action){
       case 'eat':this.eat();break;
-      case 'bounce':this.side();break;
+      case 'bounce':case 'spin':this.side();break;
       case 'graze':this.graze();break;
       case 'cowDowngrade':case 'armorDowngrade':this.side();break;
       case 'knockaway':case 'downgrade':case 'wall':case 'roadwork':this.crash();break;

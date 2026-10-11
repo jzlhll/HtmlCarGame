@@ -1,14 +1,16 @@
-import { LEVELS, ROCKETS, COINS, VEHICLES, MAX_RANK, VEHICLE_DEFENSE, UPGRADE_POINTS, NITRO, CAR_COLORS, RESCUE_LIMIT } from './config.js';
+import { LEVELS, ROCKETS, COINS, DINOSAURS, VEHICLES, MAX_RANK, VEHICLE_DEFENSE, UPGRADE_POINTS, NITRO, CAR_COLORS, RESCUE_LIMIT } from './config.js';
 import { TEST_OVERRIDES } from './test-overrides.js';
 import { CAUSES } from './game.js';
 import { coinIcon } from './arsenal-icons.js';
+import { mathText } from './math-display.js';
+import { mathHelp } from './quiz-help.js';
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const format=v=>Math.floor(v).toLocaleString('zh-CN');
 const time=s=>Math.floor(s/60)+' 分 '+Math.floor(s%60)+' 秒';
 export class UI {
   constructor(game){
     this.game=game;this.overlay=document.getElementById('overlay');this.toast=document.getElementById('toast');this.toastSeconds=0;this.resetConfirm=false;this.displayed={};
-    this.elements=Object.fromEntries(['distance','elapsed','speed','speed-fill','nitro','nitro-state','nitro-fill','nitro-reserve-fill','defense','defense-fill','rank','progress','growth-fill','rear-alert','storage-warning','hud','level-countdown','test-badge','arsenal-hud','coin-count','buy-rocket','buy-advanced-rocket'].map(id=>[id,document.getElementById(id)]));
+    this.elements=Object.fromEntries(['distance','elapsed','speed','speed-fill','nitro','nitro-state','nitro-fill','nitro-reserve-fill','defense','defense-fill','rank','progress','growth-fill','rear-alert','storage-warning','hud','level-countdown','test-badge','arsenal-hud','coin-count','buy-rocket','buy-advanced-rocket','dinosaur-defense','dinosaur-defense-value'].map(id=>[id,document.getElementById(id)]));
     document.getElementById('coin-icon').innerHTML=coinIcon;
     this.elements['buy-rocket'].addEventListener('click',()=>game.weaponAction(1));this.elements['buy-advanced-rocket'].addEventListener('click',()=>game.weaponAction(2));
     // URL 测试参数生效时显示角标,Agent 截图可直接确认,避免把测试结果当默认行为。
@@ -25,6 +27,8 @@ export class UI {
       if(action==='pick-color')game.setColor(event.target.closest('[data-color]')?.dataset.color);
       if(action==='back')game.ready();
       if(action==='quiz'&&game.state==='QUIZ')game.answerQuiz(Number(event.target.closest('[data-action]').dataset.choice));
+      if(action==='quiz-help')game.openQuizHelp();
+      if(action==='quiz-help-close'){game.closeQuizHelp();this.overlay.querySelector('.quiz-help-button')?.focus({preventScroll:true});}
       if(action==='reset'){this.resetConfirm=true;this.render();}
       if(action==='cancel-reset'){this.resetConfirm=false;this.render();}
       if(action==='confirm-reset'){game.store.reset();this.resetConfirm=false;this.render();}
@@ -57,7 +61,8 @@ export class UI {
     for(const [id,compact,full] of [['distance-label','距离','行驶距离'],['elapsed-label','时间','运行时间'],['defense-label','防御','防御力'],['nitro-label','氮气','加速 / 氮气 · ↑']])document.getElementById(id).textContent=mobile?compact:full;
     for(const [id,key,name,cost] of [['buy-rocket',1,'普通炮',ROCKETS.normalCost],['buy-advanced-rocket',2,'高级炮',ROCKETS.advancedCost]]){
       this.elements[id].textContent=mobile?name+' · '+cost:key+' · '+name+' '+cost+' 金币';
-      this.elements[id].setAttribute('aria-label','消耗 '+cost+' 金币发射'+name);
+      const description='消耗 '+cost+' 金币发射'+name+'，清理前方 '+ROCKETS.range+' 米'+(key===1?'自身及左右相邻车道':'全部车道');
+      this.elements[id].setAttribute('aria-label',description);this.elements[id].title=description;
     }
     g.input.container.classList.toggle('level-two',g.level===2);
     this.elements['arsenal-hud'].hidden=g.level!==2||['READY','PREPARING','RESULT'].includes(g.state);
@@ -74,23 +79,32 @@ export class UI {
     }
     if(g.state==='READY'){
       const colorButtons=CAR_COLORS.map(c=>'<button class="color-chip'+(c.id===g.carColor?' selected':'')+'" data-action="pick-color" data-color="'+c.id+'" aria-label="汽车颜色 '+c.name+'" aria-pressed="'+(c.id===g.carColor)+'" title="'+c.name+'"><i style="background:'+c.css+'"></i></button>').join('');
-      this.overlay.innerHTML='<section class="card intro-card"><div class="eyebrow">FOUR SEASONS / ENDLESS ROAD</div><div class="intro-head"><h1>四季车途</h1><div class="head-pickers"><div class="color-picker"><span>汽车颜色：</span><div class="color-mini">'+colorButtons+'</div></div></div></div><blockquote class="intro-quote">从一辆自行车开始，生存满'+time(LEVELS.firstSeconds)+'，驶入恐龙出没的荒原第二关。</blockquote><p class="driving-help">'+(mobile?'左手摇杆左右横移，右手按住刹车或加速。<br>持续按住加速，达到车型最高速后自动喷气，极速时仍耗气。':'<kbd>← / →</kbd> 左右横移 <kbd>↑</kbd> 加速 <kbd>↓</kbd> 刹车 <kbd>空格</kbd> 开始 / 暂停')+'</p><button type="button" class="start-prompt" data-action="play">'+(mobile?'开始这一程':'按 <kbd>空格</kbd> 开始这一程')+'</button><div class="best"><span>最佳距离</span><strong>'+format(g.store.data.leaderboard[0]?.score||0)+' 米</strong></div>'+this.records()+(mobile?'<details class="intro-rules"><summary>玩法说明</summary>':'')+'<div class="rules"><div class="rule"><b>侧碰吞吃</b>侧碰低级车可以吞吃升级，喷气时还能吞吃同级车。</div><div class="rule"><b>警车追击</b>警车会隔一会儿撒网捕捉，捉到后要答题，答对继续。</div><div class="rule"><b>观察车流</b>避开高级车，小心追尾；遇险时有答题复活的机会。</div><div class="rule"><b>天降炮击</b>看到红色预警圈及时躲开，第二关要小心大恐龙踩踏。</div></div>'+(mobile?'</details>':'')+debugOption+'</section>';
+      this.overlay.innerHTML='<section class="card intro-card"><div class="eyebrow">FOUR SEASONS / ENDLESS ROAD</div><div class="intro-head"><h1>四季车途</h1><div class="head-pickers"><div class="color-picker"><span>汽车颜色：</span><div class="color-mini">'+colorButtons+'</div></div></div></div><blockquote class="intro-quote">从一辆自行车开始，生存满'+time(LEVELS.firstSeconds)+'，驶入恐龙出没的荒原第二关。</blockquote><p class="driving-help">'+(mobile?'左手摇杆左右横移，右手按住刹车或加速。<br>持续按住加速，达到车型最高速后自动喷气，极速时仍耗气。':'<kbd>← / →</kbd> 左右横移 <kbd>↑</kbd> 加速 <kbd>↓</kbd> 刹车 <kbd>空格</kbd> 开始 / 暂停')+'</p><button type="button" class="start-prompt" data-action="play">'+(mobile?'开始这一程':'按 <kbd>空格</kbd> 开始这一程')+'</button><div class="best"><span>最佳距离</span><strong>'+format(g.store.data.leaderboard[0]?.score||0)+' 米</strong></div>'+this.records()+(mobile?'<details class="intro-rules"><summary>玩法说明</summary>':'')+'<div class="rules"><div class="rule"><b>侧碰吞吃</b>侧碰低级或同级车可以吞吃升级；侧碰高级车会失控旋转。</div><div class="rule"><b>警车追击</b>警车会隔一会儿撒网捕捉，捉到后要答题，答对继续。</div><div class="rule"><b>观察车流</b>避开高级车，小心追尾；遇险时有答题复活的机会。</div><div class="rule"><b>天降炮击</b>看到红色预警圈及时躲开，第二关要小心大恐龙踩踏。</div></div>'+(mobile?'</details>':'')+debugOption+'</section>';
     }else if(g.state==='PREPARING')this.overlay.innerHTML='<section class="card"><h2>道路准备中</h2><p>正在分配本局的道路与车流。</p></section>';
     else if(g.state==='LEVEL_CLEAR'){
-      const images=g.renderer?.guideImages()??[],cards=[['大型恐龙踩踏','恐龙左右跳跃踩向你，及时横移躲开。'],['装甲坦克','装甲坦克不能碰，请绕开行驶。'],['金币与火箭炮','小金币 '+COINS.smallValue+'、大金币 '+COINS.largeValue+'；按 1 消耗 '+ROCKETS.normalCost+' 金币发射普通炮，按 2 消耗 '+ROCKETS.advancedCost+' 金币发射高级炮。']];
+      const images=g.renderer?.guideImages()??[],cards=[['大型恐龙踩踏','恐龙左右跳跃踩向你，及时横移躲开。'],['装甲坦克','装甲坦克不能碰，请绕开行驶。'],['金币与火箭炮','小金币 '+COINS.smallValue+'、大金币 '+COINS.largeValue+'；按 1 消耗 '+ROCKETS.normalCost+' 金币清理自身及左右相邻车道，按 2 消耗 '+ROCKETS.advancedCost+' 金币清理全部车道，距离均为 '+ROCKETS.range+' 米。']];
       this.overlay.innerHTML='<section class="card level-guide" role="dialog" aria-modal="true" aria-label="第一关通关"><div class="eyebrow">LEVEL COMPLETE / NEXT LEVEL</div><h2>恭喜！通过第一关。</h2><div class="level-guide-grid">'+cards.map(([title,copy],i)=>'<article><img src="'+(images[i]??'')+'" alt="'+title+'模型"><h3>'+title+'</h3><p>'+copy+'</p></article>').join('')+'</div><p class="level-guide-hint">第二关从零开始 · 空格进入第二关</p><button class="button" data-action="play">进入第二关</button></section>';
     }
     else if(g.state==='PAUSED')this.overlay.innerHTML='<section class="card" role="dialog" aria-modal="true" aria-label="游戏已暂停"><div class="eyebrow">TAKE A BREATH</div><h2>游戏已暂停</h2><p>当前 '+format(g.player.distance)+' 米 · '+VEHICLES[g.player.rank].name+'<br>'+(mobile?'点击继续行驶；左侧摇杆横移，右侧刹车与加速 / 氮气。':'按空格继续，↓ 刹车，左右横移，↑ 持续加速到最高车速后自动喷气，极速时仍耗气，松开留气。')+'</p><button class="button" data-action="play">继续行驶</button><button class="button secondary" data-action="quit">结束游戏</button></section>';
     else if(g.state==='QUIZ'&&g.quiz){
       const question=g.quiz,seconds=Math.ceil(g.quizRemaining()),rescue=question.rescue;
+      const help=question.subject==='math'?mathHelp(question.helpTopic):null;
+      if(help&&question.helpRemaining!==undefined){
+        this.overlay.innerHTML='<article class="card math-help-card" role="dialog" aria-modal="true" aria-label="数学学习帮助"><div class="help-paused">计时已暂停 · 剩余 '+seconds+' 秒</div><h2>'+escape(help.title)+'</h2><p class="help-current">这道题：'+mathText(question.text)+'</p><div class="math-help-body">'+help.html+'</div><footer class="help-footer"><button class="button" data-action="quiz-help-close">返回答题 · 继续计时</button></footer></article>';
+        this.overlay.querySelector('[data-action="quiz-help-close"]').focus({preventScroll:true});return;
+      }
       const subject={math:'数学',chinese:'语文',english:'英语'}[question.subject];
-      const source=question.subject==='english'?'<div class="quiz-source">'+escape(question.bookTitle)+' · Unit '+question.unit+' · '+(question.type==='word'?'单词补全':'句子选词')+'</div>':'';
-      this.overlay.innerHTML='<section class="card quiz-card" role="dialog" aria-modal="true" aria-label="'+(rescue?'答题复活':'警车拦查答题')+'"><div class="eyebrow">'+(rescue?'ONE MORE CHANCE':'POLICE CHECK')+'</div><h2>'+(rescue?'第'+g.rescueUsed+'次遇险 · 答题复活':'被警车拦下 · 答题')+'</h2><div class="quiz-timer" role="timer" aria-label="答题剩余时间"><span>'+subject+' · 剩余</span><strong>'+seconds+'</strong><span>秒</span></div>'+source+'<p class="quiz-question'+(question.subject==='english'?' quiz-english':'')+'">'+escape(question.text)+'</p><div class="quiz-options">'+question.options.map((option,index)=>'<button class="quiz-option" data-action="quiz" data-choice="'+index+'"><b>'+(index+1)+'</b>'+escape(option)+'</button>').join('')+'</div><p class="quiz-hint">'+(rescue?'答对原地复活，本局第 '+g.rescueUsed+' / '+RESCUE_LIMIT+' 次机会；答错或超时结束本局。':'答对继续行驶，答错或超时游戏结束。')+'</p></section>';
+      const source=question.subject==='english'?'<div class="quiz-source">'+escape(question.bookTitle)+' · Unit '+question.unit+' · '+(question.type==='word'?'单词补全':'句子选词')+'</div>':question.poemSource?'<div class="quiz-source quiz-poem-source">'+escape(question.poemSource)+'</div>':'';
+      this.overlay.innerHTML='<section class="card quiz-card" role="dialog" aria-modal="true" aria-label="'+(rescue?'答题复活':'警车拦查答题')+'"><div class="eyebrow">'+(rescue?'ONE MORE CHANCE':'POLICE CHECK')+'</div><h2>'+(rescue?'第'+g.rescueUsed+'次遇险 · 答题复活':'被警车拦下 · 答题')+'</h2><div class="quiz-timer" role="timer" aria-label="答题剩余时间"><span>'+subject+' · 剩余</span><strong>'+seconds+'</strong><span>秒</span></div>'+source+'<p class="quiz-question'+(question.subject==='english'?' quiz-english':question.poemSource?' quiz-poem':'')+'">'+(question.subject==='math'?mathText(question.text):escape(question.text))+'</p><div class="quiz-options">'+question.options.map((option,index)=>'<button class="quiz-option" data-action="quiz" data-choice="'+index+'"><b>'+(index+1)+'</b>'+(question.subject==='math'?mathText(option):escape(option))+'</button>').join('')+'</div><p class="quiz-hint">'+(rescue?'答对原地复活，本局第 '+g.rescueUsed+' / '+RESCUE_LIMIT+' 次机会；答错或超时结束本局。':'答对继续行驶，答错或超时游戏结束。')+'</p></section>';
       this.quizTimer=this.overlay.querySelector('.quiz-timer strong');this.quizSeconds=seconds;
+      if(help){
+        const button=document.createElement('button');button.type='button';button.className='quiz-help-button';button.dataset.action='quiz-help';button.innerHTML='<span aria-hidden="true">?</span> 学习帮助 <small>打开后暂停计时</small>';
+        this.overlay.querySelector('.quiz-question').after(button);
+      }
     }
     else if(g.state==='RESULT'){
       const r=g.result,total=r.eatenByType.reduce((a,b)=>a+b,0);
-      const solution=r.failedQuiz?'<div class="quiz-solution"><span>本题正确答案</span><p>'+escape(r.failedQuiz)+'</p></div>':'';
+      const solution=r.failedQuiz?'<div class="quiz-solution"><span>本题正确答案</span><p>'+mathText(r.failedQuiz)+'</p></div>':'';
       this.overlay.innerHTML='<section class="card" role="dialog" aria-modal="true" aria-label="本局结算"><div class="eyebrow">JOURNEY COMPLETE</div><h2>'+ (r.endReason==='quit'?'本局已结束':'旅程到这里')+'</h2><div class="result-score">'+format(r.score)+'<small>米 / 分</small></div><p class="fatal-mark">'+(r.endReason==='quit'?'主动结束':CAUSES[r.deathCause]||'车辆损毁')+'</p>'+solution+'<div class="result-grid"><div><span>最高车型</span><strong>'+VEHICLES[r.highestRank].name+'</strong></div><div><span>吞吃车辆</span><strong>'+total+' 辆</strong></div><div><span>行驶时间</span><strong>'+time(r.activeSeconds)+'</strong></div><div><span>起始季节</span><strong>'+r.startSeason+'</strong></div></div><button class="button" data-action="play">'+(mobile?'再来一局':'按空格 / 点击开始新一局')+'</button><button class="button secondary" data-action="back">返回首页</button>'+this.records()+'</section>';
     }else this.overlay.replaceChildren();
   }
@@ -124,8 +138,12 @@ export class UI {
       e.progress.setAttribute('aria-label','总积分 '+p.xp+'，'+(p.rank===MAX_RANK?'坦克上限':'下一车型门槛')+' '+threshold);
       e['growth-fill'].style.width=Math.min(100,Math.max(0,p.xp)/threshold*100)+'%';shown.growthRank=p.rank;shown.xp=p.xp;
     }
+    const chaser=g.dinosaurs?.chaser,dinosaurDefense=chaser?Math.round(chaser.defense/DINOSAURS.defense*1000)/10:null;
+    if(shown.dinosaurDefense!==dinosaurDefense){
+      e['dinosaur-defense'].hidden=dinosaurDefense===null;e['dinosaur-defense-value'].textContent=dinosaurDefense===null?'':dinosaurDefense+'%';shown.dinosaurDefense=dinosaurDefense;
+    }
     if(g.arsenal){
-      const inventory=g.arsenal,blocked=g.state!=='RUNNING',full=inventory.shots.length>=ROCKETS.capacity;
+      const inventory=g.arsenal,blocked=g.state!=='RUNNING'||Boolean(g.player.spin),full=inventory.shots.length>=ROCKETS.capacity;
       if(shown['coin-count']!==inventory.balance||shown.arsenalBlocked!==blocked||shown.arsenalFull!==full){
         if(shown['coin-count']!==inventory.balance){e['coin-count'].textContent='× '+format(inventory.balance);shown['coin-count']=inventory.balance;}
         e['buy-rocket'].disabled=blocked||full||inventory.balance<ROCKETS.normalCost;e['buy-advanced-rocket'].disabled=blocked||full||inventory.balance<ROCKETS.advancedCost;

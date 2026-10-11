@@ -2,7 +2,7 @@ import { VEHICLES, MAX_RANK, LEVELS, RULES_VERSION, XP, POINT_LOSS, HUNGER, VEHI
 import { Road } from './road.js';
 import { Traffic } from './traffic.js';
 import { RoadHazards, MUD_SECONDS, BUMP_SECONDS, surfaceContact } from './hazards.js';
-import { sweep, roadworkContact, classify, separation, bounceTravel, advanceBounce, startBounce } from './collision.js';
+import { sweep, roadworkContact, classify, separation, bounceTravel, advanceBounce, startSpin } from './collision.js';
 import { CrossingCows } from './crossings.js';
 import { Shelling } from './shell.js';
 import { Nitro } from './driving.js';
@@ -66,7 +66,7 @@ export class Game {
   }
   enterSecondLevel(){return this.start(2);}
   weaponAction(key){
-    if(this.state!=='RUNNING'||!this.arsenal)return;
+    if(this.state!=='RUNNING'||!this.arsenal||this.player.spin)return;
     if(key!==1&&key!==2)return;
     this.arsenal.fire(this,key===2?'advanced':'normal');
     this.renderer?.invalidate();
@@ -104,9 +104,20 @@ export class Game {
     this.audio?.netCatch();
     this.state='CAUGHT';this.onChange();
   }
-  quizRemaining(){return this.quiz?Math.max(0,(this.quiz.deadline-performance.now())/1000):0;}
+  quizRemaining(){return this.quiz?(this.quiz.helpRemaining??Math.max(0,(this.quiz.deadline-performance.now())/1000)):0;}
+  openQuizHelp(){
+    if(this.state!=='QUIZ'||this.quiz?.subject!=='math'||!this.quiz.helpTopic||this.quiz.helpRemaining!==undefined)return;
+    const remaining=this.quizRemaining();if(remaining<=0)return;
+    this.quiz.helpRemaining=remaining;this.input.clear();this.onChange();
+  }
+  closeQuizHelp(){
+    if(this.state!=='QUIZ'||this.quiz?.helpRemaining===undefined)return;
+    // 只续上打开前剩余的时间，多次学习也不会重置或损失倒计时。
+    this.quiz.deadline=performance.now()+this.quiz.helpRemaining*1000;
+    delete this.quiz.helpRemaining;this.input.clear();this.onChange();
+  }
   answerQuiz(choice){
-    if(this.state!=='QUIZ'||!this.quiz)return;
+    if(this.state!=='QUIZ'||!this.quiz||this.quiz.helpRemaining!==undefined)return;
     const expired=this.quizRemaining()<=0,correct=!expired&&choice===this.quiz.answer,rescue=this.quiz.rescue;
     if(correct)this.passQuiz(rescue);
     else this.die(expired?'quizTimeout':'quizWrong');
@@ -151,7 +162,7 @@ export class Game {
   }
   releaseNitro(dt){
     const p=this.player;
-    if(this.whiteHorse.speed(p,this.activeSeconds)!==null||p.frozenUntil>this.activeSeconds){this.nitro.stop();return;}
+    if(p.spin||this.whiteHorse.speed(p,this.activeSeconds)!==null||p.frozenUntil>this.activeSeconds){this.nitro.stop();return;}
     const held=this.input.nitro&&!this.input.down&&!this.scraping;
     // 持续按住上键时，普通加速达到车型最高速后接续喷气；达到喷气上限仍持续耗气。
     const accelerating=held&&p.speed<this.normalCap();
@@ -197,10 +208,13 @@ export class Game {
     // 吞吃只增加成长积分，同车型吞吃不恢复防御。
     this.player.xp=Math.min(XP[MAX_RANK],this.player.xp+XP[car.rank]);
     this.nextHungerAt=this.activeSeconds+HUNGER.intervalSeconds;
-    // 吞吃即按车型回气(等级越高越多);同方向持续侧移超过阈值时奖励翻倍。
-    const sideEat=this.input.lateral!==0&&this.input.lateralSeconds>NITRO.eatSideSeconds;
-    this.nitro.charge((sideEat?2:1)*NITRO.eatCharge*car.rank);
+    this.chargeNitro(car);
     car.remove=true;this.renderer?.effect(car.s,car.d,'eat',car);
+  }
+  chargeNitro(car){
+    // 吞吃与无敌撞飞共用车型回气和侧移奖励，同一目标只在移除时奖励一次。
+    const sideEat=!this.player.spin&&this.input.lateral!==0&&this.input.lateralSeconds>NITRO.eatSideSeconds;
+    this.nitro.charge((sideEat?2:1)*NITRO.eatCharge*car.rank);
   }
   grow(cause='hunger'){
     const p=this.player,previousRank=p.rank;
@@ -219,6 +233,8 @@ export class Game {
   deflect(group){
     for(const event of group){
       if(event.car){
+        if(event.car.remove)continue;
+        this.chargeNitro(event.car);
         event.car.remove=true;
         this.renderer?.effect(event.car.s,event.car.d,'knockaway',event.car,event.direction);
       }
@@ -258,7 +274,7 @@ export class Game {
     const p=this.player;
     // 保留死亡位置与车型，将总积分恢复到当前车型门槛，保留更高的有效积分。
     p.xp=Math.min(XP[MAX_RANK],Math.max(XP[p.rank],p.xp));p.defense=VEHICLE_DEFENSE[p.rank].max;p.push=0;p.sidePush=0;p.sidePushTime=0;p.bump=0;p.yaw=0;
-    p.frozenUntil=0;
+    p.frozenUntil=0;p.spin=null;
     p.speed=Math.min(Math.max(p.speed,PLAYER_START_SPEED),this.cap());
     p.invincibleUntil=this.activeSeconds+DEBUG_REVIVE_SECONDS;this.debugInvincibleUntil=p.invincibleUntil;
     this.nextHungerAt=this.activeSeconds+HUNGER.intervalSeconds;
@@ -301,7 +317,7 @@ export class Game {
       const protectedNow=this.activeSeconds<this.player.invincibleUntil;
       const debugProtected=this.activeSeconds<this.debugInvincibleUntil;
       for(const car of this.traffic.cars){
-        if(car.remove||(protectedNow&&!horseProtected))continue;
+        if(car.remove||(protectedNow&&!horseProtected)||!horseProtected&&this.player.spin?.hits.has(car.id))continue;
         const old=car.previous||car;
         const beginS=lerp(old.s,car.s,cursor),targetSize=VEHICLES[car.rank];
         const reach=(Math.hypot(playerSize.length,playerSize.width)+Math.hypot(targetSize.length,targetSize.width))/2+1+(fork?.separation??0);
@@ -383,7 +399,7 @@ export class Game {
         this.deflect(group);
         const remaining=dt*(1-global);
         finish.s=this.player.s+this.travel(this.player,this.activeSeconds,remaining);
-        finish.d=this.player.d+this.road.branchCenter(finish.s,this.player.route)-this.road.branchCenter(this.player.s,this.player.route)+(this.weather.lateral(this.player.sidePush?0:this.input.lateral,VEHICLES[this.player.rank].lateral)+this.player.push)*remaining+bounceTravel(this.player,remaining);
+        finish.d=this.player.d+this.road.branchCenter(finish.s,this.player.route)-this.road.branchCenter(this.player.s,this.player.route)+(this.weather.lateral(this.player.sidePush||this.player.spin?0:this.input.lateral,VEHICLES[this.player.rank].lateral)+this.player.push)*remaining+bounceTravel(this.player,remaining);
         start={...this.player};cursor=global;continue;
       }
       const rank=this.player.rank;
@@ -418,10 +434,12 @@ export class Game {
           this.renderer?.weatherView?.hit(this.player.s,this.player.d,e.weatherHazard.kind,this.activeSeconds,this.player.route);
         }
         if(e.action==='eat')this.eat(e.car);
-        if(e.action==='bounce'){
-          startBounce(this.player,-e.direction);startBounce(e.car,e.direction);
-          // 系统车从下一逻辑步开始横移，避免改写本步已经参与连续检测的轨迹。
-          e.car.merge=null;e.car.convoy=null;
+        if(e.action==='spin'){
+          const deflection=startSpin(this.player,e,this.road);
+          this.nitro.stop();this.input.clear();
+          this.traffic.spawnImpactRear(this.player,deflection,this.renderer?car=>this.renderer.belowScreen(car):null);
+          const target=motionSnapshot(e.car,e.car.previous||e.car,global,this.collisionBegin);
+          this.player.d+=separation(this.player,target,this.road,e.direction);
         }
         if(e.action==='knockaway'||e.action==='downgrade'){
           e.car.remove=true;
@@ -457,7 +475,7 @@ export class Game {
       if(this.state!=='RUNNING'){this.freezeTraffic(global);return;}
       // 首次接触后用更新后的等级和尺寸重新检查余下运动。
       const remaining=dt*(1-global);finish.s=this.player.s+this.travel(this.player,this.activeSeconds,remaining);
-      finish.d=this.player.d+this.road.branchCenter(finish.s,this.player.route)-this.road.branchCenter(this.player.s,this.player.route)+(this.weather.lateral(this.player.sidePush?0:this.input.lateral,VEHICLES[this.player.rank].lateral)+this.player.push)*remaining+bounceTravel(this.player,remaining);
+      finish.d=this.player.d+this.road.branchCenter(finish.s,this.player.route)-this.road.branchCenter(this.player.s,this.player.route)+(this.weather.lateral(this.player.sidePush||this.player.spin?0:this.input.lateral,VEHICLES[this.player.rank].lateral)+this.player.push)*remaining+bounceTravel(this.player,remaining);
       start={...this.player};cursor=global;
     }
     this.player.s=finish.s;this.player.d=finish.d;advanceBounce(this.player,dt*(1-cursor));this.activeSeconds+=dt*(1-cursor);this.player.speed=this.horseSpeed(this.player,this.activeSeconds)??this.player.speed;
@@ -469,7 +487,7 @@ export class Game {
       if(remaining<=1e-8){this.beginLevelExit();return;}
       dt=Math.min(dt,remaining);
     }
-    this.input.advance(dt);
+    this.input.advance(this.player.spin?0:dt);
     if(this.level===2&&this.levelSeconds+dt>=ROAD_DIFFICULTY.afterSeconds)this.road.narrowAfter(this.player.s);
     if(this.activeSeconds+dt>=ROADBLOCKS.afterSeconds)this.road.blockadesAfter(this.player.s);
     this.infrastructure.advance(dt,this);
@@ -478,9 +496,11 @@ export class Game {
     this.renderPreviousPlayer=start;
     p.mud=Math.max(0,p.mud-dt);p.bump=Math.max(0,p.bump-dt);
     this.releaseNitro(dt);
-    const bouncing=Boolean(p.sidePush),lateral=bouncing?0:this.input.lateral;
-    if(this.input.down)p.speed-=35*dt;
-    else if(!this.scraping&&!(p.frozenUntil>this.activeSeconds))p.speed+=AUTO_ACCELERATION*dt;
+    const bouncing=Boolean(p.sidePush||p.spin),lateral=bouncing?0:this.input.lateral;
+    if(!p.spin){
+      if(this.input.down)p.speed-=35*dt;
+      else if(!this.scraping&&!(p.frozenUntil>this.activeSeconds))p.speed+=AUTO_ACCELERATION*dt;
+    }
     const horseSpeed=this.horseSpeed(p,this.activeSeconds+dt);
     p.speed=horseSpeed??clamp(p.speed,0,Math.min(this.cap(),this.weather.speedLimit(p,this.activeSeconds+dt)));
     if(this.scraping&&horseSpeed===null)p.speed=Math.max(0,p.speed-15*dt);

@@ -17,11 +17,11 @@ export class DinosaurEvents {
       this.nextSmallAt=now+lerp(cfg.smallIntervalMin,cfg.smallIntervalMax,this.rng());
       if(this.rng()<cfg.smallChance)this.spawnSmall(player);
     }
-    this.feet=this.feet.filter(foot=>now<foot.until+cfg.footFade);
+    this.feet=this.feet.filter(foot=>now<foot.until);
     const chaser=this.chaser;
     if(chaser){
       if(now>=chaser.until){this.chaser=null;this.nextChaseAt=now+lerp(cfg.chaseIntervalMin,cfg.chaseIntervalMax,this.rng());}
-      else{
+      else if(!chaser.defeated){
         chaser.previousS=chaser.s;chaser.previousD=chaser.d;chaser.previousRoute=chaser.route;
         const sameRoute=(chaser.route??null)===(player.route??null),gap=(chaser.s-player.s)*this.road.pathScale((chaser.s+player.s)/2,chaser.route);
         // 越接近前方距离上限，超出玩家速度的部分越小，避免跑出视野。
@@ -51,7 +51,7 @@ export class DinosaurEvents {
         const playerRoute=player.route??null,s=player.s+lerp(cfg.chaseAheadMin,cfg.chaseAheadMax,this.rng())/this.road.pathScale(player.s,playerRoute),route=playerRoute&&s>=this.road.route(playerRoute).end?null:playerRoute,lanes=this.road.available(s,route),options=[];
         for(const direction of [-1,1])for(let lane=0;lane<lanes;lane++)if(route||this.road.laneOpen(s,lane,direction,80,cfg.footLength))options.push({lane,direction});
         if(options.length>1){
-          const choice=options[Math.floor(this.rng()*options.length)],chaser={...choice,id:this.nextId++,route,s,previousS:s,previousRoute:route,phase:0,walked:cfg.stepDistanceMin,stepDistance:cfg.stepDistanceMin,nextStepAt:now,side:1,jump:null,ratio:lerp(cfg.speedRatioMin,cfg.speedRatioMax,this.rng()),until:now+lerp(cfg.durationMin,cfg.durationMax,this.rng())};
+          const choice=options[Math.floor(this.rng()*options.length)],chaser={...choice,id:this.nextId++,route,s,previousS:s,previousRoute:route,phase:0,walked:cfg.stepDistanceMin,stepDistance:cfg.stepDistanceMin,nextStepAt:now+cfg.firstJumpSeconds,side:1,jump:null,defense:cfg.defense,defeated:false,ratio:lerp(cfg.speedRatioMin,cfg.speedRatioMax,this.rng()),until:now+lerp(cfg.durationMin,cfg.durationMax,this.rng())};
           chaser.d=this.chaserD(chaser);chaser.previousD=chaser.d;this.chaser=chaser;
         }
       }
@@ -76,7 +76,17 @@ export class DinosaurEvents {
     if(!escape)return;
     chaser.side=side;chaser.lane=lane;chaser.direction=direction;
     chaser.jump={startAt:now,fromS:chaser.s,fromD:chaser.d,toS:bodyS,toD:bodyD,route:bodyRoute,side};
-    this.feet.push({id:this.nextId++,s,d,route,createdAt:now,from:now+cfg.footWarning,until:now+cfg.footWarning+cfg.footDanger,sounded:false,hits:new Set(),dimensions:{width:cfg.footWidth,length:cfg.footLength}});
+    this.feet.push({id:this.nextId++,chaserId:chaser.id,s,d,route,createdAt:now,from:now+cfg.footWarning,until:now+cfg.footWarning+cfg.footDanger,sounded:false,hits:new Set(),dimensions:{width:cfg.footWidth,length:cfg.footLength}});
+  }
+  hurt(fraction,game){
+    const chaser=this.chaser;if(!chaser||chaser.defeated)return;
+    chaser.defense=Math.max(0,chaser.defense-DINOSAURS.defense*fraction);
+    if(chaser.defense>1e-8)return;
+    chaser.defense=0;chaser.defeated=true;chaser.jump=null;
+    chaser.previousS=chaser.s;chaser.previousD=chaser.d;chaser.previousRoute=chaser.route;
+    chaser.until=game.activeSeconds+DINOSAURS.exitFadeSeconds;
+    // 击败立即取消这只恐龙的在途踩踏，离场后仍按正常间隔调度。
+    this.feet=this.feet.filter(foot=>foot.chaserId!==chaser.id);
   }
   chaserD(chaser,s=chaser.s,d=chaser.d){
     const bounds=this.road.drivableBounds(s,chaser.route),half=DINOSAURS.chaserWidth/2+.2;
@@ -89,8 +99,9 @@ export class DinosaurEvents {
     const direction=this.rng()<.5?-1:1,speed=lerp(cfg.cowSpeedMin,cfg.cowSpeedMax,this.rng())*cfg.crossingSpeedMultiplier;
     const count=cfg.smallCountMin+Math.floor(this.rng()*(cfg.smallCountMax-cfg.smallCountMin+1));
     for(let i=0;i<count;i++){
-      const d=this.road.branchCenter(s,route)-direction*(this.road.edge(s,route)+3+i*3);
-      this.cows.push({id:this.nextId++,s,d,route,direction,speed,time:i*.3,kind:'dinosaur',hit:false,hitTime:0,previous:{s,d,route},dimensions:{width:cfg.smallLength,length:cfg.smallWidth}});
+      const station=s+(i%2-.5)*cfg.smallRowSpacing/this.road.pathScale(s,route);
+      const d=this.road.branchCenter(station,route)-direction*(this.road.edge(station,route)+cfg.smallLength/2+1+Math.floor(i/2)*cfg.smallSpacing);
+      this.cows.push({id:this.nextId++,s:station,d,route,direction,speed,time:i*.3,kind:'dinosaur',hit:false,hitTime:0,previous:{s:station,d,route},dimensions:{width:cfg.smallLength,length:cfg.smallWidth}});
     }
   }
   contact(start,finish,foot,now,dt,key='player'){
@@ -105,7 +116,7 @@ export class DinosaurEvents {
   resolveTraffic(now,dt,game){
     if(dt<=0)return;
     for(const foot of this.feet){
-      // 腾空和残留阶段没有伤害，不必反复遍历全部车流。
+      // 腾空和接地窗口结束后没有伤害，不必反复遍历全部车流。
       if(now>=foot.until||now+dt<foot.from)continue;
       for(const car of game.traffic.cars){
         if(car.remove)continue;
@@ -113,7 +124,7 @@ export class DinosaurEvents {
         // previous 只保存位置，碰撞尺寸、车型和朝向必须取当前车辆。
         const previous=car.previous??car,start=this.trafficStart;
         start.s=previous.s;start.d=previous.d;start.route=previous.route===undefined?car.route:previous.route;start.rank=car.rank;start.dimensions=car.dimensions;start.yaw=car.yaw;
-        if(this.contact(start,car,foot,now,dt,key)){foot.hits.add(key);car.remove=true;game.renderer?.effect(car.s,car.d,'wreck',car);}
+        if(this.contact(start,car,foot,now,dt,key)){foot.hits.add(key);car.remove=true;}
       }
     }
   }

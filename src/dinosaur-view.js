@@ -2,40 +2,44 @@ import * as THREE from 'three';
 import { DINOSAURS, random, lerp } from './config.js';
 import { dinosaurModel, animateDinosaur } from './dinosaur-models.js';
 
-const footShape=new THREE.Shape();
-footShape.moveTo(-.32,-.5);footShape.lineTo(.32,-.5);footShape.lineTo(.48,-.1);footShape.lineTo(.5,.35);footShape.lineTo(.28,.22);footShape.lineTo(.18,.5);footShape.lineTo(0,.29);footShape.lineTo(-.18,.5);footShape.lineTo(-.28,.22);footShape.lineTo(-.5,.35);footShape.lineTo(-.48,-.1);footShape.closePath();
-const footprint=new THREE.ShapeGeometry(footShape).rotateX(-Math.PI/2);
-
-// 完整恐龙使用共享模型与实例批次，接地脚印使用有限实例。
+// 完整恐龙使用共享模型与实例批次，追行底圈仅跟随身体，不留下脚印。
 export class DinosaurView {
   constructor(scene){
     this.bounds=new Map();this.models=new Map();this.pools=new Map();this.sources=[];this.seen=new Set();this.point={};this.layouts=new Map();this.groundGroup=new THREE.Group();scene.add(this.groundGroup);
     this.plants=new THREE.InstancedMesh(new THREE.ConeGeometry(.5,1,5),new THREE.MeshStandardMaterial({color:0x7c8951,roughness:1}),96);this.plants.frustumCulled=false;this.groundGroup.add(this.plants);this.plants.count=0;
     this.ripples=new THREE.InstancedMesh(new THREE.RingGeometry(.85,1,20).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({color:0xb8d4bd,transparent:true,opacity:.3,depthWrite:false}),12);this.ripples.frustumCulled=false;this.groundGroup.add(this.ripples);this.ripples.count=0;
-    this.prints=new THREE.InstancedMesh(footprint,new THREE.MeshBasicMaterial({color:0x65513b,transparent:true,opacity:.55,depthWrite:false}),DINOSAURS.footCapacity);
-    this.prints.frustumCulled=false;scene.add(this.prints);this.prints.visible=false;
+    this.baseRing=new THREE.Mesh(new THREE.RingGeometry(.94,1,48).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({color:0xe4d5aa,transparent:true,opacity:.65,depthWrite:false,side:THREE.DoubleSide}));
+    scene.add(this.baseRing);this.baseRing.visible=false;
   }
-  reset(){for(const item of this.models.values()){let pool=this.pools.get(item.kind);if(!pool){pool=[];this.pools.set(item.kind,pool);}pool.push(item.view);}this.models.clear();this.sources.length=0;this.seen.clear();this.layouts.clear();this.sites=null;for(const mesh of [this.prints,this.plants,this.ripples])mesh.visible=false;}
+  reset(){for(const item of this.models.values()){let pool=this.pools.get(item.kind);if(!pool){pool=[];this.pools.set(item.kind,pool);}pool.push(item.view);}this.models.clear();this.sources.length=0;this.seen.clear();this.layouts.clear();this.sites=null;for(const mesh of [this.baseRing,this.plants,this.ripples])mesh.visible=false;}
   updateScenery(renderer,game){
-    const sites=renderer.faunaSites;
+    const scenery=renderer.faunaSites,water=renderer.infrastructure.sites;
     if(this.road!==game.road||this.revision!==game.road.revision||this.seed!==game.seed){this.layouts.clear();this.sites=null;this.road=game.road;this.revision=game.road.revision;this.seed=game.seed;}
-    if(this.sites===sites)return;
-    this.sites=sites;this.cacheOrigin=game.road.at(game.player.s);this.animals=[];this.waves=[];this.scenerySources=[];
+    if(this.sites===scenery&&this.waterSites===water)return;
+    this.sites=scenery;this.waterSites=water;this.cacheOrigin=game.road.at(game.player.s);this.animals=[];this.waves=[];this.scenerySources=[];
+    // 水域优先提交，河流与桥下水域沿稳定结构 ID 布置岸边梁龙。
+    const sites=scenery.filter(site=>site.kind==='diplodocus');
+    for(const site of water)if(site.feature==='river')sites.push({id:'water:'+site.id,s:site.flatStart-DINOSAURS.waterBankOffset,d:game.road.edge(site.flatStart)+DINOSAURS.waterRoadOffset,kind:'diplodocus',river:true,waterS:site.center});
+    sites.push(...scenery.filter(site=>site.kind!=='diplodocus'));
     const ids=new Set();let plants=0;
     for(const site of sites){
       if(this.animals.length>=DINOSAURS.sceneryCapacity)break;
       ids.add(site.id);let layout=this.layouts.get(site.id);
       if(!layout){
         layout={animals:[],plants:[],waves:[],source:{...site,type:site.kind==='diplodocus'?'lake':'grazing',y:game.road.groundElevation(site.s)}};
-        const rng=random(site.id*397^game.seed),kind=site.kind,count=kind==='diplodocus'?2+Math.floor(rng()*2):2;
+        const siteSeed=typeof site.id==='number'?site.id:[...site.id].reduce((hash,char)=>Math.imul(hash,31)+char.charCodeAt(0),0);
+        const rng=random(siteSeed*397^game.seed),kind=site.kind,count=kind==='diplodocus'?2+Math.floor(rng()*2):2;
         const world=(s,d)=>({...game.road.at(s,d),y:game.road.groundElevation(s)});
         for(let i=0;i<count;i++){
-          const s=site.s+(i-(count-1)/2)*(kind==='diplodocus'?12:8),d=site.d+(kind==='diplodocus'?Math.sign(site.d)*13:(rng()-.5)*8);
+          const s=site.s+(site.river?0:(i-(count-1)/2)*(kind==='diplodocus'?12:8));
+          let d=site.d+(kind==='diplodocus'?(site.river?(i-(count-1)/2)*14:Math.sign(site.d)*13):(rng()-.5)*8);
+          // 湖泊或河流旁若邻近副路，向远离路面的岸线调整，不能把整群过滤掉。
+          if(kind==='diplodocus')for(let shift=0;shift<8&&game.road.onPavement(s,d,18);shift++)d+=Math.sign(site.d)*8;
           if(game.road.onPavement(s,d,kind==='diplodocus'?18:10))continue;
-          layout.animals.push({key:'site:'+site.id+':'+i,kind,s,d,angle:kind==='diplodocus'?Math.sign(site.d)*Math.PI/2:rng()*Math.PI*2,phase:i*Math.PI,world:world(s,d)});
+          layout.animals.push({key:'site:'+site.id+':'+i,kind,s,d,angle:kind==='diplodocus'?(site.river?0:Math.sign(site.d)*Math.PI/2):rng()*Math.PI*2,phase:i*Math.PI,world:world(s,d)});
         }
         for(let i=0;i<6;i++){const p=world(site.s+(rng()-.5)*18,site.d+(rng()-.5)*8);layout.plants.push({...p,height:.4+rng()*.4});}
-        if(kind==='diplodocus')for(let i=0;i<count;i++)layout.waves.push({...world(site.s+(i-(count-1)/2)*12,site.d+Math.sign(site.d)*2),phase:i});
+        if(kind==='diplodocus')for(let i=0;i<count;i++)layout.waves.push({...world(site.river?site.waterS:site.s+(i-(count-1)/2)*12,site.d+(site.river?(i-(count-1)/2)*14:Math.sign(site.d)*2)),phase:i});
         this.layouts.set(site.id,layout);
       }
       this.animals.push(...layout.animals);this.scenerySources.push(layout.source);this.waves.push(...layout.waves);
@@ -46,7 +50,7 @@ export class DinosaurView {
   }
   draw(renderer,game){
     this.sources.length=0;
-    if(game.level!==2){if(this.models.size)this.reset();return;}
+    if(game.level!==2){if(this.models.size)this.reset();this.baseRing.visible=false;return;}
     const seen=this.seen,time=game.activeSeconds;seen.clear();let ripples=0;
     this.updateScenery(renderer,game);
     const add=(key,kind,s,d,route,angle=0,scale=1,ground=true,phase=0,hit=null,jump=null,world=null)=>{
@@ -83,23 +87,18 @@ export class DinosaurView {
       add('small:'+animal.id,'small',animal.s,animal.d,animal.route,-animal.direction*Math.PI/2,1,false,animal.id,animal);
     }
     for(const group of game.infrastructure.trains){
-      for(let i=0;i<DINOSAURS.bridgeCount;i++)add('bridge:'+group.id+':'+i,'small',group.s+(i%2-.5)*3,group.d-i*DINOSAURS.bridgeSpacing,null,-Math.PI/2,1.6,true,i*.7);
+      for(let i=0;i<DINOSAURS.bridgeCount;i++)add('bridge:'+group.id+':'+i,'small',group.s+(i%2-.5)*3,group.d-i*DINOSAURS.bridgeSpacing,null,-Math.PI/2,DINOSAURS.bridgeScale,true,i*.7);
       this.sources.push({id:'bridge:'+group.id,s:group.s,d:group.d,type:'bridge',y:game.road.groundElevation(group.s)});
     }
     const chaser=game.dinosaurs.chaser;
+    this.baseRing.visible=Boolean(chaser);
     if(chaser){
       const sameRoute=(chaser.previousRoute??null)===(chaser.route??null),s=sameRoute?lerp(chaser.previousS,chaser.s,renderer.motionAlpha):chaser.s,d=game.dinosaurs.chaserD(chaser,s,sameRoute?lerp(chaser.previousD,chaser.d,renderer.motionAlpha):chaser.d);
-      const fade=Math.min(1,(chaser.until-time)/DINOSAURS.exitFadeSeconds);
-      add('chaser:'+chaser.id,'chaser',s,d,chaser.route,0,Math.max(.01,fade),false,chaser.phase,null,chaser.jump);
-      this.sources.push({id:'chaser:'+chaser.id,s,d,route:chaser.route,type:'bridge'});
+      const fade=Math.max(0,Math.min(1,(chaser.until-time)/DINOSAURS.exitFadeSeconds));
+      const p=add('chaser:'+chaser.id,'chaser',s,d,chaser.route,0,Math.max(.01,fade),false,chaser.phase,null,chaser.jump);
+      this.baseRing.position.set(p.x,p.y+.045,p.z);this.baseRing.rotation.set(p.pitch,-p.heading,0,'YXZ');this.baseRing.scale.setScalar(DINOSAURS.baseRingRadius*Math.max(.01,fade));this.baseRing.material.opacity=.65*fade;
+      if(!chaser.defeated)this.sources.push({id:'chaser:'+chaser.id,s,d,route:chaser.route,type:'bridge'});
     }
     for(const [key,item]of this.models)if(!seen.has(key)){let pool=this.pools.get(item.kind);if(!pool){pool=[];this.pools.set(item.kind,pool);}pool.push(item.view);this.models.delete(key);}
-    const cfg=DINOSAURS;let prints=0;
-    for(const foot of game.dinosaurs.feet){
-      if(time<foot.from)continue;
-      const p=renderer.local(foot.s,foot.d,foot.route,this.point),fade=Math.max(.05,1-(time-foot.until)/cfg.footFade);
-      renderer.instance(this.prints,prints++,p.x,p.y+.03,p.z,cfg.footWidth*fade,1,cfg.footLength*fade,p.heading,p.pitch);
-    }
-    this.prints.count=prints;this.prints.visible=prints>0;if(prints)this.prints.instanceMatrix.needsUpdate=true;
   }
 }

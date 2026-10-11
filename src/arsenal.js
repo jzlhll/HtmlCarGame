@@ -1,5 +1,12 @@
-import { COINS, ROCKETS, VEHICLES, LANE_WIDTH, laneD, random, lerp } from './config.js';
+import { COINS, ROCKETS, VEHICLES, LANE_WIDTH, laneD, random, lerp, clamp } from './config.js';
 import { sweep } from './collision.js';
+
+// 左侧车道从 -1 向外递减，右侧从 1 向外递增；按实际横向位置归属车道。
+function laneAt(road,s,d,route){
+  const relative=d-road.branchCenter(s,route),direction=relative<0?-1:1;
+  const lane=clamp(Math.floor((Math.abs(relative)-.4)/LANE_WIDTH),0,road.available(s,route)-1);
+  return direction*(lane+1);
+}
 
 // 金币与武器仅属于本局第二关，不进入成长积分或本机存档。
 export class Arsenal {
@@ -47,9 +54,20 @@ export class Arsenal {
     const cost=type==='advanced'?ROCKETS.advancedCost:ROCKETS.normalCost;
     if(this.balance<cost)return false;
     this.balance-=cost;
-    const p=game.player,origin={...this.road.at(p.s,p.d,p.route)},heading=origin.heading+(p.yaw||0),width=type==='advanced'?ROCKETS.advancedWidth:ROCKETS.normalWidth;
-    const shot={id:this.nextId++,type,origin,heading,width,range:ROCKETS.range,born:game.activeSeconds};this.shots.push(shot);
-    // 发射时固定正前方矩形，按真实车身盒体判定，不随弯道或玩家横移拐弯。
+    const p=game.player,route=p.route??null,available=this.road.available(p.s,route),ordered=[];
+    for(let lane=available;lane>=1;lane--)ordered.push(-lane);
+    for(let lane=1;lane<=available;lane++)ordered.push(lane);
+    const lane=laneAt(this.road,p.s,p.d,route),index=ordered.indexOf(lane);
+    const lanes=type==='advanced'?null:ordered.slice(Math.max(0,index-ROCKETS.normalSideLanes),index+ROCKETS.normalSideLanes+1);
+    const path=[{s:p.s,route,distance:0}];let s=p.s,currentRoute=route,distance=0;
+    // 沿当前路线累计实际前方距离，副路结束后接主路，弯道和坡道不会缩短清理范围。
+    while(distance<ROCKETS.range){
+      const step=Math.min(1,ROCKETS.range-distance);s+=step/this.road.pathScale(s,currentRoute);distance+=step;
+      if(currentRoute&&s>=this.road.route(currentRoute).end)currentRoute=null;
+      path.push({s,route:currentRoute,distance});
+    }
+    const shot={id:this.nextId++,type,s:p.s,route,lanes,lateral:p.d-this.road.branchCenter(p.s,route),path,endS:s,range:ROCKETS.range,born:game.activeSeconds};this.shots.push(shot);
+    // 起点、路线和普通炮的三条车道在发射时固定，按车辆中心所在车道立即清理。
     for(const car of game.traffic.cars)if(!car.remove&&this.hit(shot,car)){
       car.remove=true;game.renderer?.effect(car.s,car.d,'wreck',car);
     }
@@ -57,19 +75,15 @@ export class Arsenal {
     if(police&&this.hit(shot,police)){
       game.renderer?.effect(police.s,police.d,'wreck');game.police.dismiss(game.activeSeconds);
     }
+    const chaser=game.dinosaurs?.chaser;
+    // 高级炮三枚动画合计一次伤害，沿用本次发射的路线、车道与射程判定。
+    if(chaser&&!chaser.defeated&&this.hit(shot,chaser))game.dinosaurs.hurt(type==='advanced'?ROCKETS.advancedDinosaurDamage:ROCKETS.normalDinosaurDamage,game);
     game.audio?.rocketLaunch();return true;
   }
   hit(shot,car){
-    const point=this.road.at(car.s,car.d,car.route),size=car.dimensions??VEHICLES[car.rank],heading=point.heading+(car.yaw||0);
-    const fx=Math.sin(shot.heading),fz=-Math.cos(shot.heading),sx=Math.cos(shot.heading),sz=Math.sin(shot.heading);
-    const dx=point.x-shot.origin.x-fx*shot.range/2,dz=point.z-shot.origin.z-fz*shot.range/2;
-    const cx=Math.cos(heading),cz=Math.sin(heading),vx=Math.sin(heading),vz=-Math.cos(heading),halfWidth=size.width/2,halfLength=size.length*Math.cos(point.pitch||0)/2;
-    for(const [x,z]of [[sx,sz],[fx,fz],[cx,cz],[vx,vz]]){
-      const beam=Math.abs(sx*x+sz*z)*shot.width/2+Math.abs(fx*x+fz*z)*shot.range/2;
-      const vehicle=Math.abs(cx*x+cz*z)*halfWidth+Math.abs(vx*x+vz*z)*halfLength;
-      if(Math.abs(dx*x+dz*z)>beam+vehicle)return false;
-    }
-    // 前端必须进入发射点前方，后方车身不会被擦边击中。
-    return (point.x-shot.origin.x)*fx+(point.z-shot.origin.z)*fz+halfLength>0;
+    if(car.s<shot.s||car.s>shot.endS)return false;
+    const route=shot.route&&car.s<this.road.route(shot.route).end?shot.route:null;
+    if((car.route??null)!==route)return false;
+    return shot.type==='advanced'||shot.lanes.includes(laneAt(this.road,car.s,car.d,route));
   }
 }

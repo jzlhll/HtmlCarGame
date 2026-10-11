@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { TREE_SCENERY, ROAD_RENDER, random, lerp } from './config.js';
+import { TREE_SCENERY, ROAD_RENDER, DINOSAURS, random, lerp } from './config.js';
 
 // 每块只生成一次世界坐标布局，距离可见性与近远细节独立更新。
 export class SceneryWindow {
@@ -36,8 +36,8 @@ export class SceneryWindow {
       }
       // 容量只在合并窗口时裁剪，不影响区块随机序列，避免原地装饰随窗口变化。
       if(template===1&&rng()<.08){
-        const s=station0+size/2,d=sign*(road.edge(s)+65),p=road.at(s,d);
-        if(Math.abs(p.pitch)<.025)add('lakes',s,d,-.018,[9,1,17],p.heading,renderer.level===2?{id:block*2+(sign>0?1:0),s,d,kind:'diplodocus'}:null);
+        const s=station0+size/2,d=sign*(road.edge(s)+(renderer.level===2?DINOSAURS.lakeOffset:65)),p=road.at(s,d);
+        if(Math.abs(p.pitch)<.025&&(renderer.level!==2||!road.onPavement(s,d,12)))add('lakes',s,d,-.018,[9,1,17],p.heading,renderer.level===2?{id:block*2+(sign>0?1:0),s,d,kind:'diplodocus'}:null);
       }
       if(template===2||renderer.level===2){
         const s=station0+rng()*size,d=sign*(road.edge(s)+4+rng()*3);

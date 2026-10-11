@@ -1,4 +1,4 @@
-import { ROCKETS } from './config.js';
+import { ROCKETS, lerp } from './config.js';
 import { coinModel, rocketModel } from './arsenal-models.js';
 
 // 金币及火箭的部件共享几何与材质，显示对象按固定上限复用。
@@ -19,14 +19,14 @@ export class ArsenalView {
     }
     if(!arsenal.shots.length)return;
     let normal=0,advancedIndex=0;
-    const origin=renderer.origin,h=origin.heading,cos=Math.cos(h),sin=Math.sin(h);
     for(const shot of arsenal.shots){
       const progress=Math.min(1,(time-shot.born)/ROCKETS.flightSeconds),advanced=shot.type==='advanced',count=advanced?3:1;
-      const fx=Math.sin(shot.heading),fz=-Math.cos(shot.heading),sx=Math.cos(shot.heading),sz=Math.sin(shot.heading);
+      const distance=progress*shot.range,index=Math.min(Math.floor(distance),shot.path.length-2),a=shot.path[index],b=shot.path[index+1];
+      const s=lerp(a.s,b.s,(distance-a.distance)/(b.distance-a.distance)),route=shot.route&&s<game.road.route(shot.route).end?shot.route:null,center=game.road.branchCenter(s,route);
       for(let i=0;i<count;i++){
         const index=advanced?advancedIndex++:normal++,pool=this.rockets[shot.type],view=pool[index]??(pool[index]=rocketModel(advanced));
-        const spread=advanced?(i-1)*shot.width/3:0,dx=shot.origin.x+fx*progress*shot.range+sx*spread-origin.x,dz=shot.origin.z+fz*progress*shot.range+sz*spread-origin.z;
-        view.position.set(cos*dx+sin*dz,shot.origin.y-origin.y+ROCKETS.launchHeight,-sin*dx+cos*dz);view.rotation.set(0,-shot.heading+h,0);renderer.trafficView.add(view);
+        const d=center+(advanced?(i-1)*game.road.edge(s,route)*2/3:shot.lateral),p=renderer.local(s,d,route,this.point);
+        view.position.set(p.x,p.y+ROCKETS.launchHeight,p.z);view.rotation.set(p.pitch,-p.heading,0);renderer.trafficView.add(view);
       }
     }
   }
