@@ -35,9 +35,11 @@ export class UI {
     });
     this.overlay.addEventListener('change',event=>{
       const action=event.target.dataset.action;
-      if(game.state!=='READY'||!['debug','debug-second-level'].includes(action))return;
+      if(game.state!=='READY'||!['debug','debug-second-level','debug-third-level'].includes(action))return;
       if(action==='debug')game.debugMode=event.target.checked;
-      else game.debugSecondLevel=event.target.checked;
+      else if(action==='debug-second-level'){game.debugSecondLevel=event.target.checked;if(event.target.checked)game.debugThirdLevel=false;}
+      else{game.debugThirdLevel=event.target.checked;if(event.target.checked)game.debugSecondLevel=false;}
+      this.render();
       game.input.container.focus({preventScroll:true});
     });
     game.onChange=()=>{this.resetConfirm=false;this.render();};this.render();
@@ -67,7 +69,7 @@ export class UI {
     g.input.container.classList.toggle('level-two',g.level===2);
     this.elements['arsenal-hud'].hidden=g.level!==2||['READY','PREPARING','RESULT'].includes(g.state);
     this.quizTimer=null;this.quizSeconds=null;
-    const debugOption='<label class="debug-option"><input type="checkbox" data-action="debug"'+(g.debugMode?' checked':'')+'><span>调试模式 · 死亡后复活</span></label><label class="debug-option"><input type="checkbox" data-action="debug-second-level"'+(g.debugSecondLevel?' checked':'')+'><span>调试 · 直接进入第二关</span></label>';
+    const debugOption='<label class="debug-option"><input type="checkbox" data-action="debug"'+(g.debugMode?' checked':'')+'><span>调试模式 · 死亡后复活</span></label><label class="debug-option"><input type="checkbox" data-action="debug-second-level"'+(g.debugSecondLevel?' checked':'')+'><span>调试 · 直接进入第二关</span></label><label class="debug-option"><input type="checkbox" data-action="debug-third-level"'+(g.debugThirdLevel?' checked':'')+'><span>调试 · 直接进入第三关</span></label>';
     // 替换弹窗前保留游戏焦点，点击结束后仍能直接使用空格。
     if(this.overlay.contains(document.activeElement))g.input.container.focus({preventScroll:true});
     this.warning();
@@ -79,13 +81,17 @@ export class UI {
     }
     if(g.state==='READY'){
       const colorButtons=CAR_COLORS.map(c=>'<button class="color-chip'+(c.id===g.carColor?' selected':'')+'" data-action="pick-color" data-color="'+c.id+'" aria-label="汽车颜色 '+c.name+'" aria-pressed="'+(c.id===g.carColor)+'" title="'+c.name+'"><i style="background:'+c.css+'"></i></button>').join('');
-      this.overlay.innerHTML='<section class="card intro-card"><div class="eyebrow">FOUR SEASONS / ENDLESS ROAD</div><div class="intro-head"><h1>四季车途</h1><div class="head-pickers"><div class="color-picker"><span>汽车颜色：</span><div class="color-mini">'+colorButtons+'</div></div></div></div><blockquote class="intro-quote">从一辆自行车开始，生存满'+time(LEVELS.firstSeconds)+'，驶入恐龙出没的荒原第二关。</blockquote><p class="driving-help">'+(mobile?'左手摇杆左右横移，右手按住刹车或加速。<br>持续按住加速，达到车型最高速后自动喷气，极速时仍耗气。':'<kbd>← / →</kbd> 左右横移 <kbd>↑</kbd> 加速 <kbd>↓</kbd> 刹车 <kbd>空格</kbd> 开始 / 暂停')+'</p><button type="button" class="start-prompt" data-action="play">'+(mobile?'开始这一程':'按 <kbd>空格</kbd> 开始这一程')+'</button><div class="best"><span>最佳距离</span><strong>'+format(g.store.data.leaderboard[0]?.score||0)+' 米</strong></div>'+this.records()+(mobile?'<details class="intro-rules"><summary>玩法说明</summary>':'')+'<div class="rules"><div class="rule"><b>侧碰吞吃</b>侧碰低级或同级车可以吞吃升级；侧碰高级车会失控旋转。</div><div class="rule"><b>警车追击</b>警车会隔一会儿撒网捕捉，捉到后要答题，答对继续。</div><div class="rule"><b>观察车流</b>避开高级车，小心追尾；遇险时有答题复活的机会。</div><div class="rule"><b>天降炮击</b>看到红色预警圈及时躲开，第二关要小心大恐龙踩踏。</div></div>'+(mobile?'</details>':'')+debugOption+'</section>';
-    }else if(g.state==='PREPARING')this.overlay.innerHTML='<section class="card"><h2>道路准备中</h2><p>正在分配本局的道路与车流。</p></section>';
+      this.overlay.innerHTML='<section class="card intro-card"><div class="eyebrow">FOUR SEASONS / ENDLESS ROAD</div><div class="intro-head"><h1>四季车途</h1><div class="head-pickers"><div class="color-picker"><span>汽车颜色：</span><div class="color-mini">'+colorButtons+'</div></div></div></div><blockquote class="intro-quote">从一辆自行车开始，生存满'+time(LEVELS.firstSeconds)+'进入第二关，再坚持'+time(LEVELS.secondSeconds)+'进入第三关，最后坚持'+time(LEVELS.thirdSeconds)+'即可全部通关。</blockquote><p class="driving-help">'+(mobile?'左手摇杆左右横移，右手按住刹车或加速。<br>持续按住加速，达到车型最高速后自动喷气，极速时仍耗气。':'<kbd>← / →</kbd> 左右横移 <kbd>↑</kbd> 加速 <kbd>↓</kbd> 刹车 <kbd>空格</kbd> 开始 / 暂停')+'</p><button type="button" class="start-prompt" data-action="play">'+(mobile?'开始这一程':'按 <kbd>空格</kbd> 开始这一程')+'</button><div class="best"><span>最佳距离</span><strong>'+format(g.store.data.leaderboard[0]?.score||0)+' 米</strong></div>'+this.records()+(mobile?'<details class="intro-rules"><summary>玩法说明</summary>':'')+'<div class="rules"><div class="rule"><b>侧碰吞吃</b>侧碰低级或同级车可以吞吃升级；侧碰高级车会失控旋转。</div><div class="rule"><b>警车追击</b>警车会隔一会儿撒网捕捉，捉到后要答题，答对继续。</div><div class="rule"><b>观察车流</b>避开高级车，小心追尾；遇险时有答题复活的机会。</div><div class="rule"><b>天降炮击</b>看到红色预警圈及时躲开，第二关要小心大恐龙踩踏。</div></div>'+(mobile?'</details>':'')+debugOption+'</section>';
+    }else if(g.state==='PREPARING')this.overlay.innerHTML='<div class="loading-status" role="status" aria-live="polite"><span class="loading-spinner" aria-hidden="true"></span><span>loading...</span></div>';
+    else if(g.state==='LEVEL_CLEAR'&&g.level===2){
+      const cards=[['火山 · 岩浆路','每十秒三连喷发，躲开前方岩浆；自行车碰到死亡，其他车降级。'],['海水 · 浮桥','每十秒海啸横扫，扣除 60% 满防御并失控旋转；自行车碰到死亡。'],['冰山 · 冰块路','崩塌覆盖区连续横移超过 0.8 秒会打滑旋转；撞上车道冰山直接死亡。']];
+      this.overlay.innerHTML='<section class="card level-guide" role="dialog" aria-modal="true" aria-label="第二关通关"><div class="eyebrow">LEVEL COMPLETE / NEXT LEVEL</div><h2>恭喜！通过第二关。</h2><div class="level-guide-grid">'+cards.map(([title,copy])=>'<article><h3>'+title+'</h3><p>'+copy+'</p></article>').join('')+'</div><p class="level-guide-hint">第三关从零开始 · 六分钟通关 · 三分钟后四车道<br>火山 → 海水 → 冰山，每分钟轮换 · 空格进入第三关</p><button class="button" data-action="play">进入第三关</button></section>';
+    }
     else if(g.state==='LEVEL_CLEAR'){
       const images=g.renderer?.guideImages()??[],cards=[['大型恐龙踩踏','恐龙左右跳跃踩向你，及时横移躲开。'],['装甲坦克','装甲坦克不能碰，请绕开行驶。'],['金币与火箭炮','小金币 '+COINS.smallValue+'、大金币 '+COINS.largeValue+'；按 1 消耗 '+ROCKETS.normalCost+' 金币清理自身及左右相邻车道，按 2 消耗 '+ROCKETS.advancedCost+' 金币清理全部车道，距离均为 '+ROCKETS.range+' 米。']];
       this.overlay.innerHTML='<section class="card level-guide" role="dialog" aria-modal="true" aria-label="第一关通关"><div class="eyebrow">LEVEL COMPLETE / NEXT LEVEL</div><h2>恭喜！通过第一关。</h2><div class="level-guide-grid">'+cards.map(([title,copy],i)=>'<article><img src="'+(images[i]??'')+'" alt="'+title+'模型"><h3>'+title+'</h3><p>'+copy+'</p></article>').join('')+'</div><p class="level-guide-hint">第二关从零开始 · 空格进入第二关</p><button class="button" data-action="play">进入第二关</button></section>';
     }
-    else if(g.state==='PAUSED')this.overlay.innerHTML='<section class="card" role="dialog" aria-modal="true" aria-label="游戏已暂停"><div class="eyebrow">TAKE A BREATH</div><h2>游戏已暂停</h2><p>当前 '+format(g.player.distance)+' 米 · '+VEHICLES[g.player.rank].name+'<br>'+(mobile?'点击继续行驶；左侧摇杆横移，右侧刹车与加速 / 氮气。':'按空格继续，↓ 刹车，左右横移，↑ 持续加速到最高车速后自动喷气，极速时仍耗气，松开留气。')+'</p><button class="button" data-action="play">继续行驶</button><button class="button secondary" data-action="quit">结束游戏</button></section>';
+    else if(g.state==='PAUSED')this.overlay.innerHTML='<section class="card pause-card" role="dialog" aria-modal="true" aria-label="游戏已暂停"><div class="eyebrow">TAKE A BREATH</div><h2>游戏已暂停</h2><p>当前 '+format(g.player.distance)+' 米 · '+VEHICLES[g.player.rank].name+'<br>'+(mobile?'点击继续行驶；左侧摇杆横移，右侧刹车与加速 / 氮气。':'按空格继续，↓ 刹车，左右横移，↑ 持续加速到最高车速后自动喷气，极速时仍耗气，松开留气。')+'</p><button class="button" data-action="play">继续行驶</button><button class="button secondary" data-action="quit">结束游戏</button></section>';
     else if(g.state==='QUIZ'&&g.quiz){
       const question=g.quiz,seconds=Math.ceil(g.quizRemaining()),rescue=question.rescue;
       const help=question.subject==='math'?mathHelp(question.helpTopic):null;
@@ -103,9 +109,9 @@ export class UI {
       }
     }
     else if(g.state==='RESULT'){
-      const r=g.result,total=r.eatenByType.reduce((a,b)=>a+b,0);
+      const r=g.result,total=r.eatenByType.reduce((a,b)=>a+b,0),completed=r.endReason==='complete';
       const solution=r.failedQuiz?'<div class="quiz-solution"><span>本题正确答案</span><p>'+mathText(r.failedQuiz)+'</p></div>':'';
-      this.overlay.innerHTML='<section class="card" role="dialog" aria-modal="true" aria-label="本局结算"><div class="eyebrow">JOURNEY COMPLETE</div><h2>'+ (r.endReason==='quit'?'本局已结束':'旅程到这里')+'</h2><div class="result-score">'+format(r.score)+'<small>米 / 分</small></div><p class="fatal-mark">'+(r.endReason==='quit'?'主动结束':CAUSES[r.deathCause]||'车辆损毁')+'</p>'+solution+'<div class="result-grid"><div><span>最高车型</span><strong>'+VEHICLES[r.highestRank].name+'</strong></div><div><span>吞吃车辆</span><strong>'+total+' 辆</strong></div><div><span>行驶时间</span><strong>'+time(r.activeSeconds)+'</strong></div><div><span>起始季节</span><strong>'+r.startSeason+'</strong></div></div><button class="button" data-action="play">'+(mobile?'再来一局':'按空格 / 点击开始新一局')+'</button><button class="button secondary" data-action="back">返回首页</button>'+this.records()+'</section>';
+      this.overlay.innerHTML='<section class="card" role="dialog" aria-modal="true" aria-label="'+(completed?'全部通关':'本局结算')+'"><div class="eyebrow">JOURNEY COMPLETE</div><h2>'+ (completed?'恭喜！全部通关。':r.endReason==='quit'?'本局已结束':'旅程到这里')+'</h2><div class="result-score">'+format(r.score)+'<small>米 / 分</small></div><p class="'+(completed?'':'fatal-mark')+'">'+(completed?'第三关已完成，本次旅程圆满结束。':r.endReason==='quit'?'主动结束':CAUSES[r.deathCause]||'车辆损毁')+'</p>'+solution+'<div class="result-grid"><div><span>最高车型</span><strong>'+VEHICLES[r.highestRank].name+'</strong></div><div><span>吞吃车辆</span><strong>'+total+' 辆</strong></div><div><span>行驶时间</span><strong>'+time(r.activeSeconds)+'</strong></div><div><span>'+(g.level===3?'起始环境':'起始季节')+'</span><strong>'+r.startSeason+'</strong></div></div><button class="button" data-action="play">'+(mobile?'再来一局':'按空格 / 点击开始新一局')+'</button><button class="button secondary" data-action="back">返回首页</button>'+this.records()+'</section>';
     }else this.overlay.replaceChildren();
   }
   update(dt){

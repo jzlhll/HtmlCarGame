@@ -68,12 +68,9 @@ export class Arsenal {
     }
     const shot={id:this.nextId++,type,s:p.s,route,lanes,lateral:p.d-this.road.branchCenter(p.s,route),path,endS:s,range:ROCKETS.range,born:game.activeSeconds};this.shots.push(shot);
     // 起点、路线和普通炮的三条车道在发射时固定，按车辆中心所在车道立即清理。
+    // 警车与捕网属于独立事件，不受普通炮或高级炮影响。
     for(const car of game.traffic.cars)if(!car.remove&&this.hit(shot,car)){
       car.remove=true;game.renderer?.effect(car.s,car.d,'wreck',car);
-    }
-    const police=game.police.police;
-    if(police&&this.hit(shot,police)){
-      game.renderer?.effect(police.s,police.d,'wreck');game.police.dismiss(game.activeSeconds);
     }
     const chaser=game.dinosaurs?.chaser;
     // 高级炮三枚动画合计一次伤害，沿用本次发射的路线、车道与射程判定。

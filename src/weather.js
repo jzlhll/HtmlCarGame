@@ -31,6 +31,7 @@ export class SeasonalWeather {
     this.contactStart={};this.contactFinish={};this.trafficStart={};
   }
   advance(game){
+    if(game.level===3)return;
     const now=game.activeSeconds;this.road=game.road;
     const route=game.player.route??null;
     if(route!==this.route){this.route=route;this.event=null;this.hazards=[];this.nextAt=now+(route ? .5 : lerp(WEATHER.firstMin,WEATHER.firstMax,this.rng()));}

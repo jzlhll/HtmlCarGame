@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { SECOND_LEVEL_SCENE } from './config.js';
 import { material } from './models.js';
 
 // 两条路线使用相同的路面与标线，不通过外观暴露主副路线。
@@ -36,7 +35,7 @@ export class BranchRoadView {
       const first=Math.max(fork.start,s-80),last=Math.min(fork.end,s+460),points=[];
       for(let station=first;station<=last;station+=5){const center=renderer.road.branchCenter(station,fork.id);points.push({...renderer.local(station,center,fork.id),edge:renderer.road.edge(station,fork.id)});}
       if(last>first&&(last-first)%5)points.push({...renderer.local(last,renderer.road.branchCenter(last,fork.id),fork.id),edge:renderer.road.edge(last,fork.id)});
-      view.strips[0].mesh.material=material(renderer.level===2?SECOND_LEVEL_SCENE.shoulder:0x8195a0);view.strips[1].mesh.material=renderer.level===2?renderer.dirtMaterial:material(0x293e50);
+      view.strips[0].mesh.material=renderer.shoulderMaterial;view.strips[1].mesh.material=renderer.roadMaterial;
       for(const strip of view.strips){
         const positions=strip.mesh.geometry.attributes.position.array;
         for(let i=0;i<points.length;i++)for(let side=0;side<2;side++){

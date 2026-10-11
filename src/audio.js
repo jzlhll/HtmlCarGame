@@ -334,6 +334,11 @@ export class GameAudio {
   shellWhistle(seconds){if(!this.context)return;const cfg=AUDIO.shell,dur=clamp(seconds,.4,4);this.tone('sine',cfg.whistleHz,cfg.whistleDropHz,dur,cfg.gain);}
   shellBoom(){if(!this.context)return;const cfg=AUDIO.shell;this.burst(2000,300,'bandpass',.6,.5,cfg.boomGain);this.burst(700,40,'lowpass',.5,1.8,cfg.boomGain,.02);this.tone('sine',70,22,1.4,cfg.boomGain*.7,.02);}
   bump(){if(!this.context)return;this.tone('sine',130,58,.28,.28);this.burst(260,110,'lowpass',.7,.22,.22,.01);}
+  disaster(kind){
+    if(!this.context)return;
+    const cfg=AUDIO.disasters[kind];
+    this.burst(cfg.hz,cfg.endHz,cfg.filter,.7,cfg.seconds,cfg.gain);
+  }
   splash(){if(!this.context)return;this.burst(950,380,'bandpass',.9,.7,.3);this.burst(2600,1900,'highpass',.8,.3,.07,.03);}
   upgrade(){if(!this.context)return;[523,659,784].forEach((hz,i)=>this.tone('sine',hz,hz,.22,.09,i*.09));}
   downgrade(){if(!this.context)return;this.tone('sine',392,330,.2,.09);this.tone('sine',330,262,.26,.09,.11);}

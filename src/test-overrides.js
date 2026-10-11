@@ -6,7 +6,8 @@ export const TEST_OVERRIDES={active:false,keys:[]};
 
 // 白名单开放事件节奏、概率、车流容量及警车距离、网尺寸等字段，不开放车型尺寸与车辆碰撞阈值。
 const WHITELIST={
-  LEVELS:['firstSeconds','weatherChance','branchWeatherChance'],
+  LEVELS:['firstSeconds','secondSeconds','thirdSeconds','weatherChance','branchWeatherChance'],
+  DISASTERS:['environmentSeconds','narrowSeconds','volcanoInterval','waveInterval','iceInterval','collapseInterval','icebergInterval'],
   COINS:['firstSeconds','intervalMin','intervalMax','chance','aheadMin','aheadMax'],
   DINOSAURS:['smallFirstMin','smallFirstMax','smallIntervalMin','smallIntervalMax','smallChance','chaseAfterSeconds','chaseFirstMin','chaseFirstMax','chaseIntervalMin','chaseIntervalMax','chaseChance','durationMin','durationMax'],
   TRAFFIC_DENSITY:['capacity','maxCapacity','capacityPerStep'],
@@ -45,7 +46,7 @@ export function applyTestOverrides(groups){
   const set=(group,name,key,raw)=>{
     const value=Number(raw);
     if(!Number.isFinite(value)){warn(name+'.'+key+'='+raw);return;}
-    if(name==='POLICE'&&key==='intervalSeconds'&&value<=0){warn(name+'.'+key+'='+raw);return;}
+    if((name==='DISASTERS'||name==='LEVELS'||name==='POLICE'&&key==='intervalSeconds')&&value<=0){warn(name+'.'+key+'='+raw);return;}
     group[key]=value;TEST_OVERRIDES.keys.push(name+'.'+key+'='+raw);
   };
   const applyPatch=patch=>{

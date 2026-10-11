@@ -2,7 +2,8 @@ import { ROAD_CACHE, ROAD_CURVES, ROADWORKS, ROADBLOCKS, ROAD_INFRASTRUCTURE, RO
 
 // 有限种子计划重复使用，逻辑距离持续增长；每轮平移连接上一轮终点。
 export class Road {
-  constructor(seed) {
+  constructor(seed,{flat=false}={}) {
+    this.flat=flat;
     this.seed = seed;this.narrowStart=Infinity;this.narrowEnd=Infinity;this.blockadeStart=Infinity;this.revision=0;this.lapCache=new Map();this.routeCache=new Map();
     const rng = random(seed);
     this.segments = [];
@@ -235,6 +236,7 @@ export class Road {
     const fork=this.fork(s);return Boolean(fork&&Math.abs(d-this.branchCenter(s,fork.id))<this.edge(s,fork.id)+padding);
   }
   elevation(s,out={}){
+    if(this.flat){out.y=0;out.grade=0;return out;}
     out.y=0;out.grade=0;
     if(s<0)return out;
     const local=s%this.length;
@@ -269,6 +271,7 @@ export class Road {
     }
   }
   groundElevation(s){
+    if(this.flat)return 0;
     if(s<0)return 0;
     const local=s%this.length;
     for(const site of this.structures)if(site.kind==='dip'&&site.feature==='river'&&local>=site.start&&local<=site.end){
@@ -303,6 +306,11 @@ export class Road {
     const heading=lerp(a.heading,b.heading,t),lateral=d-this.branchCenter(s,route);
     out.x=this.end.x*fork.lap+lerp(a.x,b.x,t)+Math.cos(heading)*lateral;out.y=lerp(a.y,b.y,t);out.z=this.end.z*fork.lap+lerp(a.z,b.z,t)+Math.sin(heading)*lateral;out.heading=heading;out.pitch=lerp(a.pitch,b.pitch,t);return out;
   }
+  forceFour(){
+    if(this.forceFourLanes)return;
+    this.forceFourLanes=true;this.revision++;
+    for(const data of this.lapCache.values())for(const fork of data.forks)if(fork)fork.variants.length=0;
+  }
   narrowAfter(s){
     if(Number.isFinite(this.narrowStart))return;
     // 两条路线同步收窄，不等待长分叉结束；当前车身所在位置保持原宽度。
@@ -317,6 +325,7 @@ export class Road {
     this.blockadeStart=s+ROADBLOCKS.warningDistance;this.revision++;
   }
   lanes(s) {
+    if(this.forceFourLanes)return 2;
     if(s<0) return 3;
     const local=s%this.length,seg=this.localSegment(local),t=clamp((local-seg.start)/seg.length,0,1);
     let lanes=seg.kind==='taper'?lerp(3,2,smooth(t)):seg.kind==='open'?lerp(2,3,smooth(t)):seg.lanes||3;
@@ -356,6 +365,7 @@ export class Road {
     return data.closures[index]??=({...seg,start:seg.start+data.offset,end:seg.end+data.offset});
   }
   closures(s,look=450,list=[]) {
+    if(this.forceFourLanes){list.length=0;return list;}
     const lap=Math.floor(Math.max(0,s)/this.length);
     list.length=0;
     for(let round=lap;round<=lap+1;round++) for(const seg of this.closureSegments) {
@@ -366,6 +376,7 @@ export class Road {
     return list;
   }
   walls(s,look=450,list=[]) {
+    if(this.forceFourLanes){list.length=0;return list;}
     const lap=Math.floor(Math.max(0,s)/this.length);list.length=0;
     for(let round=lap;round<=lap+1;round++)for(const seg of this.wallSegments){
       const start=round*this.length+seg.start,end=round*this.length+seg.end;

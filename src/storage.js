@@ -4,7 +4,7 @@ const COLOR_KEY='htmlCarGame.color.v1';
 const SCHEMA_VERSION=2;
 const defaults=()=>({schemaVersion:SCHEMA_VERSION,rulesVersion:RULES_VERSION,updatedAt:null,leaderboard:[]});
 const number=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0;
-const validRun=r=>r&&typeof r.runId==='string'&&r.runId.length<100&&number(r.runSeed)&&SEASONS.includes(r.startSeason)&&r.rulesVersion===RULES_VERSION&&typeof r.endedAt==='string'&&Number.isFinite(Date.parse(r.endedAt))&&['death','quit'].includes(r.endReason)&&number(r.distanceMeters)&&number(r.activeSeconds)&&Number.isInteger(r.highestRank)&&r.highestRank>=1&&r.highestRank<=MAX_RANK&&Array.isArray(r.eatenByType)&&r.eatenByType.length===MAX_RANK&&r.eatenByType.every(v=>number(v)&&Number.isInteger(v))&&(r.deathCause===null||typeof r.deathCause==='string');
+const validRun=r=>r&&typeof r.runId==='string'&&r.runId.length<100&&number(r.runSeed)&&(SEASONS.includes(r.startSeason)||r.startSeason==='火山')&&r.rulesVersion===RULES_VERSION&&typeof r.endedAt==='string'&&Number.isFinite(Date.parse(r.endedAt))&&['death','quit','complete'].includes(r.endReason)&&number(r.distanceMeters)&&number(r.activeSeconds)&&Number.isInteger(r.highestRank)&&r.highestRank>=1&&r.highestRank<=MAX_RANK&&Array.isArray(r.eatenByType)&&r.eatenByType.length===MAX_RANK&&r.eatenByType.every(v=>number(v)&&Number.isInteger(v))&&(r.deathCause===null||typeof r.deathCause==='string');
 const order=(a,b)=>b.score-a.score||b.distanceMeters-a.distanceMeters||Date.parse(a.endedAt)-Date.parse(b.endedAt);
 export class SaveStore {
   constructor(){this.data=defaults();this.warning='';this.blocked=false;this.load();}

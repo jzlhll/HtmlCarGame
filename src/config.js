@@ -1,6 +1,6 @@
 export const VEHICLES = [
   null,
-  {name:'自行车', length:1, width:.55, min:20, max:45, playerMax:110, lateral:6.6, color:0xf6cf57},
+  {name:'自行车', length:1, width:.55, min:20, max:45, playerMax:120, lateral:6.6, color:0xf6cf57},
   {name:'三轮车', length:1.55, width:.85, min:55, max:85, playerMax:130, lateral:6.3, color:0x62b59a},
   {name:'小汽车', length:2, width:1, min:55, max:95, playerMax:145, lateral:6.15, color:0x68b6d7},
   {name:'卡车', length:3.75, width:1.25, min:45, max:75, playerMax:145, lateral:5.1, color:0xe3945e},
@@ -10,7 +10,22 @@ export const MAX_RANK=5; // 玩家最高车型与系统专属车型分开。
 export const ARMORED_RANK=6;
 VEHICLES.push({...VEHICLES[5],name:'装甲坦克',min:60,max:80,color:0xb29a66});
 export const SECOND_LEVEL_SCENE={road:'#858c90',grainDark:'rgba(53,62,66,.16)',grainLight:'rgba(214,219,218,.25)',tracks:'rgba(224,229,226,.12)',shoulder:0xa7aaa4,ground:0xaaa18b,water:0x438d8f,sky:0xcbd3d4,rock:0x958d7d,trunk:0x79694d,sun:0xf1f5ff};
-export const LEVELS={firstSeconds:180,countdownSeconds:5,exitSeconds:3,exitSpeed:100,weatherChance:.8,branchWeatherChance:1};
+export const LEVELS={firstSeconds:180,secondSeconds:240,thirdSeconds:360,countdownSeconds:5,exitSeconds:3,exitSpeed:100,weatherChance:.8,branchWeatherChance:1};
+// 第三关按有效时间循环，灾害尺寸和伤害不随调试节奏改变。
+export const DISASTERS={
+  environmentSeconds:60,narrowSeconds:180,
+  volcanoInterval:10,burstInterval:2,burstCount:3,lavaAheadMin:20,lavaAheadMax:30,lavaSize:5,lavaFallSeconds:.3,lavaKeepSeconds:6,
+  roadsideAheadMin:60,roadsideAheadMax:90,roadsideKeepSeconds:20,iceSideAheadMin:170,iceSideAheadMax:210,
+  waveInterval:10,waveSpeed:100/3.6,waveAhead:18,waveLength:18,waveWidth:16,waveHeight:7.8,defenseFraction:.6,waterSpinSeconds:1.5,wetSeconds:3,
+  iceInterval:10,collapseInterval:5,coverLength:22,coverKeepSeconds:12,slideSeconds:.8,iceSpinSeconds:1,
+  icebergInterval:10,icebergAheadMin:90,icebergAheadMax:130,icebergWidth:3.1,icebergLength:5,icebergHeight:5,icebergKeepSeconds:12,
+  capacity:32,sideCapacity:12,sceneryBlock:80,
+  themes:[
+    {name:'火山',road:0xc82f17,shoulder:0x552a22,ground:0x3e292b,sky:0x8c4c43,sun:0xffc190},
+    {name:'海水',road:0x8a9caa,shoulder:0x566b80,ground:0x167f9e,sky:0xb0d9e8,sun:0xe6f5ff},
+    {name:'冰山',road:0xaaddeb,shoulder:0x70adc8,ground:0xd3edf4,sky:0xc4dfed,sun:0xe5f6ff},
+  ],
+};
 export const ARMORED_TANK={truckChance:.025,tankChance:.075,heightMultiplier:2,barrelLength:4.8};
 export const COINS={smallValue:3,largeValue:6,smallSize:1.68,largeSize:2.66,largeChance:.3,firstSeconds:2,intervalMin:2.5,intervalMax:4.5,chance:.8,aheadMin:50,aheadMax:90,batchMin:3,batchMax:5,capacity:40,recycleBehind:30};
 export const ROCKETS={normalCost:20,advancedCost:50,normalSideLanes:1,range:100,normalDinosaurDamage:1/3,advancedDinosaurDamage:.5,flightSeconds:.78125,capacity:6,modelLength:4.8,modelWidth:.9,launchHeight:1.2};
@@ -38,6 +53,8 @@ export const VEHICLE_LENGTH_SCALE=2.4;
 export const VEHICLE_WIDTH_SCALE=1.6;
 export const PLAYER_LATERAL_SCALE=1.1;
 for(const vehicle of VEHICLES.slice(1)){vehicle.length*=VEHICLE_LENGTH_SCALE;vehicle.width*=VEHICLE_WIDTH_SCALE;vehicle.lateral*=PLAYER_LATERAL_SCALE;}
+// 卡车车长统一为整数米，模型、轮轴位置和碰撞共用尺寸。
+VEHICLES[4].length=7;
 // 一级车采用摩托车造型，横向放大 53%（由 80% 降低 15% 后取整）；模型和碰撞共用宽度，长度不变。
 export const BICYCLE_WIDTH_SCALE=1.53;
 VEHICLES[1].width*=BICYCLE_WIDTH_SCALE;
@@ -201,6 +218,7 @@ export const AUDIO={
   beep:{hz:880,gain:.05},
   coin:{hz:1500,gain:.09,seconds:.12},
   rocket:{hz:130,gain:.3,seconds:.4},
+  disasters:{volcano:{hz:340,endHz:48,filter:'lowpass',seconds:.8,gain:.23},wave:{hz:1500,endHz:420,filter:'bandpass',seconds:1,gain:.18},ice:{hz:2900,endHz:800,filter:'highpass',seconds:.65,gain:.16}},
   graze:{intervalSeconds:.16}, // 擦角噪声的最小间隔，避免持续接触时密集叠加。
   // 警车警笛:低频单音按固定节奏往复脉冲,形成“嗯、嗯、嗯”的短促鸣响,每个脉冲带轻微下滑;
   // 按距离衰减并随警车所在侧偏置声像。救护车的高低双音不在此列。
@@ -275,4 +293,4 @@ export const approach = (value, target, delta) => value < target ? Math.min(targ
 // 启动早期应用 URL 测试参数(?fast=1 或 ?POLICE.intervalSeconds=5 等白名单字段),
 // 仅服务 Agent/人工快速验证随机事件;不带参数或 Node 端导入时默认值原样生效。
 import { applyTestOverrides } from './test-overrides.js';
-applyTestOverrides({LEVELS,DINOSAURS,COINS,TRAFFIC_DENSITY,POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,ROADBLOCKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});
+applyTestOverrides({LEVELS,DISASTERS,DINOSAURS,COINS,TRAFFIC_DENSITY,POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,ROADBLOCKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});

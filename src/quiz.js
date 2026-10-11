@@ -75,10 +75,10 @@ function factorQuestion(){
 }
 function buildGrade5(){
   const kind=rng();
-  if(kind<.22)return {...decimalAddSub(),helpTopic:'decimal-add'};
-  if(kind<.42)return {...decimalMultiply(),helpTopic:'decimal-multiply'};
-  if(kind<.62)return {...decimalDivide(),helpTopic:'division'};
-  if(kind<.82)return {...fractionPart(),helpTopic:'fraction'};
+  if(kind<.22)return decimalAddSub();
+  if(kind<.42)return decimalMultiply();
+  if(kind<.62)return decimalDivide();
+  if(kind<.82)return fractionPart();
   return factorQuestion();
 }
 // 统一数学题格式:把刻度结果折算为字符串答案与数值,便于生成同数量级的干扰项。
@@ -166,7 +166,7 @@ function shuffle(options,correct){
 function makeMathQuestion(grade){
   let source,question;
   do{source=grade===5?buildGrade5():buildInteger(grade);question=normalizeMath(source);}while(/[×÷]/.test(question.text)&&question.value<=0);
-  return {...mathOptions(question),helpTopic:source.helpTopic??(question.text.includes('÷')?'division':'order')};
+  return {...mathOptions(question),...(source.helpTopic?{helpTopic:source.helpTopic}:{})};
 }
 
 // ---------- 语文：二至五年级课内古诗与少量课外拓展 ----------

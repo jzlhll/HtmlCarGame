@@ -30,7 +30,9 @@ export class DinosaurEvents {
         if(chaser.jump){
           const jump=chaser.jump,progress=clamp((now+dt-jump.startAt)/cfg.footWarning,0,1),blend=progress*progress*(3-2*progress);
           chaser.s=lerp(jump.fromS,jump.toS,blend);chaser.d=lerp(jump.fromD,jump.toD,blend);
-          if(progress===1){chaser.route=jump.route;chaser.jump=null;}
+          if(progress===1)chaser.route=jump.route;
+          // 接地危险窗口内保持落点和收腿姿态，避免走路动画使脚掌偏离固定伤害区。
+          if(now+dt>=jump.startAt+cfg.footWarning+cfg.footDanger)chaser.jump=null;
         }else{
           chaser.phase+=dt*Math.min(1/cfg.stepSecondsMin,speed/((cfg.stepDistanceMin+cfg.stepDistanceMax)/2))/2;
           const previousCenter=this.road.branchCenter(chaser.s,chaser.route);

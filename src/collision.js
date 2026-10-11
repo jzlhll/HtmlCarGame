@@ -47,7 +47,7 @@ function endCoreOverlap(a,b,index){
   return extent-distance>1e-6;
 }
 // 连续检测首次接触；侧面、端面中央和擦角分别处理，不再限制车头的纵向位置。
-export function sweep(player,next,target,targetNext,road) {
+export function sweep(player,next,target,targetNext,road,region=false) {
   const a=box(player,road,collisionBoxes[0]),b=box(target,road,collisionBoxes[1]),an=box(next,road,collisionBoxes[2]),bn=box(targetNext,road,collisionBoxes[3]);
   const relative=sub(b.center,a.center),motion=sub(sub(bn.center,b.center),sub(an.center,a.center));
   let enter=0,exit=1,axisIndex=-1,minDepth=Infinity,overlapAxis=0;
@@ -63,6 +63,7 @@ export function sweep(player,next,target,targetNext,road) {
     if(enter>exit+1e-8)return null;
   }
   if(enter>1||exit<0)return null;
+  if(region)return {time:Math.max(0,enter),exit:Math.min(1,exit)};
   const time=Math.max(0,enter),relativeContact=add(relative,motion,time);
   const direction=Math.sign(dot(relativeContact,a.side))||1;
   // 已有穿透先分离，不能凭缺失的首次接触面判成追尾或奖励吞吃。
@@ -121,14 +122,20 @@ export function startSpin(car,event,road){
   car.speed*=SIDE_IMPACT.speedMultiplier;
   return distance;
 }
-const spinProgress=time=>1-Math.pow(1-clamp(time/SIDE_IMPACT.seconds,0,1),3);
+// 灾害与侧撞共用旋转状态，灾害仅锁定输入和转动车身，不附加侧撞速度及后车效果。
+export function startDisasterSpin(car,seconds,direction=1){
+  if(car.spin)return;
+  car.spin={time:0,seconds,distance:0,turn:direction*Math.PI*2,power:3,hits:new Set(),initialYaw:car.yaw||0};
+  car.sidePush=0;car.sidePushTime=0;car.push=0;
+}
+const spinProgress=(time,seconds)=>1-Math.pow(1-clamp(time/seconds,0,1),3);
 function bounceIntegral(t){
   const settings=SIDE_BOUNCE,main=Math.min(t,settings.impactSeconds),tail=Math.min(Math.max(0,t-settings.impactSeconds),settings.settleSeconds);
   return main-(1-settings.settleSpeedRatio)*main*main/(2*settings.impactSeconds)
     +settings.settleSpeedRatio*(tail-tail*tail/(2*settings.settleSeconds));
 }
 export function bounceTravel(car,dt){
-  if(car.spin)return car.spin.distance*(spinProgress(car.spin.time+dt)-spinProgress(car.spin.time));
+  if(car.spin){const seconds=car.spin.seconds??SIDE_IMPACT.seconds;return car.spin.distance*(spinProgress(car.spin.time+dt,seconds)-spinProgress(car.spin.time,seconds));}
   if(!car.sidePush)return 0;
   const time=car.sidePushTime||0;
   return car.sidePush*(bounceIntegral(time+dt)-bounceIntegral(time));
@@ -137,9 +144,9 @@ export function advanceBounce(car,dt){
   const distance=bounceTravel(car,dt);
   if(car.spin){
     const spin=car.spin;spin.time+=dt;
-    const progress=clamp(spin.time/SIDE_IMPACT.seconds,0,1);
+    const seconds=spin.seconds??SIDE_IMPACT.seconds,progress=clamp(spin.time/seconds,0,1);
     car.yaw=spin.initialYaw*(1-progress)+spin.turn*(1-Math.pow(1-progress,spin.power));
-    if(spin.time>=SIDE_IMPACT.seconds-1e-10){car.spin=null;car.yaw=0;}
+    if(spin.time>=seconds-1e-10){car.spin=null;car.yaw=0;}
   }
   if(car.sidePush){
     car.sidePushTime=(car.sidePushTime||0)+dt;
