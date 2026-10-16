@@ -1,6 +1,6 @@
 import { SYSTEMS } from './config.js';
 
-const priorities = { blocked: 1, 'low-speed': 2, 'pitch-high': 3, 'pitch-low': 3, overspeed: 2, stall: 4 };
+const priorities = { blocked: 1, 'low-speed': 2, 'pitch-high': 3, 'pitch-low': 3, overspeed: 2, stall: 5, ceiling: 4, traffic: 3, 'off-course': 2, approach: 1, landed: 2, waterfall: 1, 'fault-recovered': 1 };
 
 // 告警按进入事件去重；操纵输入不会刷新或提前清除安全提示。
 export class Prompts {

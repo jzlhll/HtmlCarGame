@@ -1,0 +1,264 @@
+import { AIRCRAFT, LANDSCAPE, JOURNEY, terrainElevation } from './config.js';
+import { createMountainSurface, sampleMountain } from './terrain.js';
+
+export function transformPoint(point, pose) {
+  const [x, y, z] = point, cb = Math.cos(pose.bank), sb = Math.sin(pose.bank);
+  const xp = x * cb + y * sb, yp = (-x * sb + y * cb) * Math.cos(pose.pitch) - z * Math.sin(pose.pitch);
+  const zp = (-x * sb + y * cb) * Math.sin(pose.pitch) + z * Math.cos(pose.pitch);
+  return { x: pose.position.x + xp * Math.cos(pose.heading) - zp * Math.sin(pose.heading),
+    y: pose.position.y + yp, z: pose.position.z + xp * Math.sin(pose.heading) + zp * Math.cos(pose.heading) };
+}
+
+export function segmentBox(a, b, box, radius = 0) {
+  let near = 0, far = 1;
+  for (const axis of ['x', 'y', 'z']) {
+    const delta = b[axis] - a[axis], low = box.min[axis] - radius, high = box.max[axis] + radius;
+    if (Math.abs(delta) < 1e-10) { if (a[axis] < low || a[axis] > high) return false; continue; }
+    let t0 = (low - a[axis]) / delta, t1 = (high - a[axis]) / delta;
+    if (t0 > t1) [t0, t1] = [t1, t0];
+    near = Math.max(near, t0); far = Math.min(far, t1);
+    if (near > far) return false;
+  }
+  return true;
+}
+
+// 渲染与碰撞共用确定性的建筑尺寸和山体网格，避免看见的山与碰撞高度不同。
+export class RouteWorld {
+  constructor(route) {
+    this.route = route;
+    this.solids = []; this.waterfalls = [];
+    this.buildings = []; this.mountainSurfaces = []; this.boxCells = new Map();
+    let seed = LANDSCAPE.seed;
+    this.random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
+    const city = LANDSCAPE.city, random = this.random;
+    for (let row = 0; row < city.rows; row++) for (let column = 0; column < city.columns; column++) {
+      const x = (column - (city.columns - 1) / 2) * city.spacing;
+      const z = city.center[1] + (row - (city.rows - 1) / 2) * city.spacing;
+      if (Math.abs(x) < 180 || LANDSCAPE.landmarks.some(t => Math.hypot(x - t.position[0], z - t.position[1]) < city.landmarkClearance)) continue;
+      this.addBuilding(x, z, city.minWidth + random() * 55, city.minWidth + random() * 55,
+        city.minHeight + random() ** 1.7 * 210, city.colors[Math.floor(random() * city.colors.length)]);
+    }
+    for (let row = 0; row < 7; row++) for (let column = 0; column < 10; column++) {
+      const x = (column - 4.5) * 90, z = -11100 - row * 85;
+      if (Math.abs(x) < 110) continue;
+      this.addBuilding(x, z, 24 + random() * 14, 28 + random() * 14, 9 + random() * 10, column % 2 ? 0xb9b094 : 0xd2c6a9, '村庄房屋');
+    }
+    for (const zOffset of [0, this.route.destination.threshold - 100]) {
+      for (const [x, y, z, w, h, d] of [[215, 6, 140, 120, 12, 28], [200, 6.5, 10, 42, 13, 45], [255, 6.5, 10, 42, 13, 45], [310, 6.5, 10, 42, 13, 45], [135, 18, -210, 21, 36, 19]]) {
+        // 目的地机坪东侧留出停机圈与滑行空间。
+        const bx = zOffset ? x + 280 : x;
+        this.addBox(bx, y, z + zOffset, w, h, d, '机场建筑', zOffset ? this.route.destination.elevation : 0);
+      }
+    }
+    for (const tower of LANDSCAPE.landmarks) {
+      if (tower.kind === 'gateway') {
+        const w = tower.radius * 2, lower = tower.height * 0.82, upper = tower.height * 0.94;
+        this.addBox(tower.position[0], lower / 2, tower.position[1], w, lower, w * 0.48, tower.name);
+        for (const side of [-1, 1]) this.addBox(tower.position[0] + side * w * 0.42, (lower + upper) / 2, tower.position[1], w * 0.16, upper - lower, w * 0.48, tower.name);
+        this.addBox(tower.position[0], (upper + tower.height) / 2, tower.position[1], w, tower.height - upper, w * 0.48, tower.name);
+      } else {
+        for (let i = 0; i < 24; i++) {
+          const t = (i + 0.5) / 24;
+          const r = tower.kind === 'canton' ? (t > 0.75 ? 4 : tower.radius * (0.36 + 2.4 * (t / 0.75 - 0.53) ** 2)) : tower.kind === 'bamboo' ? tower.radius * (1 - t ** 2.5) + 1 : tower.radius * (1 - t * 0.5) * 1.12;
+          this.addBox(tower.position[0], t * tower.height, tower.position[1], r * 2, tower.height / 24, r * 2, tower.name);
+        }
+      }
+    }
+    const fall = this.route.waterfall;
+    this.addBuilding(fall.x, fall.z + fall.depth / 2, fall.width, fall.depth, fall.height, 0x638477, '瀑布岩壁');
+    this.waterfalls.push({ ...fall, id: 'river-falls', bottom: this.baseHeightAt(fall.x, fall.z), top: this.baseHeightAt(fall.x, fall.z) + fall.height, passable: false });
+    this.makeMountains();
+    this.addRegionalFeatures();
+    this.bodyPoints = [];
+    for (let z = -17; z <= 17; z += 3) this.bodyPoints.push({ point: [0, AIRCRAFT.bodyHeight, z], radius: this.route.bodyRadius });
+    for (let x = -17; x <= 17; x += 3) this.bodyPoints.push({ point: [x, 3, 1 + Math.abs(x) * 0.3], radius: 0.6 });
+    this.bodyPoints.push({ point: [0, 9, 17], radius: 0.6 }, ...AIRCRAFT.bodyContactPoints.map(point => ({point, radius: 0.45})));
+    this.bodySweep = this.bodyPoints.map(sample => ({radius: sample.radius, from: {x: 0, y: 0, z: 0}, to: {x: 0, y: 0, z: 0}}));
+    this.sweepBounds = {min: {x: 0, y: 0, z: 0}, max: {x: 0, y: 0, z: 0}};
+    this.collisionBoxes = new Set(); this.collisionMountains = [];
+  }
+
+  baseHeightAt(x, z) {
+    return terrainElevation(z, -this.route.destination.threshold);
+  }
+
+  // 凸岩体的同一组顶点生成可见三角面和碰撞平面，悬空部分不计入地面高度。
+  addRock(x, z, bottom, top, radius, color, name, lean = 0) {
+    const vertices = [], faces = [], segments = LANDSCAPE.terrain.rockSides, rows = LANDSCAPE.terrain.rockRings, floor = this.baseHeightAt(x, z);
+    for (let row = 0; row < rows; row++) {
+      const t = row / (rows - 1), height = bottom + (top - bottom) * t;
+      // 径向剖面保持凹函数，实体仍为凸体；增加层数不会生成错误的封闭碰撞平面。
+      const scale = bottom === 0 ? 1 + 0.15 * t - 0.33 * t * t : 0.3 + 2.28 * t - 1.76 * t * t;
+      for (let i = 0; i < segments; i++) {
+        const angle = i / segments * Math.PI * 2;
+        vertices.push([x + Math.cos(angle) * radius * scale + lean * t, floor + height, z + Math.sin(angle) * radius * scale]);
+      }
+    }
+    for (let row = 0; row < rows - 1; row++) for (let i = 0; i < segments; i++) {
+      const a = row * segments + i, b = row * segments + (i + 1) % segments;
+      faces.push([a, a + segments, b], [b, a + segments, b + segments]);
+    }
+    const last = (rows - 1) * segments;
+    for (let i = 1; i < segments - 1; i++) faces.push([0, i, i + 1], [last, last + i + 1, last + i]);
+    const min = {}, max = {}, center = {};
+    ['x', 'y', 'z'].forEach((axis, i) => {
+      min[axis] = Math.min(...vertices.map(v => v[i])); max[axis] = Math.max(...vertices.map(v => v[i])); center[axis] = (min[axis] + max[axis]) / 2;
+    });
+    const planes = [], positions = [];
+    for (const face of faces) {
+      let [a, b, c] = face.map(i => vertices[i]);
+      const u = b.map((v, i) => v - a[i]), v = c.map((value, i) => value - a[i]);
+      let n = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
+      const length = Math.hypot(...n); if (length < 1e-8) continue;
+      n = n.map(value => value / length);
+      if (n.reduce((sum, value, i) => sum + value * (a[i] - center[['x', 'y', 'z'][i]]), 0) < 0) { n = n.map(value => -value); [b, c] = [c, b]; }
+      planes.push({ normal: n, distance: n.reduce((sum, value, i) => sum + value * a[i], 0) });
+      positions.push(...a, ...b, ...c);
+    }
+    const solid = { min, max, planes, positions, color, name, cap: {x, z, top, radius, lean, floor} };
+    this.solids.push(solid); this.index(this.boxCells, solid, min.x, max.x, min.z, max.z);
+  }
+
+  addRegionalFeatures() {
+    if (this.route.id < 2) return;
+    const p = JOURNEY.pillars;
+    // 岩柱使用独立固定种子，山面细节调整不改变既有障碍布局。
+    let seed = p.seed;
+    const random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
+    for (let i = 0; i < p.count; i++) {
+      const side = i % 2 ? -1 : 1;
+      this.addRock(side * (340 + random() * 1100), p.startZ - Math.floor(i / 2) * p.spacing,
+        0, p.minHeight + random() * p.heightRange, p.minRadius + random() * p.radiusRange,
+        JOURNEY.rockColors.pillars, '张家界石柱');
+    }
+    const rock = JOURNEY.skyRock;
+    this.addRock(rock.x, rock.z, rock.bottom, rock.top, rock.radius, rock.color, '空中圆形山');
+    const slanted = JOURNEY.slantedRock;
+    this.addRock(slanted.x, slanted.z, slanted.bottom, slanted.top, slanted.radius, slanted.color, '斜伸岩柱', slanted.lean);
+    for (const fall of JOURNEY.skyFalls) {
+      const floor = this.baseHeightAt(fall.x, fall.z);
+      const source = fall.id === 'sky-falls' ? rock : slanted;
+      this.waterfalls.push({ ...fall, bottom: floor + fall.bottom, top: floor + fall.top,
+        source: {x: source.x + (source.lean || 0), y: this.baseHeightAt(source.x, source.z) + source.top + 0.3, z: source.z + source.radius * 0.82} });
+    }
+    const island = JOURNEY.island, h = island.statueHeight;
+    this.addRock(island.x, island.z, 3, 22, 145, 0x979c8a, '橘子洲雕像基座');
+    this.addRock(island.x, island.z, 22, h, 90, 0xa1a394, '青年毛泽东石像');
+    this.addBox(island.x, 103, island.z + 76, 18, 38, 34, '青年毛泽东石像');
+    for (let i = 0; i < 6; i++) this.addBox(island.x - 68 + i * 25, 149 + Math.sin(i * 0.7) * 12, island.z - 12, 80, 70, 96, '青年毛泽东石像');
+    if (this.route.id >= 3) {
+      const tower = JOURNEY.pagoda, floor = this.baseHeightAt(tower.x, tower.z);
+      this.addBox(tower.x, tower.height + 22.5, tower.z, 16, 45, 16, '黄鹤楼塔尖', floor);
+      for (let i = 0; i < tower.levels; i++) {
+        const y = tower.height * i / tower.levels, height = tower.height / tower.levels;
+        const width = tower.width * (1 - i * 0.07);
+        this.addBox(tower.x, y + height * 0.43, tower.z, width, height * 0.86, width, '黄鹤楼', floor);
+        this.addBox(tower.x, y + height * 0.91, tower.z, width * tower.eaves, height * 0.18, width * tower.eaves, '黄鹤楼飞檐', floor);
+      }
+    }
+  }
+
+  solidHit(from, to, solid, radius) {
+    if (!segmentBox(from, to, solid, radius)) return false;
+    if (!solid.planes) return true;
+    let near = 0, far = 1;
+    for (const plane of solid.planes) {
+      const n = plane.normal, distance = plane.distance + radius;
+      const a = n[0] * from.x + n[1] * from.y + n[2] * from.z - distance;
+      const b = n[0] * to.x + n[1] * to.y + n[2] * to.z - distance;
+      if (a > 0 && b > 0) return false;
+      if (a > 0) near = Math.max(near, a / (a - b));
+      else if (b > 0) far = Math.min(far, a / (a - b));
+      if (near > far) return false;
+    }
+    return true;
+  }
+
+  cellKey(x, z) { return `${Math.floor(x / this.route.collisionCell)},${Math.floor(z / this.route.collisionCell)}`; }
+
+  index(map, value, minX, maxX, minZ, maxZ) {
+    for (let x = Math.floor(minX / this.route.collisionCell); x <= Math.floor(maxX / this.route.collisionCell); x++) {
+      for (let z = Math.floor(minZ / this.route.collisionCell); z <= Math.floor(maxZ / this.route.collisionCell); z++) {
+        const key = `${x},${z}`;
+        if (!map.has(key)) map.set(key, []);
+        map.get(key).push(value);
+      }
+    }
+  }
+
+  addBox(x, y, z, width, height, depth, name, floor = this.baseHeightAt(x, z)) {
+    y += floor;
+    const box = { min: {x: x - width / 2, y: y - height / 2, z: z - depth / 2}, max: {x: x + width / 2, y: y + height / 2, z: z + depth / 2}, name };
+    this.index(this.boxCells, box, box.min.x, box.max.x, box.min.z, box.max.z);
+  }
+
+  addBuilding(x, z, width, depth, height, color, name = '城市楼房') {
+    this.buildings.push({x, z, width, depth, height, color, name});
+    this.addBox(x, height / 2, z, width, height, depth, name);
+  }
+
+  makeMountains() {
+    this.mountainSurfaces = this.route.mountains.map(mountain => createMountainSurface(mountain, (x, z) => this.baseHeightAt(x, z)));
+  }
+
+  heightAt(x, z) {
+    let height = this.baseHeightAt(x, z);
+    for (const surface of this.mountainSurfaces) height = Math.max(height, sampleMountain(surface, x, z));
+    return height;
+  }
+
+  // 固定步内只变换一次接触点；世界碰撞与交通碰撞复用同一组端点和扫掠包围盒。
+  prepareBodySweep(aircraft, previous) {
+    const bounds = this.sweepBounds;
+    bounds.min.x = bounds.min.y = bounds.min.z = Infinity;
+    bounds.max.x = bounds.max.y = bounds.max.z = -Infinity;
+    for (let pass = 0; pass < 2; pass++) {
+      const pose = pass ? aircraft : previous, field = pass ? 'to' : 'from';
+      const cb = Math.cos(pose.bank), sb = Math.sin(pose.bank), cp = Math.cos(pose.pitch), sp = Math.sin(pose.pitch);
+      const ch = Math.cos(pose.heading), sh = Math.sin(pose.heading);
+      for (let i = 0; i < this.bodyPoints.length; i++) {
+        const [x, y, z] = this.bodyPoints[i].point, sample = this.bodySweep[i], target = sample[field];
+        const xp = x * cb + y * sb, yp = (-x * sb + y * cb) * cp - z * sp;
+        const zp = (-x * sb + y * cb) * sp + z * cp;
+        target.x = pose.position.x + xp * ch - zp * sh;
+        target.y = pose.position.y + yp;
+        target.z = pose.position.z + xp * sh + zp * ch;
+        bounds.min.x = Math.min(bounds.min.x, target.x - sample.radius); bounds.max.x = Math.max(bounds.max.x, target.x + sample.radius);
+        bounds.min.y = Math.min(bounds.min.y, target.y - sample.radius); bounds.max.y = Math.max(bounds.max.y, target.y + sample.radius);
+        bounds.min.z = Math.min(bounds.min.z, target.z - sample.radius); bounds.max.z = Math.max(bounds.max.z, target.z + sample.radius);
+      }
+    }
+    return this.bodySweep;
+  }
+
+  collision(aircraft, previous) {
+    const sweep = this.prepareBodySweep(aircraft, previous), bounds = this.sweepBounds;
+    const boxes = this.collisionBoxes, mountains = this.collisionMountains, cell = this.route.collisionCell;
+    boxes.clear(); mountains.length = 0;
+    for (let x = Math.floor(bounds.min.x / cell); x <= Math.floor(bounds.max.x / cell); x++) {
+      for (let z = Math.floor(bounds.min.z / cell); z <= Math.floor(bounds.max.z / cell); z++) {
+        for (const box of this.boxCells.get(`${x},${z}`) || []) {
+          if (bounds.min.y <= box.max.y && bounds.max.y >= box.min.y && bounds.min.x <= box.max.x && bounds.max.x >= box.min.x && bounds.min.z <= box.max.z && bounds.max.z >= box.min.z) boxes.add(box);
+        }
+      }
+    }
+    for (const surface of this.mountainSurfaces) {
+      if (bounds.min.y <= surface.maxY + 0.001 && bounds.min.x <= surface.maxX && bounds.max.x >= surface.minX && bounds.min.z <= surface.maxZ && bounds.max.z >= surface.minZ) mountains.push(surface);
+    }
+    if (!boxes.size && !mountains.length) return null;
+    for (const {from, to, radius} of sweep) {
+      for (const box of boxes) if (this.solidHit(from, to, box, radius)) return box.name;
+      if (!mountains.length) continue;
+      // 保留原有半米空间采样，只查询与完整扫掠范围相交的山块。
+      const steps = Math.max(1, Math.ceil(Math.hypot(to.x - from.x, to.y - from.y, to.z - from.z) / this.route.sweepStep));
+      for (let i = 0; i <= steps; i++) {
+        const t = i / steps, x = from.x + (to.x - from.x) * t, z = from.z + (to.z - from.z) * t;
+        const base = this.baseHeightAt(x, z);
+        let ground = base;
+        for (const surface of mountains) ground = Math.max(ground, sampleMountain(surface, x, z));
+        if (ground > base + 0.1 && from.y + (to.y - from.y) * t - radius <= ground) return '山体';
+      }
+    }
+    return null;
+  }
+}

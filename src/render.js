@@ -1,14 +1,17 @@
 import * as THREE from 'three';
-import { AIRCRAFT, CAMERA, SCENERY, ENGINE_VIBRATION, GAME } from './config.js';
+import { AIRCRAFT, CAMERA, SCENERY, ENGINE_VIBRATION, GAME, FLIGHT_PHASES, LANDSCAPE } from './config.js';
 import { AirportView } from './airport-view.js';
 import { CockpitView } from './cockpit-view.js';
 import { createAircraft } from './models.js';
 import { CameraSequence } from './camera-sequence.js';
 import { LandscapeView } from './landscape-view.js';
 import { AircraftPreview } from './aircraft-preview.js';
+import { GearPreview } from './gear-preview.js';
+import { TrafficView } from './traffic-view.js';
+import { TrafficIndicators } from './traffic-indicators.js';
 
 export class GameRenderer {
-  constructor(container) {
+  constructor(container, world) {
     this.container = container;
     this.onInvalidate = () => {};
     this.dirty = true;
@@ -29,8 +32,8 @@ export class GameRenderer {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(SCENERY.colors.skyHorizon);
     this.scene.fog = new THREE.Fog(SCENERY.colors.skyHorizon, SCENERY.fogNear, SCENERY.fogFar);
-    this.scene.add(new THREE.HemisphereLight(0xdcebf4, 0x6b7c69, 2.4));
-    const sun = new THREE.DirectionalLight(0xfff1d4, 3.1);
+    this.scene.add(new THREE.HemisphereLight(0xdcebf4, 0x5c6650, LANDSCAPE.terrain.ambientStrength));
+    const sun = new THREE.DirectionalLight(0xfff1d4, LANDSCAPE.terrain.sunStrength);
     sun.position.set(-65, 100, -45); sun.castShadow = true;
     sun.shadow.mapSize.set(SCENERY.shadowSize, SCENERY.shadowSize);
     sun.shadow.camera.left = -90; sun.shadow.camera.right = 90;
@@ -42,8 +45,11 @@ export class GameRenderer {
     this.eyeOffset = new THREE.Vector3();
     this.sequence = new CameraSequence();
     this.scene.add(this.camera);
-    this.scene.add(new AirportView());
-    this.scene.add(new LandscapeView());
+    const airports = [new AirportView(world.route), new AirportView(world.route, true)];
+    this.scene.add(...airports);
+    this.landscape = new LandscapeView(world); this.scene.add(this.landscape);
+    this.traffic = new TrafficView(world.route); this.scene.add(this.traffic);
+    this.trafficIndicators = new TrafficIndicators(document.getElementById('traffic-indicators'));
     this.aircraft = createAircraft();
     this.scene.add(this.aircraft);
     this.aircraftMaterials = new Set();
@@ -53,6 +59,7 @@ export class GameRenderer {
     this.preview = new AircraftPreview(document.getElementById("attitude-preview-view"));
     this.cockpit = new CockpitView();
     this.camera.add(this.cockpit);
+    this.gearPreview = new GearPreview(document.getElementById('gear-preview-view'), this.scene, this.aircraft, this.cockpit, this.aircraftMaterials);
     // 淡出仍写入深度，使用多采样覆盖代替混合排序；无多采样时退回透明度散列。
     const context = this.renderer.getContext();
     const sampleCoverage = context.getParameter(context.SAMPLES) > 1;
@@ -84,9 +91,48 @@ export class GameRenderer {
       this.onContextRestored?.();
       this.invalidate();
     });
+    // 静态地景只切换可见性与纹理偏移，不随每帧场景遍历重复计算变换矩阵。
+    for (const root of [...airports, this.landscape]) {
+      root.updateMatrixWorld(true);
+      root.traverse(object => { object.matrixAutoUpdate = false; object.matrixWorldAutoUpdate = false; });
+    }
     this.resizeObserver = new ResizeObserver(() => this.resize());
     this.resizeObserver.observe(container);
     this.resize();
+  }
+
+  // 先完成全场景材质、纹理和几何的首次提交，开场运镜不再承担冷启动开销。
+  async prepare() {
+    await this.renderer.compileAsync(this.scene, this.camera);
+    await this.renderer.compileAsync(this.preview.scene, this.preview.camera);
+    const textures = new Set(this.landscape.textures);
+    const states = [];
+    for (const scene of [this.scene, this.preview.scene]) scene.traverse(object => {
+      states.push([object, object.visible, object.frustumCulled]);
+      for (const material of Array.isArray(object.material) ? object.material : object.material ? [object.material] : []) {
+        for (const value of Object.values(material)) if (value?.isTexture) textures.add(value);
+      }
+    });
+    const viewport = this.renderer.getViewport(new THREE.Vector4());
+    const scissor = this.renderer.getScissor(new THREE.Vector4());
+    const scissorTest = this.renderer.getScissorTest();
+    try {
+      for (const texture of textures) this.renderer.initTexture(texture);
+      for (const [object] of states) { object.visible = true; object.frustumCulled = false; }
+      // 仍使用主画布的色彩与抗锯齿配置，小视口只负责预提交资源；恢复画面前不让出执行权。
+      this.renderer.setViewport(0, 0, CAMERA.warmupSize, CAMERA.warmupSize);
+      this.renderer.setScissor(0, 0, CAMERA.warmupSize, CAMERA.warmupSize);
+      this.renderer.setScissorTest(true);
+      this.renderer.shadowMap.needsUpdate = true;
+      this.renderer.render(this.scene, this.camera);
+      this.renderer.render(this.preview.scene, this.preview.camera);
+    } finally {
+      for (const [object, visible, frustumCulled] of states) { object.visible = visible; object.frustumCulled = frustumCulled; }
+      this.renderer.setViewport(viewport); this.renderer.setScissor(scissor); this.renderer.setScissorTest(scissorTest);
+      // 预提交时显露的交通模型不能留在机场阴影缓存中。
+      this.renderer.shadowMap.needsUpdate = true;
+      this.renderer.render(this.scene, this.camera);
+    }
   }
 
   resize() {
@@ -106,7 +152,7 @@ export class GameRenderer {
 
   draw(game, renderRemainder = 0) {
     if (!this.dirty || this.contextLost) return;
-    const flying = ['TAKEOFF_ROLL', 'INITIAL_CLIMB'].includes(game.phase);
+    const flying = FLIGHT_PHASES.includes(game.phase);
     const pose = this.displayPose;
     if (this.poseRun !== game.runId || (!game.paused && !['COMPLETE', 'RESULT'].includes(game.phase))) {
       const current = game.aircraft, previous = game.flight.previous;
@@ -172,11 +218,21 @@ export class GameRenderer {
       this.camera.position.set(...CAMERA.exterior.position);
       this.camera.lookAt(...CAMERA.exterior.target);
     }
-    this.camera.updateProjectionMatrix();
+    if (this.projectionNear !== this.camera.near || this.projectionFov !== this.camera.fov || this.projectionAspect !== this.camera.aspect) {
+      this.camera.updateProjectionMatrix();
+      this.projectionNear = this.camera.near; this.projectionFov = this.camera.fov; this.projectionAspect = this.camera.aspect;
+    }
     this.cockpit.resize(this.camera.aspect, this.camera.fov);
     this.sky.position.copy(this.camera.position);
+    this.landscape.update(game.activeSeconds, this.camera);
+    this.traffic.update(game, flying ? Math.min(1, renderRemainder / GAME.fixedStep) : 1);
     this.renderer.render(this.scene, this.camera);
+    this.trafficIndicators.update(game, this.camera, this.traffic.models);
+    const gearVisible = !this.gearPreview.element.parentElement.hidden;
+    if (this.previousGearVisible !== gearVisible) this.previewBoundsDirty = true;
+    this.previousGearVisible = gearVisible;
     if (inside) this.preview.draw(this.renderer, game, pose, this.previewBoundsDirty || this.previousView !== game.view);
+    this.gearPreview.draw(this.renderer, game, pose, this.previewBoundsDirty || this.previousView !== game.view);
     this.previewBoundsDirty = false;
     this.previousView = game.view;
     this.dirty = false;

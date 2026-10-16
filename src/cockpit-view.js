@@ -18,7 +18,7 @@ export class CockpitView extends THREE.Group {
     };
     this.panel = makeBox(dark);
     this.coaming = makeBox(trim);
-    this.centerPost = makeBox(trim);
+    // 顶框、两侧框与仪表台上沿围成完整前窗，中央保持通透。
     this.topFrame = makeBox(dark);
     this.sideFrames = [makeBox(trim), makeBox(trim)];
     this.screens = Array.from({ length: 5 }, () => makeBox(screen));
@@ -31,6 +31,8 @@ export class CockpitView extends THREE.Group {
   }
 
   setSystems(systems) {
+    if (this.lights === systems.lights && this.avionics === systems.avionics) return;
+    this.lights = systems.lights; this.avionics = systems.avionics;
     this.backlight.emissive.setHex(systems.lights ? 0xb3a269 : 0x000000);
     this.backlight.emissiveIntensity = systems.lights ? 0.08 : 0;
     this.screenMaterial.emissive.setHex(systems.avionics ? 0x255d65 : 0x000000);
@@ -38,6 +40,8 @@ export class CockpitView extends THREE.Group {
   }
 
   setOpacity(opacity) {
+    if (this.opacity === opacity) return;
+    this.opacity = opacity;
     this.visible = opacity > 0;
     for (const material of this.materials) material.opacity = opacity;
   }
@@ -56,8 +60,6 @@ export class CockpitView extends THREE.Group {
     this.coaming.position.set(0, top + 0.015, -distance);
     this.coaming.scale.set(halfWidth * 2.4, 0.055, 0.52);
     const frameHeight = slope * COCKPIT.frameDistance;
-    this.centerPost.position.set(0, frameHeight * 0.26, -COCKPIT.frameDistance);
-    this.centerPost.scale.set(COCKPIT.frameWidth, frameHeight * 1.55, 0.11);
     this.topFrame.position.set(0, frameHeight * 1.02, -COCKPIT.frameDistance);
     this.topFrame.scale.set(frameHeight * aspect * 2.4, 0.12, 0.2);
     this.sideFrames.forEach((mesh, index) => {

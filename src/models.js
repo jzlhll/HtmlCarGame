@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { AIRCRAFT } from './config.js';
 
 function fuselageGeometry() {
@@ -41,6 +42,49 @@ function addMesh(parent, geometry, material, position, rotation) {
   mesh.receiveShadow = true;
   parent.add(mesh);
   return mesh;
+}
+
+// 同一可动部件内按材质合并，减少窗户、风扇叶片与轮毂的独立绘制。
+function batchAircraft(group) {
+  const animated = new Set([...group.userData.flaps, ...group.userData.gearLegs]);
+  const sourceGeometries = new Set();
+  group.traverse(object => { if (object.isMesh) sourceGeometries.add(object.geometry); });
+  group.updateMatrixWorld(true);
+  for (const root of [group, ...animated]) {
+    const buckets = new Map(), inverse = root.matrixWorld.clone().invert();
+    const visit = object => {
+      for (const child of object.children) {
+        if (animated.has(child) || child === group.userData.navigationLights) continue;
+        if (child.isMesh) {
+          if (!buckets.has(child.material)) buckets.set(child.material, []);
+          buckets.get(child.material).push(child);
+        }
+        visit(child);
+      }
+    };
+    visit(root);
+    for (const [material, meshes] of buckets) {
+      if (meshes.length < 2) continue;
+      const parts = meshes.map(mesh => {
+        const geometry = mesh.geometry.index ? mesh.geometry.toNonIndexed() : mesh.geometry.clone();
+        // 当前飞机材质不使用贴图，统一保留位置与法线即可共享绘制。
+        for (const name of Object.keys(geometry.attributes)) if (name !== 'position' && name !== 'normal') geometry.deleteAttribute(name);
+        geometry.applyMatrix4(new THREE.Matrix4().multiplyMatrices(inverse, mesh.matrixWorld));
+        return geometry;
+      });
+      const mesh = new THREE.Mesh(mergeGeometries(parts), material);
+      mesh.castShadow = true; mesh.receiveShadow = true; root.add(mesh);
+      for (const original of meshes) original.removeFromParent();
+      parts.forEach(geometry => geometry.dispose());
+    }
+  }
+  const liveGeometries = new Set();
+  group.updateMatrixWorld(true);
+  group.traverse(object => {
+    if (object.isMesh) liveGeometries.add(object.geometry);
+    object.matrixAutoUpdate = object === group || animated.has(object);
+  });
+  for (const geometry of sourceGeometries) if (!liveGeometries.has(geometry)) geometry.dispose();
 }
 
 export function createAircraft() {
@@ -138,5 +182,6 @@ export function createAircraft() {
   group.add(navigationLights);
   group.userData.navigationLights = navigationLights;
   group.scale.set(AIRCRAFT.wingspan / 35, 1, AIRCRAFT.length / 38);
+  batchAircraft(group);
   return group;
 }

@@ -1,15 +1,19 @@
-import { AIRCRAFT, CAMERA, FLIGHT } from './config.js';
+import { AIRCRAFT, CAMERA, FLIGHT, FLIGHT_PHASES, createRoute } from './config.js';
 import { AircraftSystems } from './aircraft-systems.js';
 import { Prompts } from './prompts.js';
 import { Flight } from './flight.js';
+import { RouteWorld } from './route-world.js';
+import { Mission } from './mission.js';
 
 const NO_INPUT = new Set();
 
 // 统一推进有效时间、阶段与事件；飞机系统和飞行响应独立处理。
 export class Game {
-  constructor() {
+  constructor(levelId = 1) {
     this.onChange = () => {};
     this.onEvent = () => {};
+    this.route = createRoute(levelId);
+    this.world = new RouteWorld(this.route);
     this.runId = 0;
     this.reset();
   }
@@ -44,22 +48,25 @@ export class Game {
       thrust: 0,
       wheelBrake: false,
       onGround: true,
+      landed: false,
+      powerLimit: 1,
       systems: {
         lights: false,
-        door: false,
+        door: false, // true 表示舱门已关闭并锁定，false 表示打开。
         harness: false,
         avionics: false,
         engine: 'OFF',
         engineProgress: 0,
-        flaps: 'CLEAN',
-        flapsPosition: 0,
+        flaps: 'TAKEOFF', // 沿用内部状态名，表示机翼减速板已打开。
+        flapsPosition: 1,
         gear: 'DOWN',
         gearPosition: 1,
         parkingBrake: true,
       },
     };
     this.systems = new AircraftSystems(this.aircraft);
-    this.flight = new Flight(this.aircraft);
+    this.flight = new Flight(this.aircraft, this.world);
+    this.mission = new Mission(this.aircraft, this.flight, this.world);
   }
 
   enterCockpit() {
@@ -79,12 +86,14 @@ export class Game {
   togglePause() {
     if (['READY', 'RESULT'].includes(this.phase)) return;
     this.paused = !this.paused;
+    if (this.paused) this.flight.speedTapRemaining = 0;
     this.onChange();
   }
 
   pause() {
     if (['READY', 'RESULT'].includes(this.phase) || this.paused) return;
     this.paused = true;
+    this.flight.speedTapRemaining = 0;
     this.onChange();
   }
 
@@ -104,28 +113,30 @@ export class Game {
   }
 
   command(key) {
-    if (!['STARTUP', 'TAKEOFF_ROLL', 'INITIAL_CLIMB'].includes(this.phase) || this.paused) return;
+    if (!['STARTUP', ...FLIGHT_PHASES].includes(this.phase) || this.paused) return;
     key = key.toUpperCase();
     const flying = this.phase !== 'STARTUP';
-    const stationary = this.aircraft.onGround && this.aircraft.airspeed < FLIGHT.stopSpeed && this.aircraft.throttle === 0;
+    const stationary = this.aircraft.onGround && this.aircraft.airspeed < FLIGHT.stopSpeed;
     let event;
     if (['T', 'S', 'UP', 'DOWN'].includes(key)) event = flying ? this.flight.command(key) : null;
-    else if (key === 'G' || (key === 'W' && flying && !stationary)) event = this.flight.command(key);
+    else if (key === 'G' || (key === 'W' && flying && (!stationary || this.aircraft.landed))) event = this.flight.command(key);
     else event = this.systems.command(key, { stationary });
     if (!event) return;
-    if (event.type === 'released') this.phase = 'TAKEOFF_ROLL';
-    else if (stationary && this.aircraft.systems.parkingBrake && this.aircraft.onGround) this.phase = 'STARTUP';
+    if (key === 'W') this.flight.updateSpeedLimits();
+    if (event.type === 'released') { this.phase = this.aircraft.landed ? 'TAXI' : 'TAKEOFF_ROLL'; this.mission.start(); }
+    else if (!this.aircraft.landed && stationary && this.aircraft.systems.parkingBrake && this.aircraft.onGround) this.phase = 'STARTUP';
     this.emit(event);
     this.onChange();
   }
 
   finish(success, reason) {
     if (this.phase === 'RESULT' || this.phase === 'COMPLETE') return;
-    this.result = { success, reason, seconds: this.activeSeconds, maxAltitude: this.flight.maxAltitude,
+    this.result = { success, reason, seconds: this.mission.elapsed, maxAltitude: this.flight.maxAltitude,
       maxAirspeed: this.flight.maxAirspeed, liftOffSpeed: this.flight.liftOffSpeed };
     this.phase = success ? 'COMPLETE' : 'RESULT';
     this.completionElapsed = 0;
     this.aircraft.wheelBrake = false;
+    this.flight.speedTapRemaining = 0;
     this.onChange();
   }
 
@@ -153,7 +164,7 @@ export class Game {
       this.emit(event);
       this.onChange();
     }
-    if (['TAKEOFF_ROLL', 'INITIAL_CLIMB'].includes(this.phase)) {
+    if (FLIGHT_PHASES.includes(this.phase)) {
       const events = this.flight.step(dt, held);
       // 接地或越界优先于同一步中的完成条件，结算只执行一次。
       const failed = events.find(item => item.type === 'failed');
@@ -161,9 +172,22 @@ export class Game {
       for (const item of events) {
         if (item.type === 'liftoff') this.phase = 'INITIAL_CLIMB';
         this.emit(item);
-        if (item.type === 'complete') { this.finish(true, '初始爬升已完成'); return; }
+        if (item.type === 'climb-complete' && !this.mission.approaching) this.phase = 'CRUISE';
+        if (item.type === 'landed') this.phase = 'LANDING_ROLL';
         this.onChange();
       }
+    }
+    if (this.mission.started) {
+      const missionEvents = this.mission.step(dt);
+      const failed = missionEvents.find(item => item.type === 'failed');
+      if (failed) { this.emit(failed); this.finish(false, failed.reason); return; }
+      for (const item of missionEvents) {
+        if (item.type === 'approach') this.phase = 'APPROACH';
+        this.emit(item);
+        if (item.type === 'complete') { this.finish(true, item.reason); return; }
+        this.onChange();
+      }
+      if (this.phase === 'LANDING_ROLL' && this.aircraft.airspeed < this.route.taxiSpeed) { this.phase = 'TAXI'; this.onChange(); }
     }
     if (this.phase === 'INTRO') {
       this.introSeconds = Math.min(CAMERA.introSeconds, this.introSeconds + dt);
