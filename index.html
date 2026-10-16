@@ -29,9 +29,9 @@
       <div class="flight-facts"><div><span>机型</span><strong>双发民航客机</strong></div><div><span>停放位置</span><strong id="runway-number">36 号跑道</strong></div></div>
     </section>
     <aside id="attitude-preview" class="attitude-preview" hidden aria-label="机外飞机姿态">
-      <header>机外姿态 <small>Aircraft attitude</small></header>
+      <header>Aircraft attitude <small>机外姿态</small></header>
       <div id="attitude-preview-view" aria-hidden="true"></div>
-      <footer id="attitude-preview-label">俯仰 0° · 坡度 0°</footer>
+      <footer id="attitude-preview-label">Pitch 0° · Bank 0°<small>俯仰 · 坡度</small></footer>
     </aside>
     <section id="intro-sequence" class="intro-sequence" hidden aria-label="进入驾驶舱倒数">
       <span class="eyebrow">Prepare for departure</span>
@@ -45,11 +45,11 @@
     <div id="startup-prompt" class="startup-prompt" hidden role="status"></div>
     <div id="aero-readout" class="aero-readout" hidden></div>
     <section id="instruments" class="instruments" hidden aria-label="驾驶舱仪表">
-      <div class="instrument"><span>空速 <small>Airspeed</small></span><strong id="airspeed-value">OFF</strong><footer>kt <i id="ground-speed">km/h</i></footer></div>
-      <div class="instrument"><span>高度 <small>Altitude</small></span><strong id="altitude-value">OFF</strong><footer>米 <i>Above ground</i></footer></div>
-      <div class="instrument attitude"><span>姿态 <small>Attitude</small></span><div class="attitude-mark" aria-hidden="true"><i></i><b></b></div><footer id="attitude-label">仪表关闭</footer></div>
-      <div class="instrument"><span>垂直速度 <small>Vertical speed</small></span><strong id="vertical-speed-value">OFF</strong><footer>m/s <i id="heading-value">航向 360°</i></footer></div>
-      <div class="instrument"><span>发动机 <small>Engine</small></span><strong id="engine-value">OFF <em>OFF</em></strong><footer><span id="throttle-value">油门 0%</span> <i id="brake-state">驻车刹车 ON</i></footer></div>
+      <div class="instrument"><span>Airspeed<small>空速</small></span><strong id="airspeed-value">OFF</strong><footer>kt <i id="ground-speed">km/h</i></footer></div>
+      <div class="instrument"><span>Altitude<small>高度</small></span><strong id="altitude-value">OFF</strong><footer>m <i>Above ground<small>离地高度</small></i></footer></div>
+      <div class="instrument attitude"><span>Attitude<small>姿态</small></span><div class="attitude-mark" aria-hidden="true"><i></i><b></b></div><footer id="attitude-label">Avionics OFF<small>仪表关闭</small></footer></div>
+      <div class="instrument"><span>Vertical speed<small>垂直速度</small></span><strong id="vertical-speed-value">OFF</strong><footer>m/s <i id="heading-value">Heading 360°<small>航向</small></i></footer></div>
+      <div class="instrument"><span>Engine<small>发动机</small></span><strong id="engine-value">OFF <em>OFF</em></strong><footer><span id="throttle-value">Throttle 0%<small>油门</small></span> <i id="brake-state">Parking brake ON<small>驻车刹车</small></i></footer></div>
     </section>
     <div id="flight-guide" class="flight-guide" hidden></div>
     <section id="startup-strip" class="startup-strip" hidden aria-label="起飞准备按键及状态"></section>

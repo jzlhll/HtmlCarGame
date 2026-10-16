@@ -2,6 +2,7 @@ import { CAMERA, FLIGHT, RUNWAY, STARTUP_STEPS, SYSTEMS, TAKEOFF_CONTROLS, CLIMB
 
 const knots = value => Math.round(value * FLIGHT.knotsPerMps);
 const degrees = value => Math.round(value * 180 / Math.PI);
+const bilingual = (english, chinese) => `${english}<small>${chinese}</small>`;
 const phases = { READY: '外部视角', INTRO: '正在进入驾驶舱', STARTUP: '驾驶舱 · 起飞准备', TAKEOFF_ROLL: '跑道滑跑', INITIAL_CLIMB: '离地爬升', COMPLETE: '初始爬升完成', RESULT: '本次飞行结束' };
 
 export class UI {
@@ -78,7 +79,7 @@ export class UI {
     const steps = flow === 'startup' ? STARTUP_STEPS : flow === 'roll' ? TAKEOFF_CONTROLS : CLIMB_CONTROLS;
     this.elements['startup-strip'].classList.toggle('flight-controls', flow !== 'startup');
     this.elements['startup-strip'].setAttribute('aria-label', flow === 'startup' ? '起飞准备按键及状态' : flow === 'roll' ? '跑道起飞操作' : '离地爬升操作');
-    this.elements['startup-strip'].innerHTML = `<span class="strip-label">${flow === 'startup' ? '起飞准备' : flow === 'roll' ? '跑道起飞' : '离地爬升'}<small id="startup-count"></small></span>${steps.map(step => `<div class="startup-key" data-key="${step.key}"><kbd>${step.key}</kbd><span>${step.shortLabel || step.label}<small>${step.english}</small></span><b class="switch-state"></b></div>`).join('')}`;
+    this.elements['startup-strip'].innerHTML = `<span class="strip-label">${flow === 'startup' ? 'Preflight' : flow === 'roll' ? 'Takeoff roll' : 'Initial climb'}<small>${flow === 'startup' ? '起飞准备' : flow === 'roll' ? '跑道起飞' : '离地爬升'}</small><small id="startup-count"></small></span>${steps.map(step => `<div class="startup-key" data-key="${step.key}"><kbd>${step.key}</kbd><span>${bilingual(step.english, step.shortLabel || step.label)}</span><b class="switch-state"></b></div>`).join('')}`;
     this.startupItems = [...this.elements['startup-strip'].querySelectorAll('.startup-key')];
     this.startupCount = document.getElementById('startup-count');
   }
@@ -105,37 +106,42 @@ export class UI {
       this.startupCount.textContent = `${completed} / ${STARTUP_STEPS.length}`;
     } else if (this.flow === 'roll') {
       const rotate = a.airspeed >= FLIGHT.rotationSpeed;
-      this.setItem(0, a.throttle > 0, false, `${throttle}%`);
-      this.setItem(1, a.wheelBrake, false, a.wheelBrake ? '轮刹' : '收油');
-      this.setItem(2, true, false, '修正方向');
-      this.setItem(3, rotate, false, rotate ? '可抬头' : `${knots(FLIGHT.rotationSpeed)} kt`);
-      this.startupCount.textContent = `目标 ${knots(FLIGHT.rotationSpeed)} kt`;
+      this.setItem(0, true, false, '');
+      this.setItem(1, true, false, '');
+      this.setItem(2, true, false, 'Steady');
+      this.setItem(3, rotate, false, rotate ? 'Ready' : `${knots(FLIGHT.rotationSpeed)} kt`);
+      this.startupCount.textContent = `${knots(FLIGHT.rotationSpeed)} kt`;
     } else {
-      this.setItem(0, true, false, `${throttle}%`);
+      this.setItem(0, true, false, '');
       this.setItem(1, !flight.pitchHigh && !flight.pitchLow && !flight.stalled, flight.pitchHigh || flight.pitchLow || flight.stalled, `${pitch}°`);
       this.setItem(2, Math.abs(a.bank) <= FLIGHT.successBank, false, `${bank}°`);
       for (const [index, name, ready] of [[3, 'gear', flight.canRetractGear()], [4, 'flaps', flight.canRetractFlaps()]]) {
         const busy = systems[name] === 'RETRACTING', done = systems[name] === (name === 'gear' ? 'UP' : 'CLEAN');
-        this.setItem(index, done || ready, busy, done ? '已收起' : busy ? '收起中' : ready ? '可收起' : name === 'gear' ? `${FLIGHT.gearHeight} m ↑` : `${FLIGHT.flapsHeight} m / ${knots(FLIGHT.climbMinSpeed)} kt`);
+        this.setItem(index, done || ready, busy, done ? 'Up' : busy ? 'Retracting' : ready ? 'Ready' : name === 'gear' ? `${FLIGHT.gearHeight} m ↑` : `${FLIGHT.flapsHeight} m / ${knots(FLIGHT.climbMinSpeed)} kt`);
       }
-      this.startupCount.textContent = `目标 ${FLIGHT.completionHeight} m`;
+      this.startupCount.textContent = `${FLIGHT.completionHeight} m`;
     }
     for (const [id, value] of [['airspeed-value', speed], ['altitude-value', altitude], ['vertical-speed-value', a.verticalSpeed.toFixed(1)]]) this.elements[id].textContent = systems.avionics ? value : 'OFF';
     this.elements['ground-speed'].textContent = systems.avionics ? `${Math.round(a.airspeed * 3.6)} km/h` : 'km/h';
-    this.elements['heading-value'].textContent = systems.avionics ? `航向 ${heading}°` : '航向 OFF';
-    this.elements['attitude-preview-label'].textContent = `俯仰 ${pitch}° · 坡度 ${bank}°`;
-    this.elements['attitude-label'].textContent = systems.avionics ? `俯仰 ${pitch}° · 坡度 ${bank}°` : '仪表关闭';
+    this.elements['heading-value'].innerHTML = bilingual(systems.avionics ? `Heading ${heading}°` : 'Heading OFF', '航向');
+    this.elements['attitude-preview-label'].innerHTML = bilingual(`Pitch ${pitch}° · Bank ${bank}°`, '俯仰 · 坡度');
+    this.elements['attitude-label'].innerHTML = systems.avionics ? bilingual(`Pitch ${pitch}° · Bank ${bank}°`, '俯仰 · 坡度') : bilingual('Avionics OFF', '仪表关闭');
     this.attitudeMark.style.setProperty('--bank', `${-bank}deg`);
     this.attitudeMark.style.setProperty('--horizon', `${50 + pitch * 2}%`);
     const engineValue = systems.avionics ? `${rpm}%` : 'OFF';
     this.elements['engine-value'].innerHTML = `${engineValue} <em>${engineValue}</em>`;
-    this.elements['throttle-value'].textContent = `油门 ${throttle}%`;
+    this.elements['throttle-value'].innerHTML = bilingual(`Throttle ${throttle}%`, '油门');
     const alphaWarning = Math.abs(a.angleOfAttack) > AERODYNAMICS.criticalAlpha + systems.flapsPosition * AERODYNAMICS.flapsCriticalBonus - AERODYNAMICS.alphaWarningMargin;
-    const condition = flight.stalled ? '失速' : flight.pitchHigh ? '仰角过大' : flight.pitchLow ? '下降危险' : flight.overspeed ? '空速过高' : alphaWarning ? '迎角偏高' : flight.lowSpeed ? '空速偏低' : '正常';
+    const condition = flight.stalled ? ['Stall', '失速'] : flight.pitchHigh ? ['Pitch high', '仰角过大'] : flight.pitchLow ? ['Descent warning', '下降危险'] : flight.overspeed ? ['Overspeed', '空速过高'] : alphaWarning ? ['Angle high', '迎角偏高'] : flight.lowSpeed ? ['Airspeed low', '空速偏低'] : ['Normal', '正常'];
     const readout = this.elements['aero-readout'];
-    readout.textContent = systems.avionics ? `迎角 ${(a.angleOfAttack * 180 / Math.PI).toFixed(1)}° · 航迹 ${(a.flightPathAngle * 180 / Math.PI).toFixed(1)}° · 升力载荷 ${a.loadFactor.toFixed(1)} g · ${condition}` : '飞行仪表 OFF';
-    readout.classList.toggle('is-warning', condition !== '正常');
-    this.elements['brake-state'].textContent = systems.parkingBrake ? '驻车刹车 ON' : a.wheelBrake ? '轮刹 ON' : '刹车 OFF';
+    readout.innerHTML = systems.avionics ? [
+      bilingual(`Angle of attack ${(a.angleOfAttack * 180 / Math.PI).toFixed(1)}°`, '迎角'),
+      bilingual(`Flight path ${(a.flightPathAngle * 180 / Math.PI).toFixed(1)}°`, '航迹角'),
+      bilingual(`Lift load ${a.loadFactor.toFixed(1)} g`, '升力载荷'),
+      bilingual(...condition),
+    ].map(value => `<span>${value}</span>`).join('') : `<span>${bilingual('Avionics OFF', '飞行仪表')}</span>`;
+    readout.classList.toggle('is-warning', condition[0] !== 'Normal');
+    this.elements['brake-state'].innerHTML = systems.parkingBrake ? bilingual('Parking brake ON', '驻车刹车') : a.wheelBrake ? bilingual('Wheel brake ON', '轮刹') : bilingual('Brake OFF', '刹车');
     const prompt = this.game.prompts.current;
     this.elements['startup-prompt'].hidden = !prompt;
     this.elements['startup-prompt'].textContent = prompt || '';
@@ -156,8 +162,10 @@ export class UI {
     const item = this.startupItems[index];
     item.classList.toggle('is-on', ready);
     item.classList.toggle('is-busy', busy);
-    item.querySelector('.switch-state').textContent = state;
-    item.title = `${item.querySelector('small').textContent}（${item.querySelector('span').firstChild.textContent}）[${item.dataset.key}]，${state}`;
+    const status = item.querySelector('.switch-state');
+    status.textContent = state;
+    status.hidden = !state;
+    item.title = `${item.querySelector('span').firstChild.textContent}（${item.querySelector('small').textContent}）[${item.dataset.key}]${state ? `，${state}` : ''}`;
   }
 
   update() {

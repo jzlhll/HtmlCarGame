@@ -134,7 +134,7 @@ export const FLIGHT = {
 
 export const TAKEOFF_CONTROLS = [
   { key: 'T', english: 'Throttle', label: '增加油门', action: 'throttle' },
-  { key: 'S', english: 'Slow', label: '减速／轮刹', action: 'slow' },
+  { key: 'S', english: 'Slow', label: '收油门', action: 'slow' },
   { key: '← →', english: 'Steer', label: '保持方向', action: 'steer' },
   { key: '↑', english: 'Rotate', label: '抬头起飞', action: 'rotate' },
 ];
