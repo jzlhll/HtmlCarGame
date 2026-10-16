@@ -1,10 +1,10 @@
-import { WHITE_HORSE, VEHICLES, LANE_WIDTH, random, laneD, lerp, clamp } from './config.js';
+import { FIRST_LEVEL_EVENTS, WHITE_HORSE, VEHICLES, LANE_WIDTH, random, laneD, lerp, clamp } from './config.js';
 import { sweep } from './collision.js';
 
-// 每分钟安排一匹白马，拾取和强化均使用有效游戏时间；暂停冻结，新局清空。
+// 按本关固定周期安排白马，拾取和强化均使用有效游戏时间；暂停冻结，新局清空。
 export class WhiteHorseEvent {
-  constructor(seed){
-    this.rng=random(seed^0x29c4a831);this.nextAt=WHITE_HORSE.intervalSeconds;this.nextId=1;
+  constructor(seed,level=1){
+    this.rng=random(seed^0x29c4a831);this.intervalSeconds=level===1?FIRST_LEVEL_EVENTS.endSeconds/FIRST_LEVEL_EVENTS.horseCount:WHITE_HORSE.intervalSeconds;this.nextAt=this.intervalSeconds;this.nextId=1;
     this.horse=null;this.buff=null;this.smashed=new Map();this.revision=0;
   }
   advance(dt,game){
@@ -12,9 +12,9 @@ export class WhiteHorseEvent {
     for(const [key,s]of this.smashed)if(s<p.s-100){this.smashed.delete(key);this.revision++;}
     if(this.buff&&now>=this.buff.until)this.buff=null;
     if(this.horse&&now>=this.horse.until)this.horse=null;
-    if(!this.horse&&now>=this.nextAt){
+    if(!this.horse&&now+1e-8>=this.nextAt){
       const candidates=[],fallback=[];
-      // 每分钟必定投放；优先选完整奔跑路段无施工、且不与系统车重叠的位置。
+      // 按固定周期投放；优先选完整奔跑路段无施工、且不与系统车重叠的位置。
       for(let distance=WHITE_HORSE.minAhead;distance<=WHITE_HORSE.maxAhead;distance+=5){
         const s=p.s+distance,look=WHITE_HORSE.speed/3.6*(WHITE_HORSE.visibleSeconds+WHITE_HORSE.blinkSeconds);
         const route=p.route&&s<game.road.route(p.route).end?p.route:null;
@@ -30,7 +30,7 @@ export class WhiteHorseEvent {
       if(positions.length){
         const position=positions[Math.floor(this.rng()*positions.length)];
         this.horse={...position,id:this.nextId++,direction:1,speed:WHITE_HORSE.speed/3.6,from:now,until:now+WHITE_HORSE.visibleSeconds+WHITE_HORSE.blinkSeconds,dimensions:{length:WHITE_HORSE.length,width:WHITE_HORSE.width}};
-        this.nextAt=(Math.floor(now/WHITE_HORSE.intervalSeconds)+1)*WHITE_HORSE.intervalSeconds;
+        this.nextAt=(Math.floor((now+1e-8)/this.intervalSeconds)+1)*this.intervalSeconds;
       }
     }
     if(this.horse){

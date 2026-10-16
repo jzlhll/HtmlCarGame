@@ -1,4 +1,4 @@
-import { VEHICLES, MAX_RANK, ARMORED_RANK, ARMORED_TANK, TRAFFIC_COLORS, ONCOMING_SPEED_SCALE, TRAFFIC_WEIGHTS, TRAFFIC_SPAWN_AHEAD, TRAFFIC_SPAWN_BEHIND, UPGRADE_TRAFFIC, TRAFFIC_DENSITY, TRAFFIC_LANE_CHANGE, TRAFFIC_DRIVING, ROAD_DIFFICULTY, SLOW_TRAFFIC, REAR_WARNING, LANE_WIDTH, ROAD_INFRASTRUCTURE, SIDE_IMPACT, laneD, random, clamp, approach, lerp, smooth } from './config.js';
+import { FIRST_LEVEL_EVENTS, SECOND_LEVEL_EVENTS, VEHICLES, MAX_RANK, ARMORED_RANK, ARMORED_TANK, TRAFFIC_COLORS, ONCOMING_SPEED_SCALE, TRAFFIC_WEIGHTS, TRAFFIC_SPAWN_AHEAD, TRAFFIC_SPAWN_BEHIND, UPGRADE_TRAFFIC, TRAFFIC_DENSITY, TRAFFIC_LANE_CHANGE, TRAFFIC_DRIVING, ROAD_DIFFICULTY, SLOW_TRAFFIC, REAR_WARNING, LANE_WIDTH, ROAD_INFRASTRUCTURE, SIDE_IMPACT, laneD, random, clamp, approach, lerp, smooth } from './config.js';
 import { sweep, roadworkContact, separation, startBounce, advanceBounce } from './collision.js';
 import { surfaceContact, MUD_SECONDS } from './hazards.js';
 const maxVehicleLength=Math.max(...VEHICLES.slice(1).map(vehicle=>vehicle.length));
@@ -350,9 +350,16 @@ export class Traffic {
         if(fourLane)car.laneChangeTimer=Math.min(car.laneChangeTimer??intervalMax,intervalMax+(car.merge?TRAFFIC_DRIVING.signalSeconds+TRAFFIC_DRIVING.changeSeconds:0));
       }
     }
-    const density=TRAFFIC_DENSITY,stage=Math.floor(Math.max(0,activeSeconds)/density.growthSeconds);
-    this.capacity=Math.min(density.maxCapacity,density.capacity+stage*density.capacityPerStep);
-    this.gapScale=Math.max(density.minGapScale,1-stage*density.gapReductionPerStep);
+    const density=TRAFFIC_DENSITY,elapsed=Math.max(0,activeSeconds);
+    // 第一关在 145 秒到达上限；第二关只缩短总增长时间，保留档数及每档幅度。
+    const capacitySteps=Math.ceil((density.maxCapacity-density.capacity)/density.capacityPerStep),gapSteps=Math.ceil((1-density.minGapScale)/density.gapReductionPerStep);
+    const compression=this.level===2?SECOND_LEVEL_EVENTS.trafficCompressionSeconds:0;
+    const capacitySeconds=Math.max(density.growthSeconds,capacitySteps*density.growthSeconds-compression),gapSeconds=Math.max(density.growthSeconds,gapSteps*density.growthSeconds-compression);
+    const capacityInterval=capacitySteps>0?(this.level===1?FIRST_LEVEL_EVENTS.endSeconds:capacitySeconds)/capacitySteps:density.growthSeconds;
+    const gapInterval=gapSteps>0?(this.level===1?FIRST_LEVEL_EVENTS.endSeconds:gapSeconds)/gapSteps:density.growthSeconds;
+    const capacityStage=Math.floor((elapsed+1e-8)/capacityInterval),gapStage=Math.floor((elapsed+1e-8)/gapInterval);
+    this.capacity=Math.min(density.maxCapacity,density.capacity+capacityStage*density.capacityPerStep);
+    this.gapScale=Math.max(density.minGapScale,1-gapStage*density.gapReductionPerStep);
     this.queueTimer-=dt;
     if(this.queueTimer<=0){
       this.queueTimer=lerp(SLOW_TRAFFIC.intervalMin,SLOW_TRAFFIC.intervalMax,this.queueRng());

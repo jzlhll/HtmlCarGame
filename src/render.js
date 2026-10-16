@@ -385,9 +385,7 @@ export class GameRenderer {
           for(const large of [false,true]){
             const view=coinModel(large);this.trafficView.prewarm(view,COINS.capacity);this.arsenalView.pools[large?'large':'small'].push(view);
           }
-          for(const advanced of [false,true]){
-            const view=rocketModel(advanced);this.trafficView.prewarm(view,ROCKETS.capacity*(advanced?3:1));this.arsenalView.rockets[advanced?'advanced':'normal'].push(view);
-          }
+          const rocket=rocketModel();this.trafficView.prewarm(rocket,ROCKETS.capacity);this.arsenalView.rockets.push(rocket);
         }else{const cow=cowModel();this.cowPool.push(cow);warmGroup.add(cow.clone(true));}
       }
       if(!this.preparedColors.has(colorKey))for(let rank=1;rank<=5;rank++){

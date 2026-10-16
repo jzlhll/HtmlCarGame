@@ -7,12 +7,12 @@ import { sweep } from './collision.js';
 // 网边长随警车持续时长逐渐增大，生成即生效，接触即被抓,
 // 由游戏层播放缩小并拉向警车的动画,再弹出答题。渔网与警车均不可被吃,不受白马无敌影响。
 export class PoliceEvent {
-  constructor(seed){
+  constructor(seed,level=1){
     this.rng=random(seed^0x5f3c92);this.nextId=1;this.netSeq=1;
     this.police=null;this.nets=[];
-    this.nextAt=this.nextWindow(0);
+    this.intervalSeconds=level===2?POLICE.secondLevelIntervalSeconds:POLICE.intervalSeconds;this.maxChaseSeconds=level===1?POLICE.firstLevelMaxChaseSeconds:level===3?POLICE.thirdLevelMaxChaseSeconds:POLICE.maxChaseSeconds;this.nextAt=this.nextWindow(0);
   }
-  nextWindow(now){return (Math.floor(now/POLICE.intervalSeconds)+1)*POLICE.intervalSeconds;}
+  nextWindow(now){return (Math.floor(now/this.intervalSeconds)+1)*this.intervalSeconds;}
   dismiss(now){
     this.police=null;this.nets=[];
     this.nextAt=this.nextWindow(now);
@@ -39,7 +39,7 @@ export class PoliceEvent {
     const police=this.police;
     police.chase+=dt;
     // 警车持续时长达到上限后自动撤离。
-    if(police.chase>=POLICE.maxChaseSeconds){this.dismiss(now);return;}
+    if(police.chase>=this.maxChaseSeconds){this.dismiss(now);return;}
     police.previous={s:police.s,d:police.d};
     // 速度自由:目标速度只由与玩家的距离决定——太近加速拉开,太远减速等待,
     // 窗口内按 keepGain 比例控制收敛到窗口中点(在前方距离窗口内游走)。

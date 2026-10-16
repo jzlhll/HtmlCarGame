@@ -10,9 +10,9 @@ const time=s=>Math.floor(s/60)+' 分 '+Math.floor(s%60)+' 秒';
 export class UI {
   constructor(game){
     this.game=game;this.overlay=document.getElementById('overlay');this.toast=document.getElementById('toast');this.toastSeconds=0;this.resetConfirm=false;this.displayed={};
-    this.elements=Object.fromEntries(['distance','elapsed','speed','speed-fill','nitro','nitro-state','nitro-fill','nitro-reserve-fill','defense','defense-fill','rank','progress','growth-fill','rear-alert','storage-warning','hud','level-countdown','test-badge','arsenal-hud','coin-count','buy-rocket','buy-advanced-rocket','dinosaur-defense','dinosaur-defense-value'].map(id=>[id,document.getElementById(id)]));
+    this.elements=Object.fromEntries(['distance','elapsed','speed','speed-fill','nitro','nitro-state','nitro-fill','nitro-reserve-fill','defense','defense-fill','rank','progress','growth-fill','rear-alert','storage-warning','hud','level-countdown','test-badge','arsenal-hud','coin-count','buy-rocket','dinosaur-defense','dinosaur-defense-value'].map(id=>[id,document.getElementById(id)]));
     document.getElementById('coin-icon').innerHTML=coinIcon;
-    this.elements['buy-rocket'].addEventListener('click',()=>game.weaponAction(1));this.elements['buy-advanced-rocket'].addEventListener('click',()=>game.weaponAction(2));
+    this.elements['buy-rocket'].addEventListener('click',()=>game.weaponAction(1));
     // URL 测试参数生效时显示角标,Agent 截图可直接确认,避免把测试结果当默认行为。
     this.elements['test-badge'].hidden=!TEST_OVERRIDES.active;
     this.elements['test-badge'].title=TEST_OVERRIDES.keys.join('\n');
@@ -61,11 +61,10 @@ export class UI {
     this.pauseButton.textContent=g.state==='PAUSED'?'继续':'暂停';this.pauseButton.setAttribute('aria-label',g.state==='PAUSED'?'继续游戏':'暂停游戏');
     this.restartButton.disabled=g.state==='PREPARING';
     for(const [id,compact,full] of [['distance-label','距离','行驶距离'],['elapsed-label','时间','运行时间'],['defense-label','防御','防御力'],['nitro-label','氮气','加速 / 氮气 · ↑']])document.getElementById(id).textContent=mobile?compact:full;
-    for(const [id,key,name,cost] of [['buy-rocket',1,'普通炮',ROCKETS.normalCost],['buy-advanced-rocket',2,'高级炮',ROCKETS.advancedCost]]){
-      this.elements[id].textContent=mobile?name+' · '+cost:key+' · '+name+' '+cost+' 金币';
-      const description='消耗 '+cost+' 金币发射'+name+'，清理前方 '+ROCKETS.range+' 米'+(key===1?'自身及左右相邻车道':'全部车道');
-      this.elements[id].setAttribute('aria-label',description);this.elements[id].title=description;
-    }
+    const rocketButton=this.elements['buy-rocket'],cost=ROCKETS.normalCost;
+    rocketButton.textContent=mobile?'普通炮 · '+cost:'1 · 普通炮 '+cost+' 金币';
+    const description='消耗 '+cost+' 金币发射普通炮，清理前方 '+ROCKETS.range+' 米自身及左右相邻车道';
+    rocketButton.setAttribute('aria-label',description);rocketButton.title=description;
     g.input.container.classList.toggle('level-two',g.level===2);
     this.elements['arsenal-hud'].hidden=g.level!==2||['READY','PREPARING','RESULT'].includes(g.state);
     this.quizTimer=null;this.quizSeconds=null;
@@ -88,7 +87,7 @@ export class UI {
       this.overlay.innerHTML='<section class="card level-guide" role="dialog" aria-modal="true" aria-label="第二关通关"><div class="eyebrow">LEVEL COMPLETE / NEXT LEVEL</div><h2>恭喜！通过第二关。</h2><div class="level-guide-grid">'+cards.map(([title,copy])=>'<article><h3>'+title+'</h3><p>'+copy+'</p></article>').join('')+'</div><p class="level-guide-hint">第三关从零开始 · 六分钟通关 · 三分钟后四车道<br>火山 → 海水 → 冰山，每分钟轮换 · 空格进入第三关</p><button class="button" data-action="play">进入第三关</button></section>';
     }
     else if(g.state==='LEVEL_CLEAR'){
-      const images=g.renderer?.guideImages()??[],cards=[['大型恐龙踩踏','恐龙左右跳跃踩向你，及时横移躲开。'],['装甲坦克','装甲坦克不能碰，请绕开行驶。'],['金币与火箭炮','小金币 '+COINS.smallValue+'、大金币 '+COINS.largeValue+'；按 1 消耗 '+ROCKETS.normalCost+' 金币清理自身及左右相邻车道，按 2 消耗 '+ROCKETS.advancedCost+' 金币清理全部车道，距离均为 '+ROCKETS.range+' 米。']];
+      const images=g.renderer?.guideImages()??[],cards=[['大型恐龙踩踏','恐龙左右跳跃踩向你，及时横移躲开。'],['装甲坦克','装甲坦克不能碰，请绕开行驶。'],['金币与火箭炮','小金币 '+COINS.smallValue+'、大金币 '+COINS.largeValue+'；按 1 消耗 '+ROCKETS.normalCost+' 金币清理自身及左右相邻车道，射程 '+ROCKETS.range+' 米。']];
       this.overlay.innerHTML='<section class="card level-guide" role="dialog" aria-modal="true" aria-label="第一关通关"><div class="eyebrow">LEVEL COMPLETE / NEXT LEVEL</div><h2>恭喜！通过第一关。</h2><div class="level-guide-grid">'+cards.map(([title,copy],i)=>'<article><img src="'+(images[i]??'')+'" alt="'+title+'模型"><h3>'+title+'</h3><p>'+copy+'</p></article>').join('')+'</div><p class="level-guide-hint">第二关从零开始 · 空格进入第二关</p><button class="button" data-action="play">进入第二关</button></section>';
     }
     else if(g.state==='PAUSED')this.overlay.innerHTML='<section class="card pause-card" role="dialog" aria-modal="true" aria-label="游戏已暂停"><div class="eyebrow">TAKE A BREATH</div><h2>游戏已暂停</h2><p>当前 '+format(g.player.distance)+' 米 · '+VEHICLES[g.player.rank].name+'<br>'+(mobile?'点击继续行驶；左侧摇杆横移，右侧刹车与加速 / 氮气。':'按空格继续，↓ 刹车，左右横移，↑ 持续加速到最高车速后自动喷气，极速时仍耗气，松开留气。')+'</p><button class="button" data-action="play">继续行驶</button><button class="button secondary" data-action="quit">结束游戏</button></section>';
@@ -152,7 +151,7 @@ export class UI {
       const inventory=g.arsenal,blocked=g.state!=='RUNNING'||Boolean(g.player.spin),full=inventory.shots.length>=ROCKETS.capacity;
       if(shown['coin-count']!==inventory.balance||shown.arsenalBlocked!==blocked||shown.arsenalFull!==full){
         if(shown['coin-count']!==inventory.balance){e['coin-count'].textContent='× '+format(inventory.balance);shown['coin-count']=inventory.balance;}
-        e['buy-rocket'].disabled=blocked||full||inventory.balance<ROCKETS.normalCost;e['buy-advanced-rocket'].disabled=blocked||full||inventory.balance<ROCKETS.advancedCost;
+        e['buy-rocket'].disabled=blocked||full||inventory.balance<ROCKETS.normalCost;
         shown.arsenalBlocked=blocked;shown.arsenalFull=full;
       }
     }

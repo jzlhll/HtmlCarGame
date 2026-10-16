@@ -10,7 +10,11 @@ export const MAX_RANK=5; // 玩家最高车型与系统专属车型分开。
 export const ARMORED_RANK=6;
 VEHICLES.push({...VEHICLES[5],name:'装甲坦克',min:60,max:80,color:0xb29a66});
 export const SECOND_LEVEL_SCENE={road:'#858c90',grainDark:'rgba(53,62,66,.16)',grainLight:'rgba(214,219,218,.25)',tracks:'rgba(224,229,226,.12)',shoulder:0xa7aaa4,ground:0xaaa18b,water:0x438d8f,sky:0xcbd3d4,rock:0x958d7d,trunk:0x79694d,sun:0xf1f5ff};
-export const LEVELS={firstSeconds:180,secondSeconds:240,thirdSeconds:360,countdownSeconds:5,exitSeconds:3,exitSpeed:100,weatherChance:.8,branchWeatherChance:1};
+export const LEVELS={firstSeconds:150,secondSeconds:195,thirdSeconds:360,countdownSeconds:5,exitSeconds:3,exitSpeed:100,weatherChance:.8,branchWeatherChance:1};
+// 第一关固定节奏在通关前五秒完成最后一次投放或强化；其他关卡分别配置。
+export const FIRST_LEVEL_EVENTS={endSeconds:145,horseCount:3,roadblocksAfterSeconds:120};
+// 第二关保留逐档增长曲线，仅将到达车流上限和车距下限的时间各缩短二十秒。
+export const SECOND_LEVEL_EVENTS={trafficCompressionSeconds:20,roadblocksAfterSeconds:130};
 // 第三关按有效时间循环，灾害尺寸和伤害不随调试节奏改变。
 export const DISASTERS={
   environmentSeconds:60,narrowSeconds:180,
@@ -28,14 +32,14 @@ export const DISASTERS={
 };
 export const ARMORED_TANK={truckChance:.025,tankChance:.075,heightMultiplier:2,barrelLength:4.8};
 export const COINS={smallValue:3,largeValue:6,smallSize:1.68,largeSize:2.66,largeChance:.3,firstSeconds:2,intervalMin:2.5,intervalMax:4.5,chance:.8,aheadMin:50,aheadMax:90,batchMin:3,batchMax:5,capacity:40,recycleBehind:30};
-export const ROCKETS={normalCost:20,advancedCost:50,normalSideLanes:1,range:100,normalDinosaurDamage:1/3,advancedDinosaurDamage:.5,flightSeconds:.78125,capacity:6,modelLength:4.8,modelWidth:.9,launchHeight:1.2};
+export const ROCKETS={normalCost:25,normalSideLanes:1,range:100,normalDinosaurDamage:1/3,flightSeconds:.78125,capacity:6,modelLength:4.8,modelWidth:.9,launchHeight:1.2};
 export const DINOSAURS={
   smallFirstMin:15,smallFirstMax:30,smallIntervalMin:25,smallIntervalMax:40,smallChance:.4,smallCountMin:3,smallCountMax:6,
   cowSpeedMin:1.6,cowSpeedMax:2.2,crossingSpeedMultiplier:2,smallLength:4.8,smallWidth:1.6,smallHeight:2.4,smallSpacing:5.6,smallRowSpacing:2.6,smallAheadMin:60,smallLeadSeconds:3,
   chaseAfterSeconds:120,chaseFirstMin:4,chaseFirstMax:8,chaseIntervalMin:20,chaseIntervalMax:35,chaseChance:.7,
   chaseAheadMin:12,chaseAheadMax:18,followAheadMax:32,speedRatioMin:1,speedRatioMax:1.08,durationMin:12,durationMax:18,
   chaserLength:22,chaserWidth:5.8,chaserHeight:10,footSpread:1.8,footBack:4,jumpHeight:3,jumpTilt:.12,exitFadeSeconds:1,
-  defense:100,firstJumpSeconds:1.2,stepDistanceMin:36,stepDistanceMax:48,stepSecondsMin:2.4,footWidth:1.8,footLength:3,footWarning:1.2,footDanger:.2,footCapacity:12,baseRingRadius:4.5, // 仅在实际接地时判定踩踏；底圈跟随身体，不保留脚印或绘制预警。
+  defense:100,firstJumpSeconds:1.2,stepDistanceMin:36,stepDistanceMax:48,stepSecondsMin:2.4,footWidth:1.8,footLength:3,footWarning:1.2,footDanger:.2,footAimChance:.4,footCapacity:12,baseRingRadius:4.5, // 仅在实际接地时判定踩踏；底圈跟随身体，不保留脚印或绘制预警。
   bridgeLeadSeconds:2.5,bridgeSpeed:12,bridgeCount:4,bridgeSpacing:5,bridgeScale:.8,sceneryCapacity:32,grazerScale:2.4,diplodocusScale:3.2,lakeOffset:35,waterBankOffset:9,waterRoadOffset:32,
 };
 // 玩家座驾涂装：yellow/blue/green 为纯色，rainbow 使用渐变贴图；默认绿色。
@@ -141,7 +145,7 @@ export const TRAFFIC_SPAWN_BEHIND={min:120,max:200,retainDistance:260,intervalSe
 export const REAR_WARNING={minDistance:45,seconds:6,minClosingSpeed:.5};
 export const TRAFFIC_DENSITY={
   scale:2,capacity:88,maxCapacity:160,
-  growthSeconds:15,capacityPerStep:3, // 按本局有效运行时间每 15 秒增加 3 辆容量，最多 160 辆，暂停不计时。
+  growthSeconds:15,capacityPerStep:3, // 第三关每 15 秒增加 3 辆；第一关在 145 秒内走完全部档位，第二关将总增长时间缩短二十秒。
   gapReductionPerStep:.02,minGapScale:.65, // 每档缩短初始系统车距的 2%，最低保留 65%；不缩短玩家生成安全距离。
 };
 // 生成时固定 0 或 1 的随机变道开关；启用车辆每隔 6–10 秒按 30%–55% 概率尝试。
@@ -231,16 +235,16 @@ export const SEASON_CYCLE={seconds:45,transitionSeconds:10};
 // 非分叉路段天气按 intervalMin~intervalMax 秒随机检查，以 chance 概率触发，首次检查在 firstMin~firstMax 秒；分叉路段使用 ROAD_FORKS 的天气字段。
 // 手机保持原有雨量，电脑端增加雨丝密度以加强宽屏遮挡；粒子缓冲按最大雨量复用。
 export const WEATHER={chance:.4,duration:9,windDuration:6,windSpeed:.5,freezeSeconds:3,fogNear:10,fogFar:50,intervalMin:31,intervalMax:45,firstMin:12,firstMax:25,rainCount:560,desktopRainMultiplier:3};
-// 白马按有效运行时间每分钟投放；保护总长 10 秒包含末尾 2 秒闪烁，回落另计。
+// 白马第一关在 145 秒内等间隔投放三次，其他关卡每分钟投放；保护总长 10 秒包含末尾 2 秒闪烁，回落另计。
 export const WHITE_HORSE={
   intervalSeconds:60,speed:60,minAhead:20,maxAhead:35,
   visibleSeconds:6,blinkSeconds:2,length:3.8,width:1.3,
   rampSeconds:1,shieldSeconds:10,shieldBlinkSeconds:2,recoverySeconds:2,speedMultiplier:2,
 };
-// 警车追击:两关均按固定周期投放无敌警车,速度自由——只按前方距离窗口调节车速并极速避让车流。
+// 警车追击:按各关固定周期投放无敌警车,速度自由——只按前方距离窗口调节车速并极速避让车流。
 // 追击期间每三秒在玩家当前路线、车道前方按两秒车程且至少四十米生成捕捞网，接触后进入答题。
 export const POLICE={
-  intervalSeconds:75, // 按本关有效运行时间每 75 秒投放；撤离后仍对齐下一周期。
+  intervalSeconds:75,secondLevelIntervalSeconds:55, // 第二关每 55 秒，其他关卡每 75 秒；撤离后仍对齐下一周期。
   spawnAheadMin:35,spawnAheadMax:55, // 生成在玩家前方 35~55 米。
   keepMin:15,keepMax:42, // 警车与玩家保持的前方距离窗口(米),保证始终在屏幕内且不太远。
   keepGain:.9, // 窗口内距离保持的力度:每偏差 1 米修正 0.9 km/h,使间距收敛到窗口中点。
@@ -257,7 +261,7 @@ export const POLICE={
   quizMathSeconds:45,quizChineseSeconds:30,quizEnglishSeconds:45, // 题目显示后按真实时间倒计时，超时结束本局。
   quizChineseExtraChance:.1, // 语文题中课外诗词的比例，错误选项仍来自二至五年级课内题库。
   catchSeconds:1.5, // 被抓动画时长:玩家缩小并被拉向警车。
-  maxChaseSeconds:45, // 警车持续时长达到上限后自动撤离。
+  firstLevelMaxChaseSeconds:25,maxChaseSeconds:35,thirdLevelMaxChaseSeconds:45, // 第一关 25 秒、第二关 35 秒、第三关 45 秒。
 };
 export const LANE_WIDTH = 3.6;
 // 天降炮弹：开局 startSeconds 后按 intervalMin~intervalMax 秒随机检查，以 chance 概率投弹，落点取玩家前方并横向抖动；
@@ -266,12 +270,12 @@ export const LANE_WIDTH = 3.6;
 // 玩家被直接命中即死亡;坦克只损失 tankDamageFraction 满防御、卡车损失 truckDamageFraction(取整后经统一防御流程)。
 export const SHELL={
   chance:.4,
-  startSeconds:120,
+  startSeconds:100,
   intervalMin:10,intervalMax:22,
-  frequencyAfterSeconds:150,lateIntervalMin:5,lateIntervalMax:10, // 满 2 分 30 秒后加密炮击。
+  frequencyAfterSeconds:125,lateIntervalMin:5,lateIntervalMax:10, // 第一关满 2 分 5 秒后加密炮击。
   fallSeconds:2.5,
   areaSize:6, // 基础爆炸区域边长(米),由 7.5 缩小 25% 取整。
-  sizeGrowthSeconds:30,sizeGrowthFactor:1.2, // 炮击开始后每 30 秒爆炸边长增大 20%。
+  sizeGrowthSeconds:22.5,sizeGrowthFactor:1.2, // 122.5、145 秒扩大范围并各投放一枚炮弹。
   targetAheadMin:0,targetAheadMax:45,
   targetJitter:7,
   tankDamageFraction:1/3,truckDamageFraction:1/2,
@@ -293,4 +297,4 @@ export const approach = (value, target, delta) => value < target ? Math.min(targ
 // 启动早期应用 URL 测试参数(?fast=1 或 ?POLICE.intervalSeconds=5 等白名单字段),
 // 仅服务 Agent/人工快速验证随机事件;不带参数或 Node 端导入时默认值原样生效。
 import { applyTestOverrides } from './test-overrides.js';
-applyTestOverrides({LEVELS,DISASTERS,DINOSAURS,COINS,TRAFFIC_DENSITY,POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,ROADBLOCKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});
+applyTestOverrides({LEVELS,FIRST_LEVEL_EVENTS,SECOND_LEVEL_EVENTS,DISASTERS,DINOSAURS,COINS,TRAFFIC_DENSITY,POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,ROADBLOCKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});

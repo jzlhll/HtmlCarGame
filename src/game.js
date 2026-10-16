@@ -1,4 +1,4 @@
-import { VEHICLES, MAX_RANK, LEVELS, DISASTERS, RULES_VERSION, XP, POINT_LOSS, HUNGER, VEHICLE_DEFENSE, SEASONS, SEASON_CYCLE, PLAYER_START_SPEED, AUTO_ACCELERATION, MANUAL_ACCELERATION, NITRO, REAR_END_INVINCIBLE_SECONDS, DEBUG_REVIVE_SECONDS, RESCUE_LIMIT, REVIVE_CLEAR_AHEAD, ROAD_INFRASTRUCTURE, ROAD_DIFFICULTY, ROADBLOCKS, POLICE, laneD, clamp, lerp, approach, random } from './config.js';
+import { VEHICLES, MAX_RANK, LEVELS, FIRST_LEVEL_EVENTS, SECOND_LEVEL_EVENTS, DISASTERS, RULES_VERSION, XP, POINT_LOSS, HUNGER, VEHICLE_DEFENSE, SEASONS, SEASON_CYCLE, PLAYER_START_SPEED, AUTO_ACCELERATION, MANUAL_ACCELERATION, NITRO, REAR_END_INVINCIBLE_SECONDS, DEBUG_REVIVE_SECONDS, RESCUE_LIMIT, REVIVE_CLEAR_AHEAD, ROAD_INFRASTRUCTURE, ROAD_DIFFICULTY, ROADBLOCKS, POLICE, laneD, clamp, lerp, approach, random } from './config.js';
 import { Road } from './road.js';
 import { Traffic } from './traffic.js';
 import { RoadHazards, MUD_SECONDS, BUMP_SECONDS, surfaceContact } from './hazards.js';
@@ -38,7 +38,7 @@ export class Game {
     await new Promise(resolve=>requestAnimationFrame(resolve));
     try{
       this.seed=crypto.getRandomValues(new Uint32Array(1))[0];this.runId=crypto.randomUUID();
-      this.whiteHorse=new WhiteHorseEvent(this.seed);this.police=new PoliceEvent(this.seed);this.quiz=null;this.failedQuiz=null;this.caught=null;this.rescueUsed=0;this.weather=new SeasonalWeather(this.seed);
+      this.whiteHorse=new WhiteHorseEvent(this.seed,level);this.police=new PoliceEvent(this.seed,level);this.quiz=null;this.failedQuiz=null;this.caught=null;this.rescueUsed=0;this.weather=new SeasonalWeather(this.seed);
       this.road=new Road(this.seed,{flat:level===3});this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};
       this.level=level;this.levelStartedAt=0;this.levelExit=null;this.renderPreviousPlayer=null;this.activeSeconds=0;
       this.dinosaurs=level===2?new DinosaurEvents(this.road,0):null;
@@ -71,8 +71,8 @@ export class Game {
   enterSecondLevel(){return this.start(2);}
   weaponAction(key){
     if(this.state!=='RUNNING'||!this.arsenal||this.player.spin)return;
-    if(key!==1&&key!==2)return;
-    this.arsenal.fire(this,key===2?'advanced':'normal');
+    if(key!==1)return;
+    this.arsenal.fire(this);
     this.renderer?.invalidate();
   }
   beginLevelExit(){
@@ -520,7 +520,7 @@ export class Game {
     }
     this.input.advance(this.player.spin?0:dt);
     if(this.level===2&&this.levelSeconds+dt>=ROAD_DIFFICULTY.afterSeconds)this.road.narrowAfter(this.player.s);
-    if(this.activeSeconds+dt>=ROADBLOCKS.afterSeconds)this.road.blockadesAfter(this.player.s);
+    if(this.activeSeconds+dt>=(this.level===1?FIRST_LEVEL_EVENTS.roadblocksAfterSeconds:this.level===2?SECOND_LEVEL_EVENTS.roadblocksAfterSeconds:ROADBLOCKS.afterSeconds))this.road.blockadesAfter(this.player.s);
     this.infrastructure.advance(dt,this);
     this.weather.advance(this);this.whiteHorse.advance(dt,this);this.police.advance(dt,this);
     const p=this.player,start={...p};

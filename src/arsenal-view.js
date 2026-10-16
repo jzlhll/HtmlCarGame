@@ -3,7 +3,7 @@ import { coinModel, rocketModel } from './arsenal-models.js';
 
 // 金币及火箭的部件共享几何与材质，显示对象按固定上限复用。
 export class ArsenalView {
-  constructor(){this.coins=new Map();this.pools={small:[],large:[]};this.rockets={normal:[],advanced:[]};this.seen=new Set();this.point={};}
+  constructor(){this.coins=new Map();this.pools={small:[],large:[]};this.rockets=[];this.seen=new Set();this.point={};}
   reset(){for(const item of this.coins.values())this.pools[item.large?'large':'small'].push(item.view);this.coins.clear();this.seen.clear();}
   draw(renderer,game){
     const arsenal=game.arsenal;if(!arsenal)return;
@@ -18,16 +18,14 @@ export class ArsenalView {
       view.position.set(p.x,p.y+coin.dimensions.width/2+.3+Math.sin(time*3+coin.id)*.1,p.z);view.rotation.set(p.pitch,time*2,0);renderer.trafficView.add(view);
     }
     if(!arsenal.shots.length)return;
-    let normal=0,advancedIndex=0;
+    let rocketIndex=0;
     for(const shot of arsenal.shots){
-      const progress=Math.min(1,(time-shot.born)/ROCKETS.flightSeconds),advanced=shot.type==='advanced',count=advanced?3:1;
+      const progress=Math.min(1,(time-shot.born)/ROCKETS.flightSeconds);
       const distance=progress*shot.range,index=Math.min(Math.floor(distance),shot.path.length-2),a=shot.path[index],b=shot.path[index+1];
       const s=lerp(a.s,b.s,(distance-a.distance)/(b.distance-a.distance)),route=shot.route&&s<game.road.route(shot.route).end?shot.route:null,center=game.road.branchCenter(s,route);
-      for(let i=0;i<count;i++){
-        const index=advanced?advancedIndex++:normal++,pool=this.rockets[shot.type],view=pool[index]??(pool[index]=rocketModel(advanced));
-        const d=center+(advanced?(i-1)*game.road.edge(s,route)*2/3:shot.lateral),p=renderer.local(s,d,route,this.point);
-        view.position.set(p.x,p.y+ROCKETS.launchHeight,p.z);view.rotation.set(p.pitch,-p.heading,0);renderer.trafficView.add(view);
-      }
+      const view=this.rockets[rocketIndex]??(this.rockets[rocketIndex]=rocketModel());rocketIndex++;
+      const p=renderer.local(s,center+shot.lateral,route,this.point);
+      view.position.set(p.x,p.y+ROCKETS.launchHeight,p.z);view.rotation.set(p.pitch,-p.heading,0);renderer.trafficView.add(view);
     }
   }
 }

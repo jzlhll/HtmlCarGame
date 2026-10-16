@@ -70,7 +70,15 @@ export class DinosaurEvents {
     const side=-chaser.side,center=this.road.branchCenter(s,route);
     const bodyS=s+cfg.footBack/this.road.pathScale(s,route),bodyRoute=route&&bodyS>=this.road.route(route).end?null:route;
     const bodyCenter=this.road.branchCenter(bodyS,bodyRoute),bounds=this.road.drivableBounds(bodyS,bodyRoute),half=cfg.chaserWidth/2+.2;
-    const bodyD=clamp(bodyCenter+lateral-side*cfg.footSpread,bounds.min+half,bounds.max-half),d=center+bodyD-bodyCenter+side*cfg.footSpread;
+    const aimD=bodyCenter+lateral-side*cfg.footSpread,min=bounds.min+half,max=bounds.max-half;
+    let bodyD=clamp(aimD,min,max);
+    if(this.rng()>=cfg.footAimChance){
+      // 偏离瞄准点一条车道；道路边界限制时选偏离更远的一侧，避免夹回玩家脚下。
+      const offset=(this.rng()<.5?-1:1)*LANE_WIDTH;
+      const first=clamp(aimD+offset,min,max),other=clamp(aimD-offset,min,max);
+      bodyD=Math.abs(first-aimD)>=Math.abs(other-aimD)?first:other;
+    }
+    const d=center+bodyD-bodyCenter+side*cfg.footSpread;
     const relative=d-center,direction=relative<0?-1:1,lane=Math.max(0,Math.floor((Math.abs(relative)-.4)/LANE_WIDTH)),lanes=this.road.available(s,route);
     if(lane>=lanes||(!route&&!this.road.laneOpen(s,lane,direction,0,cfg.footLength/2)))return;
     let escape=false;

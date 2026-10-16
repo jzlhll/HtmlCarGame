@@ -49,16 +49,16 @@ export class Arsenal {
       this.coins.push({id:this.nextId++,s,d,route,value:large?COINS.largeValue:COINS.smallValue,large,dimensions:{width:size,length:size}});
     }
   }
-  fire(game,type='normal'){
-    if(!['normal','advanced'].includes(type)||this.shots.length>=ROCKETS.capacity)return false;
-    const cost=type==='advanced'?ROCKETS.advancedCost:ROCKETS.normalCost;
+  fire(game){
+    if(this.shots.length>=ROCKETS.capacity)return false;
+    const cost=ROCKETS.normalCost;
     if(this.balance<cost)return false;
     this.balance-=cost;
     const p=game.player,route=p.route??null,available=this.road.available(p.s,route),ordered=[];
     for(let lane=available;lane>=1;lane--)ordered.push(-lane);
     for(let lane=1;lane<=available;lane++)ordered.push(lane);
     const lane=laneAt(this.road,p.s,p.d,route),index=ordered.indexOf(lane);
-    const lanes=type==='advanced'?null:ordered.slice(Math.max(0,index-ROCKETS.normalSideLanes),index+ROCKETS.normalSideLanes+1);
+    const lanes=ordered.slice(Math.max(0,index-ROCKETS.normalSideLanes),index+ROCKETS.normalSideLanes+1);
     const path=[{s:p.s,route,distance:0}];let s=p.s,currentRoute=route,distance=0;
     // 沿当前路线累计实际前方距离，副路结束后接主路，弯道和坡道不会缩短清理范围。
     while(distance<ROCKETS.range){
@@ -66,21 +66,21 @@ export class Arsenal {
       if(currentRoute&&s>=this.road.route(currentRoute).end)currentRoute=null;
       path.push({s,route:currentRoute,distance});
     }
-    const shot={id:this.nextId++,type,s:p.s,route,lanes,lateral:p.d-this.road.branchCenter(p.s,route),path,endS:s,range:ROCKETS.range,born:game.activeSeconds};this.shots.push(shot);
+    const shot={id:this.nextId++,s:p.s,route,lanes,lateral:p.d-this.road.branchCenter(p.s,route),path,endS:s,range:ROCKETS.range,born:game.activeSeconds};this.shots.push(shot);
     // 起点、路线和普通炮的三条车道在发射时固定，按车辆中心所在车道立即清理。
-    // 警车与捕网属于独立事件，不受普通炮或高级炮影响。
+    // 警车与捕网属于独立事件，不受火箭炮影响。
     for(const car of game.traffic.cars)if(!car.remove&&this.hit(shot,car)){
       car.remove=true;game.renderer?.effect(car.s,car.d,'wreck',car);
     }
     const chaser=game.dinosaurs?.chaser;
-    // 高级炮三枚动画合计一次伤害，沿用本次发射的路线、车道与射程判定。
-    if(chaser&&!chaser.defeated&&this.hit(shot,chaser))game.dinosaurs.hurt(type==='advanced'?ROCKETS.advancedDinosaurDamage:ROCKETS.normalDinosaurDamage,game);
+    // 每发只结算一次伤害，沿用本次发射的路线、车道与射程判定。
+    if(chaser&&!chaser.defeated&&this.hit(shot,chaser))game.dinosaurs.hurt(ROCKETS.normalDinosaurDamage,game);
     game.audio?.rocketLaunch();return true;
   }
   hit(shot,car){
     if(car.s<shot.s||car.s>shot.endS)return false;
     const route=shot.route&&car.s<this.road.route(shot.route).end?shot.route:null;
     if((car.route??null)!==route)return false;
-    return shot.type==='advanced'||shot.lanes.includes(laneAt(this.road,car.s,car.d,route));
+    return shot.lanes.includes(laneAt(this.road,car.s,car.d,route));
   }
 }

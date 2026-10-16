@@ -13,12 +13,12 @@ export function coinModel(large=false){
   for(const side of [-1,1]){const number=new THREE.Mesh(faceGeometry,face);number.position.z=side*.071;number.rotation.y=side<0?Math.PI:0;root.add(number);}
   root.scale.setScalar(diameter);cacheModelBounds(root);templates.set(key,root);return root.clone(true);
 }
-export function rocketModel(advanced=false){
-  const key=advanced?'advancedRocket':'rocket';if(templates.has(key))return templates.get(key).clone(true);
+export function rocketModel(){
+  const key='rocket';if(templates.has(key))return templates.get(key).clone(true);
   const root=new THREE.Group(),length=ROCKETS.modelLength,width=ROCKETS.modelWidth;
   const add=(geometry,color,size,z)=>{const mesh=new THREE.Mesh(geometry,material(color));mesh.scale.set(...size);mesh.position.z=z;root.add(mesh);return mesh;};
-  add(bodyGeometry,advanced?0x77d9e6:0xe2e5d6,[width,width,length*.7],0);
-  add(noseGeometry,advanced?0x327a99:0xc6553e,[width,width,length*.3],-length*.5);
+  add(bodyGeometry,0xe2e5d6,[width,width,length*.7],0);
+  add(noseGeometry,0xc6553e,[width,width,length*.3],-length*.5);
   for(const side of [-1,1]){const fin=add(boxGeometry,0x344d4a,[width*.8,width*.15,length*.25],length*.28);fin.position.x=side*width*.5;}
   const flame=add(noseGeometry,0xffb347,[width*.6,width*.6,length*.45],length*.65);flame.rotation.y=Math.PI;
   cacheModelBounds(root);templates.set(key,root);return root.clone(true);

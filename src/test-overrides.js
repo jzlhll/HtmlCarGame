@@ -7,11 +7,13 @@ export const TEST_OVERRIDES={active:false,keys:[]};
 // 白名单开放事件节奏、概率、车流容量及警车距离、网尺寸等字段，不开放车型尺寸与车辆碰撞阈值。
 const WHITELIST={
   LEVELS:['firstSeconds','secondSeconds','thirdSeconds','weatherChance','branchWeatherChance'],
+  FIRST_LEVEL_EVENTS:['endSeconds','horseCount','roadblocksAfterSeconds'],
+  SECOND_LEVEL_EVENTS:['trafficCompressionSeconds','roadblocksAfterSeconds'],
   DISASTERS:['environmentSeconds','narrowSeconds','volcanoInterval','waveInterval','iceInterval','collapseInterval','icebergInterval'],
   COINS:['firstSeconds','intervalMin','intervalMax','chance','aheadMin','aheadMax'],
   DINOSAURS:['smallFirstMin','smallFirstMax','smallIntervalMin','smallIntervalMax','smallChance','chaseAfterSeconds','chaseFirstMin','chaseFirstMax','chaseIntervalMin','chaseIntervalMax','chaseChance','durationMin','durationMax'],
   TRAFFIC_DENSITY:['capacity','maxCapacity','capacityPerStep'],
-  POLICE:['intervalSeconds','spawnAheadMin','spawnAheadMax','keepMin','keepMax','keepGain','chaseRatio','closeRatio','netAheadMin','netLeadSeconds','netInterval','netSizeBase','netSizeGrowth','netSizeMax','netKeep','quizMathSeconds','quizChineseSeconds','quizEnglishSeconds','catchSeconds','maxChaseSeconds'],
+  POLICE:['intervalSeconds','secondLevelIntervalSeconds','spawnAheadMin','spawnAheadMax','keepMin','keepMax','keepGain','chaseRatio','closeRatio','netAheadMin','netLeadSeconds','netInterval','netSizeBase','netSizeGrowth','netSizeMax','netKeep','quizMathSeconds','quizChineseSeconds','quizEnglishSeconds','catchSeconds','firstLevelMaxChaseSeconds','maxChaseSeconds','thirdLevelMaxChaseSeconds'],
   WHITE_HORSE:['intervalSeconds','visibleSeconds','rampSeconds','shieldSeconds','shieldBlinkSeconds','recoverySeconds'],
   COW_CROSSING:['minInterval','intervalRange','chance'],
   ROADWORKS:['first','interval','chance'],
@@ -27,7 +29,9 @@ const WHITELIST={
 
 // fast=1 一键测试档:把分钟级节奏压缩到秒级,便于快速触发警车、白马、天气、分叉候选、炮击等随机事件。
 const FAST_PRESET={
-  POLICE:{intervalSeconds:5,quizMathSeconds:5,quizChineseSeconds:5,quizEnglishSeconds:5},
+  FIRST_LEVEL_EVENTS:{endSeconds:24,horseCount:3,roadblocksAfterSeconds:15},
+  SECOND_LEVEL_EVENTS:{roadblocksAfterSeconds:15},
+  POLICE:{intervalSeconds:5,secondLevelIntervalSeconds:5,quizMathSeconds:5,quizChineseSeconds:5,quizEnglishSeconds:5},
   WHITE_HORSE:{intervalSeconds:8},
   COW_CROSSING:{minInterval:4,intervalRange:4},
   ROADWORKS:{first:10},
@@ -36,7 +40,7 @@ const FAST_PRESET={
   WEATHER:{firstMin:2,firstMax:4,intervalMin:6,intervalMax:10},
   ROAD_FORKS:{chance:1},
   ROAD_INFRASTRUCTURE:{gapMin:500,gapMax:800},
-  SHELL:{startSeconds:8,intervalMin:3,intervalMax:5,frequencyAfterSeconds:15,lateIntervalMin:1.5,lateIntervalMax:2.5,fallSeconds:1.5},
+  SHELL:{startSeconds:8,intervalMin:3,intervalMax:5,frequencyAfterSeconds:15,lateIntervalMin:1.5,lateIntervalMax:2.5,fallSeconds:1.5,sizeGrowthSeconds:8},
 };
 
 export function applyTestOverrides(groups){
@@ -46,7 +50,7 @@ export function applyTestOverrides(groups){
   const set=(group,name,key,raw)=>{
     const value=Number(raw);
     if(!Number.isFinite(value)){warn(name+'.'+key+'='+raw);return;}
-    if((name==='DISASTERS'||name==='LEVELS'||name==='POLICE'&&key==='intervalSeconds')&&value<=0){warn(name+'.'+key+'='+raw);return;}
+    if((name==='FIRST_LEVEL_EVENTS'||name==='DISASTERS'||name==='LEVELS'||name==='POLICE'&&['intervalSeconds','secondLevelIntervalSeconds'].includes(key))&&value<=0){warn(name+'.'+key+'='+raw);return;}
     group[key]=value;TEST_OVERRIDES.keys.push(name+'.'+key+'='+raw);
   };
   const applyPatch=patch=>{
