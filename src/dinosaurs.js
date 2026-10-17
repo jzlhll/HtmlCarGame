@@ -62,9 +62,9 @@ export class DinosaurEvents {
     const cfg=DINOSAURS;if(this.feet.length>=cfg.footCapacity)return;
     const sameRoute=(chaser.route??null)===(player.route??null);
     const predictionSeconds=cfg.footWarning+cfg.footDanger/2;
-    let s=sameRoute?player.s:chaser.s,route=chaser.route,distance=game?.travel?game.travel(player,now,predictionSeconds)*this.road.pathScale(player.s,player.route):player.speed/3.6*predictionSeconds;
+    let s=sameRoute?player.s:chaser.s,route=chaser.route,distance=(game?.travel?game.travel(player,now,predictionSeconds)*this.road.pathScale(player.s,player.route):player.speed/3.6*predictionSeconds)+cfg.footAhead;
     const lateral=(sameRoute?player.d:chaser.d)-this.road.branchCenter(s,route);
-    // 预测接地危险窗口中点的位置，让身体落在车前；汇流接主路，分离路线不跨路追踪。
+    // 预测接地危险窗口中点的位置，再沿路前移缓冲距离；汇流接主路，分离路线不跨路追踪。
     while(distance>0){const step=Math.min(1,distance);s+=step/this.road.pathScale(s,route);distance-=step;if(route&&s>=this.road.route(route).end)route=null;}
     const side=-chaser.side,center=this.road.branchCenter(s,route);
     const bodyS=s+cfg.footBack/this.road.pathScale(s,route),bodyRoute=route&&bodyS>=this.road.route(route).end?null:route;

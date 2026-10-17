@@ -26,10 +26,15 @@ export class ResourceCache {
     }catch(error){this.unavailable(error);}
     return this;
   }
-  async read(key){
-    if(!this.persistent)return null;
-    try{const tx=this.db.transaction('resources','readonly'),done=transactionDone(tx),[value]=await Promise.all([requestValue(tx.objectStore('resources').get(key)),done]);return value;}
-    catch(error){this.unavailable(error);return null;}
+  async read(key){return (await this.readMany([key])).get(key)??null;}
+  async readMany(keys){
+    if(!this.persistent||!keys.length)return new Map();
+    try{
+      // 一次事务只读取本版本需要的键，避免载入待清理的旧模型。
+      const tx=this.db.transaction('resources','readonly'),done=transactionDone(tx),store=tx.objectStore('resources');
+      const [values]=await Promise.all([Promise.all(keys.map(key=>requestValue(store.get(key)))),done]);
+      return new Map(keys.map((key,index)=>[key,values[index]]));
+    }catch(error){this.unavailable(error);return new Map();}
   }
   async write(resource,data){
     if(!this.persistent)return false;

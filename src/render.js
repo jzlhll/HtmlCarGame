@@ -65,14 +65,14 @@ export class GameRenderer {
       this.strip(material(0xf4e9c4),edge=>[sign*(edge-.10)-.035,sign*(edge-.10)+.035],.009);
       this.strip(material(0xe2c357),()=>[sign*.15-.035,sign*.15+.035],.011);
     }
-    this.lines=new THREE.InstancedMesh(new THREE.BoxGeometry(.07,.012,4),material(0xd4ddd7),200);this.scene.add(this.lines);
+    this.lines=new THREE.InstancedMesh(new THREE.BoxGeometry(.07,.012,4),material(0xd4ddd7),ROAD_RENDER.lineCapacity);this.scene.add(this.lines);
     const treeParts=treeGeometry();
     this.trunks=new THREE.InstancedMesh(treeParts.trunk,surfaceMaterial('bark',0x7a684d),TREE_SCENERY.capacity);this.trunks.castShadow=true;this.scene.add(this.trunks);
     this.trees=new THREE.InstancedMesh(treeParts.broadleaf,this.leafMaterial,TREE_SCENERY.capacity);this.trees.castShadow=true;this.scene.add(this.trees);
     this.pines=new THREE.InstancedMesh(treeParts.conifer,this.leafMaterial,TREE_SCENERY.capacity);this.pines.castShadow=true;this.scene.add(this.pines);
     const rockMaterial=surfaceMaterial('stone',0xa5b2a7).clone();rockMaterial.vertexColors=true;this.rocks=new THREE.InstancedMesh(rockGeometry(),rockMaterial,50);this.scene.add(this.rocks);
     this.lakes=new THREE.InstancedMesh(new THREE.CylinderGeometry(1,1,.02,24),this.waterMaterial,4);this.scene.add(this.lakes);
-    this.markers=new THREE.InstancedMesh(new THREE.BoxGeometry(.12,.65,.12),material(0xece4cc),110);this.scene.add(this.markers);
+    this.markers=new THREE.InstancedMesh(new THREE.BoxGeometry(.12,.65,.12),material(0xece4cc),ROAD_RENDER.markerCapacity);this.scene.add(this.markers);
     this.roadside=new RoadsideScenery(this.scene);
     this.roadworks=new RoadworksView(this.staticGroup);
     this.roadPoint={};this.localPoint={};this.playerMotion={};this.vehicleMotion={};this.carIds=new Set();this.cowIds=new Set();this.views=new Map();this.pools=new Map();this.viewBounds=new Map();this.carColorId=DEFAULT_CAR_COLOR;this.player=vehicleModel(1,true,carColor(this.carColorId).hex);this.scene.add(this.player);this.playerRank=1;this.upgradeTime=0;
@@ -229,6 +229,7 @@ export class GameRenderer {
         const p=this.local(station,sign*(this.road.edge(station)+.7));this.instance(this.markers,pole++,p.x,p.y+.32,p.z,1,1,1,p.heading);
       }
     }
+    if(index>this.lines.instanceMatrix.count||pole>this.markers.instanceMatrix.count)throw new RangeError('Road instance capacity exceeded: lines '+index+'/'+this.lines.instanceMatrix.count+', markers '+pole+'/'+this.markers.instanceMatrix.count);
     this.lines.count=index;this.lines.instanceMatrix.needsUpdate=true;this.markers.count=pole;this.markers.instanceMatrix.needsUpdate=true;
     this.lines.computeBoundingSphere();this.markers.computeBoundingSphere();
     let wallIndex=0,signIndex=0;

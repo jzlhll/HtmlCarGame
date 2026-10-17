@@ -1,5 +1,5 @@
 import { POEM_PAIRS, POEM_HALVES } from './poems.js';
-import { POLICE } from './config.js';
+import { POLICE, MATH_QUIZ } from './config.js';
 import { ENGLISH_BOOKS } from './english.js';
 
 // 警车拦查答题：数学、语文、英语各约三分之一，固定范围随机出题。
@@ -45,7 +45,13 @@ function decimalMultiply(){
     const k=ri(2,9),a=ri(2,49); // a 为十分刻度。
     return {text:k+' × '+fmtTenths(a),tenths:k*a};
   }
-  const a=ri(2,49),b=ri(2,49); // 一位小数 × 一位小数,结果两位小数,如 0.7 × 0.8 = 0.56。
+  // 按实际显示的数字去点判断口算难度；整十刻度会显示为整数，不算两位数。
+  const a=ri(2,49),digits=a%10===0?a/10:a;
+  const candidates=Array.from({length:48},(_,i)=>i+2).filter(value=>{
+    const other=value%10===0?value/10:value;
+    return digits<10||other<10||digits<=MATH_QUIZ.maxTwoDigitFactor&&other<=MATH_QUIZ.maxTwoDigitFactor;
+  });
+  const b=pick(candidates);
   return {text:fmtTenths(a)+' × '+fmtTenths(b),hundredths:a*b};
 }
 function decimalDivide(){

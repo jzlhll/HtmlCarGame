@@ -7,7 +7,7 @@ const editing=target=>target instanceof Element&&!!target.closest('input,textare
 export class Input {
   constructor(container){
     this.container=container;this.pressed=new Set();this.lateralSeconds=0;this.lateralDirection=0;this.onSpace=()=>{};this.onBlur=()=>{};this.onQuiz=null;this.onKey=null;this.onWeapon=()=>{};
-    this.touchPressed=new Set();this.touchPointers=new Map();this.stickPointer=null;this.onLayoutChange=()=>{};
+    this.touchPressed=new Set();this.touchPointers=new Map();this.stickPointer=null;this.stickRect=null;this.onLayoutChange=()=>{};
     this.stick=document.getElementById('steering-stick');this.thumb=document.getElementById('stick-thumb');
     this.coarsePointer=window.matchMedia('(pointer: coarse)');this.compactWindow=window.matchMedia('(max-width: '+MOBILE.compactWidth+'px)');
     const syncViewport=()=>{
@@ -18,7 +18,8 @@ export class Input {
       container.classList.toggle('touch-mode',touchMode);container.classList.toggle('landscape',landscape);
       container.style.setProperty('--viewport-height',h+'px');
       document.getElementById('portrait-hint').hidden=!landscape;
-      if(changed){this.clear();this.onLayoutChange();}
+      if(changed||this.stickPointer!==null)this.clear();
+      if(changed)this.onLayoutChange();
     };
     window.addEventListener('resize',syncViewport);window.visualViewport?.addEventListener('resize',syncViewport);
     this.coarsePointer.addEventListener('change',syncViewport);this.compactWindow.addEventListener('change',syncViewport);syncViewport();
@@ -68,9 +69,9 @@ export class Input {
       for(const type of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(type,release);
     }
     const move=event=>{
-      if(event.pointerId!==this.stickPointer)return;
+      if(event.pointerId!==this.stickPointer||!this.stickRect)return;
       event.preventDefault();
-      const rect=this.stick.getBoundingClientRect(),travel=rect.width*MOBILE.stickTravelRatio;
+      const rect=this.stickRect,travel=rect.width*MOBILE.stickTravelRatio;
       let x=event.clientX-rect.left-rect.width/2,y=event.clientY-rect.top-rect.height/2;
       const distance=Math.hypot(x,y);if(distance>travel){x*=travel/distance;y*=travel/distance;}
       this.thumb.style.transform='translate('+x+'px,'+y+'px)';
@@ -81,12 +82,12 @@ export class Input {
     };
     this.stick.addEventListener('pointerdown',event=>{
       if(!available()||this.stickPointer!==null||event.button!==0)return;
-      event.preventDefault();this.stickPointer=event.pointerId;this.stick.setPointerCapture(event.pointerId);this.stick.classList.add('held');move(event);
+      event.preventDefault();this.stickRect=this.stick.getBoundingClientRect();this.stickPointer=event.pointerId;this.stick.setPointerCapture(event.pointerId);this.stick.classList.add('held');move(event);
     });
     this.stick.addEventListener('pointermove',move);
     const releaseStick=event=>{
       if(event.pointerId!==this.stickPointer)return;
-      this.stickPointer=null;this.touchPressed.delete('ArrowLeft');this.touchPressed.delete('ArrowRight');
+      this.stickPointer=null;this.stickRect=null;this.touchPressed.delete('ArrowLeft');this.touchPressed.delete('ArrowRight');
       this.thumb.style.transform='';this.stick.classList.remove('held');this.lateralSeconds=0;this.lateralDirection=this.lateral;
       if(this.stick.hasPointerCapture(event.pointerId))this.stick.releasePointerCapture(event.pointerId);
     };
@@ -101,7 +102,7 @@ export class Input {
     this.pressed.clear();this.touchPressed.clear();this.lateralSeconds=0;this.lateralDirection=0;
     const pointers=[...this.touchPointers];this.touchPointers.clear();
     for(const [id,{button}] of pointers){button.classList.remove('held');button.setAttribute('aria-pressed','false');if(button.hasPointerCapture(id))button.releasePointerCapture(id);}
-    const id=this.stickPointer;this.stickPointer=null;
+    const id=this.stickPointer;this.stickPointer=null;this.stickRect=null;
     this.thumb.style.transform='';this.stick.classList.remove('held');
     if(id!==null&&this.stick.hasPointerCapture(id))this.stick.releasePointerCapture(id);
   }

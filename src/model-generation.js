@@ -22,9 +22,11 @@ function validate(data){
         if(!ArrayBuffer.isView(attribute.array)||attribute.array instanceof DataView||!Number.isInteger(attribute.itemSize)||attribute.itemSize<1)throw new Error('Invalid geometry attribute');
         if(attribute!==geometry.index&&attribute.array.length!==count*attribute.itemSize)throw new Error('Mismatched geometry attribute');
         bytes+=attribute.array.byteLength;
-        for(const value of attribute.array)if(typeof value!=='number'||!Number.isFinite(value))throw new Error('Invalid geometry values');
+        const array=attribute.array;
+        for(let i=0;i<array.length;i++)if(!Number.isFinite(array[i]))throw new Error('Invalid geometry values');
       }
-      if(!Number.isInteger(count)||(geometry.index&&(geometry.index.itemSize!==1||!(geometry.index.array instanceof Uint16Array||geometry.index.array instanceof Uint32Array)))||geometry.index?.array.some(value=>value<0||value>=count))throw new Error('Invalid geometry indices');
+      if(!Number.isInteger(count)||(geometry.index&&(geometry.index.itemSize!==1||!(geometry.index.array instanceof Uint16Array||geometry.index.array instanceof Uint32Array))))throw new Error('Invalid geometry indices');
+      if(geometry.index){const array=geometry.index.array;for(let i=0;i<array.length;i++)if(array[i]<0||array[i]>=count)throw new Error('Invalid geometry indices');}
     }
     names.add(geometry.key);
   }
@@ -65,8 +67,9 @@ async function initialize(cache,progress){
   const report=phase=>progress?.({mode:!previous?'initialize':upgrading?'upgrade':'ready',phase,completed:count,total,version:APP_VERSION,persistent:cache.persistent,warning:cache.warning});
   report('读取模型缓存');
   try{
+    assertNotPlaying();const cachedResources=await cache.readMany(keys);
     for(const resource of resources){
-      assertNotPlaying();const cached=await cache.read(resource.key);let restored=false;
+      assertNotPlaying();const cached=cachedResources.get(resource.key);cachedResources.delete(resource.key);let restored=false;
       if(cached?.format===CACHE_FORMAT_VERSION&&cached.id===resource.id){
         try{validate(cached.data);
           if(resource.id.startsWith('texture:')&&!cached.data.textures.some(texture=>'texture:'+texture.key===resource.id)||!resource.id.startsWith('texture:')&&!cached.data.geometries.length)throw new Error('Incomplete cached resource');

@@ -49,8 +49,8 @@ export const DINOSAURS={
   cowSpeedMin:1.6,cowSpeedMax:2.2,crossingSpeedMultiplier:2,smallLength:4.8,smallWidth:1.6,smallHeight:2.4,smallSpacing:5.6,smallRowSpacing:2.6,smallAheadMin:60,smallLeadSeconds:3,
   chaseAfterSeconds:120,chaseFirstMin:4,chaseFirstMax:8,chaseIntervalMin:20,chaseIntervalMax:35,chaseChance:.7,
   chaseAheadMin:12,chaseAheadMax:18,durationMin:12,durationMax:18,
-  chaserLength:22,chaserWidth:5.8,chaserHeight:10,footSpread:1.8,footBack:4,jumpHeight:3,jumpTilt:.12,exitFadeSeconds:1,
-  defense:100,firstJumpSeconds:1.2,stepDistanceMin:36,stepDistanceMax:48,stepSecondsMin:2.4,footWidth:1.8,footLength:3,footWarning:1.2,footDanger:.2,footAimChance:.4,footCapacity:12,baseRingRadius:4.5, // 仅在实际接地时判定踩踏；底圈跟随身体，不保留脚印或绘制预警。
+  chaserLength:22,chaserWidth:5.8,chaserHeight:10,footSpread:1.8,footBack:4,footAhead:8,jumpHeight:3,jumpTilt:.12,exitFadeSeconds:1,
+  defense:100,firstJumpSeconds:1.2,stepDistanceMin:36,stepDistanceMax:48,stepSecondsMin:2.4,footWidth:1.35,footLength:2.25,footWarning:1.2,footDanger:.2,footAimChance:.4,footCapacity:12,baseRingRadius:3.2, // 仅在实际接地时判定踩踏；底圈跟随身体，不保留脚印或绘制预警。
   bridgeLeadSeconds:2.5,bridgeSpeed:12,bridgeCount:4,bridgeSpacing:5,bridgeScale:.8,sceneryCapacity:32,grazerScale:2.4,diplodocusScale:3.2,lakeOffset:35,waterBankOffset:9,waterRoadOffset:32,
 };
 // 玩家座驾涂装：yellow/blue/green 为纯色，rainbow 使用渐变贴图；默认绿色。
@@ -166,7 +166,7 @@ export const TRAFFIC_LANE_CHANGE={enabledChance:.5,chanceMin:.3,chanceMax:.55,se
 export const TRAFFIC_DRIVING={dangerousChance:.15,avoidSeconds:3.5,minAvoidDistance:16,signalSeconds:1,changeSeconds:1.5};
 // 跨轮静态查询缓存按轮数限制，远离当前窗口的内容可重新生成。
 export const ROAD_CACHE={maxLaps:4};
-export const ROAD_RENDER={sampleCapacity:160,sceneryBlock:40,sceneryBlocks:15,infrastructureBlock:80,roadsideMargin:65};
+export const ROAD_RENDER={lineCapacity:240,markerCapacity:110,sampleCapacity:160,sceneryBlock:40,sceneryBlocks:15,infrastructureBlock:80,roadsideMargin:65};
 export const MODEL_PREWARM={idleSliceMs:4,idleMinMs:5,idleFallbackMs:80,trafficExtra:16,targetSize:48,poolPerType:8,sliceMs:7};
 export const RENDER_QUALITY={
   firstLevelFastSpeed:160,fastExitSpeed:145,firstLevelFastFps:58,secondLevelFps:58,normalFps:45,
@@ -275,7 +275,9 @@ export const POLICE={
   catchSeconds:1.5, // 被抓动画时长:玩家缩小并被拉向警车。
   firstLevelMaxChaseSeconds:25,maxChaseSeconds:35,thirdLevelMaxChaseSeconds:45, // 第一关 25 秒、第二关 35 秒、第三关 45 秒。
 };
-export const KEYBOARD_TRAINING={startCount:3,rescueCount:5,rescueSeconds:45,rescueChance:.25};
+// 两个乘数去掉小数点后都超过个位时，均不得超过 19。
+export const MATH_QUIZ={maxTwoDigitFactor:19};
+export const KEYBOARD_TRAINING={startCount:3,rescueCount:4,rescueSeconds:30,rescueChance:.25};
 export const LANE_WIDTH = 3.6;
 // 天降炮弹：开局 startSeconds 后按 intervalMin~intervalMax 秒随机检查，以 chance 概率投弹，落点取玩家前方并横向抖动；
 // fallSeconds 为预警圈+下落时长(留给玩家躲避),areaSize 为爆炸区域基础边长(米,常量,后续可调),
