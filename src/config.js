@@ -163,6 +163,7 @@ export const CONTROLS = {
 
 // 地标采用轮廓化比例，集中于虚构河湾城市，不对应真实城市间的地理位置。
 export const LANDSCAPE = {
+  staticBatchCell: 640,
   seed: 3827,
   city: {
     center: [0, -9700], columns: 18, rows: 8, spacing: 150, roadWidth: 22,

@@ -28,13 +28,17 @@ export class GearPreview {
     const aircraftVisible = this.aircraft.visible, cockpitVisible = this.cockpit.visible;
     const opacity = this.materials.values().next().value.opacity;
     const size = renderer.getSize(this.size);
+    const matrixWorldAutoUpdate = this.scene.matrixWorldAutoUpdate;
     try {
       this.aircraft.visible = true; this.cockpit.visible = false;
       for (const material of this.materials) material.opacity = 1;
       renderer.setViewport(bounds.left, size.y - bounds.bottom, bounds.width, bounds.height);
       renderer.setScissor(bounds.left, size.y - bounds.bottom, bounds.width, bounds.height);
+      // 主视口已更新同一姿态的世界矩阵，脚部小窗直接复用。
+      this.scene.matrixWorldAutoUpdate = false;
       renderer.setScissorTest(true); renderer.render(this.scene, this.camera);
     } finally {
+      this.scene.matrixWorldAutoUpdate = matrixWorldAutoUpdate;
       this.aircraft.visible = aircraftVisible; this.cockpit.visible = cockpitVisible;
       for (const material of this.materials) material.opacity = opacity;
       renderer.setScissorTest(false); renderer.setViewport(0, 0, size.x, size.y);

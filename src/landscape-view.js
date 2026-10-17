@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { LANDSCAPE, SCENERY, JOURNEY } from './config.js';
 import { MountainView } from './mountain-view.js';
+import { batchStaticMeshes } from './static-batch.js';
 
 // 沿压缩航线绘制地景；建筑和山体直接读取逻辑共用数据。
 export class LandscapeView extends THREE.Group {
@@ -17,11 +18,12 @@ export class LandscapeView extends THREE.Group {
     this.addRiver();
     this.addCity();
     this.addLandmarks();
-    this.mountains = new MountainView(world); this.add(this.mountains);
-    this.textures = this.mountains.textures;
     this.addFarmland();
     this.addWaterfall();
     this.addRegionalViews();
+    batchStaticMeshes(this);
+    this.mountains = new MountainView(world); this.add(this.mountains);
+    this.textures = this.mountains.textures;
   }
 
   addGround() {

@@ -8,12 +8,13 @@ export class CockpitView extends THREE.Group {
     const dark = new THREE.MeshStandardMaterial({ color: COCKPIT.color, roughness: 0.95 });
     const trim = new THREE.MeshStandardMaterial({ color: COCKPIT.trimColor, roughness: 0.7, metalness: 0.18 });
     const screen = new THREE.MeshStandardMaterial({ color: 0x101a20, roughness: 0.45 });
+    const geometry = new THREE.BoxGeometry(1, 1, 1), parts = [];
     const makeBox = (material) => {
-      const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material);
+      const mesh = new THREE.Mesh(geometry, material);
       mesh.frustumCulled = false;
       mesh.castShadow = false;
       mesh.receiveShadow = false;
-      this.add(mesh);
+      parts.push(mesh);
       return mesh;
     };
     this.panel = makeBox(dark);
@@ -25,6 +26,12 @@ export class CockpitView extends THREE.Group {
     this.bolts = [];
     for (let i = 0; i < 8; i++) this.bolts.push(makeBox(trim));
     this.materials = [dark, trim, screen];
+    this.batches = this.materials.map(material => {
+      const items = parts.filter(mesh => mesh.material === material);
+      const mesh = new THREE.InstancedMesh(geometry, material, items.length);
+      mesh.frustumCulled = false; this.add(mesh);
+      return {mesh, items};
+    });
     this.backlight = trim;
     this.screenMaterial = screen;
     this.visible = false;
@@ -75,5 +82,9 @@ export class CockpitView extends THREE.Group {
       mesh.position.set((index / 7 * 2 - 1) * halfWidth * 0.94, top - 0.025, -distance + 0.27);
       mesh.scale.set(0.012, 0.012, 0.012);
     });
+    for (const {mesh, items} of this.batches) {
+      items.forEach((part, index) => { part.updateMatrix(); mesh.setMatrixAt(index, part.matrix); });
+      mesh.instanceMatrix.needsUpdate = true;
+    }
   }
 }

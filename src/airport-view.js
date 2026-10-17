@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { batchStaticMeshes } from './static-batch.js';
 import { RUNWAY, SCENERY } from './config.js';
 
 export class AirportView extends THREE.Group {
@@ -117,21 +117,8 @@ export class AirportView extends THREE.Group {
     this.batchSurfaces();
   }
 
-  // 同材质不透明标线共用一次绘制，保留地表深度偏移和透明跑道编号的排序。
   batchSurfaces() {
-    const batches = new Map();
-    for (const mesh of this.children) {
-      if (!mesh.isMesh || mesh.isInstancedMesh || mesh.geometry.type !== 'PlaneGeometry' || mesh.material.transparent) continue;
-      if (!batches.has(mesh.material)) batches.set(mesh.material, []);
-      batches.get(mesh.material).push(mesh);
-    }
-    for (const [material, meshes] of batches) {
-      if (meshes.length < 2) continue;
-      const geometries = meshes.map(mesh => { mesh.updateMatrix(); return mesh.geometry.clone().applyMatrix4(mesh.matrix); });
-      const combined = new THREE.Mesh(mergeGeometries(geometries), material);
-      combined.receiveShadow = true; this.add(combined);
-      for (const mesh of meshes) { mesh.removeFromParent(); mesh.geometry.dispose(); }
-      geometries.forEach(geometry => geometry.dispose());
-    }
+    // 每座机场独立合批，长跑道标线沿用完整批次。
+    batchStaticMeshes(this, Infinity);
   }
 }
