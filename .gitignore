@@ -4,3 +4,4 @@ node_modules
 *.log
 .workbuddy/
 .playwright-cli/
+assets/

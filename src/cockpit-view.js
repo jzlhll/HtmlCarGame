@@ -1,14 +1,16 @@
 import * as THREE from 'three';
-import { COCKPIT } from './config.js';
+import { COCKPIT, SURFACE_APPEARANCE } from './config.js';
+import { WindshieldDamage } from './windshield-damage.js';
+import { surfaceTexture, modelGeometry } from './surface-assets.js';
 
 // 驾驶舱几何位于飞行员眼位前方，与主相机共享同一个世界视图。
 export class CockpitView extends THREE.Group {
   constructor() {
     super();
-    const dark = new THREE.MeshStandardMaterial({ color: COCKPIT.color, roughness: 0.95 });
-    const trim = new THREE.MeshStandardMaterial({ color: COCKPIT.trimColor, roughness: 0.7, metalness: 0.18 });
-    const screen = new THREE.MeshStandardMaterial({ color: 0x101a20, roughness: 0.45 });
-    const geometry = new THREE.BoxGeometry(1, 1, 1), parts = [];
+    const panelDetail = surfaceTexture('panel-detail');
+    const dark = new THREE.MeshStandardMaterial({ color: COCKPIT.color, roughness: 0.96, envMapIntensity: 0.15, roughnessMap: panelDetail, bumpMap: panelDetail, bumpScale: SURFACE_APPEARANCE.panelBump });
+    const trim = new THREE.MeshStandardMaterial({ color: COCKPIT.trimColor, roughness: 0.8, metalness: 0.25, envMapIntensity: 0.3, roughnessMap: surfaceTexture('metal-detail') });
+    const geometry = modelGeometry('cockpit-box'), parts = [];
     const makeBox = (material) => {
       const mesh = new THREE.Mesh(geometry, material);
       mesh.frustumCulled = false;
@@ -17,15 +19,10 @@ export class CockpitView extends THREE.Group {
       parts.push(mesh);
       return mesh;
     };
-    this.panel = makeBox(dark);
-    this.coaming = makeBox(trim);
-    // 顶框、两侧框与仪表台上沿围成完整前窗，中央保持通透。
+    // 仅保留顶框和侧框；底部仪表与按键使用独立界面，不再叠加整块三维底座。
     this.topFrame = makeBox(dark);
     this.sideFrames = [makeBox(trim), makeBox(trim)];
-    this.screens = Array.from({ length: 5 }, () => makeBox(screen));
-    this.bolts = [];
-    for (let i = 0; i < 8; i++) this.bolts.push(makeBox(trim));
-    this.materials = [dark, trim, screen];
+    this.materials = [dark, trim];
     this.batches = this.materials.map(material => {
       const items = parts.filter(mesh => mesh.material === material);
       const mesh = new THREE.InstancedMesh(geometry, material, items.length);
@@ -33,17 +30,15 @@ export class CockpitView extends THREE.Group {
       return {mesh, items};
     });
     this.backlight = trim;
-    this.screenMaterial = screen;
+    this.glass=new WindshieldDamage(); this.add(this.glass);
     this.visible = false;
   }
 
   setSystems(systems) {
-    if (this.lights === systems.lights && this.avionics === systems.avionics) return;
-    this.lights = systems.lights; this.avionics = systems.avionics;
+    if (this.lights === systems.lights) return;
+    this.lights = systems.lights;
     this.backlight.emissive.setHex(systems.lights ? 0xb3a269 : 0x000000);
     this.backlight.emissiveIntensity = systems.lights ? 0.08 : 0;
-    this.screenMaterial.emissive.setHex(systems.avionics ? 0x255d65 : 0x000000);
-    this.screenMaterial.emissiveIntensity = systems.avionics ? 0.35 : 0;
   }
 
   setOpacity(opacity) {
@@ -57,15 +52,8 @@ export class CockpitView extends THREE.Group {
     if (aspect === this.lastAspect && fov === this.lastFov) return;
     this.lastAspect = aspect;
     this.lastFov = fov;
+    this.glass.resize(aspect,fov);
     const slope = Math.tan(THREE.MathUtils.degToRad(fov / 2));
-    const distance = COCKPIT.dashboardDistance;
-    const halfHeight = slope * distance;
-    const halfWidth = halfHeight * aspect;
-    const top = halfHeight * (1 - 2 * COCKPIT.panelTop);
-    this.panel.position.set(0, top - halfHeight * 0.55, -distance);
-    this.panel.scale.set(halfWidth * 2.35, halfHeight * 1.1, 0.32);
-    this.coaming.position.set(0, top + 0.015, -distance);
-    this.coaming.scale.set(halfWidth * 2.4, 0.055, 0.52);
     const frameHeight = slope * COCKPIT.frameDistance;
     this.topFrame.position.set(0, frameHeight * 1.02, -COCKPIT.frameDistance);
     this.topFrame.scale.set(frameHeight * aspect * 2.4, 0.12, 0.2);
@@ -73,14 +61,6 @@ export class CockpitView extends THREE.Group {
       mesh.position.set((index ? 1 : -1) * frameHeight * aspect * 0.97, frameHeight * 0.2, -COCKPIT.frameDistance);
       mesh.scale.set(0.1, frameHeight * 1.7, 0.15);
       mesh.rotation.z = (index ? 1 : -1) * -0.11;
-    });
-    this.screens.forEach((mesh, index) => {
-      mesh.position.set((index - 2) * halfWidth * 0.35, top - halfHeight * 0.28, -distance + 0.17);
-      mesh.scale.set(halfWidth * 0.32, halfHeight * 0.36, 0.015);
-    });
-    this.bolts.forEach((mesh, index) => {
-      mesh.position.set((index / 7 * 2 - 1) * halfWidth * 0.94, top - 0.025, -distance + 0.27);
-      mesh.scale.set(0.012, 0.012, 0.012);
     });
     for (const {mesh, items} of this.batches) {
       items.forEach((part, index) => { part.updateMatrix(); mesh.setMatrixAt(index, part.matrix); });

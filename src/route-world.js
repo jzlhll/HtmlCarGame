@@ -1,5 +1,6 @@
-import { AIRCRAFT, LANDSCAPE, JOURNEY, terrainElevation } from './config.js';
-import { createMountainSurface, sampleMountain } from './terrain.js';
+import { AIRCRAFT, LANDSCAPE, JOURNEY, terrainElevation, clusterZ } from './config.js';
+import { createCoastalSurface, coastalHeight, shorelineX } from './coastal-terrain.js';
+import { createMountainSurface, sampleMountain, createRockFootprint } from './terrain.js';
 
 export function transformPoint(point, pose) {
   const [x, y, z] = point, cb = Math.cos(pose.bank), sb = Math.sin(pose.bank);
@@ -26,6 +27,7 @@ export function segmentBox(a, b, box, radius = 0) {
 export class RouteWorld {
   constructor(route) {
     this.route = route;
+    this.coastalSurface=createCoastalSurface(-route.destination.threshold);
     this.solids = []; this.waterfalls = [];
     this.buildings = []; this.mountainSurfaces = []; this.boxCells = new Map();
     let seed = LANDSCAPE.seed;
@@ -38,14 +40,14 @@ export class RouteWorld {
       this.addBuilding(x, z, city.minWidth + random() * 55, city.minWidth + random() * 55,
         city.minHeight + random() ** 1.7 * 210, city.colors[Math.floor(random() * city.colors.length)]);
     }
-    for (let row = 0; row < 7; row++) for (let column = 0; column < 10; column++) {
-      const x = (column - 4.5) * 90, z = -11100 - row * 85;
+    if(this.route.id===1)for (let row = 0; row < 7; row++) for (let column = 0; column < 10; column++) {
+      const x = (column - 4.5) * 90, z = clusterZ('village', -11100) - row * 85;
       if (Math.abs(x) < 110) continue;
       this.addBuilding(x, z, 24 + random() * 14, 28 + random() * 14, 9 + random() * 10, column % 2 ? 0xb9b094 : 0xd2c6a9, '村庄房屋');
     }
     for (const zOffset of [0, this.route.destination.threshold - 100]) {
       for (const [x, y, z, w, h, d] of [[215, 6, 140, 120, 12, 28], [200, 6.5, 10, 42, 13, 45], [255, 6.5, 10, 42, 13, 45], [310, 6.5, 10, 42, 13, 45], [135, 18, -210, 21, 36, 19]]) {
-        // 目的地机坪东侧留出停机圈与滑行空间。
+        // 目的地机坪东侧留出跑道与滑行空间。
         const bx = zOffset ? x + 280 : x;
         this.addBox(bx, y, z + zOffset, w, h, d, '机场建筑', zOffset ? this.route.destination.elevation : 0);
       }
@@ -64,9 +66,8 @@ export class RouteWorld {
         }
       }
     }
-    const fall = this.route.waterfall;
-    this.addBuilding(fall.x, fall.z + fall.depth / 2, fall.width, fall.depth, fall.height, 0x638477, '瀑布岩壁');
-    this.waterfalls.push({ ...fall, id: 'river-falls', bottom: this.baseHeightAt(fall.x, fall.z), top: this.baseHeightAt(fall.x, fall.z) + fall.height, passable: false });
+    this.makeCoastalRoad();
+    this.makeTransitions();
     this.makeMountains();
     this.addRegionalFeatures();
     this.bodyPoints = [];
@@ -79,19 +80,22 @@ export class RouteWorld {
   }
 
   baseHeightAt(x, z) {
+    if(z>=LANDSCAPE.coast.endZ)return Math.max(LANDSCAPE.coast.seaLevel,coastalHeight(this.coastalSurface,x,z));
     return terrainElevation(z, -this.route.destination.threshold);
   }
 
+  isSeaAt(x,z) {return z>=LANDSCAPE.coast.endZ&&this.baseHeightAt(x,z)<=LANDSCAPE.coast.seaLevel+1e-6;}
+
   // 凸岩体的同一组顶点生成可见三角面和碰撞平面，悬空部分不计入地面高度。
-  addRock(x, z, bottom, top, radius, color, name, lean = 0) {
-    const vertices = [], faces = [], segments = LANDSCAPE.terrain.rockSides, rows = LANDSCAPE.terrain.rockRings, floor = this.baseHeightAt(x, z);
+  addRock(x, z, bottom, top, radius, color, name, lean = 0, form) {
+    const outline=createRockFootprint(LANDSCAPE.terrain.rockSides,form);
+    const vertices = [], faces = [], segments = outline.length, rows = LANDSCAPE.terrain.rockRings, floor = this.baseHeightAt(x, z);
     for (let row = 0; row < rows; row++) {
       const t = row / (rows - 1), height = bottom + (top - bottom) * t;
       // 径向剖面保持凹函数，实体仍为凸体；增加层数不会生成错误的封闭碰撞平面。
       const scale = bottom === 0 ? 1 + 0.15 * t - 0.33 * t * t : 0.3 + 2.28 * t - 1.76 * t * t;
       for (let i = 0; i < segments; i++) {
-        const angle = i / segments * Math.PI * 2;
-        vertices.push([x + Math.cos(angle) * radius * scale + lean * t, floor + height, z + Math.sin(angle) * radius * scale]);
+        vertices.push([x + outline[i][0] * radius * scale + lean * t, floor + height, z + outline[i][1] * radius * scale]);
       }
     }
     for (let row = 0; row < rows - 1; row++) for (let i = 0; i < segments; i++) {
@@ -102,7 +106,7 @@ export class RouteWorld {
     for (let i = 1; i < segments - 1; i++) faces.push([0, i, i + 1], [last, last + i + 1, last + i]);
     const min = {}, max = {}, center = {};
     ['x', 'y', 'z'].forEach((axis, i) => {
-      min[axis] = Math.min(...vertices.map(v => v[i])); max[axis] = Math.max(...vertices.map(v => v[i])); center[axis] = (min[axis] + max[axis]) / 2;
+      min[axis] = Math.min(...vertices.map(v => v[i])); max[axis] = Math.max(...vertices.map(v => v[i])); center[axis] = vertices.reduce((sum,point)=>sum+point[i],0)/vertices.length;
     });
     const planes = [], positions = [];
     for (const face of faces) {
@@ -115,7 +119,7 @@ export class RouteWorld {
       planes.push({ normal: n, distance: n.reduce((sum, value, i) => sum + value * a[i], 0) });
       positions.push(...a, ...b, ...c);
     }
-    const solid = { min, max, planes, positions, color, name, cap: {x, z, top, radius, lean, floor} };
+    const solid = { min, max, planes, positions, color, name, cap: {x, z, top, radius, lean, floor, outline: vertices.slice(last).map(point=>[point[0],point[2]])} };
     this.solids.push(solid); this.index(this.boxCells, solid, min.x, max.x, min.z, max.z);
   }
 
@@ -129,7 +133,8 @@ export class RouteWorld {
       const side = i % 2 ? -1 : 1;
       this.addRock(side * (340 + random() * 1100), p.startZ - Math.floor(i / 2) * p.spacing,
         0, p.minHeight + random() * p.heightRange, p.minRadius + random() * p.radiusRange,
-        JOURNEY.rockColors.pillars, '张家界石柱');
+        JOURNEY.rockColors.pillars, '张家界石柱', 0,
+        {...p.forms[i%p.forms.length],seed:(p.seed^Math.imul(i+1,0x9e3779b9))>>>0,variation:p.shapeVariation});
     }
     const rock = JOURNEY.skyRock;
     this.addRock(rock.x, rock.z, rock.bottom, rock.top, rock.radius, rock.color, '空中圆形山');
@@ -197,8 +202,58 @@ export class RouteWorld {
     this.addBox(x, height / 2, z, width, height, depth, name);
   }
 
+  makeCoastalRoad() {
+    const s=LANDSCAPE.coast,road=s.highway;this.coastalRoad=[];
+    const part=(kind,x,y,z,width,height,length,heading=0)=>{
+      const c=Math.cos(heading),n=Math.sin(heading),hx=width/2,hz=length/2;
+      const extentX=Math.abs(c)*hx+Math.abs(n)*hz,extentZ=Math.abs(n)*hx+Math.abs(c)*hz;
+      const center={x,y,z},planes=[];
+      for(const [normal,half] of [[[c,0,-n],hx],[[n,0,c],hz],[[0,1,0],height/2]])for(const side of [-1,1]){
+        const direction=normal.map(v=>v*side);planes.push({normal:direction,distance:direction[0]*x+direction[1]*y+direction[2]*z+half});
+      }
+      const solid={min:{x:x-extentX,y:y-height/2,z:z-extentZ},max:{x:x+extentX,y:y+height/2,z:z+extentZ},planes,name:'沿江高速'};
+      this.index(this.boxCells,solid,solid.min.x,solid.max.x,solid.min.z,solid.max.z);
+      this.coastalRoad.push({kind,center,width,height,length,heading});
+    };
+    const path=[];
+    for(let z=road.startZ;z>=road.endZ;z-=road.step)path.push({x:shorelineX(z)-road.waterOffset,z});
+    const addPath=points=>{
+      for(let i=1;i<points.length;i++){
+        const a=points[i-1],b=points[i],dx=b.x-a.x,dz=b.z-a.z,length=Math.hypot(dx,dz),heading=Math.atan2(dx,dz),x=(a.x+b.x)/2,z=(a.z+b.z)/2;
+        part('deck',x,road.height,z,road.width,road.thickness,length+.5,heading);
+        for(const side of [-1,0,1]){
+          const offset=side*(road.width/2-road.railWidth/2);
+          part('rail',x+Math.cos(heading)*offset,road.height+road.thickness/2+road.railHeight/2,z-Math.sin(heading)*offset,road.railWidth,road.railHeight,length+.5,heading);
+        }
+        const bottom=s.seaLevel+s.seabed,height=road.height-road.thickness/2-bottom;
+        part('pier',a.x,bottom+height/2,a.z,road.pierWidth,height,road.pierLength,heading);
+      }
+    };
+    addPath(path);
+    const z=(s.causeway.minZ+s.causeway.maxZ)/2;
+    addPath([{x:s.causeway.minX,z},{x:shorelineX(z)-road.waterOffset,z}]);
+  }
+
+  // 过渡带独立随机流，不改变景点群内部布局；小丘避开中央航线和机场。
+  makeTransitions() {
+    const settings=JOURNEY.transitions;
+    this.transitions=[];this.transitionHills=[];
+    for(const zone of this.route.transitions){
+      let seed=settings.seed;
+      for(const character of zone.id)seed=Math.imul(seed^character.charCodeAt(0),16777619)>>>0;
+      const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+      const points=Array.from({length:9},(_,i)=>({x:(i/8-.5)*settings.meadowWidth,z:zone.z+Math.sin(i*1.1+random())*zone.length*.2}));
+      this.transitions.push({...zone,points});
+      for(let i=0;i<(zone.hills??settings.hills);i++){
+        const radius=settings.hillRadius[0]+random()*(settings.hillRadius[1]-settings.hillRadius[0]);
+        this.transitionHills.push({position:[(i%2?1:-1)*(radius+settings.corridor+random()*450),zone.z+(i/Math.max(1,settings.hills-1)-.5)*zone.length*.55],
+          radius:[radius,Math.min(zone.length*.36,300+random()*180)],height:settings.hillHeight[0]+random()*(settings.hillHeight[1]-settings.hillHeight[0]),kind:'rolling',segments:settings.segments});
+      }
+    }
+  }
+
   makeMountains() {
-    this.mountainSurfaces = this.route.mountains.map(mountain => createMountainSurface(mountain, (x, z) => this.baseHeightAt(x, z)));
+    this.mountainSurfaces = [...this.route.mountains,...this.transitionHills].map(mountain => createMountainSurface(mountain, (x, z) => this.baseHeightAt(x, z)));
   }
 
   heightAt(x, z) {

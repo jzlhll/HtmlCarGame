@@ -1,6 +1,10 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { LANDSCAPE, SCENERY, JOURNEY } from './config.js';
+import { LANDSCAPE, SCENERY, JOURNEY, SURFACE_APPEARANCE, clusterZ } from './config.js';
+import { surfaceTexture } from './surface-assets.js';
+import { coastalLandWeight } from './coastal-terrain.js';
+import { CoastalView } from './coastal-view.js';
+import { GenerationQueue } from './generation-queue.js';
 import { MountainView } from './mountain-view.js';
 import { batchStaticMeshes } from './static-batch.js';
 
@@ -14,7 +18,7 @@ export class LandscapeView extends THREE.Group {
     this.world = world;
     this.route = world.route;
     this.frameSegments = [];
-    this.addGround();
+    this.coast=new CoastalView(world);this.add(this.coast);
     this.addRiver();
     this.addCity();
     this.addLandmarks();
@@ -26,18 +30,33 @@ export class LandscapeView extends THREE.Group {
     this.textures = this.mountains.textures;
   }
 
-  addGround() {
-    const half = SCENERY.groundSize / 2, coordinates = new Set([25000, -55000, this.route.destination.threshold]);
-    for (let i = 0; i <= JOURNEY.groundSegments; i++) coordinates.add(25000 - i / JOURNEY.groundSegments * SCENERY.groundSize);
-    for (const [distance] of JOURNEY.elevationProfile) coordinates.add(-distance);
-    const rows = [...coordinates].sort((a, b) => b - a), positions = [], indices = [];
-    rows.forEach((z, row) => {
-      for (const x of [-half, half]) positions.push(x, this.world.baseHeightAt(x, z) - 0.04, z);
-      if (row) { const a = (row - 1) * 2; indices.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
+  *addGround() {
+    const settings=LANDSCAPE.coast,surface=this.world.coastalSurface;
+    const material=new THREE.MeshStandardMaterial({color:SCENERY.colors.ground,map:surfaceTexture('grass-color'),roughness:1,bumpMap:surfaceTexture('grass-color'),bumpScale:SURFACE_APPEARANCE.groundBump});
+    const positions=surface.positions,uv=new Float32Array(positions.length/3*2),normals=new Float32Array(positions.length),indices=[];
+    for(let row=0;row<surface.z.length;row++){
+      for(let col=0;col<surface.x.length;col++){
+        const i=row*surface.x.length+col,left=Math.max(0,col-1),right=Math.min(surface.x.length-1,col+1),back=Math.max(0,row-1),front=Math.min(surface.z.length-1,row+1);
+        const dx=(surface.heights[row*surface.x.length+right]-surface.heights[row*surface.x.length+left])/(surface.x[right]-surface.x[left]);
+        const dz=(surface.heights[front*surface.x.length+col]-surface.heights[back*surface.x.length+col])/(surface.z[front]-surface.z[back]),length=Math.hypot(dx,1,dz);
+        normals.set([-dx/length,1/length,-dz/length],i*3);uv[i*2]=positions[i*3]/SURFACE_APPEARANCE.grassTileMetres;uv[i*2+1]=positions[i*3+2]/SURFACE_APPEARANCE.grassTileMetres;
+        if(row&&col){const a=(row-1)*surface.x.length+col-1,b=a+surface.x.length;indices.push(a,b,a+1,b,b+1,a+1);}
+      }
+      yield;
+    }
+    const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.BufferAttribute(positions,3));geometry.setAttribute('uv',new THREE.BufferAttribute(uv,2));geometry.setIndex(indices);yield 'boundary';
+    geometry.setAttribute('normal',new THREE.BufferAttribute(normals,3));yield 'boundary';
+    const coastalGround=new THREE.Mesh(geometry,material);coastalGround.position.y=-.04;coastalGround.receiveShadow=true;this.add(coastalGround);
+    const half=SCENERY.groundSize/2,coordinates=new Set([settings.endZ,-55000,this.route.destination.threshold]);
+    for(let i=0;i<=JOURNEY.groundSegments;i++){const z=25000-i/JOURNEY.groundSegments*SCENERY.groundSize;if(z<settings.endZ)coordinates.add(z);}
+    for(const [distance] of JOURNEY.elevationProfile)if(-distance<settings.endZ)coordinates.add(-distance);
+    const rows=[...coordinates].sort((a,b)=>b-a),landPositions=[],landUV=[],landIndices=[];
+    rows.forEach((z,row)=>{
+      for(const x of [-half,half]){landPositions.push(x,this.world.baseHeightAt(x,z),z);landUV.push(x/SURFACE_APPEARANCE.grassTileMetres,z/SURFACE_APPEARANCE.grassTileMetres);}
+      if(row){const a=(row-1)*2;landIndices.push(a,a+1,a+2,a+1,a+3,a+2);}
     });
-    const geometry = new THREE.BufferGeometry(); geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3)); geometry.setIndex(indices); geometry.computeVertexNormals();
-    const ground = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({color: SCENERY.colors.ground, roughness: 1}));
-    ground.receiveShadow = true; this.add(ground);
+    const inlandGeometry=new THREE.BufferGeometry();inlandGeometry.setAttribute('position',new THREE.Float32BufferAttribute(landPositions,3));inlandGeometry.setAttribute('uv',new THREE.Float32BufferAttribute(landUV,2));inlandGeometry.setIndex(landIndices);inlandGeometry.computeVertexNormals();
+    const inland=new THREE.Mesh(inlandGeometry,material);inland.position.y=-.04;inland.receiveShadow=true;this.add(inland);yield 'boundary';
   }
 
   addRegionalViews() {
@@ -79,7 +98,7 @@ export class LandscapeView extends THREE.Group {
     oval(lake.x, lake.z, lake.width + 180, lake.length + 140, lake.elevation + 0.025, 0xb2b79c);
     oval(lake.x, lake.z, lake.width, lake.length, lake.elevation + 0.07, 0x3c94a9);
     for (const [x, z, width, length] of [[-1500, -17900, 500, 800], [2100, -18800, 650, 1100], [-2200, -19700, 400, 500]]) {
-      oval(x, z, width, length, lake.elevation + 0.12, 0x789468);
+      oval(x, clusterZ('lake',z), width, length, lake.elevation + 0.12, 0x789468);
     }
     this.addPagoda();
   }
@@ -141,9 +160,9 @@ export class LandscapeView extends THREE.Group {
     this.riverPaths = [river.points, river.tributary].map((coordinates, index) => {
       const curve = new THREE.CatmullRomCurve3(coordinates.map(([x, z]) => new THREE.Vector3(x, 0, z)));
       const points = curve.getPoints(river.samples);
-      const scale = index ? 0.65 : 1;
-      this.surface(this.ribbon(points, river.bankWidth * scale), river.bankColor, SCENERY.surfaceLayers.shoulder, 0.02);
-      this.surface(this.ribbon(points, river.width * scale), river.waterColor, SCENERY.surfaceLayers.pavement, 0.05);
+      const scale = index ? 0.65 : 1,landPoints=points.filter(p=>coastalLandWeight(p.x,p.z)>.08);
+      this.surface(this.ribbon(landPoints, river.bankWidth * scale), river.bankColor, SCENERY.surfaceLayers.shoulder, 0.02);
+      this.surface(this.ribbon(landPoints, river.width * scale), river.waterColor, SCENERY.surfaceLayers.pavement, 0.05);
       return points;
     });
     const bridgeGeometries = [];
@@ -171,6 +190,41 @@ export class LandscapeView extends THREE.Group {
     this.add(bridge); bridgeGeometries.forEach(geometry => geometry.dispose());
   }
 
+  prepare() {
+    if(!this.transitionQueue)this.transitionQueue=new GenerationQueue(this.buildScenery(),{urgent:true,name:'route-transitions'});
+    this.transitionQueue.resume();return this.transitionQueue.done;
+  }
+
+  *buildScenery() {
+    yield* this.addGround();yield* this.coast.build();yield* this.addTransitions();yield* this.mountains.buildRolling();
+    this.updateMatrixWorld(true);
+    this.traverse(object=>{object.matrixAutoUpdate=false;object.matrixWorldAutoUpdate=false;});
+  }
+
+  *addTransitions() {
+    const settings=JOURNEY.transitions, baseColor=new THREE.Color(SCENERY.colors.ground),meadowColor=new THREE.Color(settings.meadowColor),color=new THREE.Color();
+    const grass=new THREE.MeshStandardMaterial({map:surfaceTexture('grass-color'),vertexColors:true,roughness:1,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
+    for(const zone of this.world.transitions){
+      yield {task:zone.id};
+      const [columns,rows]=settings.meadowSegments,positions=[],uv=[],colors=[],indices=[],land=[];
+      for(let row=0;row<=rows;row++)for(let col=0;col<=columns;col++){
+        const u=col/columns,v=row/rows,x=(u-.5)*settings.meadowWidth,z=zone.z+(v-.5)*zone.length;
+        land.push(coastalLandWeight(x,z)>.98);
+        positions.push(x,this.world.baseHeightAt(x,z)+.008,z);uv.push(x/SURFACE_APPEARANCE.grassTileMetres,z/SURFACE_APPEARANCE.grassTileMetres);
+        const blend=Math.sin(u*Math.PI)*Math.sin(v*Math.PI)*(.55+.15*Math.sin(u*17+v*11));
+        color.copy(baseColor).lerp(meadowColor,blend);colors.push(color.r,color.g,color.b);
+        if(row&&col){const a=(row-1)*(columns+1)+col-1,b=a+columns+1;if(land[a]&&land[b]&&land[a+1])indices.push(a,b,a+1);if(land[b]&&land[b+1]&&land[a+1])indices.push(b,b+1,a+1);}
+      }
+      const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geometry.setIndex(indices);geometry.computeVertexNormals();
+      const meadow=new THREE.Mesh(geometry,grass);meadow.receiveShadow=true;this.add(meadow);
+      const curve=new THREE.CatmullRomCurve3(zone.points.map(point=>new THREE.Vector3(point.x,0,point.z))),points=curve.getPoints(settings.streamSamples).filter(p=>coastalLandWeight(p.x,p.z)>.08);
+      if(points.length<2)continue;
+      this.surface(this.ribbon(points,settings.streamBankWidth),settings.bankColor,SCENERY.surfaceLayers.shoulder,.02);
+      this.surface(this.ribbon(points,settings.streamWidth),settings.waterColor,SCENERY.surfaceLayers.pavement,.05);
+      yield 'boundary';
+    }
+  }
+
   addCity() {
     const city = LANDSCAPE.city, random = this.random;
     const width = city.columns * city.spacing, length = city.rows * city.spacing;
@@ -188,17 +242,11 @@ export class LandscapeView extends THREE.Group {
     }
     this.surface(mergeGeometries(roadGeometries), city.roadColor, SCENERY.surfaceLayers.shoulder, 0.015);
     roadGeometries.forEach(geometry => geometry.dispose());
-    const canvas = document.createElement('canvas'); canvas.width = 128; canvas.height = 256;
-    const context = canvas.getContext('2d');
-    context.fillStyle = '#7e9a9e'; context.fillRect(0, 0, 128, 256);
-    for (let row = 0; row < 24; row++) for (let column = 0; column < 8; column++) {
-      context.fillStyle = random() > 0.8 ? '#d5d3ab' : random() > 0.4 ? '#3f6677' : '#a4bbc0';
-      context.fillRect(column * 16 + 3, row * 10 + 3, 10, 6);
-    }
-    const texture = new THREE.CanvasTexture(canvas); texture.colorSpace = THREE.SRGBColorSpace;
-    texture.anisotropy = 4;
-    const sites = this.world.buildings.filter(site => site.name !== '瀑布岩壁');
-    const buildings = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({ map: texture, roughness: 0.65 }), sites.length);
+    // 保留原装饰随机流的消耗，材质升级不改变后续地景位置。
+    for (let cell=0; cell<24*8; cell++) if (random() <= 0.8) random();
+    const texture = surfaceTexture('facade-color');
+    const sites = this.world.buildings;
+    const buildings = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({ map: texture, roughness: 0.7, roughnessMap: surfaceTexture('facade-detail'), bumpMap: surfaceTexture('facade-detail'), bumpScale: SURFACE_APPEARANCE.facadeBump, metalness: 0.15 }), sites.length);
     const roofs = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({color: city.roofColor, roughness: 0.9}), sites.length);
     const dummy = new THREE.Object3D(), color = new THREE.Color();
     sites.forEach((site, index) => {
@@ -269,9 +317,9 @@ export class LandscapeView extends THREE.Group {
 
   addFarmland() {
     const count = 80, dummy = new THREE.Object3D(), color = new THREE.Color();
-    const fields = new THREE.InstancedMesh(new THREE.PlaneGeometry(160, 190), new THREE.MeshStandardMaterial({roughness: 1, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1}), count);
+    const fields = new THREE.InstancedMesh(new THREE.PlaneGeometry(160, 190), new THREE.MeshStandardMaterial({map: surfaceTexture('grass-color'), roughness: 1, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1}), count);
     for (let i = 0; i < count; i++) {
-      const x = (i % 10 - 4.5) * 180, z = -7200 - Math.floor(i / 10) * 210;
+      const x = (i % 10 - 4.5) * 180, z = clusterZ('fields', -7200) - Math.floor(i / 10) * 210;
       dummy.position.set(x, this.world.baseHeightAt(x, z) + 0.012, z);
       const slope = (this.world.baseHeightAt(x, z + 1) - this.world.baseHeightAt(x, z - 1)) / 2;
       dummy.rotation.x = -Math.PI / 2 - Math.atan(slope); dummy.updateMatrix(); fields.setMatrixAt(i, dummy.matrix);
@@ -281,6 +329,7 @@ export class LandscapeView extends THREE.Group {
   }
 
   addWaterfall() {
+    if(!this.world.waterfalls.length)return;
     const canvas = document.createElement('canvas'); canvas.width = 32; canvas.height = 128;
     const context = canvas.getContext('2d'); context.fillStyle = '#9ddce4'; context.fillRect(0, 0, 32, 128);
     for (let i = 0; i < 36; i++) { context.fillStyle = i % 2 ? '#e5f4ef' : '#70bdd0'; context.fillRect(i * 7 % 32, i * 19 % 128, 2, 16); }
@@ -311,5 +360,5 @@ export class LandscapeView extends THREE.Group {
     }
   }
 
-  update(seconds, camera) { this.fallTexture.offset.y = -seconds * 0.7; this.mountains.update(camera); }
+  update(seconds, camera) { if(this.fallTexture)this.fallTexture.offset.y = -seconds * 0.7; this.coast.update(seconds);this.mountains.update(camera); }
 }

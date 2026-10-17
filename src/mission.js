@@ -1,4 +1,5 @@
-import { AIRCRAFT } from './config.js';
+import { AIRCRAFT, FLIGHT, AIRPORT_TRAFFIC, WORLD_TRAVEL, worldHorizontalSpeed } from './config.js';
+import { createAirportTraffic, airportTrafficHit, hitAirportTruck, stoppedOnRunway } from './airport-traffic.js';
 
 const clamp = (v, low, high) => Math.max(low, Math.min(high, v));
 const courses = { 'head-on': '迎面', 'same-way': '同向', crossing: '侧向', diagonal: '斜向' };
@@ -12,25 +13,37 @@ export class Mission {
     this.sampleElapsed = 0; this.contacts = []; this.nextEncounter = 0;
     this.ceilingFault = false; this.ceilingRecovery = 0; this.waterfallsPassed = new Set();
     this.parkSeconds = 0; this.approaching = false; this.offCourse = false;
-    this.events = [];
+    this.events = []; this.airportTraffic = createAirportTraffic(this.route);
   }
 
   start() { this.started = true; }
   get remaining() { return Math.max(0, this.route.deadline - this.elapsed); }
   get runwayDistance() { return this.aircraft.position.z - this.route.destination.threshold; }
-  get parkDistance() { const p = this.route.destination.park; return Math.hypot(this.aircraft.position.x - p.x, this.aircraft.position.z - p.z); }
-  get targetAltitude() { return Math.min(this.world.baseHeightAt(this.aircraft.position.x, this.aircraft.position.z) + this.route.cruiseHeight, this.route.destination.elevation + Math.max(0, (this.runwayDistance + this.route.touchdownOffset) * Math.tan(this.route.glideSlope))); }
+  get targetAltitude() { return Math.min(this.world.baseHeightAt(this.aircraft.position.x, this.aircraft.position.z) + this.route.cruiseHeight, this.route.destination.elevation + Math.max(0, (this.runwayDistance + this.route.touchdownOffset) / WORLD_TRAVEL.horizontalScale * Math.tan(this.route.glideSlope))); }
   get sector() { return this.route.sectors.find(item => -this.aircraft.position.z <= -item.z + 1000) || this.route.sectors.at(-1); }
   get alert() { return this.ceilingFault || this.contacts.some(contact => contact.danger); }
 
   spawn(spec, index) {
     const a = this.aircraft, forward = {x: Math.sin(a.heading), z: -Math.cos(a.heading)}, right = {x: Math.cos(a.heading), z: Math.sin(a.heading)};
     const direction = spec.course === 'head-on' ? [-forward.x, -forward.z] : spec.course === 'same-way' ? [forward.x, forward.z] : spec.course === 'crossing' ? [right.x, right.z] : [right.x * 0.7 - forward.x * 0.7, right.z * 0.7 - forward.z * 0.7];
-    const velocity = {x: direction[0] * spec.speed, y: 0, z: direction[1] * spec.speed};
-    const position = {x: a.position.x - (velocity.x - a.velocity.x) * this.route.radarLead + right.x * spec.offset,
-      y: Math.max(this.world.baseHeightAt(a.position.x, a.position.z) + 100, a.position.y + a.velocity.y * this.route.radarLead + spec.height), z: a.position.z - (velocity.z - a.velocity.z) * this.route.radarLead + right.z * spec.offset};
-    this.contacts.push({id: index, kind: spec.kind, course: spec.course, position, previous: {...position}, velocity,
-      heading: Math.atan2(velocity.x, -velocity.z), age: 0, danger: false, warned: false});
+    const velocity = {x: worldHorizontalSpeed(direction[0] * spec.speed / FLIGHT.kmhPerMps), y: 0, z: worldHorizontalSpeed(direction[1] * spec.speed / FLIGHT.kmhPerMps)};
+    const position = {x: a.position.x - (velocity.x - worldHorizontalSpeed(a.velocity.x)) * this.route.radarLead + right.x * spec.offset,
+      y: Math.max(this.world.baseHeightAt(a.position.x, a.position.z) + 100, a.position.y + a.velocity.y * this.route.radarLead + spec.height), z: a.position.z - (velocity.z - worldHorizontalSpeed(a.velocity.z)) * this.route.radarLead + right.z * spec.offset};
+    const contact={id:index,kind:spec.kind,course:spec.course,position,previous:{...position},velocity,
+      heading:Math.atan2(velocity.x,-velocity.z),age:0,danger:false,warned:false};
+    const clearance=this.route.trafficRadius*this.route.trafficScale+Math.max(AIRCRAFT.length,AIRCRAFT.wingspan)/2;
+    if (contact.kind==='aircraft' && (this.rearApproach(contact) || Math.hypot(position.x-a.position.x,position.z-a.position.z)<clearance)) return;
+    this.contacts.push(contact);
+  }
+
+  // 以本机航向判断后方30°锥内、相对速度正在追上的客机，雁群不适用。
+  rearApproach(contact, previous=false) {
+    const a=this.aircraft, pose=previous?this.flight.previous:a, position=previous?contact.previous:contact.position;
+    const sine=Math.sin(pose.heading), cosine=Math.cos(pose.heading);
+    const x=position.x-pose.position.x, z=position.z-pose.position.z;
+    const forward=x*sine-z*cosine, side=x*cosine+z*sine;
+    const closing=(contact.velocity.x-worldHorizontalSpeed(a.velocity.x))*sine-(contact.velocity.z-worldHorizontalSpeed(a.velocity.z))*cosine;
+    return forward<0 && Math.abs(side)<=-forward*Math.tan(this.route.rearApproachHalfAngle) && closing>0;
   }
 
   birdOffsets(contact) {
@@ -50,7 +63,9 @@ export class Mission {
   }
 
   trafficCollision(contact, sweep = this.world.prepareBodySweep(this.aircraft, this.flight.previous)) {
-    const plane = contact.kind === 'aircraft', offsets = this.birdOffsets(contact), bounds = this.world.sweepBounds;
+    const plane = contact.kind === 'aircraft';
+    if (plane && (contact.rearBypass || this.rearApproach(contact,true))) return false;
+    const offsets = this.birdOffsets(contact), bounds = this.world.sweepBounds;
     const horizontal = plane ? this.route.trafficRadius * this.route.trafficScale : this.route.birdRadius * this.route.birdScale;
     const vertical = plane ? this.route.trafficHeight * this.route.trafficScale : this.route.birdHeight * this.route.birdScale;
     const position = contact.position, previous = contact.previous;
@@ -77,17 +92,23 @@ export class Mission {
     if (!this.started) return events;
     this.elapsed += dt;
     if (!a.onGround && !a.landed) this.flightSeconds += dt;
-    if (this.elapsed > this.route.deadline + 1e-8) return [{type: 'failed', key: 'deadline', reason: `${this.route.deadline} 秒已到，尚未在${this.route.destinationName}机场停机圈内停妥。`}];
+    if (this.elapsed > this.route.deadline + 1e-8) return [{type: 'failed', key: 'deadline', reason: `${this.route.deadline} 秒已到，尚未在${this.route.destinationName}机场跑道内停妥。`}];
     this.sampleElapsed += dt;
     if (this.sampleElapsed >= this.route.sampleSeconds) {
       this.sampleElapsed %= this.route.sampleSeconds;
       this.path.push([a.position.x, a.position.z]);
     }
     const collision = this.world.collision(a, flight.previous);
-    if (collision) return [{type: 'failed', key: 'obstacle', reason: `飞机碰撞了${collision}。`}];
+    if (collision) return [{type: 'failed', key: 'obstacle', destructive: true, reason: `飞机碰撞了${collision}。`}];
+    for (const actor of this.airportTraffic) {
+      if (!airportTrafficHit(actor, this.world)) continue;
+      if (actor.kind === 'aircraft') return [{type:'failed',key:actor.id,destructive:true,reason:'飞机撞上了跑道上停放的飞机。'}];
+      hitAirportTruck(actor, a, this.elapsed);
+      events.push({type:'truck-hit',key:actor.id,reason:'撞飞卡车：当前速度降低 10%，请继续避让并在跑道内停稳。'});
+    }
     if (!a.landed && !a.onGround && this.runwayDistance < this.route.approachDistance && !this.approaching) {
       this.approaching = true;
-      events.push({type: 'approach', key: 'airport', reason: `Approach（${this.route.destinationName}进近）：减速至 160–180 kt，G 放轮，W 打开机翼减速板，沿跑道下降。`});
+      events.push({type: 'approach', key: 'airport', reason: `Approach（${this.route.destinationName}进近）：减速至 ${this.route.approachSpeedRange.map(speed=>Math.round(speed)).join('–')} km/h，G 放轮，W 打开机翼减速板，沿跑道下降。`});
     }
     const high = a.position.y > this.route.ceiling;
     this.ceilingRecovery = a.position.y < this.route.ceilingClear ? this.ceilingRecovery + dt : 0;
@@ -121,25 +142,36 @@ export class Mission {
     }
     for (const contact of this.contacts) {
       Object.assign(contact.previous, contact.position); contact.age += dt;
+      // 进入后方追赶后，本次遭遇一直安全通过，不能越过机尾后在下一帧补判碰撞。
+      if (contact.kind==='aircraft' && (this.rearApproach(contact,true) || this.rearApproach(contact))) contact.rearBypass=true;
       for (const axis of ['x', 'y', 'z']) contact.position[axis] += contact.velocity[axis] * dt;
       const rx = contact.position.x - a.position.x, rz = contact.position.z - a.position.z;
-      const vx = contact.velocity.x - a.velocity.x, vz = contact.velocity.z - a.velocity.z;
+      const vx = contact.velocity.x - worldHorizontalSpeed(a.velocity.x), vz = contact.velocity.z - worldHorizontalSpeed(a.velocity.z);
       const squared = vx * vx + vz * vz;
       const closest = squared ? -(rx * vx + rz * vz) / squared : 0;
       contact.closestSeconds = Math.max(0, closest);
-      contact.danger = closest >= 0 && closest < this.route.radarHorizon && Math.hypot(rx + vx * closest, rz + vz * closest) < this.route.radarDanger && Math.abs(contact.position.y - a.position.y - a.velocity.y * closest) < this.route.radarVertical;
-      if (!contact.warned && (contact.danger || contact.age <= dt * 2)) {
+      contact.danger = !contact.hit && !contact.rearBypass && closest >= 0 && closest < this.route.radarHorizon && Math.hypot(rx + vx * closest, rz + vz * closest) < this.route.radarDanger && Math.abs(contact.position.y - a.position.y - a.velocity.y * closest) < this.route.radarVertical;
+      if (!contact.warned && !contact.rearBypass && (contact.danger || contact.age <= dt * 2)) {
         contact.warned = true;
         events.push({type: 'traffic', key: `contact-${contact.id}`, reason: `${contact.kind === 'geese' ? 'Geese（大雁群）' : 'Traffic（其他飞机）'}：${courses[contact.course]}接近，请参考雷达箭头，调整方向或高度避让。`});
       }
-      if (!a.onGround && this.trafficCollision(contact, this.world.bodySweep)) return [{type: 'failed', key: 'traffic', reason: contact.kind === 'geese' ? '飞机撞上了大雁群。' : '飞机与其他飞机发生碰撞。'}];
+      if (!a.onGround && !contact.hit && this.trafficCollision(contact, this.world.bodySweep)) {
+        if (contact.kind==='aircraft') return [{type:'failed',key:'traffic',destructive:true,reason:'飞机与其他飞机发生碰撞。'}];
+        contact.hit=true; contact.danger=false;
+        a.birdStrike=true; a.birdStrikeCount++; flight.limitSpeed();
+        if (flight.thrustLocked) {
+          if (flight.speedTapDirection>0) flight.speedTapRemaining=0;
+          a.throttle=0; a.enginePower=0; a.thrust=0;
+        }
+        events.push({type:'bird-strike',key:`contact-${contact.id}`,reason:flight.thrustLocked ? 'Bird strike（再次鸟击）：又一块玻璃破裂，T 加速已失效，本关持续，下一关恢复。' : `Bird strike（鸟击）：一块玻璃破裂，本关最高空速为 ${Math.round(flight.maxSpeed)} km/h（原来的80%）。`});
+      }
     }
     let live = 0;
     for (const contact of this.contacts) if (contact.age < this.route.contactLifetime) this.contacts[live++] = contact;
     this.contacts.length = live;
-    const parked = a.landed && a.onGround && this.parkDistance + Math.hypot(AIRCRAFT.length / 2, AIRCRAFT.wingspan / 2) <= this.route.destination.park.radius && a.airspeed <= this.route.parkedSpeed;
+    const parked = stoppedOnRunway(a, this.route) && this.airportTraffic.every(actor => !actor.hit || this.elapsed-actor.hitAt >= 2*AIRPORT_TRAFFIC.truckLaunch.up/AIRPORT_TRAFFIC.truckLaunch.gravity);
     this.parkSeconds = parked ? this.parkSeconds + dt : 0;
-    if (this.parkSeconds >= this.route.parkHold) events.push({type: 'complete', key: 'parking', reason: `已安全抵达${this.route.destinationName}，在目标停机圈内停妥。`});
+    if (this.parkSeconds >= this.route.parkHold) events.push({type: 'complete', key: 'parking', reason: `已安全抵达${this.route.destinationName}，在目的地跑道内停妥。`});
     return events;
   }
 }

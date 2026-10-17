@@ -14,24 +14,27 @@ export class NavigationUI {
     this.panel = document.getElementById('navigation-panel');
     this.route = document.getElementById('route-map');
     this.radar = document.getElementById('traffic-radar');
+    this.radarCard=this.radar.closest('.radar-card');
     this.clock = document.getElementById('mission-clock');
     this.status = document.getElementById('route-status');
     this.warning = document.getElementById('radar-status');
     document.getElementById('route-heading').innerHTML = `Shenzhen → ${game.route.destinationEnglish}<small>深圳 → ${game.route.destinationName}</small>`;
-    this.route.innerHTML = `<path class="planned-route" d="M110 130V20"/><text x="119" y="18">${game.route.destinationEnglish}</text><text x="119" y="132">Shenzhen</text><text class="destination-star" x="110" y="23" text-anchor="middle">★</text><polyline class="flown-route"/><g class="route-player"><path class="own-aircraft" d="M0 -7L5 5L0 2L-5 5Z"/></g>`;
+    const targetY=Number(this.mapPoint(game.route.destination.x,game.route.destination.threshold-game.route.destination.length/2).split(',')[1]);
+    this.route.innerHTML = `<path class="planned-route" d="M110 130V${targetY}"/><text x="119" y="${targetY-8}">${game.route.destinationEnglish}</text><text x="119" y="132">Shenzhen</text><text class="destination-star" x="110" y="${targetY+3}" text-anchor="middle">★</text><polyline class="flown-route"/><g class="route-player"><path class="own-aircraft" d="M0 -7L5 5L0 2L-5 5Z"/></g>`;
     this.path = this.route.querySelector('.flown-route'); this.player = this.route.querySelector('.route-player');
     this.radar.innerHTML = '<g class="radar-grid"><circle cx="90" cy="90" r="75"/><circle cx="90" cy="90" r="38"/><path d="M15 90H165M90 15V165"/></g><path class="own-aircraft" d="M90 82L95 95L90 92L85 95Z"/>';
     this.contactNodes = new Map();
   }
 
   mapPoint(x, z) {
-    return `${(110 + x / this.game.route.mapHalfWidth * 95).toFixed(1)},${(130 + z / -this.game.route.destination.park.z * 110).toFixed(1)}`;
+    return `${(110 + x / this.game.route.mapHalfWidth * 95).toFixed(1)},${(130 + z / -(this.game.route.destination.threshold-this.game.route.destination.length) * 110).toFixed(1)}`;
   }
 
   update() {
     const game = this.game, mission = game.mission, a = game.aircraft;
     const hidden = game.view !== 'COCKPIT';
     if (this.panel.hidden !== hidden) this.panel.hidden = hidden;
+    if (this.radarCard.hidden !== hidden) this.radarCard.hidden = hidden;
     const tick = `${game.runId}:${game.phase}:${a.systems.avionics}:${Math.floor(game.activeSeconds * 8)}`;
     if (tick === this.tick) return;
     this.tick = tick;
@@ -53,10 +56,10 @@ export class NavigationUI {
     }
     setAttribute(this.player, 'transform', `translate(${this.mapPoint(a.position.x, a.position.z)}) rotate(${degrees(a.heading).toFixed(1)})`);
     const distance = Math.max(0, mission.runwayDistance);
-    setHTML(this.status, a.landed ? `Parking ${Math.round(mission.parkDistance)} m<small>停机圈距离 · 低速滑行</small>` : `${mission.sector.english} · ${(distance / 1000).toFixed(1)} km<small>${mission.sector.chinese} · 海拔 ${Math.round(a.position.y)} / ${game.route.ceiling} m</small>`);
+    setHTML(this.status, a.landed ? `Parking ${Math.round(a.airspeed)} km/h<small>避让障碍 · 跑道内停稳 1 秒</small>` : `${mission.sector.english} · ${(distance / 1000).toFixed(1)} km<small>${mission.sector.chinese} · 海拔 ${Math.round(a.position.y)} / ${game.route.ceiling} m</small>`);
     const contacts = a.systems.avionics ? mission.contacts.filter(c => Math.hypot(c.position.x - a.position.x, c.position.z - a.position.z) < game.route.radarRange) : [];
     const alert = mission.ceilingFault || contacts.some(c => c.danger || c.age < game.route.radarLead), flash = Math.floor(mission.elapsed * 4) % 2 === 0;
-    this.panel.classList.toggle('has-alert', alert && flash);
+    this.radarCard.classList.toggle('has-alert', alert && flash);
     const visible = new Set(), cosine = Math.cos(a.heading), sine = Math.sin(a.heading);
     for (const contact of contacts) {
       visible.add(contact.id);
@@ -78,6 +81,6 @@ export class NavigationUI {
     }
     for (const [id, item] of this.contactNodes) if (!visible.has(id)) { item.element.remove(); this.contactNodes.delete(id); }
     const urgent = contacts.find(c => c.danger) || contacts[0];
-    setHTML(this.warning, mission.ceilingFault ? 'Altitude fault<small>超过 10000 m，降低高度</small>' : !a.systems.avionics ? 'Avionics OFF<small>A 开启雷达</small>' : urgent ? `${urgent.kind === 'geese' ? 'Geese' : 'Traffic'} · ${compass[urgent.course]}<small>箭头表示行动方向 · 数字为相对高度</small>` : 'Clear · 2.6 km<small>雷达范围内无交通目标</small>');
+    setHTML(this.warning, mission.ceilingFault ? 'Altitude fault<small>超过 10000 m，降低高度</small>' : !a.systems.avionics ? 'Avionics OFF<small>A 开启雷达</small>' : urgent ? `${urgent.kind === 'geese' ? 'Geese' : 'Traffic'} · ${compass[urgent.course]}<small>箭头表示行动方向 · 数字为相对高度</small>` : `Clear · ${(game.route.radarRange/1000).toFixed(1)} km<small>雷达范围内无交通目标</small>`);
   }
 }

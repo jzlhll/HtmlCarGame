@@ -1,41 +1,21 @@
 import * as THREE from 'three';
 import { LANDSCAPE } from './config.js';
-import { smoothRange } from './terrain.js';
+import { surfaceTexture } from './surface-assets.js';
 
-// 可平铺的共享岩纹在启动时生成，三关复用同一配方，不下载大幅地形图片。
+// 岩纹在浏览器空闲时分行生成，三关共用同一配方。
 export function createTerrainDetail() {
-  const size = LANDSCAPE.terrain.textureSize, data = new Uint8Array(size * size * 4);
-  let seed = LANDSCAPE.seed;
-  const random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
-  const layers = [4, 8, 16, 32, 64, 128].map(period => ({ period, values: Float32Array.from({length: period * period}, random) }));
-  for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
-    let noise = 0, weight = 0.5;
-    for (const {period, values} of layers) {
-      const u = x / size * period, v = y / size * period, ix = Math.floor(u), iy = Math.floor(v);
-      const a = values[iy * period + ix], b = values[iy * period + (ix + 1) % period];
-      const c = values[(iy + 1) % period * period + ix], d = values[(iy + 1) % period * period + (ix + 1) % period];
-      const fx = smoothRange(0, 1, u - ix), fy = smoothRange(0, 1, v - iy);
-      noise += (a + (b - a) * fx + (c - a) * fy * (1 - fx) + (d - b) * fx * fy) * weight;
-      weight *= 0.5;
-    }
-    const i = (y * size + x) * 4, ridge = 1 - Math.abs(noise * 2 - 1);
-    data[i] = Math.round(noise * 255); data[i + 1] = Math.round(ridge * 255);
-    data[i + 2] = Math.round(random() * 255); data[i + 3] = 255;
-  }
-  const texture = new THREE.DataTexture(data, size, size);
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  texture.magFilter = THREE.LinearFilter; texture.minFilter = THREE.LinearMipmapLinearFilter;
-  texture.generateMipmaps = true; texture.needsUpdate = true;
-  return texture;
+  return surfaceTexture('terrain-detail');
 }
 
 export function createTerrainMaterial(detail) {
   const settings = LANDSCAPE.terrain;
   const material = new THREE.MeshStandardMaterial({vertexColors: true, roughness: 0.96});
   material.userData.detailTexture = detail;
-  material.customProgramCacheKey = () => 'flight-terrain-strata-v1';
+  material.userData.landUniforms = new Set();
+  material.customProgramCacheKey = () => 'flight-terrain-strata-v2';
   material.onBeforeCompile = shader => {
-    shader.uniforms.landDetail = {value: detail};
+    shader.uniforms.landDetail = {value: material.userData.detailTexture};
+    material.userData.landUniforms.add(shader.uniforms.landDetail);
     shader.uniforms.landScale = {value: settings.rockScale};
     shader.uniforms.landFineScale = {value: settings.detailScale};
     shader.uniforms.landBump = {value: settings.bumpStrength};
@@ -70,11 +50,14 @@ export function createTerrainMaterial(detail) {
       float landCover = vLandBiome.x;
       float landBand = sin(vLandPosition.y * 0.18 + landCoarse.r * 8.0);
       float landStrata = mix(0.96 + landBand * 0.04, 0.88 + landBand * 0.12, vLandBiome.y);
-      float landRock = (0.65 + landCoarse.r * 0.7 + (landFine.r - 0.5) * 0.3) * landStrata;
+      float landFracture = 1.0 - smoothstep(0.015, 0.075, abs(landFine.g - 0.46));
+      float landRock = (0.65 + landCoarse.r * 0.7 + (landFine.r - 0.5) * 0.3) * landStrata * (1.0 - landFracture * 0.16);
       float landCanopy = pow(landCoarse.g, 2.0) * 0.7 + 0.48 + landFine.r * 0.22;
       diffuseColor.rgb *= mix(1.0, mix(landRock, landCanopy, landCover) * (1.0 - vLandBiome.z * 0.16), vLandBiome.w);
       float landHeight = mix(landCoarse.r * 0.55 + landFine.r * 0.12, landCoarse.g * 1.5, landCover);
     `);
+    shader.fragmentShader = shader.fragmentShader.replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
+      roughnessFactor *= mix(0.78 + landFine.r * 0.2, 1.0, landCover);`);
     shader.fragmentShader = shader.fragmentShader.replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
       vec3 landQx = dFdx(-vViewPosition), landQy = dFdy(-vViewPosition);
       vec3 landRx = cross(landQy, normal), landRy = cross(normal, landQx);

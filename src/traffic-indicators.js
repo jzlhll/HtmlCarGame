@@ -9,7 +9,7 @@ export class TrafficIndicators {
   }
 
   update(game, camera, models) {
-    const hidden = game.view !== 'COCKPIT' || ['COMPLETE', 'RESULT'].includes(game.phase);
+    const hidden = game.view !== 'COCKPIT' || ['CRASH', 'COMPLETE', 'RESULT'].includes(game.phase);
     if (this.element.hidden !== hidden) this.element.hidden = hidden;
     if (this.runId !== game.runId) {
       this.runId = game.runId;

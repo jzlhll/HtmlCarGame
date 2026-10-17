@@ -11,65 +11,77 @@
 </head>
 <body>
   <main id="game" tabindex="0" aria-label="云端驾驶舱飞行游戏" data-view="EXTERIOR">
-    <div id="scene"></div>
+    <div id="scene"><svg id="light-preview" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice" role="img" aria-label="机场与客机轻量预览">
+      <defs><linearGradient id="preview-sky" x2="0" y2="1"><stop stop-color="#76a6bd"/><stop offset="1" stop-color="#c1d7d9"/></linearGradient><linearGradient id="preview-body" x2="0" y2="1"><stop stop-color="#f4f5ee"/><stop offset="1" stop-color="#acbfbc"/></linearGradient></defs>
+      <path fill="url(#preview-sky)" d="M0 0H1280V720H0Z"/><path fill="#428ba2" d="M0 220H1280V720H0Z"/><path fill="#7d9278" d="M480 220H710L1240 720H100Z"/>
+      <path fill="#788484" d="M0 570 1280 260V500L340 720H0Z"/><path stroke="#dce4dc" stroke-width="3" d="M0 638 1280 320M280 720 1280 470"/>
+      <path stroke="#dce4dc" stroke-width="5" stroke-dasharray="32 28" d="M0 705 1280 395"/>
+      <g transform="translate(650 440) rotate(-14)"><ellipse fill="#314b484a" cx="0" cy="30" rx="205" ry="27"/>
+      <path fill="#d0dcd7" d="M-55-16 120-112 155-106 45 8 170 82 143 91-60 21Z"/>
+      <path fill="#274f5e" d="M145-11 170-86 193-90 185 0Z"/>
+      <path fill="url(#preview-body)" d="M-203 4Q-191-17-153-22L155-18Q187-17 198-3 183 12 147 15L-150 22Q-191 21-203 4Z"/>
+      <path fill="#234655" d="M-182-8-163-16-143-16-146-6Z"/>
+      <path stroke="#294e59" stroke-width="4" d="M-122 12H144"/>
+      <path stroke="#234655" stroke-width="5" stroke-linecap="round" stroke-dasharray="1 12" d="M-122-7H125"/>
+      <path fill="#c6d3d0" d="M-12 20 112 90 134 88 59 15Z"/>
+      <ellipse fill="#c4d1ce" cx="35" cy="43" rx="24" ry="14"/><ellipse fill="#2a4146" cx="14" cy="43" rx="7" ry="12"/>
+      <path stroke="#263f43" stroke-width="5" d="M-143 24V37M78 18V32"/><circle fill="#263f43" cx="-143" cy="39" r="6"/><circle fill="#263f43" cx="78" cy="34" r="6"/>
+      </g></svg></div>
     <header class="topbar">
-      <div class="brand"><span class="brand-symbol" aria-hidden="true">✦</span><div>云端驾驶舱<small>Cloud cockpit</small></div></div>
-      <div class="session"><span class="status-dot"></span><span id="phase-label">外部视角</span><span id="elapsed" hidden>00:00</span></div>
-      <nav id="cockpit-actions" hidden aria-label="场景操作">
-        <button class="text-button" data-action="pause">暂停 <kbd>空格</kbd></button>
-      </nav>
+      <div class="brand"><span class="brand-symbol" aria-hidden="true">✦</span><div>云端驾驶舱<small>Cloud cockpit <span id="app-version" class="app-version"></span></small></div></div>
+      <div class="session" hidden aria-label="时间"><span id="elapsed" hidden>00:00</span></div>
     </header>
     <section id="welcome" class="welcome" aria-labelledby="welcome-title">
       <p class="eyebrow">Your first flight</p>
       <h1 id="welcome-title">天空，<br>从这里开始。</h1>
-      <p class="intro-copy">坐进驾驶舱，认识每一个按键。<br>从点亮灯光，到安全抵达广州。</p>
-      <div class="preview-note"><span class="status-dot"></span>四秒开场 · 自由完成起飞准备</div>
+      <p class="intro-copy">第 1 关：深圳起飞，抵达广州。</p>
       <button class="primary-button" data-action="enter" disabled>开始体验 <kbd>空格</kbd><span aria-hidden="true">↗</span></button>
-      <p class="availability">3:20 · 起飞至广州停机圈</p>
-      <div class="flight-facts"><div><span>机型</span><strong>双发民航客机</strong></div><div><span>停放位置</span><strong id="runway-number">36 号跑道</strong></div></div>
+      <p class="availability">3:20 · 起飞至广州机场</p>
+      <div class="flight-facts"><div><span>机型</span><strong>双发民航客机</strong></div><div><span>停放位置</span><strong id="runway-number">深圳机场</strong></div></div>
     </section>
     <aside id="route-briefing" class="route-briefing" aria-label="本关飞行计划"></aside>
-    <aside id="navigation-panel" class="navigation-panel" hidden aria-label="航线与交通雷达">
+    <aside id="navigation-panel" class="navigation-panel" hidden aria-label="航线与起落架视角">
       <section class="navigation-card"><header><span id="route-heading">Shenzhen → Guangzhou<small>深圳 → 广州</small></span><b id="mission-clock">03:20</b></header><svg id="route-map" viewBox="0 0 220 150" aria-label="计划航线与实际飞行轨迹"></svg><footer id="route-status"></footer></section>
-      <section class="navigation-card radar-card"><header>Traffic radar<small>交通雷达</small></header><svg id="traffic-radar" viewBox="0 0 180 180" aria-label="目标方位与运动方向"></svg><footer id="radar-status"></footer></section>
+    <aside id="gear-preview" class="attitude-preview" hidden aria-label="起落架与地面视角">
+      <header>Gear view <small>脚部视角</small></header>
+      <div id="gear-preview-view" class="preview-viewport" aria-hidden="true"></div>
+      <footer id="gear-preview-label">0 m · ↓0.0 km/h<small>起落架放下 · 减速板打开</small></footer>
+    </aside>
     </aside>
     <div id="traffic-indicators" class="traffic-indicators" hidden aria-label="窗外交通目标"></div>
     <div class="flight-views">
     <aside id="attitude-preview" class="attitude-preview" hidden aria-label="机外飞机姿态">
-      <header>Aircraft attitude <small>机外姿态</small></header>
-      <div id="attitude-preview-view" class="preview-viewport" aria-hidden="true"></div>
-      <footer id="attitude-preview-label">Pitch 0° · Bank 0°<small>俯仰 · 坡度</small></footer>
+      <header id="attitude-preview-heading">Aircraft attitude <small>机外姿态</small></header>
+      <div id="attitude-preview-view" class="preview-viewport"><div id="preview-traffic-legend" class="preview-traffic-legend" hidden>V Geese · ✈ Traffic<small>线为相对航迹 · 5.2 km示意</small></div></div>
+
     </aside>
-    <aside id="gear-preview" class="attitude-preview" hidden aria-label="起落架与地面视角">
-      <header>Gear view <small>脚部视角</small></header>
-      <div id="gear-preview-view" class="preview-viewport" aria-hidden="true"></div>
-      <footer id="gear-preview-label">0 m · ↓0.0 m/s<small>起落架放下 · 减速板打开</small></footer>
-    </aside>
+
+      <section class="navigation-card radar-card" hidden aria-label="交通雷达"><header>Traffic radar<small>交通雷达</small></header><svg id="traffic-radar" viewBox="0 0 180 180" aria-label="目标方位与运动方向"></svg><footer id="radar-status"></footer></section>
     </div>
     <section id="intro-sequence" class="intro-sequence" hidden aria-label="进入驾驶舱倒数">
       <span class="eyebrow">Prepare for departure</span>
       <strong id="countdown-number" aria-live="off">4</strong>
       <span id="countdown-caption">跑道与起点</span>
-      <small>空格暂停 · 发动机保持关闭</small>
+      <small>发动机保持关闭</small>
     </section>
     <section id="preview-banner" class="preview-banner" hidden aria-label="起飞准备说明">
       <span id="startup-hint-copy"></span>
     </section>
     <div id="startup-prompt" class="startup-prompt" hidden role="status"></div>
-    <div id="aero-readout" class="aero-readout" hidden></div>
+    <section id="flight-status" class="flight-status" hidden role="status" aria-label="飞机异常警告">
+      <div id="flight-guide" class="flight-guide"></div>
+    </section>
     <section id="instruments" class="instruments" hidden aria-label="驾驶舱仪表">
-      <div class="instrument"><span>Airspeed<small>空速</small></span><strong id="airspeed-value">OFF</strong><footer>kt <i id="ground-speed">km/h</i></footer></div>
+      <div class="instrument"><span>Airspeed<small>空速</small></span><strong id="airspeed-value">OFF</strong><footer>km/h <i id="ground-speed">Flight speed<small>飞行速度</small></i></footer></div>
       <div class="instrument"><span>Altitude<small>高度</small></span><strong id="altitude-value">OFF</strong><footer>m <i>Above ground<small>离地高度</small></i></footer></div>
       <div class="instrument attitude"><span>Attitude<small>姿态</small></span><div class="attitude-mark" aria-hidden="true"><i></i><b></b></div><footer id="attitude-label">Avionics OFF<small>仪表关闭</small></footer></div>
-      <div class="instrument"><span>Vertical speed<small>垂直速度</small></span><strong id="vertical-speed-value">OFF</strong><footer>m/s <i id="heading-value">Heading 360°<small>航向</small></i></footer></div>
-      <div class="instrument"><span>Engine<small>发动机</small></span><strong id="engine-value">OFF <em>OFF</em></strong><footer><span id="throttle-value">Wing brake ON<small>提速慢 · 减速快</small></span> <i id="brake-state">Parking brake ON<small>驻车刹车</small></i></footer></div>
+      <div class="instrument"><span>Vertical speed<small>垂直速度</small></span><strong id="vertical-speed-value">OFF</strong><footer>km/h </footer></div>
     </section>
-    <div id="flight-guide" class="flight-guide" hidden></div>
     <section id="startup-strip" class="startup-strip" hidden aria-label="起飞准备按键及状态"></section>
     <div id="pause-overlay" class="overlay" hidden>
       <section class="pause-card" aria-labelledby="pause-title" role="dialog" aria-modal="true">
         <p class="eyebrow">Flight paused</p><h2 id="pause-title">休息一下</h2><p id="pause-copy">驾驶舱保持原位，准备好后继续。</p>
-        <button id="resume-button" class="primary-button" data-action="pause">继续体验 <kbd>空格</kbd></button>
+        <button id="resume-button" class="primary-button" data-action="pause">继续体验</button>
         <button class="secondary-button" data-action="exterior">重新开始</button>
       </section>
     </div>
@@ -79,6 +91,14 @@
         <dl id="result-stats" class="result-stats"></dl>
         <a id="next-level-button" class="secondary-button next-level-button" href="?level=2" hidden>Next flight<small>下一关</small></a>
         <button id="restart-button" class="primary-button" data-action="exterior">重新开始</button>
+      </section>
+    </div>
+    <div id="upgrade-overlay" class="overlay" aria-busy="true">
+      <section class="pause-card upgrade-card" role="dialog" aria-modal="true" aria-labelledby="upgrade-title">
+        <p class="eyebrow">Cloud cockpit</p><h2 id="upgrade-title">版本检查</h2>
+        <p id="upgrade-message" role="status">正在检查本机已准备的资源。</p>
+        <div class="upgrade-meter"><progress id="upgrade-progress" max="100" value="0" aria-label="准备进度"></progress><span id="upgrade-percentage">0%</span></div>
+        <button id="upgrade-retry" class="primary-button" data-action="retry-upgrade" hidden>重试</button>
       </section>
     </div>
     <div id="error-overlay" class="overlay" hidden>

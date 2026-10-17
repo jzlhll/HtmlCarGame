@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { LANDSCAPE, JOURNEY, SCENERY } from './config.js';
+import { LANDSCAPE, JOURNEY, SCENERY, SURFACE_APPEARANCE } from './config.js';
 import { mountainIndices, sampleMountain, smoothRange, terrainNoise } from './terrain.js';
 import { createTerrainDetail, createTerrainMaterial } from './terrain-material.js';
+import { surfaceTexture } from './surface-assets.js';
 
 // 只消费世界山面；细节切换、岩纹和树冠不改变逻辑地形或悬空岩体。
 export class MountainView extends THREE.Group {
@@ -12,11 +13,18 @@ export class MountainView extends THREE.Group {
     this.settings = LANDSCAPE.terrain;
     this.detail = createTerrainDetail();
     this.material = createTerrainMaterial(this.detail);
+    this.rollingMaterial = new THREE.MeshStandardMaterial({map:surfaceTexture('grass-color'),bumpMap:surfaceTexture('grass-color'),bumpScale:SURFACE_APPEARANCE.groundBump,vertexColors:true,roughness:1,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
     this.textures = [this.detail];
     this.surfaces = []; this.forest = [];
     this.makeTreeResources();
-    for (const surface of world.mountainSurfaces) this.addMountain(surface);
+    for (const surface of world.mountainSurfaces) if(surface.kind!=='rolling')this.addMountain(surface);
     for (const solid of world.solids) this.addRock(solid);
+  }
+
+  *buildRolling() {
+    for(const surface of this.world.mountainSurfaces)if(surface.kind==='rolling'){
+      yield {task:'rolling-hill'};this.addMountain(surface);yield 'boundary';
+    }
   }
 
   makeTreeResources() {
@@ -63,6 +71,7 @@ export class MountainView extends THREE.Group {
     geometry.setAttribute('position', new THREE.BufferAttribute(surface.positions, 3));
     geometry.setIndex(mountainIndices(surface.n)); geometry.computeVertexNormals();
     const settings = this.settings, positions = geometry.attributes.position, normals = geometry.attributes.normal;
+    const rolling=surface.kind==='rolling',uv=[];
     const colors = [], biomes = [], vegetation = new Float32Array(positions.count);
     const rock = new THREE.Color(settings.rockColor), soil = new THREE.Color(settings.soilColor), green = new THREE.Color(settings.lowColor);
     const red = new THREE.Color(settings.danxiaColor), snow = new THREE.Color(settings.snowColor), ground = new THREE.Color(SCENERY.colors.ground), color = new THREE.Color();
@@ -84,16 +93,20 @@ export class MountainView extends THREE.Group {
         const [sx, sy, sz] = settings.sunDirection;
         if (sampleMountain(surface, x + sx / sy * distance, z + sz / sy * distance) > y + distance + 2) { occlusion = 0.8; break; }
       }
+      // 小丘与平地共用世界UV和草纹，边缘不露出浅色矩形底座。
+      if(rolling)color.copy(ground).lerp(green,edge*.2);
+      uv.push(x/SURFACE_APPEARANCE.grassTileMetres,z/SURFACE_APPEARANCE.grassTileMetres);
       colors.push(color.r, color.g, color.b); biomes.push(plants, surface.kind === 'danxia' ? 1 : 0, occlusion, edge);
     }
+    if(rolling)geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
     geometry.setAttribute('biome', new THREE.Float32BufferAttribute(biomes, 4));
     const meshes = [geometry, this.reduceGeometry(geometry, surface.n, 2), this.reduceGeometry(geometry, surface.n, 4)].map(item => {
-      item.computeBoundingSphere(); const mesh = new THREE.Mesh(item, this.material); mesh.receiveShadow = true; this.add(mesh); return mesh;
+      item.computeBoundingSphere(); const mesh = new THREE.Mesh(item, rolling?this.rollingMaterial:this.material); mesh.receiveShadow = true; this.add(mesh); return mesh;
     });
     const bounds = new THREE.Box3(new THREE.Vector3(surface.minX, surface.minY, surface.minZ), new THREE.Vector3(surface.maxX, surface.maxY, surface.maxZ));
     this.surfaces.push({meshes, bounds, level: -1});
-    this.plantMountain(surface, vegetation);
+    if(surface.kind!=='rolling')this.plantMountain(surface, vegetation);
   }
 
   reduceGeometry(source, n, step) {
@@ -145,19 +158,34 @@ export class MountainView extends THREE.Group {
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(solid.positions, 3)); geometry.computeVertexNormals();
     const cap = ['张家界石柱', '空中圆形山', '斜伸岩柱'].includes(solid.name), colors = [], biomes = [], color = new THREE.Color();
-    for (let i = 0; i < geometry.attributes.position.count; i++) {
+    const appearance=JOURNEY.pillarSurface, light=new THREE.Color(appearance.light), weathered=new THREE.Color(appearance.weathered), capLight=new THREE.Color(appearance.capLight);
+    const positions=geometry.attributes.position;
+    for (let i = 0; i < positions.count; i++) {
       const top = cap && geometry.attributes.normal.getY(i) > 0.65;
       color.setHex(top ? JOURNEY.rockColors.cap : solid.color);
-      colors.push(color.r, color.g, color.b); biomes.push(top ? 0.95 : 0, 0, 0, 1);
+      if (cap) {
+        const x=positions.getX(i), y=positions.getY(i), z=positions.getZ(i);
+        const patch=terrainNoise(x*appearance.patchScale,z*appearance.patchScale+y*appearance.heightScale,JOURNEY.pillars.seed);
+        if (top) color.lerp(capLight,patch*appearance.lightBlend);
+        else {
+          const streak=terrainNoise(x*appearance.streakScale+y*appearance.streakDrift,z*appearance.streakScale,JOURNEY.pillars.seed+1);
+          color.lerp(light,patch*appearance.lightBlend).lerp(weathered,smoothRange(...appearance.weatherThreshold,streak)*appearance.weathering);
+        }
+      }
+      colors.push(color.r, color.g, color.b); biomes.push(top ? 0.95 : 0, cap&&!top?appearance.strataStrength:0, 0, 1);
     }
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3)); geometry.setAttribute('biome', new THREE.Float32BufferAttribute(biomes, 4));
     const mesh = new THREE.Mesh(geometry, this.material); mesh.receiveShadow = true; this.add(mesh);
     if (!cap) return;
-    const trees = [], {x, z, top, radius, lean, floor} = solid.cap;
-    for (let i = 0; i < Math.min(70, Math.round(radius * 0.22)); i++) {
-      const angle = i * 2.399963, r = Math.sqrt((i + 0.5) / Math.min(70, Math.round(radius * 0.22))) * radius * 0.6;
-      trees.push({x: x + lean + Math.cos(angle) * r, y: floor + top - 0.2, z: z + Math.sin(angle) * r,
-        scale: 12 + (i % 7) * 1.4, yaw: angle, color: this.settings.canopyColors[i % this.settings.canopyColors.length]});
+    const trees = [], {top, radius, floor, outline} = solid.cap;
+    const center=outline.reduce((point,next)=>[point[0]+next[0]/outline.length,point[1]+next[1]/outline.length],[0,0]);
+    const count=Math.min(70,Math.round(radius*0.22));
+    for (let i=0;i<count;i++) {
+      const along=(i*(Math.sqrt(5)-1)/2%1)*outline.length,index=Math.floor(along),a=outline[index],b=outline[(index+1)%outline.length];
+      const fraction=along-index,inset=Math.sqrt((i+0.5)/count)*JOURNEY.pillars.crownInset;
+      const x=center[0]+(a[0]+(b[0]-a[0])*fraction-center[0])*inset;
+      const z=center[1]+(a[1]+(b[1]-a[1])*fraction-center[1])*inset;
+      trees.push({x,y:floor+top-0.2,z,scale:12+(i%7)*1.4,yaw:i*2.399963,color:this.settings.canopyColors[i%this.settings.canopyColors.length]});
     }
     this.addForestChunk(trees);
   }

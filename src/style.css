@@ -9,21 +9,19 @@ button:active { transform: translateY(1px); }
 kbd { font-family: inherit; font-size: 14px; font-weight: 500; display: inline-grid; place-items: center; min-width: 25px; height: 25px; border: 1px solid #e2e8db50; border-radius: 5px; padding: 0 7px; }
 #game { position: relative; width: 100vw; height: 100dvh; min-height: 480px; overflow: hidden; outline: none; user-select: none; }
 #scene, #scene canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.topbar { position: absolute; z-index: 3; top: 28px; left: 34px; right: 34px; display: flex; align-items: center; gap: 24px; pointer-events: none; }
+.topbar { position: absolute; z-index: 3; top: 28px; left: 34px; right: 34px; display: flex; align-items: center; gap: 10px; pointer-events: none; }
 .brand { display: flex; gap: 12px; align-items: center; color: #f5f4e9; text-shadow: 0 2px 12px #203b4a99; letter-spacing: 2px; font-size: 19px; font-weight: 600; }
 .brand-symbol { width: 36px; height: 36px; border: 1px solid #e4eee36b; border-radius: 50%; display: grid; place-items: center; color: var(--gold); }
 .brand small { display: block; font-size: 12px; letter-spacing: 3px; font-weight: 400; margin-top: 5px; }
-.session { margin-left: auto; display: flex; align-items: center; gap: 9px; font-size: 14px; padding: 10px 14px; border-radius: 30px; border: 1px solid #ebf1e644; background: #15323b9c; backdrop-filter: blur(10px); }
-.session #elapsed { border-left: 1px solid #ffffff30; padding-left: 10px; font-variant-numeric: tabular-nums; }
+.session { display: flex; align-items: center; gap: 6px; font-size: 12px; padding: 5px 8px; border-radius: 30px; border: 1px solid #ebf1e644; background: #15323b9c; backdrop-filter: blur(10px); }
+.session #elapsed { font-variant-numeric: tabular-nums; }
 .status-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
-.topbar nav { display: flex; gap: 8px; pointer-events: auto; }
 .text-button { padding: 7px 11px; border: 1px solid #ffffff40; border-radius: 7px; background: #182e389e; color: #eef2e8; font-size: 14px; }
 .text-button kbd { margin-left: 5px; height: 20px; font-size: 13px; }
 .welcome { position: absolute; left: 48px; top: 50%; transform: translateY(-46%); width: 345px; padding: 30px 28px; background: linear-gradient(145deg, #18363ce8, #152b32e8); border: 1px solid #d6e0d33b; border-radius: 20px; box-shadow: 0 25px 60px #122b3630; backdrop-filter: blur(14px); }
 .eyebrow { font-size: 13px; letter-spacing: 2.5px; color: var(--gold); margin: 0 0 17px; font-weight: 500; }
 .welcome h1 { font-weight: 500; font-size: 31px; letter-spacing: 1px; margin: 0 0 20px; line-height: 1.5; }
 .intro-copy { font-size: 16px; line-height: 1.9; color: #c1d1cc; margin: 0 0 24px; }
-.preview-note { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #d8dfcd; padding: 12px 0; border-top: 1px solid #ffffff16; }
 .primary-button { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px; border: 0; border-radius: 9px; color: #273b3a; background: var(--gold); font-weight: 600; font-size: 16px; }
 .primary-button kbd { border-color: #293d3b50; }
 .primary-button>span { margin-left: auto; font-size: 20px; font-weight: 400; }
@@ -35,12 +33,11 @@ kbd { font-family: inherit; font-size: 14px; font-weight: 500; display: inline-g
 .exterior-caption i { font-style: normal; font-size: 12px; letter-spacing: 2px; }
 .preview-banner { position: absolute; top: 114px; left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100% - 48px); padding: 14px 24px; border-radius: 10px; background: #193840df; border: 1px solid #e2e8db29; font-size: 15px; line-height: 1.8; text-align: center; }
 #game[data-view="SEQUENCE"] .session { backdrop-filter: none; }
-.instruments { position: absolute; z-index: 2; left: 8%; right: 8%; top: auto; bottom: 94px; height: 106px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2.4%; pointer-events: none; }
-.instrument { border: 1px solid #91a4a41f; border-radius: 6px; background: linear-gradient(150deg, #0f1b21fa, #142329fc); display: flex; flex-direction: column; justify-content: space-between; padding: 6px 10px; box-shadow: inset 0 0 15px #00000030; }
+.instruments { position: absolute; z-index: 2; left: 14.3%; right: 14.3%; top: auto; bottom: 94px; height: 90px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.4%; pointer-events: none; }
+.instrument { border: 1px solid #91a4a41f; border-radius: 6px; background: linear-gradient(150deg, #0f1b21fa, #142329fc); display: flex; flex-direction: column; justify-content: space-between; padding: 5px 8px; line-height: 1.05; box-shadow: inset 0 0 15px #00000030; }
 .instrument>span { font-size: 14px; letter-spacing: 0.5px; color: #809391; }
 .instrument small { display: block; margin-top: 2px; font-size: 10px; letter-spacing: 0.5px; color: #526a6b; }
-.instrument strong { font-size: clamp(16px, 2.5vw, 29px); font-weight: 400; letter-spacing: 1px; color: #4b6061; }
-.instrument em { font-size: 0.7em; font-style: normal; margin-left: 8px; }
+.instrument strong { font-size: clamp(16px, 2.25vw, 26px); line-height: 1; font-weight: 400; letter-spacing: 1px; color: #4b6061; }
 .instrument footer { display: flex; gap: 6px; align-items: center; justify-content: space-between; font-size: 11px; color: #647c7b; }
 .instrument footer i { font-style: normal; color: #647c7b; }
 .attitude { text-align: center; }
@@ -49,10 +46,10 @@ kbd { font-family: inherit; font-size: 14px; font-weight: 500; display: inline-g
 .attitude-mark b { position: absolute; width: 18px; height: 4px; border-bottom: 1px solid #687d72; border-left: 1px solid #687d72; border-right: 1px solid #687d72; left: 13px; top: 9px; }
 .attitude footer { display: block; text-align: center; }
 .instrument footer small { margin-top: 1px; font-size: 9px; letter-spacing: 0; }
-.startup-strip { position: absolute; z-index: 2; left: 8%; right: 8%; bottom: 1%; min-height: 46px; display: flex; justify-content: space-between; align-items: stretch; gap: 6px; }
+.startup-strip { position: absolute; z-index: 2; left: 8%; right: 8%; bottom: 1%; min-height: 46px; display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap; }
 .strip-label { align-self: center; flex: 0 0 auto; line-height: 1.15; white-space: nowrap; font-size: 13px; color: #a4b5af; letter-spacing: 1px; padding-right: 10px; border-right: 1px solid #ffffff15; }
 .strip-label small { display: block; font-size: 10px; color: #829b98; letter-spacing: 0; margin-top: 2px; }
-.startup-key { display: grid; flex: 1; min-width: 0; grid-template-columns: auto minmax(0, 1fr); align-content: center; align-items: center; column-gap: 6px; row-gap: 2px; color: #8d9f99; }
+.startup-key { display: grid; flex: 0 0 auto; min-width: 0; grid-template-columns: auto max-content; align-content: center; align-items: center; column-gap: 6px; row-gap: 2px; color: #baccc2; }
 .startup-key kbd { grid-row: 1 / 3; width: 28px; height: 28px; padding: 0; color: #b7b994; border-color: #a7b4a736; background: #ffffff04; font-size: 14px; }
 .startup-key span { font-size: 13px; line-height: 1.2; white-space: nowrap; }
 .startup-key small { display: block; font-size: 10px; color: #9bb0ab; margin-top: 2px; }
@@ -70,9 +67,9 @@ kbd { font-family: inherit; font-size: 14px; font-weight: 500; display: inline-g
   .welcome { width: 310px; left: 24px; padding: 25px; }
   .welcome h1 { font-size: 26px; }
   .text-button { font-size: 13px; padding: 7px; }
-  .session { font-size: 13px; padding: 8px 10px; }
-  .instruments { left: 5%; right: 5%; gap: 1.8%; }
-  .instrument { padding: 8px; }
+  .session { font-size: 11px; padding: 4px 6px; }
+  .instruments { left: 11.75%; right: 11.75%; gap: 1.8%; }
+  .instrument { padding: 5px 6px; }
   .instrument>span { font-size: 12px; }
   .instrument small { font-size: 9px; letter-spacing: 0.7px; }
   .instrument footer { font-size: 10px; }
@@ -84,7 +81,7 @@ kbd { font-family: inherit; font-size: 14px; font-weight: 500; display: inline-g
   .startup-key small { display: block; font-size: 9px; }
 }
 @media (max-width: 650px) {
-  .brand small, .session #phase-label, .exterior-caption i, .text-button kbd { display: none; }
+  .brand small, .exterior-caption i, .text-button kbd { display: none; }
   .welcome { top: 52%; width: min(310px, calc(100% - 48px)); }
   .preview-banner { top: 86px; }
   .instrument footer i { display: none; }
@@ -112,14 +109,14 @@ kbd { font-family: inherit; font-size: 14px; font-weight: 500; display: inline-g
 .intro-sequence small { margin-top: 20px; padding: 7px 12px; border-radius: 20px; font-size: 13px; color: #d9e4de; background: #17343c99; letter-spacing: 1px; }
 
 .switch-state { grid-column: 2; line-height: 1.1; font-size: 12px; font-weight: 500; color: #9bb0ab; }
-.startup-key { padding: 4px 5px; border: 1px solid transparent; border-radius: 6px; }
+.startup-key { padding: 4px 6px; border: 1px solid transparent; border-radius: 6px; }
 .startup-key.is-on { background: #9cd8ad13; border-color: #a7dbb440; color: #d2e8c8; }
 .startup-key.is-on kbd { color: #ecf4c5; border-color: #c4e2a77d; background: #c4e2a71c; }
 .startup-key.is-on small { color: #90b8a7; }
 .startup-key.is-on .switch-state { color: #b9e9ad; }
 .startup-key.is-busy { border-color: #f4d97955; background: #f4d97910; }
 .startup-key.is-busy .switch-state { color: var(--gold); font-size: 11px; }
-.lights-on .startup-strip, .lights-on .instrument { box-shadow: 0 0 18px #e6c97614; }
+.lights-on .instrument { box-shadow: 0 0 18px #e6c97614; }
 .lights-on .strip-label { color: #e0d5a3; }
 .avionics-on .instrument { background: linear-gradient(150deg, #15363bfa, #132a30fc); border-color: #8bad9a60; }
 .avionics-on .instrument strong { color: #d8efd6; }
@@ -131,9 +128,7 @@ kbd { font-family: inherit; font-size: 14px; font-weight: 500; display: inline-g
 @media (max-width: 900px) { .startup-key { padding: 3px 1px; column-gap: 3px; row-gap: 2px; } }
 @media (max-width: 650px) { .startup-key { column-gap: 3px; } .startup-key kbd { width: 22px; min-width: 22px; } .switch-state { font-size: 11px; } .startup-key.is-busy .switch-state { font-size: 9px; } .startup-prompt { top: 195px; } }
 
-.flight-guide { position: absolute; left: 8%; right: 8%; bottom: 62px; min-height: 24px; display: flex; align-items: center; justify-content: center; color: #c5d9c4; font-size: clamp(11px, 1.05vw, 14px); line-height: 1.35; text-align: center; }
-.flight-guide.is-warning { color: var(--gold); }
-.flight-controls .startup-key { flex: 1; justify-content: center; }
+.flight-controls .startup-key { flex: 0 0 auto; justify-content: center; }
 .flight-controls .startup-key kbd { width: auto; min-width: 30px; padding: 0 5px; white-space: nowrap; }
 .flight-controls .startup-key .switch-state { font-size: 11px; white-space: nowrap; }
 .result-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 0 0 28px; }
@@ -143,7 +138,6 @@ kbd { font-family: inherit; font-size: 14px; font-weight: 500; display: inline-g
 .avionics-on .attitude-mark { background: none; }
 .avionics-on .attitude-mark::before { content: ''; position: absolute; inset: -50%; background: linear-gradient(#3b788c var(--horizon, 50%), #685e47 var(--horizon, 50%)); transform: rotate(var(--bank, 0deg)); }
 @media (max-width: 900px) {
-  .flight-guide { left: 5%; right: 5%; font-size: 11px; }
   .flight-controls .startup-key { column-gap: 4px; }
   .flight-controls .switch-state { font-size: 10px; }
 }
@@ -151,14 +145,7 @@ kbd { font-family: inherit; font-size: 14px; font-weight: 500; display: inline-g
   .instrument>span { font-size: 11px; }
   .instrument strong { font-size: 20px; }
   .attitude-mark { height: 18px; }
-  .flight-guide { bottom: 62px; }
 }
-
-.aero-readout { position: absolute; z-index: 3; top: auto; bottom: 208px; left: 8%; right: 8%; display: flex; justify-content: center; align-items: start; gap: 18px; line-height: 1.05; text-align: center; font-size: 13px; color: #d4dfcd; font-variant-numeric: tabular-nums; }
-.aero-readout small { display: block; font-size: 9px; color: #9fb4aa; margin-top: 1px; }
-.aero-readout.is-warning { color: #ffe39b; }
-.startup-prompt.is-flight-warning { top: 38%; padding: 18px 26px; font-size: 17px; background: #4b3026ed; border-color: #f5bd72; }
-@media (max-width: 900px) { .aero-readout { font-size: 11px; gap: 12px; } .aero-readout small { font-size: 9px; } .startup-prompt.is-flight-warning { font-size: 16px; } }
 
 .attitude-preview { position: absolute; z-index: 3; right: 34px; top: 96px; width: 226px; border: 1px solid #bdd0ce55; border-radius: 12px; overflow: hidden; pointer-events: none; box-shadow: 0 10px 24px #152b3829; }
 .attitude-preview header, .attitude-preview footer { background: #18333ef5; padding: 8px 12px; font-size: 13px; color: #dce5d8; }
@@ -192,7 +179,7 @@ kbd { font-family: inherit; font-size: 14px; font-weight: 500; display: inline-g
 .radar-contact text { stroke: none; fill: #b9cfc6; font-size: 18px; }
 .radar-contact.geese { stroke: #e7cd83; }
 .radar-contact.danger { stroke: #ffa06d; }
-.navigation-panel.has-alert .radar-card { border-color: #ffad76; box-shadow: 0 0 18px #eb995133; }
+.radar-card.has-alert { border-color: #ffad76; box-shadow: 0 0 18px #eb995133; }
 .is-warning { color: #ffe39b; }
 @media (max-width: 900px) {
   .navigation-panel { left: 24px; top: 78px; width: 196px; gap: 8px; }
@@ -247,3 +234,67 @@ button:disabled:active { transform: none; }
 .traffic-marker.is-danger { color: #ffab7a; }
 
 .is-critical { color: #ff9d79; }
+
+#light-preview { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.app-version { letter-spacing: 0; opacity: 0.75; margin-left: 8px; }
+#upgrade-overlay { z-index: 21; }
+.upgrade-card { width: min(100%, 460px); }
+.upgrade-meter { display: flex; gap: 16px; align-items: center; margin: 22px 0; font-variant-numeric: tabular-nums; color: var(--gold); }
+.upgrade-meter progress { flex: 1; min-width: 0; height: 10px; accent-color: var(--gold); }
+
+/* 中文单独放大，保留英文和数字原有层级；底部背景仅包住按键和文字。 */
+cjk-text { font-size: calc(1em + 1px); }
+.startup-strip { justify-content: center; gap: 6px 10px; }
+
+.flight-views .attitude-preview.has-traffic { flex-basis: 250px; }
+#attitude-preview-view { position: relative; }
+.preview-traffic-legend { position: absolute; left: 4px; right: 4px; bottom: 3px; text-align: center; font-size: 10px; color: #f1e6be; text-shadow: 0 1px 3px #18333e; }
+.preview-traffic-legend small { display: block; font-size: 9px; margin-top: 1px; }
+@media (max-width: 900px) { .preview-traffic-legend { font-size: 9px; } .preview-traffic-legend small { font-size: 8px; } }
+
+@media (max-width: 900px) {
+  .navigation-panel, .flight-views { bottom: 236px; }
+}
+
+.startup-strip { text-shadow: 0 1px 3px #071a20, 0 0 6px #071a20b3; }
+
+.navigation-panel #gear-preview { position: relative; inset: auto; width: 100%; min-height: 0; display: flex; flex-direction: column; }
+.navigation-panel #gear-preview header, .navigation-panel #gear-preview footer { flex-shrink: 0; }
+.navigation-panel #gear-preview .preview-viewport { height: auto; min-height: 40px; flex: 1; }
+.flight-views .radar-card { flex: 1 1 194px; }
+
+/* 异常警告贴近屏幕上沿，正常时不占位。 */
+.flight-status { position: absolute; z-index: 4; top: 8px; left: 50%; right: auto; transform: translateX(-50%); width: max-content; max-width: min(560px, calc(100% - 48px)); padding: 9px 14px; border: 1px solid #e6a93e; border-radius: 8px; background: #493407f5; color: #ffd16b; pointer-events: none; box-shadow: 0 3px 12px #101b3040; }
+.flight-status .flight-guide { color: inherit; position: static; min-height: 0; display: block; font-size: 14px; font-weight: 600; line-height: 1.25; text-align: center; text-shadow: none; }
+.flight-status .flight-guide small { display: block; margin-top: 3px; color: #fff0c7; font-size: 12px; font-weight: 400; }
+.flight-status.is-danger { background: #641f21f5; border-color: #ef6a5a; color: #ffb4a3; }
+.flight-status.is-danger .flight-guide small { color: #ffe2d9; }
+@media (max-width: 900px) {
+  .topbar { gap: 6px; }
+  .flight-status { top: 8px; max-width: 260px; padding: 7px 10px; }
+  .flight-status .flight-guide { font-size: 12px; }
+  .flight-status .flight-guide small { font-size: 11px; }
+}
+@media (max-width: 650px) {
+  .flight-status { top: 64px; max-width: calc(100% - 32px); }
+  .navigation-panel, .flight-views { top: 136px; }
+}
+
+/* 标题与时间共用左侧卡片的列宽。 */
+#game { --left-column-width: 248px; --left-column-edge: 34px; }
+.topbar, .navigation-panel { left: var(--left-column-edge); width: var(--left-column-width); }
+.topbar { right: auto; gap: 8px; }
+.brand { flex: 1; min-width: 0; gap: 8px; font-size: 17px; letter-spacing: 1px; }
+.brand>div { min-width: 0; }
+.brand-symbol { flex: 0 0 28px; width: 28px; height: 28px; }
+.brand small { margin-top: 3px; font-size: 9px; letter-spacing: 1px; white-space: nowrap; }
+.brand .app-version { margin-left: 4px; }
+.session { flex: 0 0 auto; white-space: nowrap; }
+@media (max-width: 900px) {
+  #game { --left-column-width: 196px; --left-column-edge: 24px; }
+  .topbar { gap: 6px; }
+  .brand { gap: 6px; font-size: 15px; }
+  .brand-symbol { display: grid; flex-basis: 24px; width: 24px; height: 24px; font-size: 15px; }
+  .brand small { font-size: 8px; letter-spacing: 0.6px; }
+}

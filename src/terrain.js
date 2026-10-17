@@ -18,12 +18,13 @@ export function terrainNoise(x, z, seed = LANDSCAPE.seed) {
 }
 
 export function mountainSeed(mountain) {
-  return (LANDSCAPE.seed ^ Math.imul(Math.round(mountain.position[0]), 73856093) ^ Math.imul(Math.round(mountain.position[1]), 19349663)) >>> 0;
+  const position=mountain.sourcePosition || mountain.position;
+  return (LANDSCAPE.seed ^ Math.imul(Math.round(position[0]), 73856093) ^ Math.imul(Math.round(position[1]), 19349663)) >>> 0;
 }
 
 // 山脊、支脉与侵蚀纹理共享固定种子；固定高度网格同时用于近景和碰撞。
 export function createMountainSurface(mountain, baseHeightAt) {
-  const n = LANDSCAPE.terrain.segments, stride = n + 1, seed = mountainSeed(mountain);
+  const n = mountain.segments || LANDSCAPE.terrain.segments, stride = n + 1, seed = mountainSeed(mountain);
   const heights = new Float32Array(stride * stride), positions = new Float32Array(stride * stride * 3);
   let peak = 0;
   for (let row = 0; row <= n; row++) for (let column = 0; column <= n; column++) {
@@ -35,7 +36,8 @@ export function createMountainSurface(mountain, baseHeightAt) {
     const fine = terrainNoise(u * 11, v * 11, seed + 2) - 0.5;
     let height = 0;
     if (radius < 1) {
-      if (mountain.kind === 'danxia') {
+      if (mountain.kind === 'rolling') height = (1-radius*radius)**2 * (0.97+noise*0.03);
+      else if (mountain.kind === 'danxia') {
         const wall = smoothRange(0, 0.25, 1 - radius);
         const terrace = 0.86 + 0.1 * smoothRange(0.25, 0.75, noise) + 0.04 * ridge;
         height = wall * terrace + fine * 0.008 * wall;
@@ -79,4 +81,28 @@ export function mountainIndices(n, step = 1) {
     indices.push(a, c, b, b, c, d);
   }
   return indices;
+}
+
+
+// 半平面裁切保留凸轮廓，削平崖面与薄片岩峰使用同一轮廓生成显示和碰撞。
+export function createRockFootprint(segments, form) {
+  let points=Array.from({length:segments},(_,i)=>[Math.cos(i/segments*Math.PI*2),Math.sin(i/segments*Math.PI*2)]);
+  if (!form) return points;
+  let seed=form.seed;
+  const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+  const rotation=random()*Math.PI*2, firstCut=random()*Math.PI*2;
+  for (let cut=0;cut<form.cuts;cut++) {
+    const angle=firstCut+cut*Math.PI*(3-Math.sqrt(5)),nx=Math.cos(angle),nz=Math.sin(angle);
+    const depth=form.cutDepth+(random()-0.5)*form.variation,next=[];
+    for (let i=0;i<points.length;i++) {
+      const a=points[i],b=points[(i+1)%points.length],da=a[0]*nx+a[1]*nz-depth,db=b[0]*nx+b[1]*nz-depth;
+      if (da<=0) next.push(a);
+      if ((da<0&&db>0)||(da>0&&db<0)) {
+        const t=da/(da-db);next.push([a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t]);
+      }
+    }
+    points=next;
+  }
+  const cosine=Math.cos(rotation),sine=Math.sin(rotation);
+  return points.map(([x,z])=>[x*form.width*cosine-z*form.depth*sine,x*form.width*sine+z*form.depth*cosine]);
 }

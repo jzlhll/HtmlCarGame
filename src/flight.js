@@ -1,4 +1,4 @@
-import { AIRCRAFT, FLIGHT, RUNWAY, AERODYNAMICS } from './config.js';
+import { AIRCRAFT, FLIGHT, RUNWAY, AERODYNAMICS, worldHorizontalSpeed } from './config.js';
 
 const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
 const approach = (value, target, amount) => value + clamp(target - value, -amount, amount);
@@ -29,6 +29,10 @@ export class Flight {
     this.maxAltitude = 0;
     this.maxAirspeed = 0;
     this.liftOffSpeed = 0;
+    this.gearWarningAnnounced = false;
+    this.gearExtensionBlocked = false;
+    this.landingAlignment = null;
+    this.landingState = {};
     this.updateSpeedLimits();
   }
 
@@ -60,24 +64,93 @@ export class Flight {
   updateSpeedLimits(density = AERODYNAMICS.seaLevelDensity * Math.exp(-Math.max(0, this.aircraft.position.y) / AERODYNAMICS.densityScaleHeight)) {
     const a = this.aircraft, aero = AERODYNAMICS;
     const peak = (aero.liftAtZero + aero.liftSlope * aero.criticalAlpha) * (1 - a.systems.flapsPosition * aero.wingBrakeLiftLoss);
-    this.stallSpeed = Math.sqrt(2 * aero.mass * FLIGHT.gravity / (density * aero.wingArea * peak * Math.max(0.25, Math.cos(a.bank))));
+    this.stallSpeed = Math.sqrt(2 * aero.mass * FLIGHT.gravity / (density * aero.wingArea * peak * Math.max(0.25, Math.cos(a.bank)))) * FLIGHT.kmhPerMps;
     this.safeSpeed = this.stallSpeed * aero.safeSpeedFactor;
+  }
+
+  // 接地判定与右侧指引共用同一状态，角度安全不代表其他条件已经满足。
+  landingStatus() {
+    const a=this.aircraft, route=this.route, destination=route.destination, state=this.landingState;
+    state.heading=Math.atan2(Math.sin(a.heading),Math.cos(a.heading));
+    state.pitch=a.pitch>=route.landingMinPitch && a.pitch<=route.landingMaxPitch;
+    state.bank=Math.abs(a.bank)<=route.landingMaxBank;
+    state.aligned=Math.abs(state.heading)<=route.landingMaxHeading+1e-9;
+    state.attitude=state.pitch && state.bank && state.aligned;
+    state.runway=Math.abs(a.position.x-destination.x)+AIRCRAFT.wingspan/2<=destination.width/2 && a.position.z<=destination.threshold && a.position.z>=destination.threshold-destination.length;
+    state.gear=a.systems.gearPosition>=0.99; state.flaps=a.systems.flapsPosition>=0.99;
+    state.speed=a.airspeed<=route.landingMaxSpeed; state.sink=a.verticalSpeed>=-route.landingMaxSink;
+    state.stable=!this.stalled;
+    state.ready=state.runway && state.attitude && state.gear && state.flaps && state.speed && state.sink && state.stable;
+    const factor=route.landingDangerFactor;
+    const severe=!state.stable || a.pitch<route.landingMinPitch*factor || a.pitch>route.landingMaxPitch*factor || Math.abs(a.bank)>route.landingMaxBank*factor || Math.abs(state.heading)>route.landingMaxHeading*factor || a.airspeed>route.landingMaxSpeed*factor || a.verticalSpeed < -route.landingMaxSink*factor;
+    state.severity=a.landed || state.ready ? 'safe' : severe || this.altitude()<=route.landingDangerHeight ? 'danger' : 'caution';
+    return state;
+  }
+
+  settleLanding(dt) {
+    const alignment=this.landingAlignment;
+    if (!alignment) return false;
+    const a=this.aircraft, route=this.route, blend=1-Math.exp(-route.landingSettleResponse*dt), rate=route.landingSettleRate*dt;
+    alignment.elapsed+=dt;
+    for (const [key,target] of [['pitch',0],['bank',0],['heading',alignment.heading]]) a[key]=approach(a[key],a[key]+(target-a[key])*blend,rate);
+    if (alignment.elapsed>=route.landingSettleSeconds-1e-9) {
+      a.pitch=0; a.bank=0; a.heading=alignment.heading;
+      this.landingAlignment=null;
+    }
+    return true;
+  }
+
+  get thrustLocked() { return this.aircraft.birdStrikeCount >= this.route.birdThrustLockHits; }
+
+  get stallGuidance() {
+    const alpha = this.aircraft.angleOfAttack;
+    if (Math.abs(alpha) < AERODYNAMICS.criticalAlpha - AERODYNAMICS.stallRecoveryMargin) {
+      return this.thrustLocked ? '保持机翼平稳，等待失速解除；T 已失效，恢复后再平缓拉起。' : '保持机翼平稳，按 T 提速，等待失速解除后再平缓拉起。';
+    }
+    const direction = alpha < 0 ? '按 ↑ 平缓抬高机头' : '先按 ↓ 降低机头，恢复后再平缓 ↑ 拉起';
+    return `${direction}；${this.thrustLocked ? 'T 已失效，关闭 W 并保持机翼平稳。' : '关闭 W 并按 T 提速。'}`;
+  }
+
+  get gearWarning() {
+    const a=this.aircraft;
+    return !a.onGround && !a.landed && a.systems.gearPosition<0.99 && a.verticalSpeed<0 && this.altitude()<FLIGHT.gearWarningHeight;
+  }
+
+  get maxSpeed() {
+    return this.aircraft.birdStrike ? AERODYNAMICS.overspeedWarning * this.route.birdStrikeSpeedRatio : Infinity;
+  }
+
+  // 鸟击是明确的游戏限速：保留三维速度方向，不取消下坠或自动恢复高度。
+  limitSpeed() {
+    if (!this.aircraft.birdStrike) return;
+    const a=this.aircraft, speed=Math.hypot(a.velocity.x,a.velocity.y,a.velocity.z)*FLIGHT.kmhPerMps, limit=this.maxSpeed;
+    if (speed<=limit) return;
+    const ratio=limit/speed;
+    a.velocity.x*=ratio; a.velocity.y*=ratio; a.velocity.z*=ratio;
+    a.airspeed=limit; a.verticalSpeed=a.velocity.y*FLIGHT.kmhPerMps;
+    a.flightPathAngle=Math.atan2(a.velocity.y,Math.hypot(a.velocity.x,a.velocity.z));
+    a.angleOfAttack=a.pitch-a.flightPathAngle;
   }
 
   command(key) {
     const a = this.aircraft, state = a.systems;
     if (key === 'T' || key === 'S') {
+      if (key==='T' && this.thrustLocked) return {type:'blocked',key,condition:'bird-thrust-lock',reason:'Thrust unavailable（无法提速）：本关已遭两次鸟击，T 已失效，下一关恢复。'};
       if (key === 'T' && (state.engine !== 'RUNNING' || (a.onGround && state.parkingBrake))) return {
         type: 'blocked', key, condition: 'power', reason: '请先启动发动机并松开驻车刹车，再按 T 提速。',
       };
-      // 点按也通过有限时长的受力推进，不能缩放垂直速度或直接抹去下坠动量。
-      this.speedTapDirection = key === 'T' ? 1 : -1;
-      this.speedTapRemaining = FLIGHT.speedTapSeconds;
+      const direction=key==='T'?1:-1;
+      const pending=this.speedTapDirection===direction?this.speedTapRemaining:0;
+      this.speedTapDirection=direction;
+      this.speedTapRemaining=Math.min(pending+FLIGHT.speedTapKmh,direction>0?Math.max(0,this.maxSpeed-a.airspeed):a.airspeed);
       return { type: 'throttle', key };
     }
     if (key === 'UP' || key === 'DOWN') {
       if (a.landed || (a.onGround && a.airspeed < FLIGHT.rotationSpeed)) return null;
-      this.pitchTarget = clamp(this.pitchTarget + (key === 'UP' ? 1 : -1) * FLIGHT.pitchTap,
+      // 反向操作从当前姿态开始，避免先偿还此前未能达到的目标角度。
+      const direction = key === 'UP' ? 1 : -1;
+      if ((this.pitchTarget - a.pitch) * direction < 0) this.pitchTarget = a.pitch;
+      this.pitchTarget = clamp(this.pitchTarget + direction * FLIGHT.pitchTap,
         a.onGround ? 0 : FLIGHT.minPitch, a.onGround ? FLIGHT.groundMaxPitch : FLIGHT.maxPitch);
       return { type: 'pitch', key };
     }
@@ -89,9 +162,10 @@ export class Flight {
     }
     if (['RETRACTING', 'EXTENDING'].includes(state.gear)) return null;
     if (state.gear === 'UP') {
-      if (a.onGround || a.airspeed > this.route.gearMaxSpeed) return {
-        type: 'blocked', key, condition: 'extension-speed', reason: `Gear（起落架）：先减速至 ${Math.round(this.route.gearMaxSpeed * FLIGHT.knotsPerMps)} kt 以下再放下。`,
-      };
+      if (a.onGround || a.airspeed > this.route.gearMaxSpeed) {
+        this.gearExtensionBlocked=a.airspeed>this.route.gearMaxSpeed;
+        return {type:'blocked',key,condition:'extension-speed',reason:`Gear（起落架）：先减速至 ${Math.round(this.route.gearMaxSpeed)} km/h 以下再放下。`};
+      }
       state.gear = 'EXTENDING';
     } else {
       if (a.landed) return {type: 'blocked', key, condition: 'taxi', reason: '着陆后保持起落架放下。'};
@@ -106,29 +180,51 @@ export class Flight {
   step(dt, held) {
     const a = this.aircraft, state = a.systems;
     this.events.length = 0;
+    const airborneAtStart = !a.onGround;
+    if (a.airspeed<=this.route.gearMaxSpeed || state.gear!=='UP') this.gearExtensionBlocked=false;
     Object.assign(this.previous.position, a.position);
     this.previous.pitch = a.pitch; this.previous.bank = a.bank; this.previous.heading = a.heading;
-    const pulse = this.speedTapRemaining > 0;
-    const slow = held.has('S') || (!held.has('T') && pulse && this.speedTapDirection < 0);
-    const advancing = !slow && (held.has('T') || (pulse && this.speedTapDirection > 0));
-    this.speedTapRemaining = Math.max(0, this.speedTapRemaining - dt);
+    const aligning = a.landed && this.settleLanding(dt);
+    const pressingThrust=held.has('T') && !this.thrustLocked;
+    if (this.thrustLocked && this.speedTapDirection>0) this.speedTapRemaining=0;
+    if ((held.has('S') && this.speedTapDirection>0) || (!held.has('S') && pressingThrust && this.speedTapDirection<0)) this.speedTapRemaining=0;
+    if ((this.speedTapDirection>0 && (state.engine!=='RUNNING' || (a.onGround && state.parkingBrake) || a.airspeed>=this.maxSpeed)) || (this.speedTapDirection<0 && a.airspeed<=0)) this.speedTapRemaining=0;
+    const pulse = this.speedTapRemaining > 1e-7;
+    const previousSpeed=a.airspeed;
+    const slow = held.has('S') || (!pressingThrust && pulse && this.speedTapDirection < 0);
+    const advancing = !this.thrustLocked && !slow && (pressingThrust || (pulse && this.speedTapDirection > 0));
+    // 额度单位为km/h；点按末步缩小变速力，长按仍持续按当前W速率施力。
+    const pulseRate=this.speedTapRemaining/(FLIGHT.kmhPerMps*dt);
+    const thrustRate=held.has('T')?this.speedRate(1):Math.min(this.speedRate(1),pulseRate);
+    const brakeRate=held.has('S')?this.speedRate(-1):Math.min(this.speedRate(-1),pulseRate);
     a.wheelBrake = a.onGround && slow;
     const pitchInput = Number(held.has('up')) - Number(held.has('down'));
-    const turnInput = Number(held.has('right')) - Number(held.has('left'));
-    if (a.landed || (a.onGround && a.airspeed < FLIGHT.rotationSpeed)) this.pitchTarget = 0;
-    else this.pitchTarget = clamp(this.pitchTarget + pitchInput * FLIGHT.pitchRate * dt,
-      a.onGround ? 0 : FLIGHT.minPitch, a.onGround ? FLIGHT.groundMaxPitch : FLIGHT.maxPitch);
+    const turnInput = aligning ? 0 : Number(held.has('right')) - Number(held.has('left'));
     const aero = AERODYNAMICS;
-    const effectiveness = a.onGround ? 1 : clamp((a.airspeed / aero.controlReferenceSpeed) ** 2, aero.minimumControl, 1) * (this.stalled ? aero.stallControl : 1);
-    a.pitch = approach(a.pitch, this.pitchTarget, FLIGHT.pitchRate * effectiveness * dt);
+    const pressure = a.onGround ? 1 : clamp((a.airspeed / aero.controlReferenceSpeed) ** 2, aero.minimumControl, 1);
+    const effectiveness = pressure * (this.stalled ? aero.stallControl : 1);
+    // 目标与实际使用相同操纵速率，低动压或失速时不积压长按目标。
+    const pitchRate = FLIGHT.pitchRate * pressure * (this.stalled ? aero.stallPitchControl : 1);
+    if (a.landed || (a.onGround && a.airspeed < FLIGHT.rotationSpeed)) this.pitchTarget = 0;
+    else this.pitchTarget = clamp(this.pitchTarget + pitchInput * pitchRate * dt,
+      a.onGround ? 0 : FLIGHT.minPitch, a.onGround ? FLIGHT.groundMaxPitch : FLIGHT.maxPitch);
+    if (!aligning) a.pitch = approach(a.pitch, this.pitchTarget, pitchRate * dt);
     if (!a.onGround) {
+      const sign = Math.sign(a.angleOfAttack);
       const separation = clamp((Math.abs(a.angleOfAttack) - aero.criticalAlpha) / aero.postStallDecay, 0, 1);
-      a.pitch = clamp(a.pitch - Math.sign(a.angleOfAttack) * aero.stallPitchRate * separation * dt, FLIGHT.minPitch, FLIGHT.maxPitch);
+      let correctionRate = aero.stallPitchRate * separation;
+      // 保留气动回正，但不让它将玩家的持续操纵反向；猛拉仍承担失速升阻力。
+      if (pitchInput * sign > 0) correctionRate = Math.min(correctionRate, pitchRate * aero.stallOpposingPitchRatio);
+      const before = a.pitch;
+      a.pitch = clamp(a.pitch - sign * correctionRate * dt, FLIGHT.minPitch, FLIGHT.maxPitch);
+      // 气动回正同步移动目标，松键后不再自动追赶过期的机头角度。
+      this.pitchTarget = clamp(this.pitchTarget + a.pitch - before, FLIGHT.minPitch, FLIGHT.maxPitch);
     }
-    if (a.onGround) a.bank = 0;
+    if (a.onGround) { if (!aligning) a.bank = 0; }
     else a.bank = approach(a.bank, a.bank + (turnInput * FLIGHT.maxBank - a.bank) * (1 - Math.exp(-FLIGHT.bankResponse * dt)), aero.maxRollRate * effectiveness * dt);
-    const horizontal = a.onGround ? a.airspeed : Math.hypot(a.velocity.x, a.velocity.z);
-    const speed = a.onGround ? a.airspeed : Math.hypot(horizontal, a.velocity.y);
+    const horizontal = a.onGround ? a.airspeed / FLIGHT.kmhPerMps : Math.hypot(a.velocity.x, a.velocity.z);
+    const speed = a.onGround ? a.airspeed / FLIGHT.kmhPerMps : Math.hypot(horizontal, a.velocity.y);
+    const speedKmh = speed * FLIGHT.kmhPerMps;
     const gamma = a.onGround ? 0 : Math.atan2(a.velocity.y, horizontal);
     const alpha = a.pitch - gamma;
     const density = aero.seaLevelDensity * Math.exp(-Math.max(0, a.position.y) / aero.densityScaleHeight);
@@ -143,40 +239,42 @@ export class Flight {
       cl = peak * (aero.postStallLiftFraction + (1 - aero.postStallLiftFraction) * Math.exp(-excess / aero.postStallDecay));
     }
     const separated = 1 - Math.exp(-excess / aero.postStallDecay);
-    const highSpeedDrag = aero.highSpeedDrag * Math.max(0, speed / aero.overspeedWarning - 1) ** 2;
+    const highSpeedDrag = aero.highSpeedDrag * Math.max(0, speedKmh / aero.overspeedWarning - 1) ** 2;
     const cd = highSpeedDrag + aero.parasiteDrag + aero.inducedDrag * cl ** 2 + state.flapsPosition * aero.wingBrakeDrag + state.gearPosition * aero.gearDrag + aero.stallDrag * separated;
     const groundSpoilers = a.landed && a.onGround;
     const lift = qArea * cl * (groundSpoilers ? aero.landingGroundLift : 1), drag = qArea * (cd + (groundSpoilers ? aero.landingGroundDrag : 0));
-    const capacity = aero.maxThrust * density / aero.seaLevelDensity / (1 + speed / aero.thrustSpeedScale);
+    const capacity = aero.maxThrust * density / aero.seaLevelDensity / (1 + speedKmh / aero.thrustSpeedScale);
     const rolling = a.onGround ? aero.rollingFriction * Math.max(0, aero.mass * FLIGHT.gravity - lift) : 0;
     const accelerating = advancing && state.engine === 'RUNNING' && !(a.onGround && state.parkingBrake);
     // 只补偿正常平飞配平阻力；失速、超速和过度拉升增加的阻力必须消耗能量。
     const peak = (aero.liftAtZero + aero.liftSlope * critical) * wingLift;
     const trimCl = a.onGround ? cl : clamp(aero.mass * FLIGHT.gravity / Math.max(1, qArea), 0, peak);
     const trimDrag = qArea * (aero.parasiteDrag + aero.inducedDrag * trimCl ** 2 + state.flapsPosition * aero.wingBrakeDrag + state.gearPosition * aero.gearDrag + (groundSpoilers ? aero.landingGroundDrag : 0));
-    const authority = a.onGround ? 1 : clamp((speed / this.stallSpeed - aero.lowSpeedPowerStart) / (1 - aero.lowSpeedPowerStart), 0, 1);
-    const requested = speed > FLIGHT.stopSpeed || accelerating ? (trimDrag + rolling) * authority + (accelerating ? aero.mass * this.speedRate(1) : 0) : 0;
+    const authority = a.onGround ? 1 : clamp((speedKmh / this.stallSpeed - aero.lowSpeedPowerStart) / (1 - aero.lowSpeedPowerStart), 0, 1);
+    // 只有玩家的T请求提供推力；请求结束后不补动力、不保速，继续承受阻力和重力。
+    const requested = accelerating ? (trimDrag + rolling) * authority + aero.mass * thrustRate : 0;
     const demanded = state.engine === 'RUNNING' && !(a.onGround && state.parkingBrake) ? Math.min(capacity * a.powerLimit, requested) : 0;
     a.throttle = capacity ? demanded / capacity : 0;
     a.enginePower += (a.throttle - a.enginePower) * (1 - Math.exp(-dt / aero.engineResponseSeconds));
     if (a.enginePower < 1e-6) a.enginePower = 0;
-    const thrust = state.engine === 'RUNNING' ? demanded : capacity * a.enginePower;
-    const speedBrake = slow ? aero.mass * this.speedRate(-1) : 0;
+    const thrust = this.thrustLocked ? 0 : state.engine === 'RUNNING' ? demanded : capacity * a.enginePower;
+    const speedBrake = slow ? aero.mass * brakeRate : 0;
     a.angleOfAttack = alpha; a.flightPathAngle = gamma;
     a.lift = lift; a.drag = drag; a.thrust = thrust; a.loadFactor = lift / (aero.mass * FLIGHT.gravity);
     if (a.onGround) {
       const normal = Math.max(0, aero.mass * FLIGHT.gravity - lift - thrust * Math.sin(a.pitch));
       const braking = state.parkingBrake ? aero.brakeFriction * normal : 0;
       const acceleration = (thrust * Math.cos(a.pitch) - drag - speedBrake - aero.rollingFriction * normal - braking) / aero.mass;
-      a.airspeed = Math.max(0, speed + acceleration * dt);
+      a.airspeed = Math.max(0, speed + acceleration * dt) * FLIGHT.kmhPerMps;
       const steering = FLIGHT.groundTurnRate * a.airspeed / (a.airspeed + FLIGHT.groundTurnSpeed) / (1 + a.airspeed / FLIGHT.groundTurnSpeed);
-      const gripTurn = aero.tireFriction * normal / aero.mass / Math.max(1, a.airspeed);
+      const gripTurn = aero.tireFriction * normal / aero.mass / Math.max(1, a.airspeed / FLIGHT.kmhPerMps);
       a.heading += turnInput * Math.min(steering, gripTurn) * dt;
-      a.position.y = (a.landed ? this.route.destination.elevation : 0) + Math.sin(a.pitch) * AIRCRAFT.mainWheelZ;
-      a.verticalSpeed = (a.position.y - this.previous.position.y) / dt;
-      a.velocity.x = Math.sin(a.heading) * a.airspeed;
-      a.velocity.z = -Math.cos(a.heading) * a.airspeed;
-      a.velocity.y = a.verticalSpeed;
+      if (a.landed) a.position.y += this.route.destination.elevation - this.lowestPoint();
+      else a.position.y = Math.sin(a.pitch) * AIRCRAFT.mainWheelZ;
+      a.verticalSpeed = a.landed ? 0 : (a.position.y - this.previous.position.y) / dt * FLIGHT.kmhPerMps;
+      a.velocity.x = Math.sin(a.heading) * a.airspeed / FLIGHT.kmhPerMps;
+      a.velocity.z = -Math.cos(a.heading) * a.airspeed / FLIGHT.kmhPerMps;
+      a.velocity.y = a.verticalSpeed / FLIGHT.kmhPerMps;
       if (!this.rotateAnnounced && a.airspeed >= FLIGHT.rotationSpeed) {
         this.rotateAnnounced = true; this.events.push({ type: 'rotation-ready', key: 'UP' });
       }
@@ -196,13 +294,15 @@ export class Flight {
       a.velocity.x += (thrust * forwardX - (drag + speedBrake) * ux + lift * (normalX * cosine + rightX * sine)) / aero.mass * dt;
       a.velocity.y += ((thrust * Math.sin(a.pitch) - (drag + speedBrake) * uy + lift * normalY * cosine) / aero.mass - FLIGHT.gravity) * dt;
       a.velocity.z += (thrust * forwardZ - (drag + speedBrake) * uz + lift * (normalZ * cosine + rightZ * sine)) / aero.mass * dt;
-      a.airspeed = Math.hypot(a.velocity.x, a.velocity.y, a.velocity.z);
-      a.verticalSpeed = a.velocity.y;
+      a.airspeed = Math.hypot(a.velocity.x, a.velocity.y, a.velocity.z) * FLIGHT.kmhPerMps;
+      a.verticalSpeed = a.velocity.y * FLIGHT.kmhPerMps;
       const heading = Math.atan2(a.velocity.x, -a.velocity.z);
       a.heading += Math.atan2(Math.sin(heading - a.heading), Math.cos(heading - a.heading));
-      a.position.y += a.velocity.y * dt;
     }
-    a.position.x += a.velocity.x * dt; a.position.z += a.velocity.z * dt;
+    this.limitSpeed();
+    if ((this.speedTapDirection>0 && accelerating) || (this.speedTapDirection<0 && slow)) this.speedTapRemaining=Math.max(0,this.speedTapRemaining-Math.max(0,this.speedTapDirection*(a.airspeed-previousSpeed)));
+    if (airborneAtStart) a.position.y += a.velocity.y * dt;
+    a.position.x += worldHorizontalSpeed(a.velocity.x) * dt; a.position.z += worldHorizontalSpeed(a.velocity.z) * dt;
     if (!a.onGround) {
       a.flightPathAngle = Math.atan2(a.velocity.y, Math.hypot(a.velocity.x, a.velocity.z));
       a.angleOfAttack = a.pitch - a.flightPathAngle;
@@ -210,7 +310,7 @@ export class Flight {
       this.stallRecovery = Math.abs(a.angleOfAttack) < critical - aero.stallRecoveryMargin ? this.stallRecovery + dt : 0;
       if (!this.stalled && this.stallEntry >= aero.stallEntrySeconds) {
         this.stalled = true;
-        this.events.push({ type: 'stall', key: 'alpha', reason: a.angleOfAttack < 0 ? 'Stall（失速）：平缓抬高机头（↑），减小负迎角，保持机翼平稳。' : 'Stall（失速）：立即降低机头（↓），按 T 提速，保持机翼平稳。' });
+        this.events.push({ type: 'stall', key: 'alpha', reason: `Stall（失速）：${this.stallGuidance}` });
       } else if (this.stalled && this.stallRecovery >= aero.stallRecoverySeconds) {
         this.stalled = false; this.events.push({ type: 'stall-recovered', key: 'alpha' });
       }
@@ -243,6 +343,10 @@ export class Flight {
         this.events.push({ type: `${system}-${retracting ? 'up' : 'down'}`, key });
       }
     }
+    if (this.gearWarning && !this.gearWarningAnnounced) {
+      this.gearWarningAnnounced=true;
+      this.events.push({type:'gear-warning',key:'landing-gear',reason:'Landing gear（起落架警告）：立即按 G 放轮！未完全放下就触地会爆炸。'});
+    } else if (state.gearPosition>=0.99 || this.altitude()>=FLIGHT.gearWarningClearHeight) this.gearWarningAnnounced=false;
     this.maxAirspeed = Math.max(this.maxAirspeed, a.airspeed);
     this.maxAltitude = Math.max(this.maxAltitude, this.altitude());
     if (a.onGround && !a.landed) {
@@ -267,17 +371,16 @@ export class Flight {
       }
     } else if (!a.onGround && this.lowestPoint() < this.world.baseHeightAt(a.position.x, a.position.z) - FLIGHT.contactTolerance) {
       const destination = this.route.destination;
-      const aligned = Math.abs(Math.atan2(Math.sin(a.heading), Math.cos(a.heading))) <= this.route.landingMaxHeading;
-      const runway = Math.abs(a.position.x - destination.x) + AIRCRAFT.wingspan / 2 <= destination.width / 2 && a.position.z <= destination.threshold && a.position.z >= destination.threshold - destination.length;
-      const safe = runway && aligned && state.gearPosition >= 0.99 && state.flapsPosition >= 0.99 && a.airspeed <= this.route.landingMaxSpeed && a.verticalSpeed >= -this.route.landingMaxSink && Math.abs(a.bank) <= this.route.landingMaxBank && a.pitch >= this.route.landingMinPitch && a.pitch <= this.route.landingMaxPitch && !this.stalled;
-      if (safe) {
+      const landing=this.landingStatus();
+      if (landing.ready) {
         a.position.y += this.route.destination.elevation - this.lowestPoint(); a.onGround = true; a.landed = true;
         a.velocity.y = 0; a.verticalSpeed = 0; this.pitchTarget = 0; this.lowSpeed = false;
-        this.events.push({type: 'landed', key: 'airport', reason: 'Touchdown（安全着陆）：W 保持打开，S 减速，低速滑入金色停机圈。'});
-      } else this.events.push({type: 'failed', key: 'ground', reason: runway ? '着陆条件不安全：检查起落架、机翼减速板、速度、下降率和姿态。' : this.stalled ? '持续失速导致下坠，飞机撞到了地面。' : `飞机在${this.route.destinationName}机场跑道外撞地。`});
+        this.landingAlignment={elapsed:0,heading:a.heading-landing.heading};
+        this.events.push({type: 'landed', key: 'airport', reason: 'Touchdown（安全着陆）：机身自动摆正，W 保持打开，S 减速并在跑道内停稳，注意避让停放的飞机与卡车。'});
+      } else this.events.push({type: 'failed', key: 'ground', destructive: true, reason: !landing.gear && !this.world.isSeaAt?.(a.position.x,a.position.z) ? '起落架未完全放下就触地，飞机撞地爆炸。' : landing.runway ? '着陆条件不安全：检查起落架、机翼减速板、速度、下降率和姿态。' : this.world.isSeaAt?.(a.position.x,a.position.z) ? '飞机坠入了海面。' : this.stalled ? '持续失速导致下坠，飞机撞到了地面。' : `飞机在${this.route.destinationName}机场跑道外撞地。`});
     }
     const low = !a.onGround && a.airspeed < this.safeSpeed;
-    if (low && !this.lowSpeed) this.events.push({ type: 'low-speed', key: 'airspeed', reason: `Airspeed low（空速偏低）：当前坡度与海拔建议至少 ${Math.ceil(this.safeSpeed * FLIGHT.knotsPerMps)} kt；关闭 W、T 提速，减小迎角。` });
+    if (low && !this.lowSpeed) this.events.push({ type: 'low-speed', key: 'airspeed', reason: `Airspeed low（空速偏低）：当前坡度与海拔建议至少 ${Math.ceil(this.safeSpeed) } km/h；${this.thrustLocked ? 'T 已失效，保持机翼平稳并减小迎角' : '关闭 W、T 提速，减小迎角'}。` });
     if (low) this.lowSpeed = true;
     this.lowSpeedRecovery = a.airspeed > this.safeSpeed * aero.speedWarningClear ? this.lowSpeedRecovery + dt : 0;
     if (this.lowSpeedRecovery >= AERODYNAMICS.warningRecoverySeconds) this.lowSpeed = false;

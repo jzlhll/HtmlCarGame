@@ -47,7 +47,7 @@ export class TrafficView extends THREE.Group {
   }
 
   update(game, mix) {
-    if (this.runId === game.runId && (game.paused || ['COMPLETE', 'RESULT'].includes(game.phase))) return;
+    if (this.runId === game.runId && (game.paused || ['CRASH', 'COMPLETE', 'RESULT'].includes(game.phase))) return;
     this.runId = game.runId;
     for (const model of this.models.values()) model.visible = false;
     for (const contact of game.mission.contacts) {

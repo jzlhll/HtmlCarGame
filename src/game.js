@@ -1,4 +1,4 @@
-import { AIRCRAFT, CAMERA, FLIGHT, FLIGHT_PHASES, createRoute } from './config.js';
+import { AIRCRAFT, CAMERA, DESTRUCTION, FLIGHT, FLIGHT_PHASES, createRoute } from './config.js';
 import { AircraftSystems } from './aircraft-systems.js';
 import { Prompts } from './prompts.js';
 import { Flight } from './flight.js';
@@ -23,6 +23,8 @@ export class Game {
     this.eventRevision = 0;
     this.startupHintDismissed = false;
     this.result = null;
+    this.destruction = null;
+    this.birdImpactAt = -Infinity;
     this.completionElapsed = 0;
     this.prompts = new Prompts();
     this.phase = 'READY';
@@ -50,6 +52,8 @@ export class Game {
       onGround: true,
       landed: false,
       powerLimit: 1,
+      birdStrike: false,
+      birdStrikeCount: 0,
       systems: {
         lights: false,
         door: false, // true 表示舱门已关闭并锁定，false 表示打开。
@@ -129,29 +133,38 @@ export class Game {
     this.onChange();
   }
 
-  finish(success, reason) {
-    if (this.phase === 'RESULT' || this.phase === 'COMPLETE') return;
+  finish(success, reason, destructive = false) {
+    if (['CRASH', 'RESULT', 'COMPLETE'].includes(this.phase)) return;
     this.result = { success, reason, seconds: this.mission.elapsed, maxAltitude: this.flight.maxAltitude,
       maxAirspeed: this.flight.maxAirspeed, liftOffSpeed: this.flight.liftOffSpeed };
-    this.phase = success ? 'COMPLETE' : 'RESULT';
+    this.phase = success ? 'COMPLETE' : destructive ? 'CRASH' : 'RESULT';
     this.completionElapsed = 0;
     this.aircraft.wheelBrake = false;
     this.flight.speedTapRemaining = 0;
+    if (this.phase === 'CRASH') {
+      this.destruction = {position: {...this.aircraft.position}, heading: this.aircraft.heading};
+      this.view = 'EXTERIOR';
+      this.aircraft.systems.engine = 'OFF'; this.aircraft.enginePower = 0;
+      this.emit({type: 'destroyed', key: 'impact'});
+    }
     this.onChange();
   }
 
   emit(event) {
     if (event.type !== 'blocked') this.eventRevision++;
     event.id = `${this.runId}:${this.eventRevision}:${event.type}:${event.key}:${event.condition || ''}`;
+    if (event.condition==='bird-thrust-lock') event.id=`${this.runId}:bird-thrust-lock`;
+    if (event.type === 'bird-strike') this.birdImpactAt = this.activeSeconds;
     this.prompts.receive(event);
     this.onEvent(event);
   }
 
   step(dt, held = NO_INPUT) {
     if (!this.active) return;
-    if (this.phase === 'COMPLETE') {
+    if (this.phase === 'COMPLETE' || this.phase === 'CRASH') {
       this.completionElapsed += dt;
-      if (this.completionElapsed >= FLIGHT.completionFeedbackSeconds) {
+      const seconds = this.phase === 'CRASH' ? DESTRUCTION.seconds : FLIGHT.completionFeedbackSeconds;
+      if (this.completionElapsed >= seconds - 1e-9) {
         this.phase = 'RESULT';
         this.onChange();
       }
@@ -168,7 +181,7 @@ export class Game {
       const events = this.flight.step(dt, held);
       // 接地或越界优先于同一步中的完成条件，结算只执行一次。
       const failed = events.find(item => item.type === 'failed');
-      if (failed) { this.emit(failed); this.finish(false, failed.reason); return; }
+      if (failed) { this.emit(failed); this.finish(false, failed.reason, failed.destructive); return; }
       for (const item of events) {
         if (item.type === 'liftoff') this.phase = 'INITIAL_CLIMB';
         this.emit(item);
@@ -180,7 +193,7 @@ export class Game {
     if (this.mission.started) {
       const missionEvents = this.mission.step(dt);
       const failed = missionEvents.find(item => item.type === 'failed');
-      if (failed) { this.emit(failed); this.finish(false, failed.reason); return; }
+      if (failed) { this.emit(failed); this.finish(false, failed.reason, failed.destructive); return; }
       for (const item of missionEvents) {
         if (item.type === 'approach') this.phase = 'APPROACH';
         this.emit(item);

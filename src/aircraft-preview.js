@@ -1,10 +1,11 @@
 import * as THREE from 'three';
 import { AIRCRAFT, AIRCRAFT_PREVIEW } from './config.js';
 import { createAircraft } from './models.js';
+import { PreviewTraffic } from './preview-traffic.js';
 
-// 同一渲染器中的独立机外姿态视口，固定跟随航向，突出俯仰和坡度。
+// 同一渲染器中的机外姿态视口，只显示飞机、交通与状态色，文字指引统一放在顶部。
 export class AircraftPreview {
-  constructor(element) {
+  constructor(element,route) {
     this.element = element;
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(AIRCRAFT_PREVIEW.background);
@@ -13,6 +14,12 @@ export class AircraftPreview {
     this.aircraft = createAircraft();
     this.aircraft.traverse(mesh => { if (mesh.isMesh) { mesh.castShadow = false; mesh.receiveShadow = false; } });
     this.scene.add(this.aircraft);
+    this.traffic=new PreviewTraffic(route);this.scene.add(this.traffic);
+    this.trafficLegend=document.getElementById('preview-traffic-legend');
+    this.skinMaterials=this.aircraft.userData.skinMaterials;
+    this.skinColors=this.skinMaterials.map(material=>material.color.clone());
+    this.landingColors=Object.fromEntries(Object.entries(AIRCRAFT_PREVIEW.landingColors).map(([state,color])=>[state,new THREE.Color(color)]));
+    this.landingSeverity=null;
     const grid = new THREE.GridHelper(AIRCRAFT_PREVIEW.gridSize, AIRCRAFT_PREVIEW.gridDivisions, AIRCRAFT_PREVIEW.gridColor, AIRCRAFT_PREVIEW.groundColor);
     grid.position.y = AIRCRAFT_PREVIEW.gridHeight; this.scene.add(grid);
     this.camera = new THREE.PerspectiveCamera(AIRCRAFT_PREVIEW.fov, 1, 1, 400);
@@ -21,14 +28,31 @@ export class AircraftPreview {
     this.size = new THREE.Vector2();
   }
 
-  draw(renderer, game, pose, refreshBounds) {
+  draw(renderer, game, pose, refreshBounds, models) {
     if (refreshBounds || !this.bounds) {
       this.bounds = this.element.getBoundingClientRect();
       this.camera.aspect = this.bounds.width / Math.max(1, this.bounds.height); this.camera.updateProjectionMatrix();
     }
     const bounds = this.bounds;
     if (!bounds.width || !bounds.height) return;
-    this.aircraft.rotation.set(pose.pitch, 0, -pose.bank, 'YXZ');
+    const landing=game.mission.approaching || game.aircraft.landed;
+    const severity=landing ? game.flight.landingStatus().severity : null;
+    if (severity!==this.landingSeverity) {
+      this.landingSeverity=severity;
+      this.skinMaterials.forEach((material,index)=>material.color.copy(severity?this.landingColors[severity]:this.skinColors[index]));
+    }
+    const referenceHeading=landing?0:pose.heading;
+    const trafficVisible=this.traffic.update(game,pose,models,referenceHeading);
+    if (this.trafficVisible!==trafficVisible) {
+      this.trafficVisible=trafficVisible;this.trafficLegend.hidden=!trafficVisible;
+      this.element.parentElement.classList.toggle('has-traffic',trafficVisible);
+      this.aircraft.scale.setScalar(trafficVisible?AIRCRAFT_PREVIEW.traffic.ownScale:1);
+      this.camera.position.set(...(trafficVisible?AIRCRAFT_PREVIEW.traffic.camera:AIRCRAFT_PREVIEW.camera));
+      this.camera.lookAt(...AIRCRAFT_PREVIEW.target);
+      this.camera.fov=trafficVisible?AIRCRAFT_PREVIEW.traffic.fov:AIRCRAFT_PREVIEW.fov;this.camera.updateProjectionMatrix();
+    }
+    const heading=landing ? Math.atan2(Math.sin(pose.heading),Math.cos(pose.heading)) : 0;
+    this.aircraft.rotation.set(pose.pitch, -heading, -pose.bank, 'YXZ');
     this.aircraft.userData.navigationLights.visible = game.aircraft.systems.lights;
     for (const flap of this.aircraft.userData.flaps) flap.rotation.x = game.aircraft.systems.flapsPosition * AIRCRAFT.flapAngle;
     for (const leg of this.aircraft.userData.gearLegs) {

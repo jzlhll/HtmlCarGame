@@ -51,6 +51,7 @@ export class FlightAudio {
     const buffer = context.createBuffer(1, Math.ceil(context.sampleRate * AUDIO.noiseSeconds), context.sampleRate);
     const data = buffer.getChannelData(0);
     for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    this.noiseBuffer = buffer;
     const noise = context.createBufferSource(); noise.buffer = buffer; noise.loop = true;
     this.fan = this.noiseChannel(noise, 'lowpass', AUDIO.fanIdleHz);
     this.wind = this.noiseChannel(noise, 'bandpass', AUDIO.windIdleHz);
@@ -85,7 +86,7 @@ export class FlightAudio {
       this.master.gain.setValueAtTime(0, now);
       this.parameterTargets.delete(this.master.gain);
     }
-    for (const shot of this.shots) { shot.source.stop(); shot.source.disconnect(); shot.gain.disconnect(); }
+    for (const shot of this.shots) { shot.source.stop(); shot.source.disconnect(); shot.filter?.disconnect(); shot.gain.disconnect(); }
     this.shots.clear();
     this.cancelSpeech();
   }
@@ -121,6 +122,11 @@ export class FlightAudio {
     this.target(this.master.gain, AUDIO.masterGain);
     if (tick) this.cue(AUDIO.cues.countdown);
     if (this.utterance && game.activeSeconds - this.speechStarted >= AUDIO.voice.maxSeconds) this.cancelSpeech();
+    if (game.phase==='CRASH') {
+      this.cancelSpeech();
+      for (const channel of [this.engine,this.harmonic,this.fan,this.wind,this.wheels,this.motor,this.alarm]) this.target(channel.gain.gain,0);
+      return;
+    }
     const duck = this.utterance ? AUDIO.voiceDuck : 1;
     const a = game.aircraft, state = a.systems;
     const starting = state.engine === 'STARTING', running = state.engine === 'RUNNING';
@@ -143,7 +149,7 @@ export class FlightAudio {
     const gear = ['RETRACTING', 'EXTENDING'].includes(state.gear), flaps = ['RETRACTING', 'EXTENDING'].includes(state.flaps);
     this.target(this.motor.gain.gain, gear || flaps ? AUDIO.motorGain * duck : 0);
     this.target(this.motor.source.frequency, AUDIO.motorHz + (gear ? 0 : AUDIO.flapsMotorOffset));
-    const alarm = game.mission.alert || game.flight.stalled;
+    const alarm = game.mission.alert || game.flight.stalled || game.flight.gearWarning;
     const phase = game.activeSeconds % AUDIO.alarmPeriod;
     const pulse = phase < AUDIO.alarmPulse || (phase > AUDIO.alarmPulse * 2 && phase < AUDIO.alarmPulse * 3);
     this.target(this.alarm.gain.gain, alarm && pulse ? AUDIO.alarmGain : 0);
@@ -166,9 +172,28 @@ export class FlightAudio {
     source.start(now); source.stop(now + cue.seconds);
   }
 
+  noiseBurst(cue) {
+    if (this.context?.state!=='running' || !this.noiseBuffer || this.shots.size>=AUDIO.maxShots) return;
+    const now=this.context.currentTime, source=this.context.createBufferSource(), gain=this.context.createGain(), filter=this.context.createBiquadFilter();
+    source.buffer=this.noiseBuffer; filter.type='lowpass';
+    filter.frequency.setValueAtTime(cue.frequency,now); filter.frequency.exponentialRampToValueAtTime(cue.endFrequency,now+cue.seconds);
+    gain.gain.setValueAtTime(cue.gain,now); gain.gain.exponentialRampToValueAtTime(AUDIO.gainFloor,now+cue.seconds);
+    source.connect(filter); filter.connect(gain); gain.connect(this.master);
+    const shot={source,gain,filter}; this.shots.add(shot);
+    source.onended=()=>{this.shots.delete(shot);source.disconnect();filter.disconnect();gain.disconnect();};
+    source.start(now);source.stop(now+cue.seconds);
+  }
+
   receive(event, game) {
+    if (event.type==='destroyed') this.silence();
     this.update(game);
+    if (event.type==='destroyed') {
+      if (this.enabled(game)) {this.noiseBurst(AUDIO.explosion);this.cue(AUDIO.cues.explosion);}
+      return;
+    }
     if (!this.enabled(game) || this.context?.state !== 'running') return;
+    if (event.type==='bird-strike'||event.type==='truck-hit') this.noiseBurst(AUDIO.birdImpact);
+    if (event.type==='bird-strike') this.noiseBurst(AUDIO.glassImpact);
     if (game.flight.stalled && ['pitch-high', 'pitch-low', 'low-speed'].includes(event.type)) return;
     let words, cue = AUDIO.cues.confirm, priority = 1;
     if (event.type === 'prepared' || event.type === 'unprepared') {
@@ -178,7 +203,7 @@ export class FlightAudio {
     } else {
       words = AUDIO.voice.events[event.type];
       if (!words) return;
-      if (['stall', 'ceiling', 'traffic', 'pitch-high', 'pitch-low', 'low-speed', 'overspeed'].includes(event.type)) priority = 2;
+      if (['gear-warning', 'bird-strike', 'stall', 'ceiling', 'traffic', 'pitch-high', 'pitch-low', 'low-speed', 'overspeed'].includes(event.type)) priority = 2;
       if (event.type === 'engine-start') cue = AUDIO.cues.start;
       else if (event.type === 'engine-stop' || event.type === 'brake-set') cue = AUDIO.cues.switchOff;
       else if (event.type === 'released') cue = AUDIO.cues.latch;
