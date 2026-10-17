@@ -13,7 +13,7 @@ export class TrafficView {
       let variants=parts.get(part);if(!variants){variants=new Map();parts.set(part,variants);}
       const shadow=part.castShadow&&this.castShadows;let batch=variants.get(shadow);
       if(!batch){
-        const materialKey=tinted?'tint:'+source.roughness+':'+source.metalness+':'+source.side:source.id;
+        const materialKey=tinted?'tint:'+source.type+':'+source.roughness+':'+source.metalness+':'+source.side:source.id;
         const key=part.geometry.id+':'+materialKey+':'+shadow+':'+part.receiveShadow;
         batch=this.batches.get(key);
         if(!batch){

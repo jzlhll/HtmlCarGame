@@ -6,8 +6,10 @@ export const TEST_OVERRIDES={active:false,keys:[]};
 
 // 白名单开放事件节奏、概率、车流容量及警车距离、网尺寸等字段，不开放车型尺寸与车辆碰撞阈值。
 const WHITELIST={
+  MODEL_APPEARANCE:['profile'],
+  TANKER:['firstFraction','lastFraction'],
   LEVELS:['firstSeconds','secondSeconds','thirdSeconds','weatherChance','branchWeatherChance'],
-  FIRST_LEVEL_EVENTS:['endSeconds','horseCount','roadblocksAfterSeconds'],
+  FIRST_LEVEL_EVENTS:['endSeconds','horseCount','horseIntervalSeconds','roadblocksAfterSeconds'],
   SECOND_LEVEL_EVENTS:['trafficCompressionSeconds','roadblocksAfterSeconds'],
   DISASTERS:['environmentSeconds','narrowSeconds','volcanoInterval','waveInterval','iceInterval','collapseInterval','icebergInterval'],
   COINS:['firstSeconds','intervalMin','intervalMax','chance','aheadMin','aheadMax'],
@@ -29,7 +31,7 @@ const WHITELIST={
 
 // fast=1 一键测试档:把分钟级节奏压缩到秒级,便于快速触发警车、白马、天气、分叉候选、炮击等随机事件。
 const FAST_PRESET={
-  FIRST_LEVEL_EVENTS:{endSeconds:24,horseCount:3,roadblocksAfterSeconds:15},
+  FIRST_LEVEL_EVENTS:{endSeconds:24,horseCount:2,horseIntervalSeconds:8,roadblocksAfterSeconds:15},
   SECOND_LEVEL_EVENTS:{roadblocksAfterSeconds:15},
   POLICE:{intervalSeconds:5,secondLevelIntervalSeconds:5,quizMathSeconds:5,quizChineseSeconds:5,quizEnglishSeconds:5},
   WHITE_HORSE:{intervalSeconds:8},

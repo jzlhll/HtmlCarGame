@@ -1,6 +1,8 @@
 import * as THREE from 'three';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { ROADWORKS, ROADBLOCKS } from './config.js';
 import { material } from './models.js';
+import { roadblockGeometry, roadblockMaterial } from './roadblock-model.js';
 
 // 施工网格固定容量复用，锥桶和路面分块跟随弯道与坡度。
 export class RoadworksView {
@@ -14,7 +16,7 @@ export class RoadworksView {
     for(const mesh of Object.values(this.meshes)){mesh.count=0;mesh.frustumCulled=false;mesh.receiveShadow=true;scene.add(mesh);}
     this.barriers=[];
     const boxGeometry=new THREE.BoxGeometry(1,1,1);
-    for(let index=0;index<8;index++){
+    {
       const group=new THREE.Group();
       const box=(color,size,x,y,z,angle=0)=>{
         const mesh=new THREE.Mesh(boxGeometry,material(color));mesh.scale.set(...size);mesh.position.set(x,y,z);mesh.rotation.z=angle;mesh.castShadow=true;group.add(mesh);
@@ -26,17 +28,16 @@ export class RoadworksView {
       box(0xffeed6,[1.55,1.55,.18],0,2.25,0);
       for(const face of [-1,1])for(const angle of [-Math.PI/4,Math.PI/4])box(0xe64737,[.19,1.62,.025],0,2.25,face*.11,angle);
       for(const side of [-1,1])box(0xff9f32,[.25,.25,.25],side*1.4,1.3,0);
-      group.visible=false;scene.add(group);this.barriers.push(group);
+      // 路障全部为静态部件，共用六件按材质合并的几何。
+      const parts=new Map();
+      for(const child of [...group.children]){child.updateMatrix();let pieces=parts.get(child.material);if(!pieces){pieces=[];parts.set(child.material,pieces);}pieces.push(child.geometry.clone().applyMatrix4(child.matrix));group.remove(child);}
+      for(const [mat,pieces]of parts){const mesh=new THREE.Mesh(mergeGeometries(pieces),mat);for(const piece of pieces)piece.dispose();mesh.castShadow=true;mesh.receiveShadow=true;group.add(mesh);}
+      for(let index=0;index<8;index++){const view=group.clone(true);view.visible=false;scene.add(view);this.barriers.push(view);}
     }
     this.blocks=[];
-    const beamLength=Math.hypot(ROADBLOCKS.width-.2,ROADBLOCKS.height-.2),beamAngle=Math.atan2(ROADBLOCKS.width-.2,ROADBLOCKS.height-.2);
+    const block=new THREE.Mesh(roadblockGeometry(),roadblockMaterial());block.castShadow=true;block.receiveShadow=true;
     for(let index=0;index<8;index++){
-      const group=new THREE.Group();
-      for(const direction of [-1,1]){
-        const beam=new THREE.Mesh(boxGeometry,material(0xe64737));
-        beam.scale.set(.2,beamLength,ROADBLOCKS.depth);beam.position.y=ROADBLOCKS.height/2;beam.rotation.z=direction*beamAngle;beam.castShadow=true;group.add(beam);
-      }
-      group.visible=false;scene.add(group);this.blocks.push(group);
+      const view=block.clone();view.visible=false;scene.add(view);this.blocks.push(view);
     }
     const canvas=document.createElement('canvas');canvas.width=256;canvas.height=192;
     const context=canvas.getContext('2d');context.fillStyle='#f4cf6c';context.beginPath();context.roundRect(0,0,256,192,16);context.fill();

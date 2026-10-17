@@ -265,9 +265,10 @@ export class GameAudio {
   setState(state){
     if(!this.context)return;
     this.master.gain.cancelScheduledValues(this.context.currentTime);
-    this.master.gain.setValueAtTime(state==='RUNNING'?AUDIO.master:0,this.context.currentTime);
+    const audible=(state==='RUNNING'||state==='DYING')&&!document.hidden&&document.hasFocus();
+    this.master.gain.setValueAtTime(audible?AUDIO.master:0,this.context.currentTime);
     if(state==='RUNNING')return;
-    // 暂停、结算或返回首页关闭总增益，已经发出的事件声同时静音。
+    // 非驾驶状态关闭持续声部；死亡表现保留事件声，暂停、答题与结算静音。
     for(const loop of [this.engine,this.jet,this.wind,this.water,this.train,this.tank,this.police,...Object.values(this.dinosaurVoices)])this.ramp(loop.gain.gain,0,.05);
   }
   tone(type,f0,f1,dur,gain,delay=0,pan=0){

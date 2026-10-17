@@ -6,7 +6,7 @@ const weaponKeys={Digit1:1,Numpad1:1};
 const editing=target=>target instanceof Element&&!!target.closest('input,textarea,select,[contenteditable]:not([contenteditable="false"])');
 export class Input {
   constructor(container){
-    this.container=container;this.pressed=new Set();this.lateralSeconds=0;this.lateralDirection=0;this.onSpace=()=>{};this.onBlur=()=>{};this.onQuiz=null;this.onWeapon=()=>{};
+    this.container=container;this.pressed=new Set();this.lateralSeconds=0;this.lateralDirection=0;this.onSpace=()=>{};this.onBlur=()=>{};this.onQuiz=null;this.onKey=null;this.onWeapon=()=>{};
     this.touchPressed=new Set();this.touchPointers=new Map();this.stickPointer=null;this.onLayoutChange=()=>{};
     this.stick=document.getElementById('steering-stick');this.thumb=document.getElementById('stick-thumb');
     this.coarsePointer=window.matchMedia('(pointer: coarse)');this.compactWindow=window.matchMedia('(max-width: '+MOBILE.compactWidth+'px)');
@@ -25,7 +25,9 @@ export class Input {
     this.bindTouch();
     // 页面层捕获游戏按键，焦点移到页面本身也能继续操作；保留输入框与浏览器快捷键。
     window.addEventListener('keydown',event=>{
-      if(event.isComposing||event.altKey||event.ctrlKey||event.metaKey||editing(event.target))return;
+      if(event.altKey||event.ctrlKey||event.metaKey||editing(event.target))return;
+      if(this.onKey?.(event)){event.preventDefault();return;}
+      if(event.isComposing)return;
       if(quizKeys[event.code]!==undefined&&this.onQuiz?.(quizKeys[event.code],event.repeat)){event.preventDefault();return;}
       const weapon=weaponKeys[event.code];
       if(weapon!==undefined){event.preventDefault();if(!event.repeat)this.onWeapon(weapon);return;}

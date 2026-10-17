@@ -24,48 +24,47 @@ export class DinosaurEvents {
       else if(!chaser.defeated){
         chaser.previousS=chaser.s;chaser.previousD=chaser.d;chaser.previousRoute=chaser.route;
         const sameRoute=(chaser.route??null)===(player.route??null),gap=(chaser.s-player.s)*this.road.pathScale((chaser.s+player.s)/2,chaser.route);
-        // 越接近前方距离上限，超出玩家速度的部分越小，避免跑出视野。
-        const extra=(chaser.ratio-1)*(sameRoute?clamp((cfg.followAheadMax-gap)/(cfg.followAheadMax-cfg.chaseAheadMin),0,1):1);
-        const speed=player.speed/3.6,travel=speed*(1+extra)*dt;
+        const speed=player.speed/3.6;
+        // 步距按玩家的实际行驶累计，恐龙落地后固定在世界位置，不再贴着车跑。
+        chaser.walked+=speed*dt;
         if(chaser.jump){
           const jump=chaser.jump,progress=clamp((now+dt-jump.startAt)/cfg.footWarning,0,1),blend=progress*progress*(3-2*progress);
-          chaser.s=lerp(jump.fromS,jump.toS,blend);chaser.d=lerp(jump.fromD,jump.toD,blend);
+          // 纵向前半程快速跃回前方，横移仍平滑；起跳后的落点保持固定。
+          const forward=1-(1-progress)*(1-progress);
+          chaser.s=lerp(jump.fromS,jump.toS,forward);chaser.d=lerp(jump.fromD,jump.toD,blend);
           if(progress===1)chaser.route=jump.route;
-          // 接地危险窗口内保持落点和收腿姿态，避免走路动画使脚掌偏离固定伤害区。
           if(now+dt>=jump.startAt+cfg.footWarning+cfg.footDanger)chaser.jump=null;
-        }else{
-          chaser.phase+=dt*Math.min(1/cfg.stepSecondsMin,speed/((cfg.stepDistanceMin+cfg.stepDistanceMax)/2))/2;
-          const previousCenter=this.road.branchCenter(chaser.s,chaser.route);
-          chaser.s+=travel/this.road.pathScale(chaser.s,chaser.route);chaser.walked+=travel;
-          if(chaser.route&&chaser.s>=this.road.route(chaser.route).end)chaser.route=null;
-          chaser.d+=this.road.branchCenter(chaser.s,chaser.route)-previousCenter;
-          chaser.d=this.chaserD(chaser);
         }
-        if(!chaser.jump&&travel>0&&chaser.walked>=chaser.stepDistance&&now>=chaser.nextStepAt&&now+cfg.footWarning+cfg.footDanger<chaser.until){
+        const catchingUp=sameRoute&&gap<=cfg.chaseAheadMin;
+        if(!chaser.jump&&speed>0&&(chaser.walked>=chaser.stepDistance||catchingUp)&&now>=chaser.nextStepAt&&now+cfg.footWarning+cfg.footDanger<chaser.until){
           chaser.walked=0;chaser.stepDistance=lerp(cfg.stepDistanceMin,cfg.stepDistanceMax,this.rng());
           chaser.nextStepAt=now+cfg.stepSecondsMin;
-          this.startJump(chaser,player,now);
+          this.startJump(chaser,player,now,game);
         }
       }
     }else if(age>=cfg.chaseAfterSeconds&&now>=this.nextChaseAt){
       this.nextChaseAt=now+lerp(cfg.chaseIntervalMin,cfg.chaseIntervalMax,this.rng());
       if(this.rng()<cfg.chaseChance){
-        const playerRoute=player.route??null,s=player.s+lerp(cfg.chaseAheadMin,cfg.chaseAheadMax,this.rng())/this.road.pathScale(player.s,playerRoute),route=playerRoute&&s>=this.road.route(playerRoute).end?null:playerRoute,lanes=this.road.available(s,route),options=[];
+        // 出场等待也预留行驶距离，避免尚未起跳就被玩家甩到身后。
+        let s=player.s,route=player.route??null,distance=lerp(cfg.chaseAheadMin,cfg.chaseAheadMax,this.rng())+(game.travel?game.travel(player,now,cfg.firstJumpSeconds)*this.road.pathScale(player.s,player.route):player.speed/3.6*cfg.firstJumpSeconds);
+        while(distance>0){const step=Math.min(1,distance);s+=step/this.road.pathScale(s,route);distance-=step;if(route&&s>=this.road.route(route).end)route=null;}
+        const lanes=this.road.available(s,route),options=[];
         for(const direction of [-1,1])for(let lane=0;lane<lanes;lane++)if(route||this.road.laneOpen(s,lane,direction,80,cfg.footLength))options.push({lane,direction});
         if(options.length>1){
-          const choice=options[Math.floor(this.rng()*options.length)],chaser={...choice,id:this.nextId++,route,s,previousS:s,previousRoute:route,phase:0,walked:cfg.stepDistanceMin,stepDistance:cfg.stepDistanceMin,nextStepAt:now+cfg.firstJumpSeconds,side:1,jump:null,defense:cfg.defense,defeated:false,ratio:lerp(cfg.speedRatioMin,cfg.speedRatioMax,this.rng()),until:now+lerp(cfg.durationMin,cfg.durationMax,this.rng())};
+          const choice=options[Math.floor(this.rng()*options.length)],chaser={...choice,id:this.nextId++,route,s,previousS:s,previousRoute:route,phase:0,walked:cfg.stepDistanceMin,stepDistance:cfg.stepDistanceMin,nextStepAt:now+cfg.firstJumpSeconds,side:1,jump:null,defense:cfg.defense,defeated:false,until:now+lerp(cfg.durationMin,cfg.durationMax,this.rng())};
           chaser.d=this.chaserD(chaser);chaser.previousD=chaser.d;this.chaser=chaser;
         }
       }
     }
     for(const foot of this.feet)if(now+dt>=foot.from&&!foot.sounded){foot.sounded=true;game.audio?.dinosaurStep(foot,game);}
   }
-  startJump(chaser,player,now){
+  startJump(chaser,player,now,game){
     const cfg=DINOSAURS;if(this.feet.length>=cfg.footCapacity)return;
     const sameRoute=(chaser.route??null)===(player.route??null);
-    let s=sameRoute?player.s:chaser.s,route=chaser.route,distance=player.speed/3.6*cfg.footWarning;
+    const predictionSeconds=cfg.footWarning+cfg.footDanger/2;
+    let s=sameRoute?player.s:chaser.s,route=chaser.route,distance=game?.travel?game.travel(player,now,predictionSeconds)*this.road.pathScale(player.s,player.route):player.speed/3.6*predictionSeconds;
     const lateral=(sameRoute?player.d:chaser.d)-this.road.branchCenter(s,route);
-    // 沿实际路线预测接地时的位置，汇流后接主路；玩家转入分离路线时不跨路追踪。
+    // 预测接地危险窗口中点的位置，让身体落在车前；汇流接主路，分离路线不跨路追踪。
     while(distance>0){const step=Math.min(1,distance);s+=step/this.road.pathScale(s,route);distance-=step;if(route&&s>=this.road.route(route).end)route=null;}
     const side=-chaser.side,center=this.road.branchCenter(s,route);
     const bodyS=s+cfg.footBack/this.road.pathScale(s,route),bodyRoute=route&&bodyS>=this.road.route(route).end?null:route;

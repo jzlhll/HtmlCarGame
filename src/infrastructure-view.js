@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { material } from './models.js';
+import { surfaceMaterial } from './model-surfaces.js';
 import { ROAD_RENDER } from './config.js';
 
 const capacity=2048;
@@ -8,12 +8,12 @@ const capacity=2048;
 export class InfrastructureView {
   constructor(scene){
     this.group=new THREE.Group();scene.add(this.group);this.dynamicGroup=new THREE.Group();scene.add(this.dynamicGroup);
-    this.batches=new Map();this.dynamicBatches=new Map();this.sites=[];this.layouts=new Map();this.matrix=new THREE.Matrix4();this.geometry=new THREE.BoxGeometry(1,1,1);this.temp=new THREE.Object3D();
+    this.batches=new Map();this.dynamicBatches=new Map();this.sites=[];this.siteCandidates=[];this.layouts=new Map();this.matrix=new THREE.Matrix4();this.geometry=new THREE.BoxGeometry(1,1,1);this.temp=new THREE.Object3D();
   }
   box(renderer,s,d,size,height,color,angle=0,pitch=false,castShadow=true,dynamic=false){
     const key=color+':'+castShadow,batches=dynamic?this.dynamicBatches:this.batches;
     let batch=batches.get(key);
-    if(!batch){const mesh=new THREE.InstancedMesh(this.geometry,material(color),capacity);mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);mesh.frustumCulled=false;mesh.castShadow=castShadow;mesh.receiveShadow=true;(dynamic?this.dynamicGroup:this.group).add(mesh);batch={mesh,count:0};batches.set(key,batch);}
+    if(!batch){const mesh=new THREE.InstancedMesh(this.geometry,surfaceMaterial(color===0x248d9e?'water':[0x93acb6,0x506772,0xc1c9ce,0x4a7688].includes(color)?'metal':dynamic?'paint':'stone',color),capacity);mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);mesh.frustumCulled=false;mesh.castShadow=castShadow;mesh.receiveShadow=true;(dynamic?this.dynamicGroup:this.group).add(mesh);batch={mesh,count:0};batches.set(key,batch);}
     if(batch.count>=capacity&&(!this.layout||dynamic))return;
     const p=renderer.local(s,d),temp=this.temp;
     temp.position.set(p.x,p.y+height,p.z);temp.rotation.set(pitch?p.pitch:0,-p.heading+angle,0,'YXZ');temp.scale.set(...size);temp.updateMatrix();
@@ -34,8 +34,9 @@ export class InfrastructureView {
   }
   rebuild(renderer,station){
     const road=renderer.road,size=ROAD_RENDER.infrastructureBlock,first=Math.floor((station-100)/size),last=Math.floor((station+460)/size);
-    this.sites=road.infrastructure(station-100,station+460);
-    if(this.road!==road||this.revision!==road.revision||this.level!==renderer.level){this.reset();this.road=road;this.revision=road.revision;this.level=renderer.level;this.sites=road.infrastructure(station-100,station+460);}
+    if(this.road!==road||this.revision!==road.revision||this.level!==renderer.level){this.reset();this.road=road;this.revision=road.revision;this.level=renderer.level;}
+    const sites=road.infrastructure(station-100,station+460,this.siteCandidates);
+    if(sites.length!==this.sites.length||sites.some((site,index)=>site!==this.sites[index]))this.sites=sites.slice();
     const key=first+':'+last;if(this.visibleKey===key)return;this.visibleKey=key;
     for(const block of this.layouts.keys())if(block<first||block>last)this.layouts.delete(block);
     const origin=renderer.origin;

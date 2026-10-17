@@ -1,4 +1,4 @@
-import { VEHICLES, MAX_RANK, LEVELS, FIRST_LEVEL_EVENTS, SECOND_LEVEL_EVENTS, DISASTERS, RULES_VERSION, XP, POINT_LOSS, HUNGER, VEHICLE_DEFENSE, SEASONS, SEASON_CYCLE, PLAYER_START_SPEED, AUTO_ACCELERATION, MANUAL_ACCELERATION, NITRO, REAR_END_INVINCIBLE_SECONDS, DEBUG_REVIVE_SECONDS, RESCUE_LIMIT, REVIVE_CLEAR_AHEAD, ROAD_INFRASTRUCTURE, ROAD_DIFFICULTY, ROADBLOCKS, POLICE, laneD, clamp, lerp, approach, random } from './config.js';
+import { VEHICLES, MAX_RANK, LEVELS, FIRST_LEVEL_EVENTS, SECOND_LEVEL_EVENTS, DISASTERS, TANKER, DEATH_ANIMATION, RULES_VERSION, XP, POINT_LOSS, HUNGER, VEHICLE_DEFENSE, SEASONS, SEASON_CYCLE, PLAYER_START_SPEED, AUTO_ACCELERATION, MANUAL_ACCELERATION, NITRO, REAR_END_INVINCIBLE_SECONDS, DEBUG_REVIVE_SECONDS, RESCUE_LIMIT, REVIVE_CLEAR_AHEAD, ROAD_INFRASTRUCTURE, ROAD_DIFFICULTY, ROADBLOCKS, POLICE, laneD, clamp, lerp, approach, random } from './config.js';
 import { Road } from './road.js';
 import { Traffic } from './traffic.js';
 import { RoadHazards, MUD_SECONDS, BUMP_SECONDS, surfaceContact } from './hazards.js';
@@ -9,12 +9,13 @@ import { Nitro } from './driving.js';
 import { WhiteHorseEvent } from './white-horse.js';
 import { PoliceEvent } from './police.js';
 import { makeQuestion, answeredQuestion } from './quiz.js';
+import { KeyboardMode } from './keyboard-mode.js';
 import { SeasonalWeather } from './weather.js';
 import { RoadInfrastructure } from './infrastructure.js';
 import { DinosaurEvents } from './dinosaurs.js';
 import { Arsenal } from './arsenal.js';
 import { DisasterEvents } from './disasters.js';
-export const CAUSES={frontFatal:'撞击更高级车辆或追尾后积分耗尽',bicycleRearFatal:'自行车追尾自行车',sideFatal:'侧碰更高级车辆',wall:'撞上截止车道的墙',roadwork:'撞上施工封闭路段',roadblock:'撞上 X 路障',lightning:'被闪电击毁',shell:'被天降炮弹炸毁',cowFatal:'撞上横穿马路的奶牛',dinosaurFatal:'撞上横穿的小恐龙',stomp:'被大型恐龙踩中',lava:'碰到火山岩浆',tsunami:'被海啸吞没',iceberg:'撞上道路冰山',hunger:'饥饿死亡',quizWrong:'答题错误',quizTimeout:'答题超时'}; // 火车仅在桥下装饰性经过,不参与碰撞判定;警车接触只触发答题，警车与捕网不受炮击影响。
+export const CAUSES={tanker:'撞上油罐车并引发爆炸',frontFatal:'撞击更高级车辆或追尾后积分耗尽',bicycleRearFatal:'自行车追尾自行车',sideFatal:'侧碰更高级车辆',wall:'撞上截止车道的墙',roadwork:'撞上施工封闭路段',roadblock:'撞上 X 路障',lightning:'被闪电击毁',shell:'被天降炮弹炸毁',cowFatal:'撞上横穿马路的奶牛',dinosaurFatal:'撞上横穿的小恐龙',stomp:'被大型恐龙踩中',lava:'碰到火山岩浆',tsunami:'被海啸吞没',iceberg:'撞上道路冰山',hunger:'饥饿死亡',quizWrong:'答题错误',quizTimeout:'答题超时'}; // 火车仅在桥下装饰性经过,不参与碰撞判定;警车接触只触发答题，警车与捕网不受炮击影响。
 
 const maxVehicleLength=Math.max(...VEHICLES.slice(1).map(vehicle=>vehicle.length));
 const maxPlayerSpeed=Math.max(...VEHICLES.slice(1).map(vehicle=>vehicle.playerMax))*2;
@@ -26,11 +27,13 @@ function motionSnapshot(target,old,time,out){
 
 export class Game {
   constructor(store,input,notify){
-    this.store=store;this.input=input;this.notify=notify;this.state='READY';this.carColor=store.getColor();this.deathTime=0;this.debugMode=false;this.debugSecondLevel=false;this.debugThirdLevel=false;this.debugRun=false;this.debugInvincibleUntil=0;this.renderer=null;this.onChange=()=>{};this.collisionCandidates=[];this.collisionGroup=[];this.separatedCars=new Set();this.collisionBegin={};this.collisionSites=[];this.collisionWalls=[];this.collisionWorks=[];this.collisionHazards=[];this.preview();
+    this.store=store;this.keyboardMode=new KeyboardMode();this.input=input;this.notify=notify;this.state='READY';this.carColor=store.getColor();this.deathTime=0;this.pendingRescue=false;this.debugMode=false;this.debugSecondLevel=false;this.debugThirdLevel=false;this.debugRun=false;this.debugInvincibleUntil=0;this.renderer=null;this.onChange=()=>{};this.collisionCandidates=[];this.collisionGroup=[];this.separatedCars=new Set();this.collisionBegin={};this.collisionSites=[];this.collisionWalls=[];this.collisionWorks=[];this.collisionHazards=[];this.preview();
   }
-  preview(){this.renderer?.resetRun();this.seed=6183;this.whiteHorse=new WhiteHorseEvent(this.seed);this.police=new PoliceEvent(this.seed);this.quiz=null;this.failedQuiz=null;this.caught=null;this.rescueUsed=0;this.weather=new SeasonalWeather(this.seed);this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};this.traffic=new Traffic(this.road,this.seed);this.level=1;this.levelStartedAt=0;this.levelExit=null;this.renderPreviousPlayer=null;this.dinosaurs=null;this.arsenal=null;this.disasters=null;this.activeSeconds=0;this.nextHungerAt=HUNGER.intervalSeconds;this.startSeason=0;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;this.scraping=false;this.debugRun=false;this.debugInvincibleUntil=0;}
+  preview(){this.renderer?.resetRun();this.seed=6183;this.whiteHorse=new WhiteHorseEvent(this.seed);this.police=new PoliceEvent(this.seed);this.quiz=null;this.failedQuiz=null;this.caught=null;this.rescueUsed=0;this.deathTime=0;this.pendingRescue=false;this.weather=new SeasonalWeather(this.seed);this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};this.traffic=new Traffic(this.road,this.seed);this.level=1;this.levelStartedAt=0;this.levelExit=null;this.renderPreviousPlayer=null;this.dinosaurs=null;this.arsenal=null;this.disasters=null;this.activeSeconds=0;this.nextHungerAt=HUNGER.intervalSeconds;this.startSeason=0;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;this.scraping=false;this.debugRun=false;this.debugInvincibleUntil=0;}
   async start(level=this.debugThirdLevel?3:this.debugSecondLevel?2:1){
     if(!['READY','RESULT'].includes(this.state)&&!(this.state==='LEVEL_CLEAR'&&level===this.level+1))return;
+    if(['READY','RESULT'].includes(this.state)&&!this.keyboardMode.startReady())return;
+    this.keyboardMode.resetStart();
     this.audio?.ensure();
     this.debugRun=this.debugMode||this.debugSecondLevel||this.debugThirdLevel;this.debugInvincibleUntil=0;
     this.state='PREPARING';this.onChange();
@@ -49,7 +52,7 @@ export class Game {
       this.traffic=new Traffic(this.road,this.seed);this.traffic.level=level;this.traffic.populate(this.player);
       this.startSeason=this.seed%4;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;
       this.nextHungerAt=HUNGER.intervalSeconds;
-      this.deathTime=0;this.scraping=false;this.saved=false;this.cause=null;this.result=null;this.input.clear();
+      this.deathTime=0;this.pendingRescue=false;this.scraping=false;this.saved=false;this.cause=null;this.result=null;this.input.clear();
       this.renderer?.resetRun();
       await this.renderer?.prepare(this);
       this.state=document.hasFocus()&&!document.hidden?'RUNNING':'PAUSED';this.onChange();
@@ -60,6 +63,11 @@ export class Game {
   setColor(id){
     if(!['READY','RESULT'].includes(this.state)||id===this.carColor||!this.store.setColor(id))return;
     this.carColor=id;this.renderer?.setCarColor(id);this.onChange();
+  }
+  setChildMode(enabled){
+    if(this.state!=='READY')return;
+    const saved=this.keyboardMode.setEnabled(enabled);this.input.clear();this.onChange();
+    if(!saved)this.notify('浏览器未能保存儿童模式设置，本次选择仍然有效。');
   }
   space(){if(this.state==='READY'||this.state==='RESULT')this.start();else if(this.state==='LEVEL_CLEAR')this.start(this.level+1);else if(this.state==='RUNNING')this.pause();else if(this.state==='PAUSED'){this.audio?.ensure();this.input.clear();this.state='RUNNING';this.onChange();}}
   get levelSeconds(){return this.activeSeconds-this.levelStartedAt;}
@@ -86,7 +94,7 @@ export class Game {
   }
   restart(){
     if(this.state==='PREPARING')return;
-    this.input.clear();this.nitro.stop();this.state='READY';this.start();
+    this.input.clear();this.nitro.stop();this.state='READY';this.keyboardMode.resetStart();this.onChange();this.start();
   }
   policeContact(rescue=false){
     // 警车拦查或致命救援共用题目流程；驾驶时间与音效暂停，答题按真实时间倒计时。
@@ -94,9 +102,10 @@ export class Game {
     this.caught=null;
     this.nitro.stop();this.input.clear();this.scraping=false;
     if(this.debugRun){this.passQuiz(rescue);return;}
-    this.quiz=makeQuestion(random(this.seed^0x7ab91e^Math.floor(this.activeSeconds*1024)));
+    const rng=random(this.seed^0x7ab91e^Math.floor(this.activeSeconds*1024));
+    this.quiz=(rescue?this.keyboardMode.makeRescueQuestion(rng):null)??makeQuestion(rng);
     this.quiz.rescue=rescue;
-    this.quiz.deadline=performance.now()+1000*(this.quiz.subject==='math'?POLICE.quizMathSeconds:this.quiz.subject==='english'?POLICE.quizEnglishSeconds:POLICE.quizChineseSeconds);
+    this.quiz.deadline=performance.now()+1000*(this.quiz.seconds??(this.quiz.subject==='math'?POLICE.quizMathSeconds:this.quiz.subject==='english'?POLICE.quizEnglishSeconds:POLICE.quizChineseSeconds));
     this.state='QUIZ';this.onChange();
   }
   caughtBy(net){
@@ -121,7 +130,7 @@ export class Game {
     delete this.quiz.helpRemaining;this.input.clear();this.onChange();
   }
   answerQuiz(choice){
-    if(this.state!=='QUIZ'||!this.quiz||this.quiz.helpRemaining!==undefined)return;
+    if(this.state!=='QUIZ'||!this.quiz||this.quiz.subject==='keyboard'||this.quiz.helpRemaining!==undefined)return;
     const expired=this.quizRemaining()<=0,correct=!expired&&choice===this.quiz.answer,rescue=this.quiz.rescue;
     if(correct)this.passQuiz(rescue);
     else this.die(expired?'quizTimeout':'quizWrong');
@@ -132,10 +141,9 @@ export class Game {
     if(rescue){this.revive(true);return;}
     this.state=document.hasFocus()&&!document.hidden?'RUNNING':'PAUSED';
     this.input.clear();this.onChange();
-    this.notify(this.debugRun?'调试通过 · 警车撤离':'回答正确 · 警车撤离');
   }
   pause(){if(this.state!=='RUNNING')return;this.state='PAUSED';this.input.clear();this.onChange();}
-  ready(){if(this.state!=='RESULT')return;this.state='READY';this.preview();this.input.clear();this.onChange();}
+  ready(){if(this.state!=='RESULT')return;this.state='READY';this.keyboardMode.resetStart();this.preview();this.input.clear();this.onChange();}
   season(){const {seconds,transitionSeconds}=SEASON_CYCLE,period=this.activeSeconds%seconds;return {index:(this.startSeason+Math.floor(this.activeSeconds/seconds))%SEASONS.length,blend:clamp((period-(seconds-transitionSeconds))/transitionSeconds,0,1),remaining:Math.ceil(seconds-period)};}
   normalCap(){
     // 车型正常最高速,已计入泥巴、河道谷底与天气限速,不含氮气加成。
@@ -265,12 +273,14 @@ export class Game {
     const chaser=this.dinosaurs?.chaser;if(chaser&&chaser.previousS!==undefined){chaser.s=lerp(chaser.previousS,chaser.s,time);chaser.d=lerp(chaser.previousD,chaser.d,time);}
     const horse=this.whiteHorse.horse;if(horse)horse.s=lerp(horse.previous.s,horse.s,time);
   }
+  get deathDuration(){return this.cause==='tanker'?Math.max(DEATH_ANIMATION.seconds,TANKER.explosionSeconds):DEATH_ANIMATION.seconds;}
   die(cause){
-    // 每局按次数提供答题救援，出题即消耗一次，答题失败不能再触发救援。
-    if(cause!=='quizWrong'&&cause!=='quizTimeout'&&this.rescueUsed<RESCUE_LIMIT){
-      this.rescueUsed++;this.policeContact(true);return;
-    }
-    if((cause==='quizWrong'||cause==='quizTimeout')&&this.quiz)this.failedQuiz=answeredQuestion(this.quiz);
+    if(this.state==='DYING'||this.state==='RESULT')return;
+    const quizFailure=cause==='quizWrong'||cause==='quizTimeout';
+    // 先消费本次救援资格并播放死亡表现，动画结束后才创建题目及倒计时。
+    this.pendingRescue=!quizFailure&&this.rescueUsed<RESCUE_LIMIT;
+    if(this.pendingRescue)this.rescueUsed++;
+    if(quizFailure&&this.quiz)this.failedQuiz=this.keyboardMode.answerText(this.quiz)??answeredQuestion(this.quiz);
     this.quiz=null;this.caught=null;this.cause=cause;this.state='DYING';this.deathTime=0;
     this.nitro.stop();this.input.clear();this.audio?.explosion();this.onChange();
   }
@@ -291,7 +301,7 @@ export class Game {
     }
     for(const car of this.traffic.cars)
       if(car.s>=p.s&&car.s<=ahead&&(car.route??null)===(car.s<exit?route:null))car.remove=true;
-    this.deathTime=0;this.cause=null;this.scraping=false;this.input.clear();this.renderer?.resetEffects();
+    this.deathTime=0;this.pendingRescue=false;this.cause=null;this.scraping=false;this.input.clear();this.renderer?.resetEffects();
     this.state=document.hasFocus()&&!document.hidden?'RUNNING':'PAUSED';this.onChange();
     this.notify((rescued?'回答正确 · 复活保护 ':'调试复活 · 保护 ')+DEBUG_REVIVE_SECONDS+' 秒');
   }
@@ -335,13 +345,13 @@ export class Game {
       const protectedNow=this.activeSeconds<this.player.invincibleUntil;
       const debugProtected=this.activeSeconds<this.debugInvincibleUntil;
       for(const car of this.traffic.cars){
-        if(car.remove||(protectedNow&&!horseProtected)||!horseProtected&&this.player.spin?.hits.has(car.id))continue;
+        if(car.remove||!car.tanker&&((protectedNow&&!horseProtected)||!horseProtected&&this.player.spin?.hits.has(car.id)))continue;
         const old=car.previous||car;
         const beginS=lerp(old.s,car.s,cursor),targetSize=VEHICLES[car.rank];
         const reach=(Math.hypot(playerSize.length,playerSize.width)+Math.hypot(targetSize.length,targetSize.width))/2+1+(fork?.separation??0);
         if(Math.abs(beginS-start.s)>reach+Math.abs(finish.s-start.s)+Math.abs(car.s-beginS))continue;
         const begin=motionSnapshot(car,old,cursor,this.collisionBegin);
-        const event=sweep(start,finish,begin,car,this.road);
+        const event=sweep(start,finish,begin,car,this.road,Boolean(car.tanker));
         if(event&&!(separated.has(car.id)&&(event.kind==='graze'||event.kind==='overlap'))){event.car=car;candidates.push(event);}
       }
       for(const site of sites){
@@ -402,14 +412,26 @@ export class Game {
       this.disasters?.slide(start,{...finish,s:lerp(start.s,finish.s,t),d:lerp(start.d,finish.d,t)},this.activeSeconds,dt*(global-cursor),this,true);
       this.player.s=lerp(start.s,finish.s,t);this.player.d=lerp(start.d,finish.d,t);this.activeSeconds+=dt*(global-cursor);
       advanceBounce(this.player,dt*(global-cursor));
-      // 捕捞网接触:进入被抓动画;警车车身接触(兜底)直接弹题,均优先于同刻其他事件。
+      if(group.some(e=>e.immunityEnd))this.activeSeconds=this.player.invincibleUntil;
+      const boundary=group.find(e=>e.horseBoundary);if(boundary)this.activeSeconds=boundary.horseBoundary;
+      // 油罐车仍引爆；保护按接触时刻判断，免死时不冻结车流、不消耗救援。
+      const tankerHit=group.find(event=>event.car?.tanker);
+      if(tankerHit){
+        const protectedTanker=this.whiteHorse.shielded(this.activeSeconds)||this.activeSeconds<this.player.invincibleUntil||this.activeSeconds<this.debugInvincibleUntil;
+        if(protectedTanker){
+          const car=tankerHit.car,old=car.previous||car;car.s=lerp(old.s,car.s,global);car.d=lerp(old.d,car.d,global);
+        }else this.freezeTraffic(global);
+        this.traffic.tanker.explode(this,tankerHit.car);
+        if(!protectedTanker){this.die('tanker');return;}
+        // 爆炸已消费目标，重新查询余下接触，避免同刻被清场的旧候选继续伤害。
+        start={...this.player};cursor=global;continue;
+      }
+      // 捕捞网接触进入被抓动画，警车车身接触直接弹题，优先于其余同刻事件。
       // 渔网的命中标记在事件真正入选结算时才落笔,查询阶段的候选不会提前消费渔网。
       const netHit=group.find(e=>e.netCatch);
       if(netHit){netHit.net.hit=true;this.freezeTraffic(global);this.caughtBy(netHit.net);return;}
       const policeHit=group.some(e=>e.police);
       if(policeHit){this.freezeTraffic(global);this.policeContact();return;}
-      if(group.some(e=>e.immunityEnd))this.activeSeconds=this.player.invincibleUntil;
-      const boundary=group.find(e=>e.horseBoundary);if(boundary)this.activeSeconds=boundary.horseBoundary;
       for(const event of group)if(event.dip){this.infrastructure.dipHits.add(event.dip.id);this.player.speed*=ROAD_INFRASTRUCTURE.slowMultiplier;this.audio?.splash();}
       if(group.some(e=>e.horse)){this.whiteHorse.collect(this);this.audio?.horse();}
       const horseSpeed=this.horseSpeed(this.player,this.activeSeconds);if(horseSpeed!==null)this.player.speed=horseSpeed;
@@ -590,7 +612,14 @@ export class Game {
       return;
     }
     if(this.state!=='DYING')return;
-    this.deathTime+=dt;
-    if(this.deathTime>=1.2){if(this.debugRun&&this.cause!=='quizWrong'&&this.cause!=='quizTimeout')this.revive();else this.finish('death');}
+    if(document.hidden||!document.hasFocus())return;
+    // 先让最后一帧特效绘出，再于下一帧弹题；重置或切关无需额外定时器取消。
+    if(this.deathTime>=this.deathDuration){
+      if(this.pendingRescue){this.pendingRescue=false;this.policeContact(true);}
+      else if(this.debugRun&&this.cause!=='quizWrong'&&this.cause!=='quizTimeout')this.revive();
+      else this.finish('death');
+      return;
+    }
+    this.deathTime=Math.min(this.deathDuration,this.deathTime+dt);
   }
 }

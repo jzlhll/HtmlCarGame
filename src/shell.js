@@ -18,7 +18,7 @@ export class Shelling {
     }
     const growth=Math.max(0,Math.floor((now-SHELL.startSeconds+1e-8)/SHELL.sizeGrowthSeconds)),growing=growth>this.growthStage;
     this.growthStage=growth;
-    // 扩大范围时必投一枚，确保最后一次强化在通关前出现；普通检查仍按原概率。
+    // 扩大范围时必投一枚；仅处理仍在行驶中的节点，普通检查按原概率。
     if(now+1e-8>=this.nextAt||growing){
       if(growing||this.rng()<SHELL.chance)this.spawn(game);
       this.nextAt=now+lerp(min,max,this.rng());

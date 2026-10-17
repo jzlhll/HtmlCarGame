@@ -1,9 +1,10 @@
 {
   "name": "htmlcargame",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "本机 Three.js 四季赛车游戏",
   "scripts": {
-    "start": "node scripts/serve.mjs"
+    "start": "node scripts/serve.mjs",
+    "prepare:pages": "node scripts/prepare-pages.mjs"
   },
   "keywords": [],
   "author": "",

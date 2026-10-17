@@ -1,12 +1,12 @@
 import * as THREE from 'three';
-import { TREE_SCENERY, ROAD_RENDER, DINOSAURS, random, lerp } from './config.js';
+import { TREE_SCENERY, ROAD_RENDER, RENDER_QUALITY, DINOSAURS, random, lerp } from './config.js';
 
 // 每块只生成一次世界坐标布局，距离可见性与近远细节独立更新。
 export class SceneryWindow {
   constructor(scene,meshes){
     this.group=new THREE.Group();scene.add(this.group);this.meshes=meshes;
     this.group.add(...Object.values(meshes));
-    const geometry={trees:new THREE.IcosahedronGeometry(1.15,0).translate(0,.17,0),pines:new THREE.ConeGeometry(1,1.9,5).translate(0,.48,0),trunks:new THREE.CylinderGeometry(.085,.16,1,5).translate(0,.5,0)};
+    const geometry={trees:new THREE.IcosahedronGeometry(1.02,1).scale(1,.84,1).translate(0,.17,0),pines:new THREE.ConeGeometry(1,1.9,8).translate(0,.48,0),trunks:new THREE.CylinderGeometry(.085,.16,1,5).translate(0,.5,0)};
     for(const [name,shape]of Object.entries(geometry)){
       const original=meshes[name],mesh=new THREE.InstancedMesh(shape,original.material,original.instanceMatrix.count);
       if(original.material.vertexColors){const colors=new Float32Array(shape.attributes.position.count*3);colors.fill(1);shape.setAttribute('color',new THREE.BufferAttribute(colors,3));}
@@ -31,8 +31,8 @@ export class SceneryWindow {
         if(road.onPavement(s,d,3))continue;
         const radius=lerp(TREE_SCENERY.minRadius,TREE_SCENERY.maxRadius,rng()),angle=rng()*Math.PI*2,pine=rng()<TREE_SCENERY.coniferChance;
         const object={parts:[],bounds:new THREE.Box3()};layout.objects.push(object);
-        add('trunks',s,d,0,[renderer.level===2?.5:1,height*(renderer.level===2?.18:.60),renderer.level===2?.5:1],angle,null,object);
-        if(renderer.level!==2)add(pine?'pines':'trees',s,d,height*(pine?.55:.72),[radius,height*(pine?.28:.23),radius*(.85+rng()*.3)],angle,null,object);
+        add('trunks',s,d,0,[renderer.level===2?.5:1,height*(renderer.level===2?.18:.42),renderer.level===2?.5:1],angle,null,object);
+        if(renderer.level!==2)add(pine?'pines':'trees',s,d,height*(pine?.55:.61),[radius,height*(pine?.31:.43),radius*(.85+rng()*.3)],angle,null,object);
       }
       // 容量只在合并窗口时裁剪，不影响区块随机序列，避免原地装饰随窗口变化。
       if(template===1&&rng()<.08){
@@ -66,7 +66,7 @@ export class SceneryWindow {
       let layout=this.layouts.get(block);if(!layout){layout=this.create(renderer,block);this.layouts.set(block,layout);changed=true;}
       for(const object of layout.objects){
         const sphere=object.sphere,dx=sphere.center.x-current.x,dz=sphere.center.z-current.z,distanceSquared=dx*dx+dz*dz;
-        const range=quality?quality.environmentFar+sphere.radius:Infinity,visible=distanceSquared<=range*range,lowDetail=Boolean(quality&&distanceSquared>quality.environmentDetail*quality.environmentDetail);
+        const range=quality?quality.environmentFar+sphere.radius:Infinity,visible=distanceSquared<=range*range,detailDistance=quality?quality.environmentDetail+(object.lowDetail?-RENDER_QUALITY.lodHysteresis:RENDER_QUALITY.lodHysteresis):Infinity,lowDetail=distanceSquared>detailDistance*detailDistance;
         if(object.visible!==visible||visible&&object.lowDetail!==lowDetail)changed=true;
         object.visible=visible;object.lowDetail=lowDetail;
       }
@@ -76,7 +76,7 @@ export class SceneryWindow {
       }
     }
     if(changed){
-      this.origin=this.road.at(s);renderer.faunaSites=[];
+      this.origin=this.road.at(s);const faunaSites=[];
       const counts=Object.fromEntries(Object.keys(this.meshes).map(name=>[name,0]));
       for(let block=first;block<=last;block++){
         const layout=this.layouts.get(block);
@@ -85,10 +85,11 @@ export class SceneryWindow {
           const mesh=this.meshes[name],index=counts[name];if(index>=mesh.instanceMatrix.count)continue;
           this.matrix.copy(part.matrix);this.matrix.elements[12]-=this.origin.x;this.matrix.elements[13]-=this.origin.y;this.matrix.elements[14]-=this.origin.z;
           mesh.setMatrixAt(index,this.matrix);counts[name]++;
-          if(part.site)renderer.faunaSites.push(part.site);
+          if(part.site)faunaSites.push(part.site);
         }
-        for(const record of layout.sites)if(record.visible)renderer.faunaSites.push(record.site);
+        for(const record of layout.sites)if(record.visible)faunaSites.push(record.site);
       }
+      if(faunaSites.length!==renderer.faunaSites.length||faunaSites.some((site,index)=>site!==renderer.faunaSites[index]))renderer.faunaSites=faunaSites;
       for(const [name,mesh]of Object.entries(this.meshes)){
         mesh.count=counts[name];mesh.visible=mesh.count>0;mesh.instanceMatrix.clearUpdateRanges();
         if(mesh.count){mesh.instanceMatrix.addUpdateRange(0,mesh.count*16);mesh.instanceMatrix.needsUpdate=true;}mesh.computeBoundingSphere();

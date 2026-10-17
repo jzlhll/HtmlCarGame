@@ -1,4 +1,4 @@
-import { DISASTERS, XP, VEHICLES, VEHICLE_DEFENSE, laneD, clamp, lerp, random } from './config.js';
+import { MODEL_APPEARANCE, DISASTERS, XP, VEHICLES, VEHICLE_DEFENSE, laneD, clamp, lerp, random } from './config.js';
 import { sweep, startDisasterSpin } from './collision.js';
 
 // 圆形岩浆与车身矩形的扫掠：圆角扩张包含中间条带与四角圆，避免方框角落误伤。
@@ -76,7 +76,9 @@ export class DisasterEvents {
         game.audio?.disaster('wave');
       }else if(this.sides.length<DISASTERS.sideCapacity){
         const point=this.ahead(game,lerp(this.environment===2?DISASTERS.iceSideAheadMin:DISASTERS.roadsideAheadMin,this.environment===2?DISASTERS.iceSideAheadMax:DISASTERS.roadsideAheadMax,this.rng())),side=this.rng()<.5?-1:1;
-        this.sides.push({id:this.nextId++,...point,d:game.road.branchCenter(point.s,point.route)+side*(game.road.edge(point.s,point.route)+10),side,kind:this.environment===0?'volcano':'ice',createdAt:now,until:now+DISASTERS.roadsideKeepSeconds,nextAt:this.environment===0?now:now+DISASTERS.collapseInterval,shots:0});
+        let d=game.road.branchCenter(point.s,point.route)+side*(game.road.edge(point.s,point.route)+(this.environment===0?MODEL_APPEARANCE.volcanoRoadOffset:10));
+        if(this.environment===0)for(let shift=0;shift<12&&game.road.onPavement(point.s,d,MODEL_APPEARANCE.volcanoRadius*1.3);shift++)d+=side*8;
+        this.sides.push({id:this.nextId++,...point,d,side,kind:this.environment===0?'volcano':'ice',createdAt:now,until:now+DISASTERS.roadsideKeepSeconds,nextAt:this.environment===0?now:now+DISASTERS.collapseInterval,shots:0});
       }
       this.nextMain+=this.environment===0?DISASTERS.volcanoInterval:this.environment===1?DISASTERS.waveInterval:DISASTERS.iceInterval;
     }

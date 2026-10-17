@@ -32,6 +32,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: node scripts/prepare-pages.mjs
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

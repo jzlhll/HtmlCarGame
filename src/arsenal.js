@@ -67,7 +67,7 @@ export class Arsenal {
       path.push({s,route:currentRoute,distance});
     }
     const shot={id:this.nextId++,s:p.s,route,lanes,lateral:p.d-this.road.branchCenter(p.s,route),path,endS:s,range:ROCKETS.range,born:game.activeSeconds};this.shots.push(shot);
-    // 起点、路线和普通炮的三条车道在发射时固定，按车辆中心所在车道立即清理。
+    // 起点、路线和火箭炮的三条车道在发射时固定，按车辆中心所在车道立即清理。
     // 警车与捕网属于独立事件，不受火箭炮影响。
     for(const car of game.traffic.cars)if(!car.remove&&this.hit(shot,car)){
       car.remove=true;game.renderer?.effect(car.s,car.d,'wreck',car);

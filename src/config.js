@@ -6,13 +6,19 @@ export const VEHICLES = [
   {name:'卡车', length:3.75, width:1.25, min:45, max:75, playerMax:145, lateral:5.1, color:0xe3945e},
   {name:'坦克', length:2.5, width:1.875, min:25, max:55, playerMax:145, lateral:4.35, color:0x829b83},
 ];
+export const CAR_STYLES=['sedan','suv'];
+export const TRUCK_STYLES=['box','flatbed','tipper'];
+export const TANKER={speed:26,firstFraction:.25,lastFraction:.65,aheadMin:180,aheadMax:240,retrySeconds:1,color:0xc43d29,blastRadius:40/3,explosionSeconds:2.6,fireSeconds:1.1};
+export const TANKER_APPEARANCE={tankColor:0xf3c438,tankSegments:40,lowTankSegments:16,signSize:.96,topSignSize:1.12};
 export const MAX_RANK=5; // 玩家最高车型与系统专属车型分开。
 export const ARMORED_RANK=6;
 VEHICLES.push({...VEHICLES[5],name:'装甲坦克',min:60,max:80,color:0xb29a66});
+// 写实外观只影响显示；共享小纹理和有限细分控制开局与显存开销。
+export const MODEL_APPEARANCE={profile:false,textureSize:256,environmentWidth:256,paintRoughness:.24,paintMetalness:.48,environmentIntensity:.8,exposure:.96,volcanoSegments:128,volcanoRings:52,waveAcross:72,waveAlong:64,volcanoRadius:22,volcanoHeight:13,volcanoRoadOffset:32,volcanoLavaFraction:.205,volcanoLavaRadius:.06};
 export const SECOND_LEVEL_SCENE={road:'#858c90',grainDark:'rgba(53,62,66,.16)',grainLight:'rgba(214,219,218,.25)',tracks:'rgba(224,229,226,.12)',shoulder:0xa7aaa4,ground:0xaaa18b,water:0x438d8f,sky:0xcbd3d4,rock:0x958d7d,trunk:0x79694d,sun:0xf1f5ff};
-export const LEVELS={firstSeconds:150,secondSeconds:195,thirdSeconds:360,countdownSeconds:5,exitSeconds:3,exitSpeed:100,weatherChance:.8,branchWeatherChance:1};
-// 第一关固定节奏在通关前五秒完成最后一次投放或强化；其他关卡分别配置。
-export const FIRST_LEVEL_EVENTS={endSeconds:145,horseCount:3,roadblocksAfterSeconds:120};
+export const LEVELS={firstSeconds:135,secondSeconds:195,thirdSeconds:360,countdownSeconds:5,exitSeconds:3,exitSpeed:100,weatherChance:.8,branchWeatherChance:1};
+// 第一关白马每 45 秒投放、最多两次；车流强化保留独立的 145 秒目标。
+export const FIRST_LEVEL_EVENTS={endSeconds:145,horseCount:2,horseIntervalSeconds:45,roadblocksAfterSeconds:120};
 // 第二关保留逐档增长曲线，仅将到达车流上限和车距下限的时间各缩短二十秒。
 export const SECOND_LEVEL_EVENTS={trafficCompressionSeconds:20,roadblocksAfterSeconds:130};
 // 第三关按有效时间循环，灾害尺寸和伤害不随调试节奏改变。
@@ -24,10 +30,15 @@ export const DISASTERS={
   iceInterval:10,collapseInterval:5,coverLength:22,coverKeepSeconds:12,slideSeconds:.8,iceSpinSeconds:1,
   icebergInterval:10,icebergAheadMin:90,icebergAheadMax:130,icebergWidth:3.1,icebergLength:5,icebergHeight:5,icebergKeepSeconds:12,
   capacity:32,sideCapacity:12,sceneryBlock:80,
+  roadSurface:{lavaHot:0xc2824e,lavaEmissive:0x773519,lavaGlow:.10,iceCrack:0xb0c0c7,iceCrackWidth:1,iceCrackCount:11,iceRoughness:.62},
+  iceScenery:{smallChance:.22,clearance:8,sampleStep:10,searchDistance:240,placementAttempts:6,
+    small:{width:[10,16],height:[12,18],length:[10,18]},
+    massif:{width:[38,68],height:[22,34],length:[32,54]},
+    ridge:{width:[26,42],height:[32,44],length:[42,64]}},
   themes:[
-    {name:'火山',road:0xc82f17,shoulder:0x552a22,ground:0x3e292b,sky:0x8c4c43,sun:0xffc190},
+    {name:'火山',road:0x6e605a,shoulder:0x51433e,ground:0x3e292b,sky:0x8c4c43,sun:0xffc190},
     {name:'海水',road:0x8a9caa,shoulder:0x566b80,ground:0x167f9e,sky:0xb0d9e8,sun:0xe6f5ff},
-    {name:'冰山',road:0xaaddeb,shoulder:0x70adc8,ground:0xd3edf4,sky:0xc4dfed,sun:0xe5f6ff},
+    {name:'冰山',road:0x91a4ae,shoulder:0x7e9cae,ground:0xd3edf4,sky:0xc4dfed,sun:0xe5f6ff},
   ],
 };
 export const ARMORED_TANK={truckChance:.025,tankChance:.075,heightMultiplier:2,barrelLength:4.8};
@@ -37,7 +48,7 @@ export const DINOSAURS={
   smallFirstMin:15,smallFirstMax:30,smallIntervalMin:25,smallIntervalMax:40,smallChance:.4,smallCountMin:3,smallCountMax:6,
   cowSpeedMin:1.6,cowSpeedMax:2.2,crossingSpeedMultiplier:2,smallLength:4.8,smallWidth:1.6,smallHeight:2.4,smallSpacing:5.6,smallRowSpacing:2.6,smallAheadMin:60,smallLeadSeconds:3,
   chaseAfterSeconds:120,chaseFirstMin:4,chaseFirstMax:8,chaseIntervalMin:20,chaseIntervalMax:35,chaseChance:.7,
-  chaseAheadMin:12,chaseAheadMax:18,followAheadMax:32,speedRatioMin:1,speedRatioMax:1.08,durationMin:12,durationMax:18,
+  chaseAheadMin:12,chaseAheadMax:18,durationMin:12,durationMax:18,
   chaserLength:22,chaserWidth:5.8,chaserHeight:10,footSpread:1.8,footBack:4,jumpHeight:3,jumpTilt:.12,exitFadeSeconds:1,
   defense:100,firstJumpSeconds:1.2,stepDistanceMin:36,stepDistanceMax:48,stepSecondsMin:2.4,footWidth:1.8,footLength:3,footWarning:1.2,footDanger:.2,footAimChance:.4,footCapacity:12,baseRingRadius:4.5, // 仅在实际接地时判定踩踏；底圈跟随身体，不保留脚印或绘制预警。
   bridgeLeadSeconds:2.5,bridgeSpeed:12,bridgeCount:4,bridgeSpacing:5,bridgeScale:.8,sceneryCapacity:32,grazerScale:2.4,diplodocusScale:3.2,lakeOffset:35,waterBankOffset:9,waterRoadOffset:32,
@@ -96,6 +107,7 @@ export const SIDE_IMPACT={
 export const REAR_END_INVINCIBLE_SECONDS=2;
 // 答题或调试复活后保护两秒，包括截止墙和道路障碍；暂停不消耗。
 export const DEBUG_REVIVE_SECONDS=2;
+export const DEATH_ANIMATION={seconds:1.2}; // 死亡表现播完后才进入救援题或结算。
 export const RESCUE_LIMIT=2; // 每局非答题致命事件可触发的答题复活次数。
 export const REVIVE_CLEAR_AHEAD=50; // 原地复活时清理当前路线前方的车流距离(米)。
 export const PLAYER_START_SPEED=57.5;
@@ -155,7 +167,7 @@ export const TRAFFIC_DRIVING={dangerousChance:.15,avoidSeconds:3.5,minAvoidDista
 // 跨轮静态查询缓存按轮数限制，远离当前窗口的内容可重新生成。
 export const ROAD_CACHE={maxLaps:4};
 export const ROAD_RENDER={sampleCapacity:160,sceneryBlock:40,sceneryBlocks:15,infrastructureBlock:80,roadsideMargin:65};
-export const MODEL_PREWARM={trafficExtra:16,targetSize:32,poolPerType:8};
+export const MODEL_PREWARM={idleSliceMs:4,idleMinMs:5,idleFallbackMs:80,trafficExtra:16,targetSize:48,poolPerType:8,sliceMs:7};
 export const RENDER_QUALITY={
   firstLevelFastSpeed:160,fastExitSpeed:145,firstLevelFastFps:58,secondLevelFps:58,normalFps:45,
   maxPixelRatio:1.5,minPixelRatio:.75,pixelBudget:2200000,pixelStep:.25,
@@ -180,7 +192,7 @@ export const ROAD_DIFFICULTY={
 // 施工只关闭一个车道，区间长度为米；与永久收窄保持独立。
 export const ROADWORKS={first:380,interval:400,chance:.5,minLength:30,maxLength:100,warningDistance:240,barrierWidth:3.4};
 // 独立 X 路障不铺施工路面；后期只启用玩家前方有足够反应距离的候选点。
-export const ROADBLOCKS={afterSeconds:150,first:300,interval:360,chance:.4,warningDistance:240,width:3.4,depth:.35,height:2.8};
+export const ROADBLOCKS={afterSeconds:150,first:300,interval:360,chance:.4,warningDistance:240,width:3.4,depth:.55,height:2.8};
 // 减速倍率仅用于泥巴和河道谷底；建筑道路间距为加长分叉预留平地区间。
 // 高架与低沉地形随机:高度/深度与坡长独立抽取,长坡高而平缓(顶峰较远),短坡高而陡(很快到顶);
 // 最小坡长按 maxGrade 反推(|高度|×1.5÷最大坡度,smooth 曲线峰值坡度为高度×1.5÷坡长),坡度不会越界。
@@ -235,7 +247,7 @@ export const SEASON_CYCLE={seconds:45,transitionSeconds:10};
 // 非分叉路段天气按 intervalMin~intervalMax 秒随机检查，以 chance 概率触发，首次检查在 firstMin~firstMax 秒；分叉路段使用 ROAD_FORKS 的天气字段。
 // 手机保持原有雨量，电脑端增加雨丝密度以加强宽屏遮挡；粒子缓冲按最大雨量复用。
 export const WEATHER={chance:.4,duration:9,windDuration:6,windSpeed:.5,freezeSeconds:3,fogNear:10,fogFar:50,intervalMin:31,intervalMax:45,firstMin:12,firstMax:25,rainCount:560,desktopRainMultiplier:3};
-// 白马第一关在 145 秒内等间隔投放三次，其他关卡每分钟投放；保护总长 10 秒包含末尾 2 秒闪烁，回落另计。
+// 白马第一关在 45、90 秒各投放一次，其他关卡每分钟投放；保护总长 10 秒包含末尾 2 秒闪烁，回落另计。
 export const WHITE_HORSE={
   intervalSeconds:60,speed:60,minAhead:20,maxAhead:35,
   visibleSeconds:6,blinkSeconds:2,length:3.8,width:1.3,
@@ -263,6 +275,7 @@ export const POLICE={
   catchSeconds:1.5, // 被抓动画时长:玩家缩小并被拉向警车。
   firstLevelMaxChaseSeconds:25,maxChaseSeconds:35,thirdLevelMaxChaseSeconds:45, // 第一关 25 秒、第二关 35 秒、第三关 45 秒。
 };
+export const KEYBOARD_TRAINING={startCount:3,rescueCount:5,rescueSeconds:45,rescueChance:.25};
 export const LANE_WIDTH = 3.6;
 // 天降炮弹：开局 startSeconds 后按 intervalMin~intervalMax 秒随机检查，以 chance 概率投弹，落点取玩家前方并横向抖动；
 // fallSeconds 为预警圈+下落时长(留给玩家躲避),areaSize 为爆炸区域基础边长(米,常量,后续可调),
@@ -297,4 +310,4 @@ export const approach = (value, target, delta) => value < target ? Math.min(targ
 // 启动早期应用 URL 测试参数(?fast=1 或 ?POLICE.intervalSeconds=5 等白名单字段),
 // 仅服务 Agent/人工快速验证随机事件;不带参数或 Node 端导入时默认值原样生效。
 import { applyTestOverrides } from './test-overrides.js';
-applyTestOverrides({LEVELS,FIRST_LEVEL_EVENTS,SECOND_LEVEL_EVENTS,DISASTERS,DINOSAURS,COINS,TRAFFIC_DENSITY,POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,ROADBLOCKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});
+applyTestOverrides({TANKER,MODEL_APPEARANCE,LEVELS,FIRST_LEVEL_EVENTS,SECOND_LEVEL_EVENTS,DISASTERS,DINOSAURS,COINS,TRAFFIC_DENSITY,POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,ROADBLOCKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});

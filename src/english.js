@@ -58,6 +58,8 @@ export const ENGLISH_BOOKS=[
       'birthday=生日|cake=蛋糕|candle=蜡烛|gift=礼物|doll=玩偶|card=卡片|noodles=面条|plane=飞机',[
       ['How old {are} you?','am','is','be'],
       ['She {is} nine years old.','am','are','be'],
+      ['{When} is your birthday? It is in May.','Where','What','Who'],
+      ['My birthday is {in} May.','to','on','at'],
       ['{Do} you like your gift? Yes, I do.','Does','Is','Are'],
       ['Let us {make} a birthday card.','makes','making','to make'],
     ]),
@@ -76,6 +78,7 @@ export const ENGLISH_BOOKS=[
       ['Do you {like} telling stories?','likes','liking','to like'],
       ['Can I {join} you?','joins','joining','to join'],
       ['We can {row} a boat together.','rows','rowing','to row'],
+      ['We want {to} play a game.','for','on','at'],
     ]),
     unit('What do we wear?',
       'sweater=毛衣|skirt=女裙|dress=连衣裙|shirt=衬衫|trousers=裤子|shorts=短裤|coat=外套|cap=便帽|shoes=鞋子|wear=穿；戴',[
@@ -83,6 +86,7 @@ export const ENGLISH_BOOKS=[
       ['She {wears} a coat every day.','wear','wearing','is wear'],
       ['{Is} this your shirt? Yes, it is.','Do','Does','Are'],
       ['These shoes {are} blue.','am','is','be'],
+      ['{Where} is my cap? It is on the chair.','When','What','How'],
     ]),
     unit('What sounds can we hear?',
       'hear=听见|sound=声音|bird=鸟|train=火车|bus=公共汽车|car=小汽车|loud=响亮的|quiet=安静的',[
@@ -90,6 +94,7 @@ export const ENGLISH_BOOKS=[
       ['I can {hear} a bird.','hears','hearing','to hear'],
       ['{Can} you hear the bus? Yes, I can.','Does','Is','Are'],
       ['The train {is} loud.','am','are','be'],
+      ['{What} can you hear? I can hear a bird.','Where','When','Who'],
     ]),
     unit('Where can we see colours?',
       'red=红色的|yellow=黄色的|blue=蓝色的|green=绿色的|orange=橙色的|purple=紫色的|pink=粉色的|colour=颜色',[
@@ -108,6 +113,7 @@ export const ENGLISH_BOOKS=[
     unit('What do we do at school?',
       'school=学校|classroom=教室|library=图书馆|playground=操场|lesson=课|teacher=老师|student=学生|book=书',[
       ['We {have} lessons in the classroom.','has','having','are'],
+      ['I go {to} school every morning.','in','on','at'],
       ['There {are} many books in the library.','am','is','be'],
       ['{Do} you like your school? Yes, I do.','Does','Is','Are'],
       ['She {reads} books every day.','read','reading','is read'],
@@ -118,6 +124,8 @@ export const ENGLISH_BOOKS=[
       ['Let us {go} to the park.','goes','going','to go'],
       ['We can {visit} the museum.','visits','visiting','to visit'],
       ['The children {are} happy.','am','is','be'],
+      ['I {am} going to visit the zoo tomorrow.','is','are','be'],
+      ['{When} are you going to visit the zoo? I am going to visit it on Sunday.','Where','What','Who'],
     ]),
   ]},
   {id:'4A',grade:4,title:'四年级上册',units:[
@@ -127,6 +135,7 @@ export const ENGLISH_BOOKS=[
       ['He {lives} in a city.','live','living','is live'],
       ['{Does} she live on a farm? Yes, she does.','Do','Is','Are'],
       ['They {live} in a big house.','lives','living','are live'],
+      ['{Where} do you live? I live in a city.','When','What','How'],
     ]),
     unit('Where do animals live?',
       'eagle=老鹰|owl=猫头鹰|honeybee=蜜蜂|nest=鸟巢|hive=蜂巢|hole=洞|tree=树|forest=森林',[
@@ -148,6 +157,9 @@ export const ENGLISH_BOOKS=[
       ['How much {are} the eggs?','am','is','be'],
       ['{Do} you need any bread? Yes, I do.','Does','Is','Are'],
       ['She {buys} milk every day.','buy','buying','is buy'],
+      ['She {is} going to buy some bread tomorrow.','am','are','be'],
+      ['{What} are you going to buy? I am going to buy a book.','Where','When','Who'],
+      ['{What} do you eat for breakfast? I eat bread and eggs.','Where','When','Who'],
     ]),
     unit('How are the seasons different?',
       'spring=春天|summer=夏天|autumn=秋天|winter=冬天|warm=温暖的|hot=热的|cool=凉爽的|cold=冷的|season=季节',[
@@ -155,6 +167,7 @@ export const ENGLISH_BOOKS=[
       ['We can {swim} in summer.','swims','swimming','to swim'],
       ['{Does} she like winter? Yes, she does.','Do','Is','Are'],
       ['The leaves {are} yellow in autumn.','am','is','be'],
+      ['They are not going to {play} football tomorrow.','plays','playing','played'],
     ]),
     unit("What's amazing about plants?",
       'flower=花|fruit=果实|leaf=叶子|soil=土壤|sunflower=向日葵|seed=种子|plant=植物|grow=生长',[
@@ -162,6 +175,7 @@ export const ENGLISH_BOOKS=[
       ['A sunflower {has} a long stem.','have','having','are'],
       ['{Do} plants need sunlight? Yes, they do.','Does','Is','Are'],
       ['Let us {plant} some seeds.','plants','planting','to plant'],
+      ['We {are} going to plant some seeds tomorrow.','am','is','be'],
     ]),
     unit('How do we keep safe on the road?',
       'road=道路|safe=安全的|light=灯|wait=等待|cross=穿过|rule=规则|stop=停下|look=看',[
@@ -176,22 +190,29 @@ export const ENGLISH_BOOKS=[
       ['What {does} your grandfather do in the morning?','do','is','are'],
       ['They {do} exercise every morning.','does','doing','are do'],
       ['We can {help} our grandparents.','helps','helping','to help'],
+      ['{Are} you going to visit your grandparents tomorrow? Yes, I am.','Do','Does','Is'],
+      ['They are going {to} clean the kitchen tomorrow.','for','at','on'],
     ]),
   ]},
   {id:'4B',grade:4,title:'四年级下册',units:[
     unit('What is your daily schedule?',
       'breakfast=早餐|lunch=午餐|dinner=晚餐|morning=早晨|afternoon=下午|evening=傍晚|usually=通常|schedule=日程安排|brush=刷',[
       ['I {get} up at seven every day.','gets','getting','am get'],
+      ["I get up {at} seven o'clock.",'to','in','on'],
       ['What time {does} she go to school?','do','is','are'],
       ['He {has} breakfast at half past seven.','have','having','is'],
       ['She does not {go} to bed at six.','goes','going','to go'],
+      ['{When} do you get up? I get up at seven.','Where','What','Who'],
     ]),
     unit('What do we like about school?',
       'Chinese=语文|Maths=数学|English=英语|Science=科学|Art=美术|Music=音乐|subject=学科|lesson=课',[
       ['What subjects {do} you like?','does','is','are'],
       ['She {likes} Science.','like','liking','is like'],
       ['We {have} English on Monday.','has','having','are'],
+      ['We have Music {on} Monday.','to','in','at'],
       ['{Does} he like Maths? Yes, he does.','Do','Is','Are'],
+      ['{When} do you have Music? We have Music on Tuesday.','Where','What','Who'],
+      ['{Where} are the children playing? They are playing in the playground.','When','What','Who'],
     ]),
     unit("What's great about jobs?",
       'job=工作|dentist=牙医|doctor=医生|nurse=护士|teacher=老师|cook=厨师|teeth=牙齿|work=工作',[
@@ -199,6 +220,8 @@ export const ENGLISH_BOOKS=[
       ['She {is} a dentist.','am','are','be'],
       ['A dentist {looks} after our teeth.','look','looking','is look'],
       ['Doctors can {help} sick people.','helps','helping','to help'],
+      ['She {wants} to be a doctor.','want','wanting','to want'],
+      ['{Where} does your mother work? She works in a hospital.','When','What','Who'],
     ]),
     unit('How can we make music?',
       'piano=钢琴|violin=小提琴|guitar=吉他|drum=鼓|flute=长笛|erhu=二胡|pipa=琵琶|triangle=三角铁|concert=音乐会',[
@@ -206,6 +229,7 @@ export const ENGLISH_BOOKS=[
       ['She {is} playing the violin now.','am','are','be'],
       ['They are {making} musical instruments now.','make','makes','to make'],
       ['{Can} you play the guitar? Yes, I can.','Does','Is','Are'],
+      ['He is {going} to play the piano tomorrow.','go','goes','went'],
     ]),
     unit('How do we make art?',
       'square=正方形|rectangle=长方形|triangle=三角形|circle=圆形|shape=形状|side=边|corner=角|paper=纸|picture=图画',[
@@ -213,6 +237,8 @@ export const ENGLISH_BOOKS=[
       ['A circle does not {have} corners.','has','having','to have'],
       ['We can {make} art with leaves.','makes','making','to make'],
       ['How many sides {does} a triangle have?','do','is','are'],
+      ['We are going to {make} a paper boat tomorrow.','makes','making','made'],
+      ['{What} is she doing now? She is painting a picture.','Where','When','Who'],
     ]),
     unit('How do we measure time?',
       'hour=小时|minute=分钟|second=秒|day=一天|night=夜晚|month=月|year=年|time=时间|clock=钟',[

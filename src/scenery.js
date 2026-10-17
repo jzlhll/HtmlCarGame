@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { surfaceMaterial, roundedBoxGeometry } from './model-surfaces.js';
 import { ROAD_RENDER, random } from './config.js';
 
 const seasons=[
@@ -14,10 +15,10 @@ export class RoadsideScenery {
   constructor(scene){
     this.scene=scene;this.batches=new Map();this.materials=new Map();
     this.group=new THREE.Group();scene.add(this.group);this.layouts=new Map();this.animated=[];
-    this.geometry={box:new THREE.BoxGeometry(1,1,1),cylinder:new THREE.CylinderGeometry(1,1,1,10),cone:new THREE.ConeGeometry(1,1,10),roof:new THREE.CylinderGeometry(1,1,1,3,1,false,Math.PI)};
+    this.geometry={box:new THREE.BoxGeometry(1,1,1),cylinder:new THREE.CylinderGeometry(1,1,1,10),cone:new THREE.ConeGeometry(1,1,10),roof:new THREE.CylinderGeometry(1,1,1,3,1,false,Math.PI),animal:new THREE.SphereGeometry(.5,10,7),limb:new THREE.CylinderGeometry(.39,.5,1,7),rounded:roundedBoxGeometry()};
     this.root=new THREE.Matrix4();this.part=new THREE.Object3D();this.matrix=new THREE.Matrix4();this.anchor=new THREE.Object3D();this.color=new THREE.Color();this.bounds=new THREE.Box3();
     for(const geometry of Object.values(this.geometry))geometry.computeBoundingBox();
-    for(const key of ['field','crop','roof'])this.materials.set(key,new THREE.MeshStandardMaterial({color:seasons[0][key],roughness:.95}));
+    for(const key of ['field','crop','roof'])this.materials.set(key,surfaceMaterial(key==='field'?'ground':key==='roof'?'wood':'hide',seasons[0][key]).clone());
   }
   begin(s,d,angle=0,pitch=false,object=null){
     this.object=object??{parts:[],bounds:new THREE.Box3()};
@@ -30,7 +31,7 @@ export class RoadsideScenery {
     let batch=this.batches.get(key);
     if(!batch){
       let mat=this.materials.get(color);
-      if(!mat){mat=new THREE.MeshStandardMaterial({color,roughness:.87});this.materials.set(color,mat);}
+      if(!mat){const role=color===0xc1dfdb?'glass':color===0xf5f1df?'cow':color===0xc4c7bc?'metal':[0xd3b587,0xe2c8a0,0xd8b967].includes(color)?'wood':'stone';mat=surfaceMaterial(role,color);this.materials.set(color,mat);}
       const mesh=new THREE.InstancedMesh(this.geometry[shape],mat,INSTANCE_CAPACITY);mesh.instanceMatrix.setUsage(animation?THREE.DynamicDrawUsage:THREE.StaticDrawUsage);mesh.frustumCulled=false;mesh.castShadow=true;mesh.receiveShadow=true;mesh.count=0;
       this.group.add(mesh);batch={mesh,count:0,dynamic:Boolean(animation)};this.batches.set(key,batch);
     }
@@ -44,6 +45,7 @@ export class RoadsideScenery {
     const height=floors*2.6;
     this.add(0x9a978b,[width+.3,2,depth+.3],[0,-.7,0]);
     this.add(color,[width,height,depth],[0,height/2,0]);
+    this.add(0x827c70,[width+.15,.38,depth+.15],[0,.19,0]);
     if(barn){
       // 三角棱柱平躺，形成真正的双坡屋顶。
       this.add('roof',[width*.64,depth+1,width*.42],[0,height+.8,0],'roof',[Math.PI/2,0,0]);
@@ -52,12 +54,26 @@ export class RoadsideScenery {
       for(const sign of [-1,1])this.add(0xf6e8d2,[.12,3.1,.15],[sign*width*.17,1.6,-depth/2-.19]);
     }else{
       this.add('roof',[width+.6,.45,depth+.6],[0,height+.23,0]);
-      this.add(0xe2d6bb,[width*.48,.8,depth*.45],[0,height+.75,0]);
+      this.add(0xe2d6bb,[width*.28,.58,depth*.28],[-width*.2,height+.74,depth*.12]);
+      for(const side of [-1,1])this.add('roof',[.18,.35,depth+.6],[side*(width/2+.21),height+.52,0]);
+      this.add(0x52616a,[width*.3,.035,depth*.27],[width*.19,height+.48,-depth*.15]);
       this.add(0x665a4c,[1.1,2.3,.12],[0,1.15,-depth/2-.07]);
+      this.add('roof',[1.65,.14,.9],[0,2.55,-depth/2-.32]);
+      this.add(0x9a978b,[1.7,.22,1],[0,.11,-depth/2-.4]);
+      for(const side of [-1,1]){
+        this.add(0x52616a,[.10,height+.25,.10],[side*(width/2-.15),height/2,depth/2+.06],'cylinder');
+        this.add(0x827c70,[.18,.13,depth+.35],[side*(width/2+.14),height-.06,0]);
+      }
+      this.add(0xd7d6ca,[1.2,.7,.65],[width*.26,height+.7,depth*.24]);
+      this.add(0x52616a,[.85,.36,.025],[width*.26,height+.72,depth*.24-.34]);
+
       for(let floor=0;floor<floors;floor++)for(const side of [-1,1]){
         for(let k=0;k<3;k++){
           this.add(0xc1dfdb,[.85,1,.1],[(k-1)*width*.28,1.6+floor*2.6,side*(depth/2+.06)]);
           this.add(0xe8d8b7,[1,.12,.24],[(k-1)*width*.28,1.02+floor*2.6,side*(depth/2+.13)]);
+          this.add(0x665e52,[1.02,.075,.16],[(k-1)*width*.28,2.15+floor*2.6,side*(depth/2+.11)]);
+          for(const edge of [-1,1])this.add(0x827c70,[.055,1.08,.15],[(k-1)*width*.28+edge*.47,1.6+floor*2.6,side*(depth/2+.10)]);
+
         }
         for(let k=0;k<2;k++)this.add(0xc1dfdb,[.1,1,.85],[side*(width/2+.06),1.6+floor*2.6,(k-.5)*depth*.45]);
       }
@@ -65,21 +81,19 @@ export class RoadsideScenery {
   }
   cow(s,d,angle,scale,time,seed){
     this.begin(s,d,angle);this.anchor.scale.setScalar(scale);this.anchor.updateMatrix();this.root.copy(this.anchor.matrix);
-    this.add(0xf5f1df,[1.1,1.15,2.1],[0,1.35,0]);
-    this.add(0xf5f1df,[.8,.85,.85],[0,1.68,-1.25]);
-    this.add(0xd7a4a1,[.84,.42,.4],[0,1.4,-1.78]);
+    this.add(0xf5f1df,[1.1,1.15,2.1],[0,1.35,0],'animal');
+    this.add(0xf5f1df,[.8,.85,.85],[0,1.68,-1.25],'animal');
+    this.add(0xd7a4a1,[.84,.42,.4],[0,1.4,-1.78],'animal');
     for(const side of [-1,1]){
-      this.add(0x292e2c,[.04,.58,.65],[side*.57,1.44,.35]);
-      this.add(0x292e2c,[.04,.45,.55],[side*.57,1.24,-.46]);
-      this.add(0xf5f1df,[.36,.18,.4],[side*.51,1.98,-1.22], 'box',[0,0,side*.35]);
+      this.add(0xf5f1df,[.36,.18,.4],[side*.51,1.98,-1.22], 'animal',[0,0,side*.35]);
       this.add(0xddd0a8,[.10,.35,.10],[side*.28,2.16,-1.18],'cone');
       this.add(0x292e2c,[.04,.10,.10],[side*.42,1.81,-1.48]);
       for(const end of [-1,1]){
-        this.add(0xf5f1df,[.24,.85,.25],[side*.35,.47,end*.73],'box',[0,0,0],{frequency:.9,phase:seed+side*end,amplitude:.05});
-        this.add(0x292e2c,[.29,.16,.32],[side*.35,.08,end*.73]);
+        this.add(0xf5f1df,[.24,.85,.25],[side*.35,.47,end*.73],'limb',[0,0,0],{frequency:.9,phase:seed+side*end,amplitude:.05});
+        this.add(0x292e2c,[.29,.16,.32],[side*.35,.08,end*.73],'rounded');
       }
     }
-    this.add(0xd7a4a1,[.5,.23,.5],[0,.74,.27]);
+    this.add(0xd7a4a1,[.5,.23,.5],[0,.74,.27],'animal');
     this.add(0xf5f1df,[.10,.8,.10],[0,1.04,1.14],'box',[0,0,0],{frequency:.7,phase:seed,amplitude:.18});
     this.add(0x292e2c,[.16,.23,.16],[0,.62,1.15]);
   }

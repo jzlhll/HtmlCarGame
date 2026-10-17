@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { clamp } from './config.js';
+import { surfaceMaterial, roundedBoxGeometry } from './model-surfaces.js';
 import { vehicleModel, material } from './models.js';
 
 // 警车使用小汽车底盘的白车身,车顶警灯红蓝交替闪烁;渔网用网格纹理面片渲染,
@@ -23,15 +24,15 @@ export class PoliceView {
     this.body=vehicleModel(3,false,0xf2f5f7);
     this.group.add(this.body);
     // 蓝色车身涂装条与车头涂装,让警车在一排车流中一眼可辨。
-    const stripe=new THREE.Mesh(new THREE.BoxGeometry(1.64,.2,3.1),material(0x1d4f9c));
+    const stripe=new THREE.Mesh(new THREE.BoxGeometry(1.64,.2,3.1),surfaceMaterial('paint',0x1d4f9c));
     stripe.position.set(0,.5,.2);this.group.add(stripe);
-    const hood=new THREE.Mesh(new THREE.BoxGeometry(1.2,.03,1),material(0x1d4f9c));
+    const hood=new THREE.Mesh(new THREE.BoxGeometry(1.2,.03,1),surfaceMaterial('paint',0x1d4f9c));
     hood.position.set(0,.665,-1.6);this.group.add(hood);
     const bar=new THREE.Group();bar.position.set(0,1.52,.2);
     bar.add(new THREE.Mesh(new THREE.BoxGeometry(.82,.09,.56),material(0x263238)));
     this.lamps=[];
     for(const [color,offset] of [[0xff2d2d,-.24],[0x2d6bff,.24]]){
-      const lamp=new THREE.Mesh(new THREE.BoxGeometry(.34,.16,.5),new THREE.MeshBasicMaterial({color,fog:false}));
+      const lamp=new THREE.Mesh(roundedBoxGeometry().scale(.34,.16,.5),new THREE.MeshBasicMaterial({color,fog:false}));
       lamp.position.set(offset,.12,0);bar.add(lamp);this.lamps.push(lamp);
     }
     this.group.add(bar);

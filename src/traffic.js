@@ -1,4 +1,5 @@
-import { FIRST_LEVEL_EVENTS, SECOND_LEVEL_EVENTS, VEHICLES, MAX_RANK, ARMORED_RANK, ARMORED_TANK, TRAFFIC_COLORS, ONCOMING_SPEED_SCALE, TRAFFIC_WEIGHTS, TRAFFIC_SPAWN_AHEAD, TRAFFIC_SPAWN_BEHIND, UPGRADE_TRAFFIC, TRAFFIC_DENSITY, TRAFFIC_LANE_CHANGE, TRAFFIC_DRIVING, ROAD_DIFFICULTY, SLOW_TRAFFIC, REAR_WARNING, LANE_WIDTH, ROAD_INFRASTRUCTURE, SIDE_IMPACT, laneD, random, clamp, approach, lerp, smooth } from './config.js';
+import { CAR_STYLES, TRUCK_STYLES, FIRST_LEVEL_EVENTS, SECOND_LEVEL_EVENTS, VEHICLES, MAX_RANK, ARMORED_RANK, ARMORED_TANK, TRAFFIC_COLORS, ONCOMING_SPEED_SCALE, TRAFFIC_WEIGHTS, TRAFFIC_SPAWN_AHEAD, TRAFFIC_SPAWN_BEHIND, UPGRADE_TRAFFIC, TRAFFIC_DENSITY, TRAFFIC_LANE_CHANGE, TRAFFIC_DRIVING, ROAD_DIFFICULTY, SLOW_TRAFFIC, REAR_WARNING, LANE_WIDTH, ROAD_INFRASTRUCTURE, SIDE_IMPACT, laneD, random, clamp, approach, lerp, smooth } from './config.js';
+import { TankerEvent } from './tanker.js';
 import { sweep, roadworkContact, separation, startBounce, advanceBounce } from './collision.js';
 import { surfaceContact, MUD_SECONDS } from './hazards.js';
 const maxVehicleLength=Math.max(...VEHICLES.slice(1).map(vehicle=>vehicle.length));
@@ -10,7 +11,7 @@ function snapshot(car,out){
 }
 
 export class Traffic {
-  constructor(road,seed){this.road=road;this.rng=random(seed^0x31f024b5);this.maneuverRng=random(seed^0x72a391c5);this.queueRng=random(seed^0x54a31c92);this.cars=[];this.branchRng=random(seed^0x195e839a);this.branchPlans=new Map();this.nextId=1;this.nextQueueId=1;this.timer=0;this.rearTimer=0;this.elapsedSeconds=0;this.capacity=TRAFFIC_DENSITY.capacity;this.gapScale=1;this.queueTimer=SLOW_TRAFFIC.firstSeconds+this.queueRng()*6;this.dangerousRng=random(seed^0x73af2c19);this.contacts=new Set();this.obstacles=[];this.orderedObstacles=[];this.obstacleExtent=0;this.staticObstacles=[];this.cowObstacles=new Map();this.obstacleStation=null;this.obstacleRoadRevision=-1;this.activeCars=[];this.orderedCars=[];this.contactEvents=[];this.nextContacts=new Set();this.branchForks=[];this.fourLane=false;}
+  constructor(road,seed){this.road=road;this.tanker=new TankerEvent(seed);this.styleRng=random(seed^0x1b748ea3);this.carStyleRng=random(seed^0x42e6a1b7);this.rng=random(seed^0x31f024b5);this.maneuverRng=random(seed^0x72a391c5);this.queueRng=random(seed^0x54a31c92);this.cars=[];this.branchRng=random(seed^0x195e839a);this.branchPlans=new Map();this.nextId=1;this.nextQueueId=1;this.timer=0;this.rearTimer=0;this.elapsedSeconds=0;this.capacity=TRAFFIC_DENSITY.capacity;this.gapScale=1;this.queueTimer=SLOW_TRAFFIC.firstSeconds+this.queueRng()*6;this.dangerousRng=random(seed^0x73af2c19);this.contacts=new Set();this.obstacles=[];this.orderedObstacles=[];this.obstacleExtent=0;this.staticObstacles=[];this.cowObstacles=new Map();this.obstacleStation=null;this.obstacleRoadRevision=-1;this.activeCars=[];this.orderedCars=[];this.contactEvents=[];this.nextContacts=new Set();this.branchForks=[];this.fourLane=false;}
   rank(playerRank,direction,distance,ahead=true){
     const weights=TRAFFIC_WEIGHTS;
     const armor=this.level===2?(playerRank===5?ARMORED_TANK.tankChance:playerRank===4?ARMORED_TANK.truckChance:0):0;
@@ -106,16 +107,17 @@ export class Traffic {
       const rank=index%2===0?player.rank:player.rank-1,v=VEHICLES[rank],colors=TRAFFIC_COLORS[rank];
       const lanes=[];
       for(let lane=0;lane<this.road.available(s,route);lane++)if(route||this.road.laneOpen(s,lane,1,0,v.length/2))lanes.push(lane);
-      const lane=lanes[index%lanes.length],d=this.road.branchCenter(s,route)+laneD(lane);
+      const preferred=lanes[index%lanes.length],center=this.road.branchCenter(s,route);
+      const lane=[preferred,...lanes.filter(value=>value!==preferred)].find(value=>!this.cars.some(other=>other.tanker&&!other.remove&&sweep({s,d:center+laneD(value),route,rank},{s,d:center+laneD(value),route,rank},other,other,this.road)))??preferred,d=center+laneD(lane);
       const speed=lerp(v.min,v.max,this.rng())/3.6;
       const car={id:this.nextId++,s,d,route,rank,lane,direction:1,speed,desired:speed,color:colors[Math.floor(this.rng()*colors.length)],merge:null,convoy:null,sidePush:0,sidePushTime:0};
       this.configureDriving(car);batch.push(car);
     }
     // 此批次保证足量投放：只替换与新车重叠的普通车，满额时先回收最远车。
-    this.cars=this.cars.filter(car=>!car.remove&&!batch.some(target=>sweep(car,car,target,target,this.road)));
+    this.cars=this.cars.filter(car=>!car.remove&&(car.tanker||!batch.some(target=>sweep(car,car,target,target,this.road))));
     while(this.cars.length+batch.length>this.capacity){
-      let farthest=0;
-      for(let index=1;index<this.cars.length;index++)if(Math.abs(this.cars[index].s-player.s)>Math.abs(this.cars[farthest].s-player.s))farthest=index;
+      let farthest=this.cars.findIndex(car=>!car.tanker);if(farthest<0)break;
+      for(let index=0;index<this.cars.length;index++)if(!this.cars[index].tanker&&Math.abs(this.cars[index].s-player.s)>Math.abs(this.cars[farthest].s-player.s))farthest=index;
       this.cars.splice(farthest,1);
     }
     this.cars.push(...batch);
@@ -198,6 +200,8 @@ export class Traffic {
     return car?{car,gap,seconds,sameLane}:null;
   }
   configureDriving(car){
+    if(car.rank===3)car.carStyle??=CAR_STYLES[Math.floor(this.carStyleRng()*CAR_STYLES.length)];
+    if(car.rank===4)car.truckStyle??=TRUCK_STYLES[Math.floor(this.styleRng()*TRUCK_STYLES.length)];
     const change=TRAFFIC_LANE_CHANGE;
     car.laneChangeChance=this.maneuverRng()<change.enabledChance?1:0;
     const difficulty=ROAD_DIFFICULTY.fourLane;
@@ -347,7 +351,7 @@ export class Traffic {
       // 使用生成时固定的抽签值调整已有车，不逐帧重新抽签；保留进行中的变道时序。
       for(const car of this.cars){
         if(car.dangerousRoll!==undefined)car.dangerous=car.dangerousRoll<(fourLane?difficulty.dangerousChance:TRAFFIC_DRIVING.dangerousChance);
-        if(fourLane)car.laneChangeTimer=Math.min(car.laneChangeTimer??intervalMax,intervalMax+(car.merge?TRAFFIC_DRIVING.signalSeconds+TRAFFIC_DRIVING.changeSeconds:0));
+        if(fourLane&&!car.tanker)car.laneChangeTimer=Math.min(car.laneChangeTimer??intervalMax,intervalMax+(car.merge?TRAFFIC_DRIVING.signalSeconds+TRAFFIC_DRIVING.changeSeconds:0));
       }
     }
     const density=TRAFFIC_DENSITY,elapsed=Math.max(0,activeSeconds);
@@ -360,6 +364,7 @@ export class Traffic {
     const capacityStage=Math.floor((elapsed+1e-8)/capacityInterval),gapStage=Math.floor((elapsed+1e-8)/gapInterval);
     this.capacity=Math.min(density.maxCapacity,density.capacity+capacityStage*density.capacityPerStep);
     this.gapScale=Math.max(density.minGapScale,1-gapStage*density.gapReductionPerStep);
+    this.tanker.step(player,this,activeSeconds,game);
     this.queueTimer-=dt;
     if(this.queueTimer<=0){
       this.queueTimer=lerp(SLOW_TRAFFIC.intervalMin,SLOW_TRAFFIC.intervalMax,this.queueRng());
@@ -389,7 +394,7 @@ export class Traffic {
     for(const car of this.cars){
       if(car.remove)continue;
       const route=car.route??null,center=this.road.branchCenter(car.s,route),bouncing=Boolean(car.sidePush);
-      const threat=car.dangerous?null:this.imminent(car);
+      const threat=car.tanker||car.dangerous?null:this.imminent(car);
       const look=Math.max(settings.minAvoidDistance,car.speed*settings.avoidSeconds);
       const closing=car.lane>=Math.min(this.road.available(car.s,route),this.road.available(car.s+car.direction*look,route));
       car.warning=Boolean(threat||closing)&&!car.dangerous;
@@ -397,7 +402,7 @@ export class Traffic {
       let voluntary=false;
       if(car.laneChangeTimer<=0){
         car.laneChangeTimer=lerp(intervalMin,intervalMax,this.maneuverRng());
-        if(!bouncing&&!car.merge&&(!car.convoy||car.dangerous)&&car.speed>.5&&(car.laneChangeChance===1||car.dangerous)){
+        if(!car.tanker&&!bouncing&&!car.merge&&(!car.convoy||car.dangerous)&&car.speed>.5&&(car.laneChangeChance===1||car.dangerous)){
           if(car.dangerous)voluntary=true;
           else{
             const roll=this.maneuverRng(),chance=lerp(change.chanceMin,change.chanceMax,this.maneuverRng())+(fourLane?difficulty.laneChangeChanceIncrease:0);
@@ -408,11 +413,11 @@ export class Traffic {
       }
       if(!bouncing&&!car.merge&&((!car.dangerous&&(threat||closing))||voluntary)){
         const lanes=this.road.available(car.s,route),options=[car.lane-1,car.lane+1].filter(lane=>lane>=0&&lane<lanes);
-        if(this.maneuverRng()<.5)options.reverse();
+        if((car.tanker?this.tanker.rng():this.maneuverRng())<.5)options.reverse();
         const lane=options.find(candidate=>this.safe(car,candidate));
         if(lane!==undefined){
           car.merge={lane,from:car.d-center,time:0};car.convoy=null;
-          car.laneChangeTimer=settings.signalSeconds+settings.changeSeconds+lerp(intervalMin,intervalMax,this.maneuverRng());
+          car.laneChangeTimer=car.tanker?Infinity:settings.signalSeconds+settings.changeSeconds+lerp(intervalMin,intervalMax,this.maneuverRng());
         }
       }
       let relative=car.d-center;
@@ -491,6 +496,7 @@ export class Traffic {
     for(const event of events){
       const {a,b,obstacle}=event;if(a.remove||b?.remove)continue;
       if(b){
+        if(a.tanker||b.tanker){wreck(a.tanker?b:a,event.time);continue;}
         if(a.rank!==b.rank){wreck(a.rank<b.rank?a:b,event.time);continue;}
         const shift=separation(a,b,this.road,event.direction)/2;a.d+=shift;b.d-=shift;
         startBounce(a,-event.direction);startBounce(b,event.direction);a.merge=null;b.merge=null;a.convoy=null;b.convoy=null;

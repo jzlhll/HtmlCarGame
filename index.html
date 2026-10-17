@@ -7,6 +7,7 @@
   <title>四季车途 · 本机赛车</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="./src/style.css">
+  <link rel="stylesheet" href="./src/keyboard-mode.css">
   <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
 </head>
 <body>
@@ -34,7 +35,7 @@
       </section>
       <section id="arsenal-hud" class="arsenal-hud" aria-label="金币与火箭炮发射" hidden>
         <div class="inventory-row" aria-label="金币"><span id="coin-icon" class="inventory-icon"></span><strong id="coin-count">× 0</strong></div>
-        <button id="buy-rocket" type="button">1 · 普通炮 25 金币</button>
+        <button id="buy-rocket" type="button">1 · 火箭炮 25 金币</button>
         <div id="dinosaur-defense" class="dinosaur-defense" hidden><span>恐龙防御</span><strong id="dinosaur-defense-value">100%</strong></div>
       </section>
       <div class="status-notices">
@@ -58,9 +59,9 @@
         <button id="touch-nitro" class="touch-pedal nitro-pedal" type="button" aria-label="按住加速，达到车型最高速后自动喷气，极速仍耗气" aria-pressed="false"><span aria-hidden="true">»</span>加速 / 氮气</button>
       </div>
     </section>
-    <div id="overlay" class="overlay"></div>
+    <div id="overlay" class="overlay"><div class="loading-status" role="status"><span class="loading-spinner" aria-hidden="true"></span><span>正在准备这一程…</span></div></div>
     <div id="portrait-hint" class="portrait-hint" role="status" hidden><span aria-hidden="true">▯ ↻</span><strong>请竖屏游玩</strong><p>转回竖屏后，点击开始或继续</p></div>
   </main>
-  <script type="module" src="./src/main.js"></script>
+  <script type="module" src="./src/bootstrap.js"></script>
 </body>
 </html>
