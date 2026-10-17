@@ -67,9 +67,8 @@ async function initialize(cache,progress){
   const report=phase=>progress?.({mode:!previous?'initialize':upgrading?'upgrade':'ready',phase,completed:count,total,version:APP_VERSION,persistent:cache.persistent,warning:cache.warning});
   report('读取模型缓存');
   try{
-    assertNotPlaying();const cachedResources=await cache.readMany(keys);
     for(const resource of resources){
-      assertNotPlaying();const cached=cachedResources.get(resource.key);cachedResources.delete(resource.key);let restored=false;
+      assertNotPlaying();const cached=await cache.read(resource.key);let restored=false;
       if(cached?.format===CACHE_FORMAT_VERSION&&cached.id===resource.id){
         try{validate(cached.data);
           if(resource.id.startsWith('texture:')&&!cached.data.textures.some(texture=>'texture:'+texture.key===resource.id)||!resource.id.startsWith('texture:')&&!cached.data.geometries.length)throw new Error('Incomplete cached resource');

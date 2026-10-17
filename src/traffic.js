@@ -217,7 +217,7 @@ export class Traffic {
   prepareAvoidance(){
     const cars=this.avoidCars??=[];cars.length=0;this.avoidMaxSpeed=0;
     for(const car of this.cars)if(!car.remove){cars.push(car);this.avoidMaxSpeed=Math.max(this.avoidMaxSpeed,car.speed,car.desired??car.speed);}
-    cars.sort(byPreviousStation);this.avoidIndexActive=true;
+    cars.sort(byPreviousStation);
   }
   avoidanceIndex(s){
     let low=0,high=this.avoidCars.length;
@@ -230,9 +230,9 @@ export class Traffic {
     if(car.dangerous)return true;
     if(!route&&!this.road.laneOpen(car.s,lane,car.laneDirection??car.direction,look,VEHICLES[car.rank].length/2))return false;
     const d=this.road.branchCenter(car.s,route)+laneD(lane,car.laneDirection??car.direction),v=VEHICLES[car.rank];
-    const indexed=this.avoidIndexActive,cars=indexed?this.avoidCars:this.cars;
-    const reach=indexed?Math.max(TRAFFIC_DRIVING.minAvoidDistance,(car.speed+this.avoidMaxSpeed)*TRAFFIC_DRIVING.avoidSeconds)+(v.length+maxVehicleLength)/2:Infinity;
-    for(let i=indexed?this.avoidanceIndex(car.s-reach):0;i<cars.length;i++){
+    const cars=this.avoidCars;
+    const reach=Math.max(TRAFFIC_DRIVING.minAvoidDistance,(car.speed+this.avoidMaxSpeed)*TRAFFIC_DRIVING.avoidSeconds)+(v.length+maxVehicleLength)/2;
+    for(let i=this.avoidanceIndex(car.s-reach);i<cars.length;i++){
       const other=cars[i],position=other.previous||other;
       if(position.s-car.s>reach)break;
       if(other===car||other.remove||!this.samePath(car,other))continue;
@@ -297,9 +297,9 @@ export class Traffic {
     return distance>=-(v.length+dimensions.length)&&distance<=Math.max(TRAFFIC_DRIVING.minAvoidDistance,closing*TRAFFIC_DRIVING.avoidSeconds)&&Math.abs(position.d-car.d)<(v.width+dimensions.width)/2+.15;
   }
   imminent(car){
-    const indexed=this.avoidIndexActive,cars=indexed?this.avoidCars:this.cars,direction=indexed?car.direction:1;
-    const reach=indexed?Math.max(TRAFFIC_DRIVING.minAvoidDistance,(car.speed+this.avoidMaxSpeed)*TRAFFIC_DRIVING.avoidSeconds)+(VEHICLES[car.rank].length+maxVehicleLength)/2:Infinity;
-    const first=indexed?this.avoidanceIndex(car.s)+(direction<0?-1:0):0;
+    const cars=this.avoidCars,direction=car.direction;
+    const reach=Math.max(TRAFFIC_DRIVING.minAvoidDistance,(car.speed+this.avoidMaxSpeed)*TRAFFIC_DRIVING.avoidSeconds)+(VEHICLES[car.rank].length+maxVehicleLength)/2;
+    const first=this.avoidanceIndex(car.s)+(direction<0?-1:0);
     for(let i=first;i>=0&&i<cars.length;i+=direction){
       const other=cars[i],position=other.previous||other,distance=(position.s-car.s)*car.direction;
       if(distance>reach)break;
@@ -445,7 +445,6 @@ export class Traffic {
       if(route){const fork=this.road.route(route);if(car.s>=fork.end||car.s<=fork.start){car.route=null;car.d=relative;car.merge=null;}}
       // 截止墙与路障接触在边界修正之前检查；保留完整运动轨迹供玩家及系统碰撞使用。
     }
-    this.avoidIndexActive=false;
   }
   resolveContacts(dt,game){
     if(dt<=0)return;

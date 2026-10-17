@@ -46,7 +46,7 @@ export class DinosaurEvents {
       this.nextChaseAt=now+lerp(cfg.chaseIntervalMin,cfg.chaseIntervalMax,this.rng());
       if(this.rng()<cfg.chaseChance){
         // 出场等待也预留行驶距离，避免尚未起跳就被玩家甩到身后。
-        let s=player.s,route=player.route??null,distance=lerp(cfg.chaseAheadMin,cfg.chaseAheadMax,this.rng())+(game.travel?game.travel(player,now,cfg.firstJumpSeconds)*this.road.pathScale(player.s,player.route):player.speed/3.6*cfg.firstJumpSeconds);
+        let s=player.s,route=player.route??null,distance=lerp(cfg.chaseAheadMin,cfg.chaseAheadMax,this.rng())+game.travel(player,now,cfg.firstJumpSeconds)*this.road.pathScale(player.s,player.route);
         while(distance>0){const step=Math.min(1,distance);s+=step/this.road.pathScale(s,route);distance-=step;if(route&&s>=this.road.route(route).end)route=null;}
         const lanes=this.road.available(s,route),options=[];
         for(const direction of [-1,1])for(let lane=0;lane<lanes;lane++)if(route||this.road.laneOpen(s,lane,direction,80,cfg.footLength))options.push({lane,direction});
@@ -62,7 +62,7 @@ export class DinosaurEvents {
     const cfg=DINOSAURS;if(this.feet.length>=cfg.footCapacity)return;
     const sameRoute=(chaser.route??null)===(player.route??null);
     const predictionSeconds=cfg.footWarning+cfg.footDanger/2;
-    let s=sameRoute?player.s:chaser.s,route=chaser.route,distance=(game?.travel?game.travel(player,now,predictionSeconds)*this.road.pathScale(player.s,player.route):player.speed/3.6*predictionSeconds)+cfg.footAhead;
+    let s=sameRoute?player.s:chaser.s,route=chaser.route,distance=game.travel(player,now,predictionSeconds)*this.road.pathScale(player.s,player.route)+cfg.footAhead;
     const lateral=(sameRoute?player.d:chaser.d)-this.road.branchCenter(s,route);
     // 预测接地危险窗口中点的位置，再沿路前移缓冲距离；汇流接主路，分离路线不跨路追踪。
     while(distance>0){const step=Math.min(1,distance);s+=step/this.road.pathScale(s,route);distance-=step;if(route&&s>=this.road.route(route).end)route=null;}

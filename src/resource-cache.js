@@ -2,7 +2,14 @@ import { APP_VERSION, CACHE_FORMAT_VERSION } from './version.js';
 const DATABASE='htmlCarGame.models.v1';
 const generatedName=name=>/^htmlcargame[.\-_](?:models?|assets?|generated|cache)(?:[.\-_]|$)/i.test(name);
 const transactionDone=transaction=>new Promise((resolve,reject)=>{transaction.oncomplete=()=>resolve();transaction.onerror=()=>reject(transaction.error??new Error('Cache transaction failed'));transaction.onabort=()=>reject(transaction.error??new Error('Cache transaction aborted'));});
-const requestValue=request=>new Promise((resolve,reject)=>{request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});
+const requestValue=(request,optional=false)=>new Promise((resolve,reject)=>{
+  request.onsuccess=()=>resolve(request.result);
+  request.onerror=event=>{
+    if(!optional){reject(request.error);return;}
+    // 单项读取失败只视为未命中，阻止错误冒泡和默认的整笔事务中止。
+    event.preventDefault();event.stopPropagation();console.warn('Cached model resource read failed, rebuilding',request.error);resolve(null);
+  };
+});
 const versionNumber=version=>/^v\d+\.\d+\.\d+$/.test(version??'')?version.slice(1).split('.').map(Number):null;
 export function newerVersion(left,right){const a=versionNumber(left),b=versionNumber(right);if(!a||!b)return false;for(let i=0;i<3;i++)if(a[i]!==b[i])return a[i]>b[i];return false;}
 export class ResourceCache {
@@ -26,15 +33,13 @@ export class ResourceCache {
     }catch(error){this.unavailable(error);}
     return this;
   }
-  async read(key){return (await this.readMany([key])).get(key)??null;}
-  async readMany(keys){
-    if(!this.persistent||!keys.length)return new Map();
+  async read(key){
+    if(!this.persistent)return null;
     try{
-      // 一次事务只读取本版本需要的键，避免载入待清理的旧模型。
-      const tx=this.db.transaction('resources','readonly'),done=transactionDone(tx),store=tx.objectStore('resources');
-      const [values]=await Promise.all([Promise.all(keys.map(key=>requestValue(store.get(key)))),done]);
-      return new Map(keys.map((key,index)=>[key,values[index]]));
-    }catch(error){this.unavailable(error);return new Map();}
+      const tx=this.db.transaction('resources','readonly'),done=transactionDone(tx);
+      const [value]=await Promise.all([requestValue(tx.objectStore('resources').get(key),true),done]);
+      return value??null;
+    }catch(error){this.unavailable(error);return null;}
   }
   async write(resource,data){
     if(!this.persistent)return false;

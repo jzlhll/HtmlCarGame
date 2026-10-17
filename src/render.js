@@ -65,6 +65,7 @@ export class GameRenderer {
       this.strip(material(0xf4e9c4),edge=>[sign*(edge-.10)-.035,sign*(edge-.10)+.035],.009);
       this.strip(material(0xe2c357),()=>[sign*.15-.035,sign*.15+.035],.011);
     }
+    this.roadCapacityWarned=false;
     this.lines=new THREE.InstancedMesh(new THREE.BoxGeometry(.07,.012,4),material(0xd4ddd7),ROAD_RENDER.lineCapacity);this.scene.add(this.lines);
     const treeParts=treeGeometry();
     this.trunks=new THREE.InstancedMesh(treeParts.trunk,surfaceMaterial('bark',0x7a684d),TREE_SCENERY.capacity);this.trunks.castShadow=true;this.scene.add(this.trunks);
@@ -224,13 +225,19 @@ export class GameRenderer {
     const first=Math.floor((s-80)/12)*12;
     for(let station=first;station<s+460;station+=12){
       for(const sign of [-1,1]){
-        for(let lane=1;lane<3;lane++)if(lane<this.road.lanes(station)-.01){const p=this.local(station,sign*(.4+lane*3.6));this.instance(this.lines,index++,p.x,p.y+.025,p.z,1,1,1,p.heading,p.pitch);}
+        for(let lane=1;lane<3;lane++)if(lane<this.road.lanes(station)-.01){
+          if(index<this.lines.instanceMatrix.count){const p=this.local(station,sign*(.4+lane*3.6));this.instance(this.lines,index,p.x,p.y+.025,p.z,1,1,1,p.heading,p.pitch);}
+          index++;
+        }
         if(this.road.junction(station,sign))continue;
-        const p=this.local(station,sign*(this.road.edge(station)+.7));this.instance(this.markers,pole++,p.x,p.y+.32,p.z,1,1,1,p.heading);
+        if(pole<this.markers.instanceMatrix.count){const p=this.local(station,sign*(this.road.edge(station)+.7));this.instance(this.markers,pole,p.x,p.y+.32,p.z,1,1,1,p.heading);}
+        pole++;
       }
     }
-    if(index>this.lines.instanceMatrix.count||pole>this.markers.instanceMatrix.count)throw new RangeError('Road instance capacity exceeded: lines '+index+'/'+this.lines.instanceMatrix.count+', markers '+pole+'/'+this.markers.instanceMatrix.count);
-    this.lines.count=index;this.lines.instanceMatrix.needsUpdate=true;this.markers.count=pole;this.markers.instanceMatrix.needsUpdate=true;
+    if(!this.roadCapacityWarned&&(index>this.lines.instanceMatrix.count||pole>this.markers.instanceMatrix.count)){
+      this.roadCapacityWarned=true;console.warn('Road instance capacity exceeded: lines '+index+'/'+this.lines.instanceMatrix.count+', markers '+pole+'/'+this.markers.instanceMatrix.count);
+    }
+    this.lines.count=Math.min(index,this.lines.instanceMatrix.count);this.lines.instanceMatrix.needsUpdate=true;this.markers.count=Math.min(pole,this.markers.instanceMatrix.count);this.markers.instanceMatrix.needsUpdate=true;
     this.lines.computeBoundingSphere();this.markers.computeBoundingSphere();
     let wallIndex=0,signIndex=0;
     for(const closure of this.road.closures(s,470)){

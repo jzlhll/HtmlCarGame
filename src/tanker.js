@@ -1,4 +1,4 @@
-import { TANKER, VEHICLES, LEVELS, laneD, random, lerp } from './config.js';
+import { TANKER, VEHICLES, laneD, random, lerp } from './config.js';
 import { sweep } from './collision.js';
 
 // 使用世界坐标圆与车辆有向矩形求交，坡道和相邻路线不按车道身份隔离爆炸。
@@ -14,7 +14,7 @@ export class TankerEvent {
   constructor(seed){this.rng=random(seed^0x4f73a219);this.nextAt=null;this.spawned=false;}
   step(player,traffic,now,game){
     if(this.spawned)return;
-    this.nextAt??=(game?.levelDuration??(traffic.level===2?LEVELS.secondSeconds:traffic.level===3?LEVELS.thirdSeconds:LEVELS.firstSeconds))*lerp(TANKER.firstFraction,TANKER.lastFraction,this.rng());
+    this.nextAt??=game.levelDuration*lerp(TANKER.firstFraction,TANKER.lastFraction,this.rng());
     if(now<this.nextAt)return;
     this.nextAt=now+TANKER.retrySeconds;
     const road=traffic.road,rng=this.rng;

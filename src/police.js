@@ -20,10 +20,9 @@ export class PoliceEvent {
   spawn(game){
     const p=game.player,road=game.road,now=game.activeSeconds;
     const s=p.s+POLICE.spawnAheadMin+this.rng()*(POLICE.spawnAheadMax-POLICE.spawnAheadMin);
-    // 截止墙与封闭段附近不生成;暂无可用车道时稍后重试。
+    // 截止墙与封闭段附近不生成，五秒后重试。
     if(road.closures(s-40,80).length){this.nextAt=now+5;return;}
     const lanes=road.available(s);
-    if(!lanes){this.nextAt=now+5;return;}
     const lane=Math.floor(this.rng()*lanes),d=road.branchCenter(s)+laneD(lane);
     this.police={id:'police:'+this.nextId++,s,d,route:null,speed:p.speed*POLICE.closeRatio,previous:{s,d},chase:0,nextNet:0,
       dimensions:{length:VEHICLES[3].length,width:VEHICLES[3].width}};

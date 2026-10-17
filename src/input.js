@@ -18,7 +18,8 @@ export class Input {
       container.classList.toggle('touch-mode',touchMode);container.classList.toggle('landscape',landscape);
       container.style.setProperty('--viewport-height',h+'px');
       document.getElementById('portrait-hint').hidden=!landscape;
-      if(changed||this.stickPointer!==null)this.clear();
+      if(changed)this.clear();
+      else if(this.stickPointer!==null)this.stickRect=this.stick.getBoundingClientRect();
       if(changed)this.onLayoutChange();
     };
     window.addEventListener('resize',syncViewport);window.visualViewport?.addEventListener('resize',syncViewport);

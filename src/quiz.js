@@ -188,10 +188,10 @@ function poemQuestion(pair,first,second){
   return {poemSource:pair.poem.dynasty+'，'+pair.poem.author+'的诗句：',text:first+'，\n'+second+'。'};
 }
 // 上下句补全保留两个诗句位置，其中一句整句挖空。
-function lineQuestion(pool){
+function lineQuestion(pool,sameLength=true){
   const pair=pick(pool.pairs),askFirst=rng()<chance;
   const given=askFirst?pair.first:pair.second,answer=askFirst?pair.second:pair.first;
-  const candidates=[...new Set(poemPool.halves.map(item=>item.text).filter(text=>text!==answer&&text!==given&&text.length===answer.length))];
+  const candidates=[...new Set(poemPool.halves.map(item=>item.text).filter(text=>text!==answer&&text!==given&&(!sameLength||text.length===answer.length)))];
   if(candidates.length<3)return null;
   const options=[answer];
   while(options.length<4&&candidates.length){
@@ -220,27 +220,16 @@ function blankQuestion(pool){
   const masked=half.text.slice(0,start)+BLANK+half.text.slice(start+blank),pair=half.pair;
   return {...poemQuestion(pair,half.part===0?masked:pair.first,half.part===1?masked:pair.second),...shuffle(options,correct)};
 }
-const CHINESE_TYPES=[lineQuestion,blankQuestion];
 function makeChinese(){
   const pool=rng()<POLICE.quizChineseExtraChance?extraPoemPool:poemPool;
   // 已注明作者，不再重复考查作者；两种补全题型各半。
-  const first=rng()<chance?lineQuestion:blankQuestion;
-  const types=CHINESE_TYPES.filter(build=>build!==first);
-  types.unshift(first);
-  for(const build of types)for(let attempt=0;attempt<12;attempt++){
+  const first=rng()<chance?lineQuestion:blankQuestion,second=first===lineQuestion?blankQuestion:lineQuestion;
+  for(const build of [first,second])for(let attempt=0;attempt<6;attempt++){
     const question=build(pool);
     if(question)return question;
   }
-  // 兜底:上下句衔接不限同字数,题池必然存在配对。
-  const pair=pick(pool.pairs),askFirst=rng()<chance;
-  const given=askFirst?pair.first:pair.second,answer=askFirst?pair.second:pair.first;
-  const candidates=[...new Set(poemPool.halves.map(item=>item.text).filter(text=>text!==answer&&text!==given))];
-  const options=[answer];
-  while(options.length<4&&candidates.length){
-    const [value]=candidates.splice(Math.floor(rng()*candidates.length),1);
-    if(!options.includes(value))options.push(value);
-  }
-  return {...poemQuestion(pair,askFirst?pair.first:BLANK,askFirst?BLANK:pair.second),...shuffle(options,answer)};
+  // 干扰项始终来自课内题池，最终兜底只放宽整句字数限制。
+  return lineQuestion(pool,false);
 }
 
 // ---------- 英语：按册、单元均匀抽题，两种题型各半 ----------
