@@ -1,4 +1,4 @@
-import { AIRCRAFT, CAMERA, DESTRUCTION, FLIGHT, FLIGHT_PHASES, createRoute } from './config.js';
+import { AIRCRAFT, CAMERA, DESTRUCTION, FLIGHT, FLIGHT_PHASES, LANDING_DEBUG, worldHorizontalSpeed, createRoute } from './config.js';
 import { AircraftSystems } from './aircraft-systems.js';
 import { Prompts } from './prompts.js';
 import { Flight } from './flight.js';
@@ -22,6 +22,7 @@ export class Game {
     this.runId++;
     this.eventRevision = 0;
     this.startupHintDismissed = false;
+    this.landingDebug = false;
     this.result = null;
     this.destruction = null;
     this.birdImpactAt = -Infinity;
@@ -61,8 +62,8 @@ export class Game {
         avionics: false,
         engine: 'OFF',
         engineProgress: 0,
-        flaps: 'TAKEOFF', // 沿用内部状态名，表示机翼减速板已打开。
-        flapsPosition: 1,
+        flaps: 'CLEAN', // 沿用内部状态名，默认关闭机翼减速板。
+        flapsPosition: 0,
         gear: 'DOWN',
         gearPosition: 1,
         parkingBrake: true,
@@ -73,13 +74,41 @@ export class Game {
     this.mission = new Mission(this.aircraft, this.flight, this.world);
   }
 
-  enterCockpit() {
+  get introDuration() { return this.landingDebug ? LANDING_DEBUG.countdownSeconds : CAMERA.introSeconds; }
+
+  enterCockpit({landingDebug = false} = {}) {
     if (this.phase !== 'READY') return;
+    this.landingDebug = landingDebug;
+    if (landingDebug) this.prepareLandingDebug();
     this.phase = 'INTRO';
-    this.view = 'SEQUENCE';
+    this.view = landingDebug ? 'COCKPIT' : 'SEQUENCE';
     this.activeSeconds = 0;
     this.introSeconds = 0;
     this.onChange();
+  }
+
+  prepareLandingDebug() {
+    const a = this.aircraft, setup = LANDING_DEBUG, destination = this.route.destination;
+    // 按关闭W、不操作时的自然降速计算约30秒航程，侧偏避开中央地标。
+    const seconds = Math.min(setup.runwaySeconds, setup.speed / FLIGHT.speedDecayRate);
+    const distance = worldHorizontalSpeed((setup.speed * seconds - FLIGHT.speedDecayRate * seconds * seconds / 2) / FLIGHT.kmhPerMps);
+    const forward = Math.sqrt(distance * distance - setup.lateralOffset * setup.lateralOffset);
+    a.position.x = destination.x + setup.lateralOffset;
+    a.position.z = destination.threshold + forward;
+    a.position.y = Math.max(destination.elevation, this.world.heightAt(a.position.x, a.position.z)) + setup.runwayHeight;
+    a.heading = Math.atan2(-setup.lateralOffset, forward);
+    a.airspeed = setup.speed; a.onGround = false; a.enginePower = 1;
+    a.velocity.x = Math.sin(a.heading) * setup.speed / FLIGHT.kmhPerMps;
+    a.velocity.z = -Math.cos(a.heading) * setup.speed / FLIGHT.kmhPerMps;
+    Object.assign(a.systems, {lights: true, door: true, harness: true, avionics: true, engine: 'RUNNING', engineProgress: 1,
+      gear: 'UP', gearPosition: 0, flaps: 'CLEAN', flapsPosition: 0, parkingBrake: false});
+    Object.assign(this.flight.previous.position, a.position);
+    this.flight.previous.heading = a.heading;
+    this.flight.climbComplete = true; this.flight.rotateAnnounced = true;
+    this.flight.maxAltitude = this.flight.altitude(); this.flight.maxAirspeed = a.airspeed;
+    this.mission.path = [[a.position.x, a.position.z]];
+    this.mission.approaching = true;
+    this.startupHintDismissed = true;
   }
 
   space() {
@@ -125,6 +154,7 @@ export class Game {
     if (['T', 'S', 'UP', 'DOWN'].includes(key)) event = flying ? this.flight.command(key) : null;
     else if (key === 'G' || (key === 'W' && flying && (!stationary || this.aircraft.landed))) event = this.flight.command(key);
     else event = this.systems.command(key, { stationary });
+    if (key === 'W' && ['flaps-up', 'flaps-down', 'prepared', 'unprepared'].includes(event?.type)) { this.flight.speedTapRemaining = 0; this.flight.speedTapDirection = 0; }
     if (!event) return;
     if (key === 'W') this.flight.updateSpeedLimits();
     if (event.type === 'released') { this.phase = this.aircraft.landed ? 'TAXI' : 'TAKEOFF_ROLL'; this.mission.start(); }
@@ -183,6 +213,8 @@ export class Game {
       const failed = events.find(item => item.type === 'failed');
       if (failed) { this.emit(failed); this.finish(false, failed.reason, failed.destructive); return; }
       for (const item of events) {
+        // 同一步已安全接地时，不再播报触地前产生的失速或下降警告。
+        if (this.aircraft.landed && ['stall', 'stall-recovered', 'pitch-low'].includes(item.type)) continue;
         if (item.type === 'liftoff') this.phase = 'INITIAL_CLIMB';
         this.emit(item);
         if (item.type === 'climb-complete' && !this.mission.approaching) this.phase = 'CRUISE';
@@ -203,11 +235,12 @@ export class Game {
       if (this.phase === 'LANDING_ROLL' && this.aircraft.airspeed < this.route.taxiSpeed) { this.phase = 'TAXI'; this.onChange(); }
     }
     if (this.phase === 'INTRO') {
-      this.introSeconds = Math.min(CAMERA.introSeconds, this.introSeconds + dt);
-      if (this.introSeconds >= CAMERA.introSeconds - 1e-9) {
-        this.introSeconds = CAMERA.introSeconds;
-        this.phase = 'STARTUP';
+      this.introSeconds = Math.min(this.introDuration, this.introSeconds + dt);
+      if (this.introSeconds >= this.introDuration - 1e-9) {
+        this.introSeconds = this.introDuration;
+        this.phase = this.landingDebug ? 'APPROACH' : 'STARTUP';
         this.view = 'COCKPIT';
+        if (this.landingDebug) this.mission.start();
         this.onChange();
       }
     }

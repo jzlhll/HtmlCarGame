@@ -60,7 +60,7 @@ function frame(now) {
     if (renderUI) ui.render();
     if (active && (game.phase==='INTRO' || game.phase==='CRASH' || FLIGHT_PHASES.includes(game.phase) || (game.phase==='STARTUP' && game.aircraft.systems.engine!=='OFF'))) renderer.dirty=true;
     renderer.draw(game,accumulator); if (!renderUI) ui.update(); audio.update(game);
-    if (controlRequestedAt!==undefined && game.phase==='STARTUP') {
+    if (controlRequestedAt!==undefined && (game.phase==='STARTUP' || (game.landingDebug && game.phase==='APPROACH'))) {
       const milliseconds=Math.round(performance.now()-controlRequestedAt);
       console.info('Flight control ready ' + JSON.stringify({totalMs:milliseconds,runId:game.runId,level:game.route.id}));
       if (milliseconds>GAME.scenePrepareLimitSeconds*1000) console.warn('Flight preparation exceeded budget ' + milliseconds);
@@ -78,7 +78,7 @@ game.onChange = () => {
   updateGenerationWindow('state'); audio.update(game);
   if (game.phase!==previousPhase || game.paused!==previouslyPaused) {
     accumulator=0;
-    if (game.paused!==previouslyPaused || ['READY','INTRO','STARTUP','CRASH','COMPLETE','RESULT'].includes(game.phase) || (previousPhase==='STARTUP' && game.phase==='TAKEOFF_ROLL')) input.clear();
+    if (game.paused!==previouslyPaused || previousPhase==='INTRO' || ['READY','INTRO','STARTUP','CRASH','COMPLETE','RESULT'].includes(game.phase) || (previousPhase==='STARTUP' && game.phase==='TAKEOFF_ROLL')) input.clear();
     previousPhase=game.phase; previouslyPaused=game.paused;
   }
   uiNeedsRender=true;
@@ -88,22 +88,23 @@ game.onChange = () => {
 
 async function requestEnter() {
   if (!startupReady || ui.upgrading || ui.error || enterPending || game.phase!=='READY') return;
+  const landingDebug = ui.elements['landing-debug'].checked;
   enterPending=true; controlRequestedAt=performance.now();
   try {
     if (!scenePrepared) { ui.setPreparing(true,0); setSurfacePreparationUrgent(); await prepareScene(); }
     details?.pause(); ui.setPreparing(false);
     console.info('Flight loading completed ' + JSON.stringify({loadingMs:Math.round(performance.now()-controlRequestedAt),runId:game.runId}));
-    game.enterCockpit();
+    game.enterCockpit({landingDebug});
   } catch (error) {
     console.error('Scene initialization failed',error); ui.showError('场景加载失败，请刷新页面重试，并确认浏览器已开启硬件加速。');
   } finally { enterPending=false; }
 }
 
-ui.onEnter=requestEnter;
+ui.onEnter=()=>{audio.unlockSpeech();return requestEnter();};
 input.onCommand = action => {
   if (!startupReady || ui.upgrading || ui.error || ui.preparing) return;
   if (action==='space') {
-    if (game.phase==='READY') void requestEnter();
+    if (game.phase==='READY') {audio.unlockSpeech();void requestEnter();}
     else { details?.pause(); game.space(); }
   } else {
     if (action==='T' && !game.paused && ['STARTUP','TAKEOFF_ROLL'].includes(game.phase)) {

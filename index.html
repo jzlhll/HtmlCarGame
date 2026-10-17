@@ -35,6 +35,7 @@
       <p class="eyebrow">Your first flight</p>
       <h1 id="welcome-title">天空，<br>从这里开始。</h1>
       <p class="intro-copy">第 1 关：深圳起飞，抵达广州。</p>
+      <label class="landing-debug-option"><input id="landing-debug" type="checkbox"><span>Landing debug<small>调试停机 · 400 km/h · 距目的地约30秒</small></span></label>
       <button class="primary-button" data-action="enter" disabled>开始体验 <kbd>空格</kbd><span aria-hidden="true">↗</span></button>
       <p class="availability">3:20 · 起飞至广州机场</p>
       <div class="flight-facts"><div><span>机型</span><strong>双发民航客机</strong></div><div><span>停放位置</span><strong id="runway-number">深圳机场</strong></div></div>
@@ -52,17 +53,17 @@
     <div class="flight-views">
     <aside id="attitude-preview" class="attitude-preview" hidden aria-label="机外飞机姿态">
       <header id="attitude-preview-heading">Aircraft attitude <small>机外姿态</small></header>
-      <div id="attitude-preview-view" class="preview-viewport"><div id="preview-traffic-legend" class="preview-traffic-legend" hidden>V Geese · ✈ Traffic<small>线为相对航迹 · 5.2 km示意</small></div></div>
+      <div id="attitude-preview-view" class="preview-viewport"><div id="preview-traffic-legend" class="preview-traffic-legend" hidden>V Geese · ✈ Traffic<small>线为相对航迹 · ↑↓为高度差</small></div></div>
 
     </aside>
 
       <section class="navigation-card radar-card" hidden aria-label="交通雷达"><header>Traffic radar<small>交通雷达</small></header><svg id="traffic-radar" viewBox="0 0 180 180" aria-label="目标方位与运动方向"></svg><footer id="radar-status"></footer></section>
     </div>
     <section id="intro-sequence" class="intro-sequence" hidden aria-label="进入驾驶舱倒数">
-      <span class="eyebrow">Prepare for departure</span>
+      <span id="countdown-heading" class="eyebrow">Prepare for departure</span>
       <strong id="countdown-number" aria-live="off">4</strong>
       <span id="countdown-caption">跑道与起点</span>
-      <small>发动机保持关闭</small>
+      <small id="countdown-tip">发动机保持关闭</small>
     </section>
     <section id="preview-banner" class="preview-banner" hidden aria-label="起飞准备说明">
       <span id="startup-hint-copy"></span>
@@ -74,7 +75,7 @@
     <section id="instruments" class="instruments" hidden aria-label="驾驶舱仪表">
       <div class="instrument"><span>Airspeed<small>空速</small></span><strong id="airspeed-value">OFF</strong><footer>km/h <i id="ground-speed">Flight speed<small>飞行速度</small></i></footer></div>
       <div class="instrument"><span>Altitude<small>高度</small></span><strong id="altitude-value">OFF</strong><footer>m <i>Above ground<small>离地高度</small></i></footer></div>
-      <div class="instrument attitude"><span>Attitude<small>姿态</small></span><div class="attitude-mark" aria-hidden="true"><i></i><b></b></div><footer id="attitude-label">Avionics OFF<small>仪表关闭</small></footer></div>
+      <div class="instrument attitude"><span>Attitude<small>姿态</small></span><div class="attitude-body"><div class="attitude-mark" aria-hidden="true"><i></i><b></b></div><div class="attitude-reading"><strong id="attitude-value">OFF</strong><footer id="attitude-label">Avionics OFF<small>仪表关闭</small></footer></div></div></div>
       <div class="instrument"><span>Vertical speed<small>垂直速度</small></span><strong id="vertical-speed-value">OFF</strong><footer>km/h </footer></div>
     </section>
     <section id="startup-strip" class="startup-strip" hidden aria-label="起飞准备按键及状态"></section>

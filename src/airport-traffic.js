@@ -1,5 +1,5 @@
-import { AIRCRAFT, AIRPORT_TRAFFIC, FLIGHT, worldHorizontalSpeed } from './config.js';
-import { segmentBox, transformPoint } from './route-world.js';
+import { AIRCRAFT, AIRPORT_TRAFFIC, FLIGHT, worldHorizontalSpeed, isWithinRunway } from './config.js';
+import { segmentBox } from './route-world.js';
 
 const box = (x, y, z, width, height, length) => ({min: {x: x-width/2, y: y-height/2, z: z-length/2}, max: {x: x+width/2, y: y+height/2, z: z+length/2}});
 
@@ -45,16 +45,11 @@ export function hitAirportTruck(actor, aircraft, elapsed) {
   actor.launch.x=worldHorizontalSpeed(aircraft.velocity.x)*kick.speedTransfer+(horizontal?aircraft.velocity.x/horizontal:0)*kick.forward+actor.side*kick.side;
   actor.launch.z=worldHorizontalSpeed(aircraft.velocity.z)*kick.speedTransfer+(horizontal?aircraft.velocity.z/horizontal:-1)*kick.forward;
   for(const axis of ['x','y','z'])aircraft.velocity[axis]*=AIRPORT_TRAFFIC.truckSpeedRetention;
-  aircraft.airspeed=Math.hypot(aircraft.velocity.x,aircraft.velocity.y,aircraft.velocity.z)*FLIGHT.kmhPerMps;
+  aircraft.airspeed*=AIRPORT_TRAFFIC.truckSpeedRetention;
   aircraft.verticalSpeed=aircraft.velocity.y*FLIGHT.kmhPerMps;
 }
 
 export function stoppedOnRunway(aircraft, route) {
   if(!aircraft.landed||!aircraft.onGround||aircraft.airspeed>route.parkedSpeed)return false;
-  const runway=route.destination;
-  for(const x of [-AIRCRAFT.wingspan/2,AIRCRAFT.wingspan/2])for(const z of [-AIRCRAFT.length/2,AIRCRAFT.length/2]){
-    const p=transformPoint([x,0,z],aircraft);
-    if(Math.abs(p.x-runway.x)>runway.width/2||p.z>runway.threshold||p.z<runway.threshold-runway.length)return false;
-  }
-  return true;
+  return isWithinRunway(aircraft.position, route.destination);
 }

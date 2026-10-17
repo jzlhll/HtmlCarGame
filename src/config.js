@@ -65,6 +65,12 @@ export const RUNWAY = {
   stripeGap: 30,
 };
 
+// 接地、滑跑与停机共用机身位置判定，不额外要求机翼或机轮留边。
+export function isWithinRunway(position, runway) {
+  return Math.abs(position.x - runway.x) <= runway.width / 2 + 1e-9
+    && position.z <= runway.threshold + 1e-9 && position.z >= runway.threshold - runway.length - 1e-9;
+}
+
 export const CAMERA = {
   exterior: { position: [-49, 23, -47], target: [0, 3.5, 0], fov: 48 },
   cockpitFov: 52,
@@ -128,24 +134,31 @@ export const STARTUP_STEPS = [
   { key: 'R', code: 'KeyR', english: 'Release', label: '松驻车刹车', shortLabel: '松刹车', system: 'parkingBrake', kind: 'release' },
 ];
 
-// 速度状态、阈值与遭遇配置统一为km/h；受力与坐标积分在边界换算为m/s。
+// 速度状态、阈值与遭遇配置统一为km/h；坐标积分在边界换算为m/s。
 export const FLIGHT = {
   kmhPerMps: 3.6,
-  rotationSpeed: 268.54,
-  rollTargetSeconds: 20,
+  rotationSpeed: 250,
+  maxSpeed: 600,
   recommendedPitch: [8, 12],
   climbMinSpeed: 333.36,
   climbMaxSpeed: 407.44,
   gearHeight: 30,
   gearPreviewHeight: 200,
-  gearWarningHeight: 200, gearWarningClearHeight: 250,
+  gearWarningHeight: 200, gearWarningClearHeight: 250, gearWarningPulseSeconds: 0.5,
   completionHeight: 500,
   completionHoldSeconds: 3,
   completionFeedbackSeconds: 1.5,
-  speedRate: 268.54 / 3.6 / 20,
-  speedBrakeRate: 6,
-  speedModeRatio: 10,
+  // 起步T为18倍，空中T为15倍，S及接地后T为10倍；阻力另行叠加。
+  speedRate: 268.54 / 3.6 / 20 / 10,
+  speedBrakeRate: 0.6,
+  speedMultiplier: 10,
+  takeoffSpeedMultiplier: 18,
+  airSpeedMultiplier: 15,
+  stallSpeed: 150, stallRecoverySpeed: 165,
+  stallMinSink: 27, stallMaxSink: 216,
+  verticalResponse: 2.5,
   speedTapKmh: 10,
+  speedDecayRate: 5, // 始终生效的自然减速，单位为km/h每秒。
   pitchTap: Math.PI / 180,
   pitchRate: 3 * Math.PI / 180,
   groundMaxPitch: 18 * Math.PI / 180,
@@ -154,14 +167,19 @@ export const FLIGHT = {
   maxBank: 60 * Math.PI / 180,
   successBank: 10 * Math.PI / 180,
   bankResponse: 4.2,
-  takeoffBrakePosition: 0.01,
+  takeoffPitch: Math.PI / 180,
   groundTurnRate: 0.65,
   groundTurnSpeed: 43.2,
   gravity: 9.81,
   stopSpeed: 0.36,
   contactTolerance: 0.05,
-  gearSeconds: 2.5,
-  flapsSeconds: 2,
+  gearSeconds: 0.5,
+  wingBrakeDeceleration: 10, // 打开W时每秒额外减少的km/h。
+};
+
+export const LANDING_DEBUG = {
+  speed: 400, runwaySeconds: 30, countdownSeconds: 3,
+  runwayHeight: 180, lateralOffset: -300,
 };
 
 export const DESTRUCTION = {
@@ -219,7 +237,7 @@ export const LANDSCAPE = {
     bridges: [-2500, 2200], bridgeLength: 1000, bridgeWidth: 34, bridgeHeight: 12, pylonHeight: 95,
   },
   landmarks: [
-    { kind: 'canton', name: '广州塔', position: [-450, clusterZ('city', -9200)], height: 600, radius: 48, color: 0xd9ded3 },
+    { kind: 'canton', name: '广州塔', position: [0, clusterZ('city', -9200)], height: 1200, radius: 48, color: 0xd9ded3 },
     { kind: 'bamboo', name: '深圳春笋', position: [500, clusterZ('city', -9550)], height: 420, radius: 67, color: 0x6696a5 },
     { kind: 'twist', name: '上海中心', position: [900, clusterZ('city', -10000)], height: 632, radius: 78, color: 0x79a4b0 },
     { kind: 'gateway', name: '上海环球金融中心', position: [-950, clusterZ('city', -9950)], height: 492, radius: 58, color: 0x7597a3 },
@@ -252,26 +270,14 @@ export const LANDSCAPE = {
   },
 };
 
-// 固定虚构客机的点质量气动预设；不是某一真实机型的性能数据，也不提供重量设置。
+// 保留动力反馈、转向和危险提示参数；不再用迎角受力抵消玩家俯仰或改变空速。
 export const AERODYNAMICS = {
-  mass: 52000, wingArea: 122.6, seaLevelDensity: 1.225, densityScaleHeight: 8500,
-  landingGroundLift: 0.2, landingGroundDrag: 0.08,
-  maxThrust: 275000, engineResponseSeconds: 0.8, thrustSpeedScale: 1296,
-  liftAtZero: 0.6, liftSlope: 5.2, wingBrakeLiftLoss: 0.1,
-  parasiteDrag: 0.025, inducedDrag: 0.045, wingBrakeDrag: 0.04, gearDrag: 0.02,
-  criticalAlpha: 14 * Math.PI / 180,
-  postStallDecay: 6 * Math.PI / 180, postStallLiftFraction: 0.12, stallDrag: 1.1,
-  stallEntrySeconds: 0.2, stallRecoverySeconds: 0.8, stallRecoveryMargin: 3 * Math.PI / 180,
-  pitchWarning: 15 * Math.PI / 180, pitchWarningClear: 13 * Math.PI / 180,
-  pitchLowWarning: -10 * Math.PI / 180, pitchLowClear: -7 * Math.PI / 180,
+  mass: 52000, engineResponseSeconds: 0.8,
+  pitchLowWarning: -10 * Math.PI / 180,
   groundWarningHeight: 120, descentWarningAngle: -6 * Math.PI / 180,
   overspeedWarning: 463, overspeedClear: 444.48,
-  warningRecoverySeconds: 0.8, alphaWarningMargin: 2 * Math.PI / 180,
-  safeSpeedFactor: 1.2, speedWarningClear: 1.05, stallPitchRate: 6 * Math.PI / 180,
-  lowSpeedPowerStart: 0.75, highSpeedDrag: 0.4,
-  controlReferenceSpeed: 216, minimumControl: 0.15, stallControl: 0.45,
-  stallPitchControl: 0.85, stallOpposingPitchRatio: 0.5,
-  maxRollRate: 60 * Math.PI / 180, rollingFriction: 0.022, brakeFriction: 0.65, tireFriction: 0.7,
+  warningRecoverySeconds: 0.8,
+  maxRollRate: 60 * Math.PI / 180, tireFriction: 0.7,
 };
 
 export const GEAR_PREVIEW = {
@@ -299,20 +305,21 @@ export const AIRPORT_TRAFFIC = {
 // 通用航程规则；每关通过 createRoute 生成独立配置，不修改共享对象。
 export const ROUTE = {
   courseDeviation: 900, contactLifetime: 40, sweepStep: 0.5, touchdownOffset: 350 * WORLD_TRAVEL.horizontalScale,
-  taxiSpeed: 37.04, approachSpeed: 314.84, approachSpeedRange: [296.32, 333.36],
+  taxiSpeed: 37.04, approachSpeed: 140, approachSpeedRange: [60, 180],
   glideSlope: 4 * Math.PI / 180,
   sampleSeconds: 0.25, mapHalfWidth: 3500, collisionCell: 512, bodyRadius: 1.7,
   ceiling: 10000, ceilingClear: 9800, ceilingRecovery: 2, faultPower: 0.25,
   radarRange: 2600 * WORLD_TRAVEL.horizontalScale, radarLead: 10, radarDanger: 100, radarVertical: 100, radarHorizon: 12,
   apronOffset: 1350, parkedSpeed: 7.2, parkHold: 1,
-  landingMaxSpeed: 351.88, landingMaxSink: 21.6, landingMaxBank: 12 * Math.PI / 180,
-  landingMinPitch: -6 * Math.PI / 180, landingMaxPitch: 15 * Math.PI / 180,
-  landingMaxHeading: 20 * Math.PI / 180,
-  landingDangerHeight: 30, landingDangerFactor: 1.5,
-  landingSettleSeconds: 1.2, landingSettleResponse: 6, landingSettleRate: 60 * Math.PI / 180,
+  landingMinSpeed: 60, landingMaxSpeed: 180,
+  landingMinPitch: -3 * Math.PI / 180, landingMaxPitch: 3 * Math.PI / 180,
+  landingDangerHeight: 30, landingDangerFactor: 1.5, landingGuideHeight: 200,
+  landingSettleSeconds: 1.2, landingSettleResponse: 6, landingSettleRate: 180 * Math.PI / 180,
   gearMaxSpeed: 407.44,
   destination: { x: 0, length: 6000, width: 240,
     apron: { x: 80, width: 420, length: 850 } },
+  encounterExtraGapSeconds: 30,
+  finalApproachHeight: 200, finalApproachDistance: 2500,
   encounters: [
     { at: 6, kind: 'geese', course: 'head-on', offset: 0, height: 0, speed: 82.8 },
     { at: 22, kind: 'aircraft', course: 'head-on', offset: 12, height: 0, speed: 414 },
@@ -349,10 +356,13 @@ export const JOURNEY = {
     { z: -21400 * WORLD_TRAVEL.horizontalScale, english: 'Yellow crane tower', chinese: '黄鹤楼', kind: 'pagoda', level: 3 },
   ],
   danxia: [
-    { position: [-800, clusterZ('danxia', -11600)], sourcePosition: [-800, -11600], height: 1000, radius: [520, 700], kind: 'danxia' },
+    { position: [0, clusterZ('danxia', -11600)], sourcePosition: [-800, -11600], height: 1400, radius: [360, 700], kind: 'danxia' },
     { position: [950, clusterZ('danxia', -12000)], sourcePosition: [950, -12000], height: 1350, radius: [620, 800], kind: 'danxia' },
     { position: [-1600, clusterZ('danxia', -12700)], sourcePosition: [-1600, -12700], height: 1750, radius: [700, 900], kind: 'danxia' },
     { position: [1800, clusterZ('danxia', -12900)], sourcePosition: [1800, -12900], height: 1500, radius: [650, 750], kind: 'danxia' },
+  ],
+  courseBuildings: [
+    {level: 3, x: 0, z: -40500, width: 110, depth: 100, height: 900, color: 0x829b9e, name: '航道高楼'},
   ],
   rockColors: { danxia: 0x975949, danxiaBand: 0xd59a71, pillars: 0xc7aa72, cap: 0x49672f },
   pillarSurface: { light: 0xe3c68e, weathered: 0x92723e, capLight: 0x708c45,
@@ -420,7 +430,7 @@ export function createRoute(levelId = 1) {
   return { ...ROUTE, ...level, elevation, destination, sectors,
     transitions: JOURNEY.transitions.zones.filter(zone => zone.level <= level.id && (!zone.lastLevel || level.id <= zone.lastLevel) && zone.z > level.threshold + zone.length / 2),
     cruiseHeight: 550, mountains: [...LANDSCAPE.mountains, ...(level.id >= 2 ? JOURNEY.danxia : [])],
-    encounters: ROUTE.encounters.map(spec => ({ ...spec, at: spec.at * (level.deadline / 200) })) };
+    encounters: ROUTE.encounters.map((spec, index) => ({ ...spec, at: spec.at * (level.deadline / 200) + index * ROUTE.encounterExtraGapSeconds })) };
 }
 
 export const AUDIO = {
@@ -431,7 +441,7 @@ export const AUDIO = {
   fanIdleHz: 420, fanPowerSweep: 1900,
   windGain: 0.0375, windIdleHz: 650, windSpeedSweep: 1100, speedCap: 2, groundWindScale: 0.45,
   wheelGain: 0.16, wheelIdleHz: 160, wheelSpeedSweep: 850, wheelRoughness: 0.22, wheelBumpRate: 32, brakeGainScale: 1.35,
-  motorGain: 0.045, motorHz: 185, flapsMotorOffset: 80,
+  motorGain: 0.045, motorHz: 185,
   alarmGain: 0.09, alarmHigh: 880, alarmLow: 660, alarmPeriod: 0.8, alarmPulse: 0.16,
   voiceDuck: 0.55,
   explosion: {seconds: 1.5, gain: 0.65, frequency: 1700, endFrequency: 85},
@@ -447,17 +457,20 @@ export const AUDIO = {
     confirm: { type: 'sine', frequency: 540, endFrequency: 810, seconds: 0.13, gain: 0.09 },
   },
   voice: {
-    preferredNames: ['Samantha', 'Karen', 'Moira', 'Serena'], rate: 1, pitch: 1, volume: 0.7, maxSeconds: 2.5,
+    welcome: 'Welcome aboard',
+    preferredNames: ['Samantha', 'Karen', 'Moira', 'Serena', 'Tessa', 'Victoria', 'Sonia', 'Susan', 'Aria', 'Jenny', 'Zira', 'Female'],
+    rate: 1, pitch: 1, volume: 0.7, maxSeconds: 2.5, voiceRetrySeconds: 0.5, startTimeoutSeconds: 3,
     prepared: { L: 'Light', D: 'Door closed', H: 'Harness secured', A: 'Avionics', W: 'Wing brake closed' },
     unprepared: { L: 'Light off', D: 'Door open', H: 'Harness released', A: 'Avionics off', W: 'Wing brake open' },
     events: {
       'engine-start': 'Fire', 'engine-ready': 'Engines ready', 'engine-stop': 'Engines off',
-      released: 'Brakes released', 'brake-set': 'Parking brake', liftoff: 'Positive climb',
-      'gear-start': 'Gear moving', 'flaps-start': 'Wing brake moving', 'gear-up': 'Gear up', 'gear-down': 'Gear down',
-      'flaps-up': 'Wing brake closed', 'flaps-down': 'Wing brake open', 'low-speed': 'Airspeed low', overspeed: 'Airspeed high',
-      'pitch-high': 'Lower nose', 'pitch-low': 'Raise nose', stall: 'Stall', 'stall-recovered': 'Stall recovered',
-      ceiling: 'Altitude limit', 'fault-recovered': 'Power restored', traffic: 'Traffic', approach: 'Approach',
-      'bird-strike': 'Bird strike. Window damaged', 'gear-warning': 'Landing gear. Press G', landed: 'Touchdown', waterfall: 'Congratulations',
+      released: 'Cleared for takeoff', 'brake-set': 'Parking brake', liftoff: 'Airborne. Positive climb',
+      'gear-start': 'Gear moving', 'gear-up': 'Gear up', 'gear-down': 'Gear down',
+      'flaps-up': 'Wing brake closed', 'flaps-down': 'Wing brake open', overspeed: 'Airspeed high',
+      'pitch-low': 'Raise nose', stall: 'Stall', 'stall-recovered': 'Stall recovered',
+      ceiling: 'Altitude limit', 'fault-recovered': 'Power restored', traffic: 'Traffic',
+      'climb-complete': 'Climb complete',
+      'bird-strike': 'Bird strike. Window damaged', 'gear-warning': 'Landing gear. Press G', landed: 'Touchdown. Apply brakes', waterfall: 'Congratulations',
     },
   },
 };

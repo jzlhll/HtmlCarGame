@@ -26,6 +26,9 @@ kbd { font-family: inherit; font-size: 14px; font-weight: 500; display: inline-g
 .primary-button kbd { border-color: #293d3b50; }
 .primary-button>span { margin-left: auto; font-size: 20px; font-weight: 400; }
 .availability { text-align: center; color: #99b3b3; font-size: 13px; margin: 12px 0 0; }
+.landing-debug-option { display: flex; align-items: center; gap: 9px; margin: 0 0 14px; color: #d3e2d7; font-size: 13px; cursor: pointer; }
+.landing-debug-option input { flex: 0 0 auto; width: 16px; height: 16px; margin: 0; accent-color: #d5c77e; }
+.landing-debug-option small { display: block; margin-top: 3px; color: #a6bdb4; font-size: 11px; }
 .flight-facts { display: flex; justify-content: space-between; gap: 16px; margin-top: 24px; padding-top: 18px; border-top: 1px solid #ffffff16; }
 .flight-facts span { display: block; color: #8da9a9; font-size: 13px; margin-bottom: 6px; }
 .flight-facts strong { font-size: 14px; font-weight: 400; color: #d4dfd6; }
@@ -41,6 +44,12 @@ kbd { font-family: inherit; font-size: 14px; font-weight: 500; display: inline-g
 .instrument footer { display: flex; gap: 6px; align-items: center; justify-content: space-between; font-size: 11px; color: #647c7b; }
 .instrument footer i { font-style: normal; color: #647c7b; }
 .attitude { text-align: center; }
+.attitude-body { display: flex; align-items: center; justify-content: center; gap: 10px; min-width: 0; }
+.attitude-reading { min-width: 0; text-align: center; }
+.attitude-reading strong { display: block; font-size: clamp(16px, 1.8vw, 22px); letter-spacing: 0.3px; }
+.attitude-reading footer { margin-top: 3px; }
+.attitude-body .attitude-mark { flex: 0 0 auto; }
+
 .attitude-mark { position: relative; align-self: center; width: 46px; height: 26px; border: 1px solid #415858; border-radius: 50%; }
 .attitude-mark i { position: absolute; left: 2px; right: 2px; top: 12px; height: 1px; background: #415858; }
 .attitude-mark b { position: absolute; width: 18px; height: 4px; border-bottom: 1px solid #687d72; border-left: 1px solid #687d72; border-right: 1px solid #687d72; left: 13px; top: 9px; }
@@ -58,6 +67,12 @@ kbd { font-family: inherit; font-size: 14px; font-weight: 500; display: inline-g
 .pause-card h2 { font-size: 30px; font-weight: 500; letter-spacing: 3px; margin: 0 0 18px; }
 .pause-card>p:not(.eyebrow) { color: #b7cbc4; font-size: 15px; line-height: 1.8; margin: 0 0 24px; }
 .secondary-button { width: 100%; padding: 12px; border: 1px solid #c5d2c53b; border-radius: 8px; background: none; color: #bed0c7; margin-top: 12px; font-size: 15px; }
+#pause-overlay { background: rgb(0 0 0 / 30%); backdrop-filter: none; }
+#pause-overlay .pause-card { width: min(100%, 260px); padding: 16px; border-radius: 12px; box-shadow: 0 8px 24px #00000033; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 8px; }
+#pause-overlay .pause-card>p { display: none; }
+#pause-overlay .pause-card h2 { grid-column: 1 / -1; text-align: center; font-size: 20px; letter-spacing: 1px; margin: 0; }
+#pause-overlay .primary-button, #pause-overlay .secondary-button { margin: 0; padding: 9px 8px; font-size: 13px; letter-spacing: 0; }
+
 #error-overlay { z-index: 20; }
 @media (max-width: 900px) {
   .topbar { top: 20px; left: 24px; right: 24px; gap: 12px; }
@@ -249,6 +264,10 @@ cjk-text { font-size: calc(1em + 1px); }
 
 .flight-views .attitude-preview.has-traffic { flex-basis: 250px; }
 #attitude-preview-view { position: relative; }
+.preview-traffic-labels { position: absolute; inset: 0; pointer-events: none; }
+.preview-traffic-label { position: absolute; transform: translate(-50%, -100%); padding: 2px 4px; border-radius: 4px; background: #102831ed; color: #b3d8e9; white-space: nowrap; font-size: 10px; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.preview-traffic-label.is-geese { color: #ffe19a; }
+.preview-traffic-label.is-danger { color: #ffab7a; }
 .preview-traffic-legend { position: absolute; left: 4px; right: 4px; bottom: 3px; text-align: center; font-size: 10px; color: #f1e6be; text-shadow: 0 1px 3px #18333e; }
 .preview-traffic-legend small { display: block; font-size: 9px; margin-top: 1px; }
 @media (max-width: 900px) { .preview-traffic-legend { font-size: 9px; } .preview-traffic-legend small { font-size: 8px; } }
@@ -260,14 +279,22 @@ cjk-text { font-size: calc(1em + 1px); }
 .startup-strip { text-shadow: 0 1px 3px #071a20, 0 0 6px #071a20b3; }
 
 .navigation-panel #gear-preview { position: relative; inset: auto; width: 100%; min-height: 0; display: flex; flex-direction: column; }
+#gear-preview.is-gear-warning { border-color: #c95b4e; box-shadow: 0 0 8px #e8503a66; }
+#gear-preview.is-gear-warning header, #gear-preview.is-gear-warning footer { background: #51251ff5; color: #ffe4c9; }
+#gear-preview.is-gear-warning small { color: #ffd0b9; }
+#gear-preview.is-warning-pulse { border-color: #ff9275; box-shadow: 0 0 22px #ff5039cc, inset 0 0 0 2px #ff9275; }
+#gear-preview.is-warning-pulse header, #gear-preview.is-warning-pulse footer { background: #9b3427f5; color: #fff3d9; }
 .navigation-panel #gear-preview header, .navigation-panel #gear-preview footer { flex-shrink: 0; }
 .navigation-panel #gear-preview .preview-viewport { height: auto; min-height: 40px; flex: 1; }
 .flight-views .radar-card { flex: 1 1 194px; }
+@media (max-width: 900px), (max-height: 620px) { .flight-views .radar-card { min-height: min(148px, 55%); } }
 
-/* 异常警告贴近屏幕上沿，正常时不占位。 */
+/* 顶部显示安全警告；低空进近时常驻接地速度范围。 */
 .flight-status { position: absolute; z-index: 4; top: 8px; left: 50%; right: auto; transform: translateX(-50%); width: max-content; max-width: min(560px, calc(100% - 48px)); padding: 9px 14px; border: 1px solid #e6a93e; border-radius: 8px; background: #493407f5; color: #ffd16b; pointer-events: none; box-shadow: 0 3px 12px #101b3040; }
 .flight-status .flight-guide { color: inherit; position: static; min-height: 0; display: block; font-size: 14px; font-weight: 600; line-height: 1.25; text-align: center; text-shadow: none; }
 .flight-status .flight-guide small { display: block; margin-top: 3px; color: #fff0c7; font-size: 12px; font-weight: 400; }
+.flight-status.is-info { background: #183b32f5; border-color: #7ab09b; color: #d9efdc; }
+.flight-status.is-info .flight-guide small { color: #d5e9dc; }
 .flight-status.is-danger { background: #641f21f5; border-color: #ef6a5a; color: #ffb4a3; }
 .flight-status.is-danger .flight-guide small { color: #ffe2d9; }
 @media (max-width: 900px) {

@@ -45,6 +45,10 @@ export class RouteWorld {
       if (Math.abs(x) < 110) continue;
       this.addBuilding(x, z, 24 + random() * 14, 28 + random() * 14, 9 + random() * 10, column % 2 ? 0xb9b094 : 0xd2c6a9, '村庄房屋');
     }
+    for (const building of JOURNEY.courseBuildings) {
+      if (route.id < building.level) continue;
+      this.addBuilding(building.x, building.z, building.width, building.depth, building.height, building.color, building.name);
+    }
     for (const zOffset of [0, this.route.destination.threshold - 100]) {
       for (const [x, y, z, w, h, d] of [[215, 6, 140, 120, 12, 28], [200, 6.5, 10, 42, 13, 45], [255, 6.5, 10, 42, 13, 45], [310, 6.5, 10, 42, 13, 45], [135, 18, -210, 21, 36, 19]]) {
         // 目的地机坪东侧留出跑道与滑行空间。

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { AIRCRAFT } from './config.js';
 import { setText } from './dom.js';
+import { relativeHeightLabel, trafficDistanceLabel } from './traffic-labels.js';
 
 // 标记跟随同一显示位置，只辅助辨认；不改动物体尺寸、轨迹或碰撞判定。
 export class TrafficIndicators {
@@ -8,7 +9,7 @@ export class TrafficIndicators {
     this.element = element; this.items = new Map(); this.point = new THREE.Vector3();
   }
 
-  update(game, camera, models) {
+  update(game, camera, models, pose = game.aircraft) {
     const hidden = game.view !== 'COCKPIT' || ['CRASH', 'COMPLETE', 'RESULT'].includes(game.phase);
     if (this.element.hidden !== hidden) this.element.hidden = hidden;
     if (this.runId !== game.runId) {
@@ -40,8 +41,10 @@ export class TrafficIndicators {
       const screenX = x.toFixed(2), screenY = y.toFixed(2);
       if (item.x !== screenX) { item.element.style.left = screenX + '%'; item.x = screenX; }
       if (item.y !== screenY) { item.element.style.top = screenY + '%'; item.y = screenY; }
-      setText(item.label, `${contact.kind === 'geese' ? 'Geese' : 'Traffic'} · ${(distance / 1000).toFixed(1)} km`);
-      setText(item.detail, contact.danger ? `碰撞风险 · ${Math.ceil(contact.closestSeconds)} 秒` : contact.kind === 'geese' ? '大雁群' : '其他飞机');
+      const targetDistance = Math.hypot(position.x - pose.position.x, position.y - pose.position.y, position.z - pose.position.z);
+      setText(item.label, `${contact.kind === 'geese' ? 'Geese' : 'Traffic'} · ${trafficDistanceLabel(targetDistance)} · ${relativeHeightLabel(position.y, pose.position.y)}`);
+      item.detail.hidden = contact.kind === 'aircraft' && !contact.danger;
+      setText(item.detail, contact.danger ? `碰撞风险 · ${Math.ceil(contact.closestSeconds)} 秒` : contact.kind === 'geese' ? '大雁群' : '');
     }
     for (const [id, item] of this.items) {
       if (!live.has(id)) { item.element.remove(); this.items.delete(id); }

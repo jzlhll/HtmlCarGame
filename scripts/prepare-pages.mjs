@@ -2,11 +2,23 @@ import { cp, mkdir, readFile, writeFile, readdir, stat, rm } from 'node:fs/promi
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
-import { GAME } from '../src/config.js';
+import { GAME, AUDIO } from '../src/config.js';
+import { VOICE_BANK_URL, VOICE_CLIPS } from '../src/voice-clips.js';
 import { APP_VERSION } from '../src/version.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, '.pages-output');
+const voiceBank = await readFile(VOICE_BANK_URL);
+if (voiceBank.toString('ascii', 0, 4) !== 'RIFF' || voiceBank.toString('ascii', 8, 12) !== 'WAVE') throw new Error('Female voice bank is not a WAV file');
+const voiceDuration = voiceBank.readUInt32LE(40) / voiceBank.readUInt32LE(28);
+const spokenWords = new Set([AUDIO.voice.welcome, ...Object.values(AUDIO.voice.prepared), ...Object.values(AUDIO.voice.unprepared), ...Object.values(AUDIO.voice.events)]);
+for (const words of spokenWords) {
+  const clip = VOICE_CLIPS[words];
+  if (!clip || !Number.isFinite(clip.offset) || !Number.isFinite(clip.duration) || clip.offset < 0 || clip.duration <= 0 || clip.offset + clip.duration > voiceDuration + 1e-6) {
+    throw new Error('Regenerate female voice source for: ' + words);
+  }
+}
+
 if (!/^\d+\.\d+\.\d+$/.test(APP_VERSION)) throw new Error('Application version must use major.minor.patch');
 const manifest = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
 const lock = JSON.parse(await readFile(path.join(root, 'package-lock.json'), 'utf8'));

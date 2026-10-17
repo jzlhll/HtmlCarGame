@@ -12,7 +12,7 @@ export class Mission {
     this.started = false; this.elapsed = 0; this.flightSeconds = 0; this.path = [[aircraft.position.x, aircraft.position.z]];
     this.sampleElapsed = 0; this.contacts = []; this.nextEncounter = 0;
     this.ceilingFault = false; this.ceilingRecovery = 0; this.waterfallsPassed = new Set();
-    this.parkSeconds = 0; this.approaching = false; this.offCourse = false;
+    this.parkSeconds = 0; this.approaching = false; this.finalApproachAnnounced = false; this.offCourse = false;
     this.events = []; this.airportTraffic = createAirportTraffic(this.route);
   }
 
@@ -86,29 +86,44 @@ export class Mission {
     return false;
   }
 
+  deadlineReason() {
+    const a = this.aircraft, route = this.route;
+    const prefix = `超时（${route.deadline}秒）：`;
+    if (!a.landed) return a.onGround ? prefix + '起飞尚未完成，飞机仍未离地。'
+      : prefix + `尚未在${route.destinationName}机场接地，当前离地${Math.round(this.flight.altitude())}米。`;
+    if (a.airspeed > route.parkedSpeed) return prefix + `落地后尚未停稳，速度仍为${Number(a.airspeed.toFixed(2))} km/h，要求不超过${route.parkedSpeed} km/h。`;
+    if (!stoppedOnRunway(a, route)) return prefix + `停机位置错误，机身位置未停入${route.destinationName}机场跑道内。`;
+    if (this.airportTraffic.some(actor => actor.hit && this.elapsed - actor.hitAt < 2 * AIRPORT_TRAFFIC.truckLaunch.up / AIRPORT_TRAFFIC.truckLaunch.gravity)) return prefix + '撞飞的卡车仍未落地，停机结算尚未完成。';
+    return prefix + `连续停稳时间不足，已保持${Number(this.parkSeconds.toFixed(2))}秒，要求${route.parkHold}秒。`;
+  }
+
   step(dt) {
     const events = this.events, a = this.aircraft, flight = this.flight;
     events.length = 0;
     if (!this.started) return events;
     this.elapsed += dt;
     if (!a.onGround && !a.landed) this.flightSeconds += dt;
-    if (this.elapsed > this.route.deadline + 1e-8) return [{type: 'failed', key: 'deadline', reason: `${this.route.deadline} 秒已到，尚未在${this.route.destinationName}机场跑道内停妥。`}];
+    if (this.elapsed > this.route.deadline + 1e-8) return [{type: 'failed', key: 'deadline', reason: this.deadlineReason()}];
     this.sampleElapsed += dt;
     if (this.sampleElapsed >= this.route.sampleSeconds) {
       this.sampleElapsed %= this.route.sampleSeconds;
       this.path.push([a.position.x, a.position.z]);
     }
     const collision = this.world.collision(a, flight.previous);
-    if (collision) return [{type: 'failed', key: 'obstacle', destructive: true, reason: `飞机碰撞了${collision}。`}];
+    if (collision) return [{type: 'failed', key: 'obstacle', destructive: true, reason: `障碍碰撞：飞机撞上${collision}，碰撞时海拔${Math.round(a.position.y)}米。`}];
     for (const actor of this.airportTraffic) {
       if (!airportTrafficHit(actor, this.world)) continue;
-      if (actor.kind === 'aircraft') return [{type:'failed',key:actor.id,destructive:true,reason:'飞机撞上了跑道上停放的飞机。'}];
+      if (actor.kind === 'aircraft') return [{type:'failed',key:actor.id,destructive:true,reason:`跑道碰撞：撞上${this.route.destinationName}机场入口后${Math.round(this.route.destination.threshold - actor.position.z)}米处停放的飞机。`}];
       hitAirportTruck(actor, a, this.elapsed);
       events.push({type:'truck-hit',key:actor.id,reason:'撞飞卡车：当前速度降低 10%，请继续避让并在跑道内停稳。'});
     }
     if (!a.landed && !a.onGround && this.runwayDistance < this.route.approachDistance && !this.approaching) {
       this.approaching = true;
-      events.push({type: 'approach', key: 'airport', reason: `Approach（${this.route.destinationName}进近）：减速至 ${this.route.approachSpeedRange.map(speed=>Math.round(speed)).join('–')} km/h，G 放轮，W 打开机翼减速板，沿跑道下降。`});
+      events.push({type: 'approach', key: 'airport', reason: `Approach（${this.route.destinationName}进近）：减速至 ${this.route.approachSpeedRange.map(speed=>Math.round(speed)).join('–')} km/h，Gear（起落架）放下，俯仰保持−3°到+3°，沿跑道下降。`});
+    }
+    if (this.approaching && !this.finalApproachAnnounced && !a.onGround && !a.landed && this.runwayDistance > 0 && this.runwayDistance < this.route.finalApproachDistance && flight.altitude() < this.route.finalApproachHeight && a.verticalSpeed < 0) {
+      this.finalApproachAnnounced = true;
+      events.push({type: 'final-approach', key: 'airport'});
     }
     const high = a.position.y > this.route.ceiling;
     this.ceilingRecovery = a.position.y < this.route.ceilingClear ? this.ceilingRecovery + dt : 0;
@@ -156,7 +171,7 @@ export class Mission {
         events.push({type: 'traffic', key: `contact-${contact.id}`, reason: `${contact.kind === 'geese' ? 'Geese（大雁群）' : 'Traffic（其他飞机）'}：${courses[contact.course]}接近，请参考雷达箭头，调整方向或高度避让。`});
       }
       if (!a.onGround && !contact.hit && this.trafficCollision(contact, this.world.bodySweep)) {
-        if (contact.kind==='aircraft') return [{type:'failed',key:'traffic',destructive:true,reason:'飞机与其他飞机发生碰撞。'}];
+        if (contact.kind==='aircraft') return [{type:'failed',key:'traffic',destructive:true,reason:`空中碰撞：撞上${courses[contact.course]}接近的客机。`}];
         contact.hit=true; contact.danger=false;
         a.birdStrike=true; a.birdStrikeCount++; flight.limitSpeed();
         if (flight.thrustLocked) {

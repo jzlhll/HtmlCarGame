@@ -1,6 +1,6 @@
 import { STARTUP_STEPS, SYSTEMS, FLIGHT } from './config.js';
 
-// 五项准备相互独立，点火和放行分别检查依赖；不在渲染或界面中补齐状态。
+// 四项手动准备相互独立，W默认关闭；点火和放行分别检查依赖。
 export class AircraftSystems {
   constructor(aircraft) {
     this.aircraft = aircraft;

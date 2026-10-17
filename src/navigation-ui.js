@@ -1,7 +1,7 @@
 import { setText, setHTML } from './dom.js';
+import { trafficDistanceLabel } from './traffic-labels.js';
 
 const degrees = angle => angle * 180 / Math.PI;
-const compass = {'head-on': 'Head-on', 'same-way': 'Same-way', crossing: 'Crossing', diagonal: 'Diagonal'};
 
 function setAttribute(element, name, value) {
   if (element.getAttribute(name) !== value) element.setAttribute(name, value);
@@ -23,7 +23,7 @@ export class NavigationUI {
     this.route.innerHTML = `<path class="planned-route" d="M110 130V${targetY}"/><text x="119" y="${targetY-8}">${game.route.destinationEnglish}</text><text x="119" y="132">Shenzhen</text><text class="destination-star" x="110" y="${targetY+3}" text-anchor="middle">★</text><polyline class="flown-route"/><g class="route-player"><path class="own-aircraft" d="M0 -7L5 5L0 2L-5 5Z"/></g>`;
     this.path = this.route.querySelector('.flown-route'); this.player = this.route.querySelector('.route-player');
     this.radar.innerHTML = '<g class="radar-grid"><circle cx="90" cy="90" r="75"/><circle cx="90" cy="90" r="38"/><path d="M15 90H165M90 15V165"/></g><path class="own-aircraft" d="M90 82L95 95L90 92L85 95Z"/>';
-    this.contactNodes = new Map();
+    this.contactNodes = new Map(); this.distanceLabels = [];
   }
 
   mapPoint(x, z) {
@@ -38,8 +38,8 @@ export class NavigationUI {
     const tick = `${game.runId}:${game.phase}:${a.systems.avionics}:${Math.floor(game.activeSeconds * 8)}`;
     if (tick === this.tick) return;
     this.tick = tick;
-    if (this.pathRun !== game.runId) {
-      this.pathRun = game.runId; this.pathLength = 0; this.pathPoints = '';
+    if (this.pathRun !== game.runId || this.pathSource !== mission.path) {
+      this.pathRun = game.runId; this.pathSource = mission.path; this.pathLength = 0; this.pathPoints = '';
       setAttribute(this.path, 'points', '');
       for (const item of this.contactNodes.values()) item.element.remove();
       this.contactNodes.clear();
@@ -60,6 +60,7 @@ export class NavigationUI {
     const contacts = a.systems.avionics ? mission.contacts.filter(c => Math.hypot(c.position.x - a.position.x, c.position.z - a.position.z) < game.route.radarRange) : [];
     const alert = mission.ceilingFault || contacts.some(c => c.danger || c.age < game.route.radarLead), flash = Math.floor(mission.elapsed * 4) % 2 === 0;
     this.radarCard.classList.toggle('has-alert', alert && flash);
+    this.distanceLabels.length = 0;
     const visible = new Set(), cosine = Math.cos(a.heading), sine = Math.sin(a.heading);
     for (const contact of contacts) {
       visible.add(contact.id);
@@ -67,7 +68,7 @@ export class NavigationUI {
       if (!item) {
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         element.innerHTML = '<g><path d="M0 16V-4M-4 1L0 -5L4 1"/></g><text x="6" y="5"></text>';
-        item = {element, direction: element.firstElementChild, altitude: element.lastElementChild};
+        item = {element, direction: element.firstElementChild, distance: element.lastElementChild};
         this.radar.append(element); this.contactNodes.set(contact.id, item);
       }
       const dx = contact.position.x - a.position.x, dz = contact.position.z - a.position.z;
@@ -77,10 +78,25 @@ export class NavigationUI {
       setAttribute(item.element, 'opacity', (contact.danger || contact.age < game.route.radarLead) && !flash ? '0.3' : '1');
       setAttribute(item.element, 'transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
       setAttribute(item.direction, 'transform', `rotate(${degrees(contact.heading - a.heading).toFixed(1)})`);
-      setText(item.altitude, `${Math.round(contact.position.y - a.position.y)} m`);
+      const copy = trafficDistanceLabel(Math.hypot(dx, contact.position.y - a.position.y, dz));
+      const width = copy.length * 10;
+      const left = Math.max(2, Math.min(178 - width, x < 90 ? x - width - 6 : x + 6));
+      const baseLine = Math.max(18, Math.min(164, y + 5));
+      let baseline = baseLine;
+      for (let attempt = 0; attempt <= this.distanceLabels.length * 2; attempt++) {
+        const candidate = baseLine + Math.ceil(attempt / 2) * 20 * (attempt % 2 ? -1 : 1);
+        if (candidate < 18 || candidate > 164) continue;
+        if (!this.distanceLabels.some(label => left < label.left + label.width && left + width > label.left && Math.abs(candidate - label.baseline) < 20)) {
+          baseline = candidate; break;
+        }
+      }
+      item.left = left; item.baseline = baseline; item.width = width; this.distanceLabels.push(item);
+      setAttribute(item.distance, 'x', (left - x).toFixed(1));
+      setAttribute(item.distance, 'y', (baseline - y).toFixed(1));
+      setText(item.distance, copy);
     }
     for (const [id, item] of this.contactNodes) if (!visible.has(id)) { item.element.remove(); this.contactNodes.delete(id); }
     const urgent = contacts.find(c => c.danger) || contacts[0];
-    setHTML(this.warning, mission.ceilingFault ? 'Altitude fault<small>超过 10000 m，降低高度</small>' : !a.systems.avionics ? 'Avionics OFF<small>A 开启雷达</small>' : urgent ? `${urgent.kind === 'geese' ? 'Geese' : 'Traffic'} · ${compass[urgent.course]}<small>箭头表示行动方向 · 数字为相对高度</small>` : `Clear · ${(game.route.radarRange/1000).toFixed(1)} km<small>雷达范围内无交通目标</small>`);
+    setHTML(this.warning, mission.ceilingFault ? 'Altitude fault<small>超过 10000 m，降低高度</small>' : !a.systems.avionics ? 'Avionics OFF<small>A 开启雷达</small>' : urgent ? `${urgent.kind === 'geese' ? 'Geese' : 'Traffic'} · ${trafficDistanceLabel(Math.hypot(urgent.position.x - a.position.x, urgent.position.y - a.position.y, urgent.position.z - a.position.z))}<small>箭头为航向 · 数字为距离</small>` : `Clear · ${(game.route.radarRange/1000).toFixed(1)} km<small>雷达范围内无交通目标</small>`);
   }
 }

@@ -264,7 +264,7 @@ export class GameRenderer {
       leg.position.y = (1 - progress) * AIRCRAFT.gearRetractHeight;
     }
     const inside = game.view === 'COCKPIT';
-    const intro = game.phase === 'INTRO';
+    const intro = game.phase === 'INTRO' && !game.landingDebug;
     if (!intro) this.introDisplaySeconds = 0;
     else if (!game.paused) this.introDisplaySeconds = Math.min(CAMERA.introSeconds, game.introSeconds + renderRemainder);
     const progress = intro ? this.sequence.apply(this.camera, this.introDisplaySeconds) : 0;
@@ -334,7 +334,7 @@ export class GameRenderer {
     this.impactEffects.update(game,this.camera,this.renderer.domElement.height);
     if(this.airportTraffic.update(game))this.renderer.shadowMap.needsUpdate=true;
     this.renderer.render(this.scene, this.camera);
-    this.trafficIndicators.update(game, this.camera, this.traffic.models);
+    this.trafficIndicators.update(game, this.camera, this.traffic.models, pose);
     const gearVisible = !this.gearPreview.element.parentElement.hidden;
     if (this.previousGearVisible !== gearVisible) this.previewBoundsDirty = true;
     this.previousGearVisible = gearVisible;
