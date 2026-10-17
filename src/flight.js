@@ -18,7 +18,6 @@ export class Flight {
     this.stalled = false;
     this.pitchLow = false;
     this.pitchLowRecovery = 0;
-    this.overspeed = false;
     this.completionSeconds = 0;
     this.maxAltitude = 0;
     this.maxAirspeed = 0;
@@ -77,8 +76,10 @@ export class Flight {
     state.ready=state.runway && state.pitch && state.gear && state.speed;
     const factor=route.landingDangerFactor;
     const severe=a.pitch<route.landingMinPitch*factor || a.pitch>route.landingMaxPitch*factor
-      || a.airspeed>route.landingMaxSpeed*factor || a.airspeed<route.landingMinSpeed/factor;
-    state.severity=a.landed || state.ready ? 'safe' : severe || this.altitude()<=route.landingDangerHeight ? 'danger' : 'caution';
+      || a.airspeed<route.landingMinSpeed/factor;
+    // 着陆上限仅参与接地判定，速度偏高不改变飞机图颜色。
+    const colorReady=state.runway && state.pitch && state.gear && a.airspeed>=route.landingMinSpeed-1e-9;
+    state.severity=a.landed || colorReady ? 'safe' : severe || this.altitude()<=route.landingDangerHeight ? 'danger' : 'caution';
     return state;
   }
 
@@ -99,7 +100,7 @@ export class Flight {
         ? `Gear（起落架）未放妥：触地时仍在${state === 'EXTENDING' ? '放轮' : '收轮'}，放下进度${Math.round(a.systems.gearPosition * 100)}%。`
         : 'Gear（起落架）未放下：触地时仍处于收起状态。';
     }
-    if (!landing.speed) return `接地速度${a.airspeed < route.landingMinSpeed ? '过低' : '过高'}：${number(a.airspeed)} km/h，允许${number(route.landingMinSpeed)}–${number(route.landingMaxSpeed)} km/h。`;
+    if (!landing.speed) return `接地速度不符合范围：实际${number(a.airspeed)} km/h，允许${number(route.landingMinSpeed)}–${number(route.landingMaxSpeed)} km/h。`;
     return `接地机头${a.pitch < route.landingMinPitch ? '过低' : '过高'}：俯仰${degrees(a.pitch)}°，允许${degrees(route.landingMinPitch)}°至${degrees(route.landingMaxPitch)}°。`;
   }
 
@@ -142,7 +143,7 @@ export class Flight {
     a.airspeed = limit;
   }
 
-  command(key) {
+  command(key, {repeat = false} = {}) {
     const a = this.aircraft, state = a.systems;
     if (key === 'T' || key === 'S') {
       if (key==='T' && this.thrustLocked) return {type:'blocked',key,condition:'bird-thrust-lock',reason:'Thrust unavailable（无法提速）：本关已遭两次鸟击，T 已失效，下一关恢复。'};
@@ -165,7 +166,7 @@ export class Flight {
       // 反向操作从当前姿态开始，避免先偿还此前未能达到的目标角度。
       const direction = key === 'UP' ? 1 : -1;
       if ((this.pitchTarget - a.pitch) * direction < 0) this.pitchTarget = a.pitch;
-      this.pitchTarget = clamp(this.pitchTarget + direction * FLIGHT.pitchTap,
+      this.pitchTarget = clamp(this.pitchTarget + direction * (repeat ? FLIGHT.pitchRepeat : FLIGHT.pitchTap),
         a.onGround ? 0 : FLIGHT.minPitch, a.onGround ? FLIGHT.groundMaxPitch : FLIGHT.maxPitch);
       return { type: 'pitch', key };
     }
@@ -181,7 +182,7 @@ export class Flight {
     if (state.gear === 'UP') {
       if (a.onGround || a.airspeed > this.route.gearMaxSpeed) {
         this.gearExtensionBlocked=a.airspeed>this.route.gearMaxSpeed;
-        return {type:'blocked',key,condition:'extension-speed',reason:`Gear（起落架）：先减速至 ${Math.round(this.route.gearMaxSpeed)} km/h 以下再放下。`};
+        return {type:'blocked',key,condition:'extension-speed',reason:`Gear（起落架）：放轮允许范围为0–${Math.round(this.route.gearMaxSpeed)} km/h。`};
       }
       state.gear = 'EXTENDING';
     } else {
@@ -236,11 +237,9 @@ export class Flight {
       this.stalled = stalled;
       this.events.push(stalled ? {type: 'stall', key: 'airspeed', reason: `Stall（失速）：${this.stallGuidance}`} : {type: 'stall-recovered', key: 'airspeed'});
     }
-    const pitchInput = Number(held.has('up')) - Number(held.has('down'));
     const turnInput = aligning ? 0 : Number(held.has('right')) - Number(held.has('left'));
+    // 上下键点按与长按重复均通过command步进，不再按持续时间额外累加角度。
     if (a.landed || (a.onGround && a.airspeed < FLIGHT.rotationSpeed)) this.pitchTarget = 0;
-    else this.pitchTarget = clamp(this.pitchTarget + pitchInput * FLIGHT.pitchRate * dt,
-      a.onGround ? 0 : FLIGHT.minPitch, a.onGround ? FLIGHT.groundMaxPitch : FLIGHT.maxPitch);
     if (!aligning) a.pitch = approach(a.pitch, this.pitchTarget, FLIGHT.pitchRate * dt);
     if (a.onGround) { if (!aligning) a.bank = 0; }
     else a.bank = approach(a.bank, a.bank + (turnInput * FLIGHT.maxBank - a.bank) * (1 - Math.exp(-FLIGHT.bankResponse * dt)), aero.maxRollRate * dt);
@@ -287,10 +286,6 @@ export class Flight {
       this.pitchLow = true;
       this.events.push({type: 'pitch-low', key: 'pitch', reason: '下降危险，请平缓抬高机头（↑）并留出离地高度。'});
     } else if (this.pitchLow && this.pitchLowRecovery >= aero.warningRecoverySeconds) this.pitchLow = false;
-    if (!a.onGround && !this.overspeed && a.airspeed > aero.overspeedWarning) {
-      this.overspeed = true;
-      this.events.push({type: 'overspeed', key: 'airspeed', reason: '空速过高：打开 W 减速，可再按 S 加强减速。'});
-    } else if (this.overspeed && a.airspeed < aero.overspeedClear) this.overspeed = false;
     const retracting = state.gear === 'RETRACTING';
     if (retracting || state.gear === 'EXTENDING') {
       state.gearPosition = clamp(state.gearPosition + (retracting ? -1 : 1) * dt / FLIGHT.gearSeconds, 0, 1);
@@ -334,7 +329,7 @@ export class Flight {
         this.events.push({type: 'landed', key: 'airport', reason: 'Touchdown（安全着陆）：机身自动摆正，打开Wing brake（机翼减速板）后可按S加强减速，在跑道内停稳并避让停放的飞机与卡车。'});
       } else this.events.push({type: 'failed', key: 'ground', destructive: true, reason: this.landingFailureReason(landing)});
     }
-    const success = !a.onGround && !this.stalled && !this.overspeed && !this.pitchLow && this.altitude() >= FLIGHT.completionHeight && a.airspeed >= FLIGHT.climbMinSpeed && a.airspeed <= Math.max(FLIGHT.climbMaxSpeed, this.route.cruiseSpeed * 1.05) && a.verticalSpeed > 0 && Math.abs(a.bank) <= FLIGHT.successBank && state.gear === 'UP' && state.flaps === 'CLEAN';
+    const success = !a.onGround && !this.stalled && !this.pitchLow && this.altitude() >= FLIGHT.completionHeight && a.airspeed >= FLIGHT.climbMinSpeed && a.airspeed <= Math.max(FLIGHT.climbMaxSpeed, this.route.cruiseSpeed * 1.05) && a.verticalSpeed > 0 && Math.abs(a.bank) <= FLIGHT.successBank && state.gear === 'UP' && state.flaps === 'CLEAN';
     this.completionSeconds = success ? this.completionSeconds + dt : 0;
     if (!this.climbComplete && this.completionSeconds >= FLIGHT.completionHoldSeconds) { this.climbComplete = true; this.events.push({ type: 'climb-complete', key: 'flight' }); }
     return this.events;

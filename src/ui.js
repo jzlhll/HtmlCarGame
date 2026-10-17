@@ -167,8 +167,8 @@ export class UI {
     if (this.elements['gear-preview'].hidden !== gearHidden) this.elements['gear-preview'].hidden = gearHidden;
     const gearWarning = !gearHidden && flight.gearWarning;
     const gearWarningPulse = gearWarning && Math.floor(this.game.activeSeconds / FLIGHT.gearWarningPulseSeconds) % 2 === 0;
-    const pitch = Number((a.pitch * 180 / Math.PI).toFixed(2)), bank = degrees(a.bank);
-    const signature = [this.game.phase, this.game.runId, systems.lights, systems.door, systems.harness, systems.avionics, systems.engine, systems.flaps, systems.gear, flight.thrustLocked, a.birdStrikeCount, flight.gearWarning, gearWarningPulse, flight.gearExtensionBlocked, this.game.mission.offCourse, this.game.mission.approaching, systems.parkingBrake, a.wheelBrake, speed, altitude, a.verticalSpeed.toFixed(1), pitch, bank, gearReady, Math.floor(flight.completionSeconds * 10), degrees(a.angleOfAttack * 10), degrees(a.flightPathAngle * 10), a.loadFactor.toFixed(1), flight.pitchLow, flight.overspeed, flight.stalled, this.game.mission.ceilingFault, a.birdStrike, Math.round(this.game.mission.targetAltitude), this.game.prompts.current].join('|');
+    const pitch = Number((a.pitch * 180 / Math.PI).toFixed(1)), bank = degrees(a.bank);
+    const signature = [this.game.phase, this.game.runId, systems.lights, systems.door, systems.harness, systems.avionics, systems.engine, systems.flaps, systems.gear, flight.thrustLocked, a.birdStrikeCount, flight.gearWarning, gearWarningPulse, flight.gearExtensionBlocked, this.game.mission.offCourse, this.game.mission.approaching, systems.parkingBrake, a.wheelBrake, speed, altitude, a.verticalSpeed.toFixed(1), pitch, bank, gearReady, Math.floor(flight.completionSeconds * 10), degrees(a.angleOfAttack * 10), degrees(a.flightPathAngle * 10), a.loadFactor.toFixed(1), flight.pitchLow, flight.stalled, this.game.mission.ceilingFault, a.birdStrike, Math.round(this.game.mission.targetAltitude), this.game.prompts.current].join('|');
     if (signature === this.lastSystemsSignature) return;
     this.lastSystemsSignature = signature;
     this.elements['gear-preview'].classList.toggle('is-gear-warning', gearWarning);
@@ -197,13 +197,13 @@ export class UI {
       this.setItem(2, Math.abs(a.bank) <= FLIGHT.successBank, false, '');
       const gearBusy = ['EXTENDING', 'RETRACTING'].includes(systems.gear), landing = this.game.mission.approaching;
       const gearDone = systems.gear === (landing ? 'DOWN' : 'UP');
-      this.setItem(3, gearDone || gearReady, gearBusy, gearBusy ? systems.gear === 'EXTENDING' ? 'Extending' : 'Retracting' : systems.gear==='DOWN'?'Down':'Up');
+      this.setItem(3, gearDone || gearReady, gearBusy, gearBusy ? systems.gear === 'EXTENDING' ? 'Opening' : 'Closing' : systems.gear==='DOWN'?'Open':'Closed');
       this.setWingBrake(4);
       setText(this.startupCount, '');
     }
     for (const [id, value] of [['airspeed-value', speed], ['altitude-value', altitude], ['vertical-speed-value', a.verticalSpeed.toFixed(1)]]) setText(this.elements[id], systems.avionics ? value : 'OFF');
     setBilingual(this.elements['ground-speed'], 'Flight speed', '飞行速度');
-    setText(this.elements['attitude-value'], !systems.avionics ? 'OFF' : pitch === 0 ? 'Level' : `${pitch > 0 ? '+' : ''}${pitch}°`);
+    setText(this.elements['attitude-value'], !systems.avionics ? 'OFF' : pitch === 0 ? 'Level' : `${pitch > 0 ? '+' : ''}${pitch.toFixed(1)}°`);
     setBilingual(this.elements['attitude-label'], !systems.avionics ? 'Avionics OFF' : pitch === 0 ? '' : pitch > 0 ? 'Up' : 'Down',
       !systems.avionics ? '仪表关闭' : pitch === 0 ? '水平' : pitch > 0 ? '向上' : '向下');
     if (this.displayBank !== bank) { this.attitudeMark.style.setProperty('--bank', `${-bank}deg`); this.displayBank = bank; }
@@ -225,9 +225,7 @@ export class UI {
       else if(flight.gearWarning) warning=['Landing gear','起落架未完全放下，触地会爆炸！','danger'];
       else if(mission.ceilingFault) warning=['Power fault','超出高度限制，请降低高度恢复动力。','danger'];
       else if(flight.pitchLow && !landingStatus?.ready) warning=['Descent danger','下降危险，可能撞地。','danger'];
-      else if(flight.overspeed) warning=['Overspeed','速度过高，打开 W 后按 S 减速。','warning'];
       else if(flight.thrustLocked) warning=['Thrust unavailable','两次鸟击，T 加速失效，下一关恢复。','danger'];
-      else if(flight.gearExtensionBlocked) warning=['Gear unavailable','速度过高，减速后再放起落架。','warning'];
       else if(mission.contacts.some(contact=>!contact.hit&&!contact.rearBypass&&contact.danger)) warning=['Collision risk','前方有飞机或雁群，注意避让。','danger'];
       else if(mission.offCourse) warning=['Off course','已偏离航线，请调整方向。','warning'];
       else if(a.birdStrike) warning=['Bird damage','玻璃受损，本关最高速度降至 80%。','warning'];
@@ -241,15 +239,13 @@ export class UI {
       }
       if(landingStatus && flight.altitude()<game.route.landingGuideHeight) {
         const range=`${game.route.landingMinSpeed}–${game.route.landingMaxSpeed} km/h`;
-        let hint='着陆速度在允许范围内，请保持。';
+        let hint=landingStatus.speed?'着陆速度在允许范围内，请保持。':'';
         if(a.airspeed<game.route.landingMinSpeed) hint=flight.thrustLocked
           ? '着陆速度偏低，提速功能已失效，当前无法满足接地速度。'
           : a.systems.engine!=='RUNNING' ? '着陆速度偏低，请先启动Engine（发动机）再提速。'
           : a.systems.flaps!=='CLEAN' ? '着陆速度偏低，请先关闭Wing brake（机翼减速板）再提速。' : '着陆速度偏低，请提速。';
-        else if(a.airspeed>game.route.landingMaxSpeed) hint=a.systems.flaps==='CLEAN'
-          ? '着陆速度偏高，请打开Wing brake（机翼减速板）减速。' : '着陆速度偏高，请继续减速。';
-        warning=warning ? [`${warning[0]} · Landing speed ${range}`,`${warning[1]} ${hint}`,warning[2]]
-          : [`Landing speed ${range}`,hint,landingStatus.speed?'info':'warning'];
+        warning=warning ? [`${warning[0]} · Landing speed ${range}`,[warning[1],hint].filter(Boolean).join(' '),warning[2]]
+          : [`Landing speed ${range}`,hint,a.airspeed<game.route.landingMinSpeed?'warning':'info'];
       }
     }
     const banner=this.elements['flight-status'];

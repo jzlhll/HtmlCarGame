@@ -111,7 +111,7 @@ export const SCENERY = {
 };
 
 export const SYSTEMS = {
-  engineStartSeconds: 3,
+  engineStartSeconds: 1.5,
   promptSeconds: 2.5,
 };
 
@@ -159,7 +159,8 @@ export const FLIGHT = {
   verticalResponse: 2.5,
   speedTapKmh: 10,
   speedDecayRate: 5, // 始终生效的自然减速，单位为km/h每秒。
-  pitchTap: Math.PI / 180,
+  pitchTap: 0.2 * Math.PI / 180,
+  pitchRepeat: 0.8 * Math.PI / 180,
   pitchRate: 3 * Math.PI / 180,
   groundMaxPitch: 18 * Math.PI / 180,
   minPitch: -65 * Math.PI / 180,
@@ -215,8 +216,8 @@ export const CONTROLS = {
   Space: { action: 'space' },
   ArrowLeft: { action: 'left', held: true },
   ArrowRight: { action: 'right', held: true },
-  ArrowUp: { action: 'up', held: true, press: true },
-  ArrowDown: { action: 'down', held: true, press: true },
+  ArrowUp: { action: 'up', held: true, press: true, repeat: true },
+  ArrowDown: { action: 'down', held: true, press: true, repeat: true },
 };
 
 // 地标采用轮廓化比例，集中于虚构河湾城市，不对应真实城市间的地理位置。
@@ -275,7 +276,6 @@ export const AERODYNAMICS = {
   mass: 52000, engineResponseSeconds: 0.8,
   pitchLowWarning: -10 * Math.PI / 180,
   groundWarningHeight: 120, descentWarningAngle: -6 * Math.PI / 180,
-  overspeedWarning: 463, overspeedClear: 444.48,
   warningRecoverySeconds: 0.8,
   maxRollRate: 60 * Math.PI / 180, tireFriction: 0.7,
 };
@@ -466,7 +466,7 @@ export const AUDIO = {
       'engine-start': 'Fire', 'engine-ready': 'Engines ready', 'engine-stop': 'Engines off',
       released: 'Cleared for takeoff', 'brake-set': 'Parking brake', liftoff: 'Airborne. Positive climb',
       'gear-start': 'Gear moving', 'gear-up': 'Gear up', 'gear-down': 'Gear down',
-      'flaps-up': 'Wing brake closed', 'flaps-down': 'Wing brake open', overspeed: 'Airspeed high',
+      'flaps-up': 'Wing brake closed', 'flaps-down': 'Wing brake open',
       'pitch-low': 'Raise nose', stall: 'Stall', 'stall-recovered': 'Stall recovered',
       ceiling: 'Altitude limit', 'fault-recovered': 'Power restored', traffic: 'Traffic',
       'climb-complete': 'Climb complete',

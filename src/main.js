@@ -101,7 +101,7 @@ async function requestEnter() {
 }
 
 ui.onEnter=()=>{audio.unlockSpeech();return requestEnter();};
-input.onCommand = action => {
+input.onCommand = (action, {repeat = false} = {}) => {
   if (!startupReady || ui.upgrading || ui.error || ui.preparing) return;
   if (action==='space') {
     if (game.phase==='READY') {audio.unlockSpeech();void requestEnter();}
@@ -110,7 +110,7 @@ input.onCommand = action => {
     if (action==='T' && !game.paused && ['STARTUP','TAKEOFF_ROLL'].includes(game.phase)) {
       hasAccelerated=true; details?.pause(); updateGenerationWindow('thrust');
     }
-    if (action!=='T' || !input.held.has('S')) game.command(action);
+    if (action!=='T' || !input.held.has('S')) game.command(action, {repeat});
   }
 };
 input.onActivity=()=>game.dismissStartupHint(); input.onBlur=()=>game.pause();

@@ -15,7 +15,7 @@ export class Input {
       if (!control) return;
       event.preventDefault();
       if (control.held) this.held.add(control.action);
-      if ((!control.held || control.press) && !event.repeat) this.onCommand(control.action);
+      if ((!control.held || control.press) && (!event.repeat || control.repeat)) this.onCommand(control.action, {repeat: event.repeat});
     });
     window.addEventListener('keyup', event => {
       const control = CONTROLS[event.code];

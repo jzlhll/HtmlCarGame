@@ -237,7 +237,7 @@ export class FlightAudio {
     } else {
       words = AUDIO.voice.events[event.type];
       if (!words) return;
-      if (['gear-warning', 'bird-strike', 'stall', 'ceiling', 'traffic', 'pitch-low', 'overspeed'].includes(event.type)) priority = 3;
+      if (['gear-warning', 'bird-strike', 'stall', 'ceiling', 'traffic', 'pitch-low'].includes(event.type)) priority = 3;
       if (event.type === 'engine-start') cue = AUDIO.cues.start;
       else if (event.type === 'engine-stop' || event.type === 'brake-set') cue = AUDIO.cues.switchOff;
       else if (event.type === 'released') cue = AUDIO.cues.latch;

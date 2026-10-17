@@ -45,9 +45,9 @@ kbd { font-family: inherit; font-size: 14px; font-weight: 500; display: inline-g
 .instrument footer i { font-style: normal; color: #647c7b; }
 .attitude { text-align: center; }
 .attitude-body { display: flex; align-items: center; justify-content: center; gap: 10px; min-width: 0; }
-.attitude-reading { min-width: 0; text-align: center; }
-.attitude-reading strong { display: block; font-size: clamp(16px, 1.8vw, 22px); letter-spacing: 0.3px; }
-.attitude-reading footer { margin-top: 3px; }
+.attitude-reading { flex: 0 0 clamp(64px, 6.6vw, 84px); min-width: 0; text-align: center; }
+.attitude-reading strong { display: block; font-size: clamp(16px, 1.8vw, 22px); letter-spacing: 0.3px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.attitude-reading footer { margin-top: 3px; min-height: 2.4em; font-size: clamp(9px, 0.9vw, 11px); line-height: 1.1; white-space: nowrap; }
 .attitude-body .attitude-mark { flex: 0 0 auto; }
 
 .attitude-mark { position: relative; align-self: center; width: 46px; height: 26px; border: 1px solid #415858; border-radius: 50%; }

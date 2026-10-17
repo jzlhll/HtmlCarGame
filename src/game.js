@@ -145,13 +145,13 @@ export class Game {
     return !['READY', 'RESULT'].includes(this.phase) && !this.paused;
   }
 
-  command(key) {
+  command(key, {repeat = false} = {}) {
     if (!['STARTUP', ...FLIGHT_PHASES].includes(this.phase) || this.paused) return;
     key = key.toUpperCase();
     const flying = this.phase !== 'STARTUP';
     const stationary = this.aircraft.onGround && this.aircraft.airspeed < FLIGHT.stopSpeed;
     let event;
-    if (['T', 'S', 'UP', 'DOWN'].includes(key)) event = flying ? this.flight.command(key) : null;
+    if (['T', 'S', 'UP', 'DOWN'].includes(key)) event = flying ? this.flight.command(key, {repeat}) : null;
     else if (key === 'G' || (key === 'W' && flying && (!stationary || this.aircraft.landed))) event = this.flight.command(key);
     else event = this.systems.command(key, { stationary });
     if (key === 'W' && ['flaps-up', 'flaps-down', 'prepared', 'unprepared'].includes(event?.type)) { this.flight.speedTapRemaining = 0; this.flight.speedTapDirection = 0; }
