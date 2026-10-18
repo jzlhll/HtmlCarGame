@@ -23,10 +23,10 @@ export function coastalLandWeight(x,z) {
 export function createCoastalSurface(endDistance) {
   const s=LANDSCAPE.coast,xs=new Set([-s.width/2,s.width/2]),zs=new Set([s.startZ,s.endZ]);
   for(let x=-s.width/2;x<=s.width/2;x+=2500)xs.add(x);
-  for(let x=-900;x<=3000;x+=s.shoreGrid)xs.add(x);
+  for(let x=s.airport.x-s.airport.halfWidth-s.airport.edge;x<=s.airport.x+s.airport.halfWidth+s.airport.edge;x+=s.shoreGrid)xs.add(x);
   for(let x=-s.width/2;x<=-3000;x+=1500)xs.add(x);
   for(let z=s.endZ;z<=s.startZ;z+=s.alongGrid)zs.add(z);
-  for(let z=-3900;z<=800;z+=s.airportGrid)zs.add(z);
+  for(let z=s.airport.z-s.airport.halfLength-s.airport.edge;z<=s.airport.z+s.airport.halfLength+s.airport.edge;z+=s.airportGrid)zs.add(z);
   for(const [z] of s.shoreline)zs.add(z);
   for(const x of [s.airport.x-s.airport.halfWidth,s.airport.x+s.airport.halfWidth,s.airport.x,s.causeway.minX,s.causeway.maxX,0])xs.add(x);
   for(const z of [s.airport.z-s.airport.halfLength,s.airport.z+s.airport.halfLength,s.causeway.minZ,s.causeway.maxZ])zs.add(z);

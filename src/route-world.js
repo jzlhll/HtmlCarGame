@@ -1,3 +1,5 @@
+import { prepareWeatherWorld } from './weather-world.js';
+import { prepareCityStreetLayout, streetCarBox } from './city-street-layout.js';
 import { AIRCRAFT, LANDSCAPE, JOURNEY, terrainElevation, clusterZ, LOOP_WORLD, WORLD_BOUNDARY } from './config.js';
 import { createCoastalSurface, coastalHeight, shorelineX, coastalLandWeight } from './coastal-terrain.js';
 import { boundaryHeightAt } from './world-boundary.js';
@@ -30,6 +32,7 @@ export function segmentBox(a, b, box, radius = 0) {
 export class RouteWorld {
   constructor(route,{defer=false}={}) {
     this.route = route;
+    this.cacheStreetLayouts=defer;
     this.coastalSurface=createCoastalSurface(-route.destination.threshold);
     this.solids = []; this.waterfalls = [];
     this.buildings = []; this.mountainSurfaces = []; this.boxCells = new Map();
@@ -39,6 +42,7 @@ export class RouteWorld {
 
   *build() {
     const route=this.route;
+    yield {task:'weather-layout'};this.weather=yield* prepareWeatherWorld(route,this.cacheStreetLayouts);yield 'boundary';
     let seed = LANDSCAPE.seed;
     this.random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
     const city = LANDSCAPE.city, random = this.random;
@@ -80,6 +84,14 @@ export class RouteWorld {
     yield {task:'regional-layout'};this.makeChangsha();yield 'boundary';
     this.districts=[...harborParts(),...parkingParts(4200,LANDSCAPE.city.center[1])];
     for(const part of this.districts)if(part.role!=='parking')this.addBox(part.x,part.y,part.z,part.width,part.height,part.depth,part.name,0);
+    this.cityStreets=[];
+    const landmarkExclusions=LANDSCAPE.landmarks.map(t=>({minX:t.position[0]-t.radius*1.2,maxX:t.position[0]+t.radius*1.2,minZ:t.position[1]-t.radius*1.2,maxZ:t.position[1]+t.radius*1.2}));
+    for(const [index,settings]of [city,...this.regionalCities].entries()){
+      const exclusions=index===0?landmarkExclusions:[{minX:JOURNEY.island.x-JOURNEY.island.riverWidth*.51,maxX:JOURNEY.island.x+JOURNEY.island.riverWidth*.51,minZ:JOURNEY.island.z-JOURNEY.island.riverLength*.51,maxZ:JOURNEY.island.z+JOURNEY.island.riverLength*.51},{minX:settings.x-settings.plaza[0]/2,maxX:settings.x+settings.plaza[0]/2,minZ:settings.z-settings.plaza[1]/2,maxZ:settings.z+settings.plaza[1]/2}];
+      const network=yield* prepareCityStreetLayout(settings,exclusions,index===0?'guangzhou':'changsha',this.cacheStreetLayouts);this.cityStreets.push(network);
+      for(const [i,car]of network.cars.entries()){const box=streetCarBox(car);this.addBox(car.x,(box.min.y+box.max.y)/2,car.z,box.max.x-box.min.x,box.max.y-box.min.y,box.max.z-box.min.z,box.name,0);if(i%64===0)yield;}
+    }
+    this.loopStreets=yield* prepareCityStreetLayout({...city,center:[0,0],rows:city.loopRows},landmarkExclusions.map(b=>({...b,minZ:b.minZ-city.center[1],maxZ:b.maxZ-city.center[1]})),'loop-city',this.cacheStreetLayouts);
     this.makeCoastalRoad();yield 'boundary';
     this.makeTransitions();yield 'boundary';
     yield {task:'height-surfaces'};yield* this.makeMountains();
@@ -260,7 +272,12 @@ export class RouteWorld {
       this.coastalRoad.push({kind,center,width,height,length,heading});
     };
     const path=[];
-    for(let z=road.startZ;z>=road.endZ;z-=road.step)path.push({x:shorelineX(z)-road.waterOffset,z});
+    for(let z=road.startZ;z>=road.endZ;z-=road.step){
+      const airport=s.airport,distance=Math.abs(z-airport.z)-airport.halfLength-road.airportClearance;
+      const t=Math.max(0,Math.min(1,1-distance/road.airportBlend)),blend=t*t*(3-2*t);
+      const shore=shorelineX(z)-road.waterOffset,bypass=airport.x-airport.halfWidth-road.airportClearance-road.width/2;
+      path.push({x:shore+(Math.min(shore,bypass)-shore)*blend,z});
+    }
     const addPath=points=>{
       for(let i=1;i<points.length;i++){
         const a=points[i-1],b=points[i],dx=b.x-a.x,dz=b.z-a.z,length=Math.hypot(dx,dz),heading=Math.atan2(dx,dz),x=(a.x+b.x)/2,z=(a.z+b.z)/2;
@@ -274,8 +291,6 @@ export class RouteWorld {
       }
     };
     addPath(path);
-    const z=(s.causeway.minZ+s.causeway.maxZ)/2;
-    addPath([{x:s.causeway.minX,z},{x:shorelineX(z)-road.waterOffset,z}]);
   }
 
   // 过渡带独立随机流，不改变景点群内部布局；小丘避开中央航线和机场。

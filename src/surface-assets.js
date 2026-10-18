@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { SURFACE_APPEARANCE, LANDSCAPE, AIRCRAFT, LOOP_WORLD, COUNTRYSIDE, JOURNEY, WORLD_TRAVEL, WORLD_BOUNDARY, REGION_BLEND } from './config.js';
+import { SURFACE_APPEARANCE, LANDSCAPE, AIRCRAFT, LOOP_WORLD, COUNTRYSIDE, JOURNEY, WORLD_TRAVEL, WORLD_BOUNDARY, REGION_BLEND, CITY_STREETS, WEATHER, LEVELS, WORLD_HEIGHT } from './config.js';
 import { fuselageGeometry, aircraftDoorGeometry, engineGeometry, fanGeometry, treeCrownGeometry, wingGeometry } from './model-geometry.js';
 import { surfacePixels, terrainPixels, environmentPixels, mipmapPixels } from './surface-recipes.js';
 import { GenerationQueue } from './generation-queue.js';
@@ -224,6 +224,8 @@ function resourceManifest() {
     if(name.startsWith('boundary-'))dependencies={...WORLD_BOUNDARY,side:Number(name.split('-').at(-1))};
     entries.push([`base/${name}`,dependencies]);
   }
+  entries.push(['scene/weather',{settings:WEATHER,levels:LEVELS,height:WORLD_HEIGHT.displayScale}]);
+  entries.push(['scene/streets',{settings:CITY_STREETS,city:LANDSCAPE.city,changsha:JOURNEY.changsha,island:JOURNEY.island,landmarks:LANDSCAPE.landmarks}]);
   entries.push(['scene/country',{recipe:COUNTRYSIDE.cacheRecipe,country:COUNTRYSIDE,terrain:LANDSCAPE,journey:JOURNEY,world:WORLD_TRAVEL,loop:LOOP_WORLD,blend:REGION_BLEND}]);
   return entries;
 }

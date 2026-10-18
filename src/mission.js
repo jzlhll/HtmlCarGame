@@ -156,7 +156,7 @@ export class Mission {
       const closest = squared ? -(rx * vx + rz * vz) / squared : 0;
       contact.closestSeconds = Math.max(0, closest);
       contact.danger = !contact.hit && !contact.rearBypass && closest >= 0 && closest < this.route.radarHorizon && Math.hypot(rx + vx * closest, rz + vz * closest) < this.route.radarDanger && Math.abs(contact.position.y - a.position.y - a.velocity.y * closest) < this.route.radarVertical;
-      if (!contact.warned && !contact.rearBypass && (contact.danger || contact.age <= dt * 2)) {
+      if (!contact.warned && this.weatherRadarAvailable!==false && !contact.rearBypass && (contact.danger || contact.age <= dt * 2)) {
         contact.warned = true;
         events.push({type: 'traffic', key: `contact-${contact.id}`, reason: `${contact.kind === 'geese' ? 'Geese（大雁群）' : 'Traffic（其他飞机）'}：${courses[contact.course]}接近，请参考雷达箭头，调整方向或高度避让。`});
       }
@@ -168,7 +168,7 @@ export class Mission {
           if (flight.speedTapDirection>0) flight.speedTapRemaining=0;
           a.throttle=0; a.enginePower=0; a.thrust=0;
         }
-        events.push({type:'bird-strike',key:`contact-${contact.id}`,reason:flight.thrustLocked ? 'Bird strike（再次鸟击）：又一块玻璃破裂，T 加速已失效，本关持续，下一关恢复。' : `Bird strike（鸟击）：一块玻璃破裂，本关最高空速为 ${Math.round(flight.maxSpeed)} km/h（原来的80%）。`});
+        events.push({type:'bird-strike',key:`contact-${contact.id}`,reason:a.birdStrikeCount>=this.route.birdThrustLockHits ? 'Bird strike（再次鸟击）：又一块玻璃破裂，T 加速已失效，本关持续，下一关恢复。' : `Bird strike（鸟击）：一块玻璃破裂，本关最高空速为 ${Math.round(flight.maxSpeed)} km/h（原来的80%）。`});
       }
     }
     let live = 0;

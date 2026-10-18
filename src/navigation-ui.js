@@ -58,7 +58,7 @@ export class NavigationUI {
     setAttribute(this.player, 'transform', `translate(${this.mapPoint(a.position.x, a.position.z)}) rotate(${degrees(a.heading).toFixed(1)})`);
     const distance = Math.max(0, mission.runwayDistance);
     setHTML(this.status, a.landed ? `Parking ${Math.round(a.airspeed)} km/h<small>避让障碍 · 跑道内停稳 1 秒</small>` : `${mission.sector.english} · ${(distance / 1000).toFixed(1)} km<small>${mission.sector.chinese} · 海拔 ${Math.round(displayHeight(a.position.y))} / ${displayHeight(game.route.ceiling)} m</small>`);
-    const contacts = a.systems.avionics ? mission.contacts.filter(c => Math.hypot(c.position.x - a.position.x, c.position.z - a.position.z) < game.route.radarRange) : [];
+    const contacts = a.systems.avionics && game.weather.radarAvailable ? mission.contacts.filter(c => Math.hypot(c.position.x - a.position.x, c.position.z - a.position.z) < game.route.radarRange) : [];
     const alert = contacts.some(c => c.danger || c.age < game.route.radarLead), flash = Math.floor(mission.elapsed * 4) % 2 === 0;
     this.radarCard.classList.toggle('has-alert', alert && flash);
     this.distanceLabels.length = 0;
@@ -98,6 +98,6 @@ export class NavigationUI {
     }
     for (const [id, item] of this.contactNodes) if (!visible.has(id)) { item.element.remove(); this.contactNodes.delete(id); }
     const urgent = contacts.find(c => c.danger) || contacts[0];
-    setHTML(this.warning, !a.systems.avionics ? 'Avionics OFF<small>A 开启雷达</small>' : urgent ? `${urgent.kind === 'geese' ? 'Geese' : 'Traffic'} · ${trafficDistanceLabel(Math.hypot(urgent.position.x - a.position.x, urgent.position.y - a.position.y, urgent.position.z - a.position.z))}<small>箭头为航向 · 数字为距离</small>` : `Clear · ${(game.route.radarRange/1000).toFixed(1)} km<small>雷达范围内无交通目标</small>`);
+    setHTML(this.warning, !a.systems.avionics ? 'Avionics OFF<small>A 开启雷达</small>' : !game.weather.radarAvailable ? 'Radar unavailable<small>白云干扰 · 离开云层恢复</small>' : urgent ? `${urgent.kind === 'geese' ? 'Geese' : 'Traffic'} · ${trafficDistanceLabel(Math.hypot(urgent.position.x - a.position.x, urgent.position.y - a.position.y, urgent.position.z - a.position.z))}<small>箭头为航向 · 数字为距离</small>` : `Clear · ${(game.route.radarRange/1000).toFixed(1)} km<small>雷达范围内无交通目标</small>`);
   }
 }

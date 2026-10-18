@@ -1,3 +1,4 @@
+import { streetCarBox } from './city-street-layout.js';
 import { LOOP_WORLD, LANDSCAPE } from './config.js';
 import { terrainNoise, smoothRange } from './terrain.js';
 import { buildingParts } from './building-layout.js';
@@ -87,11 +88,13 @@ export function sampleLoopTerrain(geometry, x, z) {
 
 // 使用与可见三角形完全相同的插值，外围建筑也使用模板的原始包围盒。
 export class LoopWorld {
-  constructor(route, geometries, buildings, landmarkBoxes) {
+  constructor(route, geometries, buildings, landmarkBoxes, streets) {
     this.route = route; this.geometries = geometries;
     this.city = buildings.map(site => ({...site, z: site.z - LANDSCAPE.city.center[1]})).filter(site=>Math.abs(site.z)<LANDSCAPE.city.loopRows*LANDSCAPE.city.spacing/2);
     this.landmarks = landmarkBoxes.map(box => ({min: {...box.min, z: box.min.z - LANDSCAPE.city.center[1]}, max: {...box.max, z: box.max.z - LANDSCAPE.city.center[1]}, name: box.name}));
     this.cityBoxes=this.city.flatMap(site=>buildingParts(site).map(part=>({min:{x:part.x-part.width/2,y:part.y-part.height/2,z:part.z-part.depth/2},max:{x:part.x+part.width/2,y:part.y+part.height/2,z:part.z+part.depth/2},name:'外围城市建筑'})));
+    this.streets=streets;
+    if(streets)this.cityBoxes.push(...streets.cars.map(streetCarBox));
     this.parking=parkingParts(4200,0);
     this.cityBoxes.push(...this.parking.filter(p=>p.role!=='parking').map(p=>({min:{x:p.x-p.width/2,y:p.y-p.height/2,z:p.z-p.depth/2},max:{x:p.x+p.width/2,y:p.y+p.height/2,z:p.z+p.depth/2},name:p.name})));
     this.cityCells=new Map();this.candidates=new Set();

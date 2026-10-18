@@ -1,3 +1,5 @@
+export { isWithinRunway } from './runway-layout.js';
+
 export const GAME = {
   fixedStep: 1 / 120,
   maxFrameSeconds: 0.05,
@@ -51,7 +53,7 @@ export const HARBOR = {
 };
 
 export const COUNTRYSIDE = {
-  cacheRecipe: 4, treeNear: 1800, treeFar: 10500,
+  cacheRecipe: 5, treeNear: 1800, treeFar: 10500,
   fieldSpacing: 420, fieldDepth: 310, roadWidth: 28, treeArea: 18000,
   fieldColors: [0x74784b,0x8d8850,0x6e7a45,0x9b8b62,0x536748,0x8b795c,0xa19b6b,0x657751],
   treeColors: [0x334b2d,0x41562f,0x4c6037,0x2d442d],
@@ -96,19 +98,14 @@ export const AIRCRAFT = {
 };
 
 export const RUNWAY = {
-  length: 3000,
+  length: 4500,
+  headings: [0,Math.PI/4,Math.PI/2,Math.PI*3/4],
   width: 60,
   startOffset: 100,
   designator: '36',
   stripeLength: 24,
   stripeGap: 30,
 };
-
-// 接地、滑跑与停机共用机身位置判定，不额外要求机翼或机轮留边。
-export function isWithinRunway(position, runway) {
-  return Math.abs(position.x - runway.x) <= runway.width / 2 + 1e-9
-    && position.z <= runway.threshold + 1e-9 && position.z >= runway.threshold - runway.length - 1e-9;
-}
 
 export const CAMERA = {
   exterior: { position: [-49, 23, -47], target: [0, 3.5, 0], fov: 48 },
@@ -199,14 +196,19 @@ export const FLIGHT = {
   speedTapKmh: 10,
   speedDecayRate: 5, // 始终生效的自然减速，单位为km/h每秒。
   pitchTap: 0.2 * Math.PI / 180,
-  pitchRepeat: 0.8 * Math.PI / 180,
+  pitchRepeat: 1.2 * Math.PI / 180,
   pitchRate: 3 * Math.PI / 180,
+  pitchReleaseTravel: 0.2 * Math.PI / 180,
+  ceilingPitchRate: 2 * Math.PI / 180,
+  ceilingResetHeight: 20 / WORLD_HEIGHT.displayScale,
   groundMaxPitch: 18 * Math.PI / 180,
   minPitch: -65 * Math.PI / 180,
   maxPitch: 35 * Math.PI / 180,
   maxBank: 60 * Math.PI / 180,
   successBank: 10 * Math.PI / 180,
   bankResponse: 4.2,
+  airTurnMultiplier: WORLD_TRAVEL.horizontalScale,
+  maxAirTurnRate: 45 * Math.PI / 180,
   takeoffPitch: Math.PI / 180,
   groundTurnRate: 0.65,
   groundTurnSpeed: 43.2,
@@ -260,6 +262,25 @@ export const CONTROLS = {
 };
 
 // 地标采用轮廓化比例，集中于虚构河湾城市，不对应真实城市间的地理位置。
+export const WEATHER = {
+  recipe: 10, seed: 798431, width: 2800, length: 4000, height: 6720 / WORLD_HEIGHT.displayScale,
+  highBand: [7800,8500].map(v=>v/WORLD_HEIGHT.displayScale),
+  thinBand: [5800,6500].map(v=>v/WORLD_HEIGHT.displayScale), thinDensity: .36,
+  startZ: -11000, spacing: 14500, lateralSpread: 1800, windKmh: 100,
+  wrapMinX: -29000, wrapMaxX: 29000, variants: 4, puffs: 22, meshGrid: [40,32,40], blend: .24,
+  // 600 km/h下计入4倍位移，雾远端至少留4秒行程，前方2秒的物体仍有约一半对比度。
+  whiteVisibility: Math.max(SCENERY.fogFar*.1,worldHorizontalSpeed(FLIGHT.maxSpeed/3.6)*4),
+  thinVisibility: Math.max(SCENERY.fogFar*.15,worldHorizontalSpeed(FLIGHT.maxSpeed/3.6)*6), stormVisibilityRatio: .5,
+  flashInterval: [8,16], flashSeconds: .22, strikeChance: .025, maxClouds: 128,
+};
+
+export const CITY_STREETS = {
+  recipe: 3, seed: 814379, widths: [36,96,360], primaryEvery: 3, alleyInset: 150, alleyRoadGap: 12,
+  elevation: .6, chunkSize: 3600, carFar: 6500,
+  carSpacing: [360,220,160], carDensity: [.18,.38,.42],
+  carColors: [0xd6dbd7,0x334d5a,0x8b3c32,0xc4aa71,0x6c848d,0x3e474d,0xb6bab2],
+};
+
 export const LANDSCAPE = {
   staticBatchCell: 640,
   seed: 3827,
@@ -297,11 +318,12 @@ export const LANDSCAPE = {
     seaLevel: -.12, seabed: -4, shoreBlend: 600, shoreGrid: 150, alongGrid: 250, airportGrid: 100,
     endZ: -14000 * WORLD_TRAVEL.horizontalScale / 2, startZ: 6000, width: 12000,
     shoreline: [[6000,2400],[2000,1800],[0,1600],[-4000,1100],[-6500,0],[-9000,-2000],[-11500,-6500],[-14000,-41000]].map(([z,x])=>[z<0?z*WORLD_TRAVEL.horizontalScale/2:z,x]),
-    airport: {x:115,z:-1550,halfWidth:665,halfLength:2050,edge:80},
+    airport: {x:115,z:RUNWAY.startOffset-RUNWAY.length/2,halfWidth:RUNWAY.length/2+400,halfLength:RUNWAY.length/2+400,edge:80},
     causeway: {minX:450,maxX:1900,minZ:-560,maxZ:-240,edge:50},
     deepColor:0x287b98,shallowColor:0x58a2ad,waterSegments:[64,96],
     waveScale:[.035,.021],waveRate:[1.1,.75],waveNormal:.045,
-    highway: {startZ:2000,endZ:-12000*WORLD_TRAVEL.horizontalScale/2,step:160,waterOffset:100,width:30,height:12,thickness:1.4,
+    highway: {startZ:2000,endZ:-12000*WORLD_TRAVEL.horizontalScale/2,step:160,waterOffset:100,width:AIRCRAFT.wingspan*4+20,height:12,thickness:1.4,
+      airportClearance:240,airportBlend:1600,
       railWidth:.55,railHeight:1,pierWidth:7,pierLength:5,dashLength:6,dashSpacing:18,
       asphaltColor:0x526166,concreteColor:0xb9bcb0,markingColor:0xe6e4cb},
   },
@@ -364,8 +386,8 @@ export const ROUTE = {
   landingDangerHeight: 30 / WORLD_HEIGHT.displayScale, landingDangerFactor: 1.5, landingGuideHeight: 200 / WORLD_HEIGHT.displayScale,
   landingSettleSeconds: 1.2, landingSettleResponse: 6, landingSettleRate: 180 * Math.PI / 180,
   gearMaxSpeed: 407.44,
-  destination: { x: 0, length: 6000, width: 240,
-    apron: { x: 80, width: 420, length: 850 } },
+  destination: { x: 0, length: 9000, width: 240, headings: RUNWAY.headings,
+    apron: { x: 600, width: 420, length: 850 } },
   encounterExtraGapSeconds: 30,
   finalApproachHeight: 200 / WORLD_HEIGHT.displayScale, finalApproachDistance: 2500,
   encounters: [
@@ -493,6 +515,8 @@ export const AUDIO = {
       {type: 'sine', frequency: 587.33, endFrequency: 587.33, seconds: 0.85, gain: 0.06},
     ],
   },
+  lightningAlarm: {seconds: 3, lowHz: 430, highHz: 920, rate: 2.6, gain: .075},
+  thunder: {seconds: 1.5, gain: .075, frequency: 360, endFrequency: 55},
   explosion: {seconds: 1.5, gain: 0.65, frequency: 1700, endFrequency: 85},
   birdImpact: {seconds: 0.16, gain: 0.18, frequency: 1100, endFrequency: 180},
   glassImpact: {seconds: 0.24, gain: 0.12, frequency: 5600, endFrequency: 1700},

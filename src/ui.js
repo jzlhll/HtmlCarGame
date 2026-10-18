@@ -28,7 +28,7 @@ export class UI {
     setText(document.getElementById('runway-code'), `Runway ${RUNWAY.designator} / engine OFF`);
     this.elements = {};
     for (const id of ['welcome', 'preview-banner', 'instruments', 'startup-strip', 'pause-overlay',
-      'exterior-caption', 'elapsed', 'error-overlay', 'error-message', 'resume-button', 'intro-sequence', 'countdown-number', 'countdown-caption', 'countdown-heading', 'countdown-tip', 'landing-debug', 'pause-copy', 'startup-hint-copy', 'startup-prompt', 'attitude-preview', 'gear-preview', 'gear-preview-label', 'flight-status', 'airspeed-value', 'altitude-value', 'vertical-speed-value', 'attitude-value', 'attitude-label', 'ground-speed', 'flight-guide', 'result-overlay', 'result-title', 'result-reason', 'result-caption', 'result-stats', 'restart-button', 'next-level-button']) {
+      'exterior-caption', 'elapsed', 'error-overlay', 'error-message', 'resume-button', 'intro-sequence', 'countdown-number', 'countdown-caption', 'countdown-heading', 'countdown-tip', 'landing-debug', 'pause-copy', 'startup-hint-copy', 'startup-prompt', 'attitude-preview', 'gear-preview', 'gear-preview-label', 'flight-status', 'airspeed-value', 'altitude-value', 'vertical-speed-value', 'attitude-value', 'attitude-label', 'ground-speed', 'flight-guide', 'lightning-fault', 'result-overlay', 'result-title', 'result-reason', 'result-caption', 'result-stats', 'restart-button', 'next-level-button']) {
       this.elements[id] = document.getElementById(id);
     }
     this.attitudeMark = container.querySelector('.attitude-mark');
@@ -158,6 +158,7 @@ export class UI {
   updateSystems() {
     this.setFlow();
     this.updateLandingGuide();
+    this.elements['lightning-fault'].hidden=!this.game.aircraft.lightningStrike || this.game.view!=='COCKPIT' || ['CRASH','COMPLETE','RESULT'].includes(this.game.phase);
     const a = this.game.aircraft, systems = a.systems, flight = this.game.flight;
     const speed = this.game.mission.approaching && !a.onGround ? Number(a.airspeed.toFixed(2)) : Math.round(a.airspeed), altitude = Math.floor(displayHeight(flight.altitude()));
     const gearReady = flight.canRetractGear();
@@ -208,7 +209,7 @@ export class UI {
     if (this.displayPitch !== pitch) { this.attitudeMark.style.setProperty('--horizon', `${50 + pitch * 2}%`); this.displayPitch = pitch; }
     setBilingual(this.elements['gear-preview-label'], `${altitude} m · ↓${Math.max(0, -a.verticalSpeed).toFixed(1)} km/h`, `${systems.gear === 'DOWN' ? '起落架放下' : systems.gear === 'UP' ? '起落架收起' : '起落架移动中'} · ${systems.flaps === 'CLEAN' ? '减速板关闭' : '减速板打开'}`);
     this.elements['airspeed-value'].classList.toggle('is-critical', !a.onGround && flight.stalled && !(this.game.mission.approaching && flight.landingStatus().ready));
-    const prompt=this.game.prompts.current;
+    const prompt=this.game.prompts.type==='ceiling'?null:this.game.prompts.current;
     this.elements['startup-prompt'].hidden=!prompt;
     setText(this.elements['startup-prompt'],prompt || '');
   }
@@ -222,9 +223,13 @@ export class UI {
       if(flight.stalled && !landingStatus?.ready) warning=['Stall',flight.stallGuidance,'danger'];
       else if(flight.gearWarning) warning=['Landing gear','起落架未完全放下，触地会爆炸！','danger'];
       else if(flight.pitchLow && !landingStatus?.ready) warning=['Descent danger','下降危险，可能撞地。','danger'];
+      else if(a.lightningStrike) warning=['Lightning fault','雷击故障，本关无法再提速。','danger'];
       else if(flight.thrustLocked) warning=['Thrust unavailable','两次鸟击，T 加速失效，下一关恢复。','danger'];
-      else if(mission.contacts.some(contact=>!contact.hit&&!contact.rearBypass&&contact.danger)) warning=['Collision risk','前方有飞机或雁群，注意避让。','danger'];
+      else if(game.weather.radarAvailable && mission.contacts.some(contact=>!contact.hit&&!contact.rearBypass&&contact.danger)) warning=['Collision risk','前方有飞机或雁群，注意避让。','danger'];
+      else if(game.weather.kind==='white') warning=['White cloud','白云内雷达失效，可视范围大幅缩小。','warning'];
+      else if(game.weather.kind==='storm') warning=['Storm cloud','乌云内可视范围减半，雷达正常，注意闪电。','warning'];
       else if(mission.offCourse) warning=['Off course','已偏离航线，请调整方向。','warning'];
+      else if(game.prompts.type==='ceiling' && game.prompts.current) warning=['Altitude limit',game.prompts.current,'warning'];
       else if(a.birdStrike) warning=['Bird damage','玻璃受损，本关最高速度降至 80%。','warning'];
       if(!warning && mission.approaching && !a.onGround && !a.landed) {
         const altitude=flight.altitude(),status=landingStatus;

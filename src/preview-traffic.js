@@ -54,7 +54,7 @@ export class PreviewTraffic extends THREE.Group {
     const cosine=Math.cos(referenceHeading),sine=Math.sin(referenceHeading);
     for (const entry of this.entries.values()) entry.model.visible=entry.path.visible=false;
     let count=0;
-    if (game.aircraft.systems.avionics) for (const contact of game.mission.contacts) {
+    if (game.aircraft.systems.avionics && game.weather.radarAvailable) for (const contact of game.mission.contacts) {
       const entry=this.entries.get(contact.id),world=models.get(contact.id);
       if (!entry || !world || contact.hit) continue;
       const dx=world.position.x-pose.position.x,dz=world.position.z-pose.position.z;

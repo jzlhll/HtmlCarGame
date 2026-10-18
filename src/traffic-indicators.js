@@ -23,7 +23,7 @@ export class TrafficIndicators {
     for (const contact of game.mission.contacts) {
       live.add(contact.id);
       const position = models.get(contact.id).position, distance = position.distanceTo(camera.position);
-      if (distance < game.route.contactMarkerNear || distance > game.route.contactMarkerRange) continue;
+      if (distance < game.route.contactMarkerNear || distance > Math.min(game.route.contactMarkerRange,game.weather.visibility)) continue;
       this.point.copy(position);
       if (contact.kind === 'aircraft') this.point.y += AIRCRAFT.bodyHeight * game.route.trafficScale;
       this.point.project(camera);

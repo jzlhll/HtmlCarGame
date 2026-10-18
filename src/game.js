@@ -1,3 +1,4 @@
+import { Weather } from './weather.js';
 import { AIRCRAFT, CAMERA, DESTRUCTION, FLIGHT, FLIGHT_PHASES, LANDING_DEBUG, worldHorizontalSpeed, createRoute } from './config.js';
 import { AircraftSystems } from './aircraft-systems.js';
 import { Prompts } from './prompts.js';
@@ -52,6 +53,7 @@ export class Game {
       wheelBrake: false,
       onGround: true,
       landed: false,
+      lightningStrike: false, lightningHitAt: -Infinity,
       birdStrike: false,
       birdStrikeCount: 0,
       systems: {
@@ -70,6 +72,7 @@ export class Game {
     };
     this.systems = new AircraftSystems(this.aircraft);
     this.flight = new Flight(this.aircraft, this.world);
+    this.weather = new Weather(this.aircraft, this.world);
     this.mission = new Mission(this.aircraft, this.flight, this.world);
   }
 
@@ -207,6 +210,10 @@ export class Game {
       this.onChange();
     }
     if (FLIGHT_PHASES.includes(this.phase)) {
+      for(const event of this.weather.step(dt)){
+        if(event.type==='lightning-hit'){this.aircraft.lightningHitAt=this.activeSeconds;this.flight.speedTapRemaining=0;this.aircraft.throttle=0;this.aircraft.thrust=0;}
+        this.emit(event);
+      }
       const events = this.flight.step(dt, held);
       // 接地或越界优先于同一步中的完成条件，结算只执行一次。
       const failed = events.find(item => item.type === 'failed');
@@ -222,6 +229,7 @@ export class Game {
       }
     }
     if (this.mission.started) {
+      this.mission.weatherRadarAvailable=this.weather.radarAvailable;
       const missionEvents = this.mission.step(dt);
       const failed = missionEvents.find(item => item.type === 'failed');
       if (failed) { this.emit(failed); this.finish(false, failed.reason, failed.destructive); return; }

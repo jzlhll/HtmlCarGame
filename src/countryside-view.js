@@ -101,17 +101,19 @@ export function* createCountryside({width, length, centerZ=0, seed, heightAt, la
 
 export function createRoadMaterial() {
   const roadMaterial=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.88,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-4});
-  roadMaterial.customProgramCacheKey=()=> 'country-roads-v1';
+  roadMaterial.customProgramCacheKey=()=> 'country-roads-filtered-v2';
   roadMaterial.onBeforeCompile=shader=>{
     shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec2 vRoadUv;');
     shader.vertexShader=shader.vertexShader.replace('#include <uv_vertex>','#include <uv_vertex>\nvRoadUv=uv;');
     shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying vec2 vRoadUv;');
+    shader.fragmentShader=shader.fragmentShader.replace('#include <logdepthbuf_fragment>','#include <logdepthbuf_fragment>\n#ifdef USE_LOGDEPTHBUF\ngl_FragDepth=max(0.0,gl_FragDepth-0.000002);\n#endif');
     shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
-      float edge=abs(vRoadUv.x-.5),border=1.0-smoothstep(.009,.018,abs(edge-.375));
-      float median=(1.0-smoothstep(.005,.018,edge))*step(.48,fract(vRoadUv.y*.045));
+      float fx=fwidth(vRoadUv.x),fy=fwidth(vRoadUv.y*.045),edge=abs(vRoadUv.x-.5);
+      float border=(1.0-smoothstep(.009-max(fx,.001),.018+max(fx,.001),abs(edge-.375)))*(1.0-smoothstep(.012,.05,fx));
+      float dash=1.0-smoothstep(.24-max(fy,.001),.24+max(fy,.001),abs(fract(vRoadUv.y*.045)-.5));
+      float median=(1.0-smoothstep(.005-max(fx,.001),.018+max(fx,.001),edge))*dash*(1.0-smoothstep(.012,.05,fx))*(1.0-smoothstep(.12,.4,fy));
       vec3 pavement=mix(vec3(.075,.085,.087),vec3(.20,.18,.135),smoothstep(.41,.46,edge));
-      float grain=fract(sin(dot(vRoadUv,vec2(812.4,327.7)))*43758.5)*.035;
-      diffuseColor.rgb=(pavement+grain)*mix(vec3(1),vec3(2.6,2.5,2.1),max(border,median));`);
+      diffuseColor.rgb=pavement*mix(vec3(1),vec3(2.6,2.5,2.1),max(border,median));`);
   };
   return roadMaterial;
 }

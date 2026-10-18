@@ -1,8 +1,8 @@
 import { SYSTEMS } from './config.js';
 
-const priorities = { 'truck-hit': 3, blocked: 1, waterfall: 1 };
+const priorities = { 'truck-hit': 3, blocked: 1, waterfall: 1, ceiling: 1 };
 
-// 这里只管理短时操作反馈；飞行安全与角度信息由顶部持续状态显示。
+// 管理短时反馈；最高点反馈与飞行安全信息统一在顶部显示。
 export class Prompts {
   constructor() {
     this.seen = new Set();
@@ -12,7 +12,7 @@ export class Prompts {
   }
 
   receive(event) {
-    if (event.type==='blocked' && ['extension-speed','bird-thrust-lock'].includes(event.condition)) return;
+    if (event.type==='blocked' && ['extension-speed','bird-thrust-lock','lightning-thrust-lock'].includes(event.condition)) return;
     const priority = priorities[event.type];
     if (!event.reason || !priority) {
       if (this.type === 'blocked' || event.type === 'complete' || event.type === 'failed' || event.type === 'destroyed') this.clear();

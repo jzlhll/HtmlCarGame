@@ -5,9 +5,9 @@ import { mountainIndices } from './terrain.js';
 import { modelGeometry, surfaceTexture } from './surface-assets.js';
 import { createTerrainMaterial } from './terrain-material.js';
 import { createCityBlocks } from './city-blocks.js';
-import { createRoadMaterial, createCountryside } from './countryside-view.js';
+import { createCountryside } from './countryside-view.js';
 import { createDistrict } from './district-view.js';
-import { batchStaticMeshes } from './static-batch.js';
+import { createCityStreets } from './city-streets.js';
 
 // 固定模板池围绕玩家滚动，飞行中不分配模型、纹理、网格或碰撞资源。
 export class LoopView extends THREE.Group {
@@ -17,7 +17,7 @@ export class LoopView extends THREE.Group {
     const geometries=Array.from({length:LOOP_WORLD.variants},(_,i)=>modelGeometry(`loop-terrain-${i}`));
     const names=new Set(LANDSCAPE.landmarks.map(t=>t.name)), boxes=new Set();
     for(const bucket of world.boxCells.values())for(const box of bucket)if(names.has(box.name))boxes.add(box);
-    world.loop=new LoopWorld(world.route,geometries,world.buildings.filter(site=>site.name==='城市楼房'),[...boxes]);
+    world.loop=new LoopWorld(world.route,geometries,world.buildings.filter(site=>site.name==='城市楼房'),[...boxes],world.loopStreets);
     this.geometries=geometries;
   }
 
@@ -55,14 +55,7 @@ export class LoopView extends THREE.Group {
         const city=yield* createCityBlocks(this.world.loop.city);group.add(city);
         group.add(yield* createDistrict(this.world.loop.parking));
         const landmarks=this.makeLandmarks();landmarks.position.z=-LANDSCAPE.city.center[1];group.add(landmarks);
-        const roads=new THREE.Group(),material=createRoadMaterial();
-        for(let i=0;i<=LANDSCAPE.city.columns;i++){
-          const road=new THREE.Mesh(new THREE.PlaneGeometry(LANDSCAPE.city.roadWidth,LANDSCAPE.city.loopRows*LANDSCAPE.city.spacing),material);for(let v=0;v<road.geometry.attributes.uv.count;v++)road.geometry.attributes.uv.setY(v,road.geometry.attributes.uv.getY(v)*LANDSCAPE.city.loopRows*LANDSCAPE.city.spacing);road.rotation.x=-Math.PI/2;road.position.set((i-LANDSCAPE.city.columns/2)*LANDSCAPE.city.spacing,.025,0);roads.add(road);
-        }
-        for(let i=0;i<=LANDSCAPE.city.loopRows;i++){
-          const road=new THREE.Mesh(new THREE.PlaneGeometry(LANDSCAPE.city.columns*LANDSCAPE.city.spacing,LANDSCAPE.city.roadWidth),material);for(let v=0;v<road.geometry.attributes.uv.count;v++){const u=road.geometry.attributes.uv.getX(v),w=road.geometry.attributes.uv.getY(v);road.geometry.attributes.uv.setXY(v,w,u*LANDSCAPE.city.columns*LANDSCAPE.city.spacing);}road.rotation.x=-Math.PI/2;road.position.set(0,.025,(i-LANDSCAPE.city.loopRows/2)*LANDSCAPE.city.spacing);roads.add(road);
-        }
-        batchStaticMeshes(roads,30000);group.add(roads);
+        group.add(yield* createCityStreets(this.world.loop.streets));
       }
       this.templates.push(group);yield 'boundary';
     }

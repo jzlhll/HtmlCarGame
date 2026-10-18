@@ -325,3 +325,6 @@ cjk-text { font-size: calc(1em + 1px); }
   .brand-symbol { display: grid; flex-basis: 24px; width: 24px; height: 24px; font-size: 15px; }
   .brand small { font-size: 8px; letter-spacing: 0.6px; }
 }
+
+.lightning-fault{position:fixed;z-index:15;left:50%;bottom:calc(26% + 12px);transform:translateX(-50%);padding:7px 13px;border:1px solid #ffb096;border-radius:8px;background:#741e19e8;color:#fff0dd;font-size:16px;font-weight:700;box-shadow:0 0 14px #c4473155;pointer-events:none}
+.lightning-fault small{display:block;font-size:13px;margin-top:2px;color:#ffcfb8}

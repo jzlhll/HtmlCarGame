@@ -1,3 +1,4 @@
+import { nearestRunway } from './runway-layout.js';
 import { AIRCRAFT, FLIGHT, RUNWAY, AERODYNAMICS, worldHorizontalSpeed, isWithinRunway } from './config.js';
 
 const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
@@ -12,6 +13,8 @@ export class Flight {
     this.aircraft = aircraft;
     this.previous = { position: { ...aircraft.position }, pitch: 0, bank: 0, heading: 0 };
     this.pitchTarget = 0;
+    this.ceilingAnnounced = false;
+    this.ceilingLeveling = false;
     this.speedTapRemaining = 0; this.speedTapDirection = 0;
     this.events = [];
     this.rotateAnnounced = false;
@@ -68,7 +71,7 @@ export class Flight {
   // 接地判定与右侧指引共用同一状态，角度安全不代表其他条件已经满足。
   landingStatus() {
     const a=this.aircraft, route=this.route, destination=route.destination, state=this.landingState;
-    state.heading=Math.atan2(Math.sin(a.heading),Math.cos(a.heading));
+    state.heading=-nearestRunway(a.position,destination,a.heading).delta;
     state.pitch=a.pitch>=route.landingMinPitch-1e-9 && a.pitch<=route.landingMaxPitch+1e-9;
     state.runway=isWithinRunway(a.position,destination);
     state.gear=a.systems.gear==='DOWN' && a.systems.gearPosition>=0.99;
@@ -89,10 +92,9 @@ export class Flight {
     const degrees = angle => number(angle * 180 / Math.PI);
     if (this.world.isSeaAt?.(a.position.x, a.position.z)) return '海面触地：飞机落入海中，未抵达机场跑道。';
     if (!landing.runway) {
-      if (a.position.z > runway.threshold) return `提前触地：距离${route.destinationName}机场跑道入口还有${Math.ceil(a.position.z - runway.threshold)}米。`;
-      if (a.position.z < runway.threshold - runway.length) return `越过跑道触地：已超出${route.destinationName}机场跑道末端${Math.ceil(runway.threshold - runway.length - a.position.z)}米。`;
-      const overflow = Math.abs(a.position.x - runway.x) - runway.width / 2;
-      return `跑道侧边触地：机身位置超出${a.position.x < runway.x ? '左' : '右'}侧边界${number(overflow)}米。`;
+      const nearest=nearestRunway(a.position,runway,a.heading);
+      if(nearest.end>0)return `跑道端外触地：超出${route.destinationName}机场最近跑道端${number(nearest.end)}米。`;
+      return `跑道侧边触地：机身位置超出${route.destinationName}机场最近跑道边界${number(nearest.side)}米。`;
     }
     if (!landing.gear) {
       const state = a.systems.gear;
@@ -117,9 +119,10 @@ export class Flight {
     return true;
   }
 
-  get thrustLocked() { return this.aircraft.birdStrikeCount >= this.route.birdThrustLockHits; }
+  get thrustLocked() { return this.aircraft.lightningStrike || this.aircraft.birdStrikeCount >= this.route.birdThrustLockHits; }
 
   get stallGuidance() {
+    if (this.aircraft.lightningStrike) return '空速不足，飞机正在下沉；雷击故障导致本关T无法提速。';
     if (this.thrustLocked) return '空速不足，飞机正在下沉；本关两次鸟击，T 已失效。';
     if (this.aircraft.systems.engine !== 'RUNNING') return '空速不足，飞机正在下沉；先按 E 启动发动机。';
     return '空速不足，飞机正在下沉；关闭 W 后按 T 提速到 165 km/h，解除下沉。';
@@ -146,6 +149,7 @@ export class Flight {
   command(key, {repeat = false} = {}) {
     const a = this.aircraft, state = a.systems;
     if (key === 'T' || key === 'S') {
+      if (key==='T' && a.lightningStrike) return {type:'blocked',key,condition:'lightning-thrust-lock',reason:'Lightning fault（雷击故障）：本关无法再提速，下一关恢复。'};
       if (key==='T' && this.thrustLocked) return {type:'blocked',key,condition:'bird-thrust-lock',reason:'Thrust unavailable（无法提速）：本关已遭两次鸟击，T 已失效，下一关恢复。'};
       if (key === 'T' && (state.engine !== 'RUNNING' || (a.onGround && state.parkingBrake))) return {
         type: 'blocked', key, condition: 'power', reason: '请先启动发动机并松开驻车刹车，再按 T 提速。',
@@ -163,6 +167,8 @@ export class Flight {
     }
     if (key === 'UP' || key === 'DOWN') {
       if (a.landed || (a.onGround && a.airspeed < FLIGHT.rotationSpeed)) return null;
+      if (key === 'UP' && (this.ceilingLeveling || a.position.y >= this.route.ceiling)) return null;
+      if (key === 'DOWN') this.ceilingLeveling = false;
       // 反向操作从当前姿态开始，避免先偿还此前未能达到的目标角度。
       const direction = key === 'UP' ? 1 : -1;
       if ((this.pitchTarget - a.pitch) * direction < 0) this.pitchTarget = a.pitch;
@@ -238,9 +244,20 @@ export class Flight {
       this.events.push(stalled ? {type: 'stall', key: 'airspeed', reason: `Stall（失速）：${this.stallGuidance}`} : {type: 'stall-recovered', key: 'airspeed'});
     }
     const turnInput = aligning ? 0 : Number(held.has('right')) - Number(held.has('left'));
+    if (a.position.y < this.route.ceiling - FLIGHT.ceilingResetHeight) this.ceilingAnnounced = false;
     // 上下键点按与长按重复均通过command步进，不再按持续时间额外累加角度。
     if (a.landed || (a.onGround && a.airspeed < FLIGHT.rotationSpeed)) this.pitchTarget = 0;
-    if (!aligning) a.pitch = approach(a.pitch, this.pitchTarget, FLIGHT.pitchRate * dt);
+    // 松键后丢弃长按积压，仅留小幅平滑收尾；点按仍能完成0.2°步进。
+    if (!held.has('up') && !held.has('down')) {
+      this.pitchTarget = clamp(this.pitchTarget, a.pitch - FLIGHT.pitchReleaseTravel, a.pitch + FLIGHT.pitchReleaseTravel);
+    }
+    if (!aligning) {
+      if (this.ceilingLeveling && !a.onGround) {
+        a.pitch = approach(a.pitch, 0, FLIGHT.ceilingPitchRate * dt);
+        this.pitchTarget = a.pitch;
+        if (a.pitch === 0) this.ceilingLeveling = false;
+      } else a.pitch = approach(a.pitch, this.pitchTarget, FLIGHT.pitchRate * dt);
+    }
     if (a.onGround) { if (!aligning) a.bank = 0; }
     else a.bank = approach(a.bank, a.bank + (turnInput * FLIGHT.maxBank - a.bank) * (1 - Math.exp(-FLIGHT.bankResponse * dt)), aero.maxRollRate * dt);
     if (a.onGround) {
@@ -260,7 +277,9 @@ export class Flight {
       }
     } else {
       const speed = a.airspeed / FLIGHT.kmhPerMps;
-      a.heading += (speed > 0 ? FLIGHT.gravity * Math.tan(a.bank) / Math.max(20, speed) : 0) * dt;
+      // 航向响应同步水平位移倍率，避免场景放大后转弯半径被一并拉远。
+      const turnRate = speed > 0 ? FLIGHT.gravity * Math.tan(a.bank) / Math.max(20, speed) * FLIGHT.airTurnMultiplier : 0;
+      a.heading += clamp(turnRate, -FLIGHT.maxAirTurnRate, FLIGHT.maxAirTurnRate) * dt;
       let targetVertical = speed * Math.sin(a.pitch);
       if (this.stalled) {
         const severity = clamp(1 - a.airspeed / this.stallSpeed, 0, 1);
@@ -278,7 +297,17 @@ export class Flight {
     a.verticalSpeed = a.velocity.y * FLIGHT.kmhPerMps;
     if (airborneAtStart) {
       a.position.y += a.velocity.y * dt;
-      if(a.position.y>=this.route.ceiling){a.position.y=this.route.ceiling;a.velocity.y=Math.min(0,a.velocity.y);a.verticalSpeed=a.velocity.y*FLIGHT.kmhPerMps;}
+      if (a.position.y >= this.route.ceiling) {
+        a.position.y = this.route.ceiling;
+        a.velocity.y = Math.min(0, a.velocity.y);
+        a.verticalSpeed = a.velocity.y * FLIGHT.kmhPerMps;
+        if (!this.ceilingAnnounced) {
+          this.ceilingAnnounced = true;
+          this.ceilingLeveling = a.pitch > 0;
+          this.pitchTarget = a.pitch;
+          this.events.push({type: 'ceiling', key: 'altitude', reason: this.ceilingLeveling ? '已达到最高点，仰角正以每秒2°自动调整至水平。' : '已达到最高点。'});
+        }
+      }
     }
     a.position.x += worldHorizontalSpeed(a.velocity.x) * dt; a.position.z += worldHorizontalSpeed(a.velocity.z) * dt;
     a.flightPathAngle = Math.atan2(a.velocity.y, Math.hypot(a.velocity.x, a.velocity.z));
@@ -308,19 +337,16 @@ export class Flight {
       for (const [name, x, z] of [['左主轮', -AIRCRAFT.mainWheelX, AIRCRAFT.mainWheelZ], ['右主轮', AIRCRAFT.mainWheelX, AIRCRAFT.mainWheelZ], ['前轮', 0, AIRCRAFT.noseWheelZ]]) {
         const wheelX = a.position.x + Math.cos(a.heading) * x - Math.sin(a.heading) * z;
         const wheelZ = a.position.z + Math.sin(a.heading) * x + Math.cos(a.heading) * z;
-        if (Math.abs(wheelX) > RUNWAY.width / 2) {
-          this.events.push({ type: 'failed', key: 'runway', reason: `起飞滑跑越界：${name}从跑道${wheelX < 0 ? '左' : '右'}侧驶出${Number((Math.abs(wheelX) - RUNWAY.width / 2).toFixed(2))}米。` }); break;
-        }
-        if (wheelZ < RUNWAY.startOffset - RUNWAY.length || wheelZ > RUNWAY.startOffset) {
-          this.events.push({ type: 'failed', key: 'runway', reason: `起飞滑跑越界：${name}驶出跑道${wheelZ < RUNWAY.startOffset - RUNWAY.length ? '末端' : '起点'}${Number((wheelZ < RUNWAY.startOffset - RUNWAY.length ? RUNWAY.startOffset - RUNWAY.length - wheelZ : wheelZ - RUNWAY.startOffset).toFixed(2))}米。` }); break;
+        if (!isWithinRunway({x:wheelX,z:wheelZ},RUNWAY)) {
+          const nearest=nearestRunway({x:wheelX,z:wheelZ},RUNWAY,a.heading);
+          this.events.push({ type: 'failed', key: 'runway', reason: `起飞滑跑越界：${name}驶出最近跑道${nearest.end>0?'端部':'侧边'}${Number((nearest.end||nearest.side).toFixed(2))}米。` });break;
         }
       }
     } else if (a.landed && a.onGround) {
       const destination = this.route.destination;
       if (!isWithinRunway(a.position, destination)) {
-        const edge = a.position.z < destination.threshold - destination.length ? '末端'
-          : a.position.z > destination.threshold ? '入口' : a.position.x < destination.x ? '左侧' : '右侧';
-        this.events.push({type: 'failed', key: 'taxi', reason: `着陆滑行越界：机身位置驶出${this.route.destinationName}机场跑道${edge}。`});
+        const nearest=nearestRunway(a.position,destination,a.heading);
+        this.events.push({type: 'failed', key: 'taxi', reason: `着陆滑行越界：机身位置驶出${this.route.destinationName}机场最近跑道${nearest.end>0?'端部':'侧边'}${Number((nearest.end||nearest.side).toFixed(2))}米。`});
       }
     } else if (!a.onGround && this.lowestPoint() < this.world.baseHeightAt(a.position.x, a.position.z) - FLIGHT.contactTolerance) {
       const destination = this.route.destination;

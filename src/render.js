@@ -1,3 +1,4 @@
+import { WeatherView } from './weather-view.js';
 import * as THREE from 'three';
 import { AIRCRAFT, CAMERA, DESTRUCTION, SCENERY, ENGINE_VIBRATION, GAME, FLIGHT_PHASES, LANDSCAPE, SURFACE_APPEARANCE } from './config.js';
 import { AirportView } from './airport-view.js';
@@ -110,6 +111,7 @@ export class GameRenderer {
     skyGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
     this.sky = new THREE.Mesh(skyGeometry, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide, fog: false, depthWrite: false, toneMapped: false }));
     this.scene.add(this.sky);
+    this.weatherView=new WeatherView(world);this.scene.add(this.weatherView);this.weatherView.installSky(this.sky);yield* this.weatherView.build();
     this.renderer.domElement.addEventListener('webglcontextlost', event => {
       event.preventDefault();
       this.contextLost = true;
@@ -226,6 +228,7 @@ export class GameRenderer {
       leg.position.y = (1 - progress) * AIRCRAFT.gearRetractHeight;
     }
     const inside = game.view === 'COCKPIT';
+    this.camera.far=game.weather.kind==='clear'?CAMERA.far:Math.min(CAMERA.far,game.weather.visibility*1.15);
     const intro = game.phase === 'INTRO' && !game.landingDebug;
     if (!intro) this.introDisplaySeconds = 0;
     else if (!game.paused) this.introDisplaySeconds = Math.min(CAMERA.introSeconds, game.introSeconds + renderRemainder);
@@ -285,11 +288,12 @@ export class GameRenderer {
     }
     const birdTime=game.activeSeconds-game.birdImpactAt;
     if(inside&&birdTime>=0&&birdTime<DESTRUCTION.birdShakeSeconds)this.camera.rotateZ(Math.sin(birdTime*75)*DESTRUCTION.birdShakeAngle*(1-birdTime/DESTRUCTION.birdShakeSeconds));
-    if (this.projectionNear !== this.camera.near || this.projectionFov !== this.camera.fov || this.projectionAspect !== this.camera.aspect) {
+    if (this.projectionNear !== this.camera.near || this.projectionFar !== this.camera.far || this.projectionFov !== this.camera.fov || this.projectionAspect !== this.camera.aspect) {
       this.camera.updateProjectionMatrix();
-      this.projectionNear = this.camera.near; this.projectionFov = this.camera.fov; this.projectionAspect = this.camera.aspect;
+      this.projectionNear = this.camera.near;this.projectionFar=this.camera.far; this.projectionFov = this.camera.fov; this.projectionAspect = this.camera.aspect;
     }
     this.cockpit.resize(this.camera.aspect, this.camera.fov);
+    this.weatherView.update(game,this.scene);
     this.sky.position.copy(this.camera.position);
     this.landscape.update(game.activeSeconds, this.camera, pose.position);
     this.traffic.update(game, flying ? Math.min(1, renderRemainder / GAME.fixedStep) : 1);

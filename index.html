@@ -72,9 +72,10 @@
     <section id="flight-status" class="flight-status" hidden role="status" aria-label="飞机异常警告">
       <div id="flight-guide" class="flight-guide"></div>
     </section>
+    <div id="lightning-fault" class="lightning-fault" hidden role="status">⚡ Lightning fault<small>雷击故障 · 无法提速</small></div>
     <section id="instruments" class="instruments" hidden aria-label="驾驶舱仪表">
       <div class="instrument"><span>Airspeed<small>空速</small></span><strong id="airspeed-value">OFF</strong><footer>km/h <i id="ground-speed">Flight speed<small>飞行速度</small></i></footer></div>
-      <div class="instrument"><span>Altitude<small>高度</small></span><strong id="altitude-value">OFF</strong><footer>m <i>Above ground<small>离地高度</small></i></footer></div>
+      <div class="instrument"><span>离地高度</span><strong id="altitude-value">OFF</strong><footer>m</footer></div>
       <div class="instrument attitude"><span>Attitude<small>姿态</small></span><div class="attitude-body"><div class="attitude-mark" aria-hidden="true"><i></i><b></b></div><div class="attitude-reading"><strong id="attitude-value">OFF</strong><footer id="attitude-label">Avionics OFF<small>仪表关闭</small></footer></div></div></div>
       <div class="instrument"><span>Vertical speed<small>垂直速度</small></span><strong id="vertical-speed-value">OFF</strong><footer>km/h </footer></div>
     </section>

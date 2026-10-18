@@ -9,7 +9,8 @@ import { MountainView } from './mountain-view.js';
 import { regionLandAt, regionBelts } from './region-blend.js';
 import { LoopView } from './loop-view.js';
 import { createCityBlocks } from './city-blocks.js';
-import { createRoadMaterial, createCountryside } from './countryside-view.js';
+import { createCityStreets } from './city-streets.js';
+import { createCountryside } from './countryside-view.js';
 import { createDistrict } from './district-view.js';
 import { batchStaticMeshSteps } from './static-batch.js';
 
@@ -195,7 +196,7 @@ export class LandscapeView extends THREE.Group {
   }
 
   *buildScenery() {
-    yield {task:'landmark-structure'};this.addRiver();yield 'boundary';this.addCity();yield 'boundary';
+    yield {task:'landmark-structure'};this.addRiver();yield 'boundary';this.addCity();yield* this.addCityStreets();yield 'boundary';
     yield* this.addLandmarks();yield 'boundary';this.addWaterfall();yield {task:'regional-monuments'};yield* this.addRegionalViews();yield {task:'static-batches'};
     yield* batchStaticMeshSteps(this);yield 'boundary';
     this.mountains=new MountainView(this.world);this.add(this.mountains);yield* this.mountains.makeTreeResources();this.textures.push(...this.mountains.textures);yield 'boundary';
@@ -219,15 +220,9 @@ export class LandscapeView extends THREE.Group {
 
   *addRegionalCities() {
     for(const city of this.world.regionalCities){
-      const group=new THREE.Group(),material=createRoadMaterial(),width=city.columns*city.spacing,length=city.rows*city.spacing;
+      const group=new THREE.Group(),width=city.columns*city.spacing,length=city.rows*city.spacing;
       const ground=new THREE.Mesh(new THREE.PlaneGeometry(width,length),new THREE.MeshStandardMaterial({color:0x777e71,roughness:1}));
       ground.rotation.x=-Math.PI/2;ground.position.set(city.x,.02,city.z);group.add(ground);yield;
-      for(let axis=0;axis<2;axis++)for(let i=0;i<=(axis?city.rows:city.columns);i++){
-        const extent=axis?width:length,road=new THREE.Mesh(new THREE.PlaneGeometry(42,extent),material);
-        for(let v=0;v<road.geometry.attributes.uv.count;v++)road.geometry.attributes.uv.setY(v,road.geometry.attributes.uv.getY(v)*extent);
-        road.rotation.x=-Math.PI/2;road.rotation.z=axis?Math.PI/2:0;
-        road.position.set(city.x+(axis?0:(i-city.columns/2)*city.spacing),.06,city.z+(axis?(i-city.rows/2)*city.spacing:0));group.add(road);yield;
-      }
       const plaza=new THREE.Mesh(new THREE.PlaneGeometry(...city.plaza),new THREE.MeshStandardMaterial({color:0xb2ad98,roughness:.85}));plaza.rotation.x=-Math.PI/2;plaza.position.set(city.x,.12,city.z);group.add(plaza);
       const cube=new THREE.BoxGeometry(1,1,1),monument=new THREE.Mesh(cube,new THREE.MeshStandardMaterial({color:0xa07855,roughness:.7}));monument.scale.set(45,110,45);monument.position.set(city.x,55,city.z);group.add(monument);
       yield* batchStaticMeshSteps(group,30000);this.add(group);yield 'boundary';
@@ -256,22 +251,14 @@ export class LandscapeView extends THREE.Group {
     const cityGround = new THREE.PlaneGeometry(width, length); cityGround.rotateX(-Math.PI / 2);
     cityGround.translate(...[city.center[0], 0, city.center[1]]);
     this.surface(cityGround, city.parkColor, 0.5, 0.005);
-    const roadGeometries = [];
-    for (let x = 0; x <= city.columns; x++) {
-      const geometry = new THREE.PlaneGeometry(city.roadWidth, length); geometry.rotateX(-Math.PI / 2);
-      for(let i=0;i<geometry.attributes.uv.count;i++)geometry.attributes.uv.setY(i,geometry.attributes.uv.getY(i)*length);
-      geometry.translate(city.center[0] - width / 2 + x * city.spacing, 0, city.center[1]); roadGeometries.push(geometry);
-    }
-    for (let z = 0; z <= city.rows; z++) {
-      const geometry = new THREE.PlaneGeometry(width, city.roadWidth); geometry.rotateX(-Math.PI / 2);
-      for(let i=0;i<geometry.attributes.uv.count;i++){const u=geometry.attributes.uv.getX(i),v=geometry.attributes.uv.getY(i);geometry.attributes.uv.setXY(i,v,u*width);}
-      geometry.translate(city.center[0], 0, city.center[1] - length / 2 + z * city.spacing); roadGeometries.push(geometry);
-    }
-    const streets=this.surface(mergeGeometries(roadGeometries), city.roadColor, SCENERY.surfaceLayers.shoulder, 0.015);streets.material.dispose();streets.material=createRoadMaterial();
-    roadGeometries.forEach(geometry => geometry.dispose());
     // 保留原装饰随机流的消耗，材质升级不改变后续地景位置。
     for (let cell=0; cell<24*8; cell++) if (random() <= 0.8) random();
 
+  }
+
+  *addCityStreets() {
+    const shared={};
+    for(const network of this.world.cityStreets){yield {task:'city-streets'};this.add(yield* createCityStreets(network,shared));}
   }
 
   *addCityBlocks() {

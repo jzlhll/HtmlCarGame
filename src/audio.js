@@ -185,7 +185,8 @@ export class FlightAudio {
     const gear = ['RETRACTING', 'EXTENDING'].includes(state.gear);
     this.target(this.motor.gain.gain, gear ? AUDIO.motorGain * duck : 0);
     this.target(this.motor.source.frequency, AUDIO.motorHz);
-    const alarm = game.mission.alert || game.flight.stalled || game.flight.gearWarning;
+    const lightningAlarm=a.lightningStrike&&game.activeSeconds-a.lightningHitAt<AUDIO.lightningAlarm.seconds;
+    const alarm = lightningAlarm || (game.weather.radarAvailable && game.mission.alert) || game.flight.stalled || game.flight.gearWarning;
     if (alarm || game.flight.pitchLow) {
       for (const shot of this.shots) {
         if (!shot.cabinChime) continue;
@@ -194,8 +195,8 @@ export class FlightAudio {
     }
     const phase = game.activeSeconds % AUDIO.alarmPeriod;
     const pulse = phase < AUDIO.alarmPulse || (phase > AUDIO.alarmPulse * 2 && phase < AUDIO.alarmPulse * 3);
-    this.target(this.alarm.gain.gain, alarm && pulse ? AUDIO.alarmGain : 0);
-    this.target(this.alarm.source.frequency, AUDIO.alarmLow);
+    this.target(this.alarm.gain.gain, lightningAlarm ? AUDIO.lightningAlarm.gain : alarm && pulse ? AUDIO.alarmGain : 0);
+    this.target(this.alarm.source.frequency, lightningAlarm ? AUDIO.lightningAlarm.lowHz+(AUDIO.lightningAlarm.highHz-AUDIO.lightningAlarm.lowHz)*(.5+.5*Math.sin((game.activeSeconds-a.lightningHitAt)*Math.PI*2*AUDIO.lightningAlarm.rate)) : AUDIO.alarmLow);
     // 复用任务的有效飞行时间，不在准备或暂停期间计时，也不补播错过的提示音。
     if (!a.onGround && !a.landed && running && !alarm && !game.flight.pitchLow
       && !this.utterance && !this.voiceSource && !this.pendingSpeech && !this.shots.size
@@ -242,6 +243,7 @@ export class FlightAudio {
       if (this.enabled(game)) {this.noiseBurst(AUDIO.explosion);this.cue(AUDIO.cues.explosion);}
       return;
     }
+    if (['lightning-hit','lightning-flash'].includes(event.type)&&this.enabled(game))this.noiseBurst(AUDIO.thunder);
     if (!this.speechEnabled(game) || !game.active) return;
     if (event.type==='bird-strike'||event.type==='truck-hit') this.noiseBurst(AUDIO.birdImpact);
     if (event.type==='bird-strike') this.noiseBurst(AUDIO.glassImpact);

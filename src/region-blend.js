@@ -1,10 +1,11 @@
-import { LANDSCAPE, JOURNEY, REGION_BLEND } from './config.js';
+import { RUNWAY, isWithinRunway, LANDSCAPE, JOURNEY, REGION_BLEND } from './config.js';
 import { coastalLandWeight } from './coastal-terrain.js';
 
 export function regionLandAt(world,x,z) {
   if(coastalLandWeight(x,z)<.98)return false;
   if(world.pagodas?.some(tower=>Math.abs(x-tower.x)<tower.width*.7&&Math.abs(z-tower.z)<tower.width*.7))return false;
   const airport=world.route.destination;
+  if(isWithinRunway({x,z},airport,800)||isWithinRunway({x,z},RUNWAY,200))return false;
   if(Math.abs(x-airport.x)<REGION_BLEND.airportHalfWidth&&z<airport.threshold+REGION_BLEND.approachClearance&&z>airport.threshold-airport.length-800)return false;
   const city=LANDSCAPE.city;
   if(Math.abs(x)<city.columns*city.spacing/2&&Math.abs(z-city.center[1])<city.rows*city.spacing/2)return false;
