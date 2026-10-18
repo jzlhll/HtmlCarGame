@@ -1,4 +1,4 @@
-import { FLIGHT, RUNWAY, STARTUP_STEPS, TAKEOFF_CONTROLS, CLIMB_CONTROLS, LEVELS, JOURNEY } from './config.js';
+import { FLIGHT, RUNWAY, STARTUP_STEPS, TAKEOFF_CONTROLS, CLIMB_CONTROLS, LEVELS, JOURNEY, displayHeight } from './config.js';
 
 import { APP_VERSION } from './version.js';
 import { NavigationUI } from './navigation-ui.js';
@@ -61,13 +61,11 @@ export class UI {
     setText(this.container.querySelector('.availability'), `${formatTime(route.deadline)} · 起飞至${route.destinationName}机场`);
     setText(this.container.querySelector('.welcome .eyebrow'), `Flight ${route.id}`);
     const stops = [{english: 'Shenzhen airport', chinese: '深圳机场', z: 0}, ...route.sectors];
-    const profile = JOURNEY.elevationProfile.filter(([distance]) => distance <= -route.destination.threshold);
-    const points = profile.map(([distance, height]) => `${12 + distance / -route.destination.threshold * 216},${62 - height / 1100 * 48}`).join(' ');
     this.container.querySelector('#route-briefing').innerHTML = `
       <div class="level-selector" aria-label="选择飞行关卡">${LEVELS.map(level => `<a href="?level=${level.id}" ${level.id === route.id ? 'aria-current="page"' : ''}>${level.id} · ${level.destinationEnglish}<small>${level.destinationName}</small></a>`).join('')}</div>
       <header><span>Flight plan<small>第 ${route.id} 关 · 深圳 → ${route.destinationName}</small></span><b>${formatTime(route.deadline)}</b></header>
       <ol class="route-stops">${stops.map(stop => `<li><span>${stop.english}<small>${stop.chinese}</small></span></li>`).join('')}</ol>
-      <div class="route-profile"><svg viewBox="0 0 240 76" role="img" aria-label="路线地面从深圳零米逐渐升至${route.destination.elevation}米"><path d="M12 64H228"/><polyline points="${points}"/></svg><span>Terrain elevation<small>地面逐渐升高 · 0 → ${route.destination.elevation} m</small></span></div>
+      <div class="route-profile"><span>Open scenery<small>平坦机场 · 循环地景 · 飞行上限${displayHeight(route.ceiling)} m</small></span></div>
       <footer>${formatSpeed(route.cruiseSpeed)} km/h · ${(Math.abs(route.destination.threshold) / 1000).toFixed(1)} km<small>建议巡航 · 压缩航线 · 时限包含着陆停机</small></footer>`;
   }
 
@@ -128,7 +126,7 @@ export class UI {
       setText(this.elements['result-title'], value.success ? '🎉 恭喜！航程完成' : '💥 失败！再试一次');
       setText(this.elements['result-caption'], value.success ? 'Congratulations' : 'Flight failed');
       setText(this.elements['result-reason'], value.reason);
-      this.elements['result-stats'].innerHTML = [['用时', `${Math.floor(value.seconds / 60)}分${Math.floor(value.seconds % 60)}秒`], ['最高高度', `${Math.round(value.maxAltitude)} m`], ['离地速度', value.liftOffSpeed ? `${Math.round(value.liftOffSpeed)} km/h` : '尚未离地'], ['最高空速', `${Math.round(value.maxAirspeed)} km/h`]].map(([name, data]) => `<div><dt>${name}</dt><dd>${data}</dd></div>`).join('');
+      this.elements['result-stats'].innerHTML = [['用时', `${Math.floor(value.seconds / 60)}分${Math.floor(value.seconds % 60)}秒`], ['最高高度', `${Math.round(displayHeight(value.maxAltitude))} m`], ['离地速度', value.liftOffSpeed ? `${Math.round(value.liftOffSpeed)} km/h` : '尚未离地'], ['最高空速', `${Math.round(value.maxAirspeed)} km/h`]].map(([name, data]) => `<div><dt>${name}</dt><dd>${data}</dd></div>`).join('');
     }
     if (result) enlargeChinese(this.elements['result-stats']);
     this.update();
@@ -161,14 +159,14 @@ export class UI {
     this.setFlow();
     this.updateLandingGuide();
     const a = this.game.aircraft, systems = a.systems, flight = this.game.flight;
-    const speed = this.game.mission.approaching && !a.onGround ? Number(a.airspeed.toFixed(2)) : Math.round(a.airspeed), altitude = Math.floor(flight.altitude());
+    const speed = this.game.mission.approaching && !a.onGround ? Number(a.airspeed.toFixed(2)) : Math.round(a.airspeed), altitude = Math.floor(displayHeight(flight.altitude()));
     const gearReady = flight.canRetractGear();
     const gearHidden = this.game.view !== 'COCKPIT' || flight.altitude() >= FLIGHT.gearPreviewHeight || ['COMPLETE', 'RESULT'].includes(this.game.phase);
     if (this.elements['gear-preview'].hidden !== gearHidden) this.elements['gear-preview'].hidden = gearHidden;
     const gearWarning = !gearHidden && flight.gearWarning;
     const gearWarningPulse = gearWarning && Math.floor(this.game.activeSeconds / FLIGHT.gearWarningPulseSeconds) % 2 === 0;
     const pitch = Number((a.pitch * 180 / Math.PI).toFixed(1)), bank = degrees(a.bank);
-    const signature = [this.game.phase, this.game.runId, systems.lights, systems.door, systems.harness, systems.avionics, systems.engine, systems.flaps, systems.gear, flight.thrustLocked, a.birdStrikeCount, flight.gearWarning, gearWarningPulse, flight.gearExtensionBlocked, this.game.mission.offCourse, this.game.mission.approaching, systems.parkingBrake, a.wheelBrake, speed, altitude, a.verticalSpeed.toFixed(1), pitch, bank, gearReady, Math.floor(flight.completionSeconds * 10), degrees(a.angleOfAttack * 10), degrees(a.flightPathAngle * 10), a.loadFactor.toFixed(1), flight.pitchLow, flight.stalled, this.game.mission.ceilingFault, a.birdStrike, Math.round(this.game.mission.targetAltitude), this.game.prompts.current].join('|');
+    const signature = [this.game.phase, this.game.runId, systems.lights, systems.door, systems.harness, systems.avionics, systems.engine, systems.flaps, systems.gear, flight.thrustLocked, a.birdStrikeCount, flight.gearWarning, gearWarningPulse, flight.gearExtensionBlocked, this.game.mission.offCourse, this.game.mission.approaching, systems.parkingBrake, a.wheelBrake, speed, altitude, a.verticalSpeed.toFixed(1), pitch, bank, gearReady, Math.floor(flight.completionSeconds * 10), degrees(a.angleOfAttack * 10), degrees(a.flightPathAngle * 10), a.loadFactor.toFixed(1), flight.pitchLow, flight.stalled, a.birdStrike, Math.round(this.game.mission.targetAltitude), this.game.prompts.current].join('|');
     if (signature === this.lastSystemsSignature) return;
     this.lastSystemsSignature = signature;
     this.elements['gear-preview'].classList.toggle('is-gear-warning', gearWarning);
@@ -223,7 +221,6 @@ export class UI {
     if(game.view==='COCKPIT' && !['STARTUP','CRASH','COMPLETE','RESULT'].includes(game.phase)) {
       if(flight.stalled && !landingStatus?.ready) warning=['Stall',flight.stallGuidance,'danger'];
       else if(flight.gearWarning) warning=['Landing gear','起落架未完全放下，触地会爆炸！','danger'];
-      else if(mission.ceilingFault) warning=['Power fault','超出高度限制，请降低高度恢复动力。','danger'];
       else if(flight.pitchLow && !landingStatus?.ready) warning=['Descent danger','下降危险，可能撞地。','danger'];
       else if(flight.thrustLocked) warning=['Thrust unavailable','两次鸟击，T 加速失效，下一关恢复。','danger'];
       else if(mission.contacts.some(contact=>!contact.hit&&!contact.rearBypass&&contact.danger)) warning=['Collision risk','前方有飞机或雁群，注意避让。','danger'];

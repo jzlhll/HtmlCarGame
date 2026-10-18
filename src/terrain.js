@@ -23,11 +23,18 @@ export function mountainSeed(mountain) {
 }
 
 // 山脊、支脉与侵蚀纹理共享固定种子；固定高度网格同时用于近景和碰撞。
-export function createMountainSurface(mountain, baseHeightAt) {
+export function createMountainSurface(mountain,baseHeightAt) {
+  const iterator=createMountainSurfaceSteps(mountain,baseHeightAt);let result;
+  do{result=iterator.next();}while(!result.done);return result.value;
+}
+
+export function* createMountainSurfaceSteps(mountain, baseHeightAt) {
   const n = mountain.segments || LANDSCAPE.terrain.segments, stride = n + 1, seed = mountainSeed(mountain);
   const heights = new Float32Array(stride * stride), positions = new Float32Array(stride * stride * 3);
   let peak = 0;
-  for (let row = 0; row <= n; row++) for (let column = 0; column <= n; column++) {
+  for (let row = 0; row <= n; row++) {
+    if(row%8===0)yield;
+    for (let column = 0; column <= n; column++) {
     const u = column / n * 2 - 1, v = row / n * 2 - 1;
     const angle = Math.atan2(v, u), edge = 0.87 + 0.07 * Math.sin(angle * 5 + seed % 17) + 0.04 * Math.sin(angle * 9 + 1.3);
     const radius = Math.hypot(u, v) / edge;
@@ -36,14 +43,14 @@ export function createMountainSurface(mountain, baseHeightAt) {
     const fine = terrainNoise(u * 11, v * 11, seed + 2) - 0.5;
     let height = 0;
     if (radius < 1) {
-      if (mountain.kind === 'rolling') height = (1-radius*radius)**2 * (0.97+noise*0.03);
+      if (mountain.kind === 'rolling') height = (1-radius*radius)**1.7 * (0.65+noise*0.19+ridge*.14+fine*.02);
       else if (mountain.kind === 'danxia') {
         const wall = smoothRange(0, 0.25, 1 - radius);
-        const terrace = 0.86 + 0.1 * smoothRange(0.25, 0.75, noise) + 0.04 * ridge;
+        const terrace = 0.64 + 0.23 * smoothRange(0.25, 0.75, noise) + 0.13 * ridge;
         height = wall * terrace + fine * 0.008 * wall;
       } else {
-        const envelope = (1 - radius * radius) ** 1.8;
-        const spine = 0.79 + 0.1 * ridge + 0.1 * noise + fine * 0.018;
+        const envelope = (1 - radius * radius) ** 1.55;
+        const spine = 0.46 + 0.32 * ridge + 0.18 * noise + fine * 0.04;
         const gullies = 0.97 + 0.03 * Math.sin(angle * 7 + radius * 4 + noise * 5);
         height = envelope * spine * gullies;
       }
@@ -51,14 +58,18 @@ export function createMountainSurface(mountain, baseHeightAt) {
     const index = row * stride + column;
     heights[index] = height; peak = Math.max(peak, height);
   }
+  }
   const minX = mountain.position[0] - mountain.radius[0], minZ = mountain.position[1] - mountain.radius[1];
   const dx = mountain.radius[0] * 2 / n, dz = mountain.radius[1] * 2 / n;
   let minY = Infinity, maxY = -Infinity;
-  for (let row = 0; row <= n; row++) for (let column = 0; column <= n; column++) {
+  for (let row = 0; row <= n; row++) {
+    if(row%8===0)yield;
+    for (let column = 0; column <= n; column++) {
     const index = row * stride + column, x = minX + column * dx, z = minZ + row * dz;
     const y = baseHeightAt(x, z) + heights[index] / peak * mountain.height;
     heights[index] = y; positions.set([x, y, z], index * 3);
     minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+  }
   }
   return { ...mountain, seed, n, heights, positions, dx, dz, minX, minZ, minY, maxY,
     maxX: minX + mountain.radius[0] * 2, maxZ: minZ + mountain.radius[1] * 2 };

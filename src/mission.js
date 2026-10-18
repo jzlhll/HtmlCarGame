@@ -1,4 +1,4 @@
-import { AIRCRAFT, FLIGHT, AIRPORT_TRAFFIC, WORLD_TRAVEL, worldHorizontalSpeed } from './config.js';
+import { AIRCRAFT, FLIGHT, AIRPORT_TRAFFIC, WORLD_TRAVEL, worldHorizontalSpeed, displayHeight, WORLD_BOUNDARY } from './config.js';
 import { createAirportTraffic, airportTrafficHit, hitAirportTruck, stoppedOnRunway } from './airport-traffic.js';
 
 const clamp = (v, low, high) => Math.max(low, Math.min(high, v));
@@ -11,7 +11,7 @@ export class Mission {
     this.route = world.route;
     this.started = false; this.elapsed = 0; this.flightSeconds = 0; this.path = [[aircraft.position.x, aircraft.position.z]];
     this.sampleElapsed = 0; this.contacts = []; this.nextEncounter = 0;
-    this.ceilingFault = false; this.ceilingRecovery = 0; this.waterfallsPassed = new Set();
+    this.waterfallsPassed = new Set();
     this.parkSeconds = 0; this.approaching = false; this.finalApproachAnnounced = false; this.offCourse = false;
     this.events = []; this.airportTraffic = createAirportTraffic(this.route);
   }
@@ -21,7 +21,7 @@ export class Mission {
   get runwayDistance() { return this.aircraft.position.z - this.route.destination.threshold; }
   get targetAltitude() { return Math.min(this.world.baseHeightAt(this.aircraft.position.x, this.aircraft.position.z) + this.route.cruiseHeight, this.route.destination.elevation + Math.max(0, (this.runwayDistance + this.route.touchdownOffset) / WORLD_TRAVEL.horizontalScale * Math.tan(this.route.glideSlope))); }
   get sector() { return this.route.sectors.find(item => -this.aircraft.position.z <= -item.z + 1000) || this.route.sectors.at(-1); }
-  get alert() { return this.ceilingFault || this.contacts.some(contact => contact.danger); }
+  get alert() { return this.contacts.some(contact => contact.danger); }
 
   spawn(spec, index) {
     const a = this.aircraft, forward = {x: Math.sin(a.heading), z: -Math.cos(a.heading)}, right = {x: Math.cos(a.heading), z: Math.sin(a.heading)};
@@ -90,7 +90,7 @@ export class Mission {
     const a = this.aircraft, route = this.route;
     const prefix = `超时（${route.deadline}秒）：`;
     if (!a.landed) return a.onGround ? prefix + '起飞尚未完成，飞机仍未离地。'
-      : prefix + `尚未在${route.destinationName}机场接地，当前离地${Math.round(this.flight.altitude())}米。`;
+      : prefix + `尚未在${route.destinationName}机场接地，当前离地${Math.round(displayHeight(this.flight.altitude()))}米。`;
     if (a.airspeed > route.parkedSpeed) return prefix + `落地后尚未停稳，速度仍为${Number(a.airspeed.toFixed(2))} km/h，要求不超过${route.parkedSpeed} km/h。`;
     if (!stoppedOnRunway(a, route)) return prefix + `停机位置错误，机身位置未停入${route.destinationName}机场跑道内。`;
     if (this.airportTraffic.some(actor => actor.hit && this.elapsed - actor.hitAt < 2 * AIRPORT_TRAFFIC.truckLaunch.up / AIRPORT_TRAFFIC.truckLaunch.gravity)) return prefix + '撞飞的卡车仍未落地，停机结算尚未完成。';
@@ -110,7 +110,7 @@ export class Mission {
       this.path.push([a.position.x, a.position.z]);
     }
     const collision = this.world.collision(a, flight.previous);
-    if (collision) return [{type: 'failed', key: 'obstacle', destructive: true, reason: `障碍碰撞：飞机撞上${collision}，碰撞时海拔${Math.round(a.position.y)}米。`}];
+    if (collision) return [{type: 'failed', key: 'obstacle', destructive: true, reason: collision===WORLD_BOUNDARY.name?WORLD_BOUNDARY.reason:`障碍碰撞：飞机撞上${collision}，碰撞时海拔${Math.round(displayHeight(a.position.y))}米。`}];
     for (const actor of this.airportTraffic) {
       if (!airportTrafficHit(actor, this.world)) continue;
       if (actor.kind === 'aircraft') return [{type:'failed',key:actor.id,destructive:true,reason:`跑道碰撞：撞上${this.route.destinationName}机场入口后${Math.round(this.route.destination.threshold - actor.position.z)}米处停放的飞机。`}];
@@ -125,16 +125,6 @@ export class Mission {
       this.finalApproachAnnounced = true;
       events.push({type: 'final-approach', key: 'airport'});
     }
-    const high = a.position.y > this.route.ceiling;
-    this.ceilingRecovery = a.position.y < this.route.ceilingClear ? this.ceilingRecovery + dt : 0;
-    if (high && !this.ceilingFault) {
-      this.ceilingFault = true;
-      events.push({type: 'ceiling', key: 'altitude', reason: 'Altitude limit（超出 10000 米）：动力故障！立即降低高度。'});
-    } else if (this.ceilingFault && this.ceilingRecovery >= this.route.ceilingRecovery) {
-      this.ceilingFault = false;
-      events.push({type: 'fault-recovered', key: 'altitude', reason: 'Power restored（动力恢复）：已回到安全高度。'});
-    }
-    a.powerLimit = this.ceilingFault ? this.route.faultPower : 1;
     const offCourse = Math.abs(a.position.x) > this.route.courseDeviation;
     if (offCourse && !this.offCourse) events.push({type: 'off-course', key: 'route', reason: 'Off course（偏离航线）：参考左侧轨迹，回到目的地方向，倒计时仍继续。'});
     this.offCourse = offCourse;

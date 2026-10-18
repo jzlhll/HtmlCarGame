@@ -140,6 +140,8 @@ export class FlightAudio {
       this.silence();
       this.runId = game.runId;
       this.countdown = null;
+      const [first, last] = AUDIO.cabinChime.firstSeconds;
+      this.nextCabinChimeAt = first + Math.random() * (last - first);
     }
     const countdown = game.phase === 'INTRO' ? Math.max(1, Math.ceil(game.introDuration - game.introSeconds - 1e-9)) : null;
     const tick = countdown !== null && countdown !== this.countdown;
@@ -184,17 +186,32 @@ export class FlightAudio {
     this.target(this.motor.gain.gain, gear ? AUDIO.motorGain * duck : 0);
     this.target(this.motor.source.frequency, AUDIO.motorHz);
     const alarm = game.mission.alert || game.flight.stalled || game.flight.gearWarning;
+    if (alarm || game.flight.pitchLow) {
+      for (const shot of this.shots) {
+        if (!shot.cabinChime) continue;
+        shot.source.stop(); shot.source.disconnect(); shot.gain.disconnect(); this.shots.delete(shot);
+      }
+    }
     const phase = game.activeSeconds % AUDIO.alarmPeriod;
     const pulse = phase < AUDIO.alarmPulse || (phase > AUDIO.alarmPulse * 2 && phase < AUDIO.alarmPulse * 3);
     this.target(this.alarm.gain.gain, alarm && pulse ? AUDIO.alarmGain : 0);
-    this.target(this.alarm.source.frequency, game.mission.ceilingFault ? AUDIO.alarmHigh : AUDIO.alarmLow);
+    this.target(this.alarm.source.frequency, AUDIO.alarmLow);
+    // 复用任务的有效飞行时间，不在准备或暂停期间计时，也不补播错过的提示音。
+    if (!a.onGround && !a.landed && running && !alarm && !game.flight.pitchLow
+      && !this.utterance && !this.voiceSource && !this.pendingSpeech && !this.shots.size
+      && game.mission.flightSeconds >= this.nextCabinChimeAt) {
+      const chime = AUDIO.cabinChime;
+      chime.notes.forEach((note, index) => this.cue(note, {delaySeconds: index * chime.noteGapSeconds, cabinChime: true}));
+      const [first, last] = chime.intervalSeconds;
+      this.nextCabinChimeAt = game.mission.flightSeconds + first + Math.random() * (last - first);
+    }
   }
 
-  cue(cue) {
+  cue(cue, {delaySeconds = 0, cabinChime = false} = {}) {
     if (!cue || this.context?.state !== 'running') return;
     if (this.shots.size >= AUDIO.maxShots) return;
-    const now = this.context.currentTime, source = this.context.createOscillator(), gain = this.context.createGain();
-    const shot = { source, gain }; this.shots.add(shot);
+    const now = this.context.currentTime + delaySeconds, source = this.context.createOscillator(), gain = this.context.createGain();
+    const shot = { source, gain, cabinChime }; this.shots.add(shot);
     source.type = cue.type;
     source.frequency.setValueAtTime(cue.frequency, now);
     source.frequency.exponentialRampToValueAtTime(cue.endFrequency, now + cue.seconds);
@@ -272,6 +289,10 @@ export class FlightAudio {
     if (!words || !this.game || !this.speechEnabled(this.game)) return;
     if (((this.utterance || this.voiceSource) && priority < this.speechPriority) || (this.pendingSpeech && priority < this.pendingSpeech.priority)) return;
     // 语音素材尚未就绪时只保留最新一句，暂停、换局与超时立即丢弃。
+    for (const shot of this.shots) {
+      if (!shot.cabinChime) continue;
+      shot.source.stop(); shot.source.disconnect(); shot.gain.disconnect(); this.shots.delete(shot);
+    }
     this.pendingSpeech = {words, priority, runId: this.game.runId, requestedAt: this.game.activeSeconds};
     this.flushSpeech();
   }

@@ -1,5 +1,5 @@
 // 同一Samantha女声的固定短句；时间单位为秒，由generate-voice.mjs生成。
-export const VOICE_BANK_URL = new URL("./voice/english-female-506d36ac5cb9.wav", import.meta.url);
+export const VOICE_BANK_URL = new URL("./voice/english-female-a0d2c3911552.wav", import.meta.url);
 export const VOICE_CLIPS = {
   "Welcome aboard": {
     "offset": 0.1,
@@ -45,100 +45,84 @@ export const VOICE_CLIPS = {
     "offset": 10.334375,
     "duration": 0.978125
   },
-  "Fire": {
+  "Engine": {
     "offset": 11.5125,
-    "duration": 0.5248125
+    "duration": 0.4500625
   },
   "Engines ready": {
-    "offset": 12.2373125,
+    "offset": 12.1625625,
     "duration": 0.8100625
   },
   "Engines off": {
-    "offset": 13.247375,
+    "offset": 13.172625,
     "duration": 0.7634375
   },
   "Cleared for takeoff": {
-    "offset": 14.2108125,
+    "offset": 14.1360625,
     "duration": 1.0788125
   },
   "Parking brake": {
-    "offset": 15.489625,
+    "offset": 15.414875,
     "duration": 0.8023125
   },
   "Airborne. Positive climb": {
-    "offset": 16.4919375,
+    "offset": 16.4171875,
     "duration": 1.85475
   },
   "Gear moving": {
-    "offset": 18.5466875,
+    "offset": 18.4719375,
     "duration": 0.6663125
   },
-  "Wing brake moving": {
-    "offset": 19.413,
-    "duration": 0.9549375
-  },
   "Gear up": {
-    "offset": 20.5679375,
+    "offset": 19.33825,
     "duration": 0.4386875
   },
   "Gear down": {
-    "offset": 21.206625,
+    "offset": 19.9769375,
     "duration": 0.589625
   },
-  "Airspeed high": {
-    "offset": 21.99625,
-    "duration": 0.844875
-  },
   "Raise nose": {
-    "offset": 23.041125,
+    "offset": 20.7665625,
     "duration": 0.7044375
   },
   "Stall": {
-    "offset": 23.9455625,
+    "offset": 21.671,
     "duration": 0.491375
   },
   "Stall recovered": {
-    "offset": 24.6369375,
+    "offset": 22.362375,
     "duration": 0.9209375
   },
   "Altitude limit": {
-    "offset": 25.757875,
+    "offset": 23.4833125,
     "duration": 0.9378125
   },
   "Power restored": {
-    "offset": 26.8956875,
+    "offset": 24.621125,
     "duration": 0.8951875
   },
   "Traffic": {
-    "offset": 27.990875,
+    "offset": 25.7163125,
     "duration": 0.559
   },
-  "Approach. Prepare to land": {
-    "offset": 28.749875,
-    "duration": 1.762125
-  },
   "Climb complete": {
-    "offset": 30.712,
+    "offset": 26.4753125,
     "duration": 0.9046875
   },
-  "Runway ahead. Land gently": {
-    "offset": 31.8166875,
-    "duration": 1.7376875
-  },
   "Bird strike. Window damaged": {
-    "offset": 33.754375,
+    "offset": 27.58,
     "duration": 1.9095625
   },
   "Landing gear. Press G": {
-    "offset": 35.8639375,
+    "offset": 29.6895625,
     "duration": 1.54925
   },
   "Touchdown. Apply brakes": {
-    "offset": 37.6131875,
+    "offset": 31.4388125,
     "duration": 1.8009375
   },
   "Congratulations": {
-    "offset": 39.614125,
+    "offset": 33.43975,
     "duration": 1.104125
   }
 };

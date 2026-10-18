@@ -12,7 +12,7 @@ export function createTerrainMaterial(detail) {
   const material = new THREE.MeshStandardMaterial({vertexColors: true, roughness: 0.96});
   material.userData.detailTexture = detail;
   material.userData.landUniforms = new Set();
-  material.customProgramCacheKey = () => 'flight-terrain-strata-v2';
+  material.customProgramCacheKey = () => 'flight-terrain-strata-v3';
   material.onBeforeCompile = shader => {
     shader.uniforms.landDetail = {value: material.userData.detailTexture};
     material.userData.landUniforms.add(shader.uniforms.landDetail);
@@ -37,6 +37,11 @@ export function createTerrainMaterial(detail) {
       varying vec3 vLandPosition;
       varying vec3 vLandNormal;
       varying vec4 vLandBiome;
+      float landNoise(vec2 point) {
+        vec2 cell=floor(point), blend=fract(point); blend=blend*blend*(3.0-2.0*blend);
+        vec4 corners=fract(sin(vec4(dot(cell,vec2(127.1,311.7)),dot(cell+vec2(1,0),vec2(127.1,311.7)),dot(cell+vec2(0,1),vec2(127.1,311.7)),dot(cell+vec2(1,1),vec2(127.1,311.7))))*43758.5453);
+        return mix(mix(corners.x,corners.y,blend.x),mix(corners.z,corners.w,blend.x),blend.y);
+      }
       vec3 landTriplanar(vec3 point, vec3 weights) {
         return texture2D(landDetail, point.yz).rgb * weights.x
           + texture2D(landDetail, point.xz).rgb * weights.y
@@ -52,9 +57,10 @@ export function createTerrainMaterial(detail) {
       float landStrata = mix(0.96 + landBand * 0.04, 0.88 + landBand * 0.12, vLandBiome.y);
       float landFracture = 1.0 - smoothstep(0.015, 0.075, abs(landFine.g - 0.46));
       float landRock = (0.65 + landCoarse.r * 0.7 + (landFine.r - 0.5) * 0.3) * landStrata * (1.0 - landFracture * 0.16);
-      float landCanopy = pow(landCoarse.g, 2.0) * 0.7 + 0.48 + landFine.r * 0.22;
+      float landPatch=landNoise(vLandPosition.xz*.003)*.7+landNoise(vLandPosition.xz*.017+27.0)*.3;
+      float landCanopy=.72+landPatch*.55+(landFine.r-.5)*.06;
       diffuseColor.rgb *= mix(1.0, mix(landRock, landCanopy, landCover) * (1.0 - vLandBiome.z * 0.16), vLandBiome.w);
-      float landHeight = mix(landCoarse.r * 0.55 + landFine.r * 0.12, landCoarse.g * 1.5, landCover);
+      float landHeight = mix(landCoarse.r * 0.55 + landFine.r * 0.12, landPatch * .18, landCover);
     `);
     shader.fragmentShader = shader.fragmentShader.replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
       roughnessFactor *= mix(0.78 + landFine.r * 0.2, 1.0, landCover);`);

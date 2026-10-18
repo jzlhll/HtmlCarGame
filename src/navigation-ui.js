@@ -1,3 +1,4 @@
+import { displayHeight } from './config.js';
 import { setText, setHTML } from './dom.js';
 import { trafficDistanceLabel } from './traffic-labels.js';
 
@@ -56,9 +57,9 @@ export class NavigationUI {
     }
     setAttribute(this.player, 'transform', `translate(${this.mapPoint(a.position.x, a.position.z)}) rotate(${degrees(a.heading).toFixed(1)})`);
     const distance = Math.max(0, mission.runwayDistance);
-    setHTML(this.status, a.landed ? `Parking ${Math.round(a.airspeed)} km/h<small>避让障碍 · 跑道内停稳 1 秒</small>` : `${mission.sector.english} · ${(distance / 1000).toFixed(1)} km<small>${mission.sector.chinese} · 海拔 ${Math.round(a.position.y)} / ${game.route.ceiling} m</small>`);
+    setHTML(this.status, a.landed ? `Parking ${Math.round(a.airspeed)} km/h<small>避让障碍 · 跑道内停稳 1 秒</small>` : `${mission.sector.english} · ${(distance / 1000).toFixed(1)} km<small>${mission.sector.chinese} · 海拔 ${Math.round(displayHeight(a.position.y))} / ${displayHeight(game.route.ceiling)} m</small>`);
     const contacts = a.systems.avionics ? mission.contacts.filter(c => Math.hypot(c.position.x - a.position.x, c.position.z - a.position.z) < game.route.radarRange) : [];
-    const alert = mission.ceilingFault || contacts.some(c => c.danger || c.age < game.route.radarLead), flash = Math.floor(mission.elapsed * 4) % 2 === 0;
+    const alert = contacts.some(c => c.danger || c.age < game.route.radarLead), flash = Math.floor(mission.elapsed * 4) % 2 === 0;
     this.radarCard.classList.toggle('has-alert', alert && flash);
     this.distanceLabels.length = 0;
     const visible = new Set(), cosine = Math.cos(a.heading), sine = Math.sin(a.heading);
@@ -97,6 +98,6 @@ export class NavigationUI {
     }
     for (const [id, item] of this.contactNodes) if (!visible.has(id)) { item.element.remove(); this.contactNodes.delete(id); }
     const urgent = contacts.find(c => c.danger) || contacts[0];
-    setHTML(this.warning, mission.ceilingFault ? 'Altitude fault<small>超过 10000 m，降低高度</small>' : !a.systems.avionics ? 'Avionics OFF<small>A 开启雷达</small>' : urgent ? `${urgent.kind === 'geese' ? 'Geese' : 'Traffic'} · ${trafficDistanceLabel(Math.hypot(urgent.position.x - a.position.x, urgent.position.y - a.position.y, urgent.position.z - a.position.z))}<small>箭头为航向 · 数字为距离</small>` : `Clear · ${(game.route.radarRange/1000).toFixed(1)} km<small>雷达范围内无交通目标</small>`);
+    setHTML(this.warning, !a.systems.avionics ? 'Avionics OFF<small>A 开启雷达</small>' : urgent ? `${urgent.kind === 'geese' ? 'Geese' : 'Traffic'} · ${trafficDistanceLabel(Math.hypot(urgent.position.x - a.position.x, urgent.position.y - a.position.y, urgent.position.z - a.position.z))}<small>箭头为航向 · 数字为距离</small>` : `Clear · ${(game.route.radarRange/1000).toFixed(1)} km<small>雷达范围内无交通目标</small>`);
   }
 }

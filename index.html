@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#142b35">
-  <title>云端驾驶舱</title>
+  <title>低空穿越</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="./src/style.css">
   <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
 </head>
 <body>
-  <main id="game" tabindex="0" aria-label="云端驾驶舱飞行游戏" data-view="EXTERIOR">
+  <main id="game" tabindex="0" aria-label="低空穿越飞行游戏" data-view="EXTERIOR">
     <div id="scene"><svg id="light-preview" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice" role="img" aria-label="机场与客机轻量预览">
       <defs><linearGradient id="preview-sky" x2="0" y2="1"><stop stop-color="#76a6bd"/><stop offset="1" stop-color="#c1d7d9"/></linearGradient><linearGradient id="preview-body" x2="0" y2="1"><stop stop-color="#f4f5ee"/><stop offset="1" stop-color="#acbfbc"/></linearGradient></defs>
       <path fill="url(#preview-sky)" d="M0 0H1280V720H0Z"/><path fill="#428ba2" d="M0 220H1280V720H0Z"/><path fill="#7d9278" d="M480 220H710L1240 720H100Z"/>
@@ -28,7 +28,7 @@
       <path stroke="#263f43" stroke-width="5" d="M-143 24V37M78 18V32"/><circle fill="#263f43" cx="-143" cy="39" r="6"/><circle fill="#263f43" cx="78" cy="34" r="6"/>
       </g></svg></div>
     <header class="topbar">
-      <div class="brand"><span class="brand-symbol" aria-hidden="true">✦</span><div>云端驾驶舱<small>Cloud cockpit <span id="app-version" class="app-version"></span></small></div></div>
+      <div class="brand"><span class="brand-symbol" aria-hidden="true">✦</span><div>低空穿越<small>Low altitude crossing <span id="app-version" class="app-version"></span></small></div></div>
       <div class="session" hidden aria-label="时间"><span id="elapsed" hidden>00:00</span></div>
     </header>
     <section id="welcome" class="welcome" aria-labelledby="welcome-title">
@@ -96,7 +96,7 @@
     </div>
     <div id="upgrade-overlay" class="overlay" aria-busy="true">
       <section class="pause-card upgrade-card" role="dialog" aria-modal="true" aria-labelledby="upgrade-title">
-        <p class="eyebrow">Cloud cockpit</p><h2 id="upgrade-title">版本检查</h2>
+        <p class="eyebrow">Low altitude crossing</p><h2 id="upgrade-title">版本检查</h2>
         <p id="upgrade-message" role="status">正在检查本机已准备的资源。</p>
         <div class="upgrade-meter"><progress id="upgrade-progress" max="100" value="0" aria-label="准备进度"></progress><span id="upgrade-percentage">0%</span></div>
         <button id="upgrade-retry" class="primary-button" data-action="retry-upgrade" hidden>重试</button>

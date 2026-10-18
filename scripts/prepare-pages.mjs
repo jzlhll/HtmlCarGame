@@ -53,4 +53,4 @@ async function measure(directory) {
 }
 const size = await measure(output);
 console.info('Static game files prepared ' + JSON.stringify({version:APP_VERSION,...size}));
-if (size.bytes >= GAME.packageLimitMb * 1000000) throw new Error('Published files exceed stage one package budget');
+if (size.bytes >= GAME.packageLimitMb * 1000000) throw new Error('Published files exceed configured package budget');

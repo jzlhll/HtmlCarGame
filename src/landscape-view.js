@@ -1,12 +1,17 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { LANDSCAPE, SCENERY, JOURNEY, SURFACE_APPEARANCE, clusterZ } from './config.js';
+import { LANDSCAPE, SCENERY, JOURNEY, SURFACE_APPEARANCE, clusterZ, LOOP_WORLD, REGION_BLEND } from './config.js';
 import { surfaceTexture } from './surface-assets.js';
 import { coastalLandWeight } from './coastal-terrain.js';
 import { CoastalView } from './coastal-view.js';
 import { GenerationQueue } from './generation-queue.js';
 import { MountainView } from './mountain-view.js';
-import { batchStaticMeshes } from './static-batch.js';
+import { regionLandAt, regionBelts } from './region-blend.js';
+import { LoopView } from './loop-view.js';
+import { createCityBlocks } from './city-blocks.js';
+import { createRoadMaterial, createCountryside } from './countryside-view.js';
+import { createDistrict } from './district-view.js';
+import { batchStaticMeshSteps } from './static-batch.js';
 
 // 沿压缩航线绘制地景；建筑和山体直接读取逻辑共用数据。
 export class LandscapeView extends THREE.Group {
@@ -19,20 +24,12 @@ export class LandscapeView extends THREE.Group {
     this.route = world.route;
     this.frameSegments = [];
     this.coast=new CoastalView(world);this.add(this.coast);
-    this.addRiver();
-    this.addCity();
-    this.addLandmarks();
-    this.addFarmland();
-    this.addWaterfall();
-    this.addRegionalViews();
-    batchStaticMeshes(this);
-    this.mountains = new MountainView(world); this.add(this.mountains);
-    this.textures = this.mountains.textures;
+    this.textures=[];
   }
 
   *addGround() {
     const settings=LANDSCAPE.coast,surface=this.world.coastalSurface;
-    const material=new THREE.MeshStandardMaterial({color:SCENERY.colors.ground,map:surfaceTexture('grass-color'),roughness:1,bumpMap:surfaceTexture('grass-color'),bumpScale:SURFACE_APPEARANCE.groundBump});
+    const material=new THREE.MeshStandardMaterial({color:SCENERY.colors.ground,roughness:1});
     const positions=surface.positions,uv=new Float32Array(positions.length/3*2),normals=new Float32Array(positions.length),indices=[];
     for(let row=0;row<surface.z.length;row++){
       for(let col=0;col<surface.x.length;col++){
@@ -47,9 +44,8 @@ export class LandscapeView extends THREE.Group {
     const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.BufferAttribute(positions,3));geometry.setAttribute('uv',new THREE.BufferAttribute(uv,2));geometry.setIndex(indices);yield 'boundary';
     geometry.setAttribute('normal',new THREE.BufferAttribute(normals,3));yield 'boundary';
     const coastalGround=new THREE.Mesh(geometry,material);coastalGround.position.y=-.04;coastalGround.receiveShadow=true;this.add(coastalGround);
-    const half=SCENERY.groundSize/2,coordinates=new Set([settings.endZ,-55000,this.route.destination.threshold]);
-    for(let i=0;i<=JOURNEY.groundSegments;i++){const z=25000-i/JOURNEY.groundSegments*SCENERY.groundSize;if(z<settings.endZ)coordinates.add(z);}
-    for(const [distance] of JOURNEY.elevationProfile)if(-distance<settings.endZ)coordinates.add(-distance);
+    const half=LOOP_WORLD.tileSize/2,minZ=(Math.floor((this.route.destination.threshold-this.route.destination.length+half)/LOOP_WORLD.tileSize)-.5)*LOOP_WORLD.tileSize,coordinates=new Set([settings.endZ,minZ,this.route.destination.threshold]);
+    for(let i=0;i<=JOURNEY.groundSegments;i++){const z=25000-i/JOURNEY.groundSegments*SCENERY.groundSize;if(z<settings.endZ&&z>minZ)coordinates.add(z);}
     const rows=[...coordinates].sort((a,b)=>b-a),landPositions=[],landUV=[],landIndices=[];
     rows.forEach((z,row)=>{
       for(const x of [-half,half]){landPositions.push(x,this.world.baseHeightAt(x,z),z);landUV.push(x/SURFACE_APPEARANCE.grassTileMetres,z/SURFACE_APPEARANCE.grassTileMetres);}
@@ -59,7 +55,7 @@ export class LandscapeView extends THREE.Group {
     const inland=new THREE.Mesh(inlandGeometry,material);inland.position.y=-.04;inland.receiveShadow=true;this.add(inland);yield 'boundary';
   }
 
-  addRegionalViews() {
+  *addRegionalViews() {
     if (this.route.id < 2) return;
     const oval = (x, z, width, length, y, color) => {
       const mesh = new THREE.Mesh(new THREE.CircleGeometry(1, 64), new THREE.MeshStandardMaterial({color, roughness: 0.6, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2}));
@@ -89,7 +85,7 @@ export class LandscapeView extends THREE.Group {
     const trees = new THREE.InstancedMesh(new THREE.ConeGeometry(10, 32, 6), new THREE.MeshStandardMaterial({color: 0x496e50}), 40);
     const dummy = new THREE.Object3D();
     for (let i = 0; i < 40; i++) {
-      const z = island.z + (i - 20) * 32, x = island.x + (i % 2 ? -1 : 1) * 140;
+      const z = island.z + (i - 20) * 160, x = island.x + (i % 2 ? -1 : 1) * 140;
       dummy.position.set(x, floor + 16, z); dummy.updateMatrix(); trees.setMatrixAt(i, dummy.matrix);
     }
     trees.computeBoundingSphere(); this.add(trees);
@@ -100,17 +96,20 @@ export class LandscapeView extends THREE.Group {
     for (const [x, z, width, length] of [[-1500, -17900, 500, 800], [2100, -18800, 650, 1100], [-2200, -19700, 400, 500]]) {
       oval(x, clusterZ('lake',z), width, length, lake.elevation + 0.12, 0x789468);
     }
-    this.addPagoda();
+    for(const tower of this.world.pagodas){this.addPagoda(tower);yield;}
   }
 
-  addPagoda() {
-    const tower = JOURNEY.pagoda, floor = this.world.baseHeightAt(tower.x, tower.z);
-    const wall = new THREE.MeshStandardMaterial({color: 0xd3b77d, roughness: 0.85});
+  addPagoda(tower) {
+    const floor=tower.floor;
+    const wall = new THREE.MeshStandardMaterial({color: tower.hero?0xe3bb54:0xb8b5a2, roughness: 0.85});
     const red = new THREE.MeshStandardMaterial({color: 0x964d38, roughness: 0.85});
-    const gold = new THREE.MeshStandardMaterial({color: 0xc99a40, roughness: 0.7, side: THREE.DoubleSide});
+    const gold = new THREE.MeshStandardMaterial({color: tower.hero?0xd9a434:0x4b5d58, roughness: 0.7, side: THREE.DoubleSide});
     const box = (x, y, z, width, height, depth, material) => {
       const mesh = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), material); mesh.position.set(tower.x + x, floor + y, tower.z + z); this.add(mesh);
     };
+    const stone=new THREE.MeshStandardMaterial({color:0x92958b,roughness:1});
+    box(0,-tower.supportHeight/2,0,tower.width*1.15,tower.supportHeight,tower.width*1.15,stone);
+    box(0,-3,0,tower.width*1.2,6,tower.width*1.2,stone);
     for (let i = 0; i < tower.levels; i++) {
       const y = tower.height * i / tower.levels, height = tower.height / tower.levels, width = tower.width * (1 - i * 0.07);
       box(0, y + height * 0.43, 0, width, height * 0.86, width, wall);
@@ -196,27 +195,53 @@ export class LandscapeView extends THREE.Group {
   }
 
   *buildScenery() {
-    yield* this.addGround();yield* this.coast.build();yield* this.addTransitions();yield* this.mountains.buildRolling();
+    yield {task:'landmark-structure'};this.addRiver();yield 'boundary';this.addCity();yield 'boundary';
+    yield* this.addLandmarks();yield 'boundary';this.addWaterfall();yield {task:'regional-monuments'};yield* this.addRegionalViews();yield {task:'static-batches'};
+    yield* batchStaticMeshSteps(this);yield 'boundary';
+    this.mountains=new MountainView(this.world);this.add(this.mountains);yield* this.mountains.makeTreeResources();this.textures.push(...this.mountains.textures);yield 'boundary';
+    this.loopView=new LoopView(this.world,()=>this.landmarkTemplate.clone(),{geometry:this.mountains.treeGeometry,material:this.mountains.treeMaterial,farGeometry:this.mountains.treeSpriteGeometry,farMaterial:this.mountains.treeSpriteMaterial});this.add(this.loopView);yield 'boundary';
+    yield* this.addGround();yield* this.addCityBlocks();yield* this.addFarmland();this.add(yield* createDistrict(this.world.districts));yield* this.coast.build();yield* this.addTransitions();yield* this.mountains.buildRolling();yield* this.addRegionBelts();yield* this.addRegionalCities();yield* this.loopView.build();
+    this.loopView.installHorizon(this);
     this.updateMatrixWorld(true);
     this.traverse(object=>{object.matrixAutoUpdate=false;object.matrixWorldAutoUpdate=false;});
+    this.loopView.traverse(object=>{object.matrixAutoUpdate=false;object.matrixWorldAutoUpdate=false;});
+  }
+
+  *addRegionBelts() {
+    const trees={geometry:this.mountains.treeGeometry,material:this.mountains.treeMaterial,farGeometry:this.mountains.treeSpriteGeometry,farMaterial:this.mountains.treeSpriteMaterial};
+    for(const belt of regionBelts(this.route)){
+      yield {task:'region-forest'};
+      this.add(yield* createCountryside({width:REGION_BLEND.width,length:belt.length,centerZ:belt.z,seed:belt.seed,
+        heightAt:(x,z)=>this.world.heightAt(x,z),landAt:(x,z)=>regionLandAt(this.world,x,z),trees,forestOnly:true,
+        treeHeight:REGION_BLEND.treeHeight,treeArea:REGION_BLEND.treeArea,treeNear:REGION_BLEND.treeNear,treeFar:REGION_BLEND.treeFar}));
+    }
+  }
+
+  *addRegionalCities() {
+    for(const city of this.world.regionalCities){
+      const group=new THREE.Group(),material=createRoadMaterial(),width=city.columns*city.spacing,length=city.rows*city.spacing;
+      const ground=new THREE.Mesh(new THREE.PlaneGeometry(width,length),new THREE.MeshStandardMaterial({color:0x777e71,roughness:1}));
+      ground.rotation.x=-Math.PI/2;ground.position.set(city.x,.02,city.z);group.add(ground);yield;
+      for(let axis=0;axis<2;axis++)for(let i=0;i<=(axis?city.rows:city.columns);i++){
+        const extent=axis?width:length,road=new THREE.Mesh(new THREE.PlaneGeometry(42,extent),material);
+        for(let v=0;v<road.geometry.attributes.uv.count;v++)road.geometry.attributes.uv.setY(v,road.geometry.attributes.uv.getY(v)*extent);
+        road.rotation.x=-Math.PI/2;road.rotation.z=axis?Math.PI/2:0;
+        road.position.set(city.x+(axis?0:(i-city.columns/2)*city.spacing),.06,city.z+(axis?(i-city.rows/2)*city.spacing:0));group.add(road);yield;
+      }
+      const plaza=new THREE.Mesh(new THREE.PlaneGeometry(...city.plaza),new THREE.MeshStandardMaterial({color:0xb2ad98,roughness:.85}));plaza.rotation.x=-Math.PI/2;plaza.position.set(city.x,.12,city.z);group.add(plaza);
+      const cube=new THREE.BoxGeometry(1,1,1),monument=new THREE.Mesh(cube,new THREE.MeshStandardMaterial({color:0xa07855,roughness:.7}));monument.scale.set(45,110,45);monument.position.set(city.x,55,city.z);group.add(monument);
+      yield* batchStaticMeshSteps(group,30000);this.add(group);yield 'boundary';
+    }
   }
 
   *addTransitions() {
-    const settings=JOURNEY.transitions, baseColor=new THREE.Color(SCENERY.colors.ground),meadowColor=new THREE.Color(settings.meadowColor),color=new THREE.Color();
-    const grass=new THREE.MeshStandardMaterial({map:surfaceTexture('grass-color'),vertexColors:true,roughness:1,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
+    const settings=JOURNEY.transitions;
     for(const zone of this.world.transitions){
       yield {task:zone.id};
-      const [columns,rows]=settings.meadowSegments,positions=[],uv=[],colors=[],indices=[],land=[];
-      for(let row=0;row<=rows;row++)for(let col=0;col<=columns;col++){
-        const u=col/columns,v=row/rows,x=(u-.5)*settings.meadowWidth,z=zone.z+(v-.5)*zone.length;
-        land.push(coastalLandWeight(x,z)>.98);
-        positions.push(x,this.world.baseHeightAt(x,z)+.008,z);uv.push(x/SURFACE_APPEARANCE.grassTileMetres,z/SURFACE_APPEARANCE.grassTileMetres);
-        const blend=Math.sin(u*Math.PI)*Math.sin(v*Math.PI)*(.55+.15*Math.sin(u*17+v*11));
-        color.copy(baseColor).lerp(meadowColor,blend);colors.push(color.r,color.g,color.b);
-        if(row&&col){const a=(row-1)*(columns+1)+col-1,b=a+columns+1;if(land[a]&&land[b]&&land[a+1])indices.push(a,b,a+1);if(land[b]&&land[b+1]&&land[a+1])indices.push(b,b+1,a+1);}
-      }
-      const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geometry.setIndex(indices);geometry.computeVertexNormals();
-      const meadow=new THREE.Mesh(geometry,grass);meadow.receiveShadow=true;this.add(meadow);
+      const group=yield* createCountryside({width:settings.meadowWidth,length:zone.length,centerZ:zone.z,
+        seed:settings.seed+Math.round(-zone.z),heightAt:(x,z)=>this.world.heightAt(x,z),
+        landAt:(x,z)=>regionLandAt(this.world,x,z),trees:{geometry:this.mountains.treeGeometry,material:this.mountains.treeMaterial,farGeometry:this.mountains.treeSpriteGeometry,farMaterial:this.mountains.treeSpriteMaterial}});
+      this.add(group);
       const curve=new THREE.CatmullRomCurve3(zone.points.map(point=>new THREE.Vector3(point.x,0,point.z))),points=curve.getPoints(settings.streamSamples).filter(p=>coastalLandWeight(p.x,p.z)>.08);
       if(points.length<2)continue;
       this.surface(this.ribbon(points,settings.streamBankWidth),settings.bankColor,SCENERY.surfaceLayers.shoulder,.02);
@@ -234,34 +259,40 @@ export class LandscapeView extends THREE.Group {
     const roadGeometries = [];
     for (let x = 0; x <= city.columns; x++) {
       const geometry = new THREE.PlaneGeometry(city.roadWidth, length); geometry.rotateX(-Math.PI / 2);
+      for(let i=0;i<geometry.attributes.uv.count;i++)geometry.attributes.uv.setY(i,geometry.attributes.uv.getY(i)*length);
       geometry.translate(city.center[0] - width / 2 + x * city.spacing, 0, city.center[1]); roadGeometries.push(geometry);
     }
     for (let z = 0; z <= city.rows; z++) {
       const geometry = new THREE.PlaneGeometry(width, city.roadWidth); geometry.rotateX(-Math.PI / 2);
+      for(let i=0;i<geometry.attributes.uv.count;i++){const u=geometry.attributes.uv.getX(i),v=geometry.attributes.uv.getY(i);geometry.attributes.uv.setXY(i,v,u*width);}
       geometry.translate(city.center[0], 0, city.center[1] - length / 2 + z * city.spacing); roadGeometries.push(geometry);
     }
-    this.surface(mergeGeometries(roadGeometries), city.roadColor, SCENERY.surfaceLayers.shoulder, 0.015);
+    const streets=this.surface(mergeGeometries(roadGeometries), city.roadColor, SCENERY.surfaceLayers.shoulder, 0.015);streets.material.dispose();streets.material=createRoadMaterial();
     roadGeometries.forEach(geometry => geometry.dispose());
     // 保留原装饰随机流的消耗，材质升级不改变后续地景位置。
     for (let cell=0; cell<24*8; cell++) if (random() <= 0.8) random();
-    const texture = surfaceTexture('facade-color');
-    const sites = this.world.buildings;
-    const buildings = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({ map: texture, roughness: 0.7, roughnessMap: surfaceTexture('facade-detail'), bumpMap: surfaceTexture('facade-detail'), bumpScale: SURFACE_APPEARANCE.facadeBump, metalness: 0.15 }), sites.length);
-    const roofs = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({color: city.roofColor, roughness: 0.9}), sites.length);
-    const dummy = new THREE.Object3D(), color = new THREE.Color();
-    sites.forEach((site, index) => {
-      dummy.position.set(site.x, this.world.baseHeightAt(site.x, site.z) + site.height / 2, site.z); dummy.scale.set(site.width, site.height, site.depth); dummy.updateMatrix();
-      buildings.setMatrixAt(index, dummy.matrix); buildings.setColorAt(index, color.setHex(site.color));
-      dummy.position.y = this.world.baseHeightAt(site.x, site.z) + site.height + 2; dummy.scale.y = 4; dummy.updateMatrix(); roofs.setMatrixAt(index, dummy.matrix);
-    });
-    buildings.computeBoundingSphere(); roofs.computeBoundingSphere(); this.add(buildings, roofs);
+
   }
 
-  addLandmarks() {
+  *addCityBlocks() {
+    const chunks=new Map(),size=LANDSCAPE.city.chunkSize,shared={};
+    for(const site of this.world.buildings){
+      const key=Math.floor(site.x/size)+':'+Math.floor(site.z/size);
+      if(!chunks.has(key))chunks.set(key,[]);chunks.get(key).push(site);
+    }
+    for(const sites of chunks.values()){
+      yield {task:'city-block'};
+      this.add(yield* createCityBlocks(sites,(x,z)=>this.world.baseHeightAt(x,z),shared));yield 'boundary';
+    }
+  }
+
+  *addLandmarks() {
+    this.landmarkObjects=[];
+    const frameStart=this.frameSegments.length;
     const detail = LANDSCAPE.towers;
     const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
     for (const tower of LANDSCAPE.landmarks) {
-      const group = new THREE.Group(); group.name = tower.name;
+      const group = new THREE.Group(); group.name = tower.name;this.landmarkObjects.push(group);
       group.position.set(tower.position[0], this.world.baseHeightAt(...tower.position), tower.position[1]); this.add(group);
       const material = new THREE.MeshStandardMaterial({color: tower.color, metalness: 0.3, roughness: 0.5});
       const box = (x, y, z, width, height, depth) => {
@@ -298,6 +329,7 @@ export class LandscapeView extends THREE.Group {
         const geometry = new THREE.BufferGeometry(); geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3)); geometry.setIndex(indices); geometry.computeVertexNormals(); group.add(new THREE.Mesh(geometry, material));
       }
       for (let level = 0; level < detail.levels; level++) {
+        if(level%4===0)yield;
         const t = level / detail.levels, next = (level + 1) / detail.levels;
         for (let side = 0; side < detail.struts; side++) {
           const angle = side / detail.struts * Math.PI * 2, adjacent = (side + 1) / detail.struts * Math.PI * 2;
@@ -308,24 +340,25 @@ export class LandscapeView extends THREE.Group {
     }
     const segments = this.frameSegments, dummy = new THREE.Object3D(), direction = new THREE.Vector3(), center = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0);
     const frames = new THREE.InstancedMesh(new THREE.CylinderGeometry(1, 1, 1, 5), new THREE.MeshStandardMaterial({color: detail.frameColor, roughness: 0.7}), segments.length);
-    segments.forEach(([a, b, radius], index) => {
+    for(const [index,[a,b,radius]] of segments.entries()) {
       direction.subVectors(b, a); dummy.position.copy(center.addVectors(a, b).multiplyScalar(0.5));
       dummy.scale.set(radius, direction.length(), radius); dummy.quaternion.setFromUnitVectors(up, direction.normalize()); dummy.updateMatrix(); frames.setMatrixAt(index, dummy.matrix);
-    });
-    frames.computeBoundingSphere(); this.add(frames); this.frameSegments.length = 0;
+      if(index%64===0)yield;
+    }
+    frames.computeBoundingSphere(); this.add(frames);
+    // 在主场景合批移除子网格前保存完整模板；桥梁支架只属于原航线。
+    this.landmarkTemplate=new THREE.Group();
+    for(const object of this.landmarkObjects)this.landmarkTemplate.add(object.clone());
+    const landmarkFrames=new THREE.InstancedMesh(frames.geometry,frames.material,segments.length-frameStart);
+    landmarkFrames.instanceMatrix.array.set(frames.instanceMatrix.array.subarray(frameStart*16));
+    landmarkFrames.computeBoundingSphere();this.landmarkTemplate.add(landmarkFrames);
+    yield* batchStaticMeshSteps(this.landmarkTemplate);this.landmarkObjects.length=0;this.frameSegments.length=0;
   }
 
-  addFarmland() {
-    const count = 80, dummy = new THREE.Object3D(), color = new THREE.Color();
-    const fields = new THREE.InstancedMesh(new THREE.PlaneGeometry(160, 190), new THREE.MeshStandardMaterial({map: surfaceTexture('grass-color'), roughness: 1, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1}), count);
-    for (let i = 0; i < count; i++) {
-      const x = (i % 10 - 4.5) * 180, z = clusterZ('fields', -7200) - Math.floor(i / 10) * 210;
-      dummy.position.set(x, this.world.baseHeightAt(x, z) + 0.012, z);
-      const slope = (this.world.baseHeightAt(x, z + 1) - this.world.baseHeightAt(x, z - 1)) / 2;
-      dummy.rotation.x = -Math.PI / 2 - Math.atan(slope); dummy.updateMatrix(); fields.setMatrixAt(i, dummy.matrix);
-      fields.setColorAt(i, color.setHex([0x9eae62, 0x739c63, 0xc5b676, 0x557c53][i % 4]));
-    }
-    fields.computeBoundingSphere(); this.add(fields);
+  *addFarmland() {
+    const fields=yield* createCountryside({width:7200,length:4600,centerZ:clusterZ('fields'),seed:462781,
+      heightAt:(x,z)=>this.world.heightAt(x,z),trees:{geometry:this.mountains.treeGeometry,material:this.mountains.treeMaterial,farGeometry:this.mountains.treeSpriteGeometry,farMaterial:this.mountains.treeSpriteMaterial}});
+    this.add(fields);
   }
 
   addWaterfall() {
@@ -360,5 +393,5 @@ export class LandscapeView extends THREE.Group {
     }
   }
 
-  update(seconds, camera) { if(this.fallTexture)this.fallTexture.offset.y = -seconds * 0.7; this.coast.update(seconds);this.mountains.update(camera); }
+  update(seconds, camera, position) { if(this.fallTexture)this.fallTexture.offset.y = -seconds * 0.7; this.coast.update(seconds);this.mountains.update(camera);this.loopView.update(position,seconds); }
 }

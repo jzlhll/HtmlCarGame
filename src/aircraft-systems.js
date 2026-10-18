@@ -58,7 +58,7 @@ export class AircraftSystems {
     }
     if (state.engine !== 'RUNNING') return {
       type: 'blocked', key, condition: state.engine,
-      reason: state.engine === 'STARTING' ? '发动机正在启动，请等待就绪后重新按 R。' : '请先按 Fire（发动机启动）[F]，等待发动机就绪。',
+      reason: state.engine === 'STARTING' ? '发动机正在启动，请等待就绪后重新按 R。' : '请先按 Engine（发动机启动）[E]，等待发动机就绪。',
     };
     if (this.aircraft.airspeed >= FLIGHT.stopSpeed) return {
       type: 'blocked', key, condition: 'moving', reason: '请先按 S 减速并停稳，再按 Release（松驻车刹车）[R]。',
@@ -76,6 +76,6 @@ export class AircraftSystems {
     if (this.engineElapsed < SYSTEMS.engineStartSeconds - 1e-9) return null;
     state.engineProgress = 1;
     state.engine = 'RUNNING';
-    return { type: 'engine-ready', key: 'F' };
+    return { type: 'engine-ready', key: 'E' };
   }
 }

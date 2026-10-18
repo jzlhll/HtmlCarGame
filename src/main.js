@@ -1,5 +1,6 @@
 import { GAME, FLIGHT, FLIGHT_PHASES, AIRCRAFT, SURFACE_APPEARANCE } from './config.js';
 import { Game } from './game.js';
+import { GenerationQueue } from './generation-queue.js';
 import { Input } from './input.js';
 import { UI } from './ui.js';
 import { GameRenderer } from './render.js';
@@ -8,7 +9,7 @@ import { APP_VERSION, VersionUpgrade } from './version.js';
 import { prepareSurfaceAssets, setSurfacePreparationUrgent, prepareSurfaceDetails, surfaceGenerationStats, surfaceCache } from './surface-assets.js';
 
 const moduleLoadedAt = performance.now(), container = document.getElementById('game');
-const game = new Game(new URLSearchParams(location.search).get('level'));
+const game = new Game(new URLSearchParams(location.search).get('level'),{deferWorld:true});
 const worldPreparedAt = performance.now(), input = new Input(container), ui = new UI(game, container), audio = new FlightAudio(container);
 let renderer, details, sceneReady, scenePrepared = false, enterPending = false, startupReady = false, startupRunning = false;
 const versionUpgrade = new VersionUpgrade(surfaceCache(game.route.id), ui);
@@ -127,6 +128,8 @@ function ensureDetails() {
 function prepareScene() {
   if (sceneReady) return sceneReady;
   sceneReady=(async()=>{
+    const worldQueue=new GenerationQueue(game.world.preparation,{urgent:true,name:'route-world'});worldQueue.resume();
+    const worldPreparation=await worldQueue.done;
     const assetStartedAt=performance.now();
     const assetGeneration=await prepareSurfaceAssets({levelId:game.route.id,urgent:enterPending||versionUpgrade.required,onProgress:stats=>{
       if (ui.preparing && !ui.upgrading) ui.setPreparing(true,Math.min(95,Math.round((stats.completed||0)/stats.total*95)));
@@ -141,13 +144,15 @@ function prepareScene() {
     }
     const sceneryPreparedAt=performance.now();
     versionUpgrade.progress(40,'正在准备三维画面。');
-    const firstSubmitAt=performance.now(); renderer.draw(game);
-    const firstFrameMs=Math.round(performance.now()-firstSubmitAt), gpuPreparation=await renderer.prepare();
+    // 保留轻量预览到完整材质预热结束，避免先同步编译一遍未完成的地景。
+    const gpuPreparation=await renderer.prepare();
+    const firstSubmitAt=performance.now();renderer.draw(game);
+    const firstFrameMs=Math.round(performance.now()-firstSubmitAt);
     scenePrepared=true; document.getElementById('light-preview')?.remove();
     ensureDetails();
     const preparedAt=performance.now();
     console.info('Scene prepared ' + JSON.stringify({version:APP_VERSION,navigationMs:Math.round(preparedAt),modulesMs:Math.round(moduleLoadedAt),worldMs:Math.round(worldPreparedAt-moduleLoadedAt),
-      assetsMs:Math.round(assetsPreparedAt-assetStartedAt),sceneryMs:Math.round(sceneryPreparedAt-assetsPreparedAt),gpuMs:Math.round(preparedAt-sceneryPreparedAt),firstFrameMs,gpuPreparation,assetGeneration}));
+      assetsMs:Math.round(assetsPreparedAt-assetStartedAt),sceneryMs:Math.round(sceneryPreparedAt-assetsPreparedAt),gpuMs:Math.round(preparedAt-sceneryPreparedAt),firstFrameMs,worldPreparation,gpuPreparation,assetGeneration}));
     updateGenerationWindow('scene'); renderer.resize(); wake();
   })().catch(error=>{sceneReady=undefined;throw error;});
   return sceneReady;

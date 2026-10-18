@@ -30,7 +30,7 @@ export class Flight {
   }
 
   altitude() {
-    return this.aircraft.onGround ? 0 : Math.max(0, this.lowestPoint() - this.world.heightAt(this.aircraft.position.x, this.aircraft.position.z));
+    return this.aircraft.onGround ? 0 : Math.min(this.route.ceiling, Math.max(0, this.lowestPoint() - this.world.heightAt(this.aircraft.position.x, this.aircraft.position.z)));
   }
 
   lowestPoint() {
@@ -121,7 +121,7 @@ export class Flight {
 
   get stallGuidance() {
     if (this.thrustLocked) return '空速不足，飞机正在下沉；本关两次鸟击，T 已失效。';
-    if (this.aircraft.systems.engine !== 'RUNNING') return '空速不足，飞机正在下沉；先按 F 启动发动机。';
+    if (this.aircraft.systems.engine !== 'RUNNING') return '空速不足，飞机正在下沉；先按 E 启动发动机。';
     return '空速不足，飞机正在下沉；关闭 W 后按 T 提速到 165 km/h，解除下沉。';
   }
 
@@ -217,7 +217,7 @@ export class Flight {
     const previousSpeed = a.airspeed;
     // 空速是独立的前进速度状态，重力／下坠不会把它被动加到失速阈值以上。
     const direction = accelerating ? 1 : slow ? -1 : 0;
-    let rate = direction ? this.speedRate(direction) * (accelerating ? a.powerLimit : 1) : 0;
+    let rate = direction ? this.speedRate(direction) : 0;
     if (direction && !(accelerating ? pressingThrust : pressingBrake)) rate = Math.min(rate, this.speedTapRemaining / (FLIGHT.kmhPerMps * dt));
     const manualSpeed = Math.max(0, previousSpeed + direction * rate * FLIGHT.kmhPerMps * dt);
     if (direction === this.speedTapDirection) this.speedTapRemaining = Math.max(0, this.speedTapRemaining - Math.abs(manualSpeed - previousSpeed));
@@ -225,7 +225,7 @@ export class Flight {
     const decayRate = FLIGHT.speedDecayRate + (state.flaps === 'TAKEOFF' ? FLIGHT.wingBrakeDeceleration : 0);
     a.airspeed = clamp(manualSpeed - decayRate * dt, 0, this.maxSpeed);
     a.wheelBrake = a.onGround && slow;
-    a.throttle = accelerating ? a.powerLimit : 0;
+    a.throttle = accelerating ? 1 : 0;
     a.enginePower += (a.throttle - a.enginePower) * (1 - Math.exp(-dt / aero.engineResponseSeconds));
     if (a.enginePower < 1e-6) a.enginePower = 0;
     a.thrust = accelerating ? aero.mass * rate : 0;
@@ -276,7 +276,10 @@ export class Flight {
     a.velocity.x = Math.sin(travelHeading) * forward;
     a.velocity.z = -Math.cos(travelHeading) * forward;
     a.verticalSpeed = a.velocity.y * FLIGHT.kmhPerMps;
-    if (airborneAtStart) a.position.y += a.velocity.y * dt;
+    if (airborneAtStart) {
+      a.position.y += a.velocity.y * dt;
+      if(a.position.y>=this.route.ceiling){a.position.y=this.route.ceiling;a.velocity.y=Math.min(0,a.velocity.y);a.verticalSpeed=a.velocity.y*FLIGHT.kmhPerMps;}
+    }
     a.position.x += worldHorizontalSpeed(a.velocity.x) * dt; a.position.z += worldHorizontalSpeed(a.velocity.z) * dt;
     a.flightPathAngle = Math.atan2(a.velocity.y, Math.hypot(a.velocity.x, a.velocity.z));
     a.angleOfAttack = a.pitch - a.flightPathAngle;

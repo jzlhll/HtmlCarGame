@@ -1,15 +1,18 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { SURFACE_APPEARANCE, LANDSCAPE, AIRCRAFT } from './config.js';
+import { SURFACE_APPEARANCE, LANDSCAPE, AIRCRAFT, LOOP_WORLD, COUNTRYSIDE, JOURNEY, WORLD_TRAVEL, WORLD_BOUNDARY, REGION_BLEND } from './config.js';
 import { fuselageGeometry, aircraftDoorGeometry, engineGeometry, fanGeometry, treeCrownGeometry, wingGeometry } from './model-geometry.js';
 import { surfacePixels, terrainPixels, environmentPixels, mipmapPixels } from './surface-recipes.js';
 import { GenerationQueue } from './generation-queue.js';
 import { SurfaceCache } from './surface-cache.js';
 import { PixelWorker } from './pixel-worker.js';
+import { loopTerrainData } from './loop-world.js';
+import { boundaryData } from './world-boundary.js';
 
 const textures = new Map(), geometries = new Map();
 const textureNames = ['asphalt-color','asphalt-detail','paint-detail','panel-detail','metal-detail','terrain-detail','environment','grass-color','concrete-color','facade-color','facade-detail','rubber-detail'];
 let preparation, baseQueue, detailQueue, cache;
+export const sceneCacheStats={hits:0,misses:0};
 const pixelWorker=new PixelWorker();
 
 export function surfaceCache(levelId = 1) {
@@ -44,7 +47,7 @@ export function surfaceGenerationStats() {
   let textureBytes = 0;
   for (const texture of textures.values()) textureBytes += texture.image.width * texture.image.height * 4 * 4 / 3;
   return {workerActive:Boolean(pixelWorker.pending), workerPresent:Boolean(pixelWorker.worker), essential: baseQueue?.snapshot(), detail: detailQueue?.snapshot(), persistent: cache?.available,
-    textureBytes: Math.ceil(textureBytes), sizes: Object.fromEntries([...textures].map(([name,texture])=>[name,[texture.image.width,texture.image.height]]))};
+    scene:{...sceneCacheStats}, textureBytes: Math.ceil(textureBytes), sizes: Object.fromEntries([...textures].map(([name,texture])=>[name,[texture.image.width,texture.image.height]]))};
 }
 
 // 分块持久化，避免一次克隆大像素缓冲；元数据最后写入，未完成记录不会作为命中。
@@ -89,7 +92,7 @@ function* readRecord(name) {
 function sizeFor(name, detail = false) {
   const settings=SURFACE_APPEARANCE;
   const base = name==='panel-detail'?settings.panelSize:name==='metal-detail'?settings.metalSize:name==='terrain-detail'?LANDSCAPE.terrain.textureSize:settings.textureSize;
-  return detail ? Math.min(settings.detailTextureSize,base*2) : base;
+  return detail ? Math.min(settings.detailTextureSize,base*(name.startsWith('facade-')||name==='terrain-detail'?4:2)) : base;
 }
 
 function* pixelsFor(name, width, height, queue, manual = false) {
@@ -119,12 +122,24 @@ function geometryRecord(geometry) {
   return {kind: 'geometry', type: geometry.type, attributes: Object.fromEntries(Object.entries(geometry.attributes).map(([name,attribute])=>[name,{array:attribute.array,itemSize:attribute.itemSize,normalized:attribute.normalized}])), index: geometry.index?.array};
 }
 
-function geometryFrom(record) {
+function* geometryFrom(record) {
   if (record?.kind!=='geometry' || !record.attributes?.position || !record.attributes?.normal) return undefined;
   const position=record.attributes.position, count=position.array?.length/3;
   if (!(position.array instanceof Float32Array) || !Number.isInteger(count) || position.itemSize!==3) return undefined;
-  for (const attribute of Object.values(record.attributes)) if (!(attribute.array instanceof Float32Array) || attribute.array.length!==count*attribute.itemSize) return undefined;
-  if (record.index && !(record.index instanceof Uint16Array || record.index instanceof Uint32Array)) return undefined;
+  for(const attribute of Object.values(record.attributes)){
+    if(!(attribute.array instanceof Float32Array)||attribute.array.length!==count*attribute.itemSize)return undefined;
+    for(let offset=0;offset<attribute.array.length;offset+=16384){
+      for(let i=offset;i<Math.min(offset+16384,attribute.array.length);i++)if(!Number.isFinite(attribute.array[i]))return undefined;
+      yield;
+    }
+  }
+  if(record.index){
+    if(!(record.index instanceof Uint16Array||record.index instanceof Uint32Array))return undefined;
+    for(let offset=0;offset<record.index.length;offset+=16384){
+      for(let i=offset;i<Math.min(offset+16384,record.index.length);i++)if(record.index[i]>=count)return undefined;
+      yield;
+    }
+  }
   const geometry=new THREE.BufferGeometry(); geometry.type=record.type;
   for (const [name,attribute] of Object.entries(record.attributes)) geometry.setAttribute(name,new THREE.BufferAttribute(attribute.array,attribute.itemSize,attribute.normalized));
   if (record.index) geometry.setIndex(new THREE.BufferAttribute(record.index,1));
@@ -148,7 +163,7 @@ function* generateBase() {
     yield 'boundary'; yield {task:name};
     if (geometries.has(name)) {baseQueue.stats.completed=(baseQueue.stats.completed||0)+1;continue;}
     const key=`base/${name}`, record=yield* readRecord(key);
-    let geometry=geometryFrom(record);
+    let geometry=yield* geometryFrom(record);
     const hit=Boolean(geometry);
     if (hit) baseQueue.stats.hits++;
     else {baseQueue.stats.misses++; const result=create(); geometry=typeof result.next==='function'?yield* result:result;}
@@ -205,8 +220,11 @@ function resourceManifest() {
     else if (/^(main-wing|wing-leading|tailplane)-/.test(name)) dependencies=selected(['wingSpanSegments','wingChordSegments']);
     else if (name.startsWith('door-')) dependencies={...selected(['doorWidth','doorHeight','doorBorder']),
       position:settings.doorPositions[Number(name.split('-').at(-1))], bodyHeight:AIRCRAFT.bodyHeight};
+    if (name.startsWith('loop-terrain-')) dependencies={...LOOP_WORLD, variant:Number(name.split('-').at(-1))};
+    if(name.startsWith('boundary-'))dependencies={...WORLD_BOUNDARY,side:Number(name.split('-').at(-1))};
     entries.push([`base/${name}`,dependencies]);
   }
+  entries.push(['scene/country',{recipe:COUNTRYSIDE.cacheRecipe,country:COUNTRYSIDE,terrain:LANDSCAPE,journey:JOURNEY,world:WORLD_TRAVEL,loop:LOOP_WORLD,blend:REGION_BLEND}]);
   return entries;
 }
 
@@ -230,6 +248,23 @@ function geometryFactories() {
     factories.push([`main-wing-${side}`,()=>wingGeometry(main,0.3)], [`wing-leading-${side}`,()=>wingGeometry(main,0.3,true)], [`tailplane-${side}`,()=>wingGeometry(tail,0.16)]);
   }
   for (const side of [-1, 1]) settings.doorPositions.forEach((z, index) => factories.push([`door-${side}-${index}`, () => aircraftDoorGeometry(side, z)]));
+  for (let variant=0;variant<LOOP_WORLD.variants;variant++) factories.push([`loop-terrain-${variant}`,function* () {
+    const data=yield* loopTerrainData(variant), geometry=new THREE.BufferGeometry();
+    geometry.setAttribute('position',new THREE.BufferAttribute(data.positions,3));
+    geometry.setAttribute('color',new THREE.BufferAttribute(data.colors,3));
+    geometry.setAttribute('normal',new THREE.BufferAttribute(data.normals,3));
+    geometry.setAttribute('biome',new THREE.BufferAttribute(data.biomes,4));
+    geometry.setAttribute('uv',new THREE.BufferAttribute(data.uv,2));
+    geometry.setIndex(new THREE.BufferAttribute(data.indices,1));yield;
+    return geometry;
+  }]);
+  for(let side=0;side<4;side++)factories.push([`boundary-${side}`,function*(){
+    const data=yield* boundaryData(side),g=new THREE.BufferGeometry();
+    g.setAttribute('position',new THREE.BufferAttribute(data.positions,3));
+    g.setAttribute('color',new THREE.BufferAttribute(data.colors,3));
+    g.setAttribute('uv',new THREE.BufferAttribute(data.uv,2));g.setIndex(new THREE.BufferAttribute(data.indices,1));
+    g.computeVertexNormals();yield;return g;
+  }]);
   return factories;
 }
 

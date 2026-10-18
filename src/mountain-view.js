@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { LANDSCAPE, JOURNEY, SCENERY, SURFACE_APPEARANCE } from './config.js';
+import { LANDSCAPE, JOURNEY, SCENERY, SURFACE_APPEARANCE, WORLD_HEIGHT } from './config.js';
 import { mountainIndices, sampleMountain, smoothRange, terrainNoise } from './terrain.js';
 import { createTerrainDetail, createTerrainMaterial } from './terrain-material.js';
 import { surfaceTexture } from './surface-assets.js';
@@ -13,21 +13,19 @@ export class MountainView extends THREE.Group {
     this.settings = LANDSCAPE.terrain;
     this.detail = createTerrainDetail();
     this.material = createTerrainMaterial(this.detail);
-    this.rollingMaterial = new THREE.MeshStandardMaterial({map:surfaceTexture('grass-color'),bumpMap:surfaceTexture('grass-color'),bumpScale:SURFACE_APPEARANCE.groundBump,vertexColors:true,roughness:1,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
+    this.rollingMaterial=createTerrainMaterial(this.detail);this.rollingMaterial.polygonOffset=true;this.rollingMaterial.polygonOffsetFactor=-1;this.rollingMaterial.polygonOffsetUnits=-1;
     this.textures = [this.detail];
     this.surfaces = []; this.forest = [];
-    this.makeTreeResources();
-    for (const surface of world.mountainSurfaces) if(surface.kind!=='rolling')this.addMountain(surface);
-    for (const solid of world.solids) this.addRock(solid);
   }
 
   *buildRolling() {
-    for(const surface of this.world.mountainSurfaces)if(surface.kind==='rolling'){
-      yield {task:'rolling-hill'};this.addMountain(surface);yield 'boundary';
+    for(const solid of this.world.solids){this.addRock(solid);yield;}
+    for(const surface of this.world.mountainSurfaces){
+      yield {task:'mountain-surface'};yield* this.addMountain(surface);yield 'boundary';
     }
   }
 
-  makeTreeResources() {
+  *makeTreeResources() {
     const parts = [];
     const trunk = new THREE.CylinderGeometry(0.025, 0.045, 0.65, 5); trunk.translate(0, 0.325, 0);
     const trunkColors = new Float32Array(trunk.attributes.position.count * 3);
@@ -57,6 +55,7 @@ export class MountainView extends THREE.Group {
       const shade = Math.round(135 + random() * 72 + (1 - y / size) * 33);
       ctx.fillStyle = `rgb(${shade},${shade},${Math.round(shade * 0.9)})`;
       ctx.beginPath(); ctx.ellipse(x, y, 3 + random() * 9, 3 + random() * 8, 0, 0, Math.PI * 2); ctx.fill();
+      if(i%64===0)yield;
     }
     const texture = new THREE.CanvasTexture(canvas); texture.colorSpace = THREE.SRGBColorSpace; texture.anisotropy = 4;
     this.textures.push(texture);
@@ -66,7 +65,7 @@ export class MountainView extends THREE.Group {
     this.treeSpriteMaterial = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide, alphaTest: 0.55, fog: true});
   }
 
-  addMountain(surface) {
+  *addMountain(surface) {
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(surface.positions, 3));
     geometry.setIndex(mountainIndices(surface.n)); geometry.computeVertexNormals();
@@ -94,9 +93,10 @@ export class MountainView extends THREE.Group {
         if (sampleMountain(surface, x + sx / sy * distance, z + sz / sy * distance) > y + distance + 2) { occlusion = 0.8; break; }
       }
       // 小丘与平地共用世界UV和草纹，边缘不露出浅色矩形底座。
-      if(rolling)color.copy(ground).lerp(green,edge*.2);
+      if(rolling)color.copy(ground).lerp(green,edge*.45).multiplyScalar(.86+patch*.2);
       uv.push(x/SURFACE_APPEARANCE.grassTileMetres,z/SURFACE_APPEARANCE.grassTileMetres);
       colors.push(color.r, color.g, color.b); biomes.push(plants, surface.kind === 'danxia' ? 1 : 0, occlusion, edge);
+      if(i%256===0)yield;
     }
     if(rolling)geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
@@ -106,7 +106,7 @@ export class MountainView extends THREE.Group {
     });
     const bounds = new THREE.Box3(new THREE.Vector3(surface.minX, surface.minY, surface.minZ), new THREE.Vector3(surface.maxX, surface.maxY, surface.maxZ));
     this.surfaces.push({meshes, bounds, level: -1});
-    if(surface.kind!=='rolling')this.plantMountain(surface, vegetation);
+    if(surface.kind!=='rolling')yield* this.plantMountain(surface, vegetation);
   }
 
   reduceGeometry(source, n, step) {
@@ -116,12 +116,13 @@ export class MountainView extends THREE.Group {
     geometry.setIndex(mountainIndices(n, step)); return geometry;
   }
 
-  plantMountain(surface, vegetation) {
+  *plantMountain(surface, vegetation) {
     const spacing = this.settings.forestSpacing, chunks = new Map(), selected = [], n = surface.n;
     let seed = surface.seed;
     const random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
-    let count = 0;
+    let count = 0, visited=0;
     for (let z = surface.minZ + spacing / 2; z < surface.maxZ; z += spacing) for (let x = surface.minX + spacing / 2; x < surface.maxX; x += spacing) {
+      if(visited++%64===0)yield;
       const px = x + (random() - 0.5) * spacing * 0.85, pz = z + (random() - 0.5) * spacing * 0.85;
       const gx = Math.round((px - surface.minX) / surface.dx), gz = Math.round((pz - surface.minZ) / surface.dz);
       const cover = vegetation[gz * (n + 1) + gx];
@@ -137,7 +138,7 @@ export class MountainView extends THREE.Group {
       if (!chunks.has(key)) chunks.set(key, []);
       chunks.get(key).push(tree);
     }
-    for (const trees of chunks.values()) this.addForestChunk(trees);
+    for (const trees of chunks.values()){this.addForestChunk(trees);yield;}
   }
 
   addForestChunk(trees) {
@@ -179,6 +180,7 @@ export class MountainView extends THREE.Group {
     if (!cap) return;
     const trees = [], {top, radius, floor, outline} = solid.cap;
     const center=outline.reduce((point,next)=>[point[0]+next[0]/outline.length,point[1]+next[1]/outline.length],[0,0]);
+    if(floor+top>WORLD_HEIGHT.objectMax-32)return;
     const count=Math.min(70,Math.round(radius*0.22));
     for (let i=0;i<count;i++) {
       const along=(i*(Math.sqrt(5)-1)/2%1)*outline.length,index=Math.floor(along),a=outline[index],b=outline[(index+1)%outline.length];

@@ -6,7 +6,11 @@ import { createAircraft } from './models.js';
 export class TrafficView extends THREE.Group {
   constructor(route) {
     super();
-    this.route = route; this.models = new Map();
+    this.route=route;this.models=new Map();
+  }
+
+  *build() {
+    const route=this.route;
     this.birdPose = new THREE.Object3D(); this.wingPose = new THREE.Matrix4(); this.wingMatrix = new THREE.Matrix4();
     const wingGeometry = new THREE.BufferGeometry();
     wingGeometry.setAttribute('position', new THREE.Float32BufferAttribute([0, 0.08, -0.45, 1.2, 0.04, -0.05, 2.4, -0.12, 1.05, 1.6, -0.1, 0.85, 0.55, -0.08, 0.6, 0, -0.08, 0.4], 3));
@@ -31,7 +35,7 @@ export class TrafficView extends THREE.Group {
     const feathers = new THREE.MeshStandardMaterial({color: 0xffffff, vertexColors: true, roughness: 0.9, side: THREE.DoubleSide});
     const body = new THREE.MeshStandardMaterial({color: 0xffffff, vertexColors: true, roughness: 0.9});
     const beak = new THREE.MeshStandardMaterial({color: 0xd8903f, roughness: 0.8});
-    route.encounters.forEach((spec, index) => {
+    for(const [index,spec] of route.encounters.entries()) {
       const group = new THREE.Group(); group.visible = false;
       if (spec.kind === 'aircraft') {
         const plane = createAircraft(); plane.scale.multiplyScalar(route.trafficScale);
@@ -42,8 +46,8 @@ export class TrafficView extends THREE.Group {
           mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); group.add(mesh);
         }
       }
-      this.models.set(index, group); this.add(group);
-    });
+      this.models.set(index, group); this.add(group);yield;
+    }
   }
 
   update(game, mix) {

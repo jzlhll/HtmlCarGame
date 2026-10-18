@@ -1,6 +1,7 @@
+import { displayHeight } from './config.js';
 // 高度差以飞机位置为基准，不掺入眼位、模型放大或符号示意偏移。
 export function relativeHeightLabel(targetY, ownY) {
-  const height = Math.round(targetY - ownY);
+  const height = Math.round(displayHeight(targetY - ownY));
   return `${height === 0 ? '↔' : height > 0 ? '↑' : '↓'} ${Math.abs(height)} m`;
 }
 

@@ -12,14 +12,18 @@ import { ImpactEffects } from './impact-effects.js';
 import { TrafficView } from './traffic-view.js';
 import { TrafficIndicators } from './traffic-indicators.js';
 import { surfaceTexture } from './surface-assets.js';
+import { GenerationQueue } from './generation-queue.js';
+import { prepareSceneResources, initializeTextureTransfer } from './scene-preparation.js';
 
 export class GameRenderer {
   constructor(container, world) {
-    this.container = container;
-    this.onInvalidate = () => {};
-    this.dirty = true;
-    this.contextLost = false;
+    this.container=container;this.onInvalidate=()=>{};this.dirty=true;this.contextLost=false;
+    this.objectQueue=new GenerationQueue(this.build(container,world),{urgent:true,name:'scene-objects'});
+  }
+
+  *build(container,world) {
     this.renderer = new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true, powerPreference: 'high-performance' });
+    initializeTextureTransfer(this.renderer);yield {task:'renderer'};
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, CAMERA.pixelRatioLimit));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -31,7 +35,7 @@ export class GameRenderer {
     this.introDisplaySeconds = 0;
     this.displayPose = { position: new THREE.Vector3(), pitch: 0, bank: 0, heading: 0 };
     this.renderer.domElement.setAttribute('aria-label', '客机、机场和驾驶舱的三维场景');
-    container.append(this.renderer.domElement);
+    this.renderer.domElement.style.visibility='hidden';container.append(this.renderer.domElement);
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(SCENERY.colors.skyHorizon);
     this.scene.fog = new THREE.Fog(SCENERY.colors.skyHorizon, SCENERY.fogNear, SCENERY.fogFar);
@@ -48,13 +52,15 @@ export class GameRenderer {
     this.eyeOffset = new THREE.Vector3();
     this.sequence = new CameraSequence();
     this.scene.add(this.camera);
-    const airports = [new AirportView(world.route), new AirportView(world.route, true)];
-    this.scene.add(...airports);
+    const airports=[];for(const destination of [false,true]){airports.push(new AirportView(world.route,destination));yield {task:'airport'};}
+    this.scene.add(...airports);this.airports=airports;
     this.landscape = new LandscapeView(world); this.scene.add(this.landscape);
+    yield {task:'landscape'};
     this.impactEffects = new ImpactEffects(); this.scene.add(this.impactEffects);
     this.impactOffset = new THREE.Vector3(); this.impactTarget = new THREE.Vector3();
-    this.traffic = new TrafficView(world.route); this.scene.add(this.traffic);
+    this.traffic = new TrafficView(world.route);yield* this.traffic.build();this.scene.add(this.traffic);
     this.trafficIndicators = new TrafficIndicators(document.getElementById('traffic-indicators'));
+    yield {task:'traffic'};
     this.aircraft = createAircraft();
     this.scene.add(this.aircraft);
     this.airportTraffic = new AirportTrafficView(world.route, this.aircraft); this.scene.add(this.airportTraffic);
@@ -62,9 +68,12 @@ export class GameRenderer {
     this.aircraft.traverse(mesh => {
       if (mesh.isMesh) this.aircraftMaterials.add(mesh.material);
     });
+    yield {task:'aircraft'};
     this.preview = new AircraftPreview(document.getElementById("attitude-preview-view"),world.route);
+    yield {task:'preview'};
     this.cockpit = new CockpitView();
     this.camera.add(this.cockpit);
+    yield {task:'cockpit'};
     this.gearPreview = new GearPreview(document.getElementById('gear-preview-view'), this.scene, this.aircraft, this.cockpit, this.aircraftMaterials);
     // 粗糙地面和森林沿用半球光；只给有反射需求的表面采样共享环境。
     this.surfaceMaterials = new Set();
@@ -108,7 +117,7 @@ export class GameRenderer {
       this.onContextLost?.();
     });
     this.renderer.domElement.addEventListener('webglcontextrestored', () => {
-      this.contextLost = false;
+      this.contextLost = false;initializeTextureTransfer(this.renderer);
       this.renderer.shadowMap.needsUpdate = true;
       this.onContextRestored?.();
       this.invalidate();
@@ -163,7 +172,10 @@ export class GameRenderer {
 
   // 先完成全场景材质、纹理和几何的首次提交，开场运镜不再承担冷启动开销。
   async prepare() {
+    this.objectQueue.resume();const objectPreparation=await this.objectQueue.done;
     const transitionPreparation=await this.landscape.prepare();
+    for(const airport of this.airports)this.landscape.loopView.installHorizon(airport);
+    this.landscape.loopView.update(this.camera.position,0);
     // 分批加入的地景同样登记共享贴图替换与反射，然后统一预热。
     const environment=surfaceTexture('environment');
     this.scene.traverse(object=>{
@@ -173,58 +185,8 @@ export class GameRenderer {
         if(material.isMeshStandardMaterial&&material.roughness<SURFACE_APPEARANCE.reflectionMaxRoughness){material.envMap=environment;material.envMapIntensity*=SURFACE_APPEARANCE.environmentIntensity;}
       }
     });
-    const startedAt = performance.now();
-    await this.renderer.compileAsync(this.scene, this.camera);
-    await this.renderer.compileAsync(this.preview.scene, this.preview.camera);
-    const compiledAt = performance.now();
-    const textures = new Set(this.landscape.textures);
-    const states = [], lodStates = [];
-    for (const scene of [this.scene, this.preview.scene]) scene.traverse(object => {
-      states.push([object, object.visible, object.frustumCulled]);
-      if (object.isLOD) lodStates.push([object, object.autoUpdate]);
-      for (const material of Array.isArray(object.material) ? object.material : object.material ? [object.material] : []) {
-        for (const value of Object.values(material)) if (value?.isTexture) textures.add(value);
-      }
-    });
-    const viewport = this.renderer.getViewport(new THREE.Vector4());
-    const scissor = this.renderer.getScissor(new THREE.Vector4());
-    const scissorTest = this.renderer.getScissorTest();
-    let uploadCpuMs = 0, maxUploadMs = 0, uploadedAt;
-    try {
-      let batchStartedAt = performance.now();
-      for (const texture of textures) {
-        const textureStartedAt = performance.now();
-        this.renderer.initTexture(texture);
-        const elapsed = performance.now() - textureStartedAt;
-        uploadCpuMs += elapsed; maxUploadMs = Math.max(maxUploadMs, elapsed);
-        if (performance.now() - batchStartedAt >= SURFACE_APPEARANCE.generationSliceMs) {
-          // 上传与CPU配方分开计时，纹理对象只在完整像素就绪后初始化一次。
-          if (typeof globalThis.scheduler?.postTask === 'function') await globalThis.scheduler.postTask(() => {}, {priority: 'background'});
-          else await new Promise(resolve => setTimeout(resolve, 0));
-          batchStartedAt = performance.now();
-        }
-      }
-      uploadedAt = performance.now();
-      for (const [object] of lodStates) object.autoUpdate = false;
-      for (const [object] of states) { object.visible = true; object.frustumCulled = false; }
-      // 仍使用主画布的色彩与抗锯齿配置，小视口只负责预提交资源；恢复画面前不让出执行权。
-      this.renderer.setViewport(0, 0, CAMERA.warmupSize, CAMERA.warmupSize);
-      this.renderer.setScissor(0, 0, CAMERA.warmupSize, CAMERA.warmupSize);
-      this.renderer.setScissorTest(true);
-      this.renderer.shadowMap.needsUpdate = true;
-      this.renderer.render(this.scene, this.camera);
-      this.renderer.render(this.preview.scene, this.preview.camera);
-    } finally {
-      for (const [object, autoUpdate] of lodStates) object.autoUpdate = autoUpdate;
-      for (const [object, visible, frustumCulled] of states) { object.visible = visible; object.frustumCulled = frustumCulled; }
-      this.renderer.setViewport(viewport); this.renderer.setScissor(scissor); this.renderer.setScissorTest(scissorTest);
-      // 预提交时显露的交通模型不能留在机场阴影缓存中。
-      this.renderer.shadowMap.needsUpdate = true;
-      this.renderer.render(this.scene, this.camera);
-    }
-    return {transitionPreparation,compileMs: Math.round(compiledAt - startedAt), uploadMs: Math.round(uploadedAt - compiledAt),
-      uploadCpuMs: Number(uploadCpuMs.toFixed(2)), maxTextureUploadMs: Number(maxUploadMs.toFixed(2)),
-      submitMs: Math.round(performance.now() - uploadedAt)};
+    const gpuPreparation=await prepareSceneResources(this.renderer,[{scene:this.scene,camera:this.camera},{scene:this.preview.scene,camera:this.preview.camera}],this.landscape.textures);
+    return {objectPreparation,transitionPreparation,...gpuPreparation};
   }
 
   resize() {
@@ -329,11 +291,11 @@ export class GameRenderer {
     }
     this.cockpit.resize(this.camera.aspect, this.camera.fov);
     this.sky.position.copy(this.camera.position);
-    this.landscape.update(game.activeSeconds, this.camera);
+    this.landscape.update(game.activeSeconds, this.camera, pose.position);
     this.traffic.update(game, flying ? Math.min(1, renderRemainder / GAME.fixedStep) : 1);
     this.impactEffects.update(game,this.camera,this.renderer.domElement.height);
     if(this.airportTraffic.update(game))this.renderer.shadowMap.needsUpdate=true;
-    this.renderer.render(this.scene, this.camera);
+    this.renderer.render(this.scene, this.camera);if(this.renderer.domElement.style.visibility)this.renderer.domElement.style.visibility='';
     this.trafficIndicators.update(game, this.camera, this.traffic.models, pose);
     const gearVisible = !this.gearPreview.element.parentElement.hidden;
     if (this.previousGearVisible !== gearVisible) this.previewBoundsDirty = true;

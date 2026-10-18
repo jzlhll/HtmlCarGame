@@ -9,11 +9,11 @@ const NO_INPUT = new Set();
 
 // 统一推进有效时间、阶段与事件；飞机系统和飞行响应独立处理。
 export class Game {
-  constructor(levelId = 1) {
+  constructor(levelId = 1,{deferWorld=false}={}) {
     this.onChange = () => {};
     this.onEvent = () => {};
     this.route = createRoute(levelId);
-    this.world = new RouteWorld(this.route);
+    this.world = new RouteWorld(this.route,{defer:deferWorld});
     this.runId = 0;
     this.reset();
   }
@@ -52,7 +52,6 @@ export class Game {
       wheelBrake: false,
       onGround: true,
       landed: false,
-      powerLimit: 1,
       birdStrike: false,
       birdStrikeCount: 0,
       systems: {

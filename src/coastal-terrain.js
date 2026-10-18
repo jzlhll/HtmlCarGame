@@ -1,4 +1,4 @@
-import { LANDSCAPE, JOURNEY, terrainElevation } from './config.js';
+import { LANDSCAPE, terrainElevation } from './config.js';
 
 const smooth=value=>{const t=Math.max(0,Math.min(1,value));return t*t*(3-2*t);};
 
@@ -27,7 +27,6 @@ export function createCoastalSurface(endDistance) {
   for(let x=-s.width/2;x<=-3000;x+=1500)xs.add(x);
   for(let z=s.endZ;z<=s.startZ;z+=s.alongGrid)zs.add(z);
   for(let z=-3900;z<=800;z+=s.airportGrid)zs.add(z);
-  for(const [distance] of JOURNEY.elevationProfile)if(-distance>=s.endZ&&-distance<=s.startZ)zs.add(-distance);
   for(const [z] of s.shoreline)zs.add(z);
   for(const x of [s.airport.x-s.airport.halfWidth,s.airport.x+s.airport.halfWidth,s.airport.x,s.causeway.minX,s.causeway.maxX,0])xs.add(x);
   for(const z of [s.airport.z-s.airport.halfLength,s.airport.z+s.airport.halfLength,s.causeway.minZ,s.causeway.maxZ])zs.add(z);
