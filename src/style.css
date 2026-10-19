@@ -264,6 +264,13 @@ cjk-text { font-size: calc(1em + 1px); }
 
 .flight-views .attitude-preview.has-traffic { flex-basis: 250px; }
 #attitude-preview-view { position: relative; }
+.preview-compass { position: absolute; z-index: 2; top: 6px; left: 6px; width: 52px; height: 52px; overflow: visible; }
+.preview-compass circle { fill: #102831d9; stroke: #bfd2cb80; stroke-width: 1; }
+.preview-compass text { fill: #e8f0e9; font: 700 10px system-ui, sans-serif; text-anchor: middle; }
+.compass-ticks, .compass-tail { fill: none; stroke: #bfd2cb; stroke-width: 1.5; }
+.compass-forward { fill: #ffdb83; stroke: #473d27; stroke-width: .6; }
+@media (max-width: 900px) { .preview-compass { width: 44px; height: 44px; top: 4px; left: 4px; } }
+
 .preview-traffic-labels { position: absolute; inset: 0; pointer-events: none; }
 .preview-traffic-label { position: absolute; transform: translate(-50%, -100%); padding: 2px 4px; border-radius: 4px; background: #102831ed; color: #b3d8e9; white-space: nowrap; font-size: 10px; line-height: 1.2; font-variant-numeric: tabular-nums; }
 .preview-traffic-label.is-geese { color: #ffe19a; }

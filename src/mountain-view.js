@@ -32,7 +32,7 @@ export class MountainView extends THREE.Group {
     this.treeBank=yield* prepareTreeModels();
     const first=this.treeBank[0];this.treeGeometry=first.geometry;this.treeSpriteGeometry=first.farGeometry;this.treeMaterial=first.material;this.treeSpriteMaterial=first.farMaterial;
     const warmup=new THREE.Group();warmup.visible=false;
-    for(const model of this.treeBank)warmup.add(new THREE.Mesh(model.geometry,model.material),new THREE.Mesh(model.farGeometry,model.farMaterial));this.add(warmup);yield;
+    for(const model of this.treeBank)warmup.add(new THREE.Mesh(model.geometry,model.material),new THREE.Mesh(model.midGeometry,model.midMaterial),new THREE.Mesh(model.farGeometry,model.farMaterial));this.add(warmup);yield;
   }
 
   *addMountain(surface) {
@@ -109,14 +109,15 @@ export class MountainView extends THREE.Group {
       if (!chunks.has(key)) chunks.set(key, []);
       chunks.get(key).push(tree);
     }
-    for (const trees of chunks.values()){yield* this.addForestChunk(trees);yield;}
+    for (const trees of chunks.values()){yield* this.addForestChunk(trees,{mountain:true});yield;}
   }
 
-  *addForestChunk(trees) {
+  *addForestChunk(trees,{mountain=false}={}) {
+    trees=trees.filter(tree=>tree.y<WORLD_HEIGHT.objectMax-.1);
     if(!trees.length)return;
     const matrices=new Float32Array(trees.length*16),colors=new Float32Array(trees.length*3),species=new Uint8Array(trees.length),pose=new THREE.Object3D(),color=new THREE.Color();
     for(const [i,tree]of trees.entries()){
-      const size=treeDimensions(tree.x,tree.z,LANDSCAPE.seed,tree.y);pose.position.set(tree.x,tree.y,tree.z);pose.rotation.y=tree.yaw;pose.scale.set(size.width,size.y,size.width);pose.updateMatrix();
+      const size=treeDimensions(tree.x,tree.z,LANDSCAPE.seed,tree.y,{mountain});pose.position.set(tree.x,tree.y,tree.z);pose.rotation.y=tree.yaw;pose.scale.set(size.width,size.y,size.width);pose.updateMatrix();
       matrices.set(pose.matrix.elements,i*16);color.setHex(tree.color).toArray(colors,i*3);species[i]=size.type;if(i%128===0)yield;
     }
     const record={count:trees.length,matrices,colors,species};
@@ -149,7 +150,7 @@ export class MountainView extends THREE.Group {
     const trees = [], {top, radius, floor, outline} = solid.cap;
     const center=outline.reduce((point,next)=>[point[0]+next[0]/outline.length,point[1]+next[1]/outline.length],[0,0]);
     if(floor+top>WORLD_HEIGHT.objectMax-32)return;
-    const count=Math.min(70,Math.round(radius*0.22));
+    const count=Math.min(24,Math.round(radius*0.08));
     for (let i=0;i<count;i++) {
       const along=(i*(Math.sqrt(5)-1)/2%1)*outline.length,index=Math.floor(along),a=outline[index],b=outline[(index+1)%outline.length];
       const fraction=along-index,inset=Math.sqrt((i+0.5)/count)*JOURNEY.pillars.crownInset;
@@ -157,7 +158,7 @@ export class MountainView extends THREE.Group {
       const z=center[1]+(a[1]+(b[1]-a[1])*fraction-center[1])*inset;
       trees.push({x,y:floor+top-0.2,z,yaw:i*2.399963,color:this.settings.canopyColors[i%this.settings.canopyColors.length]});
     }
-    yield* this.addForestChunk(trees);
+    yield* this.addForestChunk(trees,{mountain:true});
   }
 
   update(camera) {

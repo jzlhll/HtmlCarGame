@@ -1,4 +1,5 @@
 import { SURFACE_APPEARANCE, LANDSCAPE } from './config.js';
+import { foliagePixels } from './foliage-texture.js';
 import { smoothRange } from './terrain.js';
 
 const settings = SURFACE_APPEARANCE;
@@ -18,6 +19,7 @@ function noise(x, y, period, salt = 0) {
 }
 
 export function* surfacePixels(name, size) {
+  if(name==='foliage-color')return yield* foliagePixels(size);
   const pixels = new Uint8Array(size * size * 4);
   const usesPatch = name.startsWith('asphalt') || ['paint-detail', 'grass-color', 'concrete-color'].includes(name);
   for (let y = 0; y < size; y++) {

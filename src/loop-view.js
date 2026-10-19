@@ -50,7 +50,7 @@ export class LoopView extends THREE.Group {
       const country=yield* createCountryside({width:12000,length:12000,seed:LOOP_WORLD.seed+variant*101,
         heightAt:(x,z)=>sampleLoopTerrain(geometry,x,z),
         landAt:(x,z)=>variant!==2||Math.max(Math.abs(x),Math.abs(z))>5350,
-        roadZ:x=>loopRiverZ(x,variant)+(variant===2?-420:420),trees:this.trees,treeField:this.world.loop.treeFields[variant]});
+        roadZ:x=>loopRiverZ(x,variant)+(variant===2?-420:420),trees:this.trees,periodicTrees:true,treeField:this.world.loop.treeFields[variant]});
       group.add(country);
       if(variant===2){
         const city=yield* createCityBlocks(this.world.loop.city,()=>0,{variationViews:this.world.variationViews});group.add(city);

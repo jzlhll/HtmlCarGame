@@ -42,11 +42,19 @@ export const WORLD_BOUNDARY = {
 };
 
 export const TREE_CONTACT = {
-  cell:512,tallRatio:.3,tallHeight:[5000,10000].map(v=>v/WORLD_HEIGHT.displayScale),unitHeight:1.065,
+  cell:512,unitHeight:1.065,
   windowSeconds:3,treeDamage:5,birdDamage:20,treeSpeedRetention:.95,
 };
+export const TREE_HEIGHTS = {
+  recipe:2,seed:491637,scale:5200,detailScale:2600,typeScale:2400,
+  flat:[30,10000].map(v=>v/WORLD_HEIGHT.displayScale),
+  mountain:[100,1500].map(v=>v/WORLD_HEIGHT.displayScale),
+  mountainFloor:[200,1000].map(v=>v/WORLD_HEIGHT.displayScale),
+};
 export const TREE_MODELS = {
-  recipe:1,seed:643179,nearDetail:1,farDetail:0,branchSegments:8,
+  recipe:3,seed:643179,nearDetail:1,farDetail:0,branchSegments:8,
+  leafCards:[6,10,8,6,8,8],midLeafCards:2,leafAlphaCutoff:.4,
+  chunkSize:2400,midDistance:1800,farCrownGroups:[4,4,4,6,4,3],
   species:[
     {id:'poplar',name:'杨树',height:[800,4800],width:[.18,.27],radius:.58,tall:true,color:0x8ba75d},
     {id:'banyan',name:'榕树',height:[700,2700],width:[1.3,1.9],radius:.78,tall:false,color:0x6b9657},
@@ -57,10 +65,12 @@ export const TREE_MODELS = {
   ],
 };
 
+export const FOLIAGE_TEXTURE = {recipe:1,seed:715391,size:512,tiles:2};
+
 export const REGION_BLEND = {
   length: 6000, width: 12000, seed: 952731,
   approachClearance: 13000, airportHalfWidth: 750,
-  treeArea: 100000, treeNear: 1300, treeFar: 15000,
+  treeArea: 260000, treeNear: 450, treeFar: 9500,
 };
 
 export const HARBOR = {
@@ -69,8 +79,8 @@ export const HARBOR = {
 };
 
 export const COUNTRYSIDE = {
-  cacheRecipe: 7, treeNear: 1800, treeFar: 10500,
-  fieldSpacing: 420, fieldDepth: 310, roadWidth: 28, treeArea: 110000,
+  cacheRecipe: 9, treeNear: 450, treeFar: 9500,
+  fieldSpacing: 420, fieldDepth: 310, roadWidth: 28, treeArea: 300000,
   fieldColors: [0x74784b,0x8d8850,0x6e7a45,0x9b8b62,0x536748,0x8b795c,0xa19b6b,0x657751],
   treeColors: [0x334b2d,0x41562f,0x4c6037,0x2d442d],
 };
@@ -235,6 +245,22 @@ export const FLIGHT = {
   wingBrakeDeceleration: 10, // 打开W时每秒额外减少的km/h。
 };
 
+// 气流仅按实际在空中的时间调度，速度作用与T／S及固定阻力独立叠加。
+export const AIR_CURRENTS = {
+  intervalSeconds:70, gustSeconds:12, turbulenceSeconds:10, rampSeconds:1,
+  turbulenceChance:.15, tailwindRatio:.5, headwindRatio:-.6, correctionRatio:.5,
+  sideYawRate:16*Math.PI/180, turbulentYawRate:32*Math.PI/180,
+  turbulentPitchRate:6*Math.PI/180, sideBank:28*Math.PI/180, turbulentBank:65*Math.PI/180,
+};
+
+export const REGIONAL_WATER = {
+  recipe:1, riverSamples:96, islandSamples:40, lakeSubdivisions:3, waterSubdivisions:3,
+  shoreWidth:45, waterElevation:.075, landElevation:.11, depthDistance:850,
+  riverColors:[0x769b87,0x355e61],lakeColors:[0x8aab93,0x3c6972],
+  bankColor:0x9caa82,islandColor:0x708652,
+  waveScale:[.019,.027],waveRate:[.8,.53],waveNormal:.045,
+};
+
 export const LANDING_DEBUG = {
   speed: 400, runwaySeconds: 30, countdownSeconds: 3,
   runwayHeight: 180 / WORLD_HEIGHT.displayScale, lateralOffset: -300,
@@ -353,8 +379,8 @@ export const LANDSCAPE = {
     snowHeight: 6200, snowTransition: 1100, treeLine: 2400, treeTransition: 900,
     rockScale: 0.008, detailScale: 0.13, bumpStrength: 1.1, textureSize: 512,
     rockColor: 0x888477, soilColor: 0x827657, danxiaColor: 0xa45f42,
-    vegetationSlope: [0.22, 0.62], forestSpacing: 80, maxTrees: 420,
-    treeNear: 1700, treeFar: 6200, forestCell: 640,
+    vegetationSlope: [0.22, 0.62], forestSpacing: 180, maxTrees: 150,
+    treeNear: 350, treeFar: 6200, forestCell: 640,
     canopyColors: [0x344c28, 0x465c2e, 0x536437, 0x2d4829],
     sunDirection: [-0.5, 0.8, -0.35], ambientStrength: 1.05, sunStrength: 2.7,
     rockSides: 28, rockRings: 17, resourceBudgetMb: GAME.packageLimitMb,
@@ -472,9 +498,11 @@ export const JOURNEY = {
     { id: 'sky-falls', x: 0, z: clusterZ('pillars', -13390), bottom: 0, top: 1100, width: 190, passable: true },
     { id: 'side-falls', x: -540, z: clusterZ('pillars', -13920), bottom: 0, top: 760, width: 150, passable: true },
   ],
-  island: { x: 370, z: clusterZ('island'), width: 480, length: 7500, riverWidth: 1800, riverLength: 11000, statueHeight: 170 },
-  changsha: { x: 2250, z: clusterZ('island') - 800, columns: 5, rows: 21,
+  island: { x: 370, z: clusterZ('island'), width: 760, length: 9000, riverWidth: 3200, riverLength: 31000, statueHeight: 170 },
+  changsha: { id:'changsha-east', x: 4520, z: clusterZ('island') - 800, columns: 3, rows: 21,
     spacing: 1200, corridors: [-1800, -600, 600, 1800], plaza: [1050, 900], name: '五一广场' },
+  changshaWest: { id:'changsha-west', x:-3780, z:clusterZ('island')-800, columns:3, rows:21,
+    spacing:1200,corridors:[-600,600],plaza:[900,600],name:'湘江西岸城区' },
   pagodaRidge: { height: 1150, radius: [2600, 10000], satellites: 12 },
   lake: { x: 0, z: clusterZ('lake'), width: 6500, length: 17500, elevation: 0 },
   pagoda: { x: 185, z: clusterZ('pagoda'), height: 2650, width: 720, levels: 5, eaves: 1.5 },

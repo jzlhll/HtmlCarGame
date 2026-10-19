@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { SURFACE_APPEARANCE, LANDSCAPE, AIRCRAFT, LOOP_WORLD, COUNTRYSIDE, JOURNEY, WORLD_TRAVEL, WORLD_BOUNDARY, REGION_BLEND, CITY_STREETS, WEATHER, LEVELS, WORLD_HEIGHT, TREE_CONTACT, TREE_MODELS } from './config.js';
+import { SURFACE_APPEARANCE, LANDSCAPE, AIRCRAFT, LOOP_WORLD, COUNTRYSIDE, JOURNEY, WORLD_TRAVEL, WORLD_BOUNDARY, REGION_BLEND, CITY_STREETS, WEATHER, LEVELS, WORLD_HEIGHT, TREE_CONTACT, TREE_MODELS, TREE_HEIGHTS, REGIONAL_WATER, FOLIAGE_TEXTURE } from './config.js';
 import { fuselageGeometry, aircraftDoorGeometry, engineGeometry, fanGeometry, treeCrownGeometry, wingGeometry } from './model-geometry.js';
 import { surfacePixels, terrainPixels, environmentPixels, mipmapPixels } from './surface-recipes.js';
 import { GenerationQueue } from './generation-queue.js';
@@ -11,7 +11,7 @@ import { boundaryData } from './world-boundary.js';
 import { treeProfiles } from './tree-species.js';
 
 const textures = new Map(), geometries = new Map();
-const textureNames = ['asphalt-color','asphalt-detail','paint-detail','panel-detail','metal-detail','terrain-detail','environment','grass-color','concrete-color','facade-color','facade-detail','rubber-detail'];
+const textureNames = ['asphalt-color','asphalt-detail','paint-detail','panel-detail','metal-detail','terrain-detail','environment','grass-color','concrete-color','facade-color','facade-detail','rubber-detail','foliage-color'];
 let preparation, baseQueue, detailQueue, cache;
 export const sceneCacheStats={hits:0,misses:0};
 const pixelWorker=new PixelWorker();
@@ -92,7 +92,7 @@ function* readRecord(name) {
 
 function sizeFor(name, detail = false) {
   const settings=SURFACE_APPEARANCE;
-  const base = name==='panel-detail'?settings.panelSize:name==='metal-detail'?settings.metalSize:name==='terrain-detail'?LANDSCAPE.terrain.textureSize:settings.textureSize;
+  const base = name==='foliage-color'?FOLIAGE_TEXTURE.size:name==='panel-detail'?settings.panelSize:name==='metal-detail'?settings.metalSize:name==='terrain-detail'?LANDSCAPE.terrain.textureSize:settings.textureSize;
   return detail ? Math.min(settings.detailTextureSize,base*(name.startsWith('facade-')||name==='terrain-detail'?4:2)) : base;
 }
 
@@ -116,6 +116,7 @@ function textureFrom(name, record) {
   if (name==='environment') texture.mapping=THREE.EquirectangularReflectionMapping;
   else {texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.anisotropy=4;}
   if (record.mipmaps) {texture.mipmaps=record.mipmaps;texture.generateMipmaps=false;}
+  if(name==='foliage-color'){texture.flipY=false;texture.wrapS=texture.wrapT=THREE.ClampToEdgeWrapping;}
   texture.needsUpdate=true; return texture;
 }
 
@@ -208,7 +209,7 @@ function resourceManifest() {
   const entries=[];
   for (const quality of ['base','detail']) for (const name of quality==='base'?textureNames:settings.detailTextures) {
     const size=sizeFor(name,quality==='detail'), dimensions=name==='environment'?settings.environmentSize:[size,size];
-    entries.push([`${quality}/${name}`, {dimensions, seed:name==='terrain-detail'?LANDSCAPE.seed:name==='environment'?null:settings.seed,
+    entries.push([`${quality}/${name}`, {dimensions,...(name==='foliage-color'?{recipe:FOLIAGE_TEXTURE.recipe,foliageSeed:FOLIAGE_TEXTURE.seed}:{}), seed:name==='terrain-detail'?LANDSCAPE.seed:name==='environment'?null:settings.seed,
       mipmaps:quality==='detail', color:name.endsWith('-color')||name==='environment'}]);
   }
   for (const [name] of geometryFactories()) {
@@ -225,10 +226,13 @@ function resourceManifest() {
     if(name.startsWith('boundary-'))dependencies={...WORLD_BOUNDARY,side:Number(name.split('-').at(-1))};
     entries.push([`base/${name}`,dependencies]);
   }
+  const waterShape=Object.fromEntries(['recipe','riverSamples','islandSamples','lakeSubdivisions'].map(k=>[k,REGIONAL_WATER[k]]));
+  const waterGeometry=Object.fromEntries(Object.entries(REGIONAL_WATER).filter(([key])=>!key.startsWith('wave')));
   entries.push(['scene/weather',{settings:WEATHER,levels:LEVELS,height:WORLD_HEIGHT.displayScale}]);
-  entries.push(['scene/streets',{settings:CITY_STREETS,city:LANDSCAPE.city,changsha:JOURNEY.changsha,island:JOURNEY.island,landmarks:LANDSCAPE.landmarks}]);
-  entries.push(['scene/trees',{profiles:treeProfiles,recipe:TREE_MODELS.recipe,seed:TREE_MODELS.seed,nearDetail:TREE_MODELS.nearDetail,farDetail:TREE_MODELS.farDetail,branchSegments:TREE_MODELS.branchSegments}]);
-  entries.push(['scene/country',{recipe:COUNTRYSIDE.cacheRecipe,trees:{models:TREE_MODELS,tallRatio:TREE_CONTACT.tallRatio,tallHeight:TREE_CONTACT.tallHeight,unitHeight:TREE_CONTACT.unitHeight},country:COUNTRYSIDE,terrain:LANDSCAPE,journey:JOURNEY,world:WORLD_TRAVEL,loop:LOOP_WORLD,blend:REGION_BLEND}]);
+  entries.push(['scene/streets',{settings:CITY_STREETS,city:LANDSCAPE.city,changsha:JOURNEY.changsha,changshaWest:JOURNEY.changshaWest,water:{...waterShape,shoreWidth:REGIONAL_WATER.shoreWidth},island:JOURNEY.island,lake:JOURNEY.lake,landmarks:LANDSCAPE.landmarks}]);
+  entries.push(['scene/water',{settings:waterGeometry,island:JOURNEY.island,lake:JOURNEY.lake}]);
+  entries.push(['scene/trees',{profiles:treeProfiles,recipe:TREE_MODELS.recipe,seed:TREE_MODELS.seed,nearDetail:TREE_MODELS.nearDetail,farDetail:TREE_MODELS.farDetail,branchSegments:TREE_MODELS.branchSegments,farCrownGroups:TREE_MODELS.farCrownGroups,leafCards:TREE_MODELS.leafCards,midLeafCards:TREE_MODELS.midLeafCards}]);
+  entries.push(['scene/country',{recipe:COUNTRYSIDE.cacheRecipe,water:waterShape,trees:{models:TREE_MODELS.species.map(({id,height,width,tall})=>({id,height,width,tall})),heights:TREE_HEIGHTS,unitHeight:TREE_CONTACT.unitHeight},country:COUNTRYSIDE,terrain:LANDSCAPE,journey:JOURNEY,world:WORLD_TRAVEL,loop:LOOP_WORLD,blend:REGION_BLEND}]);
   return entries;
 }
 

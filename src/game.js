@@ -1,4 +1,5 @@
 import { Weather } from './weather.js';
+import { AirCurrent } from './air-current.js';
 import { freshRunSeed } from './world-variation.js';
 import { AIRCRAFT, CAMERA, DESTRUCTION, FLIGHT, FLIGHT_PHASES, LANDING_DEBUG, worldHorizontalSpeed, createRoute } from './config.js';
 import { AircraftSystems } from './aircraft-systems.js';
@@ -78,6 +79,7 @@ export class Game {
     this.systems = new AircraftSystems(this.aircraft);
     this.flight = new Flight(this.aircraft, this.world);
     this.weather = new Weather(this.aircraft, this.world);
+    this.airCurrent = new AirCurrent(this.aircraft,this.world.runSeed);
     this.mission = new Mission(this.aircraft, this.flight, this.world);
   }
 
@@ -222,7 +224,8 @@ export class Game {
         if(event.type==='lightning-hit'){this.aircraft.lightningHitAt=this.activeSeconds;this.flight.speedTapRemaining=0;this.aircraft.throttle=0;this.aircraft.thrust=0;}
         this.emit(event);
       }
-      const events = this.flight.step(dt, held);
+      this.airCurrent.step(dt);
+      const events = this.flight.step(dt, held, this.airCurrent);
       // 接地或越界优先于同一步中的完成条件，结算只执行一次。
       const failed = events.find(item => item.type === 'failed');
       if (failed) { this.emit(failed); this.finish(false, failed.reason, failed.destructive, failed.key==='glass'); return; }

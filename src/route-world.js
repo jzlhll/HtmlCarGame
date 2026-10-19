@@ -4,6 +4,7 @@ import { AIRCRAFT, LANDSCAPE, JOURNEY, terrainElevation, clusterZ, LOOP_WORLD, W
 import { createCoastalSurface, coastalHeight, shorelineX, coastalLandWeight } from './coastal-terrain.js';
 import { boundaryHeightAt } from './world-boundary.js';
 import { buildingParts, cityBuildingSites } from './building-layout.js';
+import { createRegionalWater, regionalWaterAt, boxTouchesRegionalWater, regionalWaterExclusions } from './regional-water.js';
 import { TreeField } from './tree-contact.js';
 import { varyBuildingSites, attachBuildingShift, moveBuildingBox } from './world-variation.js';
 import { harborParts, parkingParts } from './district-layout.js';
@@ -43,7 +44,7 @@ export class RouteWorld {
   }
 
   *build() {
-    const route=this.route;
+    const route=this.route;this.regionalWater=createRegionalWater(route.id);
     yield {task:'weather-layout'};this.weather=yield* prepareWeatherWorld(route,this.cacheStreetLayouts);yield 'boundary';
     let seed = LANDSCAPE.seed;
     this.random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
@@ -89,8 +90,8 @@ export class RouteWorld {
     this.cityStreets=[];
     const landmarkExclusions=LANDSCAPE.landmarks.map(t=>({minX:t.position[0]-t.radius*1.2,maxX:t.position[0]+t.radius*1.2,minZ:t.position[1]-t.radius*1.2,maxZ:t.position[1]+t.radius*1.2}));
     for(const [index,settings]of [city,...this.regionalCities].entries()){
-      const exclusions=index===0?landmarkExclusions:[{minX:JOURNEY.island.x-JOURNEY.island.riverWidth*.51,maxX:JOURNEY.island.x+JOURNEY.island.riverWidth*.51,minZ:JOURNEY.island.z-JOURNEY.island.riverLength*.51,maxZ:JOURNEY.island.z+JOURNEY.island.riverLength*.51},{minX:settings.x-settings.plaza[0]/2,maxX:settings.x+settings.plaza[0]/2,minZ:settings.z-settings.plaza[1]/2,maxZ:settings.z+settings.plaza[1]/2}];
-      const network=yield* prepareCityStreetLayout(settings,exclusions,index===0?'guangzhou':'changsha',this.cacheStreetLayouts);this.cityStreets.push(network);
+      const exclusions=index===0?landmarkExclusions:[...regionalWaterExclusions(this.regionalWater),{minX:settings.x-settings.plaza[0]/2,maxX:settings.x+settings.plaza[0]/2,minZ:settings.z-settings.plaza[1]/2,maxZ:settings.z+settings.plaza[1]/2}];
+      const network=yield* prepareCityStreetLayout(settings,exclusions,index===0?'guangzhou':settings.id,this.cacheStreetLayouts);this.cityStreets.push(network);
       for(const [i,car]of network.cars.entries()){const box=streetCarBox(car);this.addBox(car.x,(box.min.y+box.max.y)/2,car.z,box.max.x-box.min.x,box.max.y-box.min.y,box.max.z-box.min.z,box.name,0);if(i%64===0)yield;}
     }
     this.loopStreets=yield* prepareCityStreetLayout({...city,center:[0,0],rows:city.loopRows},landmarkExclusions.map(b=>({...b,minZ:b.minZ-city.center[1],maxZ:b.maxZ-city.center[1]})),'loop-city',this.cacheStreetLayouts);
@@ -120,14 +121,17 @@ export class RouteWorld {
   makeChangsha() {
     this.regionalCities=[];
     if(this.route.id<2)return;
-    const c=JOURNEY.changsha,sites=[];
-    for(const site of cityBuildingSites(c,(x,z)=>Math.abs(x-c.x)<c.plaza[0]/2+200&&Math.abs(z-c.z)<c.plaza[1]/2+200
-      ||Math.abs(x-JOURNEY.island.x)<JOURNEY.island.riverWidth*.6&&Math.abs(z-JOURNEY.island.z)<JOURNEY.island.riverLength*.65)) {
-      this.addBuilding(site.x,site.z,site.width,site.depth,site.height,site.color,'长沙城市楼房',site.profile,site.shift);sites.push(this.buildings.at(-1));
+    for(const c of [JOURNEY.changsha,JOURNEY.changshaWest]){
+      const sites=[],half=(c.spacing-LANDSCAPE.city.passageWidth)/2+60;
+      for(const site of cityBuildingSites(c,(x,z)=>Math.abs(x-c.x)<c.plaza[0]/2+200&&Math.abs(z-c.z)<c.plaza[1]/2+200
+        ||boxTouchesRegionalWater(this.regionalWater,{minX:x-half,maxX:x+half,minZ:z-half,maxZ:z+half}))){
+        this.addBuilding(site.x,site.z,site.width,site.depth,site.height,site.color,'长沙城市楼房',site.profile,site.shift);sites.push(this.buildings.at(-1));
+      }
+      this.regionalCities.push({...c,sites});this.addBox(c.x,55,c.z,45,110,45,c.name+'雕塑',0);
     }
-    this.regionalCities.push({...c,sites});
-    this.addBox(c.x,55,c.z,45,110,45,c.name+'雕塑',0);
   }
+
+  regionalWaterAt(x,z){return regionalWaterAt(this.regionalWater,x,z);}
 
   baseHeightAt(x, z) {
     if(this.loop?.activeAt(x,z))return Math.max(LOOP_WORLD.seaLevel,this.loop.heightAt(x,z));

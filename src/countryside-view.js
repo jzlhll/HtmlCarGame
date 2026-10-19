@@ -7,7 +7,7 @@ import { surfaceTexture } from './surface-assets.js';
 import { restoreCountryside, saveCountryside } from './countryside-cache.js';
 
 // 所有田块、田埂和路面在准备阶段贴合实际三角地形，飞行时只复用。
-export function* createCountryside({width, length, centerZ=0, seed, heightAt, landAt=()=>true, roadZ, trees, treeField, forestOnly=false, treeArea=COUNTRYSIDE.treeArea, treeNear=COUNTRYSIDE.treeNear, treeFar=COUNTRYSIDE.treeFar}) {
+export function* createCountryside({width, length, centerZ=0, seed, heightAt, landAt=()=>true, roadZ, trees, treeField, periodicTrees=false, forestOnly=false, treeArea=COUNTRYSIDE.treeArea, treeNear=COUNTRYSIDE.treeNear, treeFar=COUNTRYSIDE.treeFar}) {
   const group=new THREE.Group(), fieldPositions=[],fieldColors=[],fieldUv=[],fieldIndices=[];
   const roadPositions=[],roadColors=[],roadUv=[],roadIndices=[],landUses=[];
   const color=new THREE.Color(), settings=COUNTRYSIDE;
@@ -49,7 +49,7 @@ export function* createCountryside({width, length, centerZ=0, seed, heightAt, la
       const left=cx-cellW*(.42+random()*.025),right=cx+cellW*(.42+random()*.025);
       const back=cz-cellD*(.4+random()*.04),front=cz+cellD*(.4+random()*.04),skew=(random()-.5)*cellW*.15;
       const woodland=terrainNoise(cx*.0023,cz*.0023,seed+71)>.61;
-      if(forestOnly||Math.abs(cz-roadCenter(cx))<cellD*.42+settings.roadWidth||!landAt(cx,cz))continue;
+      if(forestOnly||Math.abs(cz-roadCenter(cx))<cellD*.42+settings.roadWidth||!landAt(cx,cz)||![[left-cellW*.13,back-cellD*.04],[right+cellW*.13,back-cellD*.04],[left-cellW*.13,front+cellD*.04],[right+cellW*.13,front+cellD*.04]].every(([x,z])=>landAt(x,z)))continue;
       const h=heightAt(cx,cz),rise=Math.max(Math.abs(heightAt(cx+cellW*.35,cz)-h),Math.abs(heightAt(cx,cz+cellD*.35)-h));
       if(h<0||rise/cellW>.21)continue;
       const first=fieldPositions.length/3,n=8;
@@ -88,7 +88,7 @@ export function* createCountryside({width, length, centerZ=0, seed, heightAt, la
       if(cluster<(forestOnly?.38:.58)||!forestOnly&&nearRoad<settings.roadWidth||!landAt(x,z))continue;
       const y=heightAt(x,z);if(y<0||y>3600)continue;
       // 保留原尺寸随机步，避免高度升级改变下一棵树的位置。
-      random();const size=treeDimensions(x,z,seed,y);pose.position.set(x,y-.2,z);pose.scale.set(size.width,size.y,size.width);pose.rotation.y=random()*Math.PI*2;pose.updateMatrix();forest.setMatrixAt(live,pose.matrix);forest.setColorAt(live,color.setHex(settings.treeColors[i%settings.treeColors.length]));species[live]=size.type;live++;
+      random();const size=treeDimensions(x,z,seed,y,{periodic:periodicTrees});pose.position.set(x,y-.2,z);pose.scale.set(size.width,size.y,size.width);pose.rotation.y=random()*Math.PI*2;pose.updateMatrix();forest.setMatrixAt(live,pose.matrix);forest.setColorAt(live,color.setHex(settings.treeColors[i%settings.treeColors.length]));species[live]=size.type;live++;
       if(i%128===0)yield;
     }
     const record=group.forestRecord={count:live,matrices:forest.instanceMatrix.array.slice(0,live*16),colors:forest.instanceColor?forest.instanceColor.array.slice(0,live*3):new Float32Array(live*3),species:species.slice(0,live)};

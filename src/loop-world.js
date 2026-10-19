@@ -1,5 +1,5 @@
 import { streetCarBox } from './city-street-layout.js';
-import { LOOP_WORLD, LANDSCAPE, TREE_CONTACT } from './config.js';
+import { LOOP_WORLD, LANDSCAPE, TREE_CONTACT, TREE_HEIGHTS, WORLD_HEIGHT } from './config.js';
 import { terrainNoise, smoothRange } from './terrain.js';
 import { buildingParts } from './building-layout.js';
 import { TreeField } from './tree-contact.js';
@@ -8,7 +8,7 @@ import { attachBuildingShift, moveBuildingBox } from './world-variation.js';
 import { parkingParts } from './district-layout.js';
 
 const sweepSides=['from','to'];
-const treeReach=Math.max(...treeProfiles.map(profile=>(profile.tall?TREE_CONTACT.tallHeight[1]:profile.height[1]/5)*profile.width[1]*profile.radius));
+const treeReach=Math.max(...treeProfiles.map(profile=>(profile.tall?TREE_HEIGHTS.flat[1]:profile.height[1]/WORLD_HEIGHT.displayScale)*profile.width[1]*profile.radius));
 
 export function loopRiverZ(x, variant) {
   return Math.sin(x * 0.00047 + variant * 0.9) * 840 + Math.sin(x * 0.00113 + variant) * 210 + (variant === 2 ? 4750 : 0);

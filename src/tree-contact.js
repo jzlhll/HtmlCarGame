@@ -1,19 +1,34 @@
-import { TREE_CONTACT, TREE_MODELS, WORLD_HEIGHT } from './config.js';
+import { TREE_CONTACT, TREE_MODELS, TREE_HEIGHTS, WORLD_HEIGHT, LOOP_WORLD } from './config.js';
 
+import { terrainNoise, smoothRange } from './terrain.js';
 import { treeProfiles, branchSamples } from './tree-species.js';
 
 const stride=8,addressStride=1048576,empty=[];
 const contactBranches=treeProfiles.map(profile=>profile.branches.filter(branch=>branch.solid).flatMap(branch=>{const points=branchSamples(branch,6);return points.slice(1).map((p,i)=>({a:points[i],b:p,r:branch.radius}));}));
 
-// 固定哈希选择树种、高度和冠幅，同一数据用于近远实例、持久矩阵及接触体。
-export function treeDimensions(x,z,seed,floor=0) {
-  let state=(Math.imul(Math.round(x),73856093)^Math.imul(Math.round(z),19349663)^seed)>>>0;
-  const random=()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296;};
-  const tall=random()<TREE_CONTACT.tallRatio;
-  const type=tall?(random()<.56?0:3):Math.floor(random()*TREE_MODELS.species.length),profile=TREE_MODELS.species[type];
-  const range=tall?TREE_CONTACT.tallHeight:profile.height.map(v=>v/WORLD_HEIGHT.displayScale);
-  const height=Math.min(range[0]+random()**(tall?1:1.35)*(range[1]-range[0]),Math.max(2,WORLD_HEIGHT.objectMax-floor));
-  return {type,height,y:height/TREE_CONTACT.unitHeight,width:height*(profile.width[0]+random()*(profile.width[1]-profile.width[0]))};
+// 高度和冠幅按世界坐标连续起伏；循环模板的两端也使用周期连续采样。
+function canopyNoise(x,z,scale,seed,periodic){
+  if(!periodic)return terrainNoise(x/scale,z/scale,seed);
+  const cells=Math.max(2,Math.round(LOOP_WORLD.tileSize/scale)),step=LOOP_WORLD.tileSize/cells,ix=Math.floor(x/step),iz=Math.floor(z/step);
+  const wrap=i=>(i%cells+cells)%cells,u=smoothRange(0,1,x/step-ix),v=smoothRange(0,1,z/step-iz);
+  const a=terrainNoise(wrap(ix),wrap(iz),seed),b=terrainNoise(wrap(ix+1),wrap(iz),seed),c=terrainNoise(wrap(ix),wrap(iz+1),seed),d=terrainNoise(wrap(ix+1),wrap(iz+1),seed);
+  return a+(b-a)*u+(c-a)*v*(1-u)+(d-b)*u*v;
+}
+export function treeDimensions(x,z,seed,floor=0,{mountain=false,periodic=false}={}) {
+  const s=TREE_HEIGHTS,noise=.72*canopyNoise(x,z,s.scale,s.seed,periodic)+.28*canopyNoise(x,z,s.detailScale,s.seed+19,periodic);
+  const wave=smoothRange(.18,.82,noise),flat=s.flat[0]+(s.flat[1]-s.flat[0])*wave**1.2;
+  const short=s.mountain[0]+(s.mountain[1]-s.mountain[0])*wave,mix=mountain?1:smoothRange(...s.mountainFloor,floor);
+  const height=Math.min(flat+(short-flat)*mix,Math.max(0,WORLD_HEIGHT.objectMax-floor)),display=height*WORLD_HEIGHT.displayScale;
+  const patch=canopyNoise(x,z,s.typeScale,s.seed+37,periodic);
+  let type;
+  if(display<=TREE_MODELS.species[5].height[1])type=5;
+  else if(display>TREE_MODELS.species[0].height[1])type=patch<.5?0:3;
+  else{
+    const choices=TREE_MODELS.species.slice(0,5).map((p,i)=>({p,i})).filter(({p})=>display<=p.height[1]);
+    type=choices[Math.min(choices.length-1,Math.floor(patch*choices.length))].i;
+  }
+  const profile=TREE_MODELS.species[type],widthMix=canopyNoise(x,z,s.scale,s.seed+71,periodic);
+  return {type,height,y:height/TREE_CONTACT.unitHeight,width:height*(profile.width[0]+widthMix*(profile.width[1]-profile.width[0]))};
 }
 
 function ellipsoidHit(ax,ay,az,bx,by,bz,x,y,z,rx,ry,rz) {

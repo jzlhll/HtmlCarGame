@@ -1,5 +1,5 @@
 import { nearestRunway } from './runway-layout.js';
-import { AIRCRAFT, FLIGHT, RUNWAY, AERODYNAMICS, worldHorizontalSpeed, isWithinRunway } from './config.js';
+import { AIRCRAFT, FLIGHT, RUNWAY, AERODYNAMICS, AIR_CURRENTS, worldHorizontalSpeed, isWithinRunway } from './config.js';
 
 const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
 const approach = (value, target, amount) => value + clamp(target - value, -amount, amount);
@@ -90,6 +90,7 @@ export class Flight {
     const a = this.aircraft, route = this.route, runway = route.destination;
     const number = value => Number(value.toFixed(2));
     const degrees = angle => number(angle * 180 / Math.PI);
+    if(this.world.regionalWaterAt?.(a.position.x,a.position.z))return '水面触地：飞机落入'+this.world.regionalWaterAt(a.position.x,a.position.z)+'，未进入机场跑道。';
     if (this.world.isSeaAt?.(a.position.x, a.position.z)) return '海面触地：飞机落入海中，未抵达机场跑道。';
     if (!landing.runway) {
       const nearest=nearestRunway(a.position,runway,a.heading);
@@ -201,7 +202,7 @@ export class Flight {
     return {type: 'gear-start', key};
   }
 
-  step(dt, held) {
+  step(dt, held, current) {
     const a = this.aircraft, state = a.systems;
     this.events.length = 0;
     const airborneAtStart = !a.onGround;
@@ -224,12 +225,15 @@ export class Flight {
     // 空速是独立的前进速度状态，重力／下坠不会把它被动加到失速阈值以上。
     const direction = accelerating ? 1 : slow ? -1 : 0;
     let rate = direction ? this.speedRate(direction) : 0;
+    if(current)rate=current.limitSpeedRate(rate*FLIGHT.kmhPerMps,direction)/FLIGHT.kmhPerMps;
     if (direction && !(accelerating ? pressingThrust : pressingBrake)) rate = Math.min(rate, this.speedTapRemaining / (FLIGHT.kmhPerMps * dt));
-    const manualSpeed = Math.max(0, previousSpeed + direction * rate * FLIGHT.kmhPerMps * dt);
+    const requestedDelta=direction*rate*FLIGHT.kmhPerMps*dt;
+    const manualDelta=direction>0?Math.min(requestedDelta,Math.max(0,this.maxSpeed-previousSpeed)):requestedDelta;
+    const manualSpeed=Math.max(0,previousSpeed+manualDelta);
     if (direction === this.speedTapDirection) this.speedTapRemaining = Math.max(0, this.speedTapRemaining - Math.abs(manualSpeed - previousSpeed));
-    // 固定阻力与W阻力独立叠加，不消耗T／S主动额度；合并变速后再限制速度。
+    // 上限只约束主动加速；顺风可突破，离开气流后由阻力和手动减速自然回落。
     const decayRate = FLIGHT.speedDecayRate + (state.flaps === 'TAKEOFF' ? FLIGHT.wingBrakeDeceleration : 0);
-    a.airspeed = clamp(manualSpeed - decayRate * dt, 0, this.maxSpeed);
+    a.airspeed = Math.max(0,manualSpeed-decayRate*dt+(current?.speedRate||0)*dt);
     a.wheelBrake = a.onGround && slow;
     a.throttle = accelerating ? 1 : 0;
     a.enginePower += (a.throttle - a.enginePower) * (1 - Math.exp(-dt / aero.engineResponseSeconds));
@@ -259,7 +263,15 @@ export class Flight {
       } else a.pitch = approach(a.pitch, this.pitchTarget, FLIGHT.pitchRate * dt);
     }
     if (a.onGround) { if (!aligning) a.bank = 0; }
-    else a.bank = approach(a.bank, a.bank + (turnInput * FLIGHT.maxBank - a.bank) * (1 - Math.exp(-FLIGHT.bankResponse * dt)), aero.maxRollRate * dt);
+    else {
+      const windBank=current?.bankOffset||0,authority=current?.controlYawLimit<Infinity?1-(1-AIR_CURRENTS.correctionRatio)*current.strength:1;
+      const targetBank=clamp(windBank+turnInput*FLIGHT.maxBank*authority,-FLIGHT.maxBank,FLIGHT.maxBank);
+      a.bank = approach(a.bank, a.bank + (targetBank-a.bank) * (1-Math.exp(-FLIGHT.bankResponse*dt)), aero.maxRollRate*dt);
+      if(current?.pitchRate&&!this.ceilingLeveling){
+        const before=a.pitch;a.pitch=clamp(a.pitch+current.pitchRate*dt,FLIGHT.minPitch,FLIGHT.maxPitch);
+        this.pitchTarget=clamp(this.pitchTarget+a.pitch-before,FLIGHT.minPitch,FLIGHT.maxPitch);
+      }
+    }
     if (a.onGround) {
       const steering = FLIGHT.groundTurnRate * a.airspeed / (a.airspeed + FLIGHT.groundTurnSpeed) / (1 + a.airspeed / FLIGHT.groundTurnSpeed);
       const gripTurn = aero.tireFriction * FLIGHT.gravity / Math.max(1, a.airspeed / FLIGHT.kmhPerMps);
@@ -279,7 +291,10 @@ export class Flight {
       const speed = a.airspeed / FLIGHT.kmhPerMps;
       // 航向响应同步水平位移倍率，避免场景放大后转弯半径被一并拉远。
       const turnRate = speed > 0 ? FLIGHT.gravity * Math.tan(a.bank) / Math.max(20, speed) * FLIGHT.airTurnMultiplier : 0;
-      a.heading += clamp(turnRate, -FLIGHT.maxAirTurnRate, FLIGHT.maxAirTurnRate) * dt;
+      const controlled=current?.controlYawLimit<Infinity
+        ? turnInput*(Math.min(Math.abs(turnRate),FLIGHT.maxAirTurnRate)*(1-current.strength)+current.controlYawLimit*current.strength)
+        : clamp(turnRate,-FLIGHT.maxAirTurnRate,FLIGHT.maxAirTurnRate);
+      a.heading += (controlled+(current?.yawRate||0))*dt;
       let targetVertical = speed * Math.sin(a.pitch);
       if (this.stalled) {
         const severity = clamp(1 - a.airspeed / this.stallSpeed, 0, 1);

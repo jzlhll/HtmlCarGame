@@ -3,6 +3,11 @@ import * as THREE from 'three';
 // 大树的可见树冠远离地面原点，按整片树冠范围计算距离，避免贴近时仍是简模。
 export class CanopyLOD extends THREE.LOD {
   constructor(bounds){super();this.isCanopyLOD=true;this.localBounds=bounds?.clone()||new THREE.Box3();this.worldBounds=new THREE.Box3();}
+  updateMatrixWorld(force) {
+    // 静止树林的世界矩阵已准备；循环槽移动时会先重新开放世界矩阵更新。
+    if(!this.matrixWorldAutoUpdate&&!this.matrixWorldNeedsUpdate)return;
+    super.updateMatrixWorld(force);
+  }
   update(camera) {
     const distance=this.worldBounds.copy(this.localBounds).applyMatrix4(this.matrixWorld).distanceToPoint(camera.position)/camera.zoom;
     let level=0;

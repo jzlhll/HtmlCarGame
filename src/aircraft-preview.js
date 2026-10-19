@@ -18,6 +18,7 @@ export class AircraftPreview {
     this.scene.add(this.aircraft);
     this.traffic=new PreviewTraffic(route);this.scene.add(this.traffic);
     this.trafficLegend=document.getElementById('preview-traffic-legend');
+    this.compass=document.getElementById('preview-compass');this.compassNeedle=document.getElementById('preview-compass-needle');
     this.trafficLabels = new Map(); this.placedLabels = []; this.labelPoint = new THREE.Vector3();
     const labels = document.createElement('div'); labels.className = 'preview-traffic-labels';
     labels.setAttribute('aria-label', '交通目标相对本机高度差'); this.element.append(labels);
@@ -80,6 +81,13 @@ export class AircraftPreview {
     }
     const bounds = this.bounds;
     if (!bounds.width || !bounds.height) return;
+    // 世界北方为−Z；顺时针航向与同帧飞机姿态一致，暂停沿用冻结姿态。
+    const compassHeading=(((pose.heading*180/Math.PI)%360+360)%360).toFixed(1);
+    if(this.compassHeading!==compassHeading){
+      this.compassHeading=compassHeading;this.compassNeedle.setAttribute('transform',`rotate(${compassHeading} 26 26)`);
+      const reading=Math.round(Number(compassHeading))%360;
+      if(this.compassReading!==reading){this.compassReading=reading;this.compass.setAttribute('aria-label',`飞机航向${reading}度，N为北，S为南`);}
+    }
     const landing=game.mission.approaching || game.aircraft.landed;
     const severity=landing ? game.flight.landingStatus().severity : null;
     if (severity!==this.landingSeverity) {

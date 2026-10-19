@@ -3,6 +3,8 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { LANDSCAPE, SCENERY, JOURNEY, SURFACE_APPEARANCE, clusterZ, LOOP_WORLD, REGION_BLEND } from './config.js';
 import { surfaceTexture } from './surface-assets.js';
 import { coastalLandWeight } from './coastal-terrain.js';
+import { RegionalWaterView } from './regional-water-view.js';
+import { islandSection, boxTouchesRegionalWater } from './regional-water.js';
 import { CoastalView } from './coastal-view.js';
 import { GenerationQueue } from './generation-queue.js';
 import { MountainView } from './mountain-view.js';
@@ -25,6 +27,7 @@ export class LandscapeView extends THREE.Group {
     this.route = world.route;
     this.frameSegments = [];
     this.coast=new CoastalView(world);this.add(this.coast);
+    this.regionalWaterView=new RegionalWaterView(world);this.add(this.regionalWaterView);
     this.textures=[];
   }
 
@@ -58,14 +61,8 @@ export class LandscapeView extends THREE.Group {
 
   *addRegionalViews() {
     if (this.route.id < 2) return;
-    const oval = (x, z, width, length, y, color) => {
-      const mesh = new THREE.Mesh(new THREE.CircleGeometry(1, 64), new THREE.MeshStandardMaterial({color, roughness: 0.6, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2}));
-      mesh.rotation.x = -Math.PI / 2; mesh.scale.set(width / 2, length / 2, 1); mesh.position.set(x, y, z); this.add(mesh); return mesh;
-    };
-    const island = JOURNEY.island, floor = this.world.baseHeightAt(island.x, island.z);
-    oval(island.x, island.z, island.riverWidth, island.riverLength, floor + 0.06, 0x438f9b);
-    oval(island.x, island.z, island.width + 50, island.length + 80, floor + 0.08, 0xc4bd91);
-    oval(island.x, island.z, island.width, island.length, floor + 0.1, 0x708f60);
+    yield* this.regionalWaterView.build();
+    const island=JOURNEY.island,floor=this.world.baseHeightAt(island.x,island.z);
     const stone = new THREE.MeshStandardMaterial({color: 0xa1a394, roughness: 1, flatShading: true});
     const darkStone = new THREE.MeshStandardMaterial({color: 0x737d75, roughness: 1, flatShading: true});
     const face = (size, offset, material = stone) => {
@@ -83,14 +80,8 @@ export class LandscapeView extends THREE.Group {
       hair.scale.set(40, 35, 48); hair.position.set(island.x - 68 + i * 25, floor + 149 + Math.sin(i * 0.7) * 12, island.z - 12);
       this.add(hair);
     }
-    this.islandTreeSites=Array.from({length:40},(_,i)=>({x:island.x+(i%2?-1:1)*140,y:floor,z:island.z+(i-20)*160,yaw:i*2.399963,color:0x496e50}));
-    if (this.route.id < 3) return;
-    const lake = JOURNEY.lake;
-    oval(lake.x, lake.z, lake.width + 180, lake.length + 140, lake.elevation + 0.025, 0xb2b79c);
-    oval(lake.x, lake.z, lake.width, lake.length, lake.elevation + 0.07, 0x3c94a9);
-    for (const [x, z, width, length] of [[-1500, -17900, 500, 800], [2100, -18800, 650, 1100], [-2200, -19700, 400, 500]]) {
-      oval(x, clusterZ('lake',z), width, length, lake.elevation + 0.12, 0x789468);
-    }
+    this.islandTreeSites=Array.from({length:40},(_,i)=>{const z=island.z+(i-20)*160,p=islandSection(z);return {x:p.x+(i%2?-1:1)*p.half*.58,y:floor,z,yaw:i*2.399963,color:0x496e50};});
+    if(this.route.id<3)return;
     for(const tower of this.world.pagodas){this.addPagoda(tower);yield;}
   }
 
@@ -215,8 +206,13 @@ export class LandscapeView extends THREE.Group {
   *addRegionalCities() {
     for(const city of this.world.regionalCities){
       const group=new THREE.Group(),width=city.columns*city.spacing,length=city.rows*city.spacing;
-      const ground=new THREE.Mesh(new THREE.PlaneGeometry(width,length),new THREE.MeshStandardMaterial({color:0x777e71,roughness:1}));
-      ground.rotation.x=-Math.PI/2;ground.position.set(city.x,.02,city.z);group.add(ground);yield;
+      const positions=[],indices=[],step=240;
+      for(let x=city.x-width/2;x<city.x+width/2;x+=step)for(let z=city.z-length/2;z<city.z+length/2;z+=step){
+        const right=Math.min(city.x+width/2,x+step),front=Math.min(city.z+length/2,z+step);
+        if(boxTouchesRegionalWater(this.world.regionalWater,{minX:x,maxX:right,minZ:z,maxZ:front}))continue;
+        const i=positions.length/3;positions.push(x,.02,z,x,.02,front,right,.02,z,right,.02,front);indices.push(i,i+1,i+2,i+2,i+1,i+3);
+      }
+      const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setIndex(indices);geometry.computeVertexNormals();group.add(new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:0x777e71,roughness:1})));yield;
       const plaza=new THREE.Mesh(new THREE.PlaneGeometry(...city.plaza),new THREE.MeshStandardMaterial({color:0xb2ad98,roughness:.85}));plaza.rotation.x=-Math.PI/2;plaza.position.set(city.x,.12,city.z);group.add(plaza);
       const cube=new THREE.BoxGeometry(1,1,1),monument=new THREE.Mesh(cube,new THREE.MeshStandardMaterial({color:0xa07855,roughness:.7}));monument.scale.set(45,110,45);monument.position.set(city.x,55,city.z);group.add(monument);
       yield* batchStaticMeshSteps(group,30000);this.add(group);yield 'boundary';
@@ -374,5 +370,5 @@ export class LandscapeView extends THREE.Group {
     }
   }
 
-  update(seconds, camera, position) { if(this.fallTexture)this.fallTexture.offset.y = -seconds * 0.7; this.coast.update(seconds);this.mountains.update(camera);this.loopView.update(position,seconds); }
+  update(seconds, camera, position) { if(this.fallTexture)this.fallTexture.offset.y = -seconds * 0.7; this.coast.update(seconds);this.regionalWaterView.update(seconds);this.mountains.update(camera);this.loopView.update(position,seconds); }
 }

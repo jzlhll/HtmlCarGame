@@ -229,6 +229,7 @@ export class UI {
       else if(a.lightningStrike) warning=['Lightning fault','雷击故障，本关无法再提速。','danger'];
       else if(flight.thrustLocked) warning=['Thrust unavailable','两次鸟击，T 加速失效，下一关恢复。','danger'];
       else if(game.weather.radarAvailable && mission.contacts.some(contact=>!contact.hit&&!contact.rearBypass&&contact.danger)) warning=['Collision risk','前方有飞机或雁群，注意避让。','danger'];
+      else if(game.airCurrent?.guidance) warning=[...game.airCurrent.guidance,game.airCurrent.kind==='turbulence'?'danger':'warning'];
       else if(game.weather.kind==='white') warning=['White cloud','白云内雷达失效，可视范围大幅缩小。','warning'];
       else if(game.weather.kind==='storm') warning=['Storm cloud','乌云内可视范围减半，雷达正常，注意闪电。','warning'];
       else if(mission.offCourse) warning=['Off course','已偏离航线，请调整方向。','warning'];
