@@ -1,11 +1,12 @@
 import * as THREE from 'three';
-import { COUNTRYSIDE } from './config.js';
+import { createForestLOD } from './forest-view.js';
+import { COUNTRYSIDE, TREE_MODELS } from './config.js';
 import { surfaceCache, sceneCacheStats } from './surface-assets.js';
 
 const attributes=['position','normal','color','uv','landUse'];
 
-// 持久层只保存数值缓冲；材质、GPU对象和树冠纹理仍由当前渲染器持有。
-export function* restoreCountryside(key,fieldMaterial,roadMaterial,trees,centerZ,{treeNear=COUNTRYSIDE.treeNear,treeFar=COUNTRYSIDE.treeFar}={}) {
+// 持久层只保存数值缓冲；材质、GPU对象和共享树冠几何仍由当前渲染器持有。
+export function* restoreCountryside(key,fieldMaterial,roadMaterial,trees,centerZ,{treeNear=COUNTRYSIDE.treeNear,treeFar=COUNTRYSIDE.treeFar,treeField}={}) {
   const cache=surfaceCache();
   if(!cache.available){sceneCacheStats.misses++;return null;}
   const meta=yield {wait:cache.read(key+'/meta')};
@@ -26,7 +27,7 @@ export function* restoreCountryside(key,fieldMaterial,roadMaterial,trees,centerZ
   let forest;
   if(meta.forest){
     forest=yield {wait:cache.read(key+'/forest')};
-    if(!forest||!Number.isInteger(forest.count)||forest.count<0||!(forest.matrices instanceof Float32Array)||forest.matrices.length!==forest.count*16||!(forest.colors instanceof Float32Array)||forest.colors.length!==forest.count*3||!forest.matrices.every(Number.isFinite)||!forest.colors.every(Number.isFinite)){sceneCacheStats.misses++;return null;}
+    if(!forest||!Number.isInteger(forest.count)||forest.count<0||!(forest.matrices instanceof Float32Array)||forest.matrices.length!==forest.count*16||!(forest.colors instanceof Float32Array)||forest.colors.length!==forest.count*3||!(forest.species instanceof Uint8Array)||forest.species.length!==forest.count||forest.species.some(type=>type>=TREE_MODELS.species.length)||!forest.matrices.every(Number.isFinite)||!forest.colors.every(Number.isFinite)){sceneCacheStats.misses++;return null;}
   }
   const group=new THREE.Group();
   for(const record of records){
@@ -34,22 +35,15 @@ export function* restoreCountryside(key,fieldMaterial,roadMaterial,trees,centerZ
     for(const name of attributes)if(record.attributes[name])geometry.setAttribute(name,new THREE.BufferAttribute(record.attributes[name],name==='uv'?2:name==='landUse'?1:3));
     geometry.setIndex(new THREE.BufferAttribute(record.indices,1));geometry.computeBoundingSphere();group.add(new THREE.Mesh(geometry,record.role==='field'?fieldMaterial:roadMaterial));yield;
   }
-  if(forest&&trees){
-    const near=new THREE.InstancedMesh(trees.geometry,trees.material,0);near.count=forest.count;
-    near.instanceMatrix=new THREE.InstancedBufferAttribute(forest.matrices,16);near.instanceColor=new THREE.InstancedBufferAttribute(forest.colors,3);near.position.z=-centerZ;near.computeBoundingSphere();yield;
-    const lod=new THREE.LOD();lod.position.z=centerZ;lod.addLevel(near,0,.12);
-    if(trees.farGeometry){const far=new THREE.InstancedMesh(trees.farGeometry,trees.farMaterial,0);far.count=near.count;far.instanceMatrix=near.instanceMatrix;far.instanceColor=near.instanceColor;far.position.z=-centerZ;far.boundingSphere=near.boundingSphere.clone();far.boundingSphere.radius+=4;lod.addLevel(far,treeNear,.12);}
-    lod.addLevel(new THREE.Group(),treeFar,.12);group.add(lod);
-  }
+  if(forest&&trees){group.forestRecord=forest;group.add(yield* createForestLOD(forest,trees,centerZ,{treeNear,treeFar,treeField}));}
   sceneCacheStats.hits++;return group;
 }
 
 export function* saveCountryside(key,group,fieldMaterial) {
   const cache=surfaceCache();if(!cache.available)return;
-  const records=[];let forest;
+  const records=[],forest=group.forestRecord;
   group.traverse(object=>{
-    if(object.isInstancedMesh&&!forest)forest=object;
-    else if(object.isMesh&&!object.isInstancedMesh)records.push(object);
+    if(object.isMesh&&!object.isInstancedMesh)records.push(object);
   });
   for(const [index,mesh]of records.entries()){
     const values={};for(const name of attributes)if(mesh.geometry.attributes[name])values[name]=mesh.geometry.attributes[name].array;
@@ -57,7 +51,7 @@ export function* saveCountryside(key,group,fieldMaterial) {
     if(!cache.available)return;
   }
   if(forest){
-    yield {wait:cache.write(key+'/forest',{count:forest.count,matrices:forest.instanceMatrix.array.slice(0,forest.count*16),colors:forest.instanceColor?forest.instanceColor.array.slice(0,forest.count*3):new Float32Array(forest.count*3)})};
+    yield {wait:cache.write(key+'/forest',forest)};
     if(!cache.available)return;
   }
   // 全部缓冲写入成功后登记目录，未完成的数据不会作为命中。

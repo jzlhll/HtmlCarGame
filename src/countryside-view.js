@@ -1,11 +1,13 @@
 import * as THREE from 'three';
+import { createForestLOD } from './forest-view.js';
 import { COUNTRYSIDE } from './config.js';
+import { treeDimensions } from './tree-contact.js';
 import { terrainNoise } from './terrain.js';
 import { surfaceTexture } from './surface-assets.js';
 import { restoreCountryside, saveCountryside } from './countryside-cache.js';
 
 // 所有田块、田埂和路面在准备阶段贴合实际三角地形，飞行时只复用。
-export function* createCountryside({width, length, centerZ=0, seed, heightAt, landAt=()=>true, roadZ, trees, forestOnly=false, treeHeight=[14,34], treeArea=COUNTRYSIDE.treeArea, treeNear=COUNTRYSIDE.treeNear, treeFar=COUNTRYSIDE.treeFar}) {
+export function* createCountryside({width, length, centerZ=0, seed, heightAt, landAt=()=>true, roadZ, trees, treeField, forestOnly=false, treeArea=COUNTRYSIDE.treeArea, treeNear=COUNTRYSIDE.treeNear, treeFar=COUNTRYSIDE.treeFar}) {
   const group=new THREE.Group(), fieldPositions=[],fieldColors=[],fieldUv=[],fieldIndices=[];
   const roadPositions=[],roadColors=[],roadUv=[],roadIndices=[],landUses=[];
   const color=new THREE.Color(), settings=COUNTRYSIDE;
@@ -30,8 +32,8 @@ export function* createCountryside({width, length, centerZ=0, seed, heightAt, la
       diffuseColor.rgb*=soil*mix(mix(.62,furrow,smoothstep(.006,.027,edge)),canopy,vLandUse);
 `);
   };
-  const roadMaterial=createRoadMaterial(),cacheKey='scene/country/'+seed+'-'+width+'-'+length+'-'+centerZ+'-'+Number(forestOnly)+'-'+treeHeight.join('_');
-  const restored=yield* restoreCountryside(cacheKey,fieldMaterial,roadMaterial,trees,centerZ,{treeNear,treeFar});if(restored)return restored;
+  const roadMaterial=createRoadMaterial(),cacheKey='scene/country/'+seed+'-'+width+'-'+length+'-'+centerZ+'-'+Number(forestOnly);
+  const restored=yield* restoreCountryside(cacheKey,fieldMaterial,roadMaterial,trees,centerZ,{treeNear,treeFar,treeField});if(restored)return restored;
   const flushFields=()=>{
     if(!fieldPositions.length)return;
     const geometry=new THREE.BufferGeometry();
@@ -78,22 +80,19 @@ export function* createCountryside({width, length, centerZ=0, seed, heightAt, la
   yield 'boundary';
   // 林带沿田块和道路成簇分布，避免均匀散点铺满整块绿色地面。
   if(trees){
-    const count=Math.floor(width*length/treeArea),forest=new THREE.InstancedMesh(trees.geometry,trees.material,count),pose=new THREE.Object3D();let live=0;
+    const count=Math.floor(width*length/treeArea),forest=new THREE.InstancedMesh(trees.geometry,trees.material,count),pose=new THREE.Object3D(),species=new Uint8Array(count);let live=0;
     for(let i=0;i<count*3&&live<count;i++){
       if(i%64===0)yield;
       const x=(random()-.5)*width,z=centerZ+(random()-.5)*length;
       const cluster=terrainNoise(x*.0023,z*.0023,seed+71),nearRoad=Math.abs(z-roadCenter(x));
       if(cluster<(forestOnly?.38:.58)||!forestOnly&&nearRoad<settings.roadWidth||!landAt(x,z))continue;
       const y=heightAt(x,z);if(y<0||y>3600)continue;
-      const scale=treeHeight[0]+random()*(treeHeight[1]-treeHeight[0]);pose.position.set(x,y-.2,z);pose.scale.setScalar(scale);pose.rotation.y=random()*Math.PI*2;pose.updateMatrix();forest.setMatrixAt(live,pose.matrix);forest.setColorAt(live,color.setHex(settings.treeColors[i%settings.treeColors.length]));live++;
+      // 保留原尺寸随机步，避免高度升级改变下一棵树的位置。
+      random();const size=treeDimensions(x,z,seed,y);pose.position.set(x,y-.2,z);pose.scale.set(size.width,size.y,size.width);pose.rotation.y=random()*Math.PI*2;pose.updateMatrix();forest.setMatrixAt(live,pose.matrix);forest.setColorAt(live,color.setHex(settings.treeColors[i%settings.treeColors.length]));species[live]=size.type;live++;
       if(i%128===0)yield;
     }
-    forest.count=live;forest.computeBoundingSphere();yield 'boundary';
-    const lod=new THREE.LOD();lod.position.z=centerZ;forest.position.z=-centerZ;lod.addLevel(forest,0,.12);
-    if(trees.farGeometry){
-      const far=new THREE.InstancedMesh(trees.farGeometry,trees.farMaterial,0);far.count=live;far.instanceMatrix=forest.instanceMatrix;far.instanceColor=forest.instanceColor;far.position.z=-centerZ;far.boundingSphere=forest.boundingSphere.clone();far.boundingSphere.radius+=4;lod.addLevel(far,treeNear,.12);
-    }
-    lod.addLevel(new THREE.Group(),treeFar,.12);group.add(lod);
+    const record=group.forestRecord={count:live,matrices:forest.instanceMatrix.array.slice(0,live*16),colors:forest.instanceColor?forest.instanceColor.array.slice(0,live*3):new Float32Array(live*3),species:species.slice(0,live)};
+    group.add(yield* createForestLOD(record,trees,centerZ,{treeNear,treeFar,treeField}));
   }
   yield* saveCountryside(cacheKey,group,fieldMaterial);
   return group;

@@ -1,4 +1,5 @@
 import { Weather } from './weather.js';
+import { freshRunSeed } from './world-variation.js';
 import { AIRCRAFT, CAMERA, DESTRUCTION, FLIGHT, FLIGHT_PHASES, LANDING_DEBUG, worldHorizontalSpeed, createRoute } from './config.js';
 import { AircraftSystems } from './aircraft-systems.js';
 import { Prompts } from './prompts.js';
@@ -21,12 +22,15 @@ export class Game {
 
   reset() {
     this.runId++;
+    this.world.setRunSeed(freshRunSeed());
     this.eventRevision = 0;
     this.startupHintDismissed = false;
     this.landingDebug = false;
     this.result = null;
     this.destruction = null;
+    this.glassFailure = false;
     this.birdImpactAt = -Infinity;
+    this.glassImpactAt = -Infinity;
     this.completionElapsed = 0;
     this.prompts = new Prompts();
     this.phase = 'READY';
@@ -56,6 +60,7 @@ export class Game {
       lightningStrike: false, lightningHitAt: -Infinity,
       birdStrike: false,
       birdStrikeCount: 0,
+      glassDamage: 0,
       systems: {
         lights: false,
         door: false, // true 表示舱门已关闭并锁定，false 表示打开。
@@ -165,15 +170,17 @@ export class Game {
     this.onChange();
   }
 
-  finish(success, reason, destructive = false) {
+  finish(success, reason, destructive = false, glassFailure = false) {
     if (['CRASH', 'RESULT', 'COMPLETE'].includes(this.phase)) return;
     this.result = { success, reason, seconds: this.mission.elapsed, maxAltitude: this.flight.maxAltitude,
       maxAirspeed: this.flight.maxAirspeed, liftOffSpeed: this.flight.liftOffSpeed };
-    this.phase = success ? 'COMPLETE' : destructive ? 'CRASH' : 'RESULT';
+    this.glassFailure=glassFailure;
+    this.phase = success ? 'COMPLETE' : destructive||glassFailure ? 'CRASH' : 'RESULT';
     this.completionElapsed = 0;
     this.aircraft.wheelBrake = false;
     this.flight.speedTapRemaining = 0;
-    if (this.phase === 'CRASH') {
+    if(glassFailure){this.glassImpactAt=this.activeSeconds;this.emit({type:'glass-break',key:'glass'});}
+    if (this.phase === 'CRASH'&&!glassFailure) {
       this.destruction = {position: {...this.aircraft.position}, heading: this.aircraft.heading};
       this.view = 'EXTERIOR';
       this.aircraft.systems.engine = 'OFF'; this.aircraft.enginePower = 0;
@@ -187,6 +194,7 @@ export class Game {
     event.id = `${this.runId}:${this.eventRevision}:${event.type}:${event.key}:${event.condition || ''}`;
     if (event.condition==='bird-thrust-lock') event.id=`${this.runId}:bird-thrust-lock`;
     if (event.type === 'bird-strike') this.birdImpactAt = this.activeSeconds;
+    if (event.type === 'bird-strike'||event.type === 'tree-strike') this.glassImpactAt = this.activeSeconds;
     this.prompts.receive(event);
     this.onEvent(event);
   }
@@ -195,7 +203,7 @@ export class Game {
     if (!this.active) return;
     if (this.phase === 'COMPLETE' || this.phase === 'CRASH') {
       this.completionElapsed += dt;
-      const seconds = this.phase === 'CRASH' ? DESTRUCTION.seconds : FLIGHT.completionFeedbackSeconds;
+      const seconds = this.phase === 'CRASH' ? (this.glassFailure?DESTRUCTION.glass.failureSeconds:DESTRUCTION.seconds) : FLIGHT.completionFeedbackSeconds;
       if (this.completionElapsed >= seconds - 1e-9) {
         this.phase = 'RESULT';
         this.onChange();
@@ -217,7 +225,7 @@ export class Game {
       const events = this.flight.step(dt, held);
       // 接地或越界优先于同一步中的完成条件，结算只执行一次。
       const failed = events.find(item => item.type === 'failed');
-      if (failed) { this.emit(failed); this.finish(false, failed.reason, failed.destructive); return; }
+      if (failed) { this.emit(failed); this.finish(false, failed.reason, failed.destructive, failed.key==='glass'); return; }
       for (const item of events) {
         // 同一步已安全接地时，不再播报触地前产生的失速或下降警告。
         if (this.aircraft.landed && ['stall', 'stall-recovered', 'pitch-low'].includes(item.type)) continue;
@@ -232,7 +240,7 @@ export class Game {
       this.mission.weatherRadarAvailable=this.weather.radarAvailable;
       const missionEvents = this.mission.step(dt);
       const failed = missionEvents.find(item => item.type === 'failed');
-      if (failed) { this.emit(failed); this.finish(false, failed.reason, failed.destructive); return; }
+      if (failed) { this.emit(failed); this.finish(false, failed.reason, failed.destructive, failed.key==='glass'); return; }
       for (const item of missionEvents) {
         if (item.type === 'approach') this.phase = 'APPROACH';
         this.emit(item);

@@ -83,13 +83,7 @@ export class LandscapeView extends THREE.Group {
       hair.scale.set(40, 35, 48); hair.position.set(island.x - 68 + i * 25, floor + 149 + Math.sin(i * 0.7) * 12, island.z - 12);
       this.add(hair);
     }
-    const trees = new THREE.InstancedMesh(new THREE.ConeGeometry(10, 32, 6), new THREE.MeshStandardMaterial({color: 0x496e50}), 40);
-    const dummy = new THREE.Object3D();
-    for (let i = 0; i < 40; i++) {
-      const z = island.z + (i - 20) * 160, x = island.x + (i % 2 ? -1 : 1) * 140;
-      dummy.position.set(x, floor + 16, z); dummy.updateMatrix(); trees.setMatrixAt(i, dummy.matrix);
-    }
-    trees.computeBoundingSphere(); this.add(trees);
+    this.islandTreeSites=Array.from({length:40},(_,i)=>({x:island.x+(i%2?-1:1)*140,y:floor,z:island.z+(i-20)*160,yaw:i*2.399963,color:0x496e50}));
     if (this.route.id < 3) return;
     const lake = JOURNEY.lake;
     oval(lake.x, lake.z, lake.width + 180, lake.length + 140, lake.elevation + 0.025, 0xb2b79c);
@@ -199,8 +193,8 @@ export class LandscapeView extends THREE.Group {
     yield {task:'landmark-structure'};this.addRiver();yield 'boundary';this.addCity();yield* this.addCityStreets();yield 'boundary';
     yield* this.addLandmarks();yield 'boundary';this.addWaterfall();yield {task:'regional-monuments'};yield* this.addRegionalViews();yield {task:'static-batches'};
     yield* batchStaticMeshSteps(this);yield 'boundary';
-    this.mountains=new MountainView(this.world);this.add(this.mountains);yield* this.mountains.makeTreeResources();this.textures.push(...this.mountains.textures);yield 'boundary';
-    this.loopView=new LoopView(this.world,()=>this.landmarkTemplate.clone(),{geometry:this.mountains.treeGeometry,material:this.mountains.treeMaterial,farGeometry:this.mountains.treeSpriteGeometry,farMaterial:this.mountains.treeSpriteMaterial});this.add(this.loopView);yield 'boundary';
+    this.mountains=new MountainView(this.world);this.add(this.mountains);yield* this.mountains.makeTreeResources();this.textures.push(...this.mountains.textures);if(this.islandTreeSites)yield* this.mountains.addForestChunk(this.islandTreeSites);yield 'boundary';
+    this.loopView=new LoopView(this.world,()=>this.landmarkTemplate.clone(),{bank:this.mountains.treeBank,geometry:this.mountains.treeGeometry,material:this.mountains.treeMaterial,farGeometry:this.mountains.treeSpriteGeometry,farMaterial:this.mountains.treeSpriteMaterial});this.add(this.loopView);yield 'boundary';
     yield* this.addGround();yield* this.addCityBlocks();yield* this.addFarmland();this.add(yield* createDistrict(this.world.districts));yield* this.coast.build();yield* this.addTransitions();yield* this.mountains.buildRolling();yield* this.addRegionBelts();yield* this.addRegionalCities();yield* this.loopView.build();
     this.loopView.installHorizon(this);
     this.updateMatrixWorld(true);
@@ -209,12 +203,12 @@ export class LandscapeView extends THREE.Group {
   }
 
   *addRegionBelts() {
-    const trees={geometry:this.mountains.treeGeometry,material:this.mountains.treeMaterial,farGeometry:this.mountains.treeSpriteGeometry,farMaterial:this.mountains.treeSpriteMaterial};
+    const trees={bank:this.mountains.treeBank,geometry:this.mountains.treeGeometry,material:this.mountains.treeMaterial,farGeometry:this.mountains.treeSpriteGeometry,farMaterial:this.mountains.treeSpriteMaterial};
     for(const belt of regionBelts(this.route)){
       yield {task:'region-forest'};
       this.add(yield* createCountryside({width:REGION_BLEND.width,length:belt.length,centerZ:belt.z,seed:belt.seed,
-        heightAt:(x,z)=>this.world.heightAt(x,z),landAt:(x,z)=>regionLandAt(this.world,x,z),trees,forestOnly:true,
-        treeHeight:REGION_BLEND.treeHeight,treeArea:REGION_BLEND.treeArea,treeNear:REGION_BLEND.treeNear,treeFar:REGION_BLEND.treeFar}));
+        heightAt:(x,z)=>this.world.heightAt(x,z),landAt:(x,z)=>regionLandAt(this.world,x,z),trees,forestOnly:true,treeField:this.world.trees,
+        treeArea:REGION_BLEND.treeArea,treeNear:REGION_BLEND.treeNear,treeFar:REGION_BLEND.treeFar}));
     }
   }
 
@@ -235,7 +229,7 @@ export class LandscapeView extends THREE.Group {
       yield {task:zone.id};
       const group=yield* createCountryside({width:settings.meadowWidth,length:zone.length,centerZ:zone.z,
         seed:settings.seed+Math.round(-zone.z),heightAt:(x,z)=>this.world.heightAt(x,z),
-        landAt:(x,z)=>regionLandAt(this.world,x,z),trees:{geometry:this.mountains.treeGeometry,material:this.mountains.treeMaterial,farGeometry:this.mountains.treeSpriteGeometry,farMaterial:this.mountains.treeSpriteMaterial}});
+        landAt:(x,z)=>regionLandAt(this.world,x,z),treeField:this.world.trees,trees:{bank:this.mountains.treeBank,geometry:this.mountains.treeGeometry,material:this.mountains.treeMaterial,farGeometry:this.mountains.treeSpriteGeometry,farMaterial:this.mountains.treeSpriteMaterial}});
       this.add(group);
       const curve=new THREE.CatmullRomCurve3(zone.points.map(point=>new THREE.Vector3(point.x,0,point.z))),points=curve.getPoints(settings.streamSamples).filter(p=>coastalLandWeight(p.x,p.z)>.08);
       if(points.length<2)continue;
@@ -262,7 +256,7 @@ export class LandscapeView extends THREE.Group {
   }
 
   *addCityBlocks() {
-    const chunks=new Map(),size=LANDSCAPE.city.chunkSize,shared={};
+    const chunks=new Map(),size=LANDSCAPE.city.chunkSize,shared={variationViews:this.world.variationViews};
     for(const site of this.world.buildings){
       const key=Math.floor(site.x/size)+':'+Math.floor(site.z/size);
       if(!chunks.has(key))chunks.set(key,[]);chunks.get(key).push(site);
@@ -344,7 +338,7 @@ export class LandscapeView extends THREE.Group {
 
   *addFarmland() {
     const fields=yield* createCountryside({width:7200,length:4600,centerZ:clusterZ('fields'),seed:462781,
-      heightAt:(x,z)=>this.world.heightAt(x,z),trees:{geometry:this.mountains.treeGeometry,material:this.mountains.treeMaterial,farGeometry:this.mountains.treeSpriteGeometry,farMaterial:this.mountains.treeSpriteMaterial}});
+      heightAt:(x,z)=>this.world.heightAt(x,z),treeField:this.world.trees,trees:{bank:this.mountains.treeBank,geometry:this.mountains.treeGeometry,material:this.mountains.treeMaterial,farGeometry:this.mountains.treeSpriteGeometry,farMaterial:this.mountains.treeSpriteMaterial}});
     this.add(fields);
   }
 

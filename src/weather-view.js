@@ -71,16 +71,34 @@ export class WeatherView extends THREE.Group {
       }
       geometry.computeBoundingSphere();geometries.push(geometry);console.info('Weather geometry prepared '+JSON.stringify({variant,cacheHit:hit,vertices:geometry.attributes.position.count}));yield;
     }
-    const materials=new Map();
+    this.geometries=geometries;const materials=this.materials=new Map();
     for(const cloud of this.world.weather.clouds){
       const key=cloud.kind+cloud.thin;
       if(!materials.has(key)){
-        const material=new THREE.MeshStandardMaterial({color:cloud.kind==='white'?0xe9eef0:0x687681,roughness:1,emissive:cloud.kind==='white'?0xa3b1b8:0x27323b,emissiveIntensity:.3,transparent:cloud.thin,opacity:cloud.thin?.38:1,depthWrite:!cloud.thin});
-        material.onBeforeCompile=shader=>{shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 cloudLocalPosition;').replace('#include <begin_vertex>','#include <begin_vertex>\ncloudLocalPosition=position;');shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 cloudLocalPosition;').replace('#include <color_fragment>','#include <color_fragment>\nfloat billowShade=clamp(cloudLocalPosition.y/'+WEATHER.height.toFixed(1)+'+.5,0.,1.);\ndiffuseColor.rgb*=mix(.76,1.06,billowShade);');};
-        material.customProgramCacheKey=()=> 'solid-clouds-v4';materials.set(key,material);
+        const material=new THREE.MeshStandardMaterial({color:cloud.kind==='white'?0xe9eef0:0x687681,roughness:1,emissive:cloud.kind==='white'?0xa3b1b8:0x27323b,emissiveIntensity:.14,transparent:cloud.thin,opacity:cloud.thin?.38:1,depthWrite:!cloud.thin});
+        material.onBeforeCompile=shader=>{
+          shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 cloudLocalPosition;').replace('#include <begin_vertex>','#include <begin_vertex>\ncloudLocalPosition=position;');
+          shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>
+            varying vec3 cloudLocalPosition;
+            float cloudHash(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
+            float cloudNoise(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+              return mix(mix(mix(cloudHash(i),cloudHash(i+vec3(1,0,0)),f.x),mix(cloudHash(i+vec3(0,1,0)),cloudHash(i+vec3(1,1,0)),f.x),f.y),
+                mix(mix(cloudHash(i+vec3(0,0,1)),cloudHash(i+vec3(1,0,1)),f.x),mix(cloudHash(i+vec3(0,1,1)),cloudHash(i+vec3(1,1,1)),f.x),f.y),f.z);}
+          `).replace('#include <color_fragment>',`#include <color_fragment>
+            vec3 cloudP=cloudLocalPosition/vec3(${WEATHER.width.toFixed(1)},${WEATHER.height.toFixed(1)},${WEATHER.length.toFixed(1)});
+            float billowShade=smoothstep(-.30,.34,cloudP.y);
+            float cloudGrain=cloudNoise(cloudP*19.)*.65+cloudNoise(cloudP*43.)*.35;
+            diffuseColor.rgb*=mix(vec3(.69,.74,.80),vec3(1.07,1.06,1.03),billowShade)*(0.94+cloudGrain*.12);
+          `);
+        };
+        material.customProgramCacheKey=()=> 'solid-clouds-v5';materials.set(key,material);
       }
       const mesh=new THREE.Mesh(geometries[cloud.variant],materials.get(key));mesh.position.set(cloud.x,cloud.y,cloud.z);mesh.userData.cloudId=cloud.id;this.clouds.push(mesh);this.add(mesh);yield;
     }
+    // 预热尚未被本局选中的外形，重开切换形态时不发生首次GPU上传。
+    const warmup=new THREE.Group();warmup.visible=false;
+    for(const geometry of geometries)warmup.add(new THREE.Mesh(geometry,materials.get('whitefalse')));
+    this.add(warmup);yield;
     this.boltPositions=new Float32Array(18*6);const boltGeometry=new THREE.BufferGeometry();boltGeometry.setAttribute('position',new THREE.BufferAttribute(this.boltPositions,3).setUsage(THREE.DynamicDrawUsage));
     this.bolt=new THREE.LineSegments(boltGeometry,new THREE.LineBasicMaterial({color:0xd5edff,transparent:true,opacity:0,depthWrite:false,depthTest:true,fog:false}));this.bolt.frustumCulled=false;this.add(this.bolt);
     this.flashLight=new THREE.PointLight(0xc9e6ff,0,10000,1);this.add(this.flashLight);yield;
@@ -92,7 +110,7 @@ export class WeatherView extends THREE.Group {
   }
   update(game,scene){
     const weather=game.weather;
-    for(const mesh of this.clouds){const cloud=this.world.weather.clouds[mesh.userData.cloudId];mesh.position.x=cloudX(cloud,weather.seconds);mesh.position.z=cloudZ(cloud,weather.seconds);mesh.updateMatrix();}
+    for(const mesh of this.clouds){const cloud=this.world.weather.clouds[mesh.userData.cloudId];mesh.position.set(cloudX(cloud,weather.seconds),cloud.y,cloudZ(cloud,weather.seconds));mesh.rotation.y=cloud.heading;mesh.scale.set(cloud.scaleX,1,cloud.scaleZ);mesh.geometry=this.geometries[cloud.variant];mesh.material=this.materials.get(cloud.kind+cloud.thin);mesh.updateMatrix();}
     scene.fog.far=weather.visibility;scene.fog.near=weather.kind==='white'?35:SCENERY.fogNear*(weather.kind==='storm'?WEATHER.stormVisibilityRatio:1);
     const tint=weather.kind==='white'?0xcbd5d8:weather.kind==='storm'?0x657481:SCENERY.colors.skyHorizon;
     scene.fog.color.setHex(tint);scene.background.setHex(tint);this.skyTint.value.setHex(tint);this.skyMix.value=weather.strength*(weather.kind==='white'?.96:weather.kind==='storm'?.52:0);

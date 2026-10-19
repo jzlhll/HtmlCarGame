@@ -237,6 +237,7 @@ export class FlightAudio {
   }
 
   receive(event, game) {
+    if (event.type==='glass-break'){this.update(game);if(this.enabled(game))this.noiseBurst(AUDIO.glassImpact);return;}
     if (event.type==='destroyed') this.silence();
     this.update(game);
     if (event.type==='destroyed') {
@@ -246,7 +247,7 @@ export class FlightAudio {
     if (['lightning-hit','lightning-flash'].includes(event.type)&&this.enabled(game))this.noiseBurst(AUDIO.thunder);
     if (!this.speechEnabled(game) || !game.active) return;
     if (event.type==='bird-strike'||event.type==='truck-hit') this.noiseBurst(AUDIO.birdImpact);
-    if (event.type==='bird-strike') this.noiseBurst(AUDIO.glassImpact);
+    if (event.type==='bird-strike'||event.type==='tree-strike') this.noiseBurst(AUDIO.glassImpact);
     if (game.flight.stalled && event.type === 'pitch-low') return;
     let words, cue = AUDIO.cues.confirm, priority = 1;
     if (event.type === 'prepared' || event.type === 'unprepared') {

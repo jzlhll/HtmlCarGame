@@ -1,8 +1,14 @@
 import { streetCarBox } from './city-street-layout.js';
-import { LOOP_WORLD, LANDSCAPE } from './config.js';
+import { LOOP_WORLD, LANDSCAPE, TREE_CONTACT } from './config.js';
 import { terrainNoise, smoothRange } from './terrain.js';
 import { buildingParts } from './building-layout.js';
+import { TreeField } from './tree-contact.js';
+import { treeProfiles } from './tree-species.js';
+import { attachBuildingShift, moveBuildingBox } from './world-variation.js';
 import { parkingParts } from './district-layout.js';
+
+const sweepSides=['from','to'];
+const treeReach=Math.max(...treeProfiles.map(profile=>(profile.tall?TREE_CONTACT.tallHeight[1]:profile.height[1]/5)*profile.width[1]*profile.radius));
 
 export function loopRiverZ(x, variant) {
   return Math.sin(x * 0.00047 + variant * 0.9) * 840 + Math.sin(x * 0.00113 + variant) * 210 + (variant === 2 ? 4750 : 0);
@@ -88,24 +94,44 @@ export function sampleLoopTerrain(geometry, x, z) {
 
 // 使用与可见三角形完全相同的插值，外围建筑也使用模板的原始包围盒。
 export class LoopWorld {
-  constructor(route, geometries, buildings, landmarkBoxes, streets) {
+  constructor(route, geometries, buildings, landmarkBoxes, streets, bodySweep=[]) {
     this.route = route; this.geometries = geometries;
+    this.treeFields=Array.from({length:LOOP_WORLD.variants},()=>new TreeField());
+    this.treeSweep=bodySweep.map(sample=>({radius:sample.radius,from:{x:0,y:0,z:0},to:{x:0,y:0,z:0}}));
     this.city = buildings.map(site => ({...site, z: site.z - LANDSCAPE.city.center[1]})).filter(site=>Math.abs(site.z)<LANDSCAPE.city.loopRows*LANDSCAPE.city.spacing/2);
     this.landmarks = landmarkBoxes.map(box => ({min: {...box.min, z: box.min.z - LANDSCAPE.city.center[1]}, max: {...box.max, z: box.max.z - LANDSCAPE.city.center[1]}, name: box.name}));
-    this.cityBoxes=this.city.flatMap(site=>buildingParts(site).map(part=>({min:{x:part.x-part.width/2,y:part.y-part.height/2,z:part.z-part.depth/2},max:{x:part.x+part.width/2,y:part.y+part.height/2,z:part.z+part.depth/2},name:'外围城市建筑'})));
+    this.cityBoxes=this.city.flatMap(site=>buildingParts(site).map(part=>attachBuildingShift({min:{x:part.x-part.width/2,y:part.y-part.height/2,z:part.z-part.depth/2},max:{x:part.x+part.width/2,y:part.y+part.height/2,z:part.z+part.depth/2},name:'外围城市建筑'},site.shift)));
     this.streets=streets;
     if(streets)this.cityBoxes.push(...streets.cars.map(streetCarBox));
     this.parking=parkingParts(4200,0);
     this.cityBoxes.push(...this.parking.filter(p=>p.role!=='parking').map(p=>({min:{x:p.x-p.width/2,y:p.y-p.height/2,z:p.z-p.depth/2},max:{x:p.x+p.width/2,y:p.y+p.height/2,z:p.z+p.depth/2},name:p.name})));
     this.cityCells=new Map();this.candidates=new Set();
     for(const box of [...this.cityBoxes,...this.landmarks]){
-      for(let x=Math.floor(box.min.x/512);x<=Math.floor(box.max.x/512);x++)for(let z=Math.floor(box.min.z/512);z<=Math.floor(box.max.z/512);z++){
+      for(let x=Math.floor((box.min.x-(box.shift?.maxX||0))/512);x<=Math.floor((box.max.x+(box.shift?.maxX||0))/512);x++)for(let z=Math.floor((box.min.z-(box.shift?.maxZ||0))/512);z<=Math.floor((box.max.z+(box.shift?.maxZ||0))/512);z++){
         const key=x+':'+z;if(!this.cityCells.has(key))this.cityCells.set(key,[]);this.cityCells.get(key).push(box);
       }
     }
+    this.updateVariation();
     this.localFrom={x:0,y:0,z:0};this.localTo={x:0,y:0,z:0};
     this.query = {column: 0, row: 0, x: 0, z: 0, variant: 0};
   }
+
+  treeContact(sweep) {
+    let minX=Infinity,maxX=-Infinity,minZ=Infinity,maxZ=-Infinity;
+    for(const {from,to,radius}of sweep){minX=Math.min(minX,from.x-radius,to.x-radius);maxX=Math.max(maxX,from.x+radius,to.x+radius);minZ=Math.min(minZ,from.z-radius,to.z-radius);maxZ=Math.max(maxZ,from.z+radius,to.z+radius);}
+    const size=LOOP_WORLD.tileSize,reach=treeReach;
+    // 邻格树冠可以伸进本格，接触范围包含其最大横向半径。
+    for(let column=Math.floor((minX-reach+size/2)/size);column<=Math.floor((maxX+reach+size/2)/size);column++)for(let row=Math.floor((minZ-reach+size/2)/size);row<=Math.floor((maxZ+reach+size/2)/size);row++){
+      if(isRouteCell(column,row,this.route))continue;
+      for(let i=0;i<sweep.length;i++)for(const side of sweepSides){
+        const target=this.treeSweep[i][side],source=sweep[i][side];target.x=source.x-column*size;target.y=source.y;target.z=source.z-row*size;
+      }
+      if(this.treeFields[loopVariant(column,row)].touch(this.treeSweep))return true;
+    }
+    return false;
+  }
+
+  updateVariation() { for(const box of this.cityBoxes)moveBuildingBox(box); }
 
   locate(x, z) {
     const size = LOOP_WORLD.tileSize, q = this.query;

@@ -1,11 +1,12 @@
 import { cloudField } from './weather-world.js';
-import { WEATHER, SCENERY, worldHorizontalSpeed } from './config.js';
+import { WEATHER, WEATHER_MOTION, SCENERY, worldHorizontalSpeed } from './config.js';
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 
 export function cloudX(cloud,seconds=0) {
   if(cloud.kind!=='storm')return cloud.x;
-  const range=WEATHER.wrapMaxX-WEATHER.wrapMinX;
-  return ((cloud.x+worldHorizontalSpeed(WEATHER.windKmh/3.6)*seconds-WEATHER.wrapMinX)%range+range)%range+WEATHER.wrapMinX;
+  const omega=2*Math.PI/WEATHER_MOTION.periodSeconds,phase=cloud.id*2.399963;
+  const amplitude=worldHorizontalSpeed(WEATHER.windKmh/3.6)/omega;
+  return cloud.x+amplitude*(Math.sin(omega*seconds+phase)-Math.sin(phase));
 }
 export function cloudZ(cloud) { return cloud.z; }
 
@@ -15,7 +16,7 @@ export class Weather {
     this.aircraft=aircraft;this.world=world;this.seconds=0;this.kind='clear';this.radarAvailable=true;
     this.visibility=SCENERY.fogFar;this.strength=0;this.currentCloud=-1;this.events=[];
     this.randomState=new Uint32Array(WEATHER.maxClouds);this.nextFlash=new Float64Array(WEATHER.maxClouds);
-    for(let i=0;i<WEATHER.maxClouds;i++){this.randomState[i]=(WEATHER.seed+i*19571)>>>0;this.nextFlash[i]=4+this.random(i)*10;}
+    for(let i=0;i<WEATHER.maxClouds;i++){this.randomState[i]=((world.runSeed??WEATHER.seed)+i*19571)>>>0;this.nextFlash[i]=4+this.random(i)*10;}
     this.flash={at:-Infinity,cloud:-1,hit:false,x:0,y:0,z:0,endX:0,endY:0,endZ:0};
     this.sample(aircraft.position);
   }
@@ -24,7 +25,8 @@ export class Weather {
   sample(position) {
     let white=0,storm=0,whiteVisibility=WEATHER.whiteVisibility,current=-1;
     for(const cloud of this.world.weather?.clouds||[]){
-      const x=(position.x-cloudX(cloud,this.seconds))/WEATHER.width,y=(position.y-cloud.y)/WEATHER.height,z=(position.z-cloudZ(cloud,this.seconds))/WEATHER.length;
+      const dx=position.x-cloudX(cloud,this.seconds),dz=position.z-cloudZ(cloud,this.seconds),c=Math.cos(cloud.heading),s=Math.sin(cloud.heading);
+      const x=(c*dx-s*dz)/(WEATHER.width*cloud.scaleX),y=(position.y-cloud.y)/WEATHER.height,z=(s*dx+c*dz)/(WEATHER.length*cloud.scaleZ);
       if(Math.abs(x)>.5||Math.abs(y)>.5||Math.abs(z)>.5)continue;
       const depth=clamp(-cloudField(x,y,z,this.world.weather.templates[cloud.variant])*3,0,1);
       if(cloud.kind==='white'&&depth>white){white=depth;whiteVisibility=cloud.thin?WEATHER.thinVisibility:WEATHER.whiteVisibility;}

@@ -53,7 +53,7 @@ export class GameRenderer {
     this.eyeOffset = new THREE.Vector3();
     this.sequence = new CameraSequence();
     this.scene.add(this.camera);
-    const airports=[];for(const destination of [false,true]){airports.push(new AirportView(world.route,destination));yield {task:'airport'};}
+    const airports=[];for(const destination of [false,true]){const airport=new AirportView(world.route,destination);airports.push(airport);yield* world.trees.addMatrices(airport.treeMatrices,airport.treeCount);yield {task:'airport'};}
     this.scene.add(...airports);this.airports=airports;
     this.landscape = new LandscapeView(world); this.scene.add(this.landscape);
     yield {task:'landscape'};

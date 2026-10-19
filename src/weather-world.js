@@ -14,33 +14,62 @@ export function cloudField(x,y,z,template) {
   return field;
 }
 
+// 六类轮廓保留偏心峰、鞍部和风切长脊，形状池固定缓存，开局仅重排变换。
 export function cloudTemplates() {
+  const crowns=[
+    [[-.26,-.07,0],[0,.01,.08],[.22,-.04,-.06],[-.1,-.03,-.2],[.12,-.08,.23],[.29,-.12,.18]],
+    [[-.14,.20,-.04],[.10,.04,.05],[.28,-.08,.06],[-.28,-.08,.12],[.04,-.1,-.23],[-.06,-.03,.23]],
+    [[-.23,.14,-.02],[.23,.07,.03],[-.05,-.13,0],[-.24,-.03,.23],[.21,-.04,-.22],[.02,-.1,.25]],
+    [[-.27,.03,-.18],[-.08,.17,-.08],[.13,.02,.04],[.28,.13,.16],[-.20,-.04,.19],[.03,-.02,.26]],
+    [[-.12,.16,-.23],[-.10,.09,-.08],[0,.01,.08],[.12,-.06,.24],[.25,-.12,.27],[-.25,-.08,-.15]],
+    [[-.10,-.03,0],[-.12,.20,-.02],[.08,.22,.04],[-.30,.16,.03],[.28,.15,-.04],[.05,.13,.24]],
+  ];
   return Array.from({length:WEATHER.variants},(_,variant)=>{
-    const random=randomStream(WEATHER.seed+variant*101);
-    const puffs=[-.2,0,.2].map(x=>({x,y:-.2,z:0,rx:.27,ry:.16,rz:.3}));
-    for(let i=3;i<WEATHER.puffs;i++){
-      const angle=(i-3)*2.399963+random()*.45,radius=i===3?0:.12+random()*.17;
-      const x=Math.cos(angle)*radius,z=Math.sin(angle)*radius,y=-.045+random()*.19;
-      puffs.push({x,y,z,rx:Math.min(.48-Math.abs(x),.12+random()*.065),ry:Math.min(.48-Math.abs(y),.21+random()*.13),rz:Math.min(.48-Math.abs(z),.12+random()*.065)});
+    const random=randomStream(WEATHER.seed+variant*101),puffs=[];
+    const add=(x,y,z,rx,ry,rz)=>{
+      x+=(random()-.5)*.018;y+=(random()-.5)*.018;z+=(random()-.5)*.018;
+      puffs.push({x,y,z,rx:Math.min(.475-Math.abs(x),rx),ry:Math.min(.475-Math.abs(y),ry),rz:Math.min(.475-Math.abs(z),rz)});
+    };
+    for(const [x,z] of [[-.2,-.08],[.12,-.13],[-.1,.18],[.22,.16]])add(x,-.25,z,.25,.105,.24);
+    for(const [i,c]of crowns[variant].entries())add(...c,.18+random()*.045,variant===5&&i>1?.13:.19+random()*.05,.17+random()*.055);
+    for(let i=0;i<8;i++){
+      const c=crowns[variant][i%6],angle=i*2.399963,side=.12+random()*.03;
+      add(c[0]+Math.cos(angle)*side,c[1]-.045+random()*.08,c[2]+Math.sin(angle)*side,.10+random()*.045,.11+random()*.04,.10+random()*.045);
+    }
+    for(let i=0;i<4;i++){
+      const c=crowns[variant][i],top=variant===0?.15:variant===5?.13:.21;
+      add(c[0]+(random()-.5)*.10,c[1]+top,c[2]+(random()-.5)*.10,.075+random()*.025,.08+random()*.035,.075+random()*.025);
     }
     return puffs;
   });
 }
 
-export function weatherLayout(route) {
-  const random=randomStream(WEATHER.seed),distance=-route.destination.threshold+WEATHER.startZ;
-  const count=Math.min(WEATHER.maxClouds,Math.max(4,Math.ceil(distance/WEATHER.spacing))),clouds=[];
-  const thinCount=Math.max(1,Math.round(count*.1));
-  const kindAt=id=>id%4===((Math.imul(Math.floor(id/4)+1,0x45d9f3b)^WEATHER.seed)>>>16)%4?'storm':'white';
+function cloudPlacements(count,seed) {
+  const random=randomStream(seed),clouds=[],thinCount=Math.max(1,Math.round(count*.1));
+  const variants=Array.from({length:WEATHER.variants},(_,i)=>i);
+  for(let i=variants.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[variants[i],variants[j]]=[variants[j],variants[i]];}
+  const kindAt=id=>id%4===((Math.imul(Math.floor(id/4)+1,0x45d9f3b)^seed)>>>16)%4?'storm':'white';
   const thinIds=new Set();
   for(let i=0;i<thinCount;i++){let id=Math.floor((i+.5)*count/thinCount);while(kindAt(id)==='storm'||thinIds.has(id))id=(id+1)%count;thinIds.add(id);}
   for(let id=0;id<count;id++){
     const thin=thinIds.has(id),band=thin?WEATHER.thinBand:WEATHER.highBand;
     clouds.push({id,kind:kindAt(id),thin,
-      x:(random()*2-1)*WEATHER.lateralSpread,z:WEATHER.startZ-id*WEATHER.spacing+(random()-.5)*1000,
-      y:band[0]+random()*(band[1]-band[0]),variant:id%WEATHER.variants,density:thin?WEATHER.thinDensity:1});
+      x:(random()*2-1)*WEATHER.lateralSpread,z:WEATHER.startZ-id*WEATHER.spacing+(random()*2-1)*WEATHER.alongJitter,
+      y:band[0]+random()*(band[1]-band[0]),variant:variants[id%variants.length],density:thin?WEATHER.thinDensity:1,
+      heading:(random()*2-1)*WEATHER.headingSpread+(random()<.5?Math.PI:0),scaleX:.9+random()*.1,scaleZ:.9+random()*.1});
   }
-  return {clouds,templates:cloudTemplates()};
+  return clouds;
+}
+
+export function varyWeather(layout,seed) {
+  const clouds=cloudPlacements(layout.clouds.length,seed);
+  for(let i=0;i<clouds.length;i++)Object.assign(layout.clouds[i],clouds[i]);
+}
+
+export function weatherLayout(route) {
+  const distance=-route.destination.threshold+WEATHER.startZ;
+  const count=Math.min(WEATHER.maxClouds,Math.max(4,Math.ceil(distance/WEATHER.spacing)));
+  return {clouds:cloudPlacements(count,WEATHER.seed),templates:cloudTemplates()};
 }
 
 export function* prepareWeatherWorld(route,useCache) {
@@ -48,7 +77,7 @@ export function* prepareWeatherWorld(route,useCache) {
   const cache=surfaceCache();yield {wait:cache.ready};
   const record=cache.available?yield {wait:cache.read('scene/weather/layout')}:null;
   const valid=record?.recipe===WEATHER.recipe&&Array.isArray(record.clouds)&&record.clouds.length>0&&record.clouds.length<=WEATHER.maxClouds
-    &&record.clouds.every((c,i)=>c.id===i&&['white','storm'].includes(c.kind)&&['x','y','z','density','variant'].every(k=>Number.isFinite(c[k]))&&c.y>=WEATHER.thinBand[0]&&c.y<=WEATHER.highBand[1]&&Number.isInteger(c.variant)&&c.variant>=0&&c.variant<WEATHER.variants&&typeof c.thin==='boolean'&&c.density>0&&c.density<=1)
+    &&record.clouds.every((c,i)=>c.id===i&&['white','storm'].includes(c.kind)&&['x','y','z','density','variant','heading','scaleX','scaleZ'].every(k=>Number.isFinite(c[k]))&&c.y>=WEATHER.thinBand[0]&&c.y<=WEATHER.highBand[1]&&Number.isInteger(c.variant)&&c.variant>=0&&c.variant<WEATHER.variants&&typeof c.thin==='boolean'&&c.density>0&&c.density<=1&&c.scaleX>=.9&&c.scaleX<=1&&c.scaleZ>=.9&&c.scaleZ<=1)
     &&Array.isArray(record.templates)&&record.templates.length===WEATHER.variants&&record.templates.every(p=>p.length===WEATHER.puffs&&p.every(v=>['x','y','z','rx','ry','rz'].every(k=>Number.isFinite(v[k]))&&v.rx>0&&v.ry>0&&v.rz>0));
   if(valid){console.info('Weather layout restored '+JSON.stringify({clouds:record.clouds.length}));return record;}
   const generated=weatherLayout(route);yield;

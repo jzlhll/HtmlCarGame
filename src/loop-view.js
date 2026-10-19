@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { CanopyLOD } from './canopy-lod.js';
 import { LOOP_WORLD, LANDSCAPE, SURFACE_APPEARANCE, WORLD_BOUNDARY } from './config.js';
 import { loopVariant, isRouteCell, loopRiverZ, sampleLoopTerrain, LoopWorld } from './loop-world.js';
 import { mountainIndices } from './terrain.js';
@@ -17,7 +18,7 @@ export class LoopView extends THREE.Group {
     const geometries=Array.from({length:LOOP_WORLD.variants},(_,i)=>modelGeometry(`loop-terrain-${i}`));
     const names=new Set(LANDSCAPE.landmarks.map(t=>t.name)), boxes=new Set();
     for(const bucket of world.boxCells.values())for(const box of bucket)if(names.has(box.name))boxes.add(box);
-    world.loop=new LoopWorld(world.route,geometries,world.buildings.filter(site=>site.name==='城市楼房'),[...boxes],world.loopStreets);
+    world.loop=new LoopWorld(world.route,geometries,world.buildings.filter(site=>site.name==='城市楼房'),[...boxes],world.loopStreets,world.bodySweep);
     this.geometries=geometries;
   }
 
@@ -49,10 +50,10 @@ export class LoopView extends THREE.Group {
       const country=yield* createCountryside({width:12000,length:12000,seed:LOOP_WORLD.seed+variant*101,
         heightAt:(x,z)=>sampleLoopTerrain(geometry,x,z),
         landAt:(x,z)=>variant!==2||Math.max(Math.abs(x),Math.abs(z))>5350,
-        roadZ:x=>loopRiverZ(x,variant)+(variant===2?-420:420),trees:this.trees});
+        roadZ:x=>loopRiverZ(x,variant)+(variant===2?-420:420),trees:this.trees,treeField:this.world.loop.treeFields[variant]});
       group.add(country);
       if(variant===2){
-        const city=yield* createCityBlocks(this.world.loop.city);group.add(city);
+        const city=yield* createCityBlocks(this.world.loop.city,()=>0,{variationViews:this.world.variationViews});group.add(city);
         group.add(yield* createDistrict(this.world.loop.parking));
         const landmarks=this.makeLandmarks();landmarks.position.z=-LANDSCAPE.city.center[1];group.add(landmarks);
         group.add(yield* createCityStreets(this.world.loop.streets));
@@ -134,7 +135,7 @@ function cloneTemplate(source) {
     clone.count=source.count;clone.instanceMatrix=source.instanceMatrix;clone.instanceColor=source.instanceColor;
     clone.boundingBox=source.boundingBox;clone.boundingSphere=source.boundingSphere;
   }else if(source.isLOD){
-    clone=new THREE.LOD();THREE.Object3D.prototype.copy.call(clone,source,false);
+    clone=source.isCanopyLOD?new CanopyLOD(source.localBounds):new THREE.LOD();THREE.Object3D.prototype.copy.call(clone,source,false);
     for(const level of source.levels)clone.addLevel(cloneTemplate(level.object),level.distance,level.hysteresis);
   }else{
     clone=source.clone(false);for(const child of source.children)clone.add(cloneTemplate(child));

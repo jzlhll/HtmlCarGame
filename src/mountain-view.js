@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { LANDSCAPE, JOURNEY, SCENERY, SURFACE_APPEARANCE, WORLD_HEIGHT } from './config.js';
+import { LANDSCAPE, JOURNEY, SCENERY, SURFACE_APPEARANCE, WORLD_HEIGHT, TREE_CONTACT } from './config.js';
+import { prepareTreeModels } from './tree-models.js';
+import { createForestLOD } from './forest-view.js';
+import { treeDimensions } from './tree-contact.js';
 import { mountainIndices, sampleMountain, smoothRange, terrainNoise } from './terrain.js';
 import { createTerrainDetail, createTerrainMaterial } from './terrain-material.js';
 import { surfaceTexture } from './surface-assets.js';
@@ -19,50 +22,17 @@ export class MountainView extends THREE.Group {
   }
 
   *buildRolling() {
-    for(const solid of this.world.solids){this.addRock(solid);yield;}
+    for(const solid of this.world.solids){yield* this.addRock(solid);yield;}
     for(const surface of this.world.mountainSurfaces){
       yield {task:'mountain-surface'};yield* this.addMountain(surface);yield 'boundary';
     }
   }
 
   *makeTreeResources() {
-    const parts = [];
-    const trunk = new THREE.CylinderGeometry(0.025, 0.045, 0.65, 5); trunk.translate(0, 0.325, 0);
-    const trunkColors = new Float32Array(trunk.attributes.position.count * 3);
-    for (let i = 0; i < trunkColors.length; i += 3) trunkColors.set([0.3, 0.24, 0.15], i);
-    trunk.setAttribute('color', new THREE.Float32BufferAttribute(trunkColors, 3)); parts.push(trunk.toNonIndexed()); trunk.dispose();
-    for (const [x, y, z, width, height] of [[0, 0.73, 0, 0.27, 0.31], [-0.18, 0.6, 0.04, 0.24, 0.25], [0.16, 0.58, -0.08, 0.25, 0.26], [0.02, 0.55, 0.17, 0.23, 0.24]]) {
-      const crown = new THREE.IcosahedronGeometry(1, 1), positions = crown.attributes.position, colors = [];
-      for (let i = 0; i < positions.count; i++) {
-        const px = positions.getX(i), py = positions.getY(i), pz = positions.getZ(i);
-        const shape = 1 + 0.08 * Math.sin(px * 17 + pz * 13 + py * 9);
-        positions.setXYZ(i, x + px * width * shape, y + py * height * shape, z + pz * width * shape);
-        const light = 0.76 + (py + 1) * 0.16; colors.push(light, light, light * 0.94);
-      }
-      crown.computeVertexNormals(); crown.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3)); parts.push(crown);
-    }
-    this.treeGeometry = mergeGeometries(parts); parts.forEach(part => part.dispose());
-    this.treeMaterial = new THREE.MeshStandardMaterial({vertexColors: true, roughness: 1});
-    // 远景交叉树片共享一张树冠纹理，保留透空轮廓而不逐棵绘制枝叶。
-    const size = 256, canvas = document.createElement('canvas'); canvas.width = canvas.height = size;
-    const ctx = canvas.getContext('2d');
-    let seed = LANDSCAPE.seed;
-    const random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
-    ctx.fillStyle = '#6c6352'; ctx.fillRect(124, 102, 8, 149);
-    for (let i = 0; i < 1600; i++) {
-      const angle = random() * Math.PI * 2, radius = Math.sqrt(random());
-      const x = 128 + Math.cos(angle) * radius * 100, y = 96 + Math.sin(angle) * radius * 89;
-      const shade = Math.round(135 + random() * 72 + (1 - y / size) * 33);
-      ctx.fillStyle = `rgb(${shade},${shade},${Math.round(shade * 0.9)})`;
-      ctx.beginPath(); ctx.ellipse(x, y, 3 + random() * 9, 3 + random() * 8, 0, 0, Math.PI * 2); ctx.fill();
-      if(i%64===0)yield;
-    }
-    const texture = new THREE.CanvasTexture(canvas); texture.colorSpace = THREE.SRGBColorSpace; texture.anisotropy = 4;
-    this.textures.push(texture);
-    const a = new THREE.PlaneGeometry(0.78, 1.05); a.translate(0, 0.525, 0);
-    const b = a.clone(); b.rotateY(Math.PI / 2);
-    this.treeSpriteGeometry = mergeGeometries([a, b]); a.dispose(); b.dispose();
-    this.treeSpriteMaterial = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide, alphaTest: 0.55, fog: true});
+    this.treeBank=yield* prepareTreeModels();
+    const first=this.treeBank[0];this.treeGeometry=first.geometry;this.treeSpriteGeometry=first.farGeometry;this.treeMaterial=first.material;this.treeSpriteMaterial=first.farMaterial;
+    const warmup=new THREE.Group();warmup.visible=false;
+    for(const model of this.treeBank)warmup.add(new THREE.Mesh(model.geometry,model.material),new THREE.Mesh(model.farGeometry,model.farMaterial));this.add(warmup);yield;
   }
 
   *addMountain(surface) {
@@ -128,7 +98,8 @@ export class MountainView extends THREE.Group {
       const cover = vegetation[gz * (n + 1) + gx];
       const y = sampleMountain(surface, px, pz);
       if (random() > cover * 0.88 || y < this.world.baseHeightAt(px, pz) + 3 || this.world.heightAt(px, pz) > y + 1) continue;
-      const tree = {x: px, y: y - 0.3, z: pz, scale: this.settings.treeHeight[0] + random() * (this.settings.treeHeight[1] - this.settings.treeHeight[0]), yaw: random() * Math.PI * 2, color: this.settings.canopyColors[Math.floor(random() * this.settings.canopyColors.length)]};
+      random();
+      const tree = {x: px, y: y - 0.3, z: pz, yaw: random() * Math.PI * 2, color: this.settings.canopyColors[Math.floor(random() * this.settings.canopyColors.length)]};
       count++;
       if (selected.length < this.settings.maxTrees) selected.push(tree);
       else { const replace = Math.floor(random() * count); if (replace < selected.length) selected[replace] = tree; }
@@ -138,24 +109,21 @@ export class MountainView extends THREE.Group {
       if (!chunks.has(key)) chunks.set(key, []);
       chunks.get(key).push(tree);
     }
-    for (const trees of chunks.values()){this.addForestChunk(trees);yield;}
+    for (const trees of chunks.values()){yield* this.addForestChunk(trees);yield;}
   }
 
-  addForestChunk(trees) {
-    if (!trees.length) return;
-    const near = new THREE.InstancedMesh(this.treeGeometry, this.treeMaterial, trees.length);
-    const far = new THREE.InstancedMesh(this.treeSpriteGeometry, this.treeSpriteMaterial, trees.length);
-    const dummy = new THREE.Object3D(), color = new THREE.Color();
-    trees.forEach((tree, i) => {
-      dummy.position.set(tree.x, tree.y, tree.z); dummy.rotation.y = tree.yaw; dummy.scale.setScalar(tree.scale); dummy.updateMatrix();
-      near.setMatrixAt(i, dummy.matrix); far.setMatrixAt(i, dummy.matrix);
-      color.setHex(tree.color); near.setColorAt(i, color); far.setColorAt(i, color);
-    });
-    near.computeBoundingBox(); near.computeBoundingSphere(); far.computeBoundingSphere();
-    this.add(near, far); this.forest.push({near, far, bounds: near.boundingBox, close: false});
+  *addForestChunk(trees) {
+    if(!trees.length)return;
+    const matrices=new Float32Array(trees.length*16),colors=new Float32Array(trees.length*3),species=new Uint8Array(trees.length),pose=new THREE.Object3D(),color=new THREE.Color();
+    for(const [i,tree]of trees.entries()){
+      const size=treeDimensions(tree.x,tree.z,LANDSCAPE.seed,tree.y);pose.position.set(tree.x,tree.y,tree.z);pose.rotation.y=tree.yaw;pose.scale.set(size.width,size.y,size.width);pose.updateMatrix();
+      matrices.set(pose.matrix.elements,i*16);color.setHex(tree.color).toArray(colors,i*3);species[i]=size.type;if(i%128===0)yield;
+    }
+    const record={count:trees.length,matrices,colors,species};
+    this.add(yield* createForestLOD(record,{bank:this.treeBank},0,{treeNear:this.settings.treeNear,treeFar:this.settings.treeFar,treeField:this.world.trees}));
   }
 
-  addRock(solid) {
+  *addRock(solid) {
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(solid.positions, 3)); geometry.computeVertexNormals();
     const cap = ['张家界石柱', '空中圆形山', '斜伸岩柱'].includes(solid.name), colors = [], biomes = [], color = new THREE.Color();
@@ -187,9 +155,9 @@ export class MountainView extends THREE.Group {
       const fraction=along-index,inset=Math.sqrt((i+0.5)/count)*JOURNEY.pillars.crownInset;
       const x=center[0]+(a[0]+(b[0]-a[0])*fraction-center[0])*inset;
       const z=center[1]+(a[1]+(b[1]-a[1])*fraction-center[1])*inset;
-      trees.push({x,y:floor+top-0.2,z,scale:12+(i%7)*1.4,yaw:i*2.399963,color:this.settings.canopyColors[i%this.settings.canopyColors.length]});
+      trees.push({x,y:floor+top-0.2,z,yaw:i*2.399963,color:this.settings.canopyColors[i%this.settings.canopyColors.length]});
     }
-    this.addForestChunk(trees);
+    yield* this.addForestChunk(trees);
   }
 
   update(camera) {

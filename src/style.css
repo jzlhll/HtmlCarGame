@@ -328,3 +328,6 @@ cjk-text { font-size: calc(1em + 1px); }
 
 .lightning-fault{position:fixed;z-index:15;left:50%;bottom:calc(26% + 12px);transform:translateX(-50%);padding:7px 13px;border:1px solid #ffb096;border-radius:8px;background:#741e19e8;color:#fff0dd;font-size:16px;font-weight:700;box-shadow:0 0 14px #c4473155;pointer-events:none}
 .lightning-fault small{display:block;font-size:13px;margin-top:2px;color:#ffcfb8}
+
+.glass-damage {flex:0 0 auto;color:#ffb347;font-size:17px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;text-shadow:0 1px 4px #281000;letter-spacing:-.5px;}
+@media(max-width:900px){.glass-damage{font-size:15px;}}

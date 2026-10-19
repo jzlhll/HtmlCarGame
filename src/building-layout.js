@@ -1,4 +1,4 @@
-import { AIRCRAFT, LANDSCAPE } from './config.js';
+import { AIRCRAFT, LANDSCAPE, WORLD_VARIATION } from './config.js';
 
 function siteHash(x,z) {
   let hash=Math.imul(Math.round(x),73856093)^Math.imul(Math.round(z),19349663);
@@ -19,7 +19,10 @@ export function cityBuildingSites(settings, excluded=()=>false) {
     const profile=city.profiles[index%city.profiles.length];let state=site.hash;
     const random=()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296;};
     const sample=range=>range[0]+random()*(range[1]-range[0]);
-    return {x:site.x,z:site.z,width:Math.min(limit,sample(profile.width)),depth:Math.min(limit,sample(profile.depth)),
+    const width=Math.min(limit,sample(profile.width)),depth=Math.min(limit,sample(profile.depth));
+    // 随机偏移仍限于原楼体包络内，500米通道和道路净空保持不变。
+    const shift={x:0,z:0,maxX:Math.min(WORLD_VARIATION.cityJitter,Math.max(0,(limit-width)/2)),maxZ:Math.min(WORLD_VARIATION.cityJitter,Math.max(0,(limit-depth)/2))};
+    return {x:site.x,z:site.z,width,depth,shift,
       height:sample(profile.height),color:city.colors[Math.floor(random()*city.colors.length)],profile:profile.id};
   });
 }
@@ -29,7 +32,7 @@ export function buildingParts(site) {
   let hash=Math.imul(Math.round(site.x),73856093)^Math.imul(Math.round(site.z),19349663);
   hash=Math.imul(hash^(hash>>>13),1274126177);
   const parts=[],style=site.profile==='broad'||site.profile==='lowrise'?(hash>>>0)%2:(hash>>>0)%5;
-  const box=(x,z,bottom,height,width,depth,role='wall')=>parts.push({x,z,y:bottom+height/2,width,depth,height,role,style});
+  const box=(x,z,bottom,height,width,depth,role='wall')=>parts.push({x,z,y:bottom+height/2,width,depth,height,role,style,shift:site.shift});
   const {x,z,width,depth,height}=site;
   if(height<45)box(x,z,0,height,width,depth);
   else {

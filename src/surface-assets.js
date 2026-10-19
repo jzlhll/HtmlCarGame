@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { SURFACE_APPEARANCE, LANDSCAPE, AIRCRAFT, LOOP_WORLD, COUNTRYSIDE, JOURNEY, WORLD_TRAVEL, WORLD_BOUNDARY, REGION_BLEND, CITY_STREETS, WEATHER, LEVELS, WORLD_HEIGHT } from './config.js';
+import { SURFACE_APPEARANCE, LANDSCAPE, AIRCRAFT, LOOP_WORLD, COUNTRYSIDE, JOURNEY, WORLD_TRAVEL, WORLD_BOUNDARY, REGION_BLEND, CITY_STREETS, WEATHER, LEVELS, WORLD_HEIGHT, TREE_CONTACT, TREE_MODELS } from './config.js';
 import { fuselageGeometry, aircraftDoorGeometry, engineGeometry, fanGeometry, treeCrownGeometry, wingGeometry } from './model-geometry.js';
 import { surfacePixels, terrainPixels, environmentPixels, mipmapPixels } from './surface-recipes.js';
 import { GenerationQueue } from './generation-queue.js';
@@ -8,6 +8,7 @@ import { SurfaceCache } from './surface-cache.js';
 import { PixelWorker } from './pixel-worker.js';
 import { loopTerrainData } from './loop-world.js';
 import { boundaryData } from './world-boundary.js';
+import { treeProfiles } from './tree-species.js';
 
 const textures = new Map(), geometries = new Map();
 const textureNames = ['asphalt-color','asphalt-detail','paint-detail','panel-detail','metal-detail','terrain-detail','environment','grass-color','concrete-color','facade-color','facade-detail','rubber-detail'];
@@ -226,7 +227,8 @@ function resourceManifest() {
   }
   entries.push(['scene/weather',{settings:WEATHER,levels:LEVELS,height:WORLD_HEIGHT.displayScale}]);
   entries.push(['scene/streets',{settings:CITY_STREETS,city:LANDSCAPE.city,changsha:JOURNEY.changsha,island:JOURNEY.island,landmarks:LANDSCAPE.landmarks}]);
-  entries.push(['scene/country',{recipe:COUNTRYSIDE.cacheRecipe,country:COUNTRYSIDE,terrain:LANDSCAPE,journey:JOURNEY,world:WORLD_TRAVEL,loop:LOOP_WORLD,blend:REGION_BLEND}]);
+  entries.push(['scene/trees',{profiles:treeProfiles,recipe:TREE_MODELS.recipe,seed:TREE_MODELS.seed,nearDetail:TREE_MODELS.nearDetail,farDetail:TREE_MODELS.farDetail,branchSegments:TREE_MODELS.branchSegments}]);
+  entries.push(['scene/country',{recipe:COUNTRYSIDE.cacheRecipe,trees:{models:TREE_MODELS,tallRatio:TREE_CONTACT.tallRatio,tallHeight:TREE_CONTACT.tallHeight,unitHeight:TREE_CONTACT.unitHeight},country:COUNTRYSIDE,terrain:LANDSCAPE,journey:JOURNEY,world:WORLD_TRAVEL,loop:LOOP_WORLD,blend:REGION_BLEND}]);
   return entries;
 }
 

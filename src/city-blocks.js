@@ -45,10 +45,12 @@ export function* createCityBlocks(sites, floorAt=()=>0, shared={}) {
   };
   material.customProgramCacheKey=()=> 'city-filtered-facades-v3';
   const mesh=new THREE.InstancedMesh(geometry,material,parts.length),pose=new THREE.Object3D(),color=new THREE.Color();
-  const details=[];
+  const details=[],movements=[];
+  const track=(target,index,x,z,shift)=>{if(shift)movements.push({target,index,x,z,shift});};
   for(const [index,part] of parts.entries()){
     pose.position.set(part.x,part.floor+part.y,part.z);pose.scale.set(part.width,part.height,part.depth);pose.updateMatrix();mesh.setMatrixAt(index,pose.matrix);mesh.setColorAt(index,color.setHex(part.color));
     sizes.set([part.width,part.height,part.depth],index*3);
+    track(mesh,index,part.x,part.z,part.shift);const detailStart=details.length;
     // 楼层交给过滤后的立面贴图；实体只保留屋顶、女儿墙与设备箱。
     const roof=part.floor+part.y+part.height/2;
     details.push({x:part.x,y:roof+appearance.roofThickness/2,z:part.z,w:part.width+.3,h:appearance.roofThickness,d:part.depth+.3});
@@ -57,12 +59,14 @@ export function* createCityBlocks(sites, floorAt=()=>0, shared={}) {
       details.push({x:part.x+side*(part.width/2-appearance.parapetThickness/2),y:roof+appearance.parapetHeight/2,z:part.z,w:appearance.parapetThickness,h:appearance.parapetHeight,d:part.depth});
       details.push({x:part.x,y:roof+appearance.parapetHeight/2,z:part.z+side*(part.depth/2-appearance.parapetThickness/2),w:part.width,h:appearance.parapetHeight,d:appearance.parapetThickness});
     }
+    for(let i=detailStart;i<details.length;i++)details[i].shift=part.shift;
     if(index%16===0)yield;
   }
   yield 'boundary';mesh.computeBoundingSphere();mesh.receiveShadow=true;group.add(mesh);
   const trim=new THREE.InstancedMesh(shared.cube,shared.trimMaterial??=new THREE.MeshStandardMaterial({color:0xa7aaa0,roughness:.82,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1}),details.length);
   for(const [index,part] of details.entries()){
     pose.position.set(part.x,part.y,part.z);pose.scale.set(part.w,part.h,part.d);pose.updateMatrix();trim.setMatrixAt(index,pose.matrix);
+    track(trim,index,part.x,part.z,part.shift);
     if(index%128===0)yield;
   }
   yield 'boundary';trim.computeBoundingSphere();group.add(trim);
@@ -78,8 +82,16 @@ export function* createCityBlocks(sites, floorAt=()=>0, shared={}) {
   const shadows=new THREE.InstancedMesh(shadowGeometry,shadowMaterial,sites.length);
   for(const [index,site] of sites.entries()){
     pose.position.set(site.x+site.height*.16,floorAt(site.x,site.z)+.07,site.z+site.height*.12);pose.scale.set(site.width+site.height*.32,1,site.depth+site.height*.24);pose.rotation.set(0,0,0);pose.updateMatrix();shadows.setMatrixAt(index,pose.matrix);
+    track(shadows,index,site.x+site.height*.16,site.z+site.height*.12,site.shift);
     if(index%32===0)yield;
   }
   yield 'boundary';shadows.computeBoundingSphere();group.add(shadows);
+  if(movements.length){
+    const update=()=>{
+      for(const {target,index,x,z,shift}of movements){const offset=index*16;target.instanceMatrix.array[offset+12]=x+shift.x;target.instanceMatrix.array[offset+14]=z+shift.z;}
+      for(const target of [mesh,trim,shadows]){target.instanceMatrix.needsUpdate=true;target.computeBoundingSphere();}
+    };
+    update();shared.variationViews?.push(update);
+  }
   return group;
 }

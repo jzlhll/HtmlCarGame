@@ -28,7 +28,7 @@ export class UI {
     setText(document.getElementById('runway-code'), `Runway ${RUNWAY.designator} / engine OFF`);
     this.elements = {};
     for (const id of ['welcome', 'preview-banner', 'instruments', 'startup-strip', 'pause-overlay',
-      'exterior-caption', 'elapsed', 'error-overlay', 'error-message', 'resume-button', 'intro-sequence', 'countdown-number', 'countdown-caption', 'countdown-heading', 'countdown-tip', 'landing-debug', 'pause-copy', 'startup-hint-copy', 'startup-prompt', 'attitude-preview', 'gear-preview', 'gear-preview-label', 'flight-status', 'airspeed-value', 'altitude-value', 'vertical-speed-value', 'attitude-value', 'attitude-label', 'ground-speed', 'flight-guide', 'lightning-fault', 'result-overlay', 'result-title', 'result-reason', 'result-caption', 'result-stats', 'restart-button', 'next-level-button']) {
+      'exterior-caption', 'elapsed', 'error-overlay', 'error-message', 'resume-button', 'intro-sequence', 'countdown-number', 'countdown-caption', 'countdown-heading', 'countdown-tip', 'landing-debug', 'pause-copy', 'startup-hint-copy', 'startup-prompt', 'attitude-preview', 'gear-preview', 'gear-preview-label', 'flight-status', 'airspeed-value', 'altitude-value', 'vertical-speed-value', 'attitude-value', 'attitude-label', 'ground-speed', 'flight-guide', 'lightning-fault', 'glass-damage', 'result-overlay', 'result-title', 'result-reason', 'result-caption', 'result-stats', 'restart-button', 'next-level-button']) {
       this.elements[id] = document.getElementById(id);
     }
     this.attitudeMark = container.querySelector('.attitude-mark');
@@ -160,6 +160,9 @@ export class UI {
     this.updateLandingGuide();
     this.elements['lightning-fault'].hidden=!this.game.aircraft.lightningStrike || this.game.view!=='COCKPIT' || ['CRASH','COMPLETE','RESULT'].includes(this.game.phase);
     const a = this.game.aircraft, systems = a.systems, flight = this.game.flight;
+    const glass=this.elements['glass-damage'];glass.hidden=a.glassDamage<=0||this.game.view!=='COCKPIT';
+    setText(glass,`−${a.glassDamage}%`);
+    if(this.glassReading!==a.glassDamage){this.glassReading=a.glassDamage;glass.setAttribute('aria-label',`风挡玻璃损伤${a.glassDamage}%，剩余承受度${100-a.glassDamage}%`);glass.title=`Windshield（风挡玻璃）：剩余承受度${100-a.glassDamage}%`;}
     const speed = this.game.mission.approaching && !a.onGround ? Number(a.airspeed.toFixed(2)) : Math.round(a.airspeed), altitude = Math.floor(displayHeight(flight.altitude()));
     const gearReady = flight.canRetractGear();
     const gearHidden = this.game.view !== 'COCKPIT' || flight.altitude() >= FLIGHT.gearPreviewHeight || ['COMPLETE', 'RESULT'].includes(this.game.phase);

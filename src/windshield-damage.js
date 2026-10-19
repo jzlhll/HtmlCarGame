@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { DESTRUCTION } from './config.js';
 
-// 两块玻璃的裂纹在准备时创建并预热，鸟击只切换可见性及冲击亮度。
+// 两块风挡的完整裂纹在准备期创建；损伤仅改变绘制范围、可见性和冲击亮度。
 export class WindshieldDamage extends THREE.Group {
   constructor() {
     super();
@@ -51,7 +51,7 @@ export class WindshieldDamage extends THREE.Group {
       const facetMaterial=new THREE.MeshBasicMaterial({color:settings.facetColor,vertexColors:true,transparent:true,opacity:0.055,side:THREE.DoubleSide,depthTest:false,depthWrite:false,fog:false,toneMapped:false});
       const glass=new THREE.Mesh(pieces,facetMaterial);glass.renderOrder=29;
       pane.add(glass,edge,cracks);pane.traverse(part=>{part.frustumCulled=false;});pane.visible=false;
-      this.panes.push({pane,crackMaterial,facetMaterial});this.add(pane);
+      this.panes.push({pane,geometry,pieces,crackMaterial,facetMaterial});this.add(pane);
     }
     this.position.z=-settings.distance;
   }
@@ -62,14 +62,17 @@ export class WindshieldDamage extends THREE.Group {
   }
 
   update(game) {
-    const count=game.aircraft.birdStrikeCount;
-    const flash=Math.max(0,1-(game.activeSeconds-game.birdImpactAt)/DESTRUCTION.glass.flashSeconds);
+    const damage=game.aircraft.glassDamage;
+    const clock=game.activeSeconds+(game.glassFailure?game.completionElapsed:0);
+    const flash=Math.max(0,1-(clock-game.glassImpactAt)/DESTRUCTION.glass.flashSeconds);
     for(let index=0;index<this.panes.length;index++) {
-      const {pane,crackMaterial,facetMaterial}=this.panes[index];
-      pane.visible=index<count;
-      const impact=index===Math.min(count,this.panes.length)-1?flash:0;
-      crackMaterial.opacity=DESTRUCTION.glass.opacity+(1-DESTRUCTION.glass.opacity)*impact;
-      facetMaterial.opacity=0.055+0.16*impact;
+      const {pane,geometry,pieces,crackMaterial,facetMaterial}=this.panes[index];
+      const progress=Math.max(0,Math.min(1,(damage-index*50)/50));pane.visible=progress>0;
+      geometry.setDrawRange(0,Math.ceil(geometry.attributes.position.count*progress/2)*2);
+      pieces.setDrawRange(0,Math.ceil(pieces.attributes.position.count*progress/3)*3);
+      const impact=index===Math.min(Math.ceil(damage/50),this.panes.length)-1?flash:0;
+      crackMaterial.opacity=.45+(DESTRUCTION.glass.opacity-.45)*progress+(1-DESTRUCTION.glass.opacity)*impact;
+      facetMaterial.opacity=.025+.055*progress+.16*impact;
     }
   }
 }

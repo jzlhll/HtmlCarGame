@@ -1,4 +1,5 @@
-import { AIRCRAFT, FLIGHT, AIRPORT_TRAFFIC, WORLD_TRAVEL, worldHorizontalSpeed, displayHeight, WORLD_BOUNDARY } from './config.js';
+import { AIRCRAFT, FLIGHT, AIRPORT_TRAFFIC, TREE_CONTACT, WORLD_TRAVEL, worldHorizontalSpeed, displayHeight, WORLD_BOUNDARY } from './config.js';
+import { GlassIntegrity } from './glass-integrity.js';
 import { createAirportTraffic, airportTrafficHit, hitAirportTruck, stoppedOnRunway } from './airport-traffic.js';
 
 const clamp = (v, low, high) => Math.max(low, Math.min(high, v));
@@ -9,6 +10,7 @@ export class Mission {
   constructor(aircraft, flight, world) {
     this.aircraft = aircraft; this.flight = flight; this.world = world;
     this.route = world.route;
+    this.glass=new GlassIntegrity(aircraft);
     this.started = false; this.elapsed = 0; this.flightSeconds = 0; this.path = [[aircraft.position.x, aircraft.position.z]];
     this.sampleElapsed = 0; this.contacts = []; this.nextEncounter = 0;
     this.waterfallsPassed = new Set();
@@ -111,6 +113,12 @@ export class Mission {
     }
     const collision = this.world.collision(a, flight.previous);
     if (collision) return [{type: 'failed', key: 'obstacle', destructive: true, reason: collision===WORLD_BOUNDARY.name?WORLD_BOUNDARY.reason:`障碍碰撞：飞机撞上${collision}，碰撞时海拔${Math.round(displayHeight(a.position.y))}米。`}];
+    if(this.world.treeContact()&&this.glass.hit('tree',this.elapsed)){
+      a.airspeed*=TREE_CONTACT.treeSpeedRetention;
+      a.velocity.x*=TREE_CONTACT.treeSpeedRetention;a.velocity.z*=TREE_CONTACT.treeSpeedRetention;
+      events.push({type:'tree-strike',key:'trees'});
+      if(a.glassDamage>=100)return [{type:'failed',key:'glass',reason:'风挡玻璃完全破碎：累计损伤达到100%，玻璃承受度耗尽。'}];
+    }
     for (const actor of this.airportTraffic) {
       if (!airportTrafficHit(actor, this.world)) continue;
       if (actor.kind === 'aircraft') return [{type:'failed',key:actor.id,destructive:true,reason:`跑道碰撞：撞上${this.route.destinationName}机场入口后${Math.round(this.route.destination.threshold - actor.position.z)}米处停放的飞机。`}];
@@ -163,12 +171,14 @@ export class Mission {
       if (!a.onGround && !contact.hit && this.trafficCollision(contact, this.world.bodySweep)) {
         if (contact.kind==='aircraft') return [{type:'failed',key:'traffic',destructive:true,reason:`空中碰撞：撞上${courses[contact.course]}接近的客机。`}];
         contact.hit=true; contact.danger=false;
+        if(!this.glass.hit('bird',this.elapsed))continue;
         a.birdStrike=true; a.birdStrikeCount++; flight.limitSpeed();
+        if(a.glassDamage>=100)return [{type:'failed',key:'glass',reason:'风挡玻璃完全破碎：累计损伤达到100%，玻璃承受度耗尽。'}];
         if (flight.thrustLocked) {
           if (flight.speedTapDirection>0) flight.speedTapRemaining=0;
           a.throttle=0; a.enginePower=0; a.thrust=0;
         }
-        events.push({type:'bird-strike',key:`contact-${contact.id}`,reason:a.birdStrikeCount>=this.route.birdThrustLockHits ? 'Bird strike（再次鸟击）：又一块玻璃破裂，T 加速已失效，本关持续，下一关恢复。' : `Bird strike（鸟击）：一块玻璃破裂，本关最高空速为 ${Math.round(flight.maxSpeed)} km/h（原来的80%）。`});
+        events.push({type:'bird-strike',key:`contact-${contact.id}`,reason:a.birdStrikeCount>=this.route.birdThrustLockHits ? 'Bird strike（再次鸟击）：玻璃损伤增加20%，T 加速已失效，本关持续，下一关恢复。' : `Bird strike（鸟击）：玻璃损伤增加20%，本关最高空速为 ${Math.round(flight.maxSpeed)} km/h（原来的80%）。`});
       }
     }
     let live = 0;

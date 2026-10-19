@@ -41,10 +41,26 @@ export const WORLD_BOUNDARY = {
   name: '航道高山', reason: '偏离航道太远，撞上高山。',
 };
 
+export const TREE_CONTACT = {
+  cell:512,tallRatio:.3,tallHeight:[5000,10000].map(v=>v/WORLD_HEIGHT.displayScale),unitHeight:1.065,
+  windowSeconds:3,treeDamage:5,birdDamage:20,treeSpeedRetention:.95,
+};
+export const TREE_MODELS = {
+  recipe:1,seed:643179,nearDetail:1,farDetail:0,branchSegments:8,
+  species:[
+    {id:'poplar',name:'杨树',height:[800,4800],width:[.18,.27],radius:.58,tall:true,color:0x8ba75d},
+    {id:'banyan',name:'榕树',height:[700,2700],width:[1.3,1.9],radius:.78,tall:false,color:0x6b9657},
+    {id:'willow',name:'柳树',height:[400,2400],width:[.9,1.35],radius:.62,tall:false,color:0x9eb66b},
+    {id:'pine',name:'松树',height:[650,4500],width:[.4,.6],radius:.56,tall:true,color:0x769c76},
+    {id:'ginkgo',name:'银杏',height:[600,3500],width:[.85,1.25],radius:.70,tall:false,color:0xb7b34f},
+    {id:'shrub',name:'灌木',height:[30,220],width:[1.6,2.8],radius:.59,tall:false,color:0x86a457},
+  ],
+};
+
 export const REGION_BLEND = {
-  length: 6000, width: 12000, seed: 952731, treeHeight: [60, 145],
+  length: 6000, width: 12000, seed: 952731,
   approachClearance: 13000, airportHalfWidth: 750,
-  treeArea: 14000, treeNear: 1300, treeFar: 15000,
+  treeArea: 100000, treeNear: 1300, treeFar: 15000,
 };
 
 export const HARBOR = {
@@ -53,8 +69,8 @@ export const HARBOR = {
 };
 
 export const COUNTRYSIDE = {
-  cacheRecipe: 5, treeNear: 1800, treeFar: 10500,
-  fieldSpacing: 420, fieldDepth: 310, roadWidth: 28, treeArea: 18000,
+  cacheRecipe: 7, treeNear: 1800, treeFar: 10500,
+  fieldSpacing: 420, fieldDepth: 310, roadWidth: 28, treeArea: 110000,
   fieldColors: [0x74784b,0x8d8850,0x6e7a45,0x9b8b62,0x536748,0x8b795c,0xa19b6b,0x657751],
   treeColors: [0x334b2d,0x41562f,0x4c6037,0x2d442d],
 };
@@ -229,7 +245,7 @@ export const DESTRUCTION = {
   gravity: 9.81, fireColor: 0xff8c25, smokeColor: 0x302c2a, sparkColor: 0xffd47b,
   camera: [49, 23, 45], cameraShake: 0.5, charColor: 0x302a27,
   birdShakeSeconds: 0.35, birdShakeAngle: 0.008,
-  glass: {seed: 53721, distance: 1.7, spokes: 15, rings: 4, flashSeconds: 0.3,
+  glass: {seed: 53721, distance: 1.7, spokes: 15, rings: 4, flashSeconds: 0.3, failureSeconds: .9,
     lineColor: 0xe3f5fc, edgeColor: 0x344952, facetColor: 0xc7e8f2, opacity: 0.82},
 };
 
@@ -263,16 +279,20 @@ export const CONTROLS = {
 
 // 地标采用轮廓化比例，集中于虚构河湾城市，不对应真实城市间的地理位置。
 export const WEATHER = {
-  recipe: 10, seed: 798431, width: 2800, length: 4000, height: 6720 / WORLD_HEIGHT.displayScale,
+  recipe: 11, seed: 798431, width: 2800, length: 4000, height: 5376 / WORLD_HEIGHT.displayScale,
   highBand: [7800,8500].map(v=>v/WORLD_HEIGHT.displayScale),
   thinBand: [5800,6500].map(v=>v/WORLD_HEIGHT.displayScale), thinDensity: .36,
-  startZ: -11000, spacing: 14500, lateralSpread: 1800, windKmh: 100,
-  wrapMinX: -29000, wrapMaxX: 29000, variants: 4, puffs: 22, meshGrid: [40,32,40], blend: .24,
+  startZ: -11000, spacing: 14500, lateralSpread: 3500, alongJitter: 1000, headingSpread: .25, windKmh: 100,
+  wrapMinX: -29000, wrapMaxX: 29000, variants: 6, puffs: 22, meshGrid: [40,32,40], blend: .14,
   // 600 km/h下计入4倍位移，雾远端至少留4秒行程，前方2秒的物体仍有约一半对比度。
   whiteVisibility: Math.max(SCENERY.fogFar*.1,worldHorizontalSpeed(FLIGHT.maxSpeed/3.6)*4),
   thinVisibility: Math.max(SCENERY.fogFar*.15,worldHorizontalSpeed(FLIGHT.maxSpeed/3.6)*6), stormVisibilityRatio: .5,
   flashInterval: [8,16], flashSeconds: .22, strikeChance: .025, maxClouds: 128,
 };
+
+export const WEATHER_MOTION = { periodSeconds:15 };
+
+export const WORLD_VARIATION = { cityJitter: 220 };
 
 export const CITY_STREETS = {
   recipe: 3, seed: 814379, widths: [36,96,360], primaryEvery: 3, alleyInset: 150, alleyRoadGap: 12,
@@ -333,8 +353,8 @@ export const LANDSCAPE = {
     snowHeight: 6200, snowTransition: 1100, treeLine: 2400, treeTransition: 900,
     rockScale: 0.008, detailScale: 0.13, bumpStrength: 1.1, textureSize: 512,
     rockColor: 0x888477, soilColor: 0x827657, danxiaColor: 0xa45f42,
-    vegetationSlope: [0.22, 0.62], forestSpacing: 20, maxTrees: 2100,
-    treeHeight: [16, 30], treeNear: 1700, treeFar: 6200, forestCell: 640,
+    vegetationSlope: [0.22, 0.62], forestSpacing: 80, maxTrees: 420,
+    treeNear: 1700, treeFar: 6200, forestCell: 640,
     canopyColors: [0x344c28, 0x465c2e, 0x536437, 0x2d4829],
     sunDirection: [-0.5, 0.8, -0.35], ambientStrength: 1.05, sunStrength: 2.7,
     rockSides: 28, rockRings: 17, resourceBudgetMb: GAME.packageLimitMb,
@@ -438,16 +458,16 @@ export const JOURNEY = {
   pillarSurface: { light: 0xe3c68e, weathered: 0x92723e, capLight: 0x708c45,
     patchScale: 0.007, heightScale: 0.0015, streakScale: 0.027, streakDrift: 0.0012,
     lightBlend: 0.38, weathering: 0.48, weatherThreshold: [0.45,0.8], strataStrength: 0.55 },
-  pillars: { seed: 2387410263, count: 24, depthScale: 5, startZ: clusterZ('pillars', -12800), spacing: 2200, minHeight: 2100, heightRange: 1900, heightBias: 3, minRadius: 110, radiusRange: 100,
+  pillars: { seed: 2387410263, count: 24, depthScale: 1.65, startZ: clusterZ('pillars', -12800), spacing: 2200, minHeight: 2100, heightRange: 1900, heightBias: 3, minRadius: 450, radiusRange: 200,
     shapeVariation: 0.12, crownInset: 0.73,
     forms: [
       { width: 1, depth: 0.9, cutDepth: 0.55, cuts: 1 },
-      { width: 0.48, depth: 1, cutDepth: 0.68, cuts: 2 },
+      { width: 0.85, depth: 1, cutDepth: 0.68, cuts: 2 },
       { width: 0.85, depth: 0.9, cutDepth: 0.48, cuts: 3 },
       { width: 1, depth: 1, cutDepth: 0.86, cuts: 1 },
     ] },
-  skyRock: { x: 0, z: clusterZ('pillars', -13750), bottom: 850, top: 2600, radius: 310, color: 0xc0a374 },
-  slantedRock: { x: -880, z: clusterZ('pillars', -14150), bottom: 0, top: 2400, radius: 220, lean: 300, color: 0xc3a36a },
+  skyRock: { x: 0, z: clusterZ('pillars', -13750), bottom: 850, top: 2600, radius: 620, color: 0xc0a374 },
+  slantedRock: { x: -880, z: clusterZ('pillars', -14150), bottom: 0, top: 2400, radius: 440, lean: 300, color: 0xc3a36a },
   skyFalls: [
     { id: 'sky-falls', x: 0, z: clusterZ('pillars', -13390), bottom: 0, top: 1100, width: 190, passable: true },
     { id: 'side-falls', x: -540, z: clusterZ('pillars', -13920), bottom: 0, top: 760, width: 150, passable: true },

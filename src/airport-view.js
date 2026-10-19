@@ -119,15 +119,16 @@ export class AirportView extends THREE.Group {
     const crowns = new THREE.InstancedMesh(modelGeometry('tree-crown'), crown, 80);
     const dummy=new THREE.Object3D();
     const crownCenterZ = 250 - 19.5 * 105 + offset;
-    let treeCount=0;
+    let treeCount=0;this.treeMatrices=new Float32Array(80*16);const contactPose=new THREE.Object3D();
     for (let i = 0; i < 80; i++) {
       const side = i % 2 ? -1 : 1;
       const x = side * (350 + Math.sin(i * 2.1) * 90), z = 250 - Math.floor(i / 2) * 105 + offset;
       if(isWithinRunway({x,z},runway,60)||!destination&&coastalLandWeight(x,z)<.99)continue;
+      contactPose.position.set(x,this.position.y,z);contactPose.scale.set(10,12.7,10);contactPose.updateMatrix();this.treeMatrices.set(contactPose.matrix.elements,treeCount*16);
       dummy.position.set(x, 2.5, z); dummy.updateMatrix(); trunks.setMatrixAt(treeCount, dummy.matrix);
       dummy.position.y = 0; dummy.position.z -= crownCenterZ; dummy.updateMatrix(); crowns.setMatrixAt(treeCount++, dummy.matrix);
     }
-    trunks.count=crowns.count=treeCount;
+    trunks.count=crowns.count=treeCount;this.treeCount=treeCount;
     trunks.computeBoundingSphere(); crowns.computeBoundingSphere();
     const farCrowns = new THREE.InstancedMesh(modelGeometry('tree-crown-far'), crown, 80);
     farCrowns.count=treeCount;
