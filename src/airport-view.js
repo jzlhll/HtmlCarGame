@@ -139,6 +139,12 @@ export class AirportView extends THREE.Group {
     this.batchSurfaces();
   }
 
+  updateMatrixWorld(force) {
+    // 完成首轮矩阵更新并冻结后，机场无需逐帧遍历静止构件。
+    if(!this.matrixWorldAutoUpdate&&!this.matrixWorldNeedsUpdate)return;
+    super.updateMatrixWorld(force);
+  }
+
   batchSurfaces() {
     // 每座机场独立合批，长跑道标线沿用完整批次。
     batchStaticMeshes(this, Infinity);

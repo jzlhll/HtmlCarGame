@@ -26,8 +26,10 @@ export function* batchStaticMeshSteps(root, cellSize = LANDSCAPE.staticBatchCell
   }
   for (const entries of batches.values()) {
     if (entries.length < 2) continue;
-    const parts=[];for(const {mesh,transform}of entries){
-      const geometry=mesh.geometry.index?mesh.geometry.toNonIndexed():mesh.geometry.clone();
+    // 全索引分组保留共享顶点；混合分组才统一展开，避免合并属性不兼容。
+    const indexed=entries.every(({mesh})=>mesh.geometry.index!==null),parts=[];
+    for(const {mesh,transform}of entries){
+      const geometry=!indexed&&mesh.geometry.index?mesh.geometry.toNonIndexed():mesh.geometry.clone();
       parts.push(geometry.applyMatrix4(transform));yield;
     }
     const source = entries[0].mesh, geometry = mergeGeometries(parts);

@@ -31,6 +31,12 @@ export class LandscapeView extends THREE.Group {
     this.textures=[];
   }
 
+  updateMatrixWorld(force) {
+    // 地景队列完成后才跳过静止子树；循环槽重定位仍由LoopView显式解冻并更新。
+    if(this.transitionQueue?.state==='complete'&&!this.matrixWorldAutoUpdate&&!this.matrixWorldNeedsUpdate)return;
+    super.updateMatrixWorld(force);
+  }
+
   *addGround() {
     const settings=LANDSCAPE.coast,surface=this.world.coastalSurface;
     const material=new THREE.MeshStandardMaterial({color:SCENERY.colors.ground,roughness:1});
