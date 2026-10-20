@@ -52,9 +52,9 @@ export const TREE_HEIGHTS = {
   mountainFloor:[200,1000].map(v=>v/WORLD_HEIGHT.displayScale),
 };
 export const TREE_MODELS = {
-  recipe:3,seed:643179,nearDetail:1,farDetail:0,branchSegments:8,
-  leafCards:[6,10,8,6,8,8],midLeafCards:2,leafAlphaCutoff:.4,
-  chunkSize:2400,midDistance:1800,farCrownGroups:[4,4,4,6,4,3],
+  recipe:5,seed:643179,nearDetail:1,farDetail:0,branchSegments:8,
+  leaflets:[32,40,48,28,36,32],midLeafCards:3,leafAlphaCutoff:.32,leafLightFill:.22,
+  chunkSize:2400,midDistance:10000,visibleDistance:12000,blurDistance:[12000,22000],farCrownGroups:[4,4,4,6,4,3],
   species:[
     {id:'poplar',name:'杨树',height:[800,4800],width:[.18,.27],radius:.58,tall:true,color:0x8ba75d},
     {id:'banyan',name:'榕树',height:[700,2700],width:[1.3,1.9],radius:.78,tall:false,color:0x6b9657},
@@ -65,7 +65,9 @@ export const TREE_MODELS = {
   ],
 };
 
-export const FOLIAGE_TEXTURE = {recipe:1,seed:715391,size:512,tiles:2};
+export const FOLIAGE_TEXTURE = {recipe:3,seed:715391,size:1024,tiles:2,source:'foliage-source-v1'};
+export const ROCK_SURFACE = {recipe:1,bandScale:.025,fractureStrength:.24,fineFade:[10000,22000],blurDistance:[12000,23000]};
+export const FACADE_SURFACE = {recipe:1,seed:851627,frameShade:.72,glassRoughness:.34,stoneRoughness:.86,farFilter:5,blurDistance:[10000,22000]};
 
 export const REGION_BLEND = {
   length: 6000, width: 12000, seed: 952731,
@@ -156,7 +158,7 @@ export const COCKPIT = {
 export const SCENERY = {
   groundSize: 80000,
   skyRadius: 32000,
-  fogNear: 6000,
+  fogNear: 12000,
   fogFar: LOOP_WORLD.radius,
   shadowSize: 2048,
   surfaceLayers: { shoulder: 1, pavement: 2, marking: 3 },

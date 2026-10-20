@@ -1,8 +1,20 @@
 import { FOLIAGE_TEXTURE } from './config.js';
+import { foliageSourcePixels } from './foliage-source.js';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 
 // 四种枝叶图集由同一Worker逐行绘制，背景透明，含叶缘、叶脉与针叶。
 export function* foliagePixels(size){
+  const source=yield {wait:foliageSourcePixels(size)};
+  if(source){
+    // 保留照片叶脉和明暗，降低饱和度，交由树种实例色统一季相与色调。
+    for(let y=0;y<size;y++){
+      for(let x=0;x<size;x++){
+        const i=(y*size+x)*4,light=source[i]*.2126+source[i+1]*.7152+source[i+2]*.0722,value=186+light*.26;
+        source[i]=value;source[i+1]=value*1.015;source[i+2]=value*.94;
+      }yield;
+    }
+    return source;
+  }
   const data=new Uint8Array(size*size*4),tile=size/2;let state=FOLIAGE_TEXTURE.seed,minX=0,minY=0,maxX=size,maxY=size;
   const random=()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296;};
   const put=(x,y,r,g,b,alpha)=>{

@@ -118,7 +118,7 @@ Flight.updateSpeedLimits读取固定150 km/h触发与165 km/h恢复阈值；Flig
 
 ## 第二阶段共享表面资源
 
-`src/surface-assets.js`组织12份基础纹理、24份共享几何与11项纹理增强任务。首屏不等待这些工作；基础模型、碰撞与必要GPU对象完成后进入四秒运镜。当前按第二阶段资源预算验收，额外准备余量以`GAME.scenePrepareLimitSeconds`为准。发布仍是原生ES Modules，只保存生成代码、配置和种子，不增加模型／纹理下载。
+`src/surface-assets.js`组织12份基础纹理、24份共享几何与11项纹理增强任务。首屏不等待这些工作；基础模型、碰撞与必要GPU对象完成后进入四秒运镜。当前按第二阶段资源预算验收，额外准备余量以`GAME.scenePrepareLimitSeconds`为准。发布仍是原生ES Modules，保存生成代码、配置、种子及必要枝叶源素材；模型和运行图集仍在许可准备窗口生成并持久复用。
 
 机身80个径向分段，发动机使用64段外壳、空心进气道与32片弯掠叶片。主翼和尾翼使用保留原平面轮廓的弧面翼型，增加圆钝前缘、薄后缘、翼尖收薄与金属前缘；起落架补充支杆、轮毂紧固件与圆肩轮胎。机场补充窗框、屋顶设备和机库结构。基础几何在开始前生成、合批并预热；机轮与减速板保持独立动画，碰撞采样与关卡布局不变。
 
@@ -126,7 +126,7 @@ Flight.updateSpeedLimits读取固定150 km/h触发与165 km/h恢复阈值；Flig
 
 `src/generation-queue.js`用requestIdleCallback调度非紧急任务；真实Loading改为后台scheduler.postTask持续推进，批间scheduler.yield，不支持时用setTimeout。CPU批次目标4毫秒，高刷新率或长帧时收紧可选批次。纹理按行／256像素块、机身按截面、其他几何按对象设置让出点。像素及mip计算由模块Worker完成，ArrayBuffer直接转移；停止时终止Worker，未完成数据在下次许可窗口重算。异步读取只保存返回值，重新校验队列状态及当前窗口后才继续创建或上传。
 
-静止等待时逐步把主要立面和岩纹提升至2048，其他地表与蒙皮纹理升至1024，舱框细纹512，金属256。颜色纹理在线性空间生成mip层，数值纹理直接平均；GPU按每层32行分批上传，整张完成才替换材质，释放旧GPU对象。上下文丢失使用AbortController中止未提交上传，恢复后重传，防止采用失效进度。反射集中用于玻璃、蒙皮和金属，粗糙地面与森林不增加环境反射采样。共享纹理及mip的估算体积约99.2 MiB，含单张待提交纹理时受128 MB生成预算约束；该值不是发布体积，也不代表整个场景显存。
+静止等待时逐步把主要立面和岩纹提升至2048，其他地表与蒙皮纹理升至1024，舱框细纹512，金属256。颜色纹理在线性空间生成mip层，数值纹理直接平均；GPU按每层32行分批上传，整张完成才替换材质，释放旧GPU对象。上下文丢失使用AbortController中止未提交上传，恢复后重传，防止采用失效进度。反射集中用于玻璃、蒙皮和金属，粗糙地面与森林不增加环境反射采样。共享纹理及mip的估算体积约103.2 MiB，含单张待提交2048纹理约124.5 MiB，受128 MiB生成预算约束；该值不是发布体积，也不代表整个场景显存。
 
 `src/surface-cache.js`通过IndexedDB保存原始像素、mip及几何属性／索引，键包含项目、生成器版本、配置哈希、关卡和种子。像素以512 KiB块读写，元数据最后提交；不完整或不匹配记录重新生成，旧配置记录按关卡清理。缓存不可用时退回内存，同页重开仍复用；命中持久缓存仍需初始化GPU对象。逻辑地形与查高继续使用同源世界数据，不混入旧视觉缓存。
 
@@ -250,9 +250,9 @@ runway-layout.js不依赖Three.js，提供runwayCenter、runwayOutline、isWithi
 
 TreeField从实际近景实例矩阵分批提取位置、旋转及非均匀尺度；512米网格只保存数值树索引，查询复用候选集合，按tree-species.js中同源椭球树冠及主要枝干采样逆变换扫掠点，细根不填满榕树拱下空隙。主场景山地、岩柱、田园、区域林带、橘子洲及机场树均登记；LoopWorld预分配四份模板索引与本地扫掠端点，覆盖邻格伸入的树冠。树木不写入致命boxCells；先判山石／建筑再判刮树，因此实际撞山仍按撞山失败。
 
-树身高度／冠幅读取TREE_HEIGHTS世界坐标连续场；山地树身最高300实际米／1500显示米，并按地形标高逐步收紧。田园300000平方米／候选树、林带260000平方米／候选树，山地180米网格且每块最多150棵。近模保留精细枝根，中模不显示须根，远模聚合树冠且只保留一条主干；近中模采用alpha裁剪叶簇，远模保留不透明实体冠形，均不使用透明混合。CanopyLOD按2.4公里小块的实际冠幅计算距离，350–450米外切中模、1800米外切远模；缓存恢复与外围克隆保持相同局部bounds。COUNTRYSIDE.cacheRecipe=9保存原始矩阵、颜色及Uint8树种索引并使旧记录失效，布局缓存指纹只覆盖树种id／height／width／tall、TREE_HEIGHTS及几何相关TREE_CONTACT参数，树模细节与叶片图集变化独立失效，伤害间隔、扣损及减速不参与。恢复缓存后从同一矩阵重建轻量索引，重开复用模型和索引。玻璃耗尽复用CRASH反馈时钟并保持destruction为空，避免生成爆炸或切换机外镜头。
+树身高度／冠幅读取TREE_HEIGHTS世界坐标连续场；山地树身最高300实际米／1500显示米，并按地形标高逐步收紧。田园300000平方米／候选树、林带260000平方米／候选树，山地180米网格且每块最多150棵。近模保留精细枝根，中模不显示须根，远模聚合树冠且只保留一条主干；近模使用实体小叶片，中模采用alpha裁剪叶簇，远模保留不透明实体冠形，均不使用透明混合。CanopyLOD按2.4公里小块的实际冠幅计算距离，350–450米外切中模、10000米外切远模；显示范围至少12000米，避免向更远处提交无必要的森林批次；缓存恢复与外围克隆保持相同局部bounds。COUNTRYSIDE.cacheRecipe=9保存原始矩阵、颜色及Uint8树种索引并使旧记录失效，布局缓存指纹只覆盖树种id／height／width／tall、TREE_HEIGHTS及几何相关TREE_CONTACT参数，树模细节与叶片图集变化独立失效，伤害间隔、扣损及减速不参与。恢复缓存后从同一矩阵重建轻量索引，重开复用模型和索引。玻璃耗尽复用CRASH反馈时钟并保持destruction为空，避免生成爆炸或切换机外镜头。
 
-植被模块分工：tree-species.js维护六种枝叶轮廓与数值接触源；tree-models.js分批生成和恢复十八份近中远原型（scene/trees，TREE_MODELS.recipe=3），校验position／normal／uv／color／foliage的Float32数据、长度及有限值；forest-view.js按2.4公里空间块及树种分为近中远实例组，CanopyLOD依据整个冠幅选择细节。每棵树的树种索引随矩阵一同缓存，恢复和外围克隆共享已准备几何及实例缓冲，游玩期不生成枝叶。树干用既有地形细纹表达纵向树皮，枝干逐段变细。近中模叶簇按树种使用阔叶／银杏／柳叶／松针四格图集，并限定在同源树冠椭球内；远模保留实体聚合树冠与单主干。foliage-texture.js通过surfacePixels接入现有Worker生成512×512 RGBA，base/foliage-color按FOLIAGE_TEXTURE的recipe／seed／size独立缓存；关闭flipY并夹紧边缘，避免图格交换和串色。材质alpha裁剪并写深度，不使用透明混合；不添加发布图片，全部原型与图集在准备期预热。
+植被模块分工：tree-species.js维护六种枝叶轮廓与数值接触源；tree-models.js分批生成和恢复十八份近中远原型（scene/trees，TREE_MODELS.recipe=5），校验position／normal／uv／color／foliage的Float32数据、长度及有限值；forest-view.js按2.4公里空间块及树种分为近中远实例组，CanopyLOD依据近中远三档几何包围盒的保守并集选择细节，先按当前相机视锥裁掉整块。视锥外只隐藏档位子树，保留LOD自身和_currentLevel滞回历史；转向及Gear view切换后重新判断。同一轮同相机共享预分配视锥，投影或相机矩阵变化时重算，不改变碰撞和持久数据配方。每棵树的树种索引随矩阵一同缓存，恢复和外围克隆共享已准备几何及实例缓冲，游玩期不生成枝叶。树干用既有地形细纹表达纵向树皮，枝干逐段变细。中模叶簇按树种使用阔叶／银杏／柳叶／松针四格图集，并限定在同源树冠椭球内；远模保留实体聚合树冠与单主干。foliage-source.js仅在缓存缺失的准备阶段解码透明源素材，四格内缩并处理为1024×1024 RGBA；foliage-texture.js通过surfacePixels接入现有Worker逐行中和色调，base/foliage-color按FOLIAGE_TEXTURE的recipe／seed／size／source独立缓存。源图加载或解码失败进入现有重试路径，不将退化结果写成成功缓存；不支持createImageBitmap的平台保留程序绘制路径。关闭flipY并夹紧边缘，避免图格交换和串色。近叶实体和中景alpha裁剪均写深度，不使用透明混合；全部原型与图集在准备期预热，命中缓存不再解码源图。
 
 ## 江湖与气流模块
 
@@ -261,3 +261,27 @@ regional-water.js输出逻辑bodies与合并renderBodies，内外环同时驱动
 AirCurrent在Game的有效飞行步、Flight之前推进，地面不计时；每局独立实例与种子，既有暂停门控阻止推进，重开清除。Flight.step第三参数接收速度增量、偏航／俯仰速率、风倾角与纠偏上限；速度增量在主动变速和阻力后叠加并统一限幅，不能消耗T／S点按额度。侧风纠偏独立于被风抵消后的bank计算；乱流俯仰同步移动pitchTarget，避免旧目标充当自动驾驶。全程只运算标量状态，不创建模型、纹理、Worker或计时器。
 
 森林外层按整片范围裁剪，内层按2.4公里块选择三级模型。CanopyLOD在世界矩阵冻结后跳过子树矩阵遍历；LoopView移动槽位前按既有机制启用worldAutoUpdate，强制更新后再次冻结，不能跳过这一步。接触索引仍按原始record只注册一次，与显示等级无关。
+
+## 绘制尺寸与DPR
+
+画布CSS保持容器100%宽高，绘制像素比仍以CAMERA.pixelRatioLimit=1.5为上限。ResizeObserver处理容器变化，resolution媒体查询监听缩放／跨显示器DPR变化并重新订阅当前值；resize读取逻辑尺寸与最新DPR，仅变化时调用setDrawingBufferSize，避免setPixelRatio与setSize连调导致重复缓冲分配。相机aspect、投影和小视口边界同步更新，不改变DOM仪表字号／清晰度；未引入动态降分辨率或限帧。
+
+## 树木、岩石与城市表面细节
+
+近模使用独立立体叶片：阔叶为六边轮廓、柳叶／松针为细长轮廓，叶面带折脊、平滑法线和细叶脉；每冠团按树种32／40／48／28／36／32片，共享合批原型，不逐叶创建场景对象。树皮不乘森林实例绿色，避免二次变暗；中模每冠团3张较小叶簇卡片，按冠形计算法线，背面不翻向冠内并补少量散射光。叶片仍限定于同源碰撞椭球内。远模保留实体冠形与有限冠缘镂空，10公里外才切换，12–22公里渐进增加mip柔化；近模切换范围保持350–450米，树木数量不增加。MountainView登记共享叶片图集供准备期initTexture预热，飞行期不首次解码或上传源素材。
+
+ROCK_SURFACE独立管理岩纹配方、沉积尺度、裂隙强度及远处细节淡出。共享岩纹R通道保存多尺度起伏，G保存有方向的裂隙，B保存矿物与风化变化；三平面粗细两层仍合计6次纹理读取。岩石细纹与凹凸在10–22公里淡出，12–23公里才额外增加mip偏移；保留山体轮廓与宽度。
+
+FACADE_SURFACE独立管理立面配方与过滤。每栋楼按稳定坐标区分玻璃、石材及混合立面，用既有实例上的facadeStyle属性控制玻璃比例、纹理相位与色系；图集补窗框、窗台、百叶和雨痕，玻璃与墙体分别计算粗糙度。颜色与细节合计仍为2次读取，10–22公里才额外加强过滤，必要的亚像素稳定过滤保留；晴空雾从12公里开始。楼体、装饰与阴影实例数量不增加。
+
+本轮仅失效base/foliage-color、base/terrain-detail、base/facade-color、base/facade-detail、detail/terrain-detail、detail/facade-color、detail/facade-detail和scene/trees八组。ROCK_SURFACE／FACADE_SURFACE与布局配置分离，不失效country／streets、全局生成器或缓存格式。
+
+### 枝叶源素材
+
+文件为src/textures/foliage-source-v1.png，使用内置image_gen生成，实际1254×1254 RGBA、3185856字节。四格分别为阔叶、银杏、柳叶和松针，透明背景；该照片式植物细节为必要源素材，替代有限程序笔画难以表达的叶脉／分枝纹理。运行图集、mip和模型仍在浏览器准备并缓存，不提交生成缓存。素材约增加3.19 MB部署体积，当前全部发布文件约7.03 MB。
+
+生成提示词：
+
+```text
+Use case: photorealistic-natural. Asset type: production foliage source texture atlas for a Three.js low-altitude flight game. Generate a square high-resolution 2048x2048 RGBA cutout atlas on a genuinely transparent background, arranged in exactly FOUR equal square cells in a precise 2 by 2 grid, no lines or labels. Each cell contains a natural dense but airy 3D-looking cluster of small branching twigs and many tiny individually distinct leaves, fine botanical detail and subtle varied leaf orientation, soft neutral diffuse overcast lighting, no cast shadow or backplate. Top-left: green broadleaf poplar/banyan compound twig cluster, about 80 small pointed oval leaves on irregular secondary and tertiary twigs. Top-right: green-to-golden ginkgo cluster with about 60 tiny fan-shaped leaves and delicate veins. Bottom-left: weeping willow hanging sprays of about 100 slender narrow green leaves, slender downward twigs. Bottom-right: pine branch cluster with abundant fine dark-green needles, natural branching and visible small brown twig sections. Each cluster fills about 85 percent of its own quadrant, remains inside its cell, with at least 6 percent totally transparent padding on each quadrant edge. Clusters have leaf gaps throughout, roughly 40 to 50 percent opaque coverage, no solid circular masses, no large single leaves. Each cell is visually a detailed branch spray, not an entire tree. Crisp natural antialiased alpha edges, no checkerboard, no white halo, no typography, no objects outside the four clusters, no perspective scene, no pots. Photographic leaf microstructure rather than stylized illustration.
+```

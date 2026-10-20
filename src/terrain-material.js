@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { LANDSCAPE } from './config.js';
+import { LANDSCAPE, ROCK_SURFACE } from './config.js';
 import { surfaceTexture } from './surface-assets.js';
 
 // 岩纹在浏览器空闲时分行生成，三关共用同一配方。
@@ -12,7 +12,7 @@ export function createTerrainMaterial(detail) {
   const material = new THREE.MeshStandardMaterial({vertexColors: true, roughness: 0.96});
   material.userData.detailTexture = detail;
   material.userData.landUniforms = new Set();
-  material.customProgramCacheKey = () => 'flight-terrain-strata-v3';
+  material.customProgramCacheKey = () => 'flight-terrain-strata-v5';
   material.onBeforeCompile = shader => {
     shader.uniforms.landDetail = {value: material.userData.detailTexture};
     material.userData.landUniforms.add(shader.uniforms.landDetail);
@@ -42,24 +42,28 @@ export function createTerrainMaterial(detail) {
         vec4 corners=fract(sin(vec4(dot(cell,vec2(127.1,311.7)),dot(cell+vec2(1,0),vec2(127.1,311.7)),dot(cell+vec2(0,1),vec2(127.1,311.7)),dot(cell+vec2(1,1),vec2(127.1,311.7))))*43758.5453);
         return mix(mix(corners.x,corners.y,blend.x),mix(corners.z,corners.w,blend.x),blend.y);
       }
-      vec3 landTriplanar(vec3 point, vec3 weights) {
-        return texture2D(landDetail, point.yz).rgb * weights.x
-          + texture2D(landDetail, point.xz).rgb * weights.y
-          + texture2D(landDetail, point.xy).rgb * weights.z;
+      vec3 landTriplanar(vec3 point, vec3 weights, float bias) {
+        return texture2D(landDetail, point.yz,bias).rgb * weights.x
+          + texture2D(landDetail, point.xz,bias).rgb * weights.y
+          + texture2D(landDetail, point.xy,bias).rgb * weights.z;
       }`);
     shader.fragmentShader = shader.fragmentShader.replace('#include <map_fragment>', `
       vec3 landWeights = pow(abs(normalize(vLandNormal)), vec3(4.0));
       landWeights /= max(dot(landWeights, vec3(1.0)), 0.001);
-      vec3 landCoarse = landTriplanar((vLandPosition + vec3(sin(vLandPosition.z * 0.0009) * 70.0, 0.0, cos(vLandPosition.x * 0.0008) * 70.0)) * landScale, landWeights);
-      vec3 landFine = landTriplanar(vLandPosition * landFineScale, landWeights);
+      float landDistance=length(vViewPosition),landMip=smoothstep(${ROCK_SURFACE.blurDistance[0].toFixed(1)},${ROCK_SURFACE.blurDistance[1].toFixed(1)},landDistance)*1.5;
+      vec3 landCoarse = landTriplanar((vLandPosition + vec3(sin(vLandPosition.z * 0.0009) * 70.0, 0.0, cos(vLandPosition.x * 0.0008) * 70.0)) * landScale, landWeights,landMip);
+      vec3 landFine = landTriplanar(vLandPosition * landFineScale, landWeights,landMip);
       float landCover = vLandBiome.x;
-      float landBand = sin(vLandPosition.y * 0.18 + landCoarse.r * 8.0);
-      float landStrata = mix(0.96 + landBand * 0.04, 0.88 + landBand * 0.12, vLandBiome.y);
-      float landFracture = 1.0 - smoothstep(0.015, 0.075, abs(landFine.g - 0.46));
-      float landRock = (0.65 + landCoarse.r * 0.7 + (landFine.r - 0.5) * 0.3) * landStrata * (1.0 - landFracture * 0.16);
+      float landNear=1.0-smoothstep(${ROCK_SURFACE.fineFade[0].toFixed(1)},${ROCK_SURFACE.fineFade[1].toFixed(1)},length(vViewPosition));
+      float landBand=sin(vLandPosition.y*${ROCK_SURFACE.bandScale.toFixed(3)}+landCoarse.r*4.0+landCoarse.b*2.4);
+      float landStrata=mix(.97+landBand*.035,.94+landBand*.075,vLandBiome.y);
+      float landFracture=mix(landCoarse.g,landFine.g,.65*landNear);
+      float landRock=(.76+landCoarse.r*.52+(landFine.r-.5)*.18*landNear)*landStrata*(1.0-landFracture*${ROCK_SURFACE.fractureStrength.toFixed(2)});
+      vec3 landMineral=mix(vec3(.83,.89,.91),vec3(1.12,1.045,.88),landCoarse.b);
       float landPatch=landNoise(vLandPosition.xz*.003)*.7+landNoise(vLandPosition.xz*.017+27.0)*.3;
       float landCanopy=.72+landPatch*.55+(landFine.r-.5)*.06;
-      diffuseColor.rgb *= mix(1.0, mix(landRock, landCanopy, landCover) * (1.0 - vLandBiome.z * 0.16), vLandBiome.w);
+      vec3 landSurface=mix(landRock*landMineral,vec3(landCanopy),landCover)*(1.0-vLandBiome.z*.16);
+      diffuseColor.rgb*=mix(vec3(1.0),landSurface,vLandBiome.w);
       float landHeight = mix(landCoarse.r * 0.55 + landFine.r * 0.12, landPatch * .18, landCover);
     `);
     shader.fragmentShader = shader.fragmentShader.replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
@@ -69,7 +73,7 @@ export function createTerrainMaterial(detail) {
       vec3 landRx = cross(landQy, normal), landRy = cross(normal, landQx);
       float landDet = dot(landQx, landRx);
       vec3 landGradient = sign(landDet) * (dFdx(landHeight) * landRx + dFdy(landHeight) * landRy);
-      float landAttenuation = 1.0 - smoothstep(1200.0, 6000.0, length(vViewPosition));
+      float landAttenuation = 1.0 - smoothstep(${ROCK_SURFACE.fineFade[0].toFixed(1)}, ${ROCK_SURFACE.fineFade[1].toFixed(1)}, length(vViewPosition));
       normal = normalize(abs(landDet) * normal - landBump * landAttenuation * vLandBiome.w * landGradient);
     `);
   };

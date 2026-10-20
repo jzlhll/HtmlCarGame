@@ -1,31 +1,38 @@
 import * as THREE from 'three';
-import { SURFACE_APPEARANCE, LANDSCAPE } from './config.js';
+import { SURFACE_APPEARANCE, LANDSCAPE, FACADE_SURFACE } from './config.js';
 import { surfaceTexture } from './surface-assets.js';
 import { buildingParts } from './building-layout.js';
 
 export function* createCityBlocks(sites, floorAt=()=>0, shared={}) {
   const appearance=LANDSCAPE.city.facade;
-  const group=new THREE.Group(),parts=sites.flatMap(site=>buildingParts(site).map(part=>({...part,color:site.color,floor:floorAt(site.x,site.z)})));
+  const group=new THREE.Group(),parts=sites.flatMap(site=>{
+    let hash=Math.imul(Math.round(site.x),73856093)^Math.imul(Math.round(site.z),19349663)^FACADE_SURFACE.seed;
+    hash=Math.imul(hash^(hash>>>13),1274126177)>>>0;
+    const family=hash%4,phase=(hash>>>8)/16777216;
+    return buildingParts(site).map(part=>({...part,color:site.color,floor:floorAt(site.x,site.z),family,phase}));
+  });
   shared.cube??=new THREE.BoxGeometry(1,1,1);
   const geometry=new THREE.BufferGeometry();for(const [name,attribute] of Object.entries(shared.cube.attributes))geometry.setAttribute(name,attribute);geometry.setIndex(shared.cube.index);
-  const sizes=new Float32Array(parts.length*3);
+  const sizes=new Float32Array(parts.length*3),styles=new Float32Array(parts.length*4);
   geometry.setAttribute('facadeSize',new THREE.InstancedBufferAttribute(sizes,3));
+  geometry.setAttribute('facadeStyle',new THREE.InstancedBufferAttribute(styles,4));
   const material=shared.facadeMaterial??=new THREE.MeshPhysicalMaterial({map:surfaceTexture('facade-color'),roughnessMap:surfaceTexture('facade-detail'),bumpMap:surfaceTexture('facade-detail'),bumpScale:SURFACE_APPEARANCE.facadeBump*.55,roughness:appearance.roughness,metalness:appearance.metalness,clearcoat:appearance.clearcoat,clearcoatRoughness:appearance.clearcoatRoughness});
   material.onBeforeCompile=shader=>{
-    shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nattribute vec3 facadeSize;varying float vFacadeLevel;');
+    shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nattribute vec3 facadeSize;attribute vec4 facadeStyle;varying float vFacadeLevel;varying vec4 vFacadeStyle;');
     shader.vertexShader=shader.vertexShader.replace('#include <uv_vertex>',`#include <uv_vertex>
-      vFacadeLevel=position.y+.5;
-      vec2 facadeRepeat=vec2(abs(normal.x)>.5?facadeSize.z:facadeSize.x,facadeSize.y)/vec2(${appearance.tileMetres.map(value=>value.toFixed(1)).join(',')});
+      vFacadeLevel=position.y+.5;vFacadeStyle=facadeStyle;
+      vec2 facadeRepeat=vec2(abs(normal.x)>.5?facadeSize.z:facadeSize.x,facadeSize.y)/vec2(${appearance.tileMetres.map(value=>value.toFixed(1)).join(',')})*facadeStyle.x;
+      vec2 facadeOffset=vec2(facadeStyle.w,facadeStyle.w*.618);
       #ifdef USE_MAP
-      vMapUv*=facadeRepeat;
+      vMapUv=vMapUv*facadeRepeat+facadeOffset;
       #endif
       #ifdef USE_BUMPMAP
-      vBumpMapUv*=facadeRepeat;
+      vBumpMapUv=vBumpMapUv*facadeRepeat+facadeOffset;
       #endif
       #ifdef USE_ROUGHNESSMAP
-      vRoughnessMapUv*=facadeRepeat;
+      vRoughnessMapUv=vRoughnessMapUv*facadeRepeat+facadeOffset;
       #endif`);
-    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying float vFacadeLevel;');
+    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying float vFacadeLevel;varying vec4 vFacadeStyle;');
     // 窗格接近亚像素时增大过滤足迹，同时淡出凹凸与粗糙度变化，避免远景摩尔纹。
     const filteredMap=THREE.ShaderChunk.map_fragment.replace('texture2D( map, vMapUv )','textureGrad(map,vMapUv,facadeDx*facadeFilter,facadeDy*facadeFilter)');
     shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`
@@ -33,23 +40,31 @@ export function* createCityBlocks(sites, floorAt=()=>0, shared={}) {
       vec2 facadeCells=vec2(${appearance.windowCells.map(value=>value.toFixed(1)).join(',')});
       float facadeFootprint=max(length(facadeDx*facadeCells),length(facadeDy*facadeCells));
       float facadeDetail=1.0-smoothstep(${appearance.detailFootprint.map(value=>value.toFixed(3)).join(',')},facadeFootprint);
-      float facadeFilter=1.0+(1.0-facadeDetail)*${appearance.filterSpread.toFixed(1)};
+      float facadeBlur=smoothstep(${FACADE_SURFACE.blurDistance[0].toFixed(1)},${FACADE_SURFACE.blurDistance[1].toFixed(1)},length(vViewPosition));
+      float facadeFilter=1.0+(1.0-facadeDetail)*${FACADE_SURFACE.farFilter.toFixed(1)}*facadeBlur;
       ${filteredMap}
-      diffuseColor.rgb*=1.65*(.76+.24*smoothstep(0.0,.3,vFacadeLevel));
+      vec4 facadeTex=textureGrad(roughnessMap,vRoughnessMapUv,facadeDx*facadeFilter,facadeDy*facadeFilter);
+      float facadePane=facadeTex.b;
+      float facadeGlass=facadePane*vFacadeStyle.y;
+      vec3 facadeStone=mix(vec3(1.04,1.01,.92),vec3(.90,.94,.97),step(1.5,vFacadeStyle.z));
+      vec3 facadeGlassTint=mix(vec3(.78,.96,1.08),vec3(1.04,.94,.79),step(2.5,vFacadeStyle.z));
+      diffuseColor.rgb*=mix(facadeStone,facadeGlassTint,facadeGlass)*1.65*(.76+.24*smoothstep(0.0,.3,vFacadeLevel));
     `);
-    shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
+    shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>',`float roughnessFactor=mix(${FACADE_SURFACE.stoneRoughness.toFixed(2)},${FACADE_SURFACE.glassRoughness.toFixed(2)},facadeGlass);
       roughnessFactor=mix(max(roughnessFactor,${appearance.farRoughness.toFixed(3)}),roughnessFactor,facadeDetail);`);
     shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>',`vec3 facadeSmoothNormal=normal;
       #include <normal_fragment_maps>
       normal=normalize(mix(facadeSmoothNormal,normal,facadeDetail));`);
   };
-  material.customProgramCacheKey=()=> 'city-filtered-facades-v3';
+  material.customProgramCacheKey=()=> 'city-filtered-facades-v5';
   const mesh=new THREE.InstancedMesh(geometry,material,parts.length),pose=new THREE.Object3D(),color=new THREE.Color();
   const details=[],movements=[];
   const track=(target,index,x,z,shift)=>{if(shift)movements.push({target,index,x,z,shift});};
   for(const [index,part] of parts.entries()){
     pose.position.set(part.x,part.floor+part.y,part.z);pose.scale.set(part.width,part.height,part.depth);pose.updateMatrix();mesh.setMatrixAt(index,pose.matrix);mesh.setColorAt(index,color.setHex(part.color));
     sizes.set([part.width,part.height,part.depth],index*3);
+    const glass=part.role==='equipment'?.04:part.role==='podium'?.35:[.92,.62,.42,.76][part.family];
+    styles.set([.78+part.phase*.58,glass,part.family,part.phase],index*4);
     track(mesh,index,part.x,part.z,part.shift);const detailStart=details.length;
     // 楼层交给过滤后的立面贴图；实体只保留屋顶、女儿墙与设备箱。
     const roof=part.floor+part.y+part.height/2;

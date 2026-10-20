@@ -30,6 +30,7 @@ export class MountainView extends THREE.Group {
 
   *makeTreeResources() {
     this.treeBank=yield* prepareTreeModels();
+    this.textures.push(surfaceTexture('foliage-color'));
     const first=this.treeBank[0];this.treeGeometry=first.geometry;this.treeSpriteGeometry=first.farGeometry;this.treeMaterial=first.material;this.treeSpriteMaterial=first.farMaterial;
     const warmup=new THREE.Group();warmup.visible=false;
     for(const model of this.treeBank)warmup.add(new THREE.Mesh(model.geometry,model.material),new THREE.Mesh(model.midGeometry,model.midMaterial),new THREE.Mesh(model.farGeometry,model.farMaterial));this.add(warmup);yield;
