@@ -1,4 +1,4 @@
-import { SURFACE_APPEARANCE, LANDSCAPE } from './config.js';
+import { SURFACE_APPEARANCE, LANDSCAPE, FACADE_SURFACE } from './config.js';
 import { foliagePixels } from './foliage-texture.js';
 import { smoothRange } from './terrain.js';
 
@@ -48,14 +48,25 @@ export function* surfacePixels(name, size) {
       } else if (name.startsWith('facade')) {
         const u = x / size * 8, v = y / size * 16, fx = u % 1, fy = v % 1;
         const window = fx > 0.13 && fx < 0.87 && fy > 0.15 && fy < 0.82;
-        const mullion = Math.abs(fx-0.5) < 0.025;
+        const mullion = Math.abs(fx-0.5) < 0.018,cellX=Math.floor(u),cellY=Math.floor(v),pane=hash(cellX,cellY,FACADE_SURFACE.seed);
+        const blind=hash(cellX,cellY,79)>.62&&fy>.35+hash(cellX,cellY,83)*.3;
+        const sill=fy>.77&&fy<.84,streak=Math.max(0,(fy-.82)/.18)*(hash(cellX,cellY,87)>.5?1:0);
         if (name.endsWith('color')) {
-          const reflection = noise(x/size*4,y/size*4,4,71), lit = hash(Math.floor(u),Math.floor(v),41) > 0.85;
-          if (window && !mullion) {
-            red=lit?169+reflection*30:51+reflection*53;
-            green=lit?166+reflection*25:81+reflection*57; blue=lit?132+grain*12:98+reflection*59;
-          } else { red=157+grain*17; green=166+grain*15; blue=165+grain*13; }
-        } else { red=window&&!mullion?88:155; green=window&&!mullion?85:220; }
+          const reflection=noise(x/size*4,y/size*4,4,71),lit=pane>.91;
+          if(window&&!mullion){
+            const room=blind?.80:1,glint=.84+pane*.28;
+            red=(lit?169+reflection*30:58+reflection*48)*room*glint;
+            green=(lit?161+reflection*25:84+reflection*54)*room*glint;
+            blue=(lit?126+grain*12:104+reflection*48)*room*glint;
+          }else{
+            const shade=mullion?FACADE_SURFACE.frameShade:sill?.73:1;
+            red=(161+grain*13-streak*20)*shade;green=(166+grain*12-streak*18)*shade;blue=(159+grain*11-streak*16)*shade;
+          }
+        }else{
+          red=window&&!mullion?85+(blind?10:0):sill?132:158;
+          green=window&&!mullion?80+pane*30:220;
+          blue=window&&!mullion?255:0;
+        }
       } else if (name === 'rubber-detail') {
         const groove = Math.abs(Math.sin(y / size * Math.PI * 8)) < 0.16;
         red=groove?60:130+grain*12; green=234+grain*16;
@@ -96,7 +107,14 @@ export function* terrainPixels(size) {
         value += (a + (b - a) * fx + (c - a) * fy * (1 - fx) + (d - b) * fx * fy) * weight; weight *= 0.5;
       }
       const i = (y * size + x) * 4;
-      data[i] = Math.round(value * 255); data[i + 1] = Math.round((1 - Math.abs(value * 2 - 1)) * 255); data[i + 2] = Math.round(random() * 255);
+      // G保存连续节理，B保存矿物风化；准备期多花计算，飞行仍只读同一张纹理。
+      const u=x/size*Math.PI*2,v=y/size*Math.PI*2;
+      const jointA=Math.abs(Math.sin(u*5+Math.sin(v*2)*.65+value*1.2));
+      const jointB=Math.abs(Math.sin(v*3-u+Math.sin(u*3)*.35));
+      const crack=(1-smoothRange(.015,.10,Math.min(jointA,jointB)))*(.55+value*.45);
+      const mineral=.50+.24*Math.sin(u+Math.sin(v)*.55)+.17*Math.sin(v*2+Math.sin(u*2)*.4);
+      data[i]=Math.round(Math.max(0,Math.min(1,value*.92+.04-crack*.10))*255);
+      data[i+1]=Math.round(crack*255);data[i+2]=Math.round(Math.max(0,Math.min(1,mineral))*255);
       data[i + 3] = 255;
     }
     yield;

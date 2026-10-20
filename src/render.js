@@ -25,7 +25,6 @@ export class GameRenderer {
   *build(container,world) {
     this.renderer = new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true, powerPreference: 'high-performance' });
     initializeTextureTransfer(this.renderer);yield {task:'renderer'};
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, CAMERA.pixelRatioLimit));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.12;
@@ -33,6 +32,7 @@ export class GameRenderer {
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.shadowMap.autoUpdate = false;
     this.shadowMatrix = new THREE.Matrix4();
+    this.viewportSize = new THREE.Vector2();
     this.introDisplaySeconds = 0;
     this.displayPose = { position: new THREE.Vector3(), pitch: 0, bank: 0, heading: 0 };
     this.renderer.domElement.setAttribute('aria-label', '客机、机场和驾驶舱的三维场景');
@@ -136,7 +136,13 @@ export class GameRenderer {
     this.resizeObserver.observe(container);
     this.resizeObserver.observe(this.preview.element);
     this.resizeObserver.observe(this.gearPreview.element);
-    this.resize();
+    const pixelRatioChanged=()=>{
+      this.pixelRatioQuery?.removeEventListener('change',pixelRatioChanged);
+      this.pixelRatioQuery=window.matchMedia(`(resolution: ${window.devicePixelRatio||1}dppx)`);
+      this.pixelRatioQuery.addEventListener('change',pixelRatioChanged,{once:true});
+      this.resize();
+    };
+    pixelRatioChanged();
   }
 
   *prepareSurfaceTexture(previous, next) {
@@ -194,9 +200,10 @@ export class GameRenderer {
   resize() {
     const width = Math.max(1, this.container.clientWidth), height = Math.max(1, this.container.clientHeight);
     this.previewBoundsDirty = true;
-    this.camera.aspect = width / height;
-    this.renderer.setSize(width, height);
-    this.camera.updateProjectionMatrix();
+    const ratio=Math.min(window.devicePixelRatio||1,CAMERA.pixelRatioLimit),size=this.renderer.getSize(this.viewportSize);
+    // CSS保持逻辑尺寸；只在尺寸或DPR变化时重建绘制缓冲，避免重复分配。
+    if(size.x!==width||size.y!==height||this.renderer.getPixelRatio()!==ratio)this.renderer.setDrawingBufferSize(width,height,ratio);
+    if(this.camera.aspect!==width/height){this.camera.aspect=width/height;this.camera.updateProjectionMatrix();}
     this.cockpit.resize(this.camera.aspect, CAMERA.cockpitFov);
     this.invalidate();
   }
