@@ -6,7 +6,7 @@
 
 原生 JavaScript ES Modules、Three.js `0.186.1`、DOM／CSS／SVG 界面与 Web Audio 合成音效、本地固定Samantha女声播报，无编译或打包步骤。入口为 `index.html`，import map 从本机依赖目录加载 Three.js 与 BufferGeometryUtils；运行不依赖 CDN。
 
-依赖缺失时执行 `npm ci`，随后 `npm start`，地址为 [http://localhost:5186](http://localhost:5186)。多工作目录可用 `PORT=5187 npm start` 选择空闲端口，不停止用户已有服务。`scripts/serve.mjs` 只监听回环地址并限制资源根目录，通过 HTTP 加载，不直接打开 HTML。
+依赖缺失时执行 `npm ci`。开发调试使用 `npm start`，由实际工作目录路径的SHA-256摘要在5200–6199中确定首选端口，占用后在同一范围自动避让，工作目录相同且端口空闲时地址稳定。用户游玩使用 `npm run play` 或 `启动游戏.command`，优先5186，占用后在5186–5199避让；启动脚本打开实际监听成功的地址，不停止或接入占用端口的其他服务。显式 `PORT=5187 npm start` 仍可覆盖自动分配，要求1–65535整数，占用或非法时直接报错。`scripts/serve.mjs` 只监听回环地址并限制资源根目录，通过 HTTP 加载，不直接打开 HTML。端口隔离不提供源码快照，同一目录刷新会加载最新文件。
 
 保留现有 macOS 启动脚本与 Release 资源整理工具；当前不发布飞行分支。增加资源或 addons 时同步维护服务白名单和发布拷贝清单。
 
