@@ -102,10 +102,11 @@ export class Game {
     const seconds = Math.min(setup.runwaySeconds, setup.speed / FLIGHT.speedDecayRate);
     const distance = worldHorizontalSpeed((setup.speed * seconds - FLIGHT.speedDecayRate * seconds * seconds / 2) / FLIGHT.kmhPerMps);
     const forward = Math.sqrt(distance * distance - setup.lateralOffset * setup.lateralOffset);
-    a.position.x = destination.x + setup.lateralOffset;
-    a.position.z = destination.threshold + forward;
+    const heading=destination.approachHeading||0,entry=destination.entry||{x:destination.x,z:destination.threshold};
+    a.position.x = entry.x-Math.sin(heading)*forward+Math.cos(heading)*setup.lateralOffset;
+    a.position.z = entry.z+Math.cos(heading)*forward+Math.sin(heading)*setup.lateralOffset;
     a.position.y = Math.max(destination.elevation, this.world.heightAt(a.position.x, a.position.z)) + setup.runwayHeight;
-    a.heading = Math.atan2(-setup.lateralOffset, forward);
+    a.heading = heading+Math.atan2(-setup.lateralOffset, forward);
     a.airspeed = setup.speed; a.onGround = false; a.enginePower = 1;
     a.velocity.x = Math.sin(a.heading) * setup.speed / FLIGHT.kmhPerMps;
     a.velocity.z = -Math.cos(a.heading) * setup.speed / FLIGHT.kmhPerMps;

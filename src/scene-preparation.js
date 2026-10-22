@@ -52,19 +52,41 @@ export async function prepareSceneResources(renderer,views,extraTextures=[]) {
       yield {task:'base-texture'};const start=performance.now();renderer.initTexture(texture);
       const ms=performance.now()-start;stats.uploadCpuMs+=ms;stats.maxTextureUploadMs=Math.max(stats.maxTextureUploadMs,ms);yield 'boundary';
     }
-    for(const {warmScene,camera,lights,objects} of groups){
-      const variants=new Set(),compile=[];
-      for(const object of objects){
+    const compiling=[],inFlight=new Map(),compileGroups=[];let compileStartedAt;
+    // 同一材质的不同变体必须等前批完成，避免异步编译读取被后批改写的程序引用。
+    for(const group of groups){
+      const variants=new Set(),pending=[];
+      for(const object of group.objects){
         const materials=Array.isArray(object.material)?object.material:[object.material];
         const key=materials.map(m=>m.id).join(',')+':'+object.type+':'+Boolean(object.instanceColor)+':'+Object.keys(object.geometry.attributes).sort().join(',')+':'+Boolean(object.receiveShadow);
-        if(!variants.has(key)){variants.add(key);compile.push(object);}
+        if(!variants.has(key)){variants.add(key);pending.push({object,materials});}
       }
-      for(let i=0;i<compile.length;i+=CAMERA.warmupBatchObjects){
-        yield {task:'material-compile'};warmScene.children=[...lights,...compile.slice(i,i+CAMERA.warmupBatchObjects)];
-        const start=performance.now(),pending=renderer.compileAsync(warmScene,camera),cpu=performance.now()-start;
-        stats.compileCpuMs+=cpu;stats.maxCompileMs=Math.max(stats.maxCompileMs,cpu);
-        yield {wait:pending};stats.compileMs+=performance.now()-start;yield 'boundary';
+      compileGroups.push({...group,pending});
+    }
+    while(compileGroups.some(group=>group.pending.length)){
+      let submitted=false;
+      for(const {warmScene,camera,lights,pending} of compileGroups){
+        const batch=[],materials=new Set();
+        for(let i=0;i<pending.length&&batch.length<CAMERA.warmupBatchObjects;){
+          const candidate=pending[i];
+          if(candidate.materials.some(material=>inFlight.has(material)||materials.has(material))){i++;continue;}
+          batch.push(candidate.object);for(const material of candidate.materials)materials.add(material);pending.splice(i,1);
+        }
+        if(!batch.length)continue;
+        yield {task:'material-compile'};warmScene.children=[...lights,...batch];
+        const start=performance.now();compileStartedAt??=start;
+        const promise=renderer.compileAsync(warmScene,camera),cpu=performance.now()-start;
+        const settled=promise.then(()=>null,error=>error).then(error=>{for(const material of materials)inFlight.delete(material);return error;});
+        for(const material of materials)inFlight.set(material,settled);
+        compiling.push(settled);submitted=true;
+        stats.compileCpuMs+=cpu;stats.maxCompileMs=Math.max(stats.maxCompileMs,cpu);yield 'boundary';
       }
+      if(!submitted){const error=yield {wait:Promise.race(inFlight.values())};if(error)throw error;}
+    }
+    if(compiling.length){
+      const errors=yield {wait:Promise.all(compiling)},failed=errors.find(Boolean);
+      if(failed)throw failed;
+      stats.compileMs=performance.now()-compileStartedAt;yield 'boundary';
     }
     try {
       for(const {warmScene,camera,lights,objects} of groups)for(let i=0;i<objects.length;i+=CAMERA.warmupBatchObjects){

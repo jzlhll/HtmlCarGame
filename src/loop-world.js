@@ -79,9 +79,10 @@ export function loopVariant(column, row) {
 }
 
 export function isRouteCell(column, row, route) {
+  if(route.fixedCells)return route.fixedCells.has(`${column},${row}`);
   if(column === 0 && row <= 0 && row >= Math.floor((route.destination.threshold - route.destination.length + LOOP_WORLD.tileSize / 2) / LOOP_WORLD.tileSize))return true;
   const half=LOOP_WORLD.tileSize/2,x=column*LOOP_WORLD.tileSize,z=row*LOOP_WORLD.tileSize;
-  return route.cities.some(city=>Math.abs(x-city.x)<half+TOURISM.columns*TOURISM.spacing/2&&Math.abs(z-city.z)<half+TOURISM.rows*TOURISM.spacing/2);
+  return route.cities.some(city=>Math.abs(x-city.x)<half+(city.columns??TOURISM.columns)*TOURISM.spacing/2&&Math.abs(z-city.z)<half+(city.rows??TOURISM.rows)*TOURISM.spacing/2);
 }
 
 // 查询最高精度三角面，植被落点与飞行碰撞共用。

@@ -20,14 +20,17 @@ export class NavigationUI {
     this.status = document.getElementById('route-status');
     this.warning = document.getElementById('radar-status');
     document.getElementById('route-heading').innerHTML = `Shenzhen → ${game.route.destinationEnglish}<small>深圳 → ${game.route.destinationName}</small>`;
-    const targetY=Number(this.mapPoint(game.route.destination.x,game.route.destination.threshold-game.route.destination.length/2).split(',')[1]);
-    this.route.innerHTML = `<path class="planned-route" d="M110 130V${targetY}"/><text x="119" y="${targetY-8}">${game.route.destinationEnglish}</text><text x="119" y="132">Shenzhen</text><text class="destination-star" x="110" y="${targetY+3}" text-anchor="middle">★</text><polyline class="flown-route"/><g class="route-player"><path class="own-aircraft" d="M0 -7L5 5L0 2L-5 5Z"/></g>`;
+    const target=this.mapPoint(game.route.destination.x,game.route.destination.threshold-game.route.destination.length/2).split(',').map(Number);
+    const start=this.mapPoint(0,0).split(',').map(Number),planned=game.route.path.filter(p=>p.distance<game.route.length+game.route.destination.length/2).map((p,i)=>(i?'L':'M')+this.mapPoint(p.x,p.z)).join(' ')+` L${target.join(',')}`;
+    const wuhan=game.route.arc?this.mapPoint(0,-190000).split(',').map(Number):null;
+    this.route.innerHTML = `<path class="planned-route" d="${planned}"/><text x="${target[0]+9}" y="${target[1]-8}">${game.route.destinationEnglish}</text><text x="${start[0]+9}" y="132">Shenzhen</text>${wuhan?`<circle cx="${wuhan[0]}" cy="${wuhan[1]}" r="2"/><text x="${wuhan[0]-8}" y="${wuhan[1]+3}" text-anchor="end">Wuhan</text>`:''}<text class="destination-star" x="${target[0]}" y="${target[1]+3}" text-anchor="middle">★</text><polyline class="flown-route"/><g class="route-player"><path class="own-aircraft" d="M0 -7L5 5L0 2L-5 5Z"/></g>`;
     this.path = this.route.querySelector('.flown-route'); this.player = this.route.querySelector('.route-player');
     this.radar.innerHTML = '<g class="radar-grid"><circle cx="90" cy="90" r="75"/><circle cx="90" cy="90" r="38"/><path d="M15 90H165M90 15V165"/></g><path class="own-aircraft" d="M90 82L95 95L90 92L85 95Z"/>';
     this.contactNodes = new Map(); this.distanceLabels = [];
   }
 
   mapPoint(x, z) {
+    if(this.game.route.arc){const b=this.game.route.boundary;return `${(20+(x-(b.centerX-b.halfWidth))/(b.halfWidth*2)*180).toFixed(1)},${(130+z/-b.back*110).toFixed(1)}`;}
     return `${(110 + x / this.game.route.mapHalfWidth * 95).toFixed(1)},${(130 + z / -(this.game.route.destination.threshold-this.game.route.destination.length) * 110).toFixed(1)}`;
   }
 
@@ -57,7 +60,7 @@ export class NavigationUI {
     }
     setAttribute(this.player, 'transform', `translate(${this.mapPoint(a.position.x, a.position.z)}) rotate(${degrees(a.heading).toFixed(1)})`);
     const distance = Math.max(0, mission.runwayDistance);
-    setHTML(this.status, a.landed ? `Parking ${Math.round(a.airspeed)} km/h<small>避让障碍 · 跑道内停稳 1 秒</small>` : `${mission.sector.english} · ${(distance / 1000).toFixed(1)} km<small>${mission.sector.chinese} · 海拔 ${Math.round(displayHeight(a.position.y))} / ${displayHeight(game.route.ceiling)} m</small>`);
+    setHTML(this.status, a.landed ? `Parking ${Math.round(a.airspeed)} km/h<small>避让障碍 · 跑道内停稳 1 秒</small>` : `${mission.sector.english??mission.sector.name} · ${(distance / 1000).toFixed(1)} km<small>${mission.sector.chinese??mission.sector.name} · 海拔 ${Math.round(displayHeight(a.position.y))} / ${displayHeight(game.route.ceiling)} m</small>`);
     const contacts = a.systems.avionics && game.weather.radarAvailable ? mission.contacts.filter(c => Math.hypot(c.position.x - a.position.x, c.position.z - a.position.z) < game.route.radarRange) : [];
     const alert = contacts.some(c => c.danger || c.age < game.route.radarLead), flash = Math.floor(mission.elapsed * 4) % 2 === 0;
     this.radarCard.classList.toggle('has-alert', alert && flash);

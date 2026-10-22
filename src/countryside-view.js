@@ -7,7 +7,7 @@ import { surfaceTexture } from './surface-assets.js';
 import { restoreCountryside, saveCountryside } from './countryside-cache.js';
 
 // 所有田块、田埂和路面在准备阶段贴合实际三角地形，飞行时只复用。
-export function* createCountryside({width, length, centerZ=0, seed, heightAt, landAt=()=>true, roadZ, trees, treeField, periodicTrees=false, forestOnly=false, treeArea=COUNTRYSIDE.treeArea, treeNear=COUNTRYSIDE.treeNear, treeFar=COUNTRYSIDE.treeFar}) {
+export function* createCountryside({width, length, centerZ=0, centerX=0, seed, heightAt, landAt=()=>true, roadZ, trees, treeField, periodicTrees=false, forestOnly=false, treeArea=COUNTRYSIDE.treeArea, treeNear=COUNTRYSIDE.treeNear, treeFar=COUNTRYSIDE.treeFar}) {
   const group=new THREE.Group(), fieldPositions=[],fieldColors=[],fieldUv=[],fieldIndices=[];
   const roadPositions=[],roadColors=[],roadUv=[],roadIndices=[],landUses=[];
   const color=new THREE.Color(), settings=COUNTRYSIDE;
@@ -32,7 +32,7 @@ export function* createCountryside({width, length, centerZ=0, seed, heightAt, la
       diffuseColor.rgb*=soil*mix(mix(.62,furrow,smoothstep(.006,.027,edge)),canopy,vLandUse);
 `);
   };
-  const roadMaterial=createRoadMaterial(),cacheKey='scene/country/'+seed+'-'+width+'-'+length+'-'+centerZ+'-'+Number(forestOnly);
+  const roadMaterial=createRoadMaterial(),cacheKey='scene/country/'+seed+'-'+width+'-'+length+'-'+centerZ+'-'+Number(forestOnly)+(centerX?'-x'+centerX:'');
   const restored=yield* restoreCountryside(cacheKey,fieldMaterial,roadMaterial,trees,centerZ,{treeNear,treeFar,treeField});if(restored)return restored;
   const flushFields=()=>{
     if(!fieldPositions.length)return;
@@ -45,7 +45,7 @@ export function* createCountryside({width, length, centerZ=0, seed, heightAt, la
   const nx=Math.max(3,Math.floor(width/settings.fieldSpacing)),nz=Math.max(2,Math.floor(length/settings.fieldDepth));
   for(let row=0;row<nz;row++){
     for(let col=0;col<nx;col++){
-      const cellW=width/nx,cellD=length/nz,cx=(col+.5)*cellW-width/2,cz=centerZ+(row+.5)*cellD-length/2;
+      const cellW=width/nx,cellD=length/nz,cx=centerX+(col+.5)*cellW-width/2,cz=centerZ+(row+.5)*cellD-length/2;
       const left=cx-cellW*(.42+random()*.025),right=cx+cellW*(.42+random()*.025);
       const back=cz-cellD*(.4+random()*.04),front=cz+cellD*(.4+random()*.04),skew=(random()-.5)*cellW*.15;
       const woodland=terrainNoise(cx*.0023,cz*.0023,seed+71)>.61;
@@ -67,7 +67,7 @@ export function* createCountryside({width, length, centerZ=0, seed, heightAt, la
   // 同一条连续公路包含路肩、边线与中央虚线，不用一条无细节色带充数。
   const samples=Math.ceil(width/32),half=width/2-40;
   for(let i=0;i<=samples;i++){
-    const x=-half+i/samples*half*2,z=roadCenter(x),dz=(roadCenter(x+1)-roadCenter(x-1))/2;
+    const x=centerX-half+i/samples*half*2,z=roadCenter(x),dz=(roadCenter(x+1)-roadCenter(x-1))/2;
     const norm=Math.hypot(1,dz),base=roadPositions.length/3;
     for(const side of [-1,1]){
       const px=x-side*dz/norm*settings.roadWidth/2,pz=z+side/norm*settings.roadWidth/2;
@@ -83,7 +83,7 @@ export function* createCountryside({width, length, centerZ=0, seed, heightAt, la
     const count=Math.floor(width*length/treeArea),forest=new THREE.InstancedMesh(trees.geometry,trees.material,count),pose=new THREE.Object3D(),species=new Uint8Array(count);let live=0;
     for(let i=0;i<count*3&&live<count;i++){
       if(i%64===0)yield;
-      const x=(random()-.5)*width,z=centerZ+(random()-.5)*length;
+      const x=centerX+(random()-.5)*width,z=centerZ+(random()-.5)*length;
       const cluster=terrainNoise(x*.0023,z*.0023,seed+71),nearRoad=Math.abs(z-roadCenter(x));
       if(cluster<(forestOnly?.38:.58)||!forestOnly&&nearRoad<settings.roadWidth||!landAt(x,z))continue;
       const y=heightAt(x,z);if(y<0||y>3600)continue;

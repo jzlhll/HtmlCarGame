@@ -1,3 +1,4 @@
+import { arcPoint } from './route-path.js';
 import { WEATHER } from './config.js';
 import { surfaceCache } from './surface-assets.js';
 
@@ -61,15 +62,21 @@ function cloudPlacements(count,seed) {
   return clouds;
 }
 
+function followArc(clouds,arc){
+  if(!arc)return clouds;
+  for(const cloud of clouds){const point=arcPoint(arc,-cloud.z,cloud.x);cloud.x=point.x;cloud.z=point.z;cloud.heading+=point.heading;}
+  return clouds;
+}
+
 export function varyWeather(layout,seed) {
-  const clouds=cloudPlacements(layout.clouds.length,seed);
+  const clouds=followArc(cloudPlacements(layout.clouds.length,seed),layout.arc);
   for(let i=0;i<clouds.length;i++)Object.assign(layout.clouds[i],clouds[i]);
 }
 
 export function weatherLayout(route) {
-  const distance=-route.destination.threshold+WEATHER.startZ;
+  const distance=route.length+WEATHER.startZ;
   const count=Math.min(WEATHER.maxClouds,Math.max(4,Math.ceil(distance/WEATHER.spacing)));
-  return {clouds:cloudPlacements(count,WEATHER.seed),templates:cloudTemplates()};
+  return {clouds:followArc(cloudPlacements(count,WEATHER.seed),route.arc),templates:cloudTemplates(),...(route.arc?{arc:route.arc}:{})};
 }
 
 export function* prepareWeatherWorld(route,useCache) {

@@ -56,6 +56,18 @@ export class LandscapeView extends THREE.Group {
     const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.BufferAttribute(positions,3));geometry.setAttribute('uv',new THREE.BufferAttribute(uv,2));geometry.setIndex(indices);yield 'boundary';
     geometry.setAttribute('normal',new THREE.BufferAttribute(normals,3));yield 'boundary';
     const coastalGround=new THREE.Mesh(geometry,material);coastalGround.position.y=-.04;coastalGround.receiveShadow=true;this.add(coastalGround);
+    if(this.route.fixedCells){
+      const positions=[],uv=[],indices=[],half=LOOP_WORLD.tileSize/2;
+      for(const {column,row}of this.route.fixedCells.values()){
+        const x=column*LOOP_WORLD.tileSize,front=Math.min(settings.endZ,row*LOOP_WORLD.tileSize+half),back=row*LOOP_WORLD.tileSize-half;
+        if(back>=front)continue;
+        const i=positions.length/3;positions.push(x-half,-.04,front,x+half,-.04,front,x-half,-.04,back,x+half,-.04,back);
+        for(const [px,pz]of [[x-half,front],[x+half,front],[x-half,back],[x+half,back]])uv.push(px/SURFACE_APPEARANCE.grassTileMetres,pz/SURFACE_APPEARANCE.grassTileMetres);
+        indices.push(i,i+1,i+2,i+1,i+3,i+2);if(i%32===0)yield;
+      }
+      const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geometry.setIndex(indices);geometry.computeVertexNormals();
+      const mesh=new THREE.Mesh(geometry,material);mesh.receiveShadow=true;this.add(mesh);yield;return;
+    }
     const half=LOOP_WORLD.tileSize/2,minZ=(Math.floor((this.route.destination.threshold-this.route.destination.length+half)/LOOP_WORLD.tileSize)-.5)*LOOP_WORLD.tileSize,coordinates=new Set([settings.endZ,minZ,this.route.destination.threshold]);
     for(let i=0;i<=JOURNEY.groundSegments;i++){const z=25000-i/JOURNEY.groundSegments*SCENERY.groundSize;if(z<settings.endZ&&z>minZ)coordinates.add(z);}
     const rows=[...coordinates].sort((a,b)=>b-a),landPositions=[],landUV=[],landIndices=[];
@@ -219,7 +231,7 @@ export class LandscapeView extends THREE.Group {
     const trees={bank:this.mountains.treeBank,geometry:this.mountains.treeGeometry,material:this.mountains.treeMaterial,farGeometry:this.mountains.treeSpriteGeometry,farMaterial:this.mountains.treeSpriteMaterial};
     for(const belt of regionBelts(this.route)){
       yield {task:'region-forest'};
-      this.add(yield* createCountryside({width:REGION_BLEND.width,length:belt.length,centerZ:belt.z,seed:belt.seed,
+      this.add(yield* createCountryside({width:REGION_BLEND.width,length:belt.length,centerX:belt.x||0,centerZ:belt.z,seed:belt.seed,
         heightAt:(x,z)=>this.world.heightAt(x,z),landAt:(x,z)=>regionLandAt(this.world,x,z),trees,forestOnly:true,treeField:this.world.trees,
         treeArea:REGION_BLEND.treeArea,treeNear:REGION_BLEND.treeNear,treeFar:REGION_BLEND.treeFar}));
     }

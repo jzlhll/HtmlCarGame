@@ -67,7 +67,7 @@ export class RouteWorld {
     for (const zOffset of [0, this.route.destination.threshold - 100]) {
       for (const [x, y, z, w, h, d] of [[215, 6, 140, 120, 12, 28], [200, 6.5, 10, 42, 13, 45], [255, 6.5, 10, 42, 13, 45], [310, 6.5, 10, 42, 13, 45], [135, 18, -210, 21, 36, 19]]) {
         // 目的地机坪东侧留出跑道与滑行空间。
-        const bx = zOffset ? x + 280 : x;
+        const bx = zOffset ? x + 280 + route.destination.x : x;
         this.addBox(bx, y, z + zOffset, w, h, d, '机场建筑', zOffset ? this.route.destination.elevation : 0);
       }
     }
@@ -358,7 +358,7 @@ export class RouteWorld {
   }
 
   heightAt(x, z) {
-    let height = Math.max(this.baseHeightAt(x, z),boundaryHeightAt(x,z));
+    let height = Math.max(this.baseHeightAt(x, z),boundaryHeightAt(x,z,this.route.boundary));
     for (const surface of this.mountainSurfaces) height = Math.max(height, sampleMountain(surface, x, z));
     return height;
   }
@@ -390,12 +390,12 @@ export class RouteWorld {
   treeContact() {return this.trees.touch(this.bodySweep)||Boolean(this.loop?.treeContact(this.bodySweep));}
 
   collision(aircraft, previous) {
-    const sweep = this.prepareBodySweep(aircraft, previous), bounds = this.sweepBounds;
+    const sweep = this.prepareBodySweep(aircraft, previous), bounds = this.sweepBounds, boundary=this.route.boundary;
     for(const {from,to,radius} of sweep){
       const steps=Math.max(1,Math.ceil(Math.hypot(to.x-from.x,to.z-from.z)/this.route.sweepStep));
-      if(Math.max(Math.abs(from.x),Math.abs(to.x))<WORLD_BOUNDARY.halfWidth-radius&&Math.min(from.z,to.z)>WORLD_BOUNDARY.back+radius&&Math.max(from.z,to.z)<WORLD_BOUNDARY.front-radius)continue;
+      if(Math.max(Math.abs(from.x-(boundary.centerX||0)),Math.abs(to.x-(boundary.centerX||0)))<boundary.halfWidth-radius&&Math.min(from.z,to.z)>boundary.back+radius&&Math.max(from.z,to.z)<boundary.front-radius)continue;
       for(let i=0;i<=steps;i++){const t=i/steps,x=from.x+(to.x-from.x)*t,z=from.z+(to.z-from.z)*t;
-        const h=boundaryHeightAt(x,z);if(h>0&&from.y+(to.y-from.y)*t-radius<=h)return WORLD_BOUNDARY.name;
+        const h=boundaryHeightAt(x,z,this.route.boundary);if(h>0&&from.y+(to.y-from.y)*t-radius<=h)return WORLD_BOUNDARY.name;
       }
     }
     const boxes = this.collisionBoxes, mountains = this.collisionMountains, cell = this.route.collisionCell;
