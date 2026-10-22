@@ -4,7 +4,7 @@ import { LOOP_WORLD, LANDSCAPE, SURFACE_APPEARANCE, WORLD_BOUNDARY } from './con
 import { loopVariant, isRouteCell, loopRiverZ, sampleLoopTerrain, LoopWorld } from './loop-world.js';
 import { mountainIndices } from './terrain.js';
 import { modelGeometry, surfaceTexture } from './surface-assets.js';
-import { createTerrainMaterial } from './terrain-material.js';
+import { createTerrainMaterial, createTerrainLOD } from './terrain-material.js';
 import { createCityBlocks } from './city-blocks.js';
 import { createCountryside } from './countryside-view.js';
 import { createDistrict } from './district-view.js';
@@ -23,19 +23,19 @@ export class LoopView extends THREE.Group {
   }
 
   *build() {
-    const groundMaterial=createTerrainMaterial(surfaceTexture('terrain-detail'));
+    const groundMaterials=[0,1,2].map(level=>createTerrainMaterial(surfaceTexture('terrain-detail'),level));
     const waterMaterial=new THREE.MeshStandardMaterial({color:0x398e9c,roughness:.32,metalness:.15});
     const shoreMaterial=new THREE.MeshStandardMaterial({color:0xb8b088,roughness:1});
     for(let variant=0;variant<LOOP_WORLD.variants;variant++) {
       yield {task:`world-template-${variant}`};
-      const group=new THREE.Group(), geometry=this.geometries[variant], lod=new THREE.LOD();
+      const group=new THREE.Group(), geometry=this.geometries[variant],levels=[];
       if(!geometry.boundingSphere)geometry.computeBoundingSphere();yield 'boundary';
-      for(const [index,step] of [1,2,4].entries()) {
+      for(const step of [1,2,4]) {
         const g=step===1?geometry:new THREE.BufferGeometry();
         if(step!==1){for(const [name,attribute] of Object.entries(geometry.attributes))g.setAttribute(name,attribute);g.setIndex(mountainIndices(LOOP_WORLD.segments,step));}
-        g.boundingSphere=geometry.boundingSphere;lod.addLevel(new THREE.Mesh(g,groundMaterial),[0,5500,10000][index],.12);yield 'boundary';
+        g.boundingSphere=geometry.boundingSphere;levels.push(g);yield 'boundary';
       }
-      group.add(lod);yield 'boundary';
+      geometry.computeBoundingBox();group.add(createTerrainLOD(levels,groundMaterials,geometry.boundingBox,{distances:[5500,10000],geometryByBounds:false}));yield 'boundary';
       const ribbon=(width,y)=>{
         const positions=[],indices=[],half=LOOP_WORLD.tileSize/2-400;
         for(let i=0;i<=192;i++){
@@ -74,15 +74,24 @@ export class LoopView extends THREE.Group {
     for(let z=-LOOP_WORLD.poolRadius;z<=LOOP_WORLD.poolRadius;z++)for(let x=-LOOP_WORLD.poolRadius;x<=LOOP_WORLD.poolRadius;x++){
       const slot=new THREE.Group();
       for(const template of this.templates){
-        const clone=cloneTemplate(template);
+        const clone=yield* cloneTemplate(template);
         clone.visible=false;clone.userData.loopClone=true;clone.userData.loopWarmup=this.slots.length===0;slot.add(clone);
-      }this.slots.push({x,z,group:slot});this.add(slot);yield;
+      }
+      slot.position.set(x*LOOP_WORLD.tileSize,0,z*LOOP_WORLD.tileSize);
+      slot.children.forEach((child,index)=>{child.visible=index===loopVariant(x,z);});
+      this.slots.push({x,z,column:x,row:z,group:slot});this.add(slot);yield;
     }
     this.cellX=Infinity;this.cellZ=Infinity;
   }
 
   installHorizon(group) {
-    group.traverse(object=>{
+    const steps=this.installHorizonSteps(group);while(!steps.next().done){}
+  }
+
+  *installHorizonSteps(group) {
+    const stack=[group];let visited=0;
+    while(stack.length){
+      const object=stack.pop();stack.push(...object.children);
       for(const material of Array.isArray(object.material)?object.material:object.material?[object.material]:[]){
         if(material.userData.keepOcean||material.userData.loopHorizon)continue;
         material.userData.loopHorizon=true;const previous=material.onBeforeCompile,key=material.customProgramCacheKey();
@@ -100,7 +109,8 @@ vLoopWorld=(modelMatrix*loopPoint).xz;
         };
         material.customProgramCacheKey=()=>key+'-loop-horizon-v1';material.needsUpdate=true;
       }
-    });
+      if(++visited%64===0)yield;
+    }
   }
 
   update(position,seconds) {
@@ -109,13 +119,18 @@ vLoopWorld=(modelMatrix*loopPoint).xz;
     const x=Math.floor((position.x+LOOP_WORLD.tileSize/2)/LOOP_WORLD.tileSize),z=Math.floor((position.z+LOOP_WORLD.tileSize/2)/LOOP_WORLD.tileSize);
     if(x!==this.cellX||z!==this.cellZ){
       this.cellX=x;this.cellZ=z;
+      const width=LOOP_WORLD.poolRadius*2+1;
       for(const slot of this.slots){
-        slot.column=x+slot.x;slot.row=z+slot.z;const variant=loopVariant(slot.column,slot.row);
-        slot.group.position.set(slot.column*LOOP_WORLD.tileSize,0,slot.row*LOOP_WORLD.tileSize);slot.group.updateMatrix();
+        const column=slot.x+Math.floor((x+LOOP_WORLD.poolRadius-slot.x)/width)*width;
+        const row=slot.z+Math.floor((z+LOOP_WORLD.poolRadius-slot.z)/width)*width;
+        if(slot.column===column&&slot.row===row)continue;
+        slot.column=column;slot.row=row;const variant=loopVariant(column,row);
+        slot.group.position.set(column*LOOP_WORLD.tileSize,0,row*LOOP_WORLD.tileSize);slot.group.updateMatrix();
         slot.group.children.forEach((child,index)=>{child.visible=index===variant;});
+        // 环形池只搬动离开边缘的槽位，隐藏模板随所属槽位一起刷新并重新冻结。
+        slot.group.traverse(object=>{object.matrixWorldAutoUpdate=true;});slot.group.updateMatrixWorld(true);
+        slot.group.traverse(object=>{object.matrixWorldAutoUpdate=false;});
       }
-      this.traverse(object=>{object.matrixWorldAutoUpdate=true;});this.updateMatrixWorld(true);
-      this.traverse(object=>{object.matrixWorldAutoUpdate=false;});
       if(this.ocean)this.ocean.matrixWorldAutoUpdate=true;
     }
     for(const slot of this.slots){
@@ -127,7 +142,7 @@ vLoopWorld=(modelMatrix*loopPoint).xz;
 }
 
 // 相同模板共享实例缓冲，不在每个池槽复制成千上万个矩阵。
-function cloneTemplate(source) {
+function* cloneTemplate(source,batch={visited:0}) {
   let clone;
   if(source.isInstancedMesh){
     clone=new THREE.InstancedMesh(source.geometry,source.material,0);
@@ -135,10 +150,11 @@ function cloneTemplate(source) {
     clone.count=source.count;clone.instanceMatrix=source.instanceMatrix;clone.instanceColor=source.instanceColor;
     clone.boundingBox=source.boundingBox;clone.boundingSphere=source.boundingSphere;
   }else if(source.isLOD){
-    clone=source.isCanopyLOD?new CanopyLOD(source.localBounds):new THREE.LOD();THREE.Object3D.prototype.copy.call(clone,source,false);
-    for(const level of source.levels)clone.addLevel(cloneTemplate(level.object),level.distance,level.hysteresis);
+    clone=source.isCanopyLOD?new CanopyLOD(source.localBounds,source.leafSize):new THREE.LOD();THREE.Object3D.prototype.copy.call(clone,source,false);
+    for(const level of source.levels)clone.addLevel(yield* cloneTemplate(level.object,batch),level.distance,level.hysteresis);
   }else{
-    clone=source.clone(false);for(const child of source.children)clone.add(cloneTemplate(child));
+    clone=source.clone(false);for(const child of source.children)clone.add(yield* cloneTemplate(child,batch));
   }
+  if(++batch.visited%64===0)yield;
   return clone;
 }

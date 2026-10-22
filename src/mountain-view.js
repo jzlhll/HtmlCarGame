@@ -5,7 +5,7 @@ import { prepareTreeModels } from './tree-models.js';
 import { createForestLOD } from './forest-view.js';
 import { treeDimensions } from './tree-contact.js';
 import { mountainIndices, sampleMountain, smoothRange, terrainNoise } from './terrain.js';
-import { createTerrainDetail, createTerrainMaterial } from './terrain-material.js';
+import { createTerrainDetail, createTerrainMaterial, createTerrainLOD } from './terrain-material.js';
 import { surfaceTexture } from './surface-assets.js';
 
 // 只消费世界山面；细节切换、岩纹和树冠不改变逻辑地形或悬空岩体。
@@ -15,10 +15,11 @@ export class MountainView extends THREE.Group {
     this.world = world;
     this.settings = LANDSCAPE.terrain;
     this.detail = createTerrainDetail();
-    this.material = createTerrainMaterial(this.detail);
-    this.rollingMaterial=createTerrainMaterial(this.detail);this.rollingMaterial.polygonOffset=true;this.rollingMaterial.polygonOffsetFactor=-1;this.rollingMaterial.polygonOffsetUnits=-1;
+    this.materials=[0,1,2].map(level=>createTerrainMaterial(this.detail,level));
+    this.rollingMaterials=[0,1,2].map(level=>{
+      const material=createTerrainMaterial(this.detail,level);material.polygonOffset=true;material.polygonOffsetFactor=-1;material.polygonOffsetUnits=-1;return material;
+    });
     this.textures = [this.detail];
-    this.surfaces = []; this.forest = [];
   }
 
   *buildRolling() {
@@ -72,11 +73,9 @@ export class MountainView extends THREE.Group {
     if(rolling)geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
     geometry.setAttribute('biome', new THREE.Float32BufferAttribute(biomes, 4));
-    const meshes = [geometry, this.reduceGeometry(geometry, surface.n, 2), this.reduceGeometry(geometry, surface.n, 4)].map(item => {
-      item.computeBoundingSphere(); const mesh = new THREE.Mesh(item, rolling?this.rollingMaterial:this.material); mesh.receiveShadow = true; this.add(mesh); return mesh;
-    });
-    const bounds = new THREE.Box3(new THREE.Vector3(surface.minX, surface.minY, surface.minZ), new THREE.Vector3(surface.maxX, surface.maxY, surface.maxZ));
-    this.surfaces.push({meshes, bounds, level: -1});
+    const geometries=[geometry,this.reduceGeometry(geometry,surface.n,2),this.reduceGeometry(geometry,surface.n,4)];
+    const bounds=new THREE.Box3(new THREE.Vector3(surface.minX,surface.minY,surface.minZ),new THREE.Vector3(surface.maxX,surface.maxY,surface.maxZ));
+    this.add(createTerrainLOD(geometries,rolling?this.rollingMaterials:this.materials,bounds,{receiveShadow:true}));
     if(surface.kind!=='rolling')yield* this.plantMountain(surface, vegetation);
   }
 
@@ -146,7 +145,8 @@ export class MountainView extends THREE.Group {
       colors.push(color.r, color.g, color.b); biomes.push(top ? 0.95 : 0, cap&&!top?appearance.strataStrength:0, 0, 1);
     }
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3)); geometry.setAttribute('biome', new THREE.Float32BufferAttribute(biomes, 4));
-    const mesh = new THREE.Mesh(geometry, this.material); mesh.receiveShadow = true; this.add(mesh);
+    geometry.computeBoundingBox();
+    this.add(createTerrainLOD([geometry],this.materials,geometry.boundingBox,{receiveShadow:true}));
     if (!cap) return;
     const trees = [], {top, radius, floor, outline} = solid.cap;
     const center=outline.reduce((point,next)=>[point[0]+next[0]/outline.length,point[1]+next[1]/outline.length],[0,0]);
@@ -162,22 +162,4 @@ export class MountainView extends THREE.Group {
     yield* this.addForestChunk(trees,{mountain:true});
   }
 
-  update(camera) {
-    const settings = this.settings;
-    for (const item of this.surfaces) {
-      const distance = item.bounds.distanceToPoint(camera.position);
-      let level = distance > settings.lodDistances[1] ? 2 : distance > settings.lodDistances[0] ? 1 : 0;
-      if (item.level >= 0 && level !== item.level) {
-        const boundary = settings.lodDistances[Math.min(level, item.level)];
-        if (Math.abs(distance - boundary) < settings.lodHysteresis) level = item.level;
-      }
-      item.meshes.forEach((mesh, i) => { mesh.visible = i === level; }); item.level = level;
-    }
-    for (const item of this.forest) {
-      const distance = item.bounds.distanceToPoint(camera.position);
-      if (item.close ? distance > settings.treeNear + 100 : distance < settings.treeNear - 100) item.close = !item.close;
-      item.near.visible = item.close && distance < settings.treeFar;
-      item.far.visible = !item.close && distance < settings.treeFar;
-    }
-  }
 }
