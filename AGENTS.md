@@ -2,8 +2,8 @@
 
 ## 项目与工作范围
 
-- 本分支用于新游戏“英语空战”，使用原生 JavaScript ES Modules + Three.js。优先阅读 [设计入口](docs/README.md)。已实现多关卡与学习闭环；`index.html`、运行时模块及根 README 已切换到英语空战。旧赛车源码仍保留，但不进入运行依赖与静态包。
-- 新游戏设计位于 `docs/design/english-air-combat/`，实施约定位于 `docs/implementation/english-air-combat.md`；旧赛车专题保留供参考，不作为新游戏规则。修改入口时同步根 README，不把两种游戏规则混写。
+- 本分支用于新游戏“英语空战”，使用原生 JavaScript ES Modules + Three.js。优先阅读 [设计入口](docs/README.md)。已实现多关卡与学习闭环；`index.html`、运行时模块及根 README 已切换到英语空战。本分支只保留英语空战源码，赛车实现参考 `main` 分支。
+- 新游戏设计位于 `docs/design/english-air-combat/`，实施约定位于 `docs/implementation/english-air-combat.md`。修改入口时同步根 README。
 - 回复、文档和代码注释使用中文，日志使用英文，保留既有代码标识符。文档只保留最终结论、必要的版本及兼容性说明。
 - 文件修改统一使用脚本，禁止使用 `apply_patch`。不主动新增测试文件或运行 Gradle；仅检查、分析请求不修改文件。执行 `git diff` 及其变体直接使用原生命令。
 
@@ -36,11 +36,11 @@
 
 - `src/version.js` 的 `APP_VERSION` 是程序版本和发布 tag 的唯一依据，格式为 `v主版本.次版本.补丁版本`，包版本与之对应但不带 `v`；本分支继承 `v1.0.9`。同轮修改、文档、启动与刷新不自动加版本，不创建发布 tag。
 - `GENERATOR_VERSION`、`CACHE_FORMAT_VERSION` 仅在生成算法兼容性、持久格式发生相应变化时递增；程序版本更新不能无条件删除全部资源缓存。
-- 英语空战成绩、设置、错词和生成资源使用独立命名空间 `english-air-combat`，不得覆盖赛车存档或缓存。生成资源按源码依赖、配置和种子建立指纹；命中恢复几何和像素，不重新生成。
+- 英语空战成绩、设置、错词和生成资源使用独立命名空间 `english-air-combat`，不得覆盖其他游戏的存档或缓存。生成资源按源码依赖、配置和种子建立指纹；命中恢复几何和像素，不重新生成。
 - 新资源校验并写入成功后才清理本游戏过时生成缓存并登记升级成功。失败保留旧可用资源和成功记录；持久存储不可用时明确降级为本页内存，不声称持久升级成功。指纹清单和生成缓存不提交 Git。
 
 ## 运行与验证
 
 - 缺少依赖时执行 `npm ci`。执行 `npm start` 后通过 HTTP 打开 `http://localhost:5173`；多个 worktree 使用独立 `PORT`，不要停止用户原有服务，不直接打开 HTML 文件。
-- 文档阶段检查规则一致性、点阵数量和本地链接；实现后按 [英语空战验收](docs/implementation/english-air-combat-validation.md) 与 [通用验证流程](docs/implementation/validation.md) 选择受影响部分。旧文档中的赛车玩法回归不适用于新游戏。
+- 文档阶段检查规则一致性、点阵数量和本地链接；实现后按 [英语空战验收](docs/implementation/english-air-combat-validation.md) 与 [通用验证流程](docs/implementation/validation.md) 选择受影响部分。
 - 不逐项报告常规检查通过或按规则省略的测试与构建；只报告交付结果、实际失败和影响结论的验证缺口。回复使用普通 Markdown 和文件链接，不使用行内批注卡片。

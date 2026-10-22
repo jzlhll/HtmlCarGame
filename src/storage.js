@@ -1,4 +1,4 @@
-import { AUDIO, SCORES } from './config.js';
+import { AUDIO, SCORES, RENDERING } from './config.js';
 import { LearningDB } from './learning-db.js';
 import { VOCABULARY } from './vocabulary-data.js';
 import { TEST_ACCOUNTS,validateAccountName,randomAccountName,newAccountId } from './accounts.js';
@@ -6,7 +6,7 @@ const canonical=new Map(VOCABULARY.map(entry=>[entry.id,entry])),PREFIX='english
 export class Storage {
   constructor(debug=false,preferredAccount=null){
     this.debug=debug;this.available=true;this.warning='';this.account=null;this.prefix=null;this.profileCache=new Map();this.pendingSave=Promise.resolve();
-    this.settings={volume:AUDIO.masterVolume,reducedMotion:false};this.scores=[];this.learning={};this.progress={selected:1,unlocked:1};this.review=null;this.pendingRun=null;this.levelState={currentId:null,sessions:{}};this.savedRuns=new Set();this.attemptRows=[];this.database=null;this.databaseAvailable=false;
+    this.settings={volume:AUDIO.masterVolume,reducedMotion:false,renderQuality:RENDERING.defaultQuality};this.scores=[];this.learning={};this.progress={selected:1,unlocked:1};this.review=null;this.pendingRun=null;this.levelState={currentId:null,sessions:{}};this.savedRuns=new Set();this.attemptRows=[];this.database=null;this.databaseAvailable=false;
     this.cleanup=debug?Promise.resolve():this.discardLegacyData();
     const registry=this.readAt(PREFIX,debug?'debug-accounts':'accounts',null);
     this.accounts=debug?TEST_ACCOUNTS.map(account=>({...account})):[];
@@ -42,7 +42,7 @@ export class Storage {
     if(this.account)this.profileCache.set(this.account.id,{settings:{...this.settings},scores:this.scores,learning:this.learning,progress:this.progress,review:this.review,pendingRun:this.pendingRun,levelState:this.levelState,savedRuns:this.savedRuns,attemptRows:this.attemptRows});
     this.account=account;this.prefix=this.debug?PREFIX+'debug:'+account.id+':':PREFIX+'account:'+account.id+':';
     const cached=this.profileCache.get(id),settings=cached?.settings||this.read('settings',{});
-    Object.assign(this.settings,{volume:AUDIO.masterVolume,reducedMotion:false},settings);this.settings.volume=Number.isFinite(this.settings.volume)?Math.max(0,Math.min(1,this.settings.volume)):AUDIO.masterVolume;this.settings.reducedMotion=this.settings.reducedMotion===true;
+    Object.assign(this.settings,{volume:AUDIO.masterVolume,reducedMotion:false,renderQuality:RENDERING.defaultQuality},settings);this.settings.volume=Number.isFinite(this.settings.volume)?Math.max(0,Math.min(1,this.settings.volume)):AUDIO.masterVolume;this.settings.reducedMotion=this.settings.reducedMotion===true;if(!Object.hasOwn(RENDERING.qualities,this.settings.renderQuality))this.settings.renderQuality=RENDERING.defaultQuality;
     this.scores=cached?.scores||this.read('scores',[]);if(!Array.isArray(this.scores))this.scores=[];this.scores=this.scores.filter(row=>row&&Number.isFinite(row.score));
     this.learning=cached?.learning||this.read('learning',{});if(!this.learning||Array.isArray(this.learning)||typeof this.learning!=='object')this.learning={};
     for(const [wordId,row] of Object.entries(this.learning)){if(!row||!Number.isFinite(row.correct)||!Number.isFinite(row.wrong))delete this.learning[wordId];else{row.incomplete=Number.isFinite(row.incomplete)?row.incomplete:0;if(canonical.has(wordId))Object.assign(row,{word:canonical.get(wordId).word,meaning:canonical.get(wordId).meaning});}}

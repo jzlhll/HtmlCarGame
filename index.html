@@ -9,6 +9,8 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230a1521'/%3E%3Cpath d='M32 7 38 30 56 43 56 48 36 42 38 55 26 55 28 42 8 48 8 43 26 30Z' fill='%2381eedb'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="./src/style.css">
   <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js"}}</script>
+  <link rel="modulepreload" href="./node_modules/three/build/three.module.js">
+  <link rel="modulepreload" href="./node_modules/three/build/three.core.js">
 </head>
 <body data-home="true">
   <main id="app" tabindex="-1">
@@ -36,7 +38,7 @@
       <div id="loading" class="loading-strip"><div><span id="loading-label">准备星海</span><span id="loading-number">0%</span></div><i><b id="loading-fill"></b></i></div>
       <div id="compatibility" class="compatibility" hidden>请使用带实体键盘的桌面浏览器游玩，或阅读玩法介绍。</div>
     </section>
-    <footer class="site-footer"><div><label class="sound-control"><span id="sound-icon">♪</span><input id="volume" type="range" min="0" max="1" step="0.05" value="0.35" aria-label="音效音量"></label><label class="motion-control"><input id="reduced-motion" type="checkbox"> 减少闪烁</label><span id="version">v1.0.9</span></div></footer>
+    <footer class="site-footer"><div><label class="sound-control"><span id="sound-icon">♪</span><input id="volume" type="range" min="0" max="1" step="0.05" value="0.35" aria-label="音效音量"></label><label class="quality-control">画质 <select id="render-quality" aria-label="画质" title="降低画质可节省耗电，文字保持清晰"></select></label><label class="motion-control"><input id="reduced-motion" type="checkbox"> 减少闪烁</label><span id="version">v1.0.9</span></div></footer>
     <div id="storage-notice" class="storage-notice" role="status" hidden></div>
   </main>
   <script type="module" src="./src/bootstrap.js"></script>

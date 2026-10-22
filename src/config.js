@@ -1,5 +1,14 @@
 // 所有玩法时间均使用有效游玩秒数，空间使用 960×1080 逻辑坐标。
 export const WORLD = { width: 960, height: 1080, step: 1 / 120, maxFrameSeconds: 0.25 };
+export const MODEL_GEOMETRY = { sphere: { segments: 48, rows: 24 }, aircraftSphere: { segments: 24, rows: 12 } };
+export const RENDERING = {
+  defaultQuality: 'high', generationBatchMilliseconds: 4,
+  qualities: {
+    high: { label: '高', maxPixelRatio: 2, maxPixels: 4500000, menuFPS: 60 },
+    standard: { label: '标准', maxPixelRatio: 1.5, maxPixels: 3686400, menuFPS: 30 },
+    economy: { label: '省电', maxPixelRatio: 1, maxPixels: 2073600, menuFPS: 30 }
+  }
+};
 export const LEVELS = { durationSeconds: 300, wordCount: 12 };
 export const BOSSES = { miniAt: 90, finalAt: 240, durationSeconds: 60, miniFaces: 4, finalFaces: 5, turnSeconds: 0.6, xRange: 220, yRange: 35, centerY: 350, miniCrates: 3, finalCrates: 5, victorySeconds: 5 };
 export const BOSS_VISUALS = {
@@ -55,6 +64,9 @@ export const AUDIO = { masterVolume: 0.35, maxShotsPerSecond: 8, speechRate: 0.7
 export const SCORES = { limit: 10 };
 export function validateConfig() {
   const positive = value => Number.isFinite(value) && value > 0;
+  for(const {segments,rows} of Object.values(MODEL_GEOMETRY))if(!Number.isInteger(segments)||segments<3||!Number.isInteger(rows)||rows<2||(segments+1)*(rows+1)>65536)throw new Error('Invalid sphere geometry configuration');
+  if(!Object.hasOwn(RENDERING.qualities,RENDERING.defaultQuality)||!positive(RENDERING.generationBatchMilliseconds))throw new Error('Invalid rendering defaults');
+  for(const quality of Object.values(RENDERING.qualities))if(!positive(quality.maxPixelRatio)||!positive(quality.menuFPS)||(quality.maxPixels!==null&&!positive(quality.maxPixels)))throw new Error('Invalid rendering quality configuration');
   if (!Number.isInteger(LEVELS.wordCount)||LEVELS.wordCount<Math.max(BOSSES.miniFaces,BOSSES.finalFaces)) throw new Error('Invalid level vocabulary count');
   if (!positive(LETTERS.fireIntervalSeconds) || LETTERS.fireIntervalSeconds <= 0.02) throw new Error('Letter interval must exceed 0.02 seconds');
   for (const values of [WORDS.spawnIntervalSeconds, WORDS.fallDurationSeconds]) if (!values.every(positive) || values[0] > values[1]) throw new Error('Invalid interval range');

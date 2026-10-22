@@ -20,8 +20,6 @@ const server = http.createServer(async(req,res) => {
   }
   fs.readFile(file,(err,data) => {
     if (err) { res.writeHead(404).end('Not found'); return; }
-    // 模块 Worker 不读取 import map，工具模块改用相对依赖。
-    if(relative.split(path.sep).join('/')==='node_modules/three/examples/jsm/utils/BufferGeometryUtils.js')data=Buffer.from(data.toString().replace("from 'three';","from '../../../build/three.module.js';"));
     res.writeHead(200,{'Content-Type':types[path.extname(file)] || 'application/octet-stream','Cache-Control':'no-cache','X-Content-Type-Options':'nosniff'}).end(data);
   });
 });

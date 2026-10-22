@@ -39,4 +39,4 @@ Three.js 单人英语拼写射击游戏。玩家横移，向白色拼写飞机�
 | [实现结构](implementation/english-air-combat.md) | 模块、资源、存储和兼容性 |
 | [验收清单](implementation/english-air-combat-validation.md) | 受影响验证与实际结果 |
 
-旧赛车设计保留作继承资料，不承载英语空战规则。工程通用流程参考 [validation.md](implementation/validation.md)。
+赛车源码与设计参考 `main` 分支。工程通用流程参考 [validation.md](implementation/validation.md)。
