@@ -1,5 +1,6 @@
 import { FLIGHT, RUNWAY, STARTUP_STEPS, TAKEOFF_CONTROLS, CLIMB_CONTROLS, LEVELS, JOURNEY, displayHeight } from './config.js';
 
+import { WindFeedback } from './wind-feedback.js';
 import { APP_VERSION } from './version.js';
 import { NavigationUI } from './navigation-ui.js';
 import { setText, setBilingual, enlargeChinese } from './dom.js';
@@ -15,6 +16,7 @@ export class UI {
     this.game = game;
     this.navigation = new NavigationUI(game);
     this.container = container;
+    this.windFeedback = new WindFeedback(container);
     this.error = false;
     this.preparing = false;
     this.upgrading = true;
@@ -157,20 +159,20 @@ export class UI {
 
   updateSystems() {
     this.setFlow();
-    this.updateLandingGuide();
+    const a=this.game.aircraft,systems=a.systems,flight=this.game.flight,agl=flight.altitude(),gearFault=flight.gearWarning;
+    this.updateLandingGuide(agl,gearFault);
     this.elements['lightning-fault'].hidden=!this.game.aircraft.lightningStrike || this.game.view!=='COCKPIT' || ['CRASH','COMPLETE','RESULT'].includes(this.game.phase);
-    const a = this.game.aircraft, systems = a.systems, flight = this.game.flight;
     const glass=this.elements['glass-damage'];glass.hidden=a.glassDamage<=0||this.game.view!=='COCKPIT';
     setText(glass,`−${a.glassDamage}%`);
     if(this.glassReading!==a.glassDamage){this.glassReading=a.glassDamage;glass.setAttribute('aria-label',`风挡玻璃损伤${a.glassDamage}%，剩余承受度${100-a.glassDamage}%`);glass.title=`Windshield（风挡玻璃）：剩余承受度${100-a.glassDamage}%`;}
-    const speed = this.game.mission.approaching && !a.onGround ? Number(a.airspeed.toFixed(2)) : Math.round(a.airspeed), altitude = Math.floor(displayHeight(flight.altitude()));
+    const speed = this.game.mission.approaching && !a.onGround ? Number(a.airspeed.toFixed(2)) : Math.round(a.airspeed), altitude = Math.floor(displayHeight(agl));
     const gearReady = flight.canRetractGear();
-    const gearHidden = this.game.view !== 'COCKPIT' || flight.altitude() >= FLIGHT.gearPreviewHeight || ['COMPLETE', 'RESULT'].includes(this.game.phase);
+    const gearHidden = this.game.view !== 'COCKPIT' || agl >= FLIGHT.gearPreviewHeight || ['COMPLETE', 'RESULT'].includes(this.game.phase);
     if (this.elements['gear-preview'].hidden !== gearHidden) this.elements['gear-preview'].hidden = gearHidden;
-    const gearWarning = !gearHidden && flight.gearWarning;
+    const gearWarning = !gearHidden && gearFault;
     const gearWarningPulse = gearWarning && Math.floor(this.game.activeSeconds / FLIGHT.gearWarningPulseSeconds) % 2 === 0;
     const pitch = Number((a.pitch * 180 / Math.PI).toFixed(1)), bank = degrees(a.bank);
-    const signature = [this.game.phase, this.game.runId, systems.lights, systems.door, systems.harness, systems.avionics, systems.engine, systems.flaps, systems.gear, flight.thrustLocked, a.birdStrikeCount, flight.gearWarning, gearWarningPulse, flight.gearExtensionBlocked, this.game.mission.offCourse, this.game.mission.approaching, systems.parkingBrake, a.wheelBrake, speed, altitude, a.verticalSpeed.toFixed(1), pitch, bank, gearReady, Math.floor(flight.completionSeconds * 10), degrees(a.angleOfAttack * 10), degrees(a.flightPathAngle * 10), a.loadFactor.toFixed(1), flight.pitchLow, flight.stalled, a.birdStrike, Math.round(this.game.mission.targetAltitude), this.game.prompts.current].join('|');
+    const signature = [this.game.phase, this.game.runId, systems.lights, systems.door, systems.harness, systems.avionics, systems.engine, systems.flaps, systems.gear, flight.thrustLocked, a.birdStrikeCount, gearFault, gearWarningPulse, flight.gearExtensionBlocked, this.game.mission.offCourse, this.game.mission.approaching, systems.parkingBrake, a.wheelBrake, speed, altitude, a.verticalSpeed.toFixed(1), pitch, bank, gearReady, Math.floor(flight.completionSeconds * 10), degrees(a.angleOfAttack * 10), degrees(a.flightPathAngle * 10), a.loadFactor.toFixed(1), flight.pitchLow, flight.stalled, a.birdStrike, this.game.prompts.current].join('|');
     if (signature === this.lastSystemsSignature) return;
     this.lastSystemsSignature = signature;
     this.elements['gear-preview'].classList.toggle('is-gear-warning', gearWarning);
@@ -218,13 +220,13 @@ export class UI {
   }
 
   // 顶部优先显示异常；低空进近时始终同时显示接地速度范围。
-  updateLandingGuide() {
+  updateLandingGuide(altitude,gearWarning) {
     const game=this.game,a=game.aircraft,flight=game.flight,mission=game.mission;
     const landingStatus=mission.approaching && !a.onGround && !a.landed ? flight.landingStatus() : null;
     let warning=null;
     if(game.view==='COCKPIT' && !['STARTUP','CRASH','COMPLETE','RESULT'].includes(game.phase)) {
       if(flight.stalled && !landingStatus?.ready) warning=['Stall',flight.stallGuidance,'danger'];
-      else if(flight.gearWarning) warning=['Landing gear','起落架未完全放下，触地会爆炸！','danger'];
+      else if(gearWarning) warning=['Landing gear','起落架未完全放下，触地会爆炸！','danger'];
       else if(flight.pitchLow && !landingStatus?.ready) warning=['Descent danger','下降危险，可能撞地。','danger'];
       else if(a.lightningStrike) warning=['Lightning fault','雷击故障，本关无法再提速。','danger'];
       else if(flight.thrustLocked) warning=['Thrust unavailable','两次鸟击，T 加速失效，下一关恢复。','danger'];
@@ -236,14 +238,14 @@ export class UI {
       else if(game.prompts.type==='ceiling' && game.prompts.current) warning=['Altitude limit',game.prompts.current,'warning'];
       else if(a.birdStrike) warning=['Bird damage','玻璃受损，本关最高速度降至 80%。','warning'];
       if(!warning && mission.approaching && !a.onGround && !a.landed) {
-        const altitude=flight.altitude(),status=landingStatus;
+        const status=landingStatus;
         if(altitude<=FLIGHT.gearWarningHeight && (status.runway || altitude<=game.route.landingDangerHeight) && !status.ready) {
           if(!status.gear) warning=['Landing gear','起落架未完全放下，触地会爆炸！','danger'];
           else if(!status.pitch) warning=['Landing pitch','接地俯仰须保持−3°到+3°。','danger'];
           else if(!status.runway) warning=['Runway position','机身位置尚未进入跑道范围。','danger'];
         }
       }
-      if(landingStatus && flight.altitude()<game.route.landingGuideHeight) {
+      if(landingStatus && altitude<game.route.landingGuideHeight) {
         const range=`${game.route.landingMinSpeed}–${game.route.landingMaxSpeed} km/h`;
         let hint=landingStatus.speed?'着陆速度在允许范围内，请保持。':'';
         if(a.airspeed<game.route.landingMinSpeed) hint=flight.thrustLocked
@@ -285,6 +287,7 @@ export class UI {
   }
 
   update() {
+    this.windFeedback.update(this.game);
     this.updateSystems();
     this.navigation.update();
     if (this.game.phase === 'INTRO') {

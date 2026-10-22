@@ -338,3 +338,6 @@ cjk-text { font-size: calc(1em + 1px); }
 
 .glass-damage {flex:0 0 auto;color:#ffb347;font-size:17px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;text-shadow:0 1px 4px #281000;letter-spacing:-.5px;}
 @media(max-width:900px){.glass-damage{font-size:15px;}}
+
+/* 气流痕迹位于仪表后方，保持中间视野，不使用模糊滤镜或额外全屏渲染。 */
+.wind-traces {position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:hidden;}

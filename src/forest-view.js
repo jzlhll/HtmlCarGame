@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 import { CanopyLOD } from './canopy-lod.js';
-import { TREE_MODELS, COUNTRYSIDE } from './config.js';
+import { TREE_MODELS, COUNTRYSIDE, VIEW_DISTANCE } from './config.js';
 
 // 中远景保留大块合批，仅靠近的块展开为更细的近／中景子组。
 export function* createForestLOD(record,trees,centerZ=0,{treeNear=COUNTRYSIDE.treeNear,treeFar=COUNTRYSIDE.treeFar,treeField}={}) {
   const root=new THREE.Group(),chunks=new Map(),size=TREE_MODELS.chunkSize,matrix=new THREE.Matrix4(),color=new THREE.Color(),tint=new THREE.Color();
-  root.name='Forest chunks';const rangeBounds=new THREE.Box3(),visibleDistance=Math.max(treeFar,TREE_MODELS.visibleDistance);
+  root.name='Forest chunks';const rangeBounds=new THREE.Box3(),visibleDistance=Math.max(treeFar,TREE_MODELS.visibleDistance)*VIEW_DISTANCE.scale;
   for(let i=0;i<record.count;i++){
     const offset=i*16,x=record.matrices[offset+12],z=record.matrices[offset+14],key=Math.floor(x/size)+':'+Math.floor((z-centerZ)/size);
     let chunk=chunks.get(key);if(!chunk)chunks.set(key,chunk=Array.from({length:TREE_MODELS.species.length},()=>[]));
@@ -32,11 +32,11 @@ export function* createForestLOD(record,trees,centerZ=0,{treeNear=COUNTRYSIDE.tr
           leafSize=Math.max(leafSize,(model.leafSize||0)*Math.max(Math.hypot(m[offset],m[offset+1],m[offset+2]),Math.hypot(m[offset+4],m[offset+5],m[offset+6]),Math.hypot(m[offset+8],m[offset+9],m[offset+10])));
         }
         patchBounds.min.z-=centerZ;patchBounds.max.z-=centerZ;
-        const detail=new CanopyLOD(patchBounds,leafSize);detail.name='Forest detail';detail.userData.detailKind='forestDetail';detail.addLevel(near,0,.12);detail.addLevel(medium,treeNear,.12);levels[0].add(detail);yield;
+        const detail=new CanopyLOD(patchBounds,leafSize);detail.name='Forest detail';detail.userData.detailKind='forestDetail';detail.addLevel(near,0,.12);detail.addLevel(medium,treeNear*TREE_MODELS.nearDistanceScale,.12);levels[0].add(detail);yield;
       }
     }
     rangeBounds.union(bounds);bounds.min.z-=centerZ;bounds.max.z-=centerZ;
-    const lod=new CanopyLOD(bounds);lod.position.z=centerZ;lod.addLevel(levels[0],0,.12);lod.addLevel(levels[1],treeNear,.12);lod.addLevel(levels[2],TREE_MODELS.midDistance,.12);lod.addLevel(new THREE.Group(),visibleDistance,.12);root.add(lod);yield;
+    const lod=new CanopyLOD(bounds);lod.position.z=centerZ;lod.addLevel(levels[0],0,.12);lod.addLevel(levels[1],treeNear*TREE_MODELS.nearDistanceScale,.12);lod.addLevel(levels[2],TREE_MODELS.midDistance*VIEW_DISTANCE.scale,.12);lod.addLevel(new THREE.Group(),visibleDistance,.12);root.add(lod);yield;
   }
   // 接触索引只登记原始记录一次，不能随显示子组重复添加。
   if(treeField)yield* treeField.addMatrices(record.matrices,record.count,record.species);

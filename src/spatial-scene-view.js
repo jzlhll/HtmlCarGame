@@ -13,6 +13,7 @@ export class SpatialSceneView {
   }
 
   *prepare(roots,loop) {
+    this.loop=loop;
     this.warmup.fog=this.source.fog;this.warmup.environment=this.source.environment;
     const fixed=new Set(roots),slotGroups=new Set(loop.slots.map(slot=>slot.group));
     for(const object of this.source.children)if(!fixed.has(object)&&!object.isCamera){
@@ -121,6 +122,8 @@ export class SpatialSceneView {
   }
 
   select(camera) {
+    // 主镜头裁剪会修改槽位可见性，小窗查询前按自己的相机重新筛选。
+    this.loop.cull(camera);
     const scene=this.scene;scene.background=this.source.background;scene.fog=this.source.fog;scene.environment=this.source.environment;scene.overrideMaterial=this.source.overrideMaterial;
     this.selected.length=0;this.seen.clear();this.stats.candidates=0;
     for(const object of this.dynamic)this.selected.push(object);

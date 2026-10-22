@@ -1,5 +1,5 @@
 import { cloudField } from './weather-world.js';
-import { WEATHER, WEATHER_MOTION, SCENERY, worldHorizontalSpeed } from './config.js';
+import { WEATHER, WEATHER_MOTION, WHITE_CLOUD_SCALE, SCENERY, worldHorizontalSpeed } from './config.js';
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 
 export function cloudX(cloud,seconds=0) {
@@ -26,7 +26,8 @@ export class Weather {
     let white=0,storm=0,whiteVisibility=WEATHER.whiteVisibility,current=-1;
     for(const cloud of this.world.weather?.clouds||[]){
       const dx=position.x-cloudX(cloud,this.seconds),dz=position.z-cloudZ(cloud,this.seconds),c=Math.cos(cloud.heading),s=Math.sin(cloud.heading);
-      const x=(c*dx-s*dz)/(WEATHER.width*cloud.scaleX),y=(position.y-cloud.y)/WEATHER.height,z=(s*dx+c*dz)/(WEATHER.length*cloud.scaleZ);
+      const whiteCloud=cloud.kind==='white';
+      const x=(c*dx-s*dz)/(WEATHER.width*cloud.scaleX*(whiteCloud?WHITE_CLOUD_SCALE.width:1)),y=(position.y-cloud.y)/(WEATHER.height*(whiteCloud?WHITE_CLOUD_SCALE.height:1)),z=(s*dx+c*dz)/(WEATHER.length*cloud.scaleZ);
       if(Math.abs(x)>.5||Math.abs(y)>.5||Math.abs(z)>.5)continue;
       const depth=clamp(-cloudField(x,y,z,this.world.weather.templates[cloud.variant])*3,0,1);
       if(cloud.kind==='white'&&depth>white){white=depth;whiteVisibility=cloud.thin?WEATHER.thinVisibility:WEATHER.whiteVisibility;}

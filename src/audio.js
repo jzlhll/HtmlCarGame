@@ -1,4 +1,5 @@
 import { AUDIO, FLIGHT } from './config.js';
+import { windPulse } from './wind-feedback.js';
 import { VOICE_BANK_URL, VOICE_CLIPS } from './voice-clips.js';
 
 // 一个音频上下文复用持续声源，短音与播报只由有效事件触发。
@@ -68,6 +69,7 @@ export class FlightAudio {
     const noise = context.createBufferSource(); noise.buffer = buffer; noise.loop = true;
     this.fan = this.noiseChannel(noise, 'lowpass', AUDIO.fanIdleHz);
     this.wind = this.noiseChannel(noise, 'bandpass', AUDIO.windIdleHz);
+    this.gust = this.noiseChannel(noise, 'bandpass', AUDIO.gust.lowHz);
     this.wheels = this.noiseChannel(noise, 'lowpass', AUDIO.wheelIdleHz);
     noise.start();
   }
@@ -160,7 +162,7 @@ export class FlightAudio {
     if (tick) this.cue(AUDIO.cues.countdown);
     if (game.phase==='CRASH') {
       this.cancelSpeech();
-      for (const channel of [this.engine,this.harmonic,this.fan,this.wind,this.wheels,this.motor,this.alarm]) this.target(channel.gain.gain,0);
+      for (const channel of [this.engine,this.harmonic,this.fan,this.wind,this.gust,this.wheels,this.motor,this.alarm]) this.target(channel.gain.gain,0);
       return;
     }
     const duck = this.utterance || this.voiceSource ? AUDIO.voiceDuck : 1;
@@ -178,6 +180,10 @@ export class FlightAudio {
     const speed = Math.max(0, Math.min(AUDIO.speedCap, a.airspeed / FLIGHT.rotationSpeed));
     this.target(this.wind.gain.gain, AUDIO.windGain * duck * speed * speed * (a.onGround ? AUDIO.groundWindScale : 1));
     this.target(this.wind.filter.frequency, AUDIO.windIdleHz + speed * AUDIO.windSpeedSweep);
+    const current=game.airCurrent,gust=current?.kind&&!a.onGround&&!a.landed?current.strength:0;
+    const gustPulse=gust?windPulse(current):0,level=AUDIO.gust;
+    this.target(this.gust.gain.gain,level.gain*duck*gust*(level.baseLevel+(1-level.baseLevel)*gustPulse)*(current?.kind==='turbulence'?level.turbulenceScale:1));
+    this.target(this.gust.filter.frequency,level.lowHz+level.sweepHz*gustPulse);
     const wheelLevel = a.onGround ? Math.min(1, speed) : 0;
     const bumps = 1 + AUDIO.wheelRoughness * Math.sin(game.activeSeconds * AUDIO.wheelBumpRate * (1 + speed));
     this.target(this.wheels.gain.gain, AUDIO.wheelGain * duck * wheelLevel * bumps * (a.wheelBrake ? AUDIO.brakeGainScale : 1));
