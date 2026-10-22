@@ -4,7 +4,7 @@ import { AIRCRAFT, CAMERA, DESTRUCTION, SCENERY, ENGINE_VIBRATION, GAME, FLIGHT_
 import { AirportView } from './airport-view.js';
 import { AirportTrafficView } from './airport-traffic-view.js';
 import { CockpitView } from './cockpit-view.js';
-import { createAircraft } from './models.js';
+import { createAircraft, prepareAircraftTemplate } from './models.js';
 import { CameraSequence } from './camera-sequence.js';
 import { LandscapeView } from './landscape-view.js';
 import { AircraftPreview } from './aircraft-preview.js';
@@ -59,6 +59,7 @@ export class GameRenderer {
     yield {task:'landscape'};
     this.impactEffects = new ImpactEffects(); this.scene.add(this.impactEffects);
     this.impactOffset = new THREE.Vector3(); this.impactTarget = new THREE.Vector3();
+    yield* prepareAircraftTemplate();
     this.traffic = new TrafficView(world.route);yield* this.traffic.build();this.scene.add(this.traffic);
     this.trafficIndicators = new TrafficIndicators(document.getElementById('traffic-indicators'));
     yield {task:'traffic'};
@@ -109,7 +110,14 @@ export class GameRenderer {
       colors.push(color.r, color.g, color.b);
     }
     skyGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-    this.sky = new THREE.Mesh(skyGeometry, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide, fog: false, depthWrite: false, toneMapped: false }));
+    this.sky = new THREE.Mesh(skyGeometry, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide, fog: false, depthTest: false, depthWrite: false, toneMapped: false }));
+    // 天空先绘制，并适配每个视口的实际远裁面，避免球壳被截成移动圆弧。
+    this.sky.frustumCulled=false;this.sky.renderOrder=-1;
+    this.sky.onBeforeRender=(renderer,scene,camera)=>{
+      this.sky.position.setFromMatrixPosition(camera.matrixWorld);
+      this.sky.scale.setScalar(camera.far*.5/SCENERY.skyRadius);
+      this.sky.updateMatrixWorld();
+    };
     this.scene.add(this.sky);
     this.weatherView=new WeatherView(world);this.scene.add(this.weatherView);this.weatherView.installSky(this.sky);yield* this.weatherView.build();
     this.renderer.domElement.addEventListener('webglcontextlost', event => {
@@ -307,7 +315,6 @@ export class GameRenderer {
     }
     this.cockpit.resize(this.camera.aspect, this.camera.fov);
     this.weatherView.update(game,this.scene);
-    this.sky.position.copy(this.camera.position);
     this.landscape.update(game.activeSeconds, this.camera, pose.position);
     this.traffic.update(game, flying ? Math.min(1, renderRemainder / GAME.fixedStep) : 1);
     this.impactEffects.update(game,this.camera,this.renderer.domElement.height);

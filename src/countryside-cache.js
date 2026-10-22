@@ -8,7 +8,7 @@ const attributes=['position','normal','color','uv','landUse'];
 // 持久层只保存数值缓冲；材质、GPU对象和共享树冠几何仍由当前渲染器持有。
 export function* restoreCountryside(key,fieldMaterial,roadMaterial,trees,centerZ,{treeNear=COUNTRYSIDE.treeNear,treeFar=COUNTRYSIDE.treeFar,treeField}={}) {
   const cache=surfaceCache();
-  if(!cache.available){sceneCacheStats.misses++;return null;}
+  if(!cache.readable){sceneCacheStats.misses++;return null;}
   const meta=yield {wait:cache.read(key+'/meta')};
   if(!meta||meta.recipe!==COUNTRYSIDE.cacheRecipe||!Number.isInteger(meta.count)||meta.count<1||meta.count>100){sceneCacheStats.misses++;return null;}
   const records=[];

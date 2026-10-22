@@ -130,11 +130,7 @@ export class AirportView extends THREE.Group {
     }
     trunks.count=crowns.count=treeCount;this.treeCount=treeCount;
     trunks.computeBoundingSphere(); crowns.computeBoundingSphere();
-    const farCrowns = new THREE.InstancedMesh(modelGeometry('tree-crown-far'), crown, 80);
-    farCrowns.count=treeCount;
-    farCrowns.instanceMatrix = crowns.instanceMatrix; farCrowns.computeBoundingSphere();
-    const foliage = new THREE.LOD(); foliage.position.set(0, 8, crownCenterZ);
-    foliage.addLevel(crowns, 0); foliage.addLevel(farCrowns, SURFACE_APPEARANCE.airportTreeLodMetres, SURFACE_APPEARANCE.airportTreeLodHysteresis);
+    const foliage=new THREE.Group();foliage.position.set(0,8,crownCenterZ);foliage.add(crowns);
     this.add(trunks, foliage);
     this.batchSurfaces();
   }

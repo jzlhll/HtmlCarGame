@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { TREE_MODELS } from './config.js';
+import { TREE_MODELS, VIEW_DISTANCE } from './config.js';
 import { treeProfiles } from './tree-species.js';
 import { indexTreeGeometry } from './tree-indexing.js';
 import { surfaceCache, surfaceTexture } from './surface-assets.js';
@@ -111,7 +111,7 @@ function* treeGeometry(profile,level) {
 // 六种树各有近、中、远三份共享原型；远处只保留主干与冠形，不生成细枝垂根。
 export function* prepareTreeModels() {
   const cache=surfaceCache(),bank=[];yield {wait:cache.ready};
-  const material=new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,map:surfaceTexture('terrain-detail'),side:THREE.DoubleSide});
+  const material=new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,map:surfaceTexture('terrain-detail'),side:THREE.DoubleSide,alphaToCoverage:true});
   const compile=shader=>{
     shader.uniforms.foliageAtlas={value:surfaceTexture('foliage-color')};
     shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nattribute float foliage;varying float vFoliage;').replace('#include <begin_vertex>','#include <begin_vertex>\nvFoliage=foliage;');
@@ -137,6 +137,13 @@ export function* prepareTreeModels() {
         diffuseColor.rgb=vec3(.28,.23,.145)*(.72+grain*.6)*(1.-fissure*.32);
       }
     `);
+    // 只淡出整棵树的远端覆盖率，不更换几何；多重采样覆盖保持深度和实体边缘稳定。
+    shader.fragmentShader=shader.fragmentShader.replace('#include <alphatest_fragment>',`
+      float forestCoverage=1.0-smoothstep(${(TREE_MODELS.fadeStart*VIEW_DISTANCE.scale).toFixed(1)},${(TREE_MODELS.visibleDistance*VIEW_DISTANCE.scale).toFixed(1)},length(vViewPosition));
+      diffuseColor.a*=forestCoverage;
+      if(diffuseColor.a<.001)discard;
+      #include <alphatest_fragment>
+    `);
     // 实例绿只染枝叶，避免树皮再乘深绿而变成黑条。
     shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`if(vFoliage>.5){
       #include <color_fragment>
@@ -148,13 +155,13 @@ export function* prepareTreeModels() {
     shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>
       if(vFoliage>.5)totalEmissiveRadiance+=diffuseColor.rgb*${TREE_MODELS.leafLightFill.toFixed(2)};`);
   };
-  material.onBeforeCompile=compile;material.customProgramCacheKey=()=> 'six-tree-leaf-sprays-v5';
+  material.onBeforeCompile=compile;material.customProgramCacheKey=()=> 'six-tree-leaf-sprays-v6';
   const farMaterial=material.clone();farMaterial.side=THREE.FrontSide;farMaterial.onBeforeCompile=compile;farMaterial.customProgramCacheKey=material.customProgramCacheKey;
   for(const profile of treeProfiles){
     const leafSize=Math.max(...profile.leaves.map(p=>Math.max(p.rx,p.ry,p.rz)))*.24*(profile.type===2?1.3:profile.type===4?1.4:1);
     const model={material,midMaterial:material,farMaterial,leafSize};
     for(const level of [0,1,2]){
-      const key='scene/trees/'+profile.id+'/'+level,record=cache.available?yield {wait:cache.read(key)}:null;
+      const key='scene/trees/'+profile.id+'/'+level,record=cache.readable?yield {wait:cache.read(key)}:null;
       const count=record?.position?.length/3;
       const hit=Number.isInteger(count)&&count>0&&(record.index instanceof Uint16Array||record.index instanceof Uint32Array)&&record.index.length>0&&record.index.length%3===0&&record.index.every(i=>i<count)&&['position','normal','uv','color','foliage'].every(name=>record[name] instanceof Float32Array&&record[name].length===count*(name==='uv'?2:name==='foliage'?1:3)&&record[name].every(Number.isFinite));
       let geometry;

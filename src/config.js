@@ -4,7 +4,7 @@ export { isWithinRunway } from './runway-layout.js';
 export const GAME = {
   fixedStep: 1 / 120,
   maxFrameSeconds: 0.05,
-  scenePrepareLimitSeconds: 8,
+  scenePrepareLimitSeconds: 8, browserPrepareLimitSeconds:4,
   packageLimitMb: 50,
 };
 
@@ -63,7 +63,7 @@ export const TREE_HEIGHTS = {
 export const TREE_MODELS = {
   recipe:7,seed:643179,nearDetail:1,farDetail:0,branchSegments:8,
   leaflets:[32,40,48,28,36,32],midLeafCards:3,leafAlphaCutoff:.32,leafLightFill:.22,
-  chunkSize:2400,nearChunkSize:600,nearDistanceScale:10,leafMinPixels:3,midDistance:10000,visibleDistance:12000,blurDistance:[12000,22000],farCrownGroups:[4,4,4,6,4,3],
+  chunkSize:1200,visibleDistance:12000,fadeStart:10000,leafMinPixels:3,blurDistance:[12000,22000],farCrownGroups:[4,4,4,6,4,3],
   species:[
     {id:'poplar',name:'杨树',height:[500,10000],width:[.18,.27],radius:.58,tall:true,color:0x8ba75d},
     {id:'banyan',name:'榕树',height:[500,6000],width:[1.3,1.9],radius:.78,tall:false,color:0x6b9657},
@@ -419,7 +419,7 @@ export const GEAR_PREVIEW = {
   fov: 88, near: 0.1, far: 1800, distance: 8,
   side: -6, height: 2.2, targetDrop: 0.5, targetDropLimit: 5.5,
   spatialCellSize:1800,spatialMaxCells:16,instanceCellSize:600,instanceSplitCount:256,
-  detailBudget:{forestDetail:1,terrainGeometry:1,terrainMaterial:1},
+  detailBudget:{terrainGeometry:1,terrainMaterial:1},
 };
 
 export const AIRCRAFT_PREVIEW = {

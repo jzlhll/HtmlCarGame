@@ -22,7 +22,7 @@ const server = http.createServer((req,res) => {
   try { name = decodeURIComponent(new URL(req.url,'http://localhost').pathname); } catch { res.writeHead(400).end(); return; }
   const file = path.resolve(root, '.' + (name === '/' ? '/index.html' : name));
   const relative = path.relative(root,file);
-  if (relative.startsWith('..') || relative.split(path.sep).some(p => p.startsWith('.')) || !['index.html','src','node_modules'].includes(relative.split(path.sep)[0])) { res.writeHead(403).end(); return; }
+  if (relative.startsWith('..') || relative.split(path.sep).some(p => p.startsWith('.')) || !['index.html','src','node_modules','assets'].includes(relative.split(path.sep)[0])) { res.writeHead(403).end(); return; }
   fs.readFile(file,(err,data) => {
     if (err) { res.writeHead(404).end('Not found'); return; }
     res.writeHead(200,{'Content-Type':types[path.extname(file)] || 'application/octet-stream','Cache-Control':'no-cache','X-Content-Type-Options':'nosniff'}).end(data);

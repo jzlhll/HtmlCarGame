@@ -346,10 +346,10 @@ export class LandscapeView extends THREE.Group {
 
   addWaterfall() {
     if(!this.world.waterfalls.length)return;
-    const canvas = document.createElement('canvas'); canvas.width = 32; canvas.height = 128;
-    const context = canvas.getContext('2d'); context.fillStyle = '#9ddce4'; context.fillRect(0, 0, 32, 128);
-    for (let i = 0; i < 36; i++) { context.fillStyle = i % 2 ? '#e5f4ef' : '#70bdd0'; context.fillRect(i * 7 % 32, i * 19 % 128, 2, 16); }
-    this.fallTexture = new THREE.CanvasTexture(canvas); this.fallTexture.colorSpace = THREE.SRGBColorSpace;
+    const pixels=new Uint8Array(32*128*4);
+    for(let i=0;i<pixels.length;i+=4)pixels.set([157,220,228,255],i);
+    for(let i=0;i<36;i++)for(let y=i*19%128;y<Math.min(128,i*19%128+16);y++)for(let x=i*7%32;x<Math.min(32,i*7%32+2);x++)pixels.set(i%2?[229,244,239,255]:[112,189,208,255],(y*32+x)*4);
+    this.fallTexture = new THREE.DataTexture(pixels,32,128);this.fallTexture.flipY=true;this.fallTexture.generateMipmaps=true;this.fallTexture.minFilter=THREE.LinearMipmapLinearFilter;this.fallTexture.magFilter=THREE.LinearFilter;this.fallTexture.needsUpdate=true; this.fallTexture.colorSpace = THREE.SRGBColorSpace;
     this.fallTexture.wrapS = this.fallTexture.wrapT = THREE.RepeatWrapping; this.fallTexture.repeat.set(3, 4);
     for (const fall of this.world.waterfalls) {
       const height = fall.top - fall.bottom, z = fall.z + (fall.passable ? 0 : fall.depth + 0.3);

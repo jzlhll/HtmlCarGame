@@ -66,7 +66,7 @@ export class RegionalWaterView extends THREE.Group {
   *build(){
     const cache=surfaceCache();yield {wait:cache.ready};
     for(const body of this.world.regionalWater.renderBodies){
-      const key='scene/water/'+body.id,expected=2+body.islands.length*2,meta=cache.available?yield {wait:cache.read(key+'/meta')}:null,records=[];
+      const key='scene/water/'+body.id,expected=2+body.islands.length*2,meta=cache.readable?yield {wait:cache.read(key+'/meta')}:null,records=[];
       let hit=meta?.recipe===REGIONAL_WATER.recipe&&meta.count===expected;
       if(hit)for(let i=0;i<expected;i++){const record=yield {wait:cache.read(key+'/'+i)};if(!valid(record)){hit=false;break;}records.push(record);yield;}
       if(!hit){

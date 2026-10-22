@@ -1,4 +1,5 @@
 import { SURFACE_APPEARANCE, LANDSCAPE, AIRCRAFT } from './config.js';
+import { loadPrebuiltAssets } from './prebuilt-assets.js';
 
 export const SURFACE_CACHE_FORMAT_VERSION = 1;
 
@@ -17,7 +18,15 @@ export class SurfaceCache {
       }
       return [name, `${this.scope}resource/${name}/${signature >>> 0}`];
     }));
-    this.available = true; this.ready = this.open();
+    this.available = true;this.prebuilt=new Map();
+    this.ready=this.open().then(async()=>{
+      // 压缩包持久复用，一包一次事务；恢复后的数值视图直接共享解压缓冲。
+      this.prebuilt=await loadPrebuiltAssets(this.resources,{
+        read:key=>this.request('cloud-cockpit/'+key,undefined,false),
+        write:(key,value)=>this.request('cloud-cockpit/'+key,value,true),
+        onManifest:files=>{this.prebuiltFiles=files;},
+      });
+    });
   }
 
   open() {
@@ -53,6 +62,10 @@ export class SurfaceCache {
           if (![...this.resources.values()].some(key => entry.key === key || entry.key.startsWith(key + '/'))) store.delete(entry.key);
           entry.continue();
         };
+        if(this.prebuiltFiles){
+          const prefix='cloud-cockpit/prebuilt/',packs=store.openKeyCursor(IDBKeyRange.bound(prefix,prefix+'\uffff'));
+          packs.onsuccess=()=>{const entry=packs.result;if(!entry)return;if(!this.prebuiltFiles.has(entry.key.slice(prefix.length)))store.delete(entry.key);entry.continue();};
+        }
         transaction.oncomplete = () => resolve(true);
         transaction.onabort = transaction.onerror = () => { this.available = false; resolve(false); };
       } catch { this.available = false; resolve(false); }
@@ -66,13 +79,17 @@ export class SurfaceCache {
   }
 
   async read(name) {
-    const key = this.key(name), current = await this.request(key, undefined, false);
+    const key = this.key(name);
+    if(this.prebuilt.has(key))return this.prebuilt.get(key);
+    const current = await this.request(key, undefined, false);
     if (current !== undefined || !this.available) return current;
     // 旧版整组配置键只在配置完全相同的情况下迁移，不重算兼容数据。
     const previous = await this.request(this.prefix + name, undefined, false);
     if (previous !== undefined) await this.request(key, previous, true);
     return previous;
   }
+
+  get readable(){return this.available||this.prebuilt.size>0;}
 
   write(name, value) { return this.request(this.key(name), value, true); }
   readVersion() { return this.request('cloud-cockpit/meta/completed-version', undefined, false); }

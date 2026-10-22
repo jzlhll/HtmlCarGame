@@ -60,7 +60,7 @@ export class WeatherView extends THREE.Group {
   *build(){
     const cache=surfaceCache(),geometries=[];
     for(let variant=0;variant<WEATHER.variants;variant++){
-      const key='scene/weather/geometry/'+variant,record=cache.available?yield {wait:cache.read(key)}:null;
+      const key='scene/weather/geometry/'+variant,record=cache.readable?yield {wait:cache.read(key)}:null;
       let geometry;
       const hit=record?.positions instanceof Float32Array&&record.normals instanceof Float32Array&&record.positions.length===record.normals.length&&record.positions.length>0&&record.positions.length%9===0&&record.positions.every(Number.isFinite)&&record.normals.every(Number.isFinite);
       if(hit){
