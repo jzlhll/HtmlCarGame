@@ -1,7 +1,7 @@
+import { buildingCollisionParts } from './building-details.js';
 import { streetCarBox } from './city-street-layout.js';
 import { LOOP_WORLD, LANDSCAPE, TREE_CONTACT, TREE_HEIGHTS, WORLD_HEIGHT, TOURISM } from './config.js';
 import { terrainNoise, smoothRange } from './terrain.js';
-import { buildingParts } from './building-layout.js';
 import { TreeField } from './tree-contact.js';
 import { treeProfiles } from './tree-species.js';
 import { attachBuildingShift, moveBuildingBox } from './world-variation.js';
@@ -103,7 +103,7 @@ export class LoopWorld {
     this.treeSweep=bodySweep.map(sample=>({radius:sample.radius,from:{x:0,y:0,z:0},to:{x:0,y:0,z:0}}));
     this.city = buildings.map(site => ({...site, z: site.z - LANDSCAPE.city.center[1]})).filter(site=>Math.abs(site.z)<LANDSCAPE.city.loopRows*LANDSCAPE.city.spacing/2);
     this.landmarks = landmarkBoxes.map(box => ({min: {...box.min, z: box.min.z - LANDSCAPE.city.center[1]}, max: {...box.max, z: box.max.z - LANDSCAPE.city.center[1]}, name: box.name}));
-    this.cityBoxes=this.city.flatMap(site=>buildingParts(site).map(part=>attachBuildingShift({min:{x:part.x-part.width/2,y:part.y-part.height/2,z:part.z-part.depth/2},max:{x:part.x+part.width/2,y:part.y+part.height/2,z:part.z+part.depth/2},name:'外围城市建筑'},site.shift)));
+    this.cityBoxes=this.city.flatMap(site=>buildingCollisionParts(site).map(part=>attachBuildingShift({min:{x:part.x-part.width/2,y:part.y-part.height/2,z:part.z-part.depth/2},max:{x:part.x+part.width/2,y:part.y+part.height/2,z:part.z+part.depth/2},name:'外围城市建筑'},site.shift)));
     this.streets=streets;
     if(streets)this.cityBoxes.push(...streets.cars.map(streetCarBox));
     this.parking=parkingParts(4200,0);

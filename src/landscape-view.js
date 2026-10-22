@@ -110,36 +110,7 @@ export class LandscapeView extends THREE.Group {
     }
     this.islandTreeSites=Array.from({length:40},(_,i)=>{const z=island.z+(i-20)*160,p=islandSection(z);return {x:p.x+(i%2?-1:1)*p.half*.58,y:floor,z,yaw:i*2.399963,color:0x496e50};});
     if(this.route.id<3)return;
-    for(const tower of this.world.pagodas){this.addPagoda(tower);yield;}
-  }
 
-  addPagoda(tower) {
-    const floor=tower.floor;
-    const wall = new THREE.MeshStandardMaterial({color: tower.hero?0xe3bb54:0xb8b5a2, roughness: 0.85});
-    const red = new THREE.MeshStandardMaterial({color: 0x964d38, roughness: 0.85});
-    const gold = new THREE.MeshStandardMaterial({color: tower.hero?0xd9a434:0x4b5d58, roughness: 0.7, side: THREE.DoubleSide});
-    const box = (x, y, z, width, height, depth, material) => {
-      const mesh = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), material); mesh.position.set(tower.x + x, floor + y, tower.z + z); this.add(mesh);
-    };
-    const stone=new THREE.MeshStandardMaterial({color:0x92958b,roughness:1});
-    box(0,-tower.supportHeight/2,0,tower.width*1.15,tower.supportHeight,tower.width*1.15,stone);
-    box(0,-3,0,tower.width*1.2,6,tower.width*1.2,stone);
-    for (let i = 0; i < tower.levels; i++) {
-      const y = tower.height * i / tower.levels, height = tower.height / tower.levels, width = tower.width * (1 - i * 0.07);
-      box(0, y + height * 0.43, 0, width, height * 0.86, width, wall);
-      const roofWidth = width * tower.eaves;
-      box(0, y + height * 0.83, 0, roofWidth * 0.94, height * 0.02, roofWidth * 0.94, gold);
-      const half = roofWidth / 2, rim = [[half, 0.96, half], [0, 0.84, half], [-half, 0.96, half], [-half, 0.84, 0], [-half, 0.96, -half], [0, 0.84, -half], [half, 0.96, -half], [half, 0.84, 0]];
-      const positions = [];
-      for (let edge = 0; edge < rim.length; edge++) {
-        for (const [x, rise, z] of [[0, 1, 0], rim[(edge + 1) % rim.length], rim[edge]]) positions.push(tower.x + x, floor + y + height * rise, tower.z + z);
-      }
-      const roof = new THREE.BufferGeometry(); roof.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3)); roof.computeVertexNormals(); this.add(new THREE.Mesh(roof, gold));
-      for (const x of [-width * 0.48, width * 0.48]) for (const z of [-width * 0.48, width * 0.48]) box(x, y + height * 0.5, z, 8, height * 0.8, 8, red);
-      for (const x of [-width * 0.25, width * 0.25]) box(x, y + height * 0.4, width / 2 + 0.1, width * 0.12, height * 0.35, 0.2, red);
-    }
-    const finial = new THREE.Mesh(new THREE.ConeGeometry(8, 45, 8), gold);
-    finial.position.set(tower.x, floor + tower.height + 22.5, tower.z); this.add(finial);
   }
 
   surface(geometry, color, layer, y = 0) {

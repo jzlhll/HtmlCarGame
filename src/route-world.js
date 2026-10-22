@@ -1,10 +1,12 @@
+import { buildingCollisionParts } from './building-details.js';
+import { heritagePagoda } from './heritage-models.js';
 import { tourismSettings, tourismParts, scenerySolid } from './tourism-layout.js';
 import { prepareWeatherWorld, varyWeather } from './weather-world.js';
 import { prepareCityStreetLayout, streetCarBox } from './city-street-layout.js';
 import { AIRCRAFT, LANDSCAPE, JOURNEY, terrainElevation, clusterZ, LOOP_WORLD, WORLD_BOUNDARY } from './config.js';
 import { createCoastalSurface, coastalHeight, shorelineX, coastalLandWeight } from './coastal-terrain.js';
 import { boundaryHeightAt } from './world-boundary.js';
-import { buildingParts, cityBuildingSites } from './building-layout.js';
+import { cityBuildingSites } from './building-layout.js';
 import { createRegionalWater, regionalWaterAt, boxTouchesRegionalWater, regionalWaterExclusions } from './regional-water.js';
 import { TreeField } from './tree-contact.js';
 import { varyBuildingSites, attachBuildingShift, moveBuildingBox } from './world-variation.js';
@@ -94,9 +96,11 @@ export class RouteWorld {
         if(sites.length%24===0)yield;
       }
       this.regionalCities.push({...settings,sites});
+      let prepared=0;
       for(const part of tourismParts(settings)){
         part.y+=this.baseHeightAt(part.x,part.z);this.tourismParts.push(part);
         const solid=scenerySolid(part);this.index(this.boxCells,solid,solid.min.x,solid.max.x,solid.min.z,solid.max.z);
+        if(++prepared%4===0)yield;
       }
       yield;
     }
@@ -234,32 +238,37 @@ export class RouteWorld {
         const floor=this.heightAt(x,z),height=Math.min(700+(i%4)*230,heroTop-floor-220);
         this.pagodas.push({x,z,floor,height,width:135+(i%3)*38,levels:5+i%3,eaves:1.45,name:'山中古塔',hero:false});
       }
-      for(const tower of this.pagodas){const floor=tower.floor;
-        const half=tower.width*.575;let low=floor;
+      for(const tower of this.pagodas){
+        let prepared=0;
+        const half=tower.width*.575;let low=tower.floor;
         for(const x of [-half,0,half])for(const z of [-half,0,half])low=Math.min(low,this.heightAt(tower.x+x,tower.z+z));
-        tower.supportHeight=Math.max(12,floor-low+12);
-        this.addBox(tower.x,-tower.supportHeight/2,tower.z,tower.width*1.15,tower.supportHeight,tower.width*1.15,tower.name+'石台基座',floor);
-        this.addBox(tower.x,-3,tower.z,tower.width*1.2,6,tower.width*1.2,tower.name+'石台台沿',floor);
-      this.addBox(tower.x, tower.height + 22.5, tower.z, 16, 45, 16, tower.name+'塔尖', floor);
-      for (let i = 0; i < tower.levels; i++) {
-        const y = tower.height * i / tower.levels, height = tower.height / tower.levels;
-        const width = tower.width * (1 - i * 0.07);
-        this.addBox(tower.x, y + height * 0.43, tower.z, width, height * 0.86, width, tower.name, floor);
-        this.addBox(tower.x, y + height * 0.91, tower.z, width * tower.eaves, height * 0.18, width * tower.eaves, tower.name+'飞檐', floor);
-      }
-      yield;
+        tower.supportHeight=Math.max(12,tower.floor-low+12);
+        for(const part of heritagePagoda(tower)){
+          this.tourismParts.push(part);const solid=scenerySolid(part);
+          this.index(this.boxCells,solid,solid.min.x,solid.max.x,solid.min.z,solid.max.z);
+          if(++prepared%4===0)yield;
+        }
+        yield;
       }
     }
   }
 
   solidHit(from, to, solid, radius) {
     if (!segmentBox(from, to, solid, radius)) return false;
-    if (!solid.planes) return true;
+    if(solid.parts)return solid.parts.some(part=>this.solidHit(from,to,part,radius));
+    const planes=solid.localPlanes||solid.planes;
+    if(!planes)return true;
+    const pose=solid.pose;let fx=from.x,fy=from.y,fz=from.z,tx=to.x,ty=to.y,tz=to.z;
+    if(pose){
+      const ax=fx-pose.x,az=fz-pose.z,bx=tx-pose.x,bz=tz-pose.z;
+      fx=(ax*pose.c-az*pose.s)*pose.ix;fz=(ax*pose.s+az*pose.c)*pose.iz;fy=(fy-pose.y)*pose.iy;
+      tx=(bx*pose.c-bz*pose.s)*pose.ix;tz=(bx*pose.s+bz*pose.c)*pose.iz;ty=(ty-pose.y)*pose.iy;
+    }
     let near = 0, far = 1;
-    for (const plane of solid.planes) {
-      const n = plane.normal, distance = plane.distance + radius;
-      const a = n[0] * from.x + n[1] * from.y + n[2] * from.z - distance;
-      const b = n[0] * to.x + n[1] * to.y + n[2] * to.z - distance;
+    for(const plane of planes){
+      const n=plane.normal,scale=pose?Math.sqrt((n[0]*pose.ix)**2+(n[1]*pose.iy)**2+(n[2]*pose.iz)**2):1;
+      const distance=plane.distance+radius*scale;
+      const a=n[0]*fx+n[1]*fy+n[2]*fz-distance,b=n[0]*tx+n[1]*ty+n[2]*tz-distance;
       if (a > 0 && b > 0) return false;
       if (a > 0) near = Math.max(near, a / (a - b));
       else if (b > 0) far = Math.min(far, a / (a - b));
@@ -290,7 +299,7 @@ export class RouteWorld {
 
   addBuilding(x, z, width, depth, height, color, name = '城市楼房', profile, shift) {
     const site={x,z,width,depth,height,color,name,profile,shift};this.buildings.push(site);
-    for(const part of buildingParts(site))this.addBox(part.x,part.y,part.z,part.width,part.height,part.depth,name,this.baseHeightAt(x,z),shift);
+    for(const part of buildingCollisionParts(site))this.addBox(part.x,part.y,part.z,part.width,part.height,part.depth,name,this.baseHeightAt(x,z),shift);
   }
 
   makeCoastalRoad() {

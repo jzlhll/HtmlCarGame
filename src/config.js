@@ -5,7 +5,7 @@ export const GAME = {
   fixedStep: 1 / 120,
   maxFrameSeconds: 0.05,
   scenePrepareLimitSeconds: 8,
-  packageLimitMb: 25,
+  packageLimitMb: 50,
 };
 
 // 空速与受力保持原单位；世界水平位移倍率与景点纵深分别配置。
@@ -69,6 +69,8 @@ export const TREE_MODELS = {
 export const FOLIAGE_TEXTURE = {recipe:3,seed:715391,size:1024,tiles:2,source:'foliage-source-v1'};
 export const ROCK_SURFACE = {recipe:1,bandScale:.025,fractureStrength:.24,materialDistances:[10000,22000],fineFade:[6000,10000],coarseFade:[16000,22000],blurDistance:[12000,23000]};
 export const FACADE_SURFACE = {recipe:1,seed:851627,frameShade:.72,glassRoughness:.34,stoneRoughness:.86,farFilter:5,blurDistance:[10000,22000]};
+
+export const SCENERY_DETAIL = {recipe:1,roofSegments:6,roundSegments:24,sphereRings:14,archSegments:16,detailDistance:7000};
 
 export const REGION_BLEND = {
   length: 6000, width: 12000, seed: 952731,
@@ -386,7 +388,7 @@ export const LANDSCAPE = {
     treeNear: 350, treeFar: 6200, forestCell: 640,
     canopyColors: [0x344c28, 0x465c2e, 0x536437, 0x2d4829],
     sunDirection: [-0.5, 0.8, -0.35], ambientStrength: 1.05, sunStrength: 2.7,
-    rockSides: 28, rockRings: 17, resourceBudgetMb: GAME.packageLimitMb,
+    rockSides: 28, rockRings: 17,
   },
 };
 

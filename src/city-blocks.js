@@ -1,6 +1,8 @@
 import * as THREE from 'three';
-import { SURFACE_APPEARANCE, LANDSCAPE, FACADE_SURFACE } from './config.js';
+import { SURFACE_APPEARANCE, LANDSCAPE, FACADE_SURFACE, SCENERY_DETAIL, WORLD_VARIATION } from './config.js';
 import { surfaceTexture } from './surface-assets.js';
+import { buildingDetails } from './building-details.js';
+import { CanopyLOD } from './canopy-lod.js';
 import { buildingParts } from './building-layout.js';
 
 export function* createCityBlocks(sites, floorAt=()=>0, shared={}) {
@@ -48,7 +50,10 @@ export function* createCityBlocks(sites, floorAt=()=>0, shared={}) {
       float facadeGlass=facadePane*vFacadeStyle.y;
       vec3 facadeStone=mix(vec3(1.04,1.01,.92),vec3(.90,.94,.97),step(1.5,vFacadeStyle.z));
       vec3 facadeGlassTint=mix(vec3(.78,.96,1.08),vec3(1.04,.94,.79),step(2.5,vFacadeStyle.z));
-      diffuseColor.rgb*=mix(facadeStone,facadeGlassTint,facadeGlass)*1.65*(.76+.24*smoothstep(0.0,.3,vFacadeLevel));
+      vec3 facadeTint=mix(facadeStone,facadeGlassTint,facadeGlass);
+      float facadeFresnel=pow(1.0-abs(dot(normalize(vNormal),normalize(vViewPosition))),3.0);
+      facadeTint=mix(facadeTint,vec3(.82,1.02,1.12),facadeGlass*facadeFresnel*.3);
+      diffuseColor.rgb*=facadeTint*1.65*(.76+.24*smoothstep(0.0,.3,vFacadeLevel));
     `);
     shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>',`float roughnessFactor=mix(${FACADE_SURFACE.stoneRoughness.toFixed(2)},${FACADE_SURFACE.glassRoughness.toFixed(2)},facadeGlass);
       roughnessFactor=mix(max(roughnessFactor,${appearance.farRoughness.toFixed(3)}),roughnessFactor,facadeDetail);`);
@@ -56,9 +61,9 @@ export function* createCityBlocks(sites, floorAt=()=>0, shared={}) {
       #include <normal_fragment_maps>
       normal=normalize(mix(facadeSmoothNormal,normal,facadeDetail));`);
   };
-  material.customProgramCacheKey=()=> 'city-filtered-facades-v5';
+  material.customProgramCacheKey=()=> 'city-filtered-facades-v6';
   const mesh=new THREE.InstancedMesh(geometry,material,parts.length),pose=new THREE.Object3D(),color=new THREE.Color();
-  const details=[],movements=[];
+  const details=[],movements=[],detailMeshes=[];
   const track=(target,index,x,z,shift)=>{if(shift)movements.push({target,index,x,z,shift});};
   for(const [index,part] of parts.entries()){
     pose.position.set(part.x,part.floor+part.y,part.z);pose.scale.set(part.width,part.height,part.depth);pose.updateMatrix();mesh.setMatrixAt(index,pose.matrix);mesh.setColorAt(index,color.setHex(part.color));
@@ -85,6 +90,22 @@ export function* createCityBlocks(sites, floorAt=()=>0, shared={}) {
     if(index%128===0)yield;
   }
   yield 'boundary';trim.computeBoundingSphere();group.add(trim);
+  const crafted=[];
+  for(const site of sites){const floor=floorAt(site.x,site.z);for(const part of buildingDetails(site,buildingParts(site)))crafted.push({...part,y:part.y+floor});yield;}
+  const detailBounds=new THREE.Box3();
+  for(const role of ['frame','glass']){
+    const selected=crafted.filter(part=>part.role===role);
+    shared.craftedMaterials??={};
+    const material=shared.craftedMaterials[role]??=new THREE.MeshStandardMaterial({roughness:role==='glass'?.24:.62,metalness:role==='glass'?.32:.16});
+    const mesh=new THREE.InstancedMesh(shared.cube,material,selected.length);
+    for(const [index,part]of selected.entries()){
+      pose.position.set(part.x,part.y,part.z);pose.scale.set(part.w,part.h,part.d);pose.updateMatrix();mesh.setMatrixAt(index,pose.matrix);mesh.setColorAt(index,color.setHex(part.color));
+      track(mesh,index,part.x,part.z,part.shift);if(index%64===0)yield;
+    }
+    mesh.computeBoundingBox();mesh.computeBoundingSphere();detailBounds.union(mesh.boundingBox);detailMeshes.push(mesh);
+  }
+  const craftedLOD=new CanopyLOD(detailBounds.clone().expandByScalar(WORLD_VARIATION.cityJitter));craftedLOD.userData.detailKind='architecture';
+  const nearDetails=new THREE.Group();nearDetails.add(...detailMeshes);craftedLOD.addLevel(nearDetails,0,.12);craftedLOD.addLevel(new THREE.Group(),SCENERY_DETAIL.detailDistance,.12);group.add(craftedLOD);
   const shadowMaterial=shared.shadowMaterial??=new THREE.MeshBasicMaterial({color:0x142323,transparent:true,opacity:.17,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2});
   shadowMaterial.customProgramCacheKey=()=> 'city-ground-shadow-v1';
   shadowMaterial.onBeforeCompile=shader=>{
@@ -105,7 +126,7 @@ export function* createCityBlocks(sites, floorAt=()=>0, shared={}) {
     group.userData.variableInstances=true;
     const update=()=>{
       for(const {target,index,x,z,shift}of movements){const offset=index*16;target.instanceMatrix.array[offset+12]=x+shift.x;target.instanceMatrix.array[offset+14]=z+shift.z;}
-      for(const target of [mesh,trim,shadows]){target.instanceMatrix.needsUpdate=true;target.computeBoundingSphere();}
+      for(const target of [mesh,trim,shadows,...detailMeshes]){target.instanceMatrix.needsUpdate=true;target.computeBoundingSphere();}
     };
     update();shared.variationViews?.push(update);
   }
