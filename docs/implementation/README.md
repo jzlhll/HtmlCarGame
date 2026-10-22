@@ -199,7 +199,7 @@ Flight.updateSpeedLimits读取固定150 km/h触发与165 km/h恢复阈值；Flig
 
 循环城市碰撞使用512米空间索引，查询只检查本次机身扫掠覆盖的单元。实例矩阵和颜色在槽位间共享，静态世界矩阵仅跨区时更新；预热选取每种模板一个代表，轻量预览保留到预热完成，避免重复同步编译。
 
-田园派生数值持久保存于scene/country组，按关卡、全景配置、尺寸、中心与种子定位；COUNTRYSIDE.cacheRecipe为6。每块数据校验顶点属性、索引范围、实例数量和有限数值，全部写入成功后才保存目录。GPU材质与树冠当前页资源不序列化；持久恢复后重建对象，同页重开复用对象。基础资源和循环高度网格维持独立清单；缓存不可用时继续内存准备。
+田园派生数值持久保存于scene/country组，按关卡、全景配置、尺寸、中心与种子定位；COUNTRYSIDE.cacheRecipe为10。每块数据校验顶点属性、索引范围、实例数量和有限数值，全部写入成功后才保存目录。GPU材质与树冠当前页资源不序列化；持久恢复后重建对象，同页重开复用对象。基础资源和循环高度网格维持独立清单；缓存不可用时继续内存准备。
 
 `world-boundary.js`提供固定山墙的可缓存网格和相同三角插值；`region-blend.js`统一所有区域的衔接范围及水面／街区／跑道排除条件。城市按1.68公里空间块分批创建，材质与单位几何在主场景共享，外围仅复用代表街区。
 
@@ -243,7 +243,7 @@ AUDIO.lightningAlarm读取activeSeconds−lightningHitAt，以同一警报声源
 
 runway-layout.js不依赖Three.js，提供runwayCenter、runwayOutline、isWithinRunway与nearestRunway。四矩形共享中心、长度、宽度和方向；24点轮廓供AirportView三角化，Flight的三机轮起飞检查、接地、地面越界以及stoppedOnRunway读取同一并集。最近跑道按几何距离优先、航向差其次选择，外臂朝中心摆正，中央允许最近方向；不增加着陆速度／姿态限制。目的地停放飞机和卡车数量保持4／8，沿主轴的新长度分布。
 
-机场铺面仅24个轮廓点，属于可直接重建的轻量显示几何；同页重开复用现有对象，不单独持久化。编号512×256微型Canvas图集由同页两座机场共享，替代各机场独立编号纹理；不新增资源文件。机场材质与四方向标线在开局前预热，游玩时无生成。COUNTRYSIDE.cacheRecipe=9使新的四臂植被净空生效，基础模型、像素与全局生成器不变。
+机场铺面仅24个轮廓点，属于可直接重建的轻量显示几何；同页重开复用现有对象，不单独持久化。编号512×256微型Canvas图集由同页两座机场共享，替代各机场独立编号纹理；不新增资源文件。机场材质与四方向标线在开局前预热，游玩时无生成。COUNTRYSIDE.cacheRecipe=10使新的四臂植被净空生效，基础模型、像素与全局生成器不变。
 
 ## 树木接触与玻璃承受度
 
@@ -251,7 +251,7 @@ runway-layout.js不依赖Three.js，提供runwayCenter、runwayOutline、isWithi
 
 TreeField从实际近景实例矩阵分批提取位置、旋转及非均匀尺度；512米网格只保存数值树索引，查询复用候选集合，按tree-species.js中同源椭球树冠及主要枝干采样逆变换扫掠点，细根不填满榕树拱下空隙。主场景山地、岩柱、田园、区域林带、橘子洲及机场树均登记；LoopWorld预分配四份模板索引与本地扫掠端点，覆盖邻格伸入的树冠。树木不写入致命boxCells；先判山石／建筑再判刮树，因此实际撞山仍按撞山失败。
 
-树身高度／冠幅读取TREE_HEIGHTS世界坐标连续场；山地树身最高300实际米／1500显示米，并按地形标高逐步收紧。田园300000平方米／候选树、林带260000平方米／候选树，山地180米网格且每块最多150棵。近模保留精细枝根，中模不显示须根，远模聚合树冠且只保留一条主干；近模使用实体小叶片，中模采用alpha裁剪叶簇，远模保留不透明实体冠形，均不使用透明混合。森林中远景按2.4公里块的实际冠幅计算距离；350–450米内展开600米子组，再按叶片投影至少3个绘制像素选择近模，其他子组使用中模，10000米外切远模；显示范围至少12000米，避免向更远处提交无必要的森林批次；缓存恢复与外围克隆保持相同局部bounds。COUNTRYSIDE.cacheRecipe=9保存原始矩阵、颜色及Uint8树种索引并使旧记录失效，布局缓存指纹只覆盖树种id／height／width／tall、TREE_HEIGHTS及几何相关TREE_CONTACT参数，树模细节与叶片图集变化独立失效，伤害间隔、扣损及减速不参与。恢复缓存后从同一矩阵重建轻量索引，重开复用模型和索引。玻璃耗尽复用CRASH反馈时钟并保持destruction为空，避免生成爆炸或切换机外镜头。
+树身高度／冠幅读取TREE_HEIGHTS世界坐标连续场；山地树身最高300实际米／1500显示米，并按地形标高逐步收紧。田园300000平方米／候选树、林带260000平方米／候选树，山地180米网格且每块最多150棵。近模保留精细枝根，中模不显示须根，远模聚合树冠且只保留一条主干；近模使用实体小叶片，中模采用alpha裁剪叶簇，远模保留不透明实体冠形，均不使用透明混合。森林中远景按2.4公里块的实际冠幅计算距离；350–450米内展开600米子组，再按叶片投影至少3个绘制像素选择近模，其他子组使用中模，10000米外切远模；显示范围至少12000米，避免向更远处提交无必要的森林批次；缓存恢复与外围克隆保持相同局部bounds。COUNTRYSIDE.cacheRecipe=10保存原始矩阵、颜色及Uint8树种索引并使旧记录失效，布局缓存指纹只覆盖树种id／height／width／tall、TREE_HEIGHTS及几何相关TREE_CONTACT参数，树模细节与叶片图集变化独立失效，伤害间隔、扣损及减速不参与。恢复缓存后从同一矩阵重建轻量索引，重开复用模型和索引。玻璃耗尽复用CRASH反馈时钟并保持destruction为空，避免生成爆炸或切换机外镜头。
 
 植被模块分工：tree-species.js维护六种枝叶轮廓与数值接触源；tree-models.js分批生成和恢复十八份近中远原型（scene/trees，TREE_MODELS.recipe=6），校验position／normal／uv／color／foliage的Float32数据、长度及有限值；近模另保存Uint16／Uint32索引，校验三角长度与顶点范围后恢复。完整属性相同的叶片顶点复用，近模枝根也保留索引，展开后画面与三角形不变。forest-view.js按2.4公里空间块及树种保持中远实例组，近处才展开600米子组；近／中子组共享矩阵和颜色，中远粗组共享另一份矩阵和颜色。CanopyLOD依据几何包围盒保守并集与当前相机视锥裁剪，子组再按叶片最大尺度、投影矩阵及视口实际绘制高度选择近模。主视口在resize时、Gear view按各自裁剪高度更新像素尺度；相机往返不生成或回写实例缓冲。视锥外只隐藏档位子树，保留LOD自身及各相机独立的滞回历史；历史以相机和LOD对象的弱引用保存，首次使用以近档作为滞回历史初值，转向及Gear view切换后仍按对应相机历史判断。_currentLevel只反映最近一次选档，当前提交继续更新共享可见性。同一轮同相机共享预分配视锥，投影或相机矩阵变化时重算，不改变碰撞和持久数据配方。每棵树的树种索引随矩阵一同缓存，恢复和外围克隆共享已准备几何及实例缓冲，游玩期不生成枝叶。树干用既有地形细纹表达纵向树皮，枝干逐段变细。中模叶簇按树种使用阔叶／银杏／柳叶／松针四格图集，并限定在同源树冠椭球内；远模保留实体聚合树冠与单主干。foliage-source.js仅在缓存缺失的准备阶段解码透明源素材，四格内缩并处理为1024×1024 RGBA；foliage-texture.js通过surfacePixels接入现有Worker逐行中和色调，base/foliage-color按FOLIAGE_TEXTURE的recipe／seed／size／source独立缓存。源图加载或解码失败进入现有重试路径，不将退化结果写成成功缓存；不支持createImageBitmap的平台保留程序绘制路径。关闭flipY并夹紧边缘，避免图格交换和串色。近叶实体和中景alpha裁剪均写深度，不使用透明混合；全部原型与图集在准备期预热，命中缓存不再解码源图。
 
@@ -294,3 +294,12 @@ FACADE_SURFACE独立管理立面配方与过滤。每栋楼按稳定坐标区分
 ```text
 Use case: photorealistic-natural. Asset type: production foliage source texture atlas for a Three.js low-altitude flight game. Generate a square high-resolution 2048x2048 RGBA cutout atlas on a genuinely transparent background, arranged in exactly FOUR equal square cells in a precise 2 by 2 grid, no lines or labels. Each cell contains a natural dense but airy 3D-looking cluster of small branching twigs and many tiny individually distinct leaves, fine botanical detail and subtle varied leaf orientation, soft neutral diffuse overcast lighting, no cast shadow or backplate. Top-left: green broadleaf poplar/banyan compound twig cluster, about 80 small pointed oval leaves on irregular secondary and tertiary twigs. Top-right: green-to-golden ginkgo cluster with about 60 tiny fan-shaped leaves and delicate veins. Bottom-left: weeping willow hanging sprays of about 100 slender narrow green leaves, slender downward twigs. Bottom-right: pine branch cluster with abundant fine dark-green needles, natural branching and visible small brown twig sections. Each cluster fills about 85 percent of its own quadrant, remains inside its cell, with at least 6 percent totally transparent padding on each quadrant edge. Clusters have leaf gaps throughout, roughly 40 to 50 percent opaque coverage, no solid circular masses, no large single leaves. Each cell is visually a detailed branch spray, not an entire tree. Crisp natural antialiased alpha edges, no checkerboard, no white halo, no typography, no objects outside the four clusters, no perspective scene, no pots. Photographic leaf microstructure rather than stylized illustration.
 ```
+
+
+## 城市与景点扩展
+
+`config.js` 的 `TOURISM` 统一维护11个新增城区、13个城市区域、关卡范围、街区尺寸和3秒提示参数；`tourism-layout.js` 输出景点构件、避让区域和同源凸体平面；`tourism-view.js` 按1.68公里空间块与box／roof／cylinder／cone实例化，全部由现有准备队列创建与预热。四份单位凸原型位置与法线合计约8 KiB，作为廉价共享运行时原型保留内存，与现有单位Box原型相同；不增加纹理、二进制模型或独立Worker。景点配置随代码保存，不提交生成产物。
+
+`RouteWorld` 在路网前分批准备普通楼房与景点碰撞。新增城市使用独立街网ID，路面、车辆矩阵沿用scene/streets持久缓存；资源依赖包含完整TOURISM配置。林带避让新区，scene/country配方10同步城市占地与海岸范围；兼容飞机、树原型、云、水体与贴图资源继续复用。`isRouteCell` 统一确定新增城区占用槽，固定地面与循环显示、查高、碰撞使用同一边界。
+
+`Mission` 使用有效任务时钟维护已访问城市集合及剩余提示时间，扫掠检测包含正反向与横向进入；`UI` 合并城市名、危险提示和进近速度范围。重开创建新的Mission，不引入额外revision／generation状态，不在渲染帧触发事件。

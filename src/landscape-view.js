@@ -1,3 +1,5 @@
+import { createTourismView } from './tourism-view.js';
+import { isRouteCell } from './loop-world.js';
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { LANDSCAPE, SCENERY, JOURNEY, SURFACE_APPEARANCE, clusterZ, LOOP_WORLD, REGION_BLEND } from './config.js';
@@ -61,6 +63,14 @@ export class LandscapeView extends THREE.Group {
       for(const x of [-half,half]){landPositions.push(x,this.world.baseHeightAt(x,z),z);landUV.push(x/SURFACE_APPEARANCE.grassTileMetres,z/SURFACE_APPEARANCE.grassTileMetres);}
       if(row){const a=(row-1)*2;landIndices.push(a,a+1,a+2,a+1,a+3,a+2);}
     });
+    for(const column of [-1,1])for(let row=0;row>=Math.floor(minZ/LOOP_WORLD.tileSize);row--){
+      if(!isRouteCell(column,row,this.route))continue;
+      const x=column*LOOP_WORLD.tileSize,front=Math.min(settings.endZ,row*LOOP_WORLD.tileSize+half),back=row*LOOP_WORLD.tileSize-half;
+      if(back>=front)continue;
+      const i=landPositions.length/3;landPositions.push(x-half,0,front,x+half,0,front,x-half,0,back,x+half,0,back);
+      for(const [px,pz]of [[x-half,front],[x+half,front],[x-half,back],[x+half,back]])landUV.push(px/SURFACE_APPEARANCE.grassTileMetres,pz/SURFACE_APPEARANCE.grassTileMetres);
+      landIndices.push(i,i+1,i+2,i+1,i+3,i+2);yield;
+    }
     const inlandGeometry=new THREE.BufferGeometry();inlandGeometry.setAttribute('position',new THREE.Float32BufferAttribute(landPositions,3));inlandGeometry.setAttribute('uv',new THREE.Float32BufferAttribute(landUV,2));inlandGeometry.setIndex(landIndices);inlandGeometry.computeVertexNormals();
     const inland=new THREE.Mesh(inlandGeometry,material);inland.position.y=-.04;inland.receiveShadow=true;this.add(inland);yield 'boundary';
   }
@@ -192,7 +202,7 @@ export class LandscapeView extends THREE.Group {
     yield* batchStaticMeshSteps(this);yield 'boundary';
     this.mountains=new MountainView(this.world);this.add(this.mountains);yield* this.mountains.makeTreeResources();this.textures.push(...this.mountains.textures);if(this.islandTreeSites)yield* this.mountains.addForestChunk(this.islandTreeSites);yield 'boundary';
     this.loopView=new LoopView(this.world,()=>this.landmarkTemplate.clone(),{bank:this.mountains.treeBank,geometry:this.mountains.treeGeometry,material:this.mountains.treeMaterial,farGeometry:this.mountains.treeSpriteGeometry,farMaterial:this.mountains.treeSpriteMaterial});this.add(this.loopView);yield 'boundary';
-    yield* this.addGround();yield* this.addCityBlocks();yield* this.addFarmland();this.add(yield* createDistrict(this.world.districts));yield* this.coast.build();yield* this.addTransitions();yield* this.mountains.buildRolling();yield* this.addRegionBelts();yield* this.addRegionalCities();yield* this.loopView.build();
+    yield* this.addGround();yield* this.addCityBlocks();yield* this.addFarmland();this.add(yield* createDistrict(this.world.districts));this.add(yield* createTourismView(this.world.tourismParts));yield* this.coast.build();yield* this.addTransitions();yield* this.mountains.buildRolling();yield* this.addRegionBelts();yield* this.addRegionalCities();yield* this.loopView.build();
     yield {task:'landscape-horizon'};yield* this.loopView.installHorizonSteps(this);
     yield {task:'landscape-matrices'};
     const stack=[this];let visited=0;
@@ -225,6 +235,7 @@ export class LandscapeView extends THREE.Group {
         const i=positions.length/3;positions.push(x,.02,z,x,.02,front,right,.02,z,right,.02,front);indices.push(i,i+1,i+2,i+2,i+1,i+3);
       }
       const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setIndex(indices);geometry.computeVertexNormals();group.add(new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:0x777e71,roughness:1})));yield;
+      if(city.exclusions){this.add(group);yield 'boundary';continue;}
       const plaza=new THREE.Mesh(new THREE.PlaneGeometry(...city.plaza),new THREE.MeshStandardMaterial({color:0xb2ad98,roughness:.85}));plaza.rotation.x=-Math.PI/2;plaza.position.set(city.x,.12,city.z);group.add(plaza);
       const cube=new THREE.BoxGeometry(1,1,1),monument=new THREE.Mesh(cube,new THREE.MeshStandardMaterial({color:0xa07855,roughness:.7}));monument.scale.set(45,110,45);monument.position.set(city.x,55,city.z);group.add(monument);
       yield* batchStaticMeshSteps(group,30000);this.add(group);yield 'boundary';
