@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { SURFACE_APPEARANCE, LANDSCAPE, AIRCRAFT, LOOP_WORLD, COUNTRYSIDE, JOURNEY, WORLD_TRAVEL, WORLD_BOUNDARY, REGION_BLEND, CITY_STREETS, WEATHER, LEVELS, WORLD_HEIGHT, TREE_CONTACT, TREE_MODELS, TREE_HEIGHTS, REGIONAL_WATER, FOLIAGE_TEXTURE, ROCK_SURFACE, FACADE_SURFACE, TOURISM, createRoute } from './config.js';
+import { SURFACE_APPEARANCE, LANDSCAPE, AIRCRAFT, LOOP_WORLD, COUNTRYSIDE, JOURNEY, WORLD_TRAVEL, WORLD_BOUNDARY, REGION_BLEND, CITY_STREETS, WEATHER, LEVELS, WORLD_HEIGHT, TREE_CONTACT, TREE_MODELS, TREE_HEIGHTS, REGIONAL_WATER, FOLIAGE_TEXTURE, ROCK_SURFACE, FACADE_SURFACE, TOURISM, SCENERY_DETAIL, createRoute } from './config.js';
 import { fuselageGeometry, aircraftDoorGeometry, engineGeometry, fanGeometry, treeCrownGeometry, wingGeometry } from './model-geometry.js';
 import { surfacePixels, terrainPixels, environmentPixels, mipmapPixels } from './surface-recipes.js';
 import { GenerationQueue } from './generation-queue.js';
@@ -8,6 +8,7 @@ import { SurfaceCache } from './surface-cache.js';
 import { PixelWorker } from './pixel-worker.js';
 import { loopTerrainData } from './loop-world.js';
 import { boundaryData } from './world-boundary.js';
+import { SCENERY_SHAPES, sceneryGeometry } from './scenery-primitives.js';
 import { treeProfiles } from './tree-species.js';
 
 const textures = new Map(), geometries = new Map();
@@ -224,16 +225,19 @@ function resourceManifest(levelId) {
     else if (name.startsWith('door-')) dependencies={...selected(['doorWidth','doorHeight','doorBorder']),
       position:settings.doorPositions[Number(name.split('-').at(-1))], bodyHeight:AIRCRAFT.bodyHeight};
     if (name.startsWith('loop-terrain-')) dependencies={...LOOP_WORLD, variant:Number(name.split('-').at(-1))};
+    if(name.startsWith('scenery-'))dependencies={settings:SCENERY_DETAIL,shape:name.slice(8)};
     if(name.startsWith('boundary-'))dependencies={...boundarySettings,side:Number(name.split('-').at(-1))};
     entries.push([`base/${name}`,dependencies]);
   }
   const waterShape=Object.fromEntries(['recipe','riverSamples','islandSamples','lakeSubdivisions'].map(k=>[k,REGIONAL_WATER[k]]));
+  // 旧田园签名曾包含不参与生成的部署预算；保留其原值，预算调整不重建兼容地景。
+  const countryTerrain={...LANDSCAPE,terrain:{...LANDSCAPE.terrain,resourceBudgetMb:25}};
   const waterGeometry=Object.fromEntries(Object.entries(REGIONAL_WATER).filter(([key])=>!key.startsWith('wave')));
   entries.push(['scene/weather',{settings:WEATHER,levels:LEVELS.filter(level=>level.id<=Math.max(3,Number(levelId))),height:WORLD_HEIGHT.displayScale,...(arc?{arc}:{})}]);
   entries.push(['scene/streets',{settings:CITY_STREETS,tourism,city:LANDSCAPE.city,changsha:JOURNEY.changsha,changshaWest:JOURNEY.changshaWest,water:{...waterShape,shoreWidth:REGIONAL_WATER.shoreWidth},island:JOURNEY.island,lake:JOURNEY.lake,landmarks:LANDSCAPE.landmarks,...(arc?{arc}:{})}]);
   entries.push(['scene/water',{settings:waterGeometry,island:JOURNEY.island,lake:JOURNEY.lake}]);
   entries.push(['scene/trees',{profiles:treeProfiles,recipe:TREE_MODELS.recipe,seed:TREE_MODELS.seed,nearDetail:TREE_MODELS.nearDetail,farDetail:TREE_MODELS.farDetail,branchSegments:TREE_MODELS.branchSegments,farCrownGroups:TREE_MODELS.farCrownGroups,leaflets:TREE_MODELS.leaflets,midLeafCards:TREE_MODELS.midLeafCards}]);
-  entries.push(['scene/country',{recipe:COUNTRYSIDE.cacheRecipe,tourism,water:waterShape,trees:{models:TREE_MODELS.species.map(({id,height,width,tall})=>({id,height,width,tall})),heights:TREE_HEIGHTS,unitHeight:TREE_CONTACT.unitHeight},country:COUNTRYSIDE,terrain:LANDSCAPE,journey:JOURNEY,world:WORLD_TRAVEL,loop:LOOP_WORLD,blend:REGION_BLEND,...(arc?{arc,destination:route.destination,approachRecipe:1}:{})}]);
+  entries.push(['scene/country',{recipe:COUNTRYSIDE.cacheRecipe,tourism,water:waterShape,trees:{models:TREE_MODELS.species.map(({id,height,width,tall})=>({id,height,width,tall})),heights:TREE_HEIGHTS,unitHeight:TREE_CONTACT.unitHeight},country:COUNTRYSIDE,terrain:countryTerrain,journey:JOURNEY,world:WORLD_TRAVEL,loop:LOOP_WORLD,blend:REGION_BLEND,...(arc?{arc,destination:route.destination,approachRecipe:1}:{})}]);
   return entries;
 }
 
@@ -274,6 +278,7 @@ function geometryFactories() {
     g.setAttribute('uv',new THREE.BufferAttribute(data.uv,2));g.setIndex(new THREE.BufferAttribute(data.indices,1));
     g.computeVertexNormals();yield;return g;
   }]);
+  for(const shape of SCENERY_SHAPES)factories.push([`scenery-${shape}`,()=>sceneryGeometry(shape)]);
   return factories;
 }
 
