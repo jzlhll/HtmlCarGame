@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { WORLD, BACKGROUND, WORDS, ENEMIES, PLAYER, LETTERS, UNDO, SHELLS, SUPPLIES, BOSSES, HOME, CHOICES, BOSS_VISUALS, RENDERING } from './config.js';
+import { WORLD, BACKGROUND, WORDS, ENEMIES, PLAYER, LETTERS, UNDO, SHELLS, SUPPLIES, BOSSES, HOME, CHOICES, BOSS_VISUALS, RENDERING, VOCAB } from './config.js';
 import { LETTER_POINTS } from './letter-patterns.js';
-import { backgroundOrder } from './random.js';
+import { BackgroundLayout } from './background-layout.js';
 import { SUPPLY_SVG } from './supply-sprite.js';
 const hidden=(element,value)=>{value=!!value;if(element.hidden!==value)element.hidden=value;};
 const attribute=(element,name,value)=>{value=String(value);if(element.dataset[name]!==value)element.dataset[name]=value;};
@@ -34,7 +34,7 @@ export class Scene {
     this.atmosphereMaterial=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexShader:`varying vec3 facing;varying vec3 sight;void main(){vec4 view=modelViewMatrix*vec4(position,1.);facing=normalMatrix*normal;sight=-view.xyz;gl_Position=projectionMatrix*view;}`,fragmentShader:`varying vec3 facing;varying vec3 sight;void main(){float rim=pow(1.-max(0.,dot(normalize(facing),normalize(sight))),2.4);gl_FragColor=vec4(.16,.52,1.,rim*.65);}`});
     const ringGeometry=new THREE.RingGeometry(1.35,2.05,64),ringMaterial=new THREE.MeshBasicMaterial({color:0xbcae8c,side:THREE.DoubleSide,transparent:true,opacity:.32});
     const coronaGeometry=new THREE.PlaneGeometry(2,2),coronaMaterial=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexShader:`varying vec2 coord;void main(){coord=uv*2.-1.;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`varying vec2 coord;void main(){float d=length(coord);float rays=.9+.1*sin(atan(coord.y,coord.x)*13.);float glow=exp(-max(0.,d-.70)*9.)*(1.-smoothstep(.85,1.,d))*rays;gl_FragColor=vec4(1.,.40,.07,glow*.38);}`});
-    this.backgroundEvent=-1;this.backgroundOrders=new Map();
+    this.backgroundLayout=new BackgroundLayout(this.plan);
     this.planets=Array.from({length:BACKGROUND.models.length},()=>{
       const group=new THREE.Group(),planet=new THREE.Mesh(this.sphere,this.planetMaterials[0]),ring=new THREE.Mesh(ringGeometry,ringMaterial),atmosphere=new THREE.Mesh(this.sphere,this.atmosphereMaterial);
       const galaxy=this.galaxy.clone();galaxy.rotation.set(.94,.12,.45);galaxy.visible=false;
@@ -95,7 +95,7 @@ export class Scene {
     const element=document.createElement('div');element.className='word-card';
     const content=document.createElement('div');content.className='card-letters';
     const open=document.createElement('span');open.className='bracket';open.textContent='(';content.append(open);
-    const cells=Array.from({length:14},()=>{
+    const cells=Array.from({length:VOCAB.maxWordLength},()=>{
       const cell=document.createElement('span');cell.className='letter-cell';const glyph=document.createElement('span');glyph.className='cell-glyph';const dots=document.createElement('span');dots.className='cell-dots';
       const pixels=Array.from({length:35},()=>{const pixel=document.createElement('i');dots.append(pixel);return pixel;});dots.hidden=true;cell.append(glyph,dots);content.append(cell);return {element:cell,glyph,dots,pixels,patternKey:''};
     });
@@ -113,38 +113,22 @@ export class Scene {
   }
   resize(){this.width=Math.max(1,this.host.clientWidth);this.height=Math.max(1,this.host.clientHeight);this.scale=Math.min(this.width/WORLD.width,this.height/WORLD.height);if(this.cardScale!==this.scale){this.cardLayer.style.setProperty('--word-scale',String(this.scale));this.cardScale=this.scale;}this.viewWidth=this.width/this.scale;this.viewHeight=this.height/this.scale;Object.assign(this.camera,{left:-this.viewWidth/2,right:this.viewWidth/2,top:this.viewHeight/2,bottom:-this.viewHeight/2});this.camera.updateProjectionMatrix();this.applyRenderQuality();this.backgroundMask.scale.set(this.viewWidth/2,this.viewHeight/2,1);this.measureInventory();}
   measureInventory(){const rect=this.host.getBoundingClientRect();this.collectionTargets={};for(const type of ['heart','star','shell']){const target=document.getElementById('collect-'+type).getBoundingClientRect();this.collectionTargets[type]={x:target.left-rect.left+target.width/2,y:target.top-rect.top+target.height/2};}}
+  collectionTarget(type){const target=this.collectionTargets[type];return {x:WORLD.width/2+(target.x-this.width/2)/this.scale,y:WORLD.height/2+(target.y-this.height/2)/this.scale};}
   project(x,y){return {x:this.width/2+(x-WORLD.width/2)*this.scale,y:this.height/2+(y-WORLD.height/2)*this.scale};}
   instance(mesh,index,x,y,z,sx,sy,sz,color){this.dummy.position.set(x-WORLD.width/2,WORLD.height/2-y,z);this.dummy.rotation.set(0,0,0);this.dummy.scale.set(sx,sy,sz);this.dummy.updateMatrix();mesh.setMatrixAt(index,this.dummy.matrix);if(color){this.color.set(color);mesh.setColorAt(index,this.color);}}
   render(game,dt){if(this.quality!==RENDERING.qualities[this.settings.renderQuality])this.applyRenderQuality();const menu=['menu','instructions','tutorial','preparing','prepareFailed','preview'].includes(game.state);if(menu)this.clock+=Math.max(0,Math.min(dt,WORLD.maxFrameSeconds));const backgroundTime=menu?this.clock:game.elapsed;this.starMaterial.uniforms.time.value=backgroundTime;
     if(menu)this.inventoryVisible=false;else if(!this.inventoryVisible){this.measureInventory();this.inventoryVisible=true;}
     this.backgroundMask.material.opacity=menu?BACKGROUND.menuMaskOpacity:BACKGROUND.maskOpacity;
-    const latest=Math.floor(backgroundTime/BACKGROUND.spawnIntervalSeconds),planetSpeed=Math.round(BACKGROUND.planetBaseSpeed*BACKGROUND.speedScale);
-    if(latest!==this.backgroundEvent){
-      this.backgroundEvent=latest;
-      for(let i=0;i<this.planets.length;i++){
-        const event=latest-((latest-i+BACKGROUND.models.length)%BACKGROUND.models.length),round=Math.floor(event/this.plan.length);
-        if(event<0){this.planets[i].userData.event=-1;continue;}
-        if(!this.backgroundOrders.has(round))this.backgroundOrders.set(round,backgroundOrder(BACKGROUND.seed,round,this.plan.length));
-        this.planets[i].userData.event=event;this.planets[i].userData.plan=this.plan[this.backgroundOrders.get(round)[event%this.plan.length]];
-      }
-      for(const round of this.backgroundOrders.keys())if(round<Math.floor(latest/this.plan.length)-1||round>Math.floor(latest/this.plan.length))this.backgroundOrders.delete(round);
-    }
-    for(const model of this.planets){
-      const {event,plan}=model.userData;if(event<0){model.visible=false;continue;}
+    for(const model of this.planets)model.visible=false;
+    for(const layout of this.backgroundLayout.getFrame(backgroundTime,this.viewWidth,this.viewHeight,menu)){
+      const {event,plan,radius,extent,x,y}=layout,model=this.planets[event%this.planets.length];
       const age=backgroundTime-event*BACKGROUND.spawnIntervalSeconds,definition=BACKGROUND.models[plan.planet],isGalaxy=definition.kind==='galaxy',isSun=definition.kind==='sun',chart=this.constellationGeometries.get(definition.kind);
-      const halo=chart?1.25:isSun?BACKGROUND.sunHaloScale:definition.kind==='saturn'?2.05:1.045;
-      const vertical=isGalaxy?.68:halo;
-      const horizontal=isGalaxy?1:halo,rightOnly=menu&&definition.radius>=HOME.largeBodyMinRadius;
-      const fit=Math.min(1,this.viewWidth*BACKGROUND.maxModelWidthFraction/(2*plan.scale*horizontal),this.viewHeight*BACKGROUND.maxModelHeightFraction/(2*plan.scale*vertical),rightOnly?this.viewWidth*HOME.largeBodyMaxWidthFraction/(2*plan.scale*horizontal):1);
-      const radius=plan.scale*fit,extent=radius*vertical,y=this.viewHeight/2+extent-age*planetSpeed;
       model.visible=y+extent>=-this.viewHeight/2;
       model.userData.planet.visible=!isGalaxy&&!chart;model.userData.galaxy.visible=isGalaxy;model.userData.constellation.visible=!!chart;
       if(chart){model.userData.chartStars.geometry=chart.stars;model.userData.chartLines.geometry=chart.lines;}
       if(!isGalaxy&&!chart)model.userData.planet.material=this.planetMaterials[definition.texture];
       model.userData.ring.visible=definition.kind==='saturn';model.userData.atmosphere.visible=definition.kind==='earth';model.userData.corona.visible=isSun;
       model.scale.setScalar(isGalaxy?radius/BACKGROUND.galaxySourceRadius:chart?radius/definition.radius:radius);
-      const halfWidth=radius*horizontal,margin=Math.max(0,this.viewWidth/2-halfWidth);
-      const x=rightOnly?Math.max(halfWidth+HOME.largeBodyCenterGap,Math.min(margin,Math.abs(plan.x)*this.viewWidth)):Math.max(-margin,Math.min(margin,plan.x*this.viewWidth));
       model.position.set(x,y,isGalaxy||chart?-700:-420);
       model.rotation.set(isGalaxy||isSun||chart?0:.2,isSun||chart?0:plan.tilt+age*.005,isGalaxy?age*.0008:isSun||chart?0:.15);
       model.userData.planet.rotation.y=isSun?plan.tilt+age*.005:0;
@@ -160,12 +144,13 @@ export class Scene {
     this.cards.forEach((card,index)=>{const word=cardWords[index];hidden(card.element,menu||!word||word.state==='removed');if(card.element.hidden)return;const point=this.project(word.x,word.y),pulse=word.state==='success'||word.state==='verifying'&&game.elapsed>=word.inputLockedUntil;if(card.width!==word.width){card.element.style.width=word.width+'px';card.width=word.width;}card.element.style.transform='translate3d('+point.x+'px,'+point.y+'px,0) translateX(-50%) scale('+this.scale+')';card.element.classList.toggle('boss-card',word.boss);attribute(card.element,'state',word.state);card.element.style.opacity=pulse&&!this.settings.reducedMotion?String(.75+.25*Math.sin(game.elapsed*10)): '1';attribute(card.element,'target',target?.id===word.id);
       const isChoice=word.kind==='choice',height=isChoice?CHOICES.height+'px':'';if(card.element.style.height!==height)card.element.style.height=height;card.element.classList.toggle('carrier-card',isChoice);hidden(card.content,isChoice);hidden(card.meaning,isChoice);hidden(card.choiceTitle,!isChoice);hidden(card.choices,!isChoice);
       if(isChoice){const title=word.mode==='word-to-meaning'?word.entry.word:word.entry.meaning;if(card.choiceTitle.textContent!==title)card.choiceTitle.textContent=title;card.element.style.opacity='1';card.options.forEach((view,i)=>{const option=word.options[i];if(view.label.textContent!==option.text)view.label.textContent=option.text;view.element.style.opacity=String(1-option.hits/CHOICES.hitsToSelect);attribute(view.element,'aimed',target?.id===word.id&&Math.min(CHOICES.optionCount-1,Math.floor((game.player.x-word.x+word.width/2)/(word.width/CHOICES.optionCount)))===i);});return;}
+      const letterScale=Math.min(1,word.width/(word.entry.word.length*WORDS.cellWidth+40));if(card.letterScale!==letterScale){card.content.style.transform='scaleX('+letterScale+')';card.letterScale=letterScale;}
       card.cells.forEach((view,i)=>{const cell=view.element;hidden(cell,i>=word.entry.word.length);if(cell.hidden)return;const blank=word.blanks.indexOf(i),letter=blank>=0?word.letters[blank]:null,complete=!!letter?.letter&&letter.count>=LETTER_POINTS[letter.letter].length;const cellClass='letter-cell'+(blank>=0?' missing':'')+(blank===word.cursor&&word.state==='falling'?' current':'')+(complete&&word.state!=='success'?' pending':'');if(cell.className!==cellClass)cell.className=cellClass;view.glyph.style.opacity=complete&&game.elapsed<letter.filledAt+WORDS.inputLockSeconds&&!this.settings.reducedMotion?String(.5+.5*Math.abs(Math.sin((game.elapsed-letter.filledAt)*10))):'1';const glyph=blank<0?word.entry.word[i]:(word.state==='success'?word.entry.word[i]:complete?letter.letter:letter.count?'':'_');if(view.glyph.textContent!==glyph)view.glyph.textContent=glyph;hidden(view.dots,blank<0||!letter?.count||complete||word.state==='success');const patternKey=letter?letter.letter+':'+letter.count:'';if(patternKey!==view.patternKey){view.patternKey=patternKey;const lit=new Set(letter?.letter?LETTER_POINTS[letter.letter].slice(0,letter.count).map(point=>point.y*5+point.x):[]);view.pixels.forEach((pixel,index)=>pixel.classList.toggle('lit',lit.has(index)));}});const meaning='[ '+word.entry.meaning+' ]';if(card.meaning.textContent!==meaning)card.meaning.textContent=meaning;
     });
     this.carriers.forEach((carrier,i)=>{const word=cardWords[i];carrier.visible=!menu&&word?.kind==='choice'&&word.state!=='removed';if(!carrier.visible)return;carrier.position.set(word.x-WORLD.width/2,WORLD.height/2-word.y-CHOICES.height/2,-15);});
     const boss=game.boss;for(const model of Object.values(this.monsters))model.group.visible=false;
     if(boss){const model=this.monsters[boss.final?'final':'mini'],remaining=boss.faces.filter(face=>!face.recorded).length,turning=Math.max(0,(boss.turnUntil-game.elapsed)/BOSSES.turnSeconds);this.monster=model.group;this.monster.visible=!menu;this.monster.position.set(boss.x-480,540-boss.y+BOSS_VISUALS[boss.final?'final':'mini'].yOffset,10);this.monster.scale.setScalar(BOSS_VISUALS[boss.final?'final':'mini'].scale);this.monster.rotation.set(Math.sin(game.elapsed*.4)*.06,Math.sin(turning*Math.PI)*.85,Math.sin(game.elapsed*.3)*.025);this.poseMonster(model,remaining,game.elapsed,this.settings.reducedMotion);}
-    this.crates.forEach((element,i)=>{const crate=game.supplies[i];hidden(element,menu||!crate);if(element.hidden)return;const point=this.project(crate.x,crate.y);element.style.transform='translate3d('+point.x+'px,'+point.y+'px,0) translate(-50%,-50%) scale('+this.scale+') rotate('+Math.sin(game.elapsed*1.8)*7+'deg)';});
+    this.crates.forEach((element,i)=>{const crate=game.supplies[i];hidden(element,menu||!crate);if(element.hidden)return;const point=this.project(crate.x,crate.y),flying=crate.auto&&crate.flightDuration>0,t=flying?Math.min(1,(crate.age-SUPPLIES.rewardSwaySeconds)/crate.flightDuration):0,ease=t*t*(3-2*t),target=flying?this.collectionTargets[crate.type]:point,arc=this.settings.reducedMotion?0:Math.sin(t*Math.PI)*SUPPLIES.rewardArcHeight*this.scale,rotation=this.settings.reducedMotion?0:crate.auto?Math.sin(crate.phase+Math.min(crate.age,SUPPLIES.rewardSwaySeconds)*crate.swaySpeed)*7*(1-t):Math.sin(game.elapsed*1.8)*7;element.style.transform='translate3d('+(point.x+(target.x-point.x)*ease)+'px,'+(point.y+(target.y-point.y)*ease-arc)+'px,0) translate(-50%,-50%) scale('+(this.scale*(1-.65*t))+') rotate('+rotation+'deg)';});
     this.collectionIcons.forEach((element,i)=>{const item=game.collections[i];hidden(element,menu||!item);if(element.hidden)return;const from=this.project(item.x,item.y),target=this.collectionTargets[item.type],t=this.settings.reducedMotion?1:Math.min(1,item.age/SUPPLIES.flightSeconds),ease=1-Math.pow(1-t,3),text={heart:'♥',star:'★',shell:'↑'}[item.type];if(element.textContent!==text)element.textContent=text;attribute(element,'kind',item.type);element.style.transform='translate3d('+(from.x+(target.x-from.x)*ease)+'px,'+(from.y+(target.y-from.y)*ease-Math.sin(t*Math.PI)*60)+'px,0) translate(-50%,-50%) scale('+(1-.35*t)+')';});
     let enemyCount=0,enemyMatricesChanged=false;
     this.enemyLabels.forEach((label,index)=>{const enemy=game.enemies[index];hidden(label,menu||!enemy||game.elapsed>=enemy.labelUntil);if(!enemy||menu)return;const warning=enemy.nextShot-game.elapsed<=ENEMIES.warningSeconds,scale=warning?.95:.8,previous=this.enemyMatrixStates[enemyCount];if(previous.x!==enemy.x||previous.y!==enemy.y||previous.scale!==scale){this.enemyTransform.position.set(enemy.x-480,540-enemy.y,30);this.enemyTransform.rotation.set(.1,0,Math.PI);this.enemyTransform.scale.setScalar(scale);this.enemyTransform.updateMatrix();for(const batch of this.enemyBatches)batch.setMatrixAt(enemyCount,this.enemyTransform.matrix);Object.assign(previous,{x:enemy.x,y:enemy.y,scale});enemyMatricesChanged=true;}enemyCount++;if(!label.hidden){const point=this.project(enemy.x,enemy.y-65),text=enemy.answer+' [ '+enemy.meaning+' ]';label.style.transform='translate3d('+point.x+'px,'+point.y+'px,0) translateX(-50%)';if(label.textContent!==text)label.textContent=text;}});
@@ -189,7 +174,7 @@ export class Scene {
     }finally{
       this.particles.count=0;for(const batch of this.enemyBatches){batch.count=0;batch.visible=false;}
       for(const {model,visibility,position,scale,material,stars,lines} of saved){for(const [item,visible] of visibility)item.visible=visible;model.position.copy(position);model.scale.copy(scale);model.userData.planet.material=material;model.userData.chartStars.geometry=stars;model.userData.chartLines.geometry=lines;}
-      this.backgroundEvent=-1;for(const model of Object.values(this.monsters))model.group.visible=false;this.carriers[0].visible=false;this.homePreview.visible=previewVisible;
+      for(const model of Object.values(this.monsters))model.group.visible=false;this.carriers[0].visible=false;this.homePreview.visible=previewVisible;
     }
   }
 }

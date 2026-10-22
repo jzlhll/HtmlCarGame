@@ -1,8 +1,9 @@
+import { getVocabulary } from './vocabulary-data.js';
 const NAME='english-air-combat-learning';
 function requestValue(request){return new Promise((resolve,reject)=>{request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});}
 function completed(tx){return new Promise((resolve,reject)=>{tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||new Error('Learning transaction aborted'));});}
 export class LearningDB {
-  constructor(accountId){if(!/^pilot-[a-z0-9-]+$|^test0[1-9]$/.test(accountId))throw new Error('Learning account required');this.name=NAME+'-'+accountId;this.db=null;this.pending=Promise.resolve();}
+  constructor(accountId,libraryId){if(!/^(?:pilot-[a-z0-9-]+|test0[1-9])$/.test(accountId))throw new Error('Learning account required');const library=getVocabulary(libraryId);this.accountId=accountId;this.libraryId=library.id;this.canonical=new Map(library.entries.map(entry=>[entry.id,entry]));this.name=NAME+'-'+accountId+'-library-'+library.id;this.db=null;this.pending=Promise.resolve();}
   static discardLegacy(){
     if(typeof indexedDB==='undefined')return Promise.resolve(true);
     return new Promise(resolve=>{
@@ -16,15 +17,18 @@ export class LearningDB {
     this.db=await new Promise((resolve,reject)=>{let settled=false;const fail=error=>{if(settled)return;settled=true;clearTimeout(timer);reject(error);},timer=setTimeout(()=>fail(new Error('Learning database open timed out')),1800);request.onsuccess=()=>{if(settled){request.result.close();return;}settled=true;clearTimeout(timer);resolve(request.result);};request.onerror=()=>fail(request.error);request.onblocked=()=>fail(new Error('Learning database blocked'));});
     this.db.onversionchange=()=>{this.db?.close();this.db=null;};return this.words();
   }
-  async words(){const tx=this.db.transaction('words','readonly'),done=completed(tx),rows=await requestValue(tx.objectStore('words').getAll());await done;return rows;}
+  async words(){const tx=this.db.transaction('words','readonly'),done=completed(tx),rows=await requestValue(tx.objectStore('words').getAll());await done;return rows.filter(row=>row.accountId===this.accountId&&row.libraryId===this.libraryId&&this.canonical.has(row.id));}
   save(result,rows){
+    if(result?.accountId!==this.accountId||result?.libraryId!==this.libraryId||!result.id||!Array.isArray(result.records)||!Array.isArray(rows))throw new Error('Learning result account or library mismatch');
+    for(const record of result.records)if(!record.id||record.accountId!==this.accountId||record.libraryId!==this.libraryId||!this.canonical.has(record.wordId)||!['correct','wrong','incomplete'].includes(record.kind)||!Number.isFinite(record.time))throw new Error('Learning record account or library mismatch');
+    for(const row of rows)if(row.accountId!==this.accountId||row.libraryId!==this.libraryId||!this.canonical.has(row.id))throw new Error('Learning word account or library mismatch');
     this.pending=this.pending.catch(()=>{}).then(async()=>{
       if(!this.db)throw new Error('Learning database unavailable');
       const tx=this.db.transaction(['words','attempts','runs'],'readwrite'),done=completed(tx),runs=tx.objectStore('runs'),existing=runs.get(result.id),saved=[];
       existing.onsuccess=()=>{
-        if(existing.result)return;
+        if(existing.result){for(const row of rows){const current=tx.objectStore('words').get(row.id);current.onsuccess=()=>{if(current.result)saved.push(current.result);};}return;}
         for(const row of rows){const store=tx.objectStore('words'),current=store.get(row.id);current.onsuccess=()=>{let value=row;if(current.result){const delta={correct:0,wrong:0,incomplete:0};for(const record of result.records)if(record.wordId===row.id)delta[record.kind]++;value={...row,correct:current.result.correct+delta.correct,wrong:current.result.wrong+delta.wrong,incomplete:(current.result.incomplete||0)+delta.incomplete,last:Math.max(current.result.last||0,row.last||0)};}store.put(value);saved.push(value);};}
-        for(const record of result.records)tx.objectStore('attempts').put(record);runs.put({id:result.id,level:result.level,time:result.time});
+        for(const record of result.records)tx.objectStore('attempts').put(record);runs.put({id:result.id,accountId:this.accountId,libraryId:this.libraryId,level:result.level,time:result.time});
       };
       await done;return saved;
     });return this.pending;
@@ -37,6 +41,7 @@ export class LearningDB {
     });return this.pending;
   }
   async attemptPage(wordId,page,pageSize){
+    if(!this.canonical.has(wordId))throw new Error('Word does not belong to current library');
     await this.pending.catch(()=>{});if(!this.db)throw new Error('Learning database unavailable');
     const tx=this.db.transaction('attempts','readonly'),done=completed(tx),store=tx.objectStore('attempts'),range=IDBKeyRange.bound([wordId,0],[wordId,Number.MAX_VALUE]);
     const result=await new Promise((resolve,reject)=>{const count=store.index('wordTime').count(range);count.onerror=()=>reject(count.error);count.onsuccess=()=>{
@@ -44,5 +49,5 @@ export class LearningDB {
       request.onerror=()=>reject(request.error);request.onsuccess=()=>{const cursor=request.result;if(!cursor){resolve({rows,total,page:current});return;}if(skip){cursor.advance(skip);skip=0;return;}rows.push(cursor.value);if(rows.length===pageSize)resolve({rows,total,page:current});else cursor.continue();};
     };});await done;return result;
   }
-  async attempts(wordId){await this.pending.catch(()=>{});if(!this.db)return [];const tx=this.db.transaction('attempts','readonly'),done=completed(tx),rows=await requestValue(tx.objectStore('attempts').index('wordId').getAll(wordId));await done;return rows.sort((a,b)=>b.time-a.time);}
+  async attempts(wordId){if(!this.canonical.has(wordId))throw new Error('Word does not belong to current library');await this.pending.catch(()=>{});if(!this.db)return [];const tx=this.db.transaction('attempts','readonly'),done=completed(tx),rows=await requestValue(tx.objectStore('attempts').index('wordId').getAll(wordId));await done;return rows.sort((a,b)=>b.time-a.time);}
 }

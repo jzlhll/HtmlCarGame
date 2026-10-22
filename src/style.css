@@ -142,3 +142,20 @@ body[data-victory="true"] .hud-time>strong{color:#ffe3a0;font-size:48px}body[dat
 
 .letter-cell{font-size:max(36px,calc(20px / var(--word-scale)))}
 .card-meaning{font-size:max(18px,calc(18px / var(--word-scale)));line-height:max(23px,calc(20px / var(--word-scale)))}
+
+/* 词库选择与短语随账号及当前词库呈现。 */
+.library-control{display:flex;align-items:center;justify-content:center;gap:12px;margin:0 0 18px;font-size:13px;color:#a6bfc3}
+.library-control select{max-width:100%;min-height:42px;padding:8px 30px 8px 12px;border:1px solid #729c9a88;border-radius:4px;background:#0c1b25;color:var(--text);font:inherit;font-size:14px;cursor:pointer}
+.word-example{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);text-align:center;overflow-wrap:anywhere}
+.word-example>small{display:block;margin:0;color:#8aa6b0;font-size:11px;letter-spacing:1px}
+.word-example .example-text{margin:8px 0 6px;font-size:18px;line-height:1.6;color:#d7f4ea;font-family:ui-monospace,SFMono-Regular,monospace;letter-spacing:0}
+.word-example .example-meaning{margin:0;font-size:14px;line-height:1.65;color:#a0b9c1;letter-spacing:0}
+.result-vocabulary{margin:20px 0;text-align:center}.result-vocabulary h3{font-size:14px;font-weight:500;color:#a5c4c8}.result-vocabulary .preview-card{padding:16px;border:1px solid var(--line);border-radius:8px;min-width:0}.result-vocabulary .preview-card>strong{font-size:30px;margin:4px 0 10px}.result-vocabulary .word-meaning{font-size:18px;margin:8px 0}.result-card-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0}.result-card-controls .secondary-button{min-height:38px;padding:0 12px}.result-card-controls>span{font:12px ui-monospace,monospace;color:#a6bfc3}
+.vocabulary-catalog{display:grid;gap:12px;margin:20px 0}.vocabulary-catalog article{padding:12px 16px;border:1px solid var(--line);border-radius:6px}.vocabulary-catalog h3{margin:0;font-size:18px;color:var(--cyan)}.vocabulary-catalog h3 small{font-size:11px;font-weight:400;color:#a2bfc0}.vocabulary-catalog p{margin:5px 0}
+@media(max-width:620px){.word-example .example-text{font-size:16px}.word-example .example-meaning{font-size:13px}.result-card-controls{gap:6px}.result-card-controls .secondary-button{font-size:11px;padding:0 8px}}
+
+.dialog-backdrop[data-mode="pause"]{background:rgb(0 0 0 / 30%);backdrop-filter:none}
+.dialog-card[data-mode="pause"]{width:min(260px,100%);padding:16px;border-radius:12px;box-shadow:0 8px 24px #0003}
+.dialog-card[data-mode="pause"] h2{font-size:20px;letter-spacing:1px;text-align:center;margin:0 0 12px}
+.dialog-card[data-mode="pause"] .dialog-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0}
+.dialog-card[data-mode="pause"] .primary-button,.dialog-card[data-mode="pause"] .secondary-button{min-height:40px;padding:9px 8px;font-size:13px;letter-spacing:0;justify-content:center;gap:0}

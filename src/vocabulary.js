@@ -1,18 +1,18 @@
 import { VOCAB } from './config.js';
-import { VOCABULARY } from './vocabulary-data.js';
+import { getVocabulary, DEFAULT_VOCABULARY_ID } from './vocabulary-data.js';
 import { shuffle } from './random.js';
 export function learningWeight(stats){
   const total=(stats?.correct||0)+(stats?.wrong||0)+(stats?.incomplete||0),rate=total?(stats?.correct||0)/total:0;
   return rate>.85?.01:rate>.75?.25:rate>.5?.5:1;
 }
 export class Vocabulary {
-  constructor(random,storage,roster=null){this.random=random;this.storage=storage;this.roster=roster;this.bag=[];this.pools=[0,1,2].map(group=>VOCABULARY.filter(entry=>entry.group===group&&/^[A-Za-z]{2,14}$/.test(entry.word)&&(entry.verified||VOCAB.usePreviewPool)));}
+  constructor(random,storage,roster=null){this.random=random;this.storage=storage;this.roster=roster;this.bag=[];this.library=getVocabulary(storage.libraryId||DEFAULT_VOCABULARY_ID);this.pools=this.library.groupWeights.map((_,group)=>this.library.entries.filter(entry=>entry.group===group&&entry.word.length<=VOCAB.maxWordLength&&/^[A-Za-z]{2,}$/.test(entry.word)&&(entry.verified||VOCAB.usePreviewPool)));}
   select(count){
     // 随机起点的等距分配使每组只取目标数量的上下整数，长期保留小比例组。
-    const quotas=VOCAB.groupWeights.map(()=>0),offset=this.random();let group=0,boundary=VOCAB.groupWeights[0]*count;
-    for(let i=0;i<count;i++){while(group<VOCAB.groupWeights.length-1&&i+offset>=boundary){group++;boundary+=VOCAB.groupWeights[group]*count;}quotas[group]++;}
+    const weights=this.library.groupWeights,quotas=weights.map(()=>0),offset=this.random();let group=0,boundary=weights[0]*count;
+    for(let i=0;i<count;i++){while(group<weights.length-1&&i+offset>=boundary){group++;boundary+=weights[group]*count;}quotas[group]++;}
     const roster=[];
-    for(let group=0;group<3;group++){
+    for(let group=0;group<this.pools.length;group++){
       const pool=[...this.pools[group]];if(pool.length<quotas[group])throw new Error('Insufficient vocabulary for level');
       for(let i=0;i<quotas[group];i++){
         const weights=pool.map(entry=>learningWeight(this.storage.learning[entry.id])),total=weights.reduce((a,b)=>a+b,0);let value=this.random()*total,index=0;
