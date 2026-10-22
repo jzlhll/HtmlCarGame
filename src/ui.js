@@ -32,7 +32,7 @@ export class UI {
   dialog(mode,html){this.accountMode='';$('home-accounts').hidden=true;this.dialogMode=mode;if(this.previousFocus===undefined)this.previousFocus=document.activeElement;$('dialog-content').innerHTML=html;$('dialog').hidden=false;$('dialog-card').dataset.mode=mode;$('dialog-card').scrollTop=0;$('dialog-card').focus();this.invalidate?.();}
   closeDialog(){this.speech.stop();this.accountMode='';$('home-accounts').hidden=true;this.dialogMode='';$('dialog').hidden=true;this.previousFocus=undefined;$('app').focus();this.invalidate?.();}
   accountPanel(mode,html){
-    this.closeDialog();this.accountMode=mode;$('home-accounts').innerHTML=html;this.render();$('home-accounts').focus({preventScroll:true});
+    this.closeDialog();this.accountMode=mode;$('home-accounts').innerHTML=html;$('home-accounts').hidden=false;this.render();$('home-accounts').focus({preventScroll:true});
   }
   accounts(){
     if(this.game.state==='review'||this.accountBusy||this.resettingLearning)return;
@@ -40,9 +40,9 @@ export class UI {
     if(!this.accountMode){this.accountReturnState=this.game.state;if(this.game.state==='playing'){this.game.pause();this.accountReturnState='paused';}this.game.state='menu';}
     this.storage.refreshAccounts();this.speech.stop();this.game.input?.clear();
     const creating=this.draftName!==null;
-    const heading=creating?'<div class="account-heading"><h2>新建账号</h2><button class="text-button" data-action="account-new">换一个名字</button></div>':this.storage.debug?'':'<div class="account-heading"><button class="text-button" data-action="account-new">＋ 随机新建</button></div>';
+    const heading=creating?'<div class="account-heading"><h2>新建账号</h2><button class="text-button" data-action="account-new">换一个名字</button></div>':this.storage.debug?'':this.storage.accounts.length?'<div class="account-heading"><button class="text-button" data-action="account-new">＋ 随机新建</button></div>':'<div class="account-heading account-empty"><button class="primary-button account-create-button" data-action="account-new"><b aria-hidden="true">＋</b><span>随机新建账号</span></button></div>';
     const content=creating?'<form class="account-draft" data-account-form><label for="new-account-name">账号名</label><input id="new-account-name" name="account-name" value="'+escape(this.draftName)+'" maxlength="20" required autocomplete="off"><div class="account-actions"><button class="primary-button" type="submit">确认保存</button><button class="text-button" type="button" data-action="account-draft-cancel">取消</button></div></form>':'<div class="account-list">'+this.storage.accounts.map(account=>'<button class="account-choice" data-action="account-select" data-id="'+escape(account.id)+'"><strong>'+escape(account.name)+'</strong>'+(this.storage.account?.id===account.id?'<small>当前</small>':'')+'</button>').join('')+'</div>';
-    this.accountPanel('accounts',heading+content+(!creating&&this.storage.account?'<button class="text-button account-return" data-action="account-return">返回</button>':''));
+    this.accountPanel('accounts',(!creating&&this.storage.accounts.length?'<div class="account-options">'+heading+content+'</div>':heading+content)+(!creating&&this.storage.account?'<button class="text-button account-return" data-action="account-return">返回</button>':''));
   }
   newAccount(){if(this.storage.debug)return;this.draftName=this.storage.randomAccountName();this.accounts();$('new-account-name')?.focus({preventScroll:true});$('new-account-name')?.select();}
   saveAccountName(form){
