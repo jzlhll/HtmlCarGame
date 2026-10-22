@@ -131,7 +131,7 @@ function prepareScene() {
     const worldQueue=new GenerationQueue(game.world.preparation,{urgent:true,name:'route-world'});worldQueue.resume();
     const worldPreparation=await worldQueue.done;
     const assetStartedAt=performance.now();
-    const assetGeneration=await prepareSurfaceAssets({levelId:game.route.id,urgent:enterPending||versionUpgrade.required,onProgress:stats=>{
+    const assetGeneration=await prepareSurfaceAssets({levelId:game.route.id,urgent:true,onProgress:stats=>{
       if (ui.preparing && !ui.upgrading) ui.setPreparing(true,Math.min(95,Math.round((stats.completed||0)/stats.total*95)));
       versionUpgrade.progress(Math.round((stats.completed||0)/stats.total*38),'正在检查、更新并保存必需的模型与纹理。');
     }});
@@ -153,6 +153,7 @@ function prepareScene() {
     const preparedAt=performance.now();
     console.info('Scene prepared ' + JSON.stringify({version:APP_VERSION,navigationMs:Math.round(preparedAt),modulesMs:Math.round(moduleLoadedAt),worldMs:Math.round(worldPreparedAt-moduleLoadedAt),
       assetsMs:Math.round(assetsPreparedAt-assetStartedAt),sceneryMs:Math.round(sceneryPreparedAt-assetsPreparedAt),gpuMs:Math.round(preparedAt-sceneryPreparedAt),firstFrameMs,worldPreparation,gpuPreparation,assetGeneration}));
+    if(preparedAt>GAME.browserPrepareLimitSeconds*1000)console.warn('Browser preparation exceeded budget '+Math.round(preparedAt));
     updateGenerationWindow('scene'); renderer.resize(); wake();
   })().catch(error=>{sceneReady=undefined;throw error;});
   return sceneReady;

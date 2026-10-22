@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { AIRCRAFT, SURFACE_APPEARANCE } from './config.js';
 import { fuselageSection } from './model-geometry.js';
-import { surfaceTexture, modelGeometry } from './surface-assets.js';
+import { surfaceTexture, modelGeometry, surfaceCache, geometryRecord, geometryFrom } from './surface-assets.js';
 
 function fuselageGeometry() { return modelGeometry('fuselage'); }
 
@@ -38,7 +38,8 @@ function batchAircraft(group) {
     for (const [material, meshes] of buckets) {
       if (meshes.length < 2) continue;
       const parts = meshes.map(mesh => {
-        const geometry = mesh.geometry.index ? mesh.geometry.toNonIndexed() : mesh.geometry.clone();
+        const geometry=mesh.geometry.clone();
+        if(!geometry.index)geometry.setIndex(Array.from({length:geometry.attributes.position.count},(_,i)=>i));
         // 带纹理的材质保留UV，合批后蒙皮接缝与表面凹凸继续对齐。
         const textured = material.map || material.bumpMap || material.roughnessMap;
         for (const name of Object.keys(geometry.attributes)) if (name !== 'position' && name !== 'normal' && !(textured && name === 'uv')) geometry.deleteAttribute(name);
@@ -60,7 +61,7 @@ function batchAircraft(group) {
   for (const geometry of sourceGeometries) if (!liveGeometries.has(geometry) && !geometry.userData.sharedAsset) geometry.dispose();
 }
 
-export function createAircraft() {
+function buildAircraft() {
   const group = new THREE.Group();
   group.userData.flaps = [];
   group.userData.gearLegs = [];
@@ -169,4 +170,58 @@ export function createAircraft() {
   group.scale.set(AIRCRAFT.wingspan / 35, 1, AIRCRAFT.length / 38);
   batchAircraft(group);
   return group;
+}
+
+let aircraftTemplate;
+
+// 最终合批模型只恢复一次；每架飞机的材质与活动节点独立，几何和纹理共享。
+export function* prepareAircraftTemplate(){
+  if(aircraftTemplate)return;
+  const cache=surfaceCache(),key='scene/aircraft/template',record=cache.readable?yield {wait:cache.read(key)}:null;
+  if(record?.format===1){
+    try{
+      const geometries=[];
+      for(const value of record.geometries){const geometry=yield* geometryFrom(value);if(!geometry)throw new Error('Invalid aircraft geometry');geometries.push(geometry);}
+      const textures={};for(const name of record.textures)textures[name]=surfaceTexture(name);
+      const loader=new THREE.MaterialLoader().setTextures(textures),materials=record.materials.map(value=>loader.parse(value));
+      const nodes=record.nodes.map(value=>{
+        const node=value.geometry===undefined?new THREE.Group():new THREE.Mesh(geometries[value.geometry],materials[value.material]);
+        node.position.fromArray(value.position);node.quaternion.fromArray(value.quaternion);node.scale.fromArray(value.scale);node.matrixAutoUpdate=value.matrixAutoUpdate;node.castShadow=value.castShadow;node.receiveShadow=value.receiveShadow;node.visible=value.visible;node.userData=value.userData;node.updateMatrix();return node;
+      });
+      record.nodes.forEach((value,i)=>{if(value.parent>=0)nodes[value.parent].add(nodes[i]);});
+      aircraftTemplate=nodes[0];aircraftTemplate.userData={flaps:record.flaps.map(i=>nodes[i]),gearLegs:record.gearLegs.map(i=>nodes[i]),navigationLights:nodes[record.navigationLights],skinMaterials:record.skinMaterials.map(i=>materials[i])};
+      console.info('Aircraft template restored');return;
+    }catch(error){console.warn('Aircraft template restore failed',error);}
+  }
+  aircraftTemplate=buildAircraft();yield 'boundary';
+  const objects=[],geometryIds=new Map(),materialIds=new Map(),geometries=[],materials=[],textures=new Set();aircraftTemplate.traverse(node=>objects.push(node));
+  const nodes=objects.map(node=>{
+    let geometry,material;
+    if(node.isMesh){
+      if(!geometryIds.has(node.geometry)){geometryIds.set(node.geometry,geometries.length);geometries.push(geometryRecord(node.geometry));}
+      if(!materialIds.has(node.material)){
+        materialIds.set(node.material,materials.length);const value=node.material.toJSON({textures:{},images:{}});
+        for(const [key,texture]of Object.entries(node.material))if(texture?.isTexture){value[key]=texture.userData.assetName;textures.add(value[key]);}
+        materials.push(value);
+      }
+      geometry=geometryIds.get(node.geometry);material=materialIds.get(node.material);
+    }
+    return {parent:objects.indexOf(node.parent),geometry,material,position:node.position.toArray(),quaternion:node.quaternion.toArray(),scale:node.scale.toArray(),matrixAutoUpdate:node.matrixAutoUpdate,castShadow:node.castShadow,receiveShadow:node.receiveShadow,visible:node.visible,userData:node===aircraftTemplate?{}:node.userData};
+  });
+  const data=aircraftTemplate.userData;
+  if(cache.available)yield {wait:cache.write(key,{format:1,nodes,geometries,materials,textures:[...textures],flaps:data.flaps.map(node=>objects.indexOf(node)),gearLegs:data.gearLegs.map(node=>objects.indexOf(node)),navigationLights:objects.indexOf(data.navigationLights),skinMaterials:data.skinMaterials.map(value=>materialIds.get(value))})};
+}
+
+export function createAircraft(){
+  aircraftTemplate??=buildAircraft();
+  const data=aircraftTemplate.userData;aircraftTemplate.userData={};
+  let instance;try{instance=aircraftTemplate.clone(true);}finally{aircraftTemplate.userData=data;}
+  const source=[],nodes=[],links=new Map(),materials=new Map();aircraftTemplate.traverse(node=>source.push(node));instance.traverse(node=>nodes.push(node));
+  nodes.forEach((node,i)=>{
+    links.set(source[i],node);
+    if(!node.isMesh)return;
+    const original=source[i].material;if(!materials.has(original))materials.set(original,original.clone());node.material=materials.get(original);
+  });
+  instance.userData={flaps:data.flaps.map(node=>links.get(node)),gearLegs:data.gearLegs.map(node=>links.get(node)),navigationLights:links.get(data.navigationLights),skinMaterials:data.skinMaterials.map(material=>materials.get(material))};
+  return instance;
 }

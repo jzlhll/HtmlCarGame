@@ -6,7 +6,7 @@ import { createForestLOD } from './forest-view.js';
 import { treeDimensions } from './tree-contact.js';
 import { mountainIndices, sampleMountain, smoothRange, terrainNoise } from './terrain.js';
 import { createTerrainDetail, createTerrainMaterial, createTerrainLOD } from './terrain-material.js';
-import { surfaceTexture } from './surface-assets.js';
+import { surfaceTexture, surfaceCache, geometryRecord, geometryFrom } from './surface-assets.js';
 
 // 只消费世界山面；细节切换、岩纹和树冠不改变逻辑地形或悬空岩体。
 export class MountainView extends THREE.Group {
@@ -38,12 +38,19 @@ export class MountainView extends THREE.Group {
   }
 
   *addMountain(surface) {
-    const geometry = new THREE.BufferGeometry();
+    const cache=surfaceCache(),key='scene/terrain/mountain/'+surface.seed+'-'+surface.minX+'-'+surface.minZ+'-'+surface.n;
+    const record=cache.readable?yield {wait:cache.read(key)}:null;
+    const savedGeometry=record?.geometry?{...record.geometry,attributes:{...record.geometry.attributes,position:{array:surface.positions,itemSize:3,normalized:false}}}:null;
+    let geometry=yield* geometryFrom(savedGeometry),vegetation=record?.vegetation;
+    if(geometry)geometry.setIndex(mountainIndices(surface.n));
+    const rolling=surface.kind==='rolling';
+    if(!geometry||!(vegetation instanceof Float32Array)||vegetation.length!==surface.positions.length/3){
+    geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(surface.positions, 3));
     geometry.setIndex(mountainIndices(surface.n)); geometry.computeVertexNormals();
     const settings = this.settings, positions = geometry.attributes.position, normals = geometry.attributes.normal;
-    const rolling=surface.kind==='rolling',uv=[];
-    const colors = [], biomes = [], vegetation = new Float32Array(positions.count);
+    const uv=[];
+    const colors = [], biomes = [];vegetation = new Float32Array(positions.count);
     const rock = new THREE.Color(settings.rockColor), soil = new THREE.Color(settings.soilColor), green = new THREE.Color(settings.lowColor);
     const red = new THREE.Color(settings.danxiaColor), snow = new THREE.Color(settings.snowColor), ground = new THREE.Color(SCENERY.colors.ground), color = new THREE.Color();
     for (let i = 0; i < positions.count; i++) {
@@ -73,6 +80,8 @@ export class MountainView extends THREE.Group {
     if(rolling)geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
     geometry.setAttribute('biome', new THREE.Float32BufferAttribute(biomes, 4));
+    if(cache.available){const data=geometryRecord(geometry);delete data.attributes.position;delete data.index;yield {wait:cache.write(key,{geometry:data,vegetation})};}
+    }else geometry.attributes.position=new THREE.BufferAttribute(surface.positions,3);
     const geometries=[geometry,this.reduceGeometry(geometry,surface.n,2),this.reduceGeometry(geometry,surface.n,4)];
     const bounds=new THREE.Box3(new THREE.Vector3(surface.minX,surface.minY,surface.minZ),new THREE.Vector3(surface.maxX,surface.maxY,surface.maxZ));
     this.add(createTerrainLOD(geometries,rolling?this.rollingMaterials:this.materials,bounds,{receiveShadow:true}));
@@ -87,7 +96,11 @@ export class MountainView extends THREE.Group {
   }
 
   *plantMountain(surface, vegetation) {
+    const cache=surfaceCache(),key='scene/terrain/plants/'+surface.seed+'-'+surface.minX+'-'+surface.minZ;
+    const saved=cache.readable?yield {wait:cache.read(key)}:null;
     const spacing = this.settings.forestSpacing, chunks = new Map(), selected = [], n = surface.n;
+    if(Array.isArray(saved)&&saved.every(tree=>['x','y','z','yaw','color'].every(k=>Number.isFinite(tree[k]))))selected.push(...saved);
+    else{
     let seed = surface.seed;
     const random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
     let count = 0, visited=0;
@@ -103,6 +116,8 @@ export class MountainView extends THREE.Group {
       count++;
       if (selected.length < this.settings.maxTrees) selected.push(tree);
       else { const replace = Math.floor(random() * count); if (replace < selected.length) selected[replace] = tree; }
+    }
+    if(cache.available)yield {wait:cache.write(key,selected)};
     }
     for (const tree of selected) {
       const key = `${Math.floor(tree.x / this.settings.forestCell)},${Math.floor(tree.z / this.settings.forestCell)}`;

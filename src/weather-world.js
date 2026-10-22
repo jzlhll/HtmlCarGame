@@ -98,7 +98,7 @@ export function weatherLayout(route) {
 export function* prepareWeatherWorld(route,useCache) {
   if(!useCache)return weatherLayout(route);
   const cache=surfaceCache();yield {wait:cache.ready};
-  const record=cache.available?yield {wait:cache.read('scene/weather/layout')}:null;
+  const record=cache.readable?yield {wait:cache.read('scene/weather/layout')}:null;
   const valid=record?.recipe===WEATHER.recipe&&Array.isArray(record.clouds)&&record.clouds.length>0&&record.clouds.length<=WEATHER.maxClouds
     &&record.clouds.every((c,i)=>c.id===i&&['white','storm'].includes(c.kind)&&['x','y','z','density','variant','heading','scaleX','scaleZ'].every(k=>Number.isFinite(c[k]))&&c.y>=WEATHER.thinBand[0]&&c.y<=WEATHER.highBand[1]&&Number.isInteger(c.variant)&&c.variant>=0&&c.variant<WEATHER.variants&&typeof c.thin==='boolean'&&c.density>0&&c.density<=1&&c.scaleX>=.9&&c.scaleX<=1&&c.scaleZ>=.9&&c.scaleZ<=1)
     &&Array.isArray(record.templates)&&record.templates.length===WEATHER.variants&&record.templates.every(p=>p.length===WEATHER.puffs&&p.every(v=>['x','y','z','rx','ry','rz'].every(k=>Number.isFinite(v[k]))&&v.rx>0&&v.ry>0&&v.rz>0));

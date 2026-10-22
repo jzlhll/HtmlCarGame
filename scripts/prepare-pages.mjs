@@ -6,6 +6,8 @@ import { GAME, AUDIO } from '../src/config.js';
 import { VOICE_BANK_URL, VOICE_CLIPS } from '../src/voice-clips.js';
 import { APP_VERSION } from '../src/version.js';
 
+await import('./generate-assets.mjs');
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, '.pages-output');
 const voiceBank = await readFile(VOICE_BANK_URL);
@@ -30,6 +32,7 @@ if (releaseTag && releaseTag.replace(/^v/, '') !== APP_VERSION) throw new Error(
 await rm(output, {recursive: true, force: true});
 await mkdir(output, { recursive: true });
 await cp(path.join(root, 'src'), path.join(output, 'src'), { recursive: true });
+await cp(path.join(root, 'assets/generated'), path.join(output, 'assets/generated'), { recursive: true });
 const html = (await readFile(path.join(root, 'index.html'), 'utf8')).replaceAll('./node_modules/three/', './vendor/three/');
 await writeFile(path.join(output, 'index.html'), html);
 for (const file of ['build/three.module.js', 'build/three.core.js', 'examples/jsm/utils/BufferGeometryUtils.js', 'examples/jsm/geometries/RoundedBoxGeometry.js', 'examples/jsm/math/ImprovedNoise.js', 'LICENSE']) {

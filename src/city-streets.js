@@ -4,6 +4,7 @@ import { CITY_STREETS } from './config.js';
 import { surfaceCache } from './surface-assets.js';
 
 export const streetCacheStats={hits:0,misses:0};
+const streetResources={};
 
 function roadMaterial() {
   const material=new THREE.MeshStandardMaterial({roughness:1,metalness:0,polygonOffset:true,polygonOffsetFactor:-6,polygonOffsetUnits:-6});
@@ -68,9 +69,9 @@ function* generateRecords(network) {
   const result=[];for(const record of chunks.values()){for(const key of Object.keys(record))record[key]=new Float32Array(record[key]);result.push(record);yield;}return result;
 }
 
-export function* createCityStreets(network,shared={}) {
+export function* createCityStreets(network,shared=streetResources) {
   const cache=surfaceCache(),key='scene/streets/'+network.id,records=[];
-  const meta=cache.available?yield {wait:cache.read(key+'/meta')}:null;
+  const meta=cache.readable?yield {wait:cache.read(key+'/meta')}:null;
   let hit=meta?.recipe===CITY_STREETS.recipe&&Number.isInteger(meta.count)&&meta.count>0&&meta.count<256;
   if(hit)for(let i=0;i<meta.count;i++){const record=yield {wait:cache.read(key+'/'+i)};if(!valid(record)){hit=false;break;}records.push(record);yield;}
   if(hit)streetCacheStats.hits++;

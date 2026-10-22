@@ -70,7 +70,7 @@ function* writeRecord(name, record) {
 }
 
 function* readRecord(name) {
-  if (!cache.available) return undefined;
+  if (!cache.readable) return undefined;
   const record=yield {wait:cache.read(name)};
   if (record?.kind!=='pixels') return record;
   if (!Number.isInteger(record.width)||!Number.isInteger(record.height)||record.width<=0||record.height<=0||record.width>SURFACE_APPEARANCE.detailTextureSize||record.height>SURFACE_APPEARANCE.detailTextureSize) return undefined;
@@ -118,19 +118,26 @@ function textureFrom(name, record) {
   else {texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.anisotropy=4;}
   if (record.mipmaps) {texture.mipmaps=record.mipmaps;texture.generateMipmaps=false;}
   if(name==='foliage-color'){texture.flipY=false;texture.wrapS=texture.wrapT=THREE.ClampToEdgeWrapping;}
-  texture.needsUpdate=true; return texture;
+  texture.userData.assetName=name;texture.needsUpdate=true; return texture;
 }
 
-function geometryRecord(geometry) {
-  return {kind: 'geometry', type: geometry.type, attributes: Object.fromEntries(Object.entries(geometry.attributes).map(([name,attribute])=>[name,{array:attribute.array,itemSize:attribute.itemSize,normalized:attribute.normalized}])), index: geometry.index?.array};
+export function geometryRecord(geometry) {
+  return {kind:'geometry',type:geometry.type,attributes:Object.fromEntries(Object.entries(geometry.attributes).map(([name,attribute])=>{
+    let array=attribute.array,normalized=attribute.normalized;
+    // 法线与0–1色彩采用16位归一化存储；位置、UV和碰撞数据保持原Float32。
+    if(array instanceof Float32Array&&['normal','color','biome'].includes(name)&&array.every(value=>Number.isFinite(value)&&value>=(name==='normal'?-1:0)&&value<=1)){
+      const signed=name==='normal',limit=signed?32767:65535;array=(signed?Int16Array:Uint16Array).from(array,value=>Math.round(value*limit));normalized=true;
+    }
+    return [name,{array,itemSize:attribute.itemSize,normalized}];
+  })),index:geometry.index?.array};
 }
 
-function* geometryFrom(record) {
+export function* geometryFrom(record) {
   if (record?.kind!=='geometry' || !record.attributes?.position || !record.attributes?.normal) return undefined;
   const position=record.attributes.position, count=position.array?.length/3;
   if (!(position.array instanceof Float32Array) || !Number.isInteger(count) || position.itemSize!==3) return undefined;
   for(const attribute of Object.values(record.attributes)){
-    if(!(attribute.array instanceof Float32Array)||attribute.array.length!==count*attribute.itemSize)return undefined;
+    if(!(attribute.array instanceof Float32Array||attribute.normalized&&(attribute.array instanceof Int16Array||attribute.array instanceof Uint16Array))||attribute.array.length!==count*attribute.itemSize)return undefined;
     for(let offset=0;offset<attribute.array.length;offset+=16384){
       for(let i=offset;i<Math.min(offset+16384,attribute.array.length);i++)if(!Number.isFinite(attribute.array[i]))return undefined;
       yield;
@@ -154,7 +161,8 @@ function* generateBase() {
   for (const name of textureNames) {
     yield {task:name};
     if (textures.has(name)) {baseQueue.stats.completed=(baseQueue.stats.completed||0)+1;yield 'boundary';continue;}
-    const size=sizeFor(name), [width,height]=name==='environment'?SURFACE_APPEARANCE.environmentSize:[size,size], key=`base/${name}`;
+    const detailKey=`detail/${name}`,prebuiltDetail=SURFACE_APPEARANCE.detailTextures.includes(name)&&cache.prebuilt.has(cache.key(detailKey));
+    const size=sizeFor(name,prebuiltDetail),[width,height]=name==='environment'?SURFACE_APPEARANCE.environmentSize:[size,size],key=prebuiltDetail?detailKey:`base/${name}`;
     let record=yield* readRecord(key);
     const hit=record?.kind==='pixels' && record.width===width && record.height===height;
     if (hit) baseQueue.stats.hits++;
@@ -205,7 +213,7 @@ function* generateDetails(upload) {
   }
 }
 
-function resourceManifest(levelId) {
+export function resourceManifest(levelId) {
   const route=createRoute(levelId),tourism={...TOURISM,cities:TOURISM.cities.filter(city=>city.level<=Math.max(3,Number(levelId)))},arc=route.arc;
   const settings=SURFACE_APPEARANCE, selected=names=>Object.fromEntries(names.map(name=>[name,settings[name]]));
   const entries=[];
@@ -236,6 +244,8 @@ function resourceManifest(levelId) {
   entries.push(['scene/weather',{settings:WEATHER,levels:LEVELS.filter(level=>level.id<=Math.max(3,Number(levelId))),height:WORLD_HEIGHT.displayScale,...(arc?{arc}:{})}]);
   entries.push(['scene/streets',{settings:CITY_STREETS,tourism,city:LANDSCAPE.city,changsha:JOURNEY.changsha,changshaWest:JOURNEY.changshaWest,water:{...waterShape,shoreWidth:REGIONAL_WATER.shoreWidth},island:JOURNEY.island,lake:JOURNEY.lake,landmarks:LANDSCAPE.landmarks,...(arc?{arc}:{})}]);
   entries.push(['scene/water',{settings:waterGeometry,island:JOURNEY.island,lake:JOURNEY.lake}]);
+  entries.push(['scene/terrain',{terrain:LANDSCAPE.terrain,landscape:LANDSCAPE,journey:JOURNEY,route:{id:route.id,arc:route.arc,destination:route.destination,boundary:route.boundary},tourism,treeHeights:TREE_HEIGHTS,trees:TREE_MODELS.species,recipe:1}]);
+  entries.push(['scene/aircraft',{aircraft:AIRCRAFT,surface:selected(['aircraftSegments','fuselageStepMetres','engineSegments','fanBlades','wheelTubeSegments','wheelSegments','windowTrimSegments','wingSpanSegments','wingChordSegments','doorPositions','doorWidth','doorHeight','doorBorder','paintBump','rubberBump','metalBump']),recipe:1}]);
   entries.push(['scene/trees',{profiles:treeProfiles,recipe:TREE_MODELS.recipe,seed:TREE_MODELS.seed,nearDetail:TREE_MODELS.nearDetail,farDetail:TREE_MODELS.farDetail,branchSegments:TREE_MODELS.branchSegments,farCrownGroups:TREE_MODELS.farCrownGroups,leaflets:TREE_MODELS.leaflets,midLeafCards:TREE_MODELS.midLeafCards}]);
   entries.push(['scene/country',{recipe:COUNTRYSIDE.cacheRecipe,tourism,water:waterShape,trees:{models:TREE_MODELS.species.map(({id,height,width,tall})=>({id,height,width,tall})),heights:TREE_HEIGHTS,unitHeight:TREE_CONTACT.unitHeight},country:COUNTRYSIDE,terrain:countryTerrain,journey:JOURNEY,world:WORLD_TRAVEL,loop:LOOP_WORLD,blend:REGION_BLEND,...(arc?{arc,destination:route.destination,approachRecipe:1}:{})}]);
   return entries;

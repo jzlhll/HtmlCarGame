@@ -4,7 +4,10 @@
   "description": "本机 Three.js 民航客机模拟与键位学习游戏",
   "scripts": {
     "start": "node scripts/serve.mjs",
-    "play": "node scripts/serve.mjs --play"
+    "play": "node scripts/serve.mjs --play",
+    "prepare:assets": "node scripts/generate-assets.mjs",
+    "prestart": "npm run prepare:assets",
+    "preplay": "npm run prepare:assets"
   },
   "keywords": [],
   "author": "",

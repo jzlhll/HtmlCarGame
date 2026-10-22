@@ -65,7 +65,7 @@ export function streetCarBox(car) {
 export function* prepareCityStreetLayout(settings,exclusions,id,useCache) {
   if(!useCache)return yield* cityStreetLayoutSteps(settings,exclusions,id);
   const cache=surfaceCache();yield {wait:cache.ready};
-  const key='scene/streets/'+id,meta=cache.available?yield {wait:cache.read(key+'/layout-meta')}:null;
+  const key='scene/streets/'+id,meta=cache.readable?yield {wait:cache.read(key+'/layout-meta')}:null;
   const patches=[],cars=[];
   let hit=meta?.recipe===CITY_STREETS.recipe&&Number.isInteger(meta.patches)&&meta.patches>0&&meta.patches<128&&Number.isInteger(meta.cars)&&meta.cars>=0&&meta.cars<128;
   const patchFields=['minX','maxX','minZ','maxZ','axis','kind','width','start','end','center'],carFields=['x','z','width','height','length','heading','color'];
