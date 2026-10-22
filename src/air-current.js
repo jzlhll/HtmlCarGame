@@ -6,8 +6,8 @@ const labels={tailwind:['Tailwind','顺风正在加速'],headwind:['Headwind','�
 
 // 独立随机流和空中有效时钟，暂停／滑跑不消耗间隔，飞行中只计算已有状态。
 export class AirCurrent {
-  constructor(aircraft,seed=1){
-    this.aircraft=aircraft;this.randomState=(seed^0x71ad3b95)>>>0;this.seconds=0;this.nextAt=AIR_CURRENTS.intervalSeconds;this.serial=0;
+  constructor(aircraft,seed=1,world){
+    this.world=world;this.aircraft=aircraft;this.randomState=(seed^0x71ad3b95)>>>0;this.seconds=0;this.nextAt=AIR_CURRENTS.intervalSeconds;this.serial=0;
     this.kind=null;this.strength=0;this.speedRate=0;this.yawRate=0;this.pitchRate=0;this.bankOffset=0;this.remaining=0;this.controlYawLimit=Infinity;
   }
   random(){this.randomState=(Math.imul(this.randomState,1664525)+1013904223)>>>0;return this.randomState/4294967296;}
@@ -31,9 +31,12 @@ export class AirCurrent {
       // 两侧各一秒平滑坡道的面积为一秒，完整无操纵气流分别带来+50%／−60%速度增量。
       this.speedRate=this.initialSpeed*(this.kind==='tailwind'?s.tailwindRatio:s.headwindRatio)/(this.duration-s.rampSeconds)*this.strength;
     }else if(this.kind==='left'||this.kind==='right'){
-      const direction=this.kind==='left'?1:-1;
-      this.yawRate=direction*s.sideYawRate*this.strength;this.bankOffset=direction*s.sideBank*this.strength;
-      this.controlYawLimit=s.sideYawRate*s.correctionRatio;
+      const direction=this.kind==='left'?1:-1,factor=this.world?.crosswindFactorAt(this.aircraft.position)??1;
+      const strength=this.strength*factor;
+      this.yawRate=direction*s.sideYawRate*strength;this.bankOffset=direction*s.sideBank*strength;
+      this.controlYawLimit=s.sideYawRate*s.correctionRatio*factor;
+      // 操纵混合权重保持0–1：弱风恢复普通转向，树林增强风不会产生负权重。
+      this.strength=clamp(strength,0,1);
     }else{
       const yaw=.72*Math.sin(age*1.9+this.phaseA)+.28*Math.sin(age*4.3+this.phaseB);
       const pitch=.74*Math.sin(age*1.3+this.phaseB)+.26*Math.sin(age*3.1+this.phaseA);

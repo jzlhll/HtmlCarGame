@@ -31,5 +31,5 @@ export function* createForestLOD(record,trees,centerZ=0,{treeField}={}) {
   }
   if(treeField)yield* treeField.addMatrices(record.matrices,record.count,record.species);
   if(rangeBounds.isEmpty())return root;
-  const range=new CanopyLOD(rangeBounds);range.name='Forest range';range.addLevel(root,0,.12);range.addLevel(new THREE.Group(),visibleDistance,0);return range;
+  const range=new CanopyLOD(rangeBounds);range.name='Forest range';range.userData.spatialExpand=true;range.addLevel(root,0,.12);range.addLevel(new THREE.Group(),visibleDistance,0);return range;
 }

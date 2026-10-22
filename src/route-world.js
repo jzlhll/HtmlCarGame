@@ -1,9 +1,10 @@
+import { runwayCenter } from './runway-layout.js';
 import { buildingCollisionParts } from './building-details.js';
 import { heritagePagoda } from './heritage-models.js';
 import { tourismSettings, tourismParts, scenerySolid } from './tourism-layout.js';
 import { prepareWeatherWorld, varyWeather } from './weather-world.js';
 import { prepareCityStreetLayout, streetCarBox } from './city-street-layout.js';
-import { AIRCRAFT, LANDSCAPE, JOURNEY, terrainElevation, clusterZ, LOOP_WORLD, WORLD_BOUNDARY } from './config.js';
+import { AIRCRAFT, LANDSCAPE, JOURNEY, terrainElevation, clusterZ, LOOP_WORLD, WORLD_BOUNDARY, AIR_CURRENTS, RUNWAY, CITY_STREETS } from './config.js';
 import { createCoastalSurface, coastalHeight, shorelineX, coastalLandWeight } from './coastal-terrain.js';
 import { boundaryHeightAt } from './world-boundary.js';
 import { cityBuildingSites } from './building-layout.js';
@@ -54,12 +55,14 @@ export class RouteWorld {
     const city = LANDSCAPE.city, random = this.random;
     for(const site of cityBuildingSites(city,(x,z)=>(Math.abs(x-4200)<600&&Math.abs(z-city.center[1])<650)
       ||LANDSCAPE.landmarks.some(t=>Math.hypot(x-t.position[0],z-t.position[1])<city.landmarkClearance))) {
-      this.addBuilding(site.x,site.z,site.width,site.depth,site.height,site.color,'城市楼房',site.profile,site.shift);
+      this.addBuilding(site.x,site.z,site.width,site.depth,site.height,site.color,'城市楼房',site.profile,site.shift,site.layoutSeed);
       if(this.buildings.length%32===0)yield;
     }
     if(this.route.id===1)for (let row = 0; row < 35; row++) for (let column = 0; column < 10; column++) {
-      const x = (column - 4.5) * 90, z = clusterZ('village', -11100) - row * 85;
-      if (Math.abs(x) < 110) continue;
+      const baseX=(column-4.5)*90,scale=JOURNEY.transitions.passageScale;
+      if(Math.abs(baseX)<110)continue;
+      const x=Math.sign(baseX)*(135+(135-19)*(scale-1)+(Math.abs(baseX)/90-1.5)*(38+(90-38)*scale));
+      const z=clusterZ('village',-11100)-row*(42+(85-42)*scale);
       this.addBuilding(x, z, 24 + random() * 14, 28 + random() * 14, 9 + random() * 10, column % 2 ? 0xb9b094 : 0xd2c6a9, '村庄房屋');
     }
     for (const building of JOURNEY.courseBuildings) {
@@ -91,8 +94,8 @@ export class RouteWorld {
     this.tourismParts=[];
     for(const settings of tourismSettings(route)){
       const sites=[],half=(settings.spacing-LANDSCAPE.city.passageWidth)/2+60;
-      for(const site of cityBuildingSites(settings,(x,z)=>settings.exclusions.some(b=>x+half>b.minX&&x-half<b.maxX&&z+half>b.minZ&&z-half<b.maxZ))){
-        this.addBuilding(site.x,site.z,site.width,site.depth,site.height,site.color,settings.name+'城市楼房',site.profile,site.shift);sites.push(this.buildings.at(-1));
+      for(const site of cityBuildingSites(settings,(x,z,reference)=>(reference?settings.layoutExclusions:settings.exclusions).some(b=>x+half>b.minX&&x-half<b.maxX&&z+half>b.minZ&&z-half<b.maxZ))){
+        this.addBuilding(site.x,site.z,site.width,site.depth,site.height,site.color,settings.name+'城市楼房',site.profile,site.shift,site.layoutSeed);sites.push(this.buildings.at(-1));
         if(sites.length%24===0)yield;
       }
       this.regionalCities.push({...settings,sites});
@@ -114,6 +117,7 @@ export class RouteWorld {
       for(const [i,car]of network.cars.entries()){const box=streetCarBox(car);this.addBox(car.x,(box.min.y+box.max.y)/2,car.z,box.max.x-box.min.x,box.max.y-box.min.y,box.max.z-box.min.z,box.name,0);if(i%64===0)yield;}
     }
     this.loopStreets=yield* prepareCityStreetLayout({...city,center:[0,0],rows:city.loopRows},landmarkExclusions.map(b=>({...b,minZ:b.minZ-city.center[1],maxZ:b.maxZ-city.center[1]})),'loop-city',this.cacheStreetLayouts);
+    this.prepareWindShelters();
     this.makeCoastalRoad();yield 'boundary';
     this.makeTransitions();yield 'boundary';
     yield {task:'height-surfaces'};yield* this.makeMountains();
@@ -144,10 +148,30 @@ export class RouteWorld {
       const sites=[],half=(c.spacing-LANDSCAPE.city.passageWidth)/2+60;
       for(const site of cityBuildingSites(c,(x,z)=>Math.abs(x-c.x)<c.plaza[0]/2+200&&Math.abs(z-c.z)<c.plaza[1]/2+200
         ||boxTouchesRegionalWater(this.regionalWater,{minX:x-half,maxX:x+half,minZ:z-half,maxZ:z+half}))){
-        this.addBuilding(site.x,site.z,site.width,site.depth,site.height,site.color,'长沙城市楼房',site.profile,site.shift);sites.push(this.buildings.at(-1));
+        this.addBuilding(site.x,site.z,site.width,site.depth,site.height,site.color,'长沙城市楼房',site.profile,site.shift,site.layoutSeed);sites.push(this.buildings.at(-1));
       }
       this.regionalCities.push({...c,sites});this.addBox(c.x,55,c.z,45,110,45,c.name+'雕塑',0);
     }
+  }
+
+  prepareWindShelters() {
+    const margin=Math.max(...CITY_STREETS.widths)/2;
+    this.windShelters=[LANDSCAPE.city,...this.regionalCities].map(city=>{
+      const x=city.x??city.center[0],z=city.z??city.center[1];
+      return {x,z,halfWidth:city.columns*city.spacing/2+margin,halfLength:city.rows*city.spacing/2+margin};
+    });
+    for(const runway of [RUNWAY,this.route.destination]){
+      const center=runwayCenter(runway),reach=runway.length/2+AIR_CURRENTS.airportMargin;
+      this.windShelters.push({x:center.x,z:center.z,halfWidth:reach,halfLength:reach});
+    }
+  }
+
+  crosswindFactorAt(position) {
+    const {x,y,z}=position;
+    // 城市和两端机场优先；整片机场包含交叉跑道之间、机坪及外围400米。
+    if(this.windShelters.some(area=>Math.abs(x-area.x)<=area.halfWidth&&Math.abs(z-area.z)<=area.halfLength)||this.loop?.cityAt(x,z))return AIR_CURRENTS.cityAirportFactor;
+    const top=Math.max(this.trees.canopyHeightAt(x,z),this.loop?.canopyHeightAt(x,z)??-Infinity);
+    return Number.isFinite(top)&&y>=top?AIR_CURRENTS.forestFactor:1;
   }
 
   regionalWaterAt(x,z){return regionalWaterAt(this.regionalWater,x,z);}
@@ -209,7 +233,7 @@ export class RouteWorld {
       random();const height=p.minHeight+random()**p.heightBias*p.heightRange,radius=p.minRadius+random()*p.radiusRange;
       const form={...p.forms[i%p.forms.length],seed:(p.seed^Math.imul(i+1,0x9e3779b9))>>>0,variation:p.shapeVariation,depthScale:p.depthScale};
       const outline=createRockFootprint(LANDSCAPE.terrain.rockSides,form),maxX=Math.max(...outline.map(point=>Math.abs(point[0])))*radius*1.02;
-      const lane=Math.floor(i/2)%2,inner=lane?3050:650,outer=lane?4350:1950;
+      const [inner,outer]=p.lanes[Math.floor(i/2)%2];
       const x=side*((inner+outer)/2+(random()-.5)*Math.max(0,outer-inner-maxX*2));
       this.addRock(x,p.startZ-Math.floor(i/2)*p.spacing,0,height,radius,JOURNEY.rockColors.pillars,'张家界石柱',0,form);yield;
     }
@@ -297,8 +321,8 @@ export class RouteWorld {
     if(shift){attachBuildingShift(box,shift);this.movingBoxes.push(box);moveBuildingBox(box);}
   }
 
-  addBuilding(x, z, width, depth, height, color, name = '城市楼房', profile, shift) {
-    const site={x,z,width,depth,height,color,name,profile,shift};this.buildings.push(site);
+  addBuilding(x, z, width, depth, height, color, name = '城市楼房', profile, shift, layoutSeed) {
+    const site={x,z,width,depth,height,color,name,profile,shift,layoutSeed};this.buildings.push(site);
     for(const part of buildingCollisionParts(site))this.addBox(part.x,part.y,part.z,part.width,part.height,part.depth,name,this.baseHeightAt(x,z),shift);
   }
 
@@ -323,6 +347,7 @@ export class RouteWorld {
       path.push({x:shore+(Math.min(shore,bypass)-shore)*blend,z});
     }
     const addPath=points=>{
+      let travelled=0,nextPier=0,sourceIndex=1,previousPier,minimumGap=0;
       for(let i=1;i<points.length;i++){
         const a=points[i-1],b=points[i],dx=b.x-a.x,dz=b.z-a.z,length=Math.hypot(dx,dz),heading=Math.atan2(dx,dz),x=(a.x+b.x)/2,z=(a.z+b.z)/2;
         part('deck',x,road.height,z,road.width,road.thickness,length+.5,heading);
@@ -331,7 +356,21 @@ export class RouteWorld {
           part('rail',x+Math.cos(heading)*offset,road.height+road.thickness/2+road.railHeight/2,z-Math.sin(heading)*offset,road.railWidth,road.railHeight,length+.5,heading);
         }
         const bottom=s.seaLevel+s.seabed,height=road.height-road.thickness/2-bottom;
-        part('pier',a.x,bottom+height/2,a.z,road.pierWidth,height,road.pierLength,heading);
+        // 路面采样密度不变，桥墩独立按里程拉开，让桥下净宽增加30%。
+        while(nextPier<travelled+length){
+          const t=(nextPier-travelled)/length,px=a.x+dx*t,pz=a.z+dz*t;
+          if(previousPier){
+            const vx=px-previousPier.center.x,vz=pz-previousPier.center.z,distance=Math.hypot(vx,vz),ux=vx/distance,uz=vz/distance;
+            const extent=angle=>(Math.abs(ux*Math.cos(angle)-uz*Math.sin(angle))*road.pierWidth+Math.abs(ux*Math.sin(angle)+uz*Math.cos(angle))*road.pierLength)/2;
+            const gap=distance-extent(previousPier.heading)-extent(heading);
+            // 弯道会缩短两墩间的直线净距，沿既有路径继续退让到目标净宽。
+            if(gap<minimumGap){nextPier+=minimumGap-gap+.01;continue;}
+          }
+          part('pier',px,bottom+height/2,pz,road.pierWidth,height,road.pierLength,heading);previousPier=this.coastalRoad.at(-1);
+          const sourceA=points[sourceIndex-1],sourceB=points[sourceIndex++],spacing=Math.hypot(sourceB.x-sourceA.x,sourceB.z-sourceA.z);
+          minimumGap=(spacing-road.pierLength)*road.pierGapScale;nextPier+=road.pierLength+minimumGap;
+        }
+        travelled+=length;
       }
     };
     addPath(path);
@@ -357,7 +396,7 @@ export class RouteWorld {
 
   *makeMountains() {
     // 田野本身也有低缓连绵起伏，中央通道与机场仍保持平坦。
-    for(let i=0;i<12;i++)this.transitionHills.push({position:[(i%2?-1:1)*(1200+(i%3)*700),clusterZ('fields')+(Math.floor(i/2)-2.5)*650],radius:[850+(i%3)*180,900+(i%4)*120],height:35+(i%5)*13,kind:'rolling',segments:64});
+    for(let i=0;i<12;i++){const r=850+(i%3)*180,gap=1200+(i%3)*700-r;this.transitionHills.push({position:[(i%2?-1:1)*(r+gap*JOURNEY.transitions.passageScale),clusterZ('fields')+(Math.floor(i/2)-2.5)*650],radius:[r,900+(i%4)*120],height:35+(i%5)*13,kind:'rolling',segments:64});}
     this.transitionHills=this.transitionHills.filter(hill=>coastalLandWeight(...hill.position)>.98&&!(Math.abs(hill.position[0])-hill.radius[0]<LANDSCAPE.city.columns*LANDSCAPE.city.spacing/2+100&&Math.abs(hill.position[1]-LANDSCAPE.city.center[1])-hill.radius[1]<LANDSCAPE.city.rows*LANDSCAPE.city.spacing/2+100));
     const ridges=[];
     if(this.route.id>=3){const p=JOURNEY.pagoda,r=JOURNEY.pagodaRidge;
@@ -401,8 +440,8 @@ export class RouteWorld {
   collision(aircraft, previous) {
     const sweep = this.prepareBodySweep(aircraft, previous), bounds = this.sweepBounds, boundary=this.route.boundary;
     for(const {from,to,radius} of sweep){
-      const steps=Math.max(1,Math.ceil(Math.hypot(to.x-from.x,to.z-from.z)/this.route.sweepStep));
       if(Math.max(Math.abs(from.x-(boundary.centerX||0)),Math.abs(to.x-(boundary.centerX||0)))<boundary.halfWidth-radius&&Math.min(from.z,to.z)>boundary.back+radius&&Math.max(from.z,to.z)<boundary.front-radius)continue;
+      const steps=Math.max(1,Math.ceil(Math.hypot(to.x-from.x,to.z-from.z)/this.route.sweepStep));
       for(let i=0;i<=steps;i++){const t=i/steps,x=from.x+(to.x-from.x)*t,z=from.z+(to.z-from.z)*t;
         const h=boundaryHeightAt(x,z,this.route.boundary);if(h>0&&from.y+(to.y-from.y)*t-radius<=h)return WORLD_BOUNDARY.name;
       }

@@ -38,6 +38,7 @@ export function tourismParts(city) {
     piece(0,852,119,29,66,37);piece(0,803,107,64,13,18,0x806c51);piece(0,785,95,49,21,22);
     piece(0,918,112,12,12,9,0xd0bc8b);
   };
+  const spacing=(step,extent)=>extent+(step-extent)*TOURISM.passages.scale;
   const feature=(kind,name,x,z)=>{
     if(kind==='buddha'){statue(name,x,z);return;}
     if(kind==='grotto'){
@@ -95,7 +96,7 @@ export function tourismParts(city) {
       return;
     }
     if(kind==='pagoda-forest'){
-      for(let row=0;row<3;row++)for(let col=0;col<4;col++)pagoda(name,x+(col-1.5)*600,z+(row-1)*600,2+(row+col)%3);
+      for(let row=0;row<3;row++)for(let col=0;col<4;col++)pagoda(name,x+(col-1.5)*spacing(600,380*1.35),z+(row-1)*spacing(600,380*1.35),2+(row+col)%3);
       return;
     }
     if(kind==='song-garden'||kind==='lake-garden'){
@@ -128,7 +129,7 @@ export function tourismParts(city) {
       return;
     }
     if(kind==='village'){
-      for(let row=0;row<3;row++)for(let col=0;col<4;col++)hall(name,x+(col-1.5)*600,z+(row-1)*650,430,100,330);
+      for(let row=0;row<3;row++)for(let col=0;col<4;col++)hall(name,x+(col-1.5)*spacing(600,430*1.2),z+(row-1)*spacing(650,330*1.25),430,100,330);
       return;
     }
     if(kind==='terracotta'){
@@ -212,7 +213,8 @@ export function tourismParts(city) {
         add(name,x+dx,30,z+360,90,42,220,0x536e7b,'cone',Math.PI/2);add(name,x+dx,170,z+360,8,280,8,stone);add(name,x+dx+60,180,z+360,110,240,10,0xe4dbc0,'roof');}return;
     }
     if(kind==='stilt'){
-      for(let i=0;i<5;i++){const dx=(i-2)*280;for(const edge of [-1,1])add(name,x+dx+edge*90,110,z,18,220,180,0x715b43);
+      const offset=9+(90-9)*TOURISM.passages.scale,step=offset*2+18+(280-180-18)*TOURISM.passages.scale;
+      for(let i=0;i<5;i++){const dx=(i-2)*step;for(const edge of [-1,1])add(name,x+dx+edge*offset,110,z,18,220,180,0x715b43);
         const start=parts.length;hall(name,x+dx,z,240,110,200);for(let j=start;j<parts.length;j++)parts[j].y+=200;}
       return;
     }
@@ -228,10 +230,18 @@ export function tourismParts(city) {
       add(name,x,215,z,870,110,250,stone,'arch');
     }
   };
+  // 独立门洞、峡谷和桥洞只加宽横向截面；显示与碰撞消费同一份构件变换。
+  const addFeature=(kind,name,x,z)=>{
+    const start=parts.length;feature(kind,name,x,z);
+    if(TOURISM.passages.kinds.includes(kind))for(let i=start;i<parts.length;i++){
+      const part=parts[i];part.x=cx+x+(part.x-cx-x)*TOURISM.passages.scale;
+      if(!part.heading)part.width*=TOURISM.passages.scale;
+    }
+  };
   // 主景点在面向航路的内侧广场；副景点位于城区中心，路网与普通楼房共同避让。
-  feature(city.kind,city.landmark,-side*3400,0);
-  feature(city.theme,city.second,0,0);
-  if(city.extra)feature(city.extra,city.third,0,-3500);
+  addFeature(city.kind,city.landmark,-side*3400,0);
+  addFeature(city.theme,city.second,0,0);
+  if(city.extra)addFeature(city.extra,city.third,0,-3500);
   for(const offset of [-1,1]){
     const x=side*1800,z=offset*4700;
     hall(city.name+'车站',x,z,600,90,220);
@@ -241,8 +251,16 @@ export function tourismParts(city) {
 }
 
 export function tourismSettings(route) {
-  return route.cities.map(city=>({...city,columns:city.columns??TOURISM.columns,rows:city.rows??TOURISM.rows,spacing:TOURISM.spacing,plaza:city.plaza??TOURISM.plaza,
-    exclusions:[...(city.extra?[{minX:city.x-1500,maxX:city.x+1500,minZ:city.z-5000,maxZ:city.z-2100}]:[]),{minX:city.x+(city.side??Math.sign(city.x))*1800-900,maxX:city.x+(city.side??Math.sign(city.x))*1800+900,minZ:city.z-5500,maxZ:city.z-3800},
-      {minX:city.x+(city.side??Math.sign(city.x))*1800-900,maxX:city.x+(city.side??Math.sign(city.x))*1800+900,minZ:city.z+3800,maxZ:city.z+5500},{minX:city.x-(city.plaza??TOURISM.plaza)[0]/2,maxX:city.x+(city.plaza??TOURISM.plaza)[0]/2,minZ:city.z-(city.plaza??TOURISM.plaza)[1]/2,maxZ:city.z+(city.plaza??TOURISM.plaza)[1]/2},
-      {minX:city.x-(city.side??Math.sign(city.x))*3400-1500,maxX:city.x-(city.side??Math.sign(city.x))*3400+1500,minZ:city.z-1400,maxZ:city.z+1400}]}));
+  return route.cities.map(city=>{
+    const side=city.side??Math.sign(city.x),plaza=city.plaza??TOURISM.plaza;
+    const exclusions=scale=>[
+      ...(city.extra?[{minX:city.x-1500*scale,maxX:city.x+1500*scale,minZ:city.z-5000,maxZ:city.z-2100}]:[]),
+      {minX:city.x+side*1800-900,maxX:city.x+side*1800+900,minZ:city.z-5500,maxZ:city.z-3800},
+      {minX:city.x+side*1800-900,maxX:city.x+side*1800+900,minZ:city.z+3800,maxZ:city.z+5500},
+      {minX:city.x-plaza[0]*scale/2,maxX:city.x+plaza[0]*scale/2,minZ:city.z-plaza[1]/2,maxZ:city.z+plaza[1]/2},
+      {minX:city.x-side*3400-1500*scale,maxX:city.x-side*3400+1500*scale,minZ:city.z-1400,maxZ:city.z+1400}
+    ];
+    return {...city,columns:city.columns??TOURISM.columns,rows:city.rows??TOURISM.rows,spacing:TOURISM.spacing,
+      plaza:[plaza[0]*TOURISM.passages.scale,plaza[1]],exclusions:exclusions(TOURISM.passages.scale),layoutExclusions:exclusions(1)};
+  });
 }

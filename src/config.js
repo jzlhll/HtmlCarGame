@@ -50,10 +50,11 @@ export const TREE_CONTACT = {
   windowSeconds:3,treeDamage:5,birdDamage:20,treeSpeedRetention:.95,
 };
 export const TREE_HEIGHTS = {
-  recipe:3,seed:491637,scale:5200,detailScale:2600,
+  recipe:4,seed:491637,scale:5200,detailScale:2600,
+  heightScale:.8,rarePeakStart:9500/WORLD_HEIGHT.displayScale,
   flat:[30,10000].map(v=>v/WORLD_HEIGHT.displayScale),
   heightKnots:[30,3000,5000,7500,10000].map(v=>v/WORLD_HEIGHT.displayScale),
-  // 平地场按75%、8.33%、8.33%、8.33%标定，周期模板单独校准，保留连续变化。
+  // 基准场按分位点标定；常见树高乘0.8，极高端平滑保留10000显示米上限。
   noiseKnots:[0.01380061,0.60596216,0.65843283,0.72068537,0.9570068],
   periodicNoiseKnots:[0.29881081,0.71159942,0.74850373,0.77368679,0.82476388],
   shrubMax:500/WORLD_HEIGHT.displayScale,poplarMin:6000/WORLD_HEIGHT.displayScale,
@@ -263,6 +264,7 @@ export const AIR_CURRENTS = {
   intervalSeconds:70, gustSeconds:12, turbulenceSeconds:10, rampSeconds:1,
   turbulenceChance:.15, tailwindRatio:.5, headwindRatio:-.6, correctionRatio:.5,
   sideYawRate:3*Math.PI/180, turbulentYawRate:32*Math.PI/180,
+  cityAirportFactor:.1, forestFactor:1.2, airportMargin:400,
   turbulentPitchRate:6*Math.PI/180, sideBank:5*Math.PI/180, turbulentBank:65*Math.PI/180,
 };
 
@@ -322,8 +324,8 @@ export const CONTROLS = {
 // 地标采用轮廓化比例，集中于虚构河湾城市，不对应真实城市间的地理位置。
 export const WEATHER = {
   recipe: 12, seed: 798431, width: 2800, length: 4000, height: 5376 / WORLD_HEIGHT.displayScale,
-  highBand: [7800,8500].map(v=>v/WORLD_HEIGHT.displayScale),
-  thinBand: [5800,6500].map(v=>v/WORLD_HEIGHT.displayScale), thinDensity: .36,
+  highBand: [6800,8500].map(v=>v/WORLD_HEIGHT.displayScale),
+  thinBand: [4800,6500].map(v=>v/WORLD_HEIGHT.displayScale), thinDensity: .36,
   startZ: -11000, spacing: 14500, lateralSpread: 3500, alongJitter: 1000, headingSpread: .25, windKmh: 100,
   wrapMinX: -29000, wrapMaxX: 29000, variants: 6, puffs: 22, meshGrid: [40,32,40], blend: .14,
   shape: {warp:.075,warpScale:3.1,billowScale:5.5,detailScale:15,erosion:.28},
@@ -336,6 +338,10 @@ export const WEATHER = {
 export const WHITE_CLOUD_SCALE = {width:.7,height:.9};
 
 export const WEATHER_MOTION = { periodSeconds:15 };
+
+// 飞行通道从障碍边缘计净宽，保留楼体和主要山体尺寸。
+export const FLIGHT_PASSAGES = {scale:1.3,citySpacing:1200,cityGap:500};
+const citySpacing=FLIGHT_PASSAGES.citySpacing+FLIGHT_PASSAGES.cityGap*(FLIGHT_PASSAGES.scale-1);
 
 export const WORLD_VARIATION = { cityJitter: 220 };
 
@@ -350,8 +356,8 @@ export const LANDSCAPE = {
   staticBatchCell: 640,
   seed: 3827,
   city: {
-    center: [0, clusterZ('city')], columns: 8, rows: 28, loopRows: 8, layoutRecipe: 4, chunkSize: 1680, spacing: 1200, roadWidth: 70,
-    passageWingSpans: 3, passageWidth: 500, corridors: [-3600, -2400, 2400, 3600],
+    center: [0, clusterZ('city')], columns: 8, rows: 28, loopRows: 8, layoutRecipe: 5, chunkSize: 1680, baseSpacing: FLIGHT_PASSAGES.citySpacing, spacing: citySpacing, roadWidth: 70,
+    passageWingSpans: 3, passageWidth: FLIGHT_PASSAGES.cityGap*FLIGHT_PASSAGES.scale, corridors: [-3,-2,2,3].map(i=>i*citySpacing),
     profiles: [
       {id: 'slender', width: [280, 400], depth: [300, 430], height: [2100, 3000]},
       {id: 'broad', width: [620, 698], depth: [620, 698], height: [1600, 2750]},
@@ -389,7 +395,7 @@ export const LANDSCAPE = {
     waveScale:[.035,.021],waveRate:[1.1,.75],waveNormal:.045,
     highway: {startZ:2000,endZ:-12000*WORLD_TRAVEL.horizontalScale/2,step:160,waterOffset:100,width:AIRCRAFT.wingspan*4+20,height:12,thickness:1.4,
       airportClearance:240,airportBlend:1600,
-      railWidth:.55,railHeight:1,pierWidth:7,pierLength:5,dashLength:6,dashSpacing:18,
+      railWidth:.55,railHeight:1,pierWidth:7,pierLength:5,pierGapScale:FLIGHT_PASSAGES.scale,dashLength:6,dashSpacing:18,
       asphaltColor:0x526166,concreteColor:0xb9bcb0,markingColor:0xe6e4cb},
   },
   terrain: {
@@ -487,7 +493,8 @@ export const LEVELS = [
 // 城市按真实旅游资源选材，位置与尺度服从压缩航线及机场净空。
 export const TOURISM = {
   recipe: 1, promptSeconds: 3, visitHalfDepth: 2400, visitHalfWidth: 18000,
-  columns: 8, rows: 12, spacing: 1200, plaza: [2400, 2400],
+  columns: 8, rows: 12, spacing: citySpacing, plaza: [2400,2400],
+  passages: {scale:FLIGHT_PASSAGES.scale,kinds:['canyon','arch','bridge','gate','fort','city-wall','song-garden','lake-garden']},
   cities: [
     {id:'shenzhen',name:'深圳',english:'Shenzhen',level:1,x:10500,z:-10000,kind:'sail',landmark:'深圳湾春茧',second:'大鹏所城',theme:'fort'},
     {id:'dongguan',name:'东莞',english:'Dongguan',level:1,x:10500,z:-26000,kind:'garden',landmark:'可园',second:'虎门威远炮台',theme:'fort'},
@@ -537,9 +544,9 @@ export const JOURNEY = {
   ],
   danxia: [
     { position: [0, clusterZ('danxia', -11600)], sourcePosition: [-800, -11600], height: 2450, radius: [440, 4250], kind: 'danxia' },
-    { position: [2200, clusterZ('danxia', -12000)], sourcePosition: [950, -12000], height: 2300, radius: [800, 5000], kind: 'danxia' },
-    { position: [-2600, clusterZ('danxia', -12700)], sourcePosition: [-1600, -12700], height: 3900, radius: [850, 5500], kind: 'danxia' },
-    { position: [3300, clusterZ('danxia', -13600)], sourcePosition: [1800, -12900], height: 2600, radius: [750, 5000], kind: 'danxia' },
+    { position: [2488, clusterZ('danxia', -12000)], sourcePosition: [950, -12000], height: 2300, radius: [800, 5000], kind: 'danxia' },
+    { position: [-2993, clusterZ('danxia', -12700)], sourcePosition: [-1600, -12700], height: 3900, radius: [850, 5500], kind: 'danxia' },
+    { position: [3588, clusterZ('danxia', -13600)], sourcePosition: [1800, -12900], height: 2600, radius: [750, 5000], kind: 'danxia' },
   ],
   courseBuildings: [
     {level: 3, x: 0, z: -165000, width: 240, depth: 220, height: 2900, color: 0x829b9e, name: '航道高楼'},
@@ -549,7 +556,7 @@ export const JOURNEY = {
     patchScale: 0.007, heightScale: 0.0015, streakScale: 0.027, streakDrift: 0.0012,
     lightBlend: 0.38, weathering: 0.48, weatherThreshold: [0.45,0.8], strataStrength: 0.55 },
   pillars: { seed: 2387410263, count: 24, depthScale: 1.65, startZ: clusterZ('pillars', -12800), spacing: 2200, minHeight: 2100, heightRange: 1900, heightBias: 3, minRadius: 450, radiusRange: 200,
-    shapeVariation: 0.12, crownInset: 0.73,
+    shapeVariation: 0.12, crownInset: 0.73, lanes:[[845,2145],[3575,4875]],
     forms: [
       { width: 1, depth: 0.9, cutDepth: 0.55, cuts: 1 },
       { width: 0.85, depth: 1, cutDepth: 0.68, cuts: 2 },
@@ -564,15 +571,15 @@ export const JOURNEY = {
   ],
   island: { x: 370, z: clusterZ('island'), width: 760, length: 9000, riverWidth: 3200, riverLength: 31000, statueHeight: 170 },
   changsha: { id:'changsha-east', x: 4520, z: clusterZ('island') - 800, columns: 3, rows: 21,
-    spacing: 1200, corridors: [-1800, -600, 600, 1800], plaza: [1050, 900], name: '五一广场' },
+    spacing: citySpacing, corridors: [-1.5,-.5,.5,1.5].map(i=>i*citySpacing), plaza: [1050, 900], name: '五一广场' },
   changshaWest: { id:'changsha-west', x:-3780, z:clusterZ('island')-800, columns:3, rows:21,
-    spacing:1200,corridors:[-600,600],plaza:[900,600],name:'湘江西岸城区' },
+    spacing:citySpacing,corridors:[-.5,.5].map(i=>i*citySpacing),plaza:[900,600],name:'湘江西岸城区' },
   pagodaRidge: { height: 1150, radius: [2600, 10000], satellites: 12 },
   lake: { x: 0, z: clusterZ('lake'), width: 6500, length: 17500, elevation: 0 },
   pagoda: { x: 185, z: clusterZ('pagoda'), height: 2650, width: 720, levels: 5, eaves: 1.5 },
   transitions: {
     seed: 409361, segments: 48, hills: 4, hillHeight: [48, 180], hillRadius: [400, 700],
-    corridor: 260, meadowWidth: 6500, meadowSegments: [48, 16],
+    corridor: 260*FLIGHT_PASSAGES.scale, passageScale: FLIGHT_PASSAGES.scale, meadowWidth: 6500, meadowSegments: [48, 16],
     meadowColor: 0x90a778, bankColor: 0xa8b48c, waterColor: 0x538f98,
     streamWidth: 38, streamBankWidth: 68, streamSamples: 160,
     zones: [

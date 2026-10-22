@@ -8,7 +8,7 @@ import { buildingParts } from './building-layout.js';
 export function* createCityBlocks(sites, floorAt=()=>0, shared={}) {
   const appearance=LANDSCAPE.city.facade;
   const group=new THREE.Group(),parts=sites.flatMap(site=>{
-    let hash=Math.imul(Math.round(site.x),73856093)^Math.imul(Math.round(site.z),19349663)^FACADE_SURFACE.seed;
+    let hash=(site.layoutSeed??(Math.imul(Math.round(site.x),73856093)^Math.imul(Math.round(site.z),19349663)))^FACADE_SURFACE.seed;
     hash=Math.imul(hash^(hash>>>13),1274126177)>>>0;
     const family=hash%4,phase=(hash>>>8)/16777216;
     return buildingParts(site).map(part=>({...part,color:site.color,floor:floorAt(site.x,site.z),family,phase}));
@@ -57,11 +57,21 @@ export function* createCityBlocks(sites, floorAt=()=>0, shared={}) {
     `);
     shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>',`float roughnessFactor=mix(${FACADE_SURFACE.stoneRoughness.toFixed(2)},${FACADE_SURFACE.glassRoughness.toFixed(2)},facadeGlass);
       roughnessFactor=mix(max(roughnessFactor,${appearance.farRoughness.toFixed(3)}),roughnessFactor,facadeDetail);`);
+    // 远处凹凸权重已为零时省去三次高度采样；梯度在分支外取得。
+    const filteredNormal=THREE.ShaderChunk.normal_fragment_maps.replace('normal = perturbNormalArb( - vViewPosition, normal, dHdxy_fwd(), faceDirection );',`
+      vec2 facadeBumpDx=dFdx(vBumpMapUv),facadeBumpDy=dFdy(vBumpMapUv),facadeHeightGradient=vec2(0.0);
+      if(facadeDetail>0.0){
+        float facadeHeight=bumpScale*textureGrad(bumpMap,vBumpMapUv,facadeBumpDx,facadeBumpDy).r;
+        facadeHeightGradient=vec2(
+          bumpScale*textureGrad(bumpMap,vBumpMapUv+facadeBumpDx,facadeBumpDx,facadeBumpDy).r-facadeHeight,
+          bumpScale*textureGrad(bumpMap,vBumpMapUv+facadeBumpDy,facadeBumpDx,facadeBumpDy).r-facadeHeight);
+      }
+      normal=perturbNormalArb(-vViewPosition,normal,facadeHeightGradient,faceDirection);`);
     shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>',`vec3 facadeSmoothNormal=normal;
-      #include <normal_fragment_maps>
+      ${filteredNormal}
       normal=normalize(mix(facadeSmoothNormal,normal,facadeDetail));`);
   };
-  material.customProgramCacheKey=()=> 'city-filtered-facades-v6';
+  material.customProgramCacheKey=()=> 'city-filtered-facades-v7';
   const mesh=new THREE.InstancedMesh(geometry,material,parts.length),pose=new THREE.Object3D(),color=new THREE.Color();
   const details=[],movements=[],detailMeshes=[];
   const track=(target,index,x,z,shift)=>{if(shift)movements.push({target,index,x,z,shift});};

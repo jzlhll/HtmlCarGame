@@ -23,7 +23,11 @@ export class GameRenderer {
   }
 
   *build(container,world) {
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true, powerPreference: 'high-performance' });
+    const canvas=document.createElement('canvas'),glContext=canvas.getContext('webgl2',{alpha:false,antialias:true,depth:true,stencil:false,premultipliedAlpha:true,preserveDrawingBuffer:false,powerPreference:'high-performance'});
+    // 反向深度保留远近精度并允许早期深度剔除；旧设备继续使用对数深度。
+    const reversedDepth=Boolean(glContext?.getExtension('EXT_clip_control'));
+    this.renderer = new THREE.WebGLRenderer({canvas,context:glContext,antialias:true,reversedDepthBuffer:reversedDepth,logarithmicDepthBuffer:!reversedDepth,powerPreference:'high-performance'});
+    console.info('Render depth mode '+JSON.stringify({reversed:reversedDepth,logarithmic:!reversedDepth}));
     initializeTextureTransfer(this.renderer);yield {task:'renderer'};
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;

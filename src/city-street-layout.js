@@ -1,4 +1,4 @@
-import { CITY_STREETS } from './config.js';
+import { CITY_STREETS, FLIGHT_PASSAGES } from './config.js';
 import { surfaceCache } from './surface-assets.js';
 
 const overlaps=(a,b)=>a.minX<b.maxX&&a.maxX>b.minX&&a.minZ<b.maxZ&&a.maxZ>b.minZ;
@@ -39,7 +39,7 @@ export function* cityStreetLayoutSteps(settings, exclusions=[], id='city') {
     Object.assign(p,{axis,kind:line.kind,width:line.width,start,end,center:line.at});clip(p);
     let state=(Math.imul(Math.round(line.at),73856093)^Math.imul(Math.round(start),19349663)^c.seed)>>>0;
     const random=()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296;};
-    const lanes=line.kind===3?3:line.kind===2?2:1,step=c.carSpacing[line.kind-1];
+    const lanes=line.kind===3?3:line.kind===2?2:1,step=c.carSpacing[line.kind-1]*spacing/FLIGHT_PASSAGES.citySpacing;
     for(let lane=0;lane<lanes*2;lane++)for(let along=start+32+random()*step*.4;along<end-32;along+=step){
       if(random()>c.carDensity[line.kind-1])continue;
       const side=lane<lanes?-1:1,offset=side*(lane%lanes+.5)*line.width*.36/lanes;

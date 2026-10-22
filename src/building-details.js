@@ -2,7 +2,7 @@ import { buildingParts } from './building-layout.js';
 
 // 建筑细节贴合既有主体包络，屋顶与入口由同一楼型和稳定坐标决定。
 export function buildingDetails(site,parts){
-  const details=[],hash=(Math.imul(Math.round(site.x),73856093)^Math.imul(Math.round(site.z),19349663))>>>0;
+  const details=[],hash=(site.layoutSeed??(Math.imul(Math.round(site.x),73856093)^Math.imul(Math.round(site.z),19349663)))>>>0;
   const frame=[0xc1beb0,0x9baeb1,0xc9bda6,0x738d99][hash%4],glass=[0x355561,0x3a505a,0x52605b,0x405b66][hash%4];
   const add=(p,x,y,z,w,h,d,color,role='frame')=>details.push({x,y,z,w,h,d,color,role,shift:p.shift,collision:y-h/2>=p.y+p.height/2});
   for(const p of parts){

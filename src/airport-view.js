@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { coastalLandWeight } from './coastal-terrain.js';
 import { batchStaticMeshes } from './static-batch.js';
-import { RUNWAY, SCENERY, SURFACE_APPEARANCE, isWithinRunway } from './config.js';
+import { RUNWAY, SCENERY, SURFACE_APPEARANCE, TREE_HEIGHTS, isWithinRunway } from './config.js';
 import { runwayCenter, runwayOutline } from './runway-layout.js';
 import { surfaceTexture, modelGeometry } from './surface-assets.js';
 
@@ -124,13 +124,13 @@ export class AirportView extends THREE.Group {
       const side = i % 2 ? -1 : 1;
       const x = (destination?route.destination.x:0)+side * (350 + Math.sin(i * 2.1) * 90), z = 250 - Math.floor(i / 2) * 105 + offset;
       if(isWithinRunway({x,z},runway,60)||!destination&&coastalLandWeight(x,z)<.99)continue;
-      contactPose.position.set(x,this.position.y,z);contactPose.scale.set(10,12.7,10);contactPose.updateMatrix();this.treeMatrices.set(contactPose.matrix.elements,treeCount*16);
+      contactPose.position.set(x,this.position.y,z);contactPose.scale.set(10,12.7*TREE_HEIGHTS.heightScale,10);contactPose.updateMatrix();this.treeMatrices.set(contactPose.matrix.elements,treeCount*16);
       dummy.position.set(x, 2.5, z); dummy.updateMatrix(); trunks.setMatrixAt(treeCount, dummy.matrix);
       dummy.position.y = 0; dummy.position.z -= crownCenterZ; dummy.updateMatrix(); crowns.setMatrixAt(treeCount++, dummy.matrix);
     }
     trunks.count=crowns.count=treeCount;this.treeCount=treeCount;
     trunks.computeBoundingSphere(); crowns.computeBoundingSphere();
-    const foliage=new THREE.Group();foliage.position.set(0,8,crownCenterZ);foliage.add(crowns);
+    const foliage=new THREE.Group();foliage.position.set(0,8*TREE_HEIGHTS.heightScale,crownCenterZ);foliage.scale.y=trunks.scale.y=TREE_HEIGHTS.heightScale;foliage.add(crowns);
     this.add(trunks, foliage);
     this.batchSurfaces();
   }

@@ -11,8 +11,10 @@ export function cityBuildingSites(settings, excluded=()=>false) {
   const gap=Math.max(AIRCRAFT.wingspan*city.passageWingSpans,city.passageWidth),limit=settings.spacing-gap-2,sites=[];
   for(let row=0;row<settings.rows;row++)for(let column=0;column<settings.columns;column++){
     const x=centerX+(column-(settings.columns-1)/2)*settings.spacing,z=centerZ+(row-(settings.rows-1)/2)*settings.spacing;
-    if(excluded(x,z)||(settings.corridors||[]).some(offset=>Math.abs(x-centerX-offset)<(limit+gap)/2))continue;
-    sites.push({x,z,hash:siteHash(x,z)});
+    const base=city.baseSpacing,seedX=centerX+(column-(settings.columns-1)/2)*base,seedZ=centerZ+(row-(settings.rows-1)/2)*base;
+    if(excluded(x,z)||excluded(seedX,seedZ,true)||(settings.corridors||[]).some(offset=>Math.abs(x-centerX-offset)<(limit+gap)/2))continue;
+    const layoutSeed=Math.imul(Math.round(seedX),73856093)^Math.imul(Math.round(seedZ),19349663);
+    sites.push({x,z,layoutSeed,hash:siteHash(seedX,seedZ)});
   }
   sites.sort((a,b)=>a.hash-b.hash||a.z-b.z||a.x-b.x);
   return sites.map((site,index)=>{
@@ -20,16 +22,16 @@ export function cityBuildingSites(settings, excluded=()=>false) {
     const random=()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296;};
     const sample=range=>range[0]+random()*(range[1]-range[0]);
     const width=Math.min(limit,sample(profile.width)),depth=Math.min(limit,sample(profile.depth));
-    // 随机偏移仍限于原楼体包络内，500米通道和道路净空保持不变。
+    // 随机偏移仍限于原楼体包络内，配置的边缘净宽和道路净空保持不变。
     const shift={x:0,z:0,maxX:Math.min(WORLD_VARIATION.cityJitter,Math.max(0,(limit-width)/2)),maxZ:Math.min(WORLD_VARIATION.cityJitter,Math.max(0,(limit-depth)/2))};
-    return {x:site.x,z:site.z,width,depth,shift,
+    return {x:site.x,z:site.z,width,depth,shift,layoutSeed:site.layoutSeed,
       height:sample(profile.height),color:city.colors[Math.floor(random()*city.colors.length)],profile:profile.id};
   });
 }
 
 // 裙房、宽板楼与阶梯主体的分段轮廓同时用于渲染和碰撞。
 export function buildingParts(site) {
-  let hash=Math.imul(Math.round(site.x),73856093)^Math.imul(Math.round(site.z),19349663);
+  let hash=site.layoutSeed??(Math.imul(Math.round(site.x),73856093)^Math.imul(Math.round(site.z),19349663));
   hash=Math.imul(hash^(hash>>>13),1274126177);
   const parts=[],style=site.profile==='broad'||site.profile==='lowrise'?(hash>>>0)%2:(hash>>>0)%5;
   const box=(x,z,bottom,height,width,depth,role='wall')=>parts.push({x,z,y:bottom+height/2,width,depth,height,role,style,shift:site.shift});

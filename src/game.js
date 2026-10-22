@@ -79,7 +79,7 @@ export class Game {
     this.systems = new AircraftSystems(this.aircraft);
     this.flight = new Flight(this.aircraft, this.world);
     this.weather = new Weather(this.aircraft, this.world);
-    this.airCurrent = new AirCurrent(this.aircraft,this.world.runSeed);
+    this.airCurrent = new AirCurrent(this.aircraft,this.world.runSeed,this.world);
     this.mission = new Mission(this.aircraft, this.flight, this.world);
   }
 

@@ -50,7 +50,7 @@ export class AircraftPreview {
       if (!entry.model.visible || !world) { label.element.hidden = true; continue; }
       this.labelPoint.copy(entry.model.position).project(this.camera);
       const point = this.labelPoint;
-      if (point.z < -1 || point.z > 1 || Math.abs(point.x) > 1 || Math.abs(point.y) > 1) {
+      if (point.z < (this.camera.reversedDepth?0:-1) || point.z > 1 || Math.abs(point.x) > 1 || Math.abs(point.y) > 1) {
         label.element.hidden = true; continue;
       }
       label.element.hidden = false;

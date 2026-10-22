@@ -42,9 +42,8 @@ export class NavigationUI {
     const tick = `${game.runId}:${game.phase}:${a.systems.avionics}:${Math.floor(game.activeSeconds * 8)}`;
     if (tick === this.tick) return;
     this.tick = tick;
-    if (this.pathRun !== game.runId || this.pathSource !== mission.path) {
-      this.pathRun = game.runId; this.pathSource = mission.path; this.pathLength = 0; this.pathPoints = '';
-      setAttribute(this.path, 'points', '');
+    if (this.pathRun !== game.runId || this.pathSource !== mission.path || this.pathLength > mission.path.length) {
+      this.pathRun = game.runId; this.pathSource = mission.path; this.pathLength=0;this.lastPathPoint=undefined;this.path.points.clear();
       for (const item of this.contactNodes.values()) item.element.remove();
       this.contactNodes.clear();
     }
@@ -54,13 +53,14 @@ export class NavigationUI {
     if (this.pathLength !== mission.path.length) {
       for (; this.pathLength < mission.path.length; this.pathLength++) {
         const point = mission.path[this.pathLength];
-        this.pathPoints += (this.pathLength ? ' ' : '') + this.mapPoint(point[0], point[1]);
+        const mapped=this.mapPoint(point[0],point[1]);if(mapped===this.lastPathPoint)continue;
+        const [x,y]=mapped.split(',').map(Number),display=this.route.createSVGPoint();display.x=x;display.y=y;
+        this.path.points.appendItem(display);this.lastPathPoint=mapped;
       }
-      setAttribute(this.path, 'points', this.pathPoints);
     }
     setAttribute(this.player, 'transform', `translate(${this.mapPoint(a.position.x, a.position.z)}) rotate(${degrees(a.heading).toFixed(1)})`);
-    const distance = Math.max(0, mission.runwayDistance);
-    setHTML(this.status, a.landed ? `Parking ${Math.round(a.airspeed)} km/h<small>避让障碍 · 跑道内停稳 1 秒</small>` : `${mission.sector.english??mission.sector.name} · ${(distance / 1000).toFixed(1)} km<small>${mission.sector.chinese??mission.sector.name} · 海拔 ${Math.round(displayHeight(a.position.y))} / ${displayHeight(game.route.ceiling)} m</small>`);
+    const distance=Math.max(0,mission.runwayDistance),sector=mission.sector;
+    setHTML(this.status, a.landed ? `Parking ${Math.round(a.airspeed)} km/h<small>避让障碍 · 跑道内停稳 1 秒</small>` : `${sector.english??sector.name} · ${(distance / 1000).toFixed(1)} km<small>${sector.chinese??sector.name} · 海拔 ${Math.round(displayHeight(a.position.y))} / ${displayHeight(game.route.ceiling)} m</small>`);
     const contacts = a.systems.avionics && game.weather.radarAvailable ? mission.contacts.filter(c => Math.hypot(c.position.x - a.position.x, c.position.z - a.position.z) < game.route.radarRange) : [];
     const alert = contacts.some(c => c.danger || c.age < game.route.radarLead), flash = Math.floor(mission.elapsed * 4) % 2 === 0;
     this.radarCard.classList.toggle('has-alert', alert && flash);
