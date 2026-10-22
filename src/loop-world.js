@@ -153,7 +153,10 @@ export class LoopWorld {
 
   // 传入现有扫掠端点；不在飞行帧创建新的地形或碰撞实体。
   collision(sweep, solidHit) {
-    const size = LOOP_WORLD.tileSize;
+    const size = LOOP_WORLD.tileSize,half=size/2,minRow=Math.floor((this.route.destination.threshold-this.route.destination.length+half)/size);
+    let inside=!this.route.fixedCells&&sweep.length>0;
+    for(const {from,to,radius}of sweep)if(Math.min(from.x,to.x)-radius< -half||Math.max(from.x,to.x)+radius>=half||Math.min(from.z,to.z)-radius<minRow*size-half||Math.max(from.z,to.z)+radius>=half){inside=false;break;}
+    if(inside)return null;
     for (const {from, to, radius} of sweep) {
       const steps = Math.max(1, Math.ceil(Math.hypot(to.x - from.x, to.y - from.y, to.z - from.z) / this.route.sweepStep));
       for (let i = 0; i <= steps; i++) {

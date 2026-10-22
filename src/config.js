@@ -36,6 +36,9 @@ export const LOOP_WORLD = {
   seaSize: 160000, seaLevel: -0.16, reliefMax: 4000,
 };
 
+// 显示范围独立于地形、碰撞及模板配置，调视距不重建世界。
+export const VIEW_DISTANCE = {scale:.7};
+
 export const WORLD_BOUNDARY = {
   halfWidth: 22000, front: 6500, back: -235000, width: 3500,
   height: 6000, crossSegments: 16, alongStep: 300,
@@ -47,22 +50,27 @@ export const TREE_CONTACT = {
   windowSeconds:3,treeDamage:5,birdDamage:20,treeSpeedRetention:.95,
 };
 export const TREE_HEIGHTS = {
-  recipe:2,seed:491637,scale:5200,detailScale:2600,typeScale:2400,
+  recipe:3,seed:491637,scale:5200,detailScale:2600,
   flat:[30,10000].map(v=>v/WORLD_HEIGHT.displayScale),
+  heightKnots:[30,3000,5000,7500,10000].map(v=>v/WORLD_HEIGHT.displayScale),
+  // 平地场按75%、8.33%、8.33%、8.33%标定，周期模板单独校准，保留连续变化。
+  noiseKnots:[0.01380061,0.60596216,0.65843283,0.72068537,0.9570068],
+  periodicNoiseKnots:[0.29881081,0.71159942,0.74850373,0.77368679,0.82476388],
+  shrubMax:500/WORLD_HEIGHT.displayScale,poplarMin:6000/WORLD_HEIGHT.displayScale,
   mountain:[100,1500].map(v=>v/WORLD_HEIGHT.displayScale),
   mountainFloor:[200,1000].map(v=>v/WORLD_HEIGHT.displayScale),
 };
 export const TREE_MODELS = {
-  recipe:6,seed:643179,nearDetail:1,farDetail:0,branchSegments:8,
+  recipe:7,seed:643179,nearDetail:1,farDetail:0,branchSegments:8,
   leaflets:[32,40,48,28,36,32],midLeafCards:3,leafAlphaCutoff:.32,leafLightFill:.22,
-  chunkSize:2400,nearChunkSize:600,leafMinPixels:3,midDistance:10000,visibleDistance:12000,blurDistance:[12000,22000],farCrownGroups:[4,4,4,6,4,3],
+  chunkSize:2400,nearChunkSize:600,nearDistanceScale:10,leafMinPixels:3,midDistance:10000,visibleDistance:12000,blurDistance:[12000,22000],farCrownGroups:[4,4,4,6,4,3],
   species:[
-    {id:'poplar',name:'杨树',height:[800,4800],width:[.18,.27],radius:.58,tall:true,color:0x8ba75d},
-    {id:'banyan',name:'榕树',height:[700,2700],width:[1.3,1.9],radius:.78,tall:false,color:0x6b9657},
-    {id:'willow',name:'柳树',height:[400,2400],width:[.9,1.35],radius:.62,tall:false,color:0x9eb66b},
-    {id:'pine',name:'松树',height:[650,4500],width:[.4,.6],radius:.56,tall:true,color:0x769c76},
-    {id:'ginkgo',name:'银杏',height:[600,3500],width:[.85,1.25],radius:.70,tall:false,color:0xb7b34f},
-    {id:'shrub',name:'灌木',height:[30,220],width:[1.6,2.8],radius:.59,tall:false,color:0x86a457},
+    {id:'poplar',name:'杨树',height:[500,10000],width:[.18,.27],radius:.58,tall:true,color:0x8ba75d},
+    {id:'banyan',name:'榕树',height:[500,6000],width:[1.3,1.9],radius:.78,tall:false,color:0x6b9657},
+    {id:'willow',name:'柳树',height:[500,6000],width:[.9,1.35],radius:.62,tall:false,color:0x9eb66b},
+    {id:'pine',name:'松树',height:[500,6000],width:[.4,.6],radius:.56,tall:false,color:0x769c76},
+    {id:'ginkgo',name:'银杏',height:[500,6000],width:[.85,1.25],radius:.70,tall:false,color:0xb7b34f},
+    {id:'shrub',name:'灌木',height:[30,500],width:[1.6,2.8],radius:.59,tall:false,color:0x86a457},
   ],
 };
 
@@ -147,7 +155,7 @@ export const CAMERA = {
   cockpitFade: [0.82, 1],
   exteriorNear: 1,
   cockpitNear: 0.25,
-  far: 36000,
+  far: 36000*VIEW_DISTANCE.scale,
   pixelRatioLimit: 1.5,
   warmupSize: 64, warmupBatchObjects: 4,
 };
@@ -162,7 +170,7 @@ export const SCENERY = {
   groundSize: 80000,
   skyRadius: 32000,
   fogNear: 12000,
-  fogFar: LOOP_WORLD.radius,
+  fogFar: LOOP_WORLD.radius*VIEW_DISTANCE.scale,
   shadowSize: 2048,
   surfaceLayers: { shoulder: 1, pavement: 2, marking: 3 },
   colors: {
@@ -254,9 +262,12 @@ export const FLIGHT = {
 export const AIR_CURRENTS = {
   intervalSeconds:70, gustSeconds:12, turbulenceSeconds:10, rampSeconds:1,
   turbulenceChance:.15, tailwindRatio:.5, headwindRatio:-.6, correctionRatio:.5,
-  sideYawRate:16*Math.PI/180, turbulentYawRate:32*Math.PI/180,
-  turbulentPitchRate:6*Math.PI/180, sideBank:28*Math.PI/180, turbulentBank:65*Math.PI/180,
+  sideYawRate:8*Math.PI/180, turbulentYawRate:32*Math.PI/180,
+  turbulentPitchRate:6*Math.PI/180, sideBank:14*Math.PI/180, turbulentBank:65*Math.PI/180,
 };
+
+// 轻量屏幕气流痕迹与合成风声共用节奏，不参与资源缓存或飞行受力。
+export const WIND_EFFECTS = {pulseHz:1.1,travelSeconds:1.35,waves:3,tracesPerWave:10,opacity:.72};
 
 export const REGIONAL_WATER = {
   recipe:1, riverSamples:96, islandSamples:40, lakeSubdivisions:3, waterSubdivisions:3,
@@ -310,16 +321,19 @@ export const CONTROLS = {
 
 // 地标采用轮廓化比例，集中于虚构河湾城市，不对应真实城市间的地理位置。
 export const WEATHER = {
-  recipe: 11, seed: 798431, width: 2800, length: 4000, height: 5376 / WORLD_HEIGHT.displayScale,
+  recipe: 12, seed: 798431, width: 2800, length: 4000, height: 5376 / WORLD_HEIGHT.displayScale,
   highBand: [7800,8500].map(v=>v/WORLD_HEIGHT.displayScale),
   thinBand: [5800,6500].map(v=>v/WORLD_HEIGHT.displayScale), thinDensity: .36,
   startZ: -11000, spacing: 14500, lateralSpread: 3500, alongJitter: 1000, headingSpread: .25, windKmh: 100,
   wrapMinX: -29000, wrapMaxX: 29000, variants: 6, puffs: 22, meshGrid: [40,32,40], blend: .14,
+  shape: {warp:.075,warpScale:3.1,billowScale:5.5,detailScale:15,erosion:.28},
   // 600 km/h下计入4倍位移，雾远端至少留4秒行程，前方2秒的物体仍有约一半对比度。
   whiteVisibility: Math.max(SCENERY.fogFar*.1,worldHorizontalSpeed(FLIGHT.maxSpeed/3.6)*4),
   thinVisibility: Math.max(SCENERY.fogFar*.15,worldHorizontalSpeed(FLIGHT.maxSpeed/3.6)*6), stormVisibilityRatio: .5,
   flashInterval: [8,16], flashSeconds: .22, strikeChance: .025, maxClouds: 128,
 };
+
+export const WHITE_CLOUD_SCALE = {width:.7,height:.9};
 
 export const WEATHER_MOTION = { periodSeconds:15 };
 
@@ -612,6 +626,7 @@ export const AUDIO = {
   engineIdleHz: 48, engineStartHz: 22, engineStartSweep: 36, enginePowerSweep: 86, engineHarmonic: 2.03,
   fanIdleHz: 420, fanPowerSweep: 1900,
   windGain: 0.0375, windIdleHz: 650, windSpeedSweep: 1100, speedCap: 2, groundWindScale: 0.45,
+  gust: {gain:.14,lowHz:380,sweepHz:1450,baseLevel:.12,turbulenceScale:1.15},
   wheelGain: 0.16, wheelIdleHz: 160, wheelSpeedSweep: 850, wheelRoughness: 0.22, wheelBumpRate: 32, brakeGainScale: 1.35,
   motorGain: 0.045, motorHz: 185,
   alarmGain: 0.09, alarmHigh: 880, alarmLow: 660, alarmPeriod: 0.8, alarmPulse: 0.16,

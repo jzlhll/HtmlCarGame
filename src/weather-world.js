@@ -1,18 +1,28 @@
 import { arcPoint } from './route-path.js';
+import { ImprovedNoise } from 'three/addons/math/ImprovedNoise.js';
 import { WEATHER } from './config.js';
 import { surfaceCache } from './surface-assets.js';
 
+const cloudNoise=new ImprovedNoise();
 const randomStream=seed=>()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
 
-// 同一隐式外形供云模型与进入判定使用，团块融合为单一连续表面。
+// 大团块、空间扭曲与边缘侵蚀共用一个隐式场，模型和穿云判定保持一致。
 export function cloudField(x,y,z,template) {
+  const shape=WEATHER.shape,edge=Math.max(Math.abs(x),Math.abs(y),Math.abs(z));
+  const border=Math.max(0,Math.min(1,(.49-edge)/.10));
+  const warpedY=y+cloudNoise.noise(x*shape.warpScale+11.7,y*1.7,z*shape.warpScale-7.3)*shape.warp*border;
   let field=1e6;
   for(const p of template){
-    const distance=((x-p.x)/p.rx)**2+((y-p.y)/p.ry)**2+((z-p.z)/p.rz)**2-1;
+    const distance=((x-p.x)/p.rx)**2+((warpedY-p.y)/p.ry)**2+((z-p.z)/p.rz)**2-1;
     const h=Math.max(WEATHER.blend-Math.abs(field-distance),0)/WEATHER.blend;
     field=Math.min(field,distance)-h*h*WEATHER.blend*.25;
   }
-  return field;
+  // 只在外壳附近计算细节；云芯和远处空域无需噪声侵蚀。
+  if(field<-.65||field>.45)return field;
+  const lower=Math.max(0,Math.min(1,(.12-y)/.5));
+  const broad=.5+.5*cloudNoise.noise(x*shape.billowScale+5.3,y*shape.billowScale-3.1,z*shape.billowScale+13.8);
+  const detail=.5+.5*cloudNoise.noise(x*shape.detailScale-17.4,y*shape.detailScale+8.5,z*shape.detailScale+2.9);
+  return field+shape.erosion*(.35+.65*lower)*(.35*broad+.65*detail*detail);
 }
 
 // 六类轮廓保留偏心峰、鞍部和风切长脊，形状池固定缓存，开局仅重排变换。
@@ -31,11 +41,17 @@ export function cloudTemplates() {
       x+=(random()-.5)*.018;y+=(random()-.5)*.018;z+=(random()-.5)*.018;
       puffs.push({x,y,z,rx:Math.min(.475-Math.abs(x),rx),ry:Math.min(.475-Math.abs(y),ry),rz:Math.min(.475-Math.abs(z),rz)});
     };
-    for(const [x,z] of [[-.2,-.08],[.12,-.13],[-.1,.18],[.22,.16]])add(x,-.25,z,.25,.105,.24);
+    // 底部沿各自云峰错落延伸，避免所有模板共用一层扁椭球托底。
+    for(let i=0;i<4;i++){
+      const c=crowns[variant][(i+variant)%6],y=-.14-random()*.12+(i%2)*.045;
+      add(c[0]*.78,y,c[2]*.85,.16+random()*.055,.13+random()*.075,.16+random()*.055);
+    }
     for(const [i,c]of crowns[variant].entries())add(...c,.18+random()*.045,variant===5&&i>1?.13:.19+random()*.05,.17+random()*.055);
     for(let i=0;i<8;i++){
-      const c=crowns[variant][i%6],angle=i*2.399963,side=.12+random()*.03;
-      add(c[0]+Math.cos(angle)*side,c[1]-.045+random()*.08,c[2]+Math.sin(angle)*side,.10+random()*.045,.11+random()*.04,.10+random()*.045);
+      const c=crowns[variant][i%6],angle=i*2.399963,side=.10+random()*.04;
+      const underside=i<4;
+      add(c[0]+Math.cos(angle)*side,c[1]-(underside?.13:.015)+random()*.05,c[2]+Math.sin(angle)*side,
+        .095+random()*.055,underside?.13+random()*.04:.11+random()*.04,.095+random()*.055);
     }
     for(let i=0;i<4;i++){
       const c=crowns[variant][i],top=variant===0?.15:variant===5?.13:.21;

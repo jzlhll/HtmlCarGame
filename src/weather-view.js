@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { cloudField } from './weather-world.js';
-import { WEATHER, SCENERY } from './config.js';
+import { WEATHER, WHITE_CLOUD_SCALE, SCENERY } from './config.js';
 import { surfaceCache } from './surface-assets.js';
 import { cloudX, cloudZ } from './weather.js';
 
@@ -75,7 +75,7 @@ export class WeatherView extends THREE.Group {
     for(const cloud of this.world.weather.clouds){
       const key=cloud.kind+cloud.thin;
       if(!materials.has(key)){
-        const material=new THREE.MeshStandardMaterial({color:cloud.kind==='white'?0xe9eef0:0x687681,roughness:1,emissive:cloud.kind==='white'?0xa3b1b8:0x27323b,emissiveIntensity:.14,transparent:cloud.thin,opacity:cloud.thin?.38:1,depthWrite:!cloud.thin});
+        const material=new THREE.MeshStandardMaterial({color:cloud.kind==='white'?0xe9eef0:0x687681,roughness:1,emissive:cloud.kind==='white'?0xcbd2d6:0x27323b,emissiveIntensity:cloud.kind==='white'?.38:.14,transparent:cloud.thin,opacity:cloud.thin?.38:1,depthWrite:!cloud.thin});
         material.onBeforeCompile=shader=>{
           shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 cloudLocalPosition;').replace('#include <begin_vertex>','#include <begin_vertex>\ncloudLocalPosition=position;');
           shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>
@@ -86,12 +86,13 @@ export class WeatherView extends THREE.Group {
                 mix(mix(cloudHash(i+vec3(0,0,1)),cloudHash(i+vec3(1,0,1)),f.x),mix(cloudHash(i+vec3(0,1,1)),cloudHash(i+vec3(1,1,1)),f.x),f.y),f.z);}
           `).replace('#include <color_fragment>',`#include <color_fragment>
             vec3 cloudP=cloudLocalPosition/vec3(${WEATHER.width.toFixed(1)},${WEATHER.height.toFixed(1)},${WEATHER.length.toFixed(1)});
-            float billowShade=smoothstep(-.30,.34,cloudP.y);
-            float cloudGrain=cloudNoise(cloudP*19.)*.65+cloudNoise(cloudP*43.)*.35;
-            diffuseColor.rgb*=mix(vec3(.69,.74,.80),vec3(1.07,1.06,1.03),billowShade)*(0.94+cloudGrain*.12);
+            float broadShade=cloudNoise(cloudP*5.+vec3(4.,7.,11.));
+            float billowShade=smoothstep(-.42,.36,cloudP.y+(broadShade-.5)*.24);
+            float cloudGrain=broadShade*.65+cloudNoise(cloudP*19.)*.35;
+            diffuseColor.rgb*=mix(vec3(.79,.83,.88),vec3(1.07,1.06,1.03),billowShade)*(0.96+cloudGrain*.08);
           `);
         };
-        material.customProgramCacheKey=()=> 'solid-clouds-v5';materials.set(key,material);
+        material.customProgramCacheKey=()=> 'solid-clouds-v6';materials.set(key,material);
       }
       const mesh=new THREE.Mesh(geometries[cloud.variant],materials.get(key));mesh.position.set(cloud.x,cloud.y,cloud.z);mesh.userData.cloudId=cloud.id;this.clouds.push(mesh);this.add(mesh);yield;
     }
@@ -110,7 +111,7 @@ export class WeatherView extends THREE.Group {
   }
   update(game,scene){
     const weather=game.weather;
-    for(const mesh of this.clouds){const cloud=this.world.weather.clouds[mesh.userData.cloudId];mesh.position.set(cloudX(cloud,weather.seconds),cloud.y,cloudZ(cloud,weather.seconds));mesh.rotation.y=cloud.heading;mesh.scale.set(cloud.scaleX,1,cloud.scaleZ);mesh.geometry=this.geometries[cloud.variant];mesh.material=this.materials.get(cloud.kind+cloud.thin);mesh.updateMatrix();}
+    for(const mesh of this.clouds){const cloud=this.world.weather.clouds[mesh.userData.cloudId];mesh.position.set(cloudX(cloud,weather.seconds),cloud.y,cloudZ(cloud,weather.seconds));mesh.rotation.y=cloud.heading;mesh.scale.set(cloud.scaleX*(cloud.kind==='white'?WHITE_CLOUD_SCALE.width:1),cloud.kind==='white'?WHITE_CLOUD_SCALE.height:1,cloud.scaleZ);mesh.geometry=this.geometries[cloud.variant];mesh.material=this.materials.get(cloud.kind+cloud.thin);mesh.updateMatrix();}
     scene.fog.far=weather.visibility;scene.fog.near=weather.kind==='white'?35:SCENERY.fogNear*(weather.kind==='storm'?WEATHER.stormVisibilityRatio:1);
     const tint=weather.kind==='white'?0xcbd5d8:weather.kind==='storm'?0x657481:SCENERY.colors.skyHorizon;
     scene.fog.color.setHex(tint);scene.background.setHex(tint);this.skyTint.value.setHex(tint);this.skyMix.value=weather.strength*(weather.kind==='white'?.96:weather.kind==='storm'?.52:0);

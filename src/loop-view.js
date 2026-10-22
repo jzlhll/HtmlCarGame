@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { CanopyLOD } from './canopy-lod.js';
-import { LOOP_WORLD, LANDSCAPE, SURFACE_APPEARANCE, WORLD_BOUNDARY } from './config.js';
+import { LOOP_WORLD, LANDSCAPE, SURFACE_APPEARANCE, WORLD_VARIATION, VIEW_DISTANCE } from './config.js';
 import { loopVariant, isRouteCell, loopRiverZ, sampleLoopTerrain, LoopWorld } from './loop-world.js';
 import { mountainIndices } from './terrain.js';
 import { modelGeometry, surfaceTexture } from './surface-assets.js';
@@ -14,7 +14,7 @@ import { createCityStreets } from './city-streets.js';
 export class LoopView extends THREE.Group {
   constructor(world, makeLandmarks, trees) {
     super();this.trees=trees;this.world=world;this.makeLandmarks=makeLandmarks;this.center={value:new THREE.Vector2()};this.time={value:0};
-    this.templates=[];this.slots=[];this.cellX=Infinity;this.cellZ=Infinity;
+    this.templates=[];this.templateBounds=[];this.slots=[];this.frustum=new THREE.Frustum();this.projectionView=new THREE.Matrix4();this.worldBounds=new THREE.Box3();this.cellX=Infinity;this.cellZ=Infinity;
     const geometries=Array.from({length:LOOP_WORLD.variants},(_,i)=>modelGeometry(`loop-terrain-${i}`));
     const names=new Set(LANDSCAPE.landmarks.map(t=>t.name)), boxes=new Set();
     for(const bucket of world.boxCells.values())for(const box of bucket)if(names.has(box.name))boxes.add(box);
@@ -58,6 +58,9 @@ export class LoopView extends THREE.Group {
         const landmarks=this.makeLandmarks();landmarks.position.z=-LANDSCAPE.city.center[1];group.add(landmarks);
         group.add(yield* createCityStreets(this.world.loop.streets));
       }
+      // 完整包围盒包含所有LOD、伸出树冠和建筑；为每局街区偏移保留双向余量。
+      group.updateMatrixWorld(true);const bounds=new THREE.Box3().setFromObject(group),padding=WORLD_VARIATION.cityJitter*2;
+      bounds.expandByVector(new THREE.Vector3(padding,0,padding));this.templateBounds.push(bounds);
       this.templates.push(group);yield 'boundary';
     }
     const boundary=this.world.route.boundary;
@@ -85,7 +88,7 @@ export class LoopView extends THREE.Group {
         const object=stack.pop();nodes.push(object);stack.push(...object.children);
         if(nodes.length%64===0)yield;
       }
-      this.slots.push({x,z,column:x,row:z,group:slot,nodes});this.add(slot);yield;
+      this.slots.push({x,z,column:x,row:z,variant:loopVariant(x,z),group:slot,nodes});this.add(slot);yield;
     }
     this.cellX=Infinity;this.cellZ=Infinity;
   }
@@ -102,7 +105,7 @@ export class LoopView extends THREE.Group {
         if(material.userData.keepOcean||material.userData.loopHorizon)continue;
         material.userData.loopHorizon=true;const previous=material.onBeforeCompile,key=material.customProgramCacheKey();
         material.onBeforeCompile=(shader,renderer)=>{
-          previous.call(material,shader,renderer);shader.uniforms.loopCenter=this.center;shader.uniforms.loopRadius={value:LOOP_WORLD.radius};
+          previous.call(material,shader,renderer);shader.uniforms.loopCenter=this.center;shader.uniforms.loopRadius={value:LOOP_WORLD.radius*VIEW_DISTANCE.scale};
           shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec2 vLoopWorld;');
           shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>',`vec4 loopPoint=vec4(transformed,1.0);
 #ifdef USE_INSTANCING
@@ -130,7 +133,7 @@ vLoopWorld=(modelMatrix*loopPoint).xz;
         const column=slot.x+Math.floor((x+LOOP_WORLD.poolRadius-slot.x)/width)*width;
         const row=slot.z+Math.floor((z+LOOP_WORLD.poolRadius-slot.z)/width)*width;
         if(slot.column===column&&slot.row===row)continue;
-        slot.column=column;slot.row=row;const variant=loopVariant(column,row);
+        slot.column=column;slot.row=row;const variant=slot.variant=loopVariant(column,row);
         slot.group.position.set(column*LOOP_WORLD.tileSize,0,row*LOOP_WORLD.tileSize);slot.group.updateMatrix();
         slot.group.children.forEach((child,index)=>{child.visible=index===variant;});
         // 准备期节点表保证父先子，隐藏模板也在单遍更新后立即冻结。
@@ -142,9 +145,20 @@ vLoopWorld=(modelMatrix*loopPoint).xz;
     }
     const boundary=this.world.route.boundary;
     for(const slot of this.slots){
-      const dx=Math.max(0,Math.abs(slot.group.position.x-position.x)-LOOP_WORLD.tileSize/2);
-      const dz=Math.max(0,Math.abs(slot.group.position.z-position.z)-LOOP_WORLD.tileSize/2);
-      slot.group.visible=Math.abs(slot.group.position.x-(boundary.centerX||0))<boundary.halfWidth+LOOP_WORLD.tileSize/2&&slot.group.position.z<boundary.front+LOOP_WORLD.tileSize/2&&slot.group.position.z>boundary.back-LOOP_WORLD.tileSize/2&&!isRouteCell(slot.column,slot.row,this.world.route)&&Math.hypot(dx,dz)<=LOOP_WORLD.radius;
+      slot.active=Math.abs(slot.group.position.x-(boundary.centerX||0))<boundary.halfWidth+LOOP_WORLD.tileSize/2&&slot.group.position.z<boundary.front+LOOP_WORLD.tileSize/2&&slot.group.position.z>boundary.back-LOOP_WORLD.tileSize/2&&!isRouteCell(slot.column,slot.row,this.world.route);
+      slot.group.visible=slot.active;
+    }
+  }
+
+  // Scene.onBeforeRender在矩阵更新后逐相机调用，主镜头与Gear view各自裁剪。
+  cull(camera,useFrustum=true){
+    this.frustum.setFromProjectionMatrix(this.projectionView.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse),camera.coordinateSystem,camera.reversedDepth);
+    const center=this.center.value,radius=LOOP_WORLD.radius*VIEW_DISTANCE.scale;
+    for(const slot of this.slots){
+      if(!slot.active){slot.group.visible=false;continue;}
+      this.worldBounds.copy(this.templateBounds[slot.variant]).applyMatrix4(slot.group.matrixWorld);
+      const dx=Math.max(0,this.worldBounds.min.x-center.x,center.x-this.worldBounds.max.x),dz=Math.max(0,this.worldBounds.min.z-center.y,center.y-this.worldBounds.max.z);
+      slot.group.visible=dx*dx+dz*dz<=radius*radius&&(!useFrustum||this.frustum.intersectsBox(this.worldBounds));
     }
   }
 }

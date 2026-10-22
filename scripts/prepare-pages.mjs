@@ -32,7 +32,7 @@ await mkdir(output, { recursive: true });
 await cp(path.join(root, 'src'), path.join(output, 'src'), { recursive: true });
 const html = (await readFile(path.join(root, 'index.html'), 'utf8')).replaceAll('./node_modules/three/', './vendor/three/');
 await writeFile(path.join(output, 'index.html'), html);
-for (const file of ['build/three.module.js', 'build/three.core.js', 'examples/jsm/utils/BufferGeometryUtils.js', 'examples/jsm/geometries/RoundedBoxGeometry.js', 'LICENSE']) {
+for (const file of ['build/three.module.js', 'build/three.core.js', 'examples/jsm/utils/BufferGeometryUtils.js', 'examples/jsm/geometries/RoundedBoxGeometry.js', 'examples/jsm/math/ImprovedNoise.js', 'LICENSE']) {
   const destination = path.join(output, 'vendor/three', file);
   await mkdir(path.dirname(destination), { recursive: true });
   await cp(path.join(root, 'node_modules/three', file), destination);

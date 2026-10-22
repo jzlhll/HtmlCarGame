@@ -130,7 +130,7 @@ export class Mission {
     }
     const collision = this.world.collision(a, flight.previous);
     if (collision) return [{type: 'failed', key: 'obstacle', destructive: true, reason: collision===WORLD_BOUNDARY.name?WORLD_BOUNDARY.reason:`障碍碰撞：飞机撞上${collision}，碰撞时海拔${Math.round(displayHeight(a.position.y))}米。`}];
-    if(this.world.treeContact()&&this.glass.hit('tree',this.elapsed)){
+    if(this.elapsed-this.glass.lastTree>=TREE_CONTACT.windowSeconds-1e-9&&this.world.treeContact()&&this.glass.hit('tree',this.elapsed)){
       a.airspeed*=TREE_CONTACT.treeSpeedRetention;
       a.velocity.x*=TREE_CONTACT.treeSpeedRetention;a.velocity.z*=TREE_CONTACT.treeSpeedRetention;
       events.push({type:'tree-strike',key:'trees'});

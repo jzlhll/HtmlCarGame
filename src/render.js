@@ -196,6 +196,9 @@ export class GameRenderer {
     const gearQueue=new GenerationQueue(this.gearPreview.prepare([...this.airports,this.landscape],this.landscape.loopView),{urgent:true,name:'gear-spatial'});
     gearQueue.resume();const gearPreparation=await gearQueue.done;
     const gpuPreparation=await prepareSceneResources(this.renderer,[{scene:this.scene,camera:this.camera},{scene:this.preview.scene,camera:this.preview.camera},{scene:this.gearPreview.spatial.warmup,camera:this.gearPreview.camera}],this.landscape.textures);
+    this.scene.onBeforeRender=(renderer,scene,camera)=>{
+      this.landscape.loopView.cull(camera,!renderer.shadowMap.enabled||!renderer.shadowMap.needsUpdate);
+    };
     return {objectPreparation,transitionPreparation,gearPreparation,...gpuPreparation};
   }
 

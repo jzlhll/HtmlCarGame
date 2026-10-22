@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { TREE_MODELS } from './config.js';
 import { treeProfiles } from './tree-species.js';
+import { indexTreeGeometry } from './tree-indexing.js';
 import { surfaceCache, surfaceTexture } from './surface-assets.js';
 
 function markPart(geometry,foliage,color){
@@ -104,7 +105,7 @@ function* treeGeometry(profile,level) {
     const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)),false,'catmullrom',.5);
     parts.push(markPart(new THREE.TubeGeometry(curve,5,profile.type===1?.0045:.007,3,false),profile.type===1?0:1,[.9,.92,.85]));yield;
   }
-  const geometry=mergeGeometries(parts);parts.forEach(p=>p.dispose());geometry.computeBoundingBox();geometry.computeBoundingSphere();return geometry;
+  const merged=mergeGeometries(parts);parts.forEach(p=>p.dispose());const geometry=yield* indexTreeGeometry(merged);geometry.computeBoundingBox();geometry.computeBoundingSphere();return geometry;
 }
 
 // 六种树各有近、中、远三份共享原型；远处只保留主干与冠形，不生成细枝垂根。
@@ -155,14 +156,12 @@ export function* prepareTreeModels() {
     for(const level of [0,1,2]){
       const key='scene/trees/'+profile.id+'/'+level,record=cache.available?yield {wait:cache.read(key)}:null;
       const count=record?.position?.length/3;
-      const indexed=level===0,index=record?.index;
-      const topology=indexed?(index instanceof Uint16Array||index instanceof Uint32Array)&&index.length>0&&index.length%3===0&&index.every(value=>value<count):!index&&count%3===0;
-      const hit=Number.isInteger(count)&&count>0&&topology&&['position','normal','uv','color','foliage'].every(name=>record[name] instanceof Float32Array&&record[name].length===count*(name==='uv'?2:name==='foliage'?1:3)&&record[name].every(Number.isFinite));
+      const hit=Number.isInteger(count)&&count>0&&(record.index instanceof Uint16Array||record.index instanceof Uint32Array)&&record.index.length>0&&record.index.length%3===0&&record.index.every(i=>i<count)&&['position','normal','uv','color','foliage'].every(name=>record[name] instanceof Float32Array&&record[name].length===count*(name==='uv'?2:name==='foliage'?1:3)&&record[name].every(Number.isFinite));
       let geometry;
-      if(hit){geometry=new THREE.BufferGeometry();for(const name of ['position','normal','uv','color','foliage'])geometry.setAttribute(name,new THREE.BufferAttribute(record[name],name==='uv'?2:name==='foliage'?1:3));if(indexed)geometry.setIndex(new THREE.BufferAttribute(index,1));geometry.computeBoundingBox();geometry.computeBoundingSphere();}
+      if(hit){geometry=new THREE.BufferGeometry();for(const name of ['position','normal','uv','color','foliage'])geometry.setAttribute(name,new THREE.BufferAttribute(record[name],name==='uv'?2:name==='foliage'?1:3));geometry.setIndex(new THREE.BufferAttribute(record.index,1));geometry.computeBoundingBox();geometry.computeBoundingSphere();}
       else{
         geometry=yield* treeGeometry(profile,level);
-        if(cache.available)yield {wait:cache.write(key,{...Object.fromEntries(Object.entries(geometry.attributes).map(([name,attribute])=>[name,attribute.array])),...(geometry.index?{index:geometry.index.array}:{})})};
+        if(cache.available)yield {wait:cache.write(key,{...Object.fromEntries(Object.entries(geometry.attributes).map(([name,attribute])=>[name,attribute.array])),index:geometry.index.array})};
       }
       model[['geometry','midGeometry','farGeometry'][level]]=geometry;console.info('Tree prototype prepared '+JSON.stringify({species:profile.id,level,cacheHit:hit,vertices:geometry.attributes.position.count}));yield;
     }
