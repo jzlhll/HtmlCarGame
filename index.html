@@ -2,65 +2,42 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#142b2d">
-  <title>四季车途 · 本机赛车</title>
-  <link rel="icon" href="data:,">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080f1a">
+  <meta name="description" content="英语空战：用字母积木拼出单词，驾驶飞机穿越星海。Three.js 五分钟英语拼写游戏。">
+  <title>英语空战 · LETTER WING</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230a1521'/%3E%3Cpath d='M32 7 38 30 56 43 56 48 36 42 38 55 26 55 28 42 8 48 8 43 26 30Z' fill='%2381eedb'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="./src/style.css">
-  <link rel="stylesheet" href="./src/keyboard-mode.css">
-  <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+  <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js"}}</script>
 </head>
-<body>
-  <main id="game" tabindex="0" aria-label="四季车途赛车游戏">
-    <div id="scene"></div>
-    <header class="topbar">
-      <div class="brand"><span class="brand-icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 10 2-5h10l2 5M5 10h14l2 3v5H3v-5l2-3Z"/><path d="M3 18v2h3v-2m12 0v2h3v-2M7 14h1m8 0h1"/></svg></span><div>四季车途<small>FOUR SEASONS / ENDLESS ROAD</small></div></div>
-      <nav id="mobile-toolbar" class="mobile-toolbar" aria-label="游戏操作" hidden>
-        <button id="pause-game" type="button" aria-label="暂停游戏">暂停</button>
-        <button id="restart-game" type="button" aria-label="重置本局，重新开始">↻ 重置</button>
-      </nav>
+<body data-home="true">
+  <main id="app" tabindex="-1">
+    <header class="site-header">
+      <div id="header-brand-slot"><a class="brand" href="#" id="brand-home" aria-label="英语空战首页"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="m20 5 4 13 12 9-14-3-2 11-2-11-14 3 12-9Z"/><circle cx="20" cy="20" r="18"/></svg><span>英语空战<small>LETTER WING</small></span></a></div>
+      <nav><button class="text-button" id="history-button">学习记录 <span>↗</span></button><button class="text-button" id="vocab-button">词库说明 <span>↗</span></button><button class="text-button" id="header-help">玩法介绍 <span>?</span></button><button class="text-button" id="header-pause" hidden>暂停 <span>Ⅱ</span></button></nav>
     </header>
-    <div class="status-stack">
-      <section id="hud" class="hud" aria-label="当前状态" hidden>
-        <div class="hud-column">
-          <div class="metric distance"><span id="distance-label">行驶距离</span><strong id="distance">0</strong><small>米</small></div>
-          <div class="metric"><span id="elapsed-label">运行时间</span><strong id="elapsed">00:00</strong></div>
-          <div class="metric"><span>速度</span><strong id="speed">58</strong><small>km/h</small><div class="speed-track"><i id="speed-fill"></i></div></div>
-        </div>
-        <div class="hud-column">
-          <div class="metric nitro"><span id="nitro-label">加速 / 氮气 · ↑</span><strong id="nitro">0 / 2 管</strong><small id="nitro-state">漂移吞吃回气</small><div class="nitro-tracks"><div class="nitro-track"><i id="nitro-fill"></i></div><div class="nitro-track"><i id="nitro-reserve-fill"></i></div></div></div>
-          <div class="metric defense"><span id="defense-label">防御力</span><strong id="defense">100%</strong><div class="defense-track" aria-hidden="true"><i id="defense-fill"></i></div></div>
-          <div class="metric growth"><span id="rank">自行车</span><strong id="progress">1 / 2</strong><div class="growth-track"><i id="growth-fill"></i></div></div>
-        </div>
+    <section class="flight-frame" id="flight-frame" aria-label="英语空战游戏区域">
+      <div class="nebula nebula-one"></div><div class="nebula nebula-two"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+      <div id="scene"></div><div class="frame-grid" aria-hidden="true"></div>
+      <div class="frame-coordinates" aria-hidden="true"><span>23° 26′ N · 120° 58′ E</span></div>
+      <div id="word-layer"></div>
+      <section id="battle-hud" hidden aria-label="战斗状态">
+        <div class="hud-time"><span class="eyebrow">剩余时间</span><strong id="timer" role="timer">05:00</strong><div id="failure-count">写错 0 · 没写完 0</div><ul id="live-failures"></ul></div>
+        <div class="hud-score"><span class="eyebrow">得分</span><strong id="score">0000</strong><small id="correct-count">✓ 0</small></div>
+        <div class="hud-ammo"><span class="eyebrow">炮弹库</span><div><span class="shell-icon">↑</span><strong id="ammo">0</strong></div><small><kbd>Shift</kbd> 发射炮弹</small><div class="collection-inventory"><span>♥ <b id="collect-heart">0</b></span><span>★ <b id="collect-star">0</b></span><span>↑ <b id="collect-shell">0</b></span></div></div></section>
+      <section id="menu" class="menu-panel">
+        <div class="menu-copy"><div class="eyebrow mission-label"><span></span>一场关于单词的星际飞行</div><p class="hero-description">驾驶你的战机，瞄准缺失的字母。<br>让每一颗积木，拼成一次新的发现。</p></div>
+        <div class="menu-launch"><h1 class="home-title">以单词为帆，<br><span>向星海启航。</span></h1><div id="home-launch-controls"><button id="account-button" class="text-button" hidden></button><div class="menu-actions"><button id="start-button" class="primary-button" disabled><span>准备星海中…</span><b>↗</b></button></div><div class="space-hint">或按 <kbd>SPACE</kbd> 开始冒险</div><button id="home-retry" class="text-button" hidden>重玩原来的 12 词</button><div class="mission-facts"><div><strong>05:00</strong><span>常规五分钟</span></div><div><strong>26<span> 个</span></strong><span>字母积木武器</span></div><div><strong id="mission-level">01</strong><span id="mission-word-count">12 个词</span></div></div></div><section id="home-accounts" aria-label="本地账号" tabindex="-1" hidden></section></div>
+        <div class="hero-notes"><div id="home-preview" class="home-preview" role="img" aria-label="敌机模型"></div><div class="hero-word"><div id="hero-word-letters">( a <span>_</span> r p l <span>_</span> n e )</div><small id="hero-word-meaning">[ 飞机 ]</small></div></div>
+        <span class="hero-coordinate">READY FOR TAKEOFF <i>✦</i></span>
+        <p class="menu-motto">慢一点，也能飞得更远。</p><div class="menu-bottom"><span><i class="live-dot"></i> 本地账号 · 无需密码</span></div>
       </section>
-      <section id="arsenal-hud" class="arsenal-hud" aria-label="金币与火箭炮发射" hidden>
-        <div class="inventory-row" aria-label="金币"><span id="coin-icon" class="inventory-icon"></span><strong id="coin-count">× 0</strong></div>
-        <button id="buy-rocket" type="button">1 · 火箭炮 25 金币</button>
-        <div id="dinosaur-defense" class="dinosaur-defense" hidden><span>恐龙防御</span><strong id="dinosaur-defense-value">100%</strong></div>
-      </section>
-      <div class="status-notices">
-        <div id="level-countdown" class="level-countdown" role="timer" aria-label="第一关通关倒计时" hidden></div>
-        <div id="rear-alert" class="rear-alert" role="status" hidden></div>
-        <div id="toast" class="toast" role="status" hidden></div>
-        <div id="storage-warning" class="storage-warning" hidden></div>
-      </div>
-    </div>
-    <div id="test-badge" class="test-badge" role="status" hidden>⚡ 测试参数</div>
-    <section id="touch-controls" class="touch-controls" aria-label="触屏驾驶操作" hidden>
-      <div class="joystick-area">
-        <div id="steering-stick" class="steering-stick" role="group" aria-label="方向摇杆，左右拖动横移">
-          <span class="stick-arrows" aria-hidden="true">‹ <span>›</span></span>
-          <span id="stick-thumb" class="stick-thumb" aria-hidden="true"></span>
-        </div>
-        <span class="control-caption">方向</span>
-      </div>
-      <div class="touch-pedals">
-        <button id="touch-brake" class="touch-pedal brake-pedal" type="button" aria-label="按住刹车" aria-pressed="false"><span aria-hidden="true">Ⅱ</span>刹车</button>
-        <button id="touch-nitro" class="touch-pedal nitro-pedal" type="button" aria-label="按住加速，达到车型最高速后自动喷气，极速仍耗气" aria-pressed="false"><span aria-hidden="true">»</span>加速 / 氮气</button>
-      </div>
+      <section id="dialog" class="dialog-backdrop" hidden aria-label="游戏面板"><div id="dialog-card" class="dialog-card" role="dialog" aria-modal="true" tabindex="-1"><div id="dialog-content"></div></div></section>
+      <div id="loading" class="loading-strip"><div><span id="loading-label">准备星海</span><span id="loading-number">0%</span></div><i><b id="loading-fill"></b></i></div>
+      <div id="compatibility" class="compatibility" hidden>请使用带实体键盘的桌面浏览器游玩，或阅读玩法介绍。</div>
     </section>
-    <div id="overlay" class="overlay"><div class="loading-status" role="status"><span class="loading-spinner" aria-hidden="true"></span><span>正在准备这一程…</span></div></div>
-    <div id="portrait-hint" class="portrait-hint" role="status" hidden><span aria-hidden="true">▯ ↻</span><strong>请竖屏游玩</strong><p>转回竖屏后，点击开始或继续</p></div>
+    <footer class="site-footer"><div><label class="sound-control"><span id="sound-icon">♪</span><input id="volume" type="range" min="0" max="1" step="0.05" value="0.35" aria-label="音效音量"></label><label class="motion-control"><input id="reduced-motion" type="checkbox"> 减少闪烁</label><span id="version">v1.0.9</span></div></footer>
+    <div id="storage-notice" class="storage-notice" role="status" hidden></div>
   </main>
   <script type="module" src="./src/bootstrap.js"></script>
 </body>

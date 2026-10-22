@@ -1,315 +1,81 @@
-export const VEHICLES = [
-  null,
-  {name:'自行车', length:1, width:.55, min:20, max:45, playerMax:120, lateral:6.6, color:0xf6cf57},
-  {name:'三轮车', length:1.55, width:.85, min:55, max:85, playerMax:130, lateral:6.3, color:0x62b59a},
-  {name:'小汽车', length:2, width:1, min:55, max:95, playerMax:145, lateral:6.15, color:0x68b6d7},
-  {name:'卡车', length:3.75, width:1.25, min:45, max:75, playerMax:145, lateral:5.1, color:0xe3945e},
-  {name:'坦克', length:2.5, width:1.875, min:25, max:55, playerMax:145, lateral:4.35, color:0x829b83},
-];
-export const CAR_STYLES=['sedan','suv'];
-export const TRUCK_STYLES=['box','flatbed','tipper'];
-export const TANKER={speed:26,firstFraction:.25,lastFraction:.65,aheadMin:180,aheadMax:240,retrySeconds:1,color:0xc43d29,blastRadius:40/3,explosionSeconds:2.6,fireSeconds:1.1};
-export const TANKER_APPEARANCE={tankColor:0xf3c438,tankSegments:40,lowTankSegments:16,signSize:.96,topSignSize:1.12};
-export const MAX_RANK=5; // 玩家最高车型与系统专属车型分开。
-export const ARMORED_RANK=6;
-VEHICLES.push({...VEHICLES[5],name:'装甲坦克',min:60,max:80,color:0xb29a66});
-// 写实外观只影响显示；共享小纹理和有限细分控制开局与显存开销。
-export const MODEL_APPEARANCE={profile:false,textureSize:256,environmentWidth:256,paintRoughness:.24,paintMetalness:.48,environmentIntensity:.8,exposure:.96,volcanoSegments:128,volcanoRings:52,waveAcross:72,waveAlong:64,volcanoRadius:22,volcanoHeight:13,volcanoRoadOffset:32,volcanoLavaFraction:.205,volcanoLavaRadius:.06};
-export const SECOND_LEVEL_SCENE={road:'#858c90',grainDark:'rgba(53,62,66,.16)',grainLight:'rgba(214,219,218,.25)',tracks:'rgba(224,229,226,.12)',shoulder:0xa7aaa4,ground:0xaaa18b,water:0x438d8f,sky:0xcbd3d4,rock:0x958d7d,trunk:0x79694d,sun:0xf1f5ff};
-export const LEVELS={firstSeconds:135,secondSeconds:195,thirdSeconds:360,countdownSeconds:5,exitSeconds:3,exitSpeed:100,weatherChance:.8,branchWeatherChance:1};
-// 第一关白马每 45 秒投放、最多两次；车流强化保留独立的 145 秒目标。
-export const FIRST_LEVEL_EVENTS={endSeconds:145,horseCount:2,horseIntervalSeconds:45,roadblocksAfterSeconds:120};
-// 第二关保留逐档增长曲线，仅将到达车流上限和车距下限的时间各缩短二十秒。
-export const SECOND_LEVEL_EVENTS={trafficCompressionSeconds:20,roadblocksAfterSeconds:130};
-// 第三关按有效时间循环，灾害尺寸和伤害不随调试节奏改变。
-export const DISASTERS={
-  environmentSeconds:60,narrowSeconds:180,
-  volcanoInterval:10,burstInterval:2,burstCount:3,lavaAheadMin:20,lavaAheadMax:30,lavaSize:5,lavaFallSeconds:.3,lavaKeepSeconds:6,
-  roadsideAheadMin:60,roadsideAheadMax:90,roadsideKeepSeconds:20,iceSideAheadMin:170,iceSideAheadMax:210,
-  waveInterval:10,waveSpeed:100/3.6,waveAhead:18,waveLength:18,waveWidth:16,waveHeight:7.8,defenseFraction:.6,waterSpinSeconds:1.5,wetSeconds:3,
-  iceInterval:10,collapseInterval:5,coverLength:22,coverKeepSeconds:12,slideSeconds:.8,iceSpinSeconds:1,
-  icebergInterval:10,icebergAheadMin:90,icebergAheadMax:130,icebergWidth:3.1,icebergLength:5,icebergHeight:5,icebergKeepSeconds:12,
-  capacity:32,sideCapacity:12,sceneryBlock:80,
-  roadSurface:{lavaHot:0xc2824e,lavaEmissive:0x773519,lavaGlow:.10,iceCrack:0xb0c0c7,iceCrackWidth:1,iceCrackCount:11,iceRoughness:.62},
-  iceScenery:{smallChance:.22,clearance:8,sampleStep:10,searchDistance:240,placementAttempts:6,
-    small:{width:[10,16],height:[12,18],length:[10,18]},
-    massif:{width:[38,68],height:[22,34],length:[32,54]},
-    ridge:{width:[26,42],height:[32,44],length:[42,64]}},
-  themes:[
-    {name:'火山',road:0x6e605a,shoulder:0x51433e,ground:0x3e292b,sky:0x8c4c43,sun:0xffc190},
-    {name:'海水',road:0x8a9caa,shoulder:0x566b80,ground:0x167f9e,sky:0xb0d9e8,sun:0xe6f5ff},
-    {name:'冰山',road:0x91a4ae,shoulder:0x7e9cae,ground:0xd3edf4,sky:0xc4dfed,sun:0xe5f6ff},
+// 所有玩法时间均使用有效游玩秒数，空间使用 960×1080 逻辑坐标。
+export const WORLD = { width: 960, height: 1080, step: 1 / 120, maxFrameSeconds: 0.25 };
+export const LEVELS = { durationSeconds: 300, wordCount: 12 };
+export const BOSSES = { miniAt: 90, finalAt: 240, durationSeconds: 60, miniFaces: 4, finalFaces: 5, turnSeconds: 0.6, xRange: 220, yRange: 35, centerY: 350, miniCrates: 3, finalCrates: 5, victorySeconds: 5 };
+export const BOSS_VISUALS = {
+  segments: 24, rows: 16, tubeSides: 10, tubeSteps: 24, tentacleSway: 0.055, tentacleSpeed: 1.7,
+  mini: { scale: 0.95, yOffset: -10, headScale: 1, tentacleLength: 1, skin: 0x873ad1, light: 0xba7cf2, dark: 0x502175, cheek: 0xec78c7, horn: 0xffd6a0 },
+  final: { scale: 1.18, yOffset: -20, headScale: 1.09, tentacleLength: 1.08, skin: 0x6526a5, light: 0x9b5ce2, dark: 0x341344, cheek: 0xe562b1, horn: 0xffbd83 },
+  eyes: 0xffe695, iris: 0x70e3af, pupil: 0x21132f, tooth: 0xfff3df, tongue: 0xf184b8, glint: 0xffffff
+};
+export const SUPPLIES = { intervalSeconds: 120, fallSeconds: 22, maxActive: 16, width: 62, height: 62, flightSeconds: 0.75, burstSeconds: 0.8, burstSpacing: 64, burstSpeed: 70, burstRiseSpeed: 90, spritePadding: 32, spriteMinPixelRatio: 2, shadow: [[0,4,6,'#191000a0'],[0,0,8,'#ffce6747']] };
+export const CHOICES = { ratio: 0.3, batchSize: 10, optionCount: 3, hitsToSelect: 20, width: 720, height: 200, successCrates: 2, failureEnemies: 2, carrier: { widthPadding: 48, heightPadding: 70, depth: 38, palette: [0x2b4357,0x577887,0xc2ced1,0x82d8e0] } };
+export const REVIEW = { secondsPerWord: 10 };
+export const LEARNING = { pageSize: 100 };
+export const HOME = { words: [{word:'airplane',meaning:'飞机'},{word:'planet',meaning:'行星'},{word:'galaxy',meaning:'银河'}], blanks: 2, driftAmplitude: 6, driftSpeed: 0.8, pitchAmplitude: 0.016, rollAmplitude: 0.024, shipXRatio: 0.17, shipYRatio: 0.66, previewXRatio: 0.86, previewMobileXRatio: 0.78, wordYRatio: 0.65, previewYRatio: 0.46, previewSidePixels: 160, previewMobileSidePixels: 105, previewScales: {enemy:1.6,mini:0.6,final:0.72}, largeBodyMinRadius: 60, largeBodyMaxWidthFraction: 0.42, largeBodyCenterGap: 16, exhaustSeconds: 4.5, exhaustDistance: 64, exhaustOpacity: 0.16 };
+export const PLAYER = { x: 480, yRatio: 0.88, moveSpeedWidthsPerSecond: 0.65, invulnerableSeconds: 1.5, width: 52, height: 64 };
+export const WORDS = { firstSpawnSeconds: 3, spawnCount: 1, spawnIntervalSeconds: [10,14], capacityRetrySeconds: 1, maxEditable: 2, maxThreats: 3, fallDurationSeconds: [60,76], dangerYRatio: 0.80, blankCount: [1,4], verifySeconds: 0.5, inputLockSeconds: 1, successSeconds: 1, successAmmo: 2, successScore: 100, candidateAttempts: 8, cellWidth: 48, cardHeight: 112, planeWingMargin: 35, planeTopMargin: 18, planeBottomMargin: 22, spawnY: 110, thoughtSeconds: 8, moveAllowanceSeconds: 4, retryAllowanceSeconds: 6, urgentSeconds: 10 };
+export const LETTERS = { fireIntervalSeconds: 0.06, speedHeightsPerSecond: 1.3, lifetimeSeconds: 2, poolSize: 64 };
+export const UNDO = { cooldownSeconds: 0.25, poolSize: 4 };
+export const SHELLS = { initialAmmo: 0, cooldownSeconds: 0.4, speedHeightsPerSecond: 1, poolSize: 8 };
+export const ENEMIES = { maxActive: 16, fallDurationSeconds: 18, firstShotDelaySeconds: 2, shotIntervalSeconds: 3, warningSeconds: 0.6, bulletSpeedHeightsPerSecond: 0.18, bulletLifetimeSeconds: 8, bulletPoolSize: 64, killScore: 20, width: 84, height: 76 };
+export const VOCAB = { groupWeights: [0.8,0.15,0.05], usePreviewPool: true };
+export const BACKGROUND = {
+  seed: 73129, stars: 1200, glowStars: 240, largeGlows: 60, starTravel: 2400,
+  starSizeScale: 1.45, starPalette: [0xffdf93,0x80b8ff,0xe8ae65,0x9e4557],
+  starSpeedRange: [4,16], speedScale: 0.7, spawnIntervalSeconds: 15,
+  planetBaseSpeed: 30, maxModelWidthFraction: 0.72, maxModelHeightFraction: 0.6,
+  sunHaloScale: 1.3, galaxySourceRadius: 440,
+  // 半径是为游戏压缩的视觉比例；银河使用同一队列，但不代表物理尺寸关系。
+  models: [
+    { kind: 'mercury', radius: 42, texture: 0 }, { kind: 'venus', radius: 61, texture: 1 },
+    { kind: 'earth', radius: 64, texture: 2 }, { kind: 'mars', radius: 49, texture: 3 },
+    { kind: 'jupiter', radius: 91, texture: 4 }, { kind: 'saturn', radius: 82, texture: 5 },
+    { kind: 'uranus', radius: 70, texture: 6 }, { kind: 'neptune', radius: 68, texture: 7 },
+    { kind: 'pluto', radius: 36, texture: 8 }, { kind: 'galaxy', radius: 400, texture: null },
+    { kind: 'moon', radius: 22, texture: 9 }, { kind: 'sun', radius: 180, texture: 10 },
+    { kind: 'big-dipper', radius: 195, texture: null }, { kind: 'sagittarius', radius: 175, texture: null },
+    { kind: 'orion', radius: 180, texture: null }, { kind: 'cassiopeia', radius: 195, texture: null },
+    { kind: 'scorpius', radius: 195, texture: null }
   ],
-};
-export const ARMORED_TANK={truckChance:.025,tankChance:.075,heightMultiplier:2,barrelLength:4.8};
-export const COINS={smallValue:3,largeValue:6,smallSize:1.68,largeSize:2.66,largeChance:.3,firstSeconds:2,intervalMin:2.5,intervalMax:4.5,chance:.8,aheadMin:50,aheadMax:90,batchMin:3,batchMax:5,capacity:40,recycleBehind:30};
-export const ROCKETS={normalCost:25,normalSideLanes:1,range:100,normalDinosaurDamage:1/3,flightSeconds:.78125,capacity:6,modelLength:4.8,modelWidth:.9,launchHeight:1.2};
-export const DINOSAURS={
-  smallFirstMin:15,smallFirstMax:30,smallIntervalMin:25,smallIntervalMax:40,smallChance:.4,smallCountMin:3,smallCountMax:6,
-  cowSpeedMin:1.6,cowSpeedMax:2.2,crossingSpeedMultiplier:2,smallLength:4.8,smallWidth:1.6,smallHeight:2.4,smallSpacing:5.6,smallRowSpacing:2.6,smallAheadMin:60,smallLeadSeconds:3,
-  chaseAfterSeconds:120,chaseFirstMin:4,chaseFirstMax:8,chaseIntervalMin:20,chaseIntervalMax:35,chaseChance:.7,
-  chaseAheadMin:12,chaseAheadMax:18,durationMin:12,durationMax:18,
-  chaserLength:22,chaserWidth:5.8,chaserHeight:10,footSpread:1.8,footBack:4,footAhead:8,jumpHeight:3,jumpTilt:.12,exitFadeSeconds:1,
-  defense:100,firstJumpSeconds:1.2,stepDistanceMin:36,stepDistanceMax:48,stepSecondsMin:2.4,footWidth:1.35,footLength:2.25,footWarning:1.2,footDanger:.2,footAimChance:.4,footCapacity:12,baseRingRadius:3.2, // 仅在实际接地时判定踩踏；底圈跟随身体，不保留脚印或绘制预警。
-  bridgeLeadSeconds:2.5,bridgeSpeed:12,bridgeCount:4,bridgeSpacing:5,bridgeScale:.8,sceneryCapacity:32,grazerScale:2.4,diplodocusScale:3.2,lakeOffset:35,waterBankOffset:9,waterRoadOffset:32,
-};
-// 玩家座驾涂装：yellow/blue/green 为纯色，rainbow 使用渐变贴图；默认绿色。
-export const CAR_COLORS=[
-  {id:'yellow',name:'黄色',hex:0xf5cc58,css:'#f5cc58'},
-  {id:'blue',name:'蓝色',hex:0x4f86d6,css:'#4f86d6'},
-  {id:'green',name:'绿色',hex:0x3fae6a,css:'#3fae6a'},
-  {id:'rainbow',name:'彩虹色',hex:'rainbow',css:'linear-gradient(135deg,#ff4d4d 0%,#ff9f2e 22%,#ffe14d 42%,#3ecf6a 60%,#2eb8ff 80%,#b05fff 100%)'},
-];
-export const DEFAULT_CAR_COLOR='green';
-export const carColor=id=>CAR_COLORS.find(c=>c.id===id)??CAR_COLORS.find(c=>c.id===DEFAULT_CAR_COLOR);
-export const RULES_VERSION=3;
-// 统一放大实体车身，渲染和碰撞共用尺寸；最宽坦克仍能通过 3.6 米车道。
-export const VEHICLE_LENGTH_SCALE=2.4;
-export const VEHICLE_WIDTH_SCALE=1.6;
-export const PLAYER_LATERAL_SCALE=1.1;
-for(const vehicle of VEHICLES.slice(1)){vehicle.length*=VEHICLE_LENGTH_SCALE;vehicle.width*=VEHICLE_WIDTH_SCALE;vehicle.lateral*=PLAYER_LATERAL_SCALE;}
-// 卡车车长统一为整数米，模型、轮轴位置和碰撞共用尺寸。
-VEHICLES[4].length=7;
-// 一级车采用摩托车造型，横向放大 53%（由 80% 降低 15% 后取整）；模型和碰撞共用宽度，长度不变。
-export const BICYCLE_WIDTH_SCALE=1.53;
-VEHICLES[1].width*=BICYCLE_WIDTH_SCALE;
-export const BICYCLE_TIRE_WIDTH=.14; // 模型缩放前的轮胎宽度，路面接触使用缩放后的一半。
-export const TRAFFIC_COLORS=[
-  null,
-  [0xf6cf57,0x76bcb3,0xe88073,0x91a5dc,0xebdcc5,0x7fa970],
-  [0x62b59a,0x4c93be,0xdca54b,0xc86b55,0xb7bdd0,0x8fa95f],
-  [0x68b6d7,0xc75650,0xe5d6ae,0x73964a,0x8c77b5,0x596b79],
-  [0xe3945e,0x5e9aaf,0xb6564e,0xd4caa9,0x7a9764,0x8d80a9],
-  [0x829b83,0x667e58,0xa79770,0x788a98,0x746f60,0x9faaa1],
-];
-TRAFFIC_COLORS.push([0xb29a66,0x655d4b,0x9b8056]);
-export const VEHICLE_CONTACT={
-  endCoreFraction:.6, // 车头与车尾中央 60% 的宽度为正面撞击区，其余端角允许擦过。
-  sideOverlapFraction:.1, // 侧碰至少重叠较短车辆车长的 10%，避免单点擦角直接吞吃。
-  separationGap:.025, // 擦角及已有重叠沿横向分离，留出此间隙，单位为米。
-};
-export const SIDE_BOUNCE={
-  widthMultiplier:2, // 主弹开距离为各自车宽的两倍，与车道宽度无关。
-  impactSeconds:.65, // 主弹开阶段，横向速度线性降低至收尾速度。
-  settleSeconds:.85, // 收尾继续缓慢偏移至停止，总时长 1.5 秒；全程锁定左右控制。
-  settleSpeedRatio:.12, // 收尾起始速度占初始弹开速度的比例，收尾路程额外计算。
-};
-export const SIDE_IMPACT={
-  seconds:1.5, // 高级车侧撞后的失控旋转时长，暂停冻结。
-  speedMultiplier:.6, // 接触时保留 60% 速度。
-  minLanes:.8,
-  maxLanes:2, // 横向冲量最多偏转两条车道，实际位移受路缘限制。
-  rearClosingSpeed:8, // 后车投放时至少比玩家快 8 米/秒，之后使用普通驾驶逻辑。
-  rearMinDistance:20,
-  screenMargin:.1,
-};
-// 总积分下降导致降级后的统一保护时间，暂停不消耗；不免疫道路障碍、截止墙和饥饿。
-export const REAR_END_INVINCIBLE_SECONDS=2;
-// 答题或调试复活后保护两秒，包括截止墙和道路障碍；暂停不消耗。
-export const DEBUG_REVIVE_SECONDS=2;
-export const DEATH_ANIMATION={seconds:1.2}; // 死亡表现播完后才进入救援题或结算。
-export const RESCUE_LIMIT=2; // 每局非答题致命事件可触发的答题复活次数。
-export const REVIVE_CLEAR_AHEAD=50; // 原地复活时清理当前路线前方的车流距离(米)。
-export const PLAYER_START_SPEED=57.5;
-export const AUTO_ACCELERATION=20; // 松开刹车或加速键、解冻后自动提速，单位 km/h/秒。
-// 上键普通加速到车型最高速后持续按住即可接续喷气，达到喷气上限仍消耗氮气。
-export const MANUAL_ACCELERATION={acceleration:35};
-// 触屏布局按实际可用窗口适配；窄桌面窗口也提供触屏操作入口。
-export const MOBILE={compactWidth:600,stickDeadZone:.18,stickTravelRatio:.32};
-export const CAMERA={fov:55,portraitMaxFov:90};
-export const NITRO={
-  capacity:2, // 气量以管为单位，最多存两管，允许消耗或补充半管等部分气量。
-  eatCharge:.5, // 吞吃回气按车型计算:eatCharge×被吃车辆等级(自行车半管,每高一级加半管,封顶两管)。
-  eatSideSeconds:.4, // 同一方向连续侧移超过此时长吞吃，回气翻倍为一管；短按横移只得基础半管。
-  maxSpeed:215, // 各车型无惩罚时统一的喷气最高速度(km/h)。
-  boostAcceleration:70, // 喷气每秒额外提速，单位 km/h，低速同样有效。
-  boostSeconds:2.8, // 每管可持续喷气的秒数，满两管可喷 5.6 秒，松开上箭头保留余量。
-  recoverySeconds:.35, // 停喷后超出正常限速的速度平滑回落，可立即再次喷气。
-};
-export const XP = [0,1,2,6,18,54];
-// 总积分达到下一车型价值就升级，最高封顶为坦克价值 54；rank 0 为占位车，无升级价值。
-export const UPGRADE_POINTS = XP.map((_,rank)=>rank===0?0:(rank>=MAX_RANK?XP[MAX_RANK]:XP[rank+1]));
-// 连续未吞吃达到此时间即扣分；总积分低于负两分死亡，负分吞吃直接累加。
-export const HUNGER={intervalSeconds:10,bicycleDebtLimit:2};
-// 饥饿、同级追尾和奶牛接触共用扣分量：前一级车型价值，自行车为 1。
-export const POINT_LOSS=XP.map((_,rank)=>rank===0?0:XP[Math.max(1,rank-1)]);
-// 各车型使用整数防御刻度：max 为满防御,lightning 为闪电的单次伤害;炮弹等新伤害源按 max 的比例计算。
-// 抗击打能力由伤害 / 满防御决定，不同车型的刻度不直接比较。
-export const VEHICLE_DEFENSE=[null,
-  {max:1,lightning:1},
-  {max:2,lightning:2},
-  {max:2,lightning:2},
-  {max:15,lightning:5},
-  {max:10,lightning:2},
-];
-export const ONCOMING_SPEED_SCALE=1.44; // 对向巡航速度为基础区间的 144%，生成时按 km/h 四舍五入。
-export const TRAFFIC_WEIGHTS={
-  lower:.1,higher:.3,higherMax:.35,higherStep:.01,stepDistance:2000, // 后方车流的等级分布。
-  // 前方以低一级为主要吞吃目标；距离增长只挤占同级比例，不削减可吞吃目标。
-  ahead:{oneLower:.6,otherLower:.1,higher:.1,higherMax:.15},
-};
-export const TRAFFIC_SPAWN_AHEAD={min:160,max:240,safetySeconds:4,retainDistance:480};
-// 升至三轮车或小汽车时，立即在当前路线前方投放同级与低一级各五辆。
-export const UPGRADE_TRAFFIC={countPerRank:5,minAhead:80,maxAhead:150};
-// 后方车流覆盖本车道；新车远离玩家投放，超过保留距离才回收，距离单位为米。
-export const TRAFFIC_SPAWN_BEHIND={min:120,max:200,retainDistance:260,intervalSeconds:1};
-// 后车接近到至少 45 米或六秒追赶距离内时提示，不为玩家减速或避让。
-export const REAR_WARNING={minDistance:45,seconds:6,minClosingSpeed:.5};
-export const TRAFFIC_DENSITY={
-  scale:2,capacity:88,maxCapacity:160,
-  growthSeconds:15,capacityPerStep:3, // 第三关每 15 秒增加 3 辆；第一关在 145 秒内走完全部档位，第二关将总增长时间缩短二十秒。
-  gapReductionPerStep:.02,minGapScale:.65, // 每档缩短初始系统车距的 2%，最低保留 65%；不缩短玩家生成安全距离。
-};
-// 生成时固定 0 或 1 的随机变道开关；启用车辆每隔 6–10 秒按 30%–55% 概率尝试。
-export const TRAFFIC_LANE_CHANGE={enabledChance:.5,chanceMin:.3,chanceMax:.55,secondLevelMultiplier:1.2,intervalMin:6,intervalMax:10};
-// 危险车辆独立抽取，随机变道忽略目标空隙；普通车辆只在碰撞临近时主动避让。
-export const TRAFFIC_DRIVING={dangerousChance:.15,avoidSeconds:3.5,minAvoidDistance:16,signalSeconds:1,changeSeconds:1.5};
-// 跨轮静态查询缓存按轮数限制，远离当前窗口的内容可重新生成。
-export const ROAD_CACHE={maxLaps:4};
-export const ROAD_RENDER={lineCapacity:240,markerCapacity:110,sampleCapacity:160,sceneryBlock:40,sceneryBlocks:15,infrastructureBlock:80,roadsideMargin:65};
-export const MODEL_PREWARM={idleSliceMs:4,idleMinMs:5,idleFallbackMs:80,trafficExtra:16,targetSize:48,poolPerType:8,sliceMs:7};
-export const RENDER_QUALITY={
-  firstLevelFastSpeed:160,fastExitSpeed:145,firstLevelFastFps:58,secondLevelFps:58,normalFps:45,
-  maxPixelRatio:1.5,minPixelRatio:.75,pixelBudget:2200000,pixelStep:.25,
-  warmupSeconds:1,windowSeconds:2,slowFrameFactor:1.5,downFrameFactor:1.04,downSlowRatio:.2,downCooldown:4,
-  recoverSeconds:10,recoverCooldown:12,recoverFrameFactor:1.04,recoverSlowRatio:.02,recoverCpuFraction:.65,
-  lodHysteresis:20,smallPartSize:.16,
-  levels:[
-    {vehicleDetail:180,environmentDetail:130,environmentFar:440,animationHz:30,particles:1,shadowSize:1024,shadowDistance:85},
-    {vehicleDetail:120,environmentDetail:90,environmentFar:320,animationHz:20,particles:.6,shadowSize:512,shadowDistance:65},
-    {vehicleDetail:80,environmentDetail:60,environmentFar:240,animationHz:12,particles:.35,shadowSize:512,shadowDistance:45},
+  // 星位为便于辨认的平面示意；不模拟真实天球坐标和恒星距离。
+  constellations: [
+    { kind: 'big-dipper', stars: [[-.95,.25,1],[-.64,.47,.9],[-.28,.36,1],[.06,.12,.85],[.63,.28,1],[.74,-.3,.9],[.17,-.42,.95]], links: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,3]] },
+    { kind: 'sagittarius', stars: [[-.9,.04,.9],[-.48,.28,1],[-.2,.7,.85],[.22,.42,.9],[.3,-.18,1],[.7,-.36,.85],[.91,.1,.9],[-.35,-.42,1]], links: [[0,1],[0,7],[1,2],[2,3],[3,1],[1,7],[7,4],[4,3],[3,6],[6,5],[5,4]] },
+    { kind: 'orion', stars: [[-.54,.74,1.1],[.46,.66,.95],[0,.96,.7],[-.2,.04,.85],[0,0,.9],[.2,-.04,.85],[-.49,-.8,.95],[.48,-.86,1.1],[.02,-.28,.6],[.04,-.45,.65]], links: [[0,2],[2,1],[0,3],[1,5],[3,4],[4,5],[3,6],[5,7],[6,7],[4,8],[8,9]] },
+    { kind: 'cassiopeia', stars: [[-.94,.4,1],[-.5,-.38,.95],[-.05,.16,1.05],[.44,-.32,1],[.9,.54,.9]], links: [[0,1],[1,2],[2,3],[3,4]] },
+    { kind: 'scorpius', stars: [[-.8,.68,.8],[-.56,.88,.8],[-.32,.72,.8],[-.5,.4,1],[-.3,.13,1.2],[-.13,-.13,.85],[.02,-.48,.8],[.28,-.76,.85],[.62,-.8,.85],[.84,-.57,.9],[.76,-.29,.85],[.55,-.22,.8]], links: [[0,3],[1,3],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11]] }
   ],
+  constellationColor: 0xc9e3ff, constellationLineColor: 0x7daddb,
+  constellationStarSize: 23, constellationStarOpacity: 0.95, constellationLineOpacity: 0.44,
+  textureWidth: 512, textureHeight: 256, galaxyStars: 6000,
+  maskOpacity: 0.52, menuMaskOpacity: 0.28
 };
-// 每轮三个额外弯组候选；成对曲线保持出口方向，截止墙前后仍留直道。
-export const ROAD_CURVES={extraPairChance:.75,minAngle:12,maxAngle:22,minLength:240,maxLength:360,lengthStep:20,straightChance:.2,straightLength:60};
-// 树木共用几何与实例批次，高度、冠幅及松树比例只在静态布局刷新时抽取。
-export const TREE_SCENERY={capacity:150,coniferChance:.3,minHeight:4.8,maxHeight:7.2,minRadius:1.3,maxRadius:1.9};
-export const ROAD_DIFFICULTY={
-  afterSeconds:120,warningDistance:60,taperLength:400, // 按第二关自身有效运行时间启用永久收窄。
-  // 玩家越过永久收窄过渡段后，提高车流随机变道与危险车强度。
-  fourLane:{laneChangeChanceIncrease:.25,laneChangeIntervalMin:4,laneChangeIntervalMax:7,dangerousChance:.25},
-};
-// 施工只关闭一个车道，区间长度为米；与永久收窄保持独立。
-export const ROADWORKS={first:380,interval:400,chance:.5,minLength:30,maxLength:100,warningDistance:240,barrierWidth:3.4};
-// 独立 X 路障不铺施工路面；后期只启用玩家前方有足够反应距离的候选点。
-export const ROADBLOCKS={afterSeconds:150,first:300,interval:360,chance:.4,warningDistance:240,width:3.4,depth:.55,height:2.8};
-// 减速倍率仅用于泥巴和河道谷底；建筑道路间距为加长分叉预留平地区间。
-// 高架与低沉地形随机:高度/深度与坡长独立抽取,长坡高而平缓(顶峰较远),短坡高而陡(很快到顶);
-// 最小坡长按 maxGrade 反推(|高度|×1.5÷最大坡度,smooth 曲线峰值坡度为高度×1.5÷坡长),坡度不会越界。
-export const ROAD_INFRASTRUCTURE={
-  trainLeadSeconds:2.5,dipLength:20,slowMultiplier:.5,trainSpeed:22,trainLength:42,gapMin:800,gapMax:1160, // 间距由 1600–2320 缩半,起伏路段出现频率加倍;分叉只在较宽的间距区间(可用跨度≥minSpan)内安放。
-  viaductHeightMin:14,viaductHeightMax:40, // 桥面高度抽取范围(米),原 14–20 大幅上调。
-  viaductRampMin:120,viaductRampMax:400, // 引桥坡长抽取范围(米):400 米长坡配高桥即"高而缓",被坡度反推抬高后即"高而陡"。
-  dipDepthMin:3,dipDepthMax:16, // 谷底深度抽取范围(米,向下),原固定 3。
-  dipRampMin:40,dipRampMax:180, // 低沉坡长抽取范围(米)。
-  maxGrade:.35, // 坡度上限(垂直/水平),约 19°,防止短坡组合出失真的悬崖。
-};
-// 跨度按公共道路里程计，副路另校验实际弧长；分离距离为中段路面边缘的空隙。
-export const ROAD_FORKS={chance:.8,minSpan:880,maxSpan:1760,minLength:800,maxLength:2000,separationMin:40,separationMax:60,potholeSpacing:22,potholeChance:.7,weatherChance:.8,weatherIntervalMin:3,weatherIntervalMax:7};
-// 同一车队共享低速目标和短投放净距，普通车流使用独立的生成净距。
-export const SLOW_TRAFFIC={minCount:3,maxCount:7,minSpeed:10,maxSpeed:30,minGap:2.5,maxGap:4,firstSeconds:8,intervalMin:14,intervalMax:24,chance:.65};
-// 横穿奶牛只在平地投放；结构缓冲额外覆盖队员错开与身体纵向范围。
-export const COW_CROSSING={minCount:5,capacity:7,spacing:4.2,chance:.25,minInterval:14,intervalRange:10,minAhead:120,aheadRange:80,infrastructurePadding:20,stationJitter:2.4,dimensions:{width:3.3,length:1.5}};
-// 程序化音效（Web Audio 实时合成，不加载音频文件）：总音量、环境声增益与衰减距离、提示音。
-// range 为声源可闻距离（米），pan 为声像摆动幅度，玩家自身发动机与喷气音量刻意低于环境声。
-export const AUDIO={
-  master:.55,
-  dinosaurs:{bridge:{hz:105,range:180,gain:.3,pan:.8,period:4},lake:{hz:58,range:170,gain:.3,pan:.75,period:5.5},grazing:{hz:135,range:85,gain:.12,pan:.7,period:6},step:{hz:65,gain:.28,range:100}},
-  engine:{baseHz:44,speedHz:96,gain:.05,jetGain:.05,jetHz:1400},
-  wind:{gain:.24,pan:.75},
-  water:{gain:.22,range:70},
-  train:{
-    gain:.6,range:240,pan:.75,
-    // 按参考录音的撞缝分组：两对轮轴冲击及弱余振；各次依次为时间、重量、金属亮度。
-    clatter:{
-      period:1.315,hits:[[0,1,1],[.12,1.05,.2],[.29,.32,.08],[.43,.92,.9],[.55,1.08,.2],[.72,.3,.07]],
-      // 共鸣依次为频率、强度、衰减秒数；低频车轮震动与宽频金属冲击分层。
-      body:[[70,.65,.065],[117,.4,.045],[211,.7,.055],[258,.85,.04],[422,.5,.035],[516,.31,.025],[750,.26,.03]],
-      metal:[[1141,.25,.02],[1627,.3,.02],[1813,.22,.035],[1969,.34,.04],[2033,.4,.045],[2086,.54,.05],[2156,.43,.045],[2237,.29,.035],[2320,.31,.04],[2391,.29,.035],[2438,.31,.03],[2531,.23,.03],[2639,.25,.035],[2719,.38,.045],[2836,.29,.035],[2906,.27,.03],[3079,.18,.025],[3258,.22,.025],[3422,.23,.025],[3492,.18,.02],[4721,.66,.012],[6151,.39,.008]],
-      gain:.55,attack:.002,phaseStep:2.399963,bodyTail:.16,metalTail:.18,decayLimit:12,rateStart:.9,rateEnd:1.3,accelerateSeconds:5,
-    },
-  },
-  tank:{gain:.5,range:55,pan:.6},
-  pass:{range:7,minSpeed:8,gain:.13},
-  beep:{hz:880,gain:.05},
-  coin:{hz:1500,gain:.09,seconds:.12},
-  rocket:{hz:130,gain:.3,seconds:.4},
-  disasters:{volcano:{hz:340,endHz:48,filter:'lowpass',seconds:.8,gain:.23},wave:{hz:1500,endHz:420,filter:'bandpass',seconds:1,gain:.18},ice:{hz:2900,endHz:800,filter:'highpass',seconds:.65,gain:.16}},
-  graze:{intervalSeconds:.16}, // 擦角噪声的最小间隔，避免持续接触时密集叠加。
-  // 警车警笛:低频单音按固定节奏往复脉冲,形成“嗯、嗯、嗯”的短促鸣响,每个脉冲带轻微下滑;
-  // 按距离衰减并随警车所在侧偏置声像。救护车的高低双音不在此列。
-  police:{hz:470,dropHz:110,pulseHz:3.1,gain:.4,range:170,pan:.7},
-  // 天降炮弹:下落啸声从高频滑向低频,命中为低频爆响;落点在玩家附近,不做距离衰减。
-  shell:{whistleHz:1300,whistleDropHz:320,gain:.3,boomGain:.6},
-};
-export const SEASONS = ['春','夏','秋','冬'];
-export const SEASON_CYCLE={seconds:45,transitionSeconds:10};
-// 非分叉路段天气按 intervalMin~intervalMax 秒随机检查，以 chance 概率触发，首次检查在 firstMin~firstMax 秒；分叉路段使用 ROAD_FORKS 的天气字段。
-// 手机保持原有雨量，电脑端增加雨丝密度以加强宽屏遮挡；粒子缓冲按最大雨量复用。
-export const WEATHER={chance:.4,duration:9,windDuration:6,windSpeed:.5,freezeSeconds:3,fogNear:10,fogFar:50,intervalMin:31,intervalMax:45,firstMin:12,firstMax:25,rainCount:560,desktopRainMultiplier:3};
-// 白马第一关在 45、90 秒各投放一次，其他关卡每分钟投放；保护总长 10 秒包含末尾 2 秒闪烁，回落另计。
-export const WHITE_HORSE={
-  intervalSeconds:60,speed:60,minAhead:20,maxAhead:35,
-  visibleSeconds:6,blinkSeconds:2,length:3.8,width:1.3,
-  rampSeconds:1,shieldSeconds:10,shieldBlinkSeconds:2,recoverySeconds:2,speedMultiplier:2,
-};
-// 警车追击:按各关固定周期投放无敌警车,速度自由——只按前方距离窗口调节车速并极速避让车流。
-// 追击期间每三秒在玩家当前路线、车道前方按两秒车程且至少四十米生成捕捞网，接触后进入答题。
-export const POLICE={
-  intervalSeconds:75,secondLevelIntervalSeconds:55, // 第二关每 55 秒，其他关卡每 75 秒；撤离后仍对齐下一周期。
-  spawnAheadMin:35,spawnAheadMax:55, // 生成在玩家前方 35~55 米。
-  keepMin:15,keepMax:42, // 警车与玩家保持的前方距离窗口(米),保证始终在屏幕内且不太远。
-  keepGain:.9, // 窗口内距离保持的力度:每偏差 1 米修正 0.9 km/h,使间距收敛到窗口中点。
-  chaseRatio:1.5, // 间距小于 keepMin 时警车加速到玩家速度的该倍数拉开(速度自由,不拦截玩家)。
-  closeRatio:.7, // 间距超过 keepMax 时警车减速到玩家速度的该比例,让玩家跟上来。
-  dodgeSpeed:12,dodgeLookahead:26, // 极快避让车流:横向速度(米/秒)与前向观察距离(米)。
-  netAheadMin:40, // 生成位置与玩家的最小沿路线距离(米)。
-  netLeadSeconds:2, // 按生成时玩家车速预留的前方车程(秒)。
-  netInterval:3, // 追击期间的撒网间隔(有效运行秒数)，不受警车距离限制。
-  netSizeBase:3, // 渔网初始边长(米,原 10 缩到 1/3 取整),3×3。
-  netSizeGrowth:.28, // 警车持续期间渔网边长每秒增长(米),增长力度常量。
-  netSizeMax:16, // 渔网边长上限,保证仍可躲。
-  netKeep:6, // 捕捞网生成后立即生效，存活时间(有效运行秒数)。
-  quizMathSeconds:45,quizChineseSeconds:30,quizEnglishSeconds:45, // 题目显示后按真实时间倒计时，超时结束本局。
-  quizChineseExtraChance:.1, // 语文题中课外诗词的比例，错误选项仍来自二至五年级课内题库。
-  catchSeconds:1.5, // 被抓动画时长:玩家缩小并被拉向警车。
-  firstLevelMaxChaseSeconds:25,maxChaseSeconds:35,thirdLevelMaxChaseSeconds:45, // 第一关 25 秒、第二关 35 秒、第三关 45 秒。
-};
-// 两个乘数去掉小数点后都超过个位时，均不得超过 19。
-export const MATH_QUIZ={maxTwoDigitFactor:19};
-export const KEYBOARD_TRAINING={startCount:3,rescueCount:4,rescueSeconds:30,rescueChance:.25};
-export const LANE_WIDTH = 3.6;
-// 天降炮弹：开局 startSeconds 后按 intervalMin~intervalMax 秒随机检查，以 chance 概率投弹，落点取玩家前方并横向抖动；
-// fallSeconds 为预警圈+下落时长(留给玩家躲避),areaSize 为爆炸区域基础边长(米,常量,后续可调),
-// 炮击开始后每满 sizeGrowthSeconds 秒边长增大 sizeGrowthFactor 倍(复利,弹体携带生成时的尺寸)。
-// 玩家被直接命中即死亡;坦克只损失 tankDamageFraction 满防御、卡车损失 truckDamageFraction(取整后经统一防御流程)。
-export const SHELL={
-  chance:.4,
-  startSeconds:100,
-  intervalMin:10,intervalMax:22,
-  frequencyAfterSeconds:125,lateIntervalMin:5,lateIntervalMax:10, // 第一关满 2 分 5 秒后加密炮击。
-  fallSeconds:2.5,
-  areaSize:6, // 基础爆炸区域边长(米),由 7.5 缩小 25% 取整。
-  sizeGrowthSeconds:22.5,sizeGrowthFactor:1.2, // 122.5、145 秒扩大范围并各投放一枚炮弹。
-  targetAheadMin:0,targetAheadMax:45,
-  targetJitter:7,
-  tankDamageFraction:1/3,truckDamageFraction:1/2,
-};
-export const laneD = (lane, direction = 1) => direction * (.4 + (lane + .5) * LANE_WIDTH);
-export const clamp = (v, low, high) => Math.max(low, Math.min(high, v));
-export const lerp = (a,b,t) => a+(b-a)*t;
-export const smooth = t => t*t*(3-2*t);
-export function random(seed) {
-  let n = seed >>> 0;
-  return () => {
-    n += 0x6D2B79F5;
-    let t = Math.imul(n ^ n >>> 15, 1 | n);
-    t ^= t + Math.imul(t ^ t >>> 7, 61 | t);
-    return ((t ^ t >>> 14) >>> 0) / 4294967296;
-  };
+export const AUDIO = { masterVolume: 0.35, maxShotsPerSecond: 8, speechRate: 0.75, speechPitch: 1.08, speechVolume: 0.85 };
+export const SCORES = { limit: 10 };
+export function validateConfig() {
+  const positive = value => Number.isFinite(value) && value > 0;
+  if (!Number.isInteger(LEVELS.wordCount)||LEVELS.wordCount<Math.max(BOSSES.miniFaces,BOSSES.finalFaces)) throw new Error('Invalid level vocabulary count');
+  if (!positive(LETTERS.fireIntervalSeconds) || LETTERS.fireIntervalSeconds <= 0.02) throw new Error('Letter interval must exceed 0.02 seconds');
+  for (const values of [WORDS.spawnIntervalSeconds, WORDS.fallDurationSeconds]) if (!values.every(positive) || values[0] > values[1]) throw new Error('Invalid interval range');
+  for (const value of [WORDS.spawnCount, WORDS.maxEditable, WORDS.maxThreats, ENEMIES.maxActive, LETTERS.poolSize, SHELLS.poolSize]) if (!Number.isInteger(value) || value <= 0) throw new Error('Invalid entity capacity');
+  for (const value of [WORLD.step, LEVELS.durationSeconds, LETTERS.speedHeightsPerSecond, LETTERS.lifetimeSeconds, WORDS.verifySeconds, WORDS.inputLockSeconds, WORDS.successSeconds, UNDO.cooldownSeconds, ENEMIES.bulletLifetimeSeconds, SHELLS.cooldownSeconds, ENEMIES.shotIntervalSeconds, ENEMIES.firstShotDelaySeconds]) if (!positive(value)) throw new Error('Invalid timing configuration');
+  if (!positive(BACKGROUND.starSizeScale)||BACKGROUND.starPalette.length!==4||!BACKGROUND.starPalette.every(color=>Number.isInteger(color)&&color>=0&&color<=0xffffff)) throw new Error('Invalid star appearance configuration');
+  if (!positive(BACKGROUND.spawnIntervalSeconds) || !positive(BACKGROUND.planetBaseSpeed) || !positive(BACKGROUND.speedScale) || Math.round(BACKGROUND.planetBaseSpeed*BACKGROUND.speedScale)<1 || BACKGROUND.models.length<3) throw new Error('Invalid background scheduling configuration');
+  if (new Set(BACKGROUND.models.map(model=>model.kind)).size!==BACKGROUND.models.length || !BACKGROUND.models.every(model=>positive(model.radius))) throw new Error('Invalid background model definitions');
+  for (const fraction of [BACKGROUND.maxModelWidthFraction,BACKGROUND.maxModelHeightFraction]) if (!positive(fraction)||fraction>1) throw new Error('Invalid background viewport limit');
+  if (!positive(BACKGROUND.sunHaloScale)||BACKGROUND.sunHaloScale<1||!positive(BACKGROUND.galaxySourceRadius)) throw new Error('Invalid background visual scale');
+  const constellationKinds=new Set();
+  for(const chart of BACKGROUND.constellations){
+    if(constellationKinds.has(chart.kind)||!BACKGROUND.models.some(model=>model.kind===chart.kind&&model.texture===null)||chart.stars.length<2||!chart.stars.every(star=>star.length===3&&star.every(Number.isFinite)&&Math.hypot(star[0],star[1])<=1.2&&positive(star[2]))||!chart.links.length||!chart.links.every(link=>link.length===2&&link[0]!==link[1]&&link.every(index=>Number.isInteger(index)&&index>=0&&index<chart.stars.length)))throw new Error('Invalid constellation definition');
+    constellationKinds.add(chart.kind);
+  }
+  if(!positive(BACKGROUND.constellationStarSize)||![BACKGROUND.constellationStarOpacity,BACKGROUND.constellationLineOpacity].every(value=>positive(value)&&value<=1))throw new Error('Invalid constellation appearance');
+  if(!Number.isInteger(CHOICES.batchSize)||CHOICES.batchSize<1||!positive(CHOICES.ratio)||CHOICES.ratio>=1||!Number.isInteger(CHOICES.ratio*CHOICES.batchSize)||CHOICES.optionCount!==3||!Number.isInteger(CHOICES.hitsToSelect)||CHOICES.hitsToSelect<1||!positive(CHOICES.width)||CHOICES.width>WORLD.width-48||!positive(CHOICES.height))throw new Error('Invalid choice question configuration');
+  for(const value of [SUPPLIES.intervalSeconds,SUPPLIES.burstSeconds,BOSSES.victorySeconds])if(!positive(value))throw new Error('Invalid reward timing');
+  for(const value of [SUPPLIES.maxActive,CHOICES.successCrates,CHOICES.failureEnemies,BOSSES.miniCrates,BOSSES.finalCrates])if(!Number.isInteger(value)||value<1)throw new Error('Invalid reward capacity');
+  if(SUPPLIES.maxActive<BOSSES.finalCrates)throw new Error('Reward pool cannot hold final boss crates');
+  if (!VOCAB.groupWeights.every(positive) || Math.abs(VOCAB.groupWeights.reduce((a,b)=>a+b,0)-1)>0.00001) throw new Error('Vocabulary weights must sum to one');
+  if (!WORDS.blankCount.every(value=>Number.isInteger(value)&&value>0)||WORDS.blankCount[0]>WORDS.blankCount[1]) throw new Error('Invalid blank count range');
+  if (WORDS.maxEditable > WORDS.maxThreats ) throw new Error('Entity capacity exceeds total capacity');
 }
-export const approach = (value, target, delta) => value < target ? Math.min(target,value+delta) : Math.max(target,value-delta);
-// 启动早期应用 URL 测试参数(?fast=1 或 ?POLICE.intervalSeconds=5 等白名单字段),
-// 仅服务 Agent/人工快速验证随机事件;不带参数或 Node 端导入时默认值原样生效。
-import { applyTestOverrides } from './test-overrides.js';
-applyTestOverrides({TANKER,MODEL_APPEARANCE,LEVELS,FIRST_LEVEL_EVENTS,SECOND_LEVEL_EVENTS,DISASTERS,DINOSAURS,COINS,TRAFFIC_DENSITY,POLICE,WHITE_HORSE,COW_CROSSING,ROADWORKS,ROADBLOCKS,SLOW_TRAFFIC,HUNGER,WEATHER,ROAD_FORKS,ROAD_INFRASTRUCTURE,ROAD_DIFFICULTY,SHELL});

@@ -1,173 +1,143 @@
-import { LEVELS, ROCKETS, COINS, DINOSAURS, VEHICLES, MAX_RANK, VEHICLE_DEFENSE, UPGRADE_POINTS, NITRO, CAR_COLORS, RESCUE_LIMIT } from './config.js';
-import { TEST_OVERRIDES } from './test-overrides.js';
-import { CAUSES } from './game.js';
-import { coinIcon } from './arsenal-icons.js';
-import { mathText } from './math-display.js';
-import { mathHelp } from './quiz-help.js';
-import { modelCacheStatus } from './model-generation.js';
-const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const format=v=>Math.floor(v).toLocaleString('zh-CN');
-const time=s=>Math.floor(s/60)+' 分 '+Math.floor(s%60)+' 秒';
+import { LEVELS,LEARNING,REVIEW,HOME,CHOICES,SUPPLIES,BOSSES,VOCAB } from './config.js';
+import { VOCABULARY } from './vocabulary-data.js';
+import { APP_VERSION } from './version.js';
+import { Speech } from './speech.js';
+const $=id=>document.getElementById(id);
+const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const put=(id,value)=>{const element=$(id),text=String(value);if(element.textContent!==text)element.textContent=text;};
+const kinds={correct:'成功',wrong:'写错',incomplete:'没写完'};
+export function formatTime(seconds){const value=Math.max(0,Math.ceil(seconds));return String(Math.floor(value/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');}
 export class UI {
-  constructor(game){
-    this.game=game;this.overlay=document.getElementById('overlay');this.toast=document.getElementById('toast');this.toastSeconds=0;this.resetConfirm=false;this.displayed={};
-    this.elements=Object.fromEntries(['distance','elapsed','speed','speed-fill','nitro','nitro-state','nitro-fill','nitro-reserve-fill','defense','defense-fill','rank','progress','growth-fill','rear-alert','storage-warning','hud','level-countdown','test-badge','arsenal-hud','coin-count','buy-rocket','dinosaur-defense','dinosaur-defense-value'].map(id=>[id,document.getElementById(id)]));
-    document.getElementById('coin-icon').innerHTML=coinIcon;
-    this.elements['buy-rocket'].addEventListener('click',()=>game.weaponAction(1));
-    // URL 测试参数生效时显示角标,Agent 截图可直接确认,避免把测试结果当默认行为。
-    this.elements['test-badge'].hidden=!TEST_OVERRIDES.active;
-    this.elements['test-badge'].title=TEST_OVERRIDES.keys.join('\n');
-    this.touchControls=document.getElementById('touch-controls');this.mobileToolbar=document.getElementById('mobile-toolbar');
-    this.pauseButton=document.getElementById('pause-game');this.restartButton=document.getElementById('restart-game');
-    this.pauseButton.addEventListener('click',()=>game.space());
-    this.restartButton.addEventListener('click',()=>game.restart());
-    this.overlay.addEventListener('click',event=>{
-      const action=event.target.closest('[data-action]')?.dataset.action;
-      if(action==='play')game.space();
-      if(action==='quit'&&game.state==='PAUSED')game.finish('quit');
-      if(action==='pick-color')game.setColor(event.target.closest('[data-color]')?.dataset.color);
-      if(action==='back')game.ready();
-      if(action==='quiz'&&game.state==='QUIZ')game.answerQuiz(Number(event.target.closest('[data-action]').dataset.choice));
-      if(action==='quiz-help')game.openQuizHelp();
-      if(action==='quiz-help-close'){game.closeQuizHelp();this.overlay.querySelector('.quiz-help-button')?.focus({preventScroll:true});}
-      if(action==='reset'){this.resetConfirm=true;this.render();}
-      if(action==='cancel-reset'){this.resetConfirm=false;this.render();}
-      if(action==='confirm-reset'){game.store.reset();this.resetConfirm=false;this.render();}
-    });
-    this.overlay.addEventListener('change',event=>{
-      const action=event.target.dataset.action;
-      if(game.state==='READY'&&action==='child-mode'){game.setChildMode(event.target.checked);game.input.container.focus({preventScroll:true});return;}
-      if(game.state!=='READY'||!['debug','debug-second-level','debug-third-level'].includes(action))return;
-      if(action==='debug')game.debugMode=event.target.checked;
-      else if(action==='debug-second-level'){game.debugSecondLevel=event.target.checked;if(event.target.checked)game.debugThirdLevel=false;}
-      else{game.debugThirdLevel=event.target.checked;if(event.target.checked)game.debugSecondLevel=false;}
-      this.render();
-      game.input.container.focus({preventScroll:true});
-    });
-    game.onChange=()=>{this.resetConfirm=false;this.render();};this.render();
+  constructor(game,storage,audio){
+    Object.assign(this,{game,storage,audio,shownState:'',dialogMode:'',returnState:'menu',noticeTimer:null,seed:null,historyPage:0,historyWordId:null,launching:false,resettingLearning:false,accountBusy:false,accountMode:'',accountReturnState:'menu',draftName:null,pendingAccountId:null});this.speech=new Speech(text=>this.notice(text));this.pendingReview=!!storage.review;this.refreshHeroWord();
+    $('version').textContent=APP_VERSION;$('volume').value=storage.settings.volume;$('reduced-motion').checked=storage.settings.reducedMotion;
+    $('account-button').onclick=()=>this.accounts();$('home-retry').onclick=()=>{const saved=this.storage.currentLevel();if(saved?.status==='completed')this.preview(saved.level,true);};$('start-button').onclick=()=>this.begin();$('header-help').onclick=()=>this.instructions();$('header-pause').onclick=()=>this.action('Space');$('vocab-button').onclick=()=>this.vocabulary();$('history-button').onclick=()=>this.history();
+    $('brand-home').onclick=event=>{event.preventDefault();if(game.state==='review')return;if(game.state==='playing')game.pause();if(game.state==='paused')this.pause();else this.home();};
+    $('volume').oninput=event=>storage.saveSettings({volume:Number(event.target.value)});$('reduced-motion').onchange=event=>{storage.saveSettings({reducedMotion:event.target.checked});this.invalidate?.();};
+    $('dialog-content').addEventListener('click',event=>{if(game.state==='review')return;const button=event.target.closest('[data-action]');if(button)this.handle(button.dataset.action,button.dataset);});
+    $('home-accounts').addEventListener('click',event=>{const button=event.target.closest('[data-action]');if(button)this.handle(button.dataset.action,button.dataset);});
+    $('home-accounts').addEventListener('submit',event=>{const form=event.target.closest('form[data-account-form]');if(!form)return;event.preventDefault();if(!this.accountBusy)this.saveAccountName(form);});
+    $('dialog-content').addEventListener('pointerdown',event=>{if(this.dialogMode==='preview'&&!event.target.closest('button'))this.swipeX=event.clientX;});
+    $('dialog-content').addEventListener('pointerup',event=>{if(this.swipeX===undefined)return;const dx=event.clientX-this.swipeX;this.swipeX=undefined;if(Math.abs(dx)>45)this.previewPage(dx<0?1:-1);});
+    document.addEventListener('click',event=>{if(game.state==='review'||this.pendingReview||this.resettingLearning||this.accountBusy){event.preventDefault();event.stopImmediatePropagation();}},true);
+    document.addEventListener('keydown',event=>{if(game.state==='review'||this.pendingReview||this.resettingLearning||this.accountBusy){event.preventDefault();event.stopImmediatePropagation();return;}if(event.code==='Tab'&&!$('dialog').hidden){const items=[...$('dialog-card').querySelectorAll('button:not(:disabled),a,input')];if(!items.length)return;const first=items[0],last=items.at(-1);if(event.shiftKey&&(document.activeElement===first||document.activeElement===$('dialog-card'))){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}}},true);
   }
-  notify(message){this.toast.textContent=message;this.toast.hidden=false;this.toastSeconds=2.8;this.game.audio?.beep(.7);}
-  warning(){
-    const warning=[this.game.store.warning,modelCacheStatus().warning].filter(Boolean).join(' ');this.elements['storage-warning'].hidden=!warning;this.elements['storage-warning'].textContent=warning;
+  progress(label,percent){$('loading').hidden=false;$('loading-label').textContent=label;$('loading-number').textContent=percent+'%';$('loading-fill').style.width=percent+'%';}
+  ready(metrics){this.pendingReview=false;this.metrics=metrics;$('loading').hidden=true;$('start-button').disabled=false;if(this.storage.review)this.game.restoreReview(this.storage.review);else this.game.state='menu';if(!metrics.persistent)this.notice('生成资源仅保存在本页内存中');if(this.storage.warning)this.notice(this.storage.warning);this.render();if(!this.storage.account)this.accounts();}
+  failure(error){this.game.state='prepareFailed';this.dialog('failure','<h2>准备遇到问题</h2><p>'+escape(error.message)+'</p><button data-action="reload">重新准备</button>');}
+  notice(text){clearTimeout(this.noticeTimer);$('storage-notice').textContent=text;$('storage-notice').hidden=false;this.noticeTimer=setTimeout(()=>$('storage-notice').hidden=true,2800);}
+  dialog(mode,html){this.accountMode='';$('home-accounts').hidden=true;this.dialogMode=mode;if(this.previousFocus===undefined)this.previousFocus=document.activeElement;$('dialog-content').innerHTML=html;$('dialog').hidden=false;$('dialog-card').dataset.mode=mode;$('dialog-card').scrollTop=0;$('dialog-card').focus();this.invalidate?.();}
+  closeDialog(){this.speech.stop();this.accountMode='';$('home-accounts').hidden=true;this.dialogMode='';$('dialog').hidden=true;this.previousFocus=undefined;$('app').focus();this.invalidate?.();}
+  accountPanel(mode,html){
+    this.closeDialog();this.accountMode=mode;$('home-accounts').innerHTML=html;this.render();$('home-accounts').focus({preventScroll:true});
   }
-  records(){
-    const d=this.game.store.data;
-    const list=d.leaderboard.length?'<ol class="record-list">'+d.leaderboard.map((r,i)=>'<li><span>'+String(i+1).padStart(2,'0')+' · '+escape(VEHICLES[r.highestRank].name)+'</span><b>'+format(r.score)+' 米</b></li>').join('')+'</ol>':'<p>完成一局后，成绩会保存在这个浏览器。</p>';
-    return '<details><summary>本机排行榜</summary>'+list+'</details>'+(this.game.store.warning?'<button class="reset-button" data-action="reset">重置本游戏记录</button>':'');
+  accounts(){
+    if(this.game.state==='review'||this.accountBusy||this.resettingLearning)return;
+    if(['preparing','prepareFailed'].includes(this.game.state)){this.notice('请等待准备完成');return;}
+    if(!this.accountMode){this.accountReturnState=this.game.state;if(this.game.state==='playing'){this.game.pause();this.accountReturnState='paused';}this.game.state='menu';}
+    this.storage.refreshAccounts();this.speech.stop();this.game.input?.clear();
+    const creating=this.draftName!==null;
+    const heading=creating?'<div class="account-heading"><h2>新建账号</h2><button class="text-button" data-action="account-new">换一个名字</button></div>':this.storage.debug?'':'<div class="account-heading"><button class="text-button" data-action="account-new">＋ 随机新建</button></div>';
+    const content=creating?'<form class="account-draft" data-account-form><label for="new-account-name">账号名</label><input id="new-account-name" name="account-name" value="'+escape(this.draftName)+'" maxlength="20" required autocomplete="off"><div class="account-actions"><button class="primary-button" type="submit">确认保存</button><button class="text-button" type="button" data-action="account-draft-cancel">取消</button></div></form>':'<div class="account-list">'+this.storage.accounts.map(account=>'<button class="account-choice" data-action="account-select" data-id="'+escape(account.id)+'"><strong>'+escape(account.name)+'</strong>'+(this.storage.account?.id===account.id?'<small>当前</small>':'')+'</button>').join('')+'</div>';
+    this.accountPanel('accounts',heading+content+(!creating&&this.storage.account?'<button class="text-button account-return" data-action="account-return">返回</button>':''));
+  }
+  newAccount(){if(this.storage.debug)return;this.draftName=this.storage.randomAccountName();this.accounts();$('new-account-name')?.focus({preventScroll:true});$('new-account-name')?.select();}
+  saveAccountName(form){
+    const input=form.querySelector('input');
+    try{this.storage.createAccount(input.value);this.draftName=null;this.accounts();this.notice(this.storage.warning||'账号已保存，点击登录');}
+    catch(error){input.setAttribute('aria-invalid','true');input.focus({preventScroll:true});this.notice(error.message);}
+  }
+  confirmAccount(id){
+    const account=this.storage.accounts.find(item=>item.id===id);if(!account)return;this.pendingAccountId=id;this.speech.stop();
+    this.accountPanel('account-login','<h2 class="account-confirm-name">登录 '+escape(account.name)+'？</h2><div class="account-actions"><button class="primary-button" data-action="account-login">确认登录</button><button class="text-button" data-action="account-cancel">取消</button></div>');
+  }
+  async loginAccount(){
+    if(this.accountMode!=='account-login'||!this.pendingAccountId||this.accountBusy)return;this.accountBusy=true;for(const item of $('home-accounts').querySelectorAll('button,input'))item.disabled=true;$('home-accounts').querySelector('[data-action="account-login"]').textContent='正在登录…';
+    try{await this.game.savePromise;await this.storage.login(this.pendingAccountId);this.game.resetAccount();this.draftName=null;$('volume').value=this.storage.settings.volume;$('reduced-motion').checked=this.storage.settings.reducedMotion;this.accountBusy=false;this.closeDialog();this.refreshHeroWord();if(this.storage.review)this.game.restoreReview(this.storage.review);this.shownState='';this.render();this.notice(this.storage.warning||'已登录 '+this.storage.account.name);}
+    catch(error){console.warn('Account login failed',error);this.accountBusy=false;this.accounts();this.notice('登录未完成，请重试');}
+  }
+  returnFromAccounts(){
+    this.draftName=null;if(!this.storage.account)return;this.game.state=this.accountReturnState;this.closeDialog();
+    if(this.accountReturnState==='paused'){this.pause();this.render();}else if(this.accountReturnState==='preview')this.preview(this.game.level);else if(this.accountReturnState==='won'){this.result();this.render();}else this.home();
+  }
+  refreshHeroWord(){
+    const entry=HOME.words[Math.floor(Math.random()*HOME.words.length)],indices=Array.from({length:entry.word.length},(_,i)=>i);
+    for(let i=indices.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[indices[i],indices[j]]=[indices[j],indices[i]];}
+    const blanks=new Set(indices.slice(0,Math.min(HOME.blanks,entry.word.length-1)));
+    $('hero-word-letters').innerHTML='( '+[...entry.word].map((letter,index)=>blanks.has(index)?'<span>_</span>':escape(letter)).join(' ')+' )';$('hero-word-meaning').textContent='[ '+entry.meaning+' ]';
+  }
+  begin(){if(this.game.state==='review'||['preparing','prepareFailed'].includes(this.game.state))return;if(!this.storage.account){this.accounts();return;}const saved=this.storage.currentLevel();this.preview(saved&&saved.status!=='completed'?saved.level:this.storage.progress.selected);}
+  preview(level=this.game.level,retry=false){
+    if(this.game.state==='review')return;if(!this.storage.account){this.accounts();return;}this.speech.stop();this.game.prepareLevel(level,this.seed===null?Date.now():this.seed+level-1,{retry,wordIds:retry?this.game.result?.roster:null,sessionId:retry?this.game.result?.sessionId:null});this.previewIndex=0;this.previewSeen=new Set([0]);
+    const cards=this.game.roster.map((entry,index)=>'<article class="preview-card" aria-label="第 '+(index+1)+' 个单词"><strong>'+escape(entry.word)+'</strong><p>'+escape(entry.meaning)+'</p></article>').join('');
+    this.dialog('preview','<div class="preview-heading"><h2>认识本关的单词</h2><span class="eyebrow">第 '+level+' 关 · 词汇预习</span></div><div class="preview-indicators"><div class="preview-dots" id="preview-dots">'+this.game.roster.map((_,i)=>'<button data-action="preview-index" data-index="'+i+'" aria-label="第 '+(i+1)+' 页"></button>').join('')+'</div><p class="page-counter" id="preview-counter"></p></div><div class="preview-window"><div class="preview-track" id="preview-track">'+cards+'</div></div><div class="preview-audio"><button id="preview-speak" class="pronounce" data-action="preview-speak">▶ 朗读</button></div><div class="preview-controls"><button class="secondary-button" data-action="preview-prev">← 上一个</button><button class="secondary-button" data-action="preview-next">下一个 →</button></div><p class="note" id="preview-status"></p><div class="dialog-actions"><button id="preview-start" class="primary-button" data-action="launch" disabled>开始第 '+level+' 关 ↗</button><button class="secondary-button" data-action="home">返回首页</button></div>');this.updatePreview();this.render();if(!this.storage.available)this.notice(this.storage.warning);
+  }
+  previewPage(delta){if(this.dialogMode!=='preview')return;this.previewIndex=Math.max(0,Math.min(this.game.roster.length-1,this.previewIndex+delta));this.previewSeen.add(this.previewIndex);this.speech.stop();this.updatePreview();}
+  updatePreview(){const count=this.game.roster.length;$('preview-speak').setAttribute('aria-label','播放 '+this.game.roster[this.previewIndex].word);[...$('preview-track').children].forEach((card,index)=>{card.inert=index!==this.previewIndex;card.setAttribute('aria-hidden',String(index!==this.previewIndex));});$('preview-track').style.transform='translateX(-'+this.previewIndex*100+'%)';[...$('preview-dots').children].forEach((button,index)=>{button.classList.toggle('active',index===this.previewIndex);button.setAttribute('aria-current',index===this.previewIndex?'page':'false');});$('preview-counter').textContent=(this.previewIndex+1)+'/'+count;$('preview-start').disabled=this.previewSeen.size<count;$('preview-status').textContent=this.previewSeen.size<count?'看完全部 '+count+' 张卡片后即可起飞':'本关单词已全部浏览，准备起飞。';}
+  async launch(){
+    if(this.launching||this.game.state!=='preview'||this.previewSeen.size<this.game.roster.length)return;this.launching=true;const roster=this.game.roster;this.speech.stop();
+    try{await this.game.savePromise;if(this.game.state!=='preview'||this.game.roster!==roster)return;this.closeDialog();this.audio.unlock();this.game.start();this.render();}finally{this.launching=false;}
+  }
+  home(){if(this.game.state==='review')return;if(!this.storage.account){this.accounts();return;}this.audio.stop();this.speech.stop();this.game.input?.clear();this.game.projectiles.clear();this.game.words=[];this.game.enemies=[];this.game.boss=null;this.game.supplies=[];this.game.supplyQueue=[];this.game.collections=[];this.game.victoryRemaining=null;this.game.state='menu';this.refreshHeroWord();this.closeDialog();this.render();}
+  instructions(){
+    if(this.game.state==='review'||['preparing','prepareFailed'].includes(this.game.state))return;this.returnState=this.game.state;if(this.game.state==='playing'){this.game.pause();this.returnState='paused';}
+    this.dialog('guide','<span class="eyebrow">FLIGHT MANUAL / 玩法介绍</span><h2>让每个字母飞到正确的位置</h2><ol class="guide-steps"><li><b>01</b><div><strong>先预习，再起飞</strong><p>每关常规五分钟、固定 12 个词，关卡只改变编号，用完一轮才重复。未完成和重玩沿用原来的 12 词，新关才重新抽词。开始前左右浏览全部单词卡片。</p></div></li><li><b>02</b><div><strong>左右移动，按字母连射</strong><p>← → 移动，朝向整个白色单词飞机或 Boss。点阵跟随标准大小写；按住字母即可填满当前格，填满后飞机锁定一秒并显示待定字母；没填完时换字母会重做当前格。数字 1–4 选缺字格，退格键删除末尾已填写字母，反引号也可撤销。普通题中 '+Math.round(CHOICES.ratio*100)+'% 是航母选择题：英文选中文或中文选英文，横移瞄准三个选项，按住任意字母射击；累计 '+CHOICES.hitsToSelect+' 颗子弹使选项透明后验证，选对爆 '+CHOICES.successCrates+' 个幸运箱，选错变 '+CHOICES.failureEnemies+' 架敌机。</p></div></li><li><b>03</b><div><strong>Shift 炮弹，迎战怪兽</strong><p>答对奖励两枚战斗炮弹，Shift 发射。90 秒四面小 Boss，240 秒五面大 Boss，各一分钟。写错或超时每面变两架邪恶飞机。全部面答对击败小／大 Boss 后分别爆 '+BOSSES.miniCrates+'／'+BOSSES.finalCrates+' 个幸运箱；大 Boss 击败后清场，顶部倒数 '+BOSSES.victorySeconds+' 秒，方向键 ↑ ↓ ← → 自由移动撞箱子，随后结算。</p></div></li><li><b>04</b><div><strong>收集与复习</strong><p>每 '+(SUPPLIES.intervalSeconds/60)+' 分钟刷新一个幸运箱，碰触领取，子弹无法领取；红心、星星和收藏炮弹暂时只计数量。结算统一恭喜通关，显示正确率；每个不同失败词须复习 10 秒后才能继续。</p></div></li></ol><p class="note">空格暂停。首版 '+VOCABULARY.length+' 词为练习库，沪教新版教材逐册核验中。</p><div class="dialog-actions"><button class="primary-button" data-action="back">返回</button></div>');
+  }
+  vocabulary(){if(this.game.state==='review')return;this.returnState=this.game.state;if(this.game.state==='playing'){this.game.pause();this.returnState='paused';}this.dialog('vocabulary','<h2>词库与抽题</h2><p>首版 '+VOCABULARY.length+' 个练习词。每关词池以三至六年级练习为主：三至六年级 '+Math.round(VOCAB.groupWeights[0]*100)+'%、一至二年级 '+Math.round(VOCAB.groupWeights[2]*100)+'%、初中拓展 '+Math.round(VOCAB.groupWeights[1]*100)+'%，单关按整数近似分配，长期保持目标比例。沪教新版教材逐册核验中。</p><p>按历史成功率降低下一局入选权重：高于 50% 为 50%，高于 75% 为 25%，高于 85% 为 1%。本关已选词池用完才重复。</p><button class="primary-button" data-action="back">返回</button>');}
+  pause(){this.speech.stop();this.dialog('pause','<span class="eyebrow">FLIGHT PAUSED</span><h2>星海会等你回来。</h2><p>第 '+this.game.level+' 关 · 剩余 '+formatTime(this.game.remaining)+' · 战斗炮弹 '+this.game.ammo+'</p><div class="dialog-actions"><button class="primary-button" data-action="resume">继续飞行 ↗</button><button class="secondary-button" data-action="guide">玩法介绍</button><button class="secondary-button" data-action="end">结束本局</button></div>');}
+  failedWords(){const map=new Map();for(const record of this.game.result?.mistakes||[]){if(!map.has(record.wordId))map.set(record.wordId,{...record,attempts:[]});map.get(record.wordId).attempts.push(record);}return [...map.values()];}
+  result(){
+    const r=this.game.result;if(!r)return;const locked=this.game.state==='review',failed=this.failedWords(),items=failed.map(item=>'<li><div><strong>'+escape(item.word)+'</strong><small>（'+escape(item.meaning)+'）</small></div><div>'+item.attempts.map(row=>'<span class="attempt-'+row.kind+'">'+escape(row.answer)+' · '+kinds[row.kind]+'</span>').join('<br>')+'</div></li>').join('');
+    this.speech.stop();this.dialog(locked?'review':'result',(locked?'<div class="review-heading"><span>复习倒计时</span><strong id="review-timer"></strong></div><div class="review-focus" id="review-focus"></div>':'')+'<span class="eyebrow">LEVEL '+r.level+' / FLIGHT REPORT</span><h2>恭喜通关！</h2><div class="result-metrics"><div><strong>'+r.uniqueWords+'</strong><span>实际练习词数</span></div><div><strong>'+r.total+'</strong><span>累计普通题／Boss 面</span></div><div><strong>'+(r.accuracy===null?'—':(r.accuracy*100).toFixed(1)+'%')+'</strong><span>通过率 · 单词正确率</span></div></div><p>本关词池 '+r.rosterCount+' 个 · 成功 <b class="stat-correct">'+r.correct+'</b> · 写错 <b class="stat-wrong">'+r.wrong+'</b> · 没写完 <b class="stat-incomplete">'+r.incomplete+'</b></p><p id="save-status" class="note"></p><p class="result-collections">♥ '+r.collected.heart+'　★ '+r.collected.star+'　↑ '+r.collected.shell+'</p>'+(items?'<ul class="mistake-list">'+items+'</ul>':'<p>本局没有失败词。</p>')+(locked?'<p class="note">请看清规范拼写和中文。倒计时结束后才能继续，切后台会暂停。</p>':'<div class="dialog-actions"><button class="primary-button" data-action="next-level">预习第 '+(r.level+1)+' 关 ↗</button><button class="secondary-button" data-action="restart">重玩本关</button><button class="secondary-button" data-action="history">学习记录</button><button class="secondary-button" data-action="home">返回首页</button></div>'));
+    this.reviewIndex=-1;this.updateReview();const resultId=r.id;const saved=()=>{if(this.game.result?.id!==resultId||!$('save-status'))return;put('save-status',this.storage.pendingRun?(this.storage.available?'学习记录已暂存，数据库恢复后重试':'学习记录仅保留在本页内存'): '学习记录已保存');};saved();this.game.savePromise?.then(saved);
+  }
+  updateReview(){if(this.game.state!=='review'||!$('review-timer'))return;put('review-timer',formatTime(this.game.reviewRemaining));const failed=this.failedWords(),index=Math.min(failed.length-1,Math.floor((failed.length*REVIEW.secondsPerWord-this.game.reviewRemaining)/REVIEW.secondsPerWord));if(index===this.reviewIndex)return;this.reviewIndex=index;const word=failed[index];$('review-focus').innerHTML='<strong>'+escape(word.word)+'</strong><span>'+escape(word.meaning)+'</span><small>第 '+(index+1)+'/'+failed.length+' 个失败词</small>';}
+  history(page=0){
+    if(this.game.state==='review')return;if(!this.storage.account){this.accounts();return;}if(!['history','attempts','history-reset'].includes(this.dialogMode)){this.returnState=this.game.state;if(this.game.state==='playing'){this.game.pause();this.returnState='paused';}}
+    this.speech.stop();this.historyWordId=null;const rows=this.storage.listWords(),pages=Math.max(1,Math.ceil(rows.length/LEARNING.pageSize));this.historyPage=Math.max(0,Math.min(pages-1,page));const visible=rows.slice(this.historyPage*LEARNING.pageSize,(this.historyPage+1)*LEARNING.pageSize);
+    this.dialog('history','<div class="history-heading"><div class="history-title"><h2>我的单词记录</h2><span class="eyebrow">LEARNING LOG</span></div><div class="history-heading-actions"><button class="secondary-button reset-button" data-action="history-reset">重置</button><button class="secondary-button" data-action="back">返回</button></div></div><p class="history-summary">共 '+rows.length+' 个词 · 按写错＋没写完次数排序'+(!this.storage.databaseAvailable?' · 本页内存记录':'')+'</p><div class="history-scroll"><table class="history-table"><thead><tr><th>单词（中文）</th><th>成功</th><th>写错</th><th>没写完</th><th>播放</th></tr></thead><tbody>'+visible.map(row=>'<tr><td><button class="word-detail" data-action="attempts" data-id="'+escape(row.id)+'">'+escape(row.word)+'<small>（'+escape(row.meaning)+'）</small></button></td><td class="stat-correct">'+row.correct+'</td><td class="stat-wrong">'+row.wrong+'</td><td class="stat-incomplete">'+row.incomplete+'</td><td><button class="pronounce" data-action="speak" data-word="'+escape(row.word)+'" aria-label="播放 '+escape(row.word)+'">▶</button></td></tr>').join('')+'</tbody></table>'+(!rows.length?'<p>完成一局后，这里会保存每次出现的记录。</p>':'')+'</div><div class="history-pager"><button data-action="history-prev" '+(this.historyPage===0?'disabled':'')+'>← 上一页</button><span>'+(this.historyPage+1)+'/'+pages+' · 每页 100 词</span><button data-action="history-next" '+(this.historyPage===pages-1?'disabled':'')+'>下一页 →</button></div>');
+  }
+  confirmLearningReset(){
+    if(this.game.state==='review'||this.resettingLearning)return;
+    if(['preparing','prepareFailed'].includes(this.game.state)){this.notice('请等待准备完成后再重置');return;}
+    this.speech.stop();const count=this.storage.listWords().length;
+    this.dialog('history-reset','<span class="eyebrow">RESET LEARNING LOG</span><h2>确认清空单词记录？</h2><p>将清空已练习的 '+count+' 个词的成功、写错、没写完次数，以及每次作答明细，后续抽词概率从头计算。</p><p>成绩、关卡进度和设置保留。清空后无法恢复，之后完成游戏会重新产生学习记录。</p>'+(this.storage.debug?'<p class="note">当前为调试账号 '+escape(this.storage.account.name)+'，只清理此账号的学习记录。</p>':'')+'<div class="dialog-actions"><button class="secondary-button" data-action="history-reset-cancel">取消</button><button class="primary-button danger-button" data-action="history-reset-confirm">确认清空</button></div>');
+  }
+  async resetLearning(){
+    if(this.dialogMode!=='history-reset'||this.resettingLearning)return;this.resettingLearning=true;this.speech.stop();this.game.input?.clear();
+    for(const button of $('dialog-content').querySelectorAll('button'))button.disabled=true;
+    try{await this.game.savePromise;await this.storage.resetLearning();this.resettingLearning=false;this.history(0);this.notice('当前账号的单词记录已清空');}
+    catch(error){console.warn('Learning reset failed',error);this.resettingLearning=false;this.history(this.historyPage);this.notice('重置未完成，请稍后重试');}
+  }
+  async attempts(id,page=0){
+    this.historyWordId=id;this.historyAttemptPage=page;const row=this.storage.learning[id];if(!row)return;const account=this.storage.account?.id;this.speech.stop();this.dialog('attempts','<h2>'+escape(row.word)+'</h2><p>读取每次作答记录…</p>');
+    let result;try{result=await this.storage.attemptPage(id,page,LEARNING.pageSize);}catch(error){console.warn('Learning details read failed',error);if(this.dialogMode==='attempts'&&this.historyWordId===id&&this.historyAttemptPage===page&&this.storage.account?.id===account)this.dialog('attempts','<h2>'+escape(row.word)+'</h2><p>暂时无法读取作答记录，请稍后重试。</p><button data-action="history-page" class="secondary-button">返回学习记录</button>');return;}
+    if(this.dialogMode!=='attempts'||this.historyWordId!==id||this.historyAttemptPage!==page||this.storage.account?.id!==account)return;
+    const records=result.rows,pages=Math.max(1,Math.ceil(result.total/LEARNING.pageSize));this.historyAttemptPage=result.page;
+    this.dialog('attempts','<h2>'+escape(row.word)+'（'+escape(row.meaning)+'）</h2><div class="history-scroll"><table class="history-table"><thead><tr><th>关卡</th><th>结果</th><th>填写内容</th></tr></thead><tbody>'+records.map(record=>'<tr><td>第 '+record.level+' 关</td><td class="stat-'+record.kind+'">'+kinds[record.kind]+'</td><td>'+escape(record.answer)+'</td></tr>').join('')+'</tbody></table>'+(!records.length?'<p>这条旧记录只有汇总，没有历史明细。</p>':'')+'</div><div class="history-pager"><button data-action="attempts-prev" '+(result.page===0?'disabled':'')+'>← 上一页</button><span>'+(result.page+1)+'/'+pages+' · 共 '+result.total+' 次</span><button data-action="attempts-next" '+(result.page===pages-1?'disabled':'')+'>下一页 →</button></div><div class="dialog-actions"><button data-action="history-page" class="secondary-button">返回学习记录</button><button class="pronounce" data-action="speak" data-word="'+escape(row.word)+'">▶ 朗读</button></div>');
+  }
+  handle(action,data={}){
+    if(this.game.state==='review'||this.resettingLearning||this.accountBusy)return;
+    if(action==='account-new')this.newAccount();else if(action==='account-draft-cancel'){this.draftName=null;this.accounts();}else if(action==='account-select')this.confirmAccount(data.id);else if(action==='account-cancel')this.accounts();else if(action==='account-login')this.loginAccount();else if(action==='account-return')this.returnFromAccounts();else if(action==='history-reset')this.confirmLearningReset();else if(action==='history-reset-cancel')this.history(this.historyPage);else if(action==='history-reset-confirm')this.resetLearning();else if(action==='preview')this.preview(this.storage.progress.selected);else if(action==='launch')this.launch();else if(action==='preview-prev')this.previewPage(-1);else if(action==='preview-next')this.previewPage(1);else if(action==='preview-index'){this.previewPage(Number(data.index)-this.previewIndex);}else if(action==='preview-speak'){if(this.dialogMode==='preview')this.speech.play(this.game.roster[this.previewIndex].word);}else if(action==='speak')this.speech.play(data.word);
+    else if(action==='restart')this.preview(this.game.result.level,true);else if(action==='next-level')this.preview(this.game.result.level+1);else if(action==='resume'){this.closeDialog();this.audio.unlock();this.game.resume();this.render();}else if(action==='guide')this.instructions();else if(action==='end'){this.closeDialog();this.game.finish('ended');this.render();}else if(action==='home')this.home();else if(action==='reload')location.reload();else if(action==='history')this.history();else if(action==='history-prev')this.history(this.historyPage-1);else if(action==='history-next')this.history(this.historyPage+1);else if(action==='history-page')this.history(this.historyPage);else if(action==='attempts')this.attempts(data.id);else if(action==='attempts-prev')this.attempts(this.historyWordId,this.historyAttemptPage-1);else if(action==='attempts-next')this.attempts(this.historyWordId,this.historyAttemptPage+1);
+    else if(action==='back'){if(this.returnState==='paused')this.pause();else if(this.returnState==='preview')this.preview(this.game.level);else if(this.returnState==='won')this.result();else this.home();}
+  }
+  action(code){
+    if(this.game.state==='review'||this.resettingLearning||this.accountBusy)return;if(this.accountMode==='accounts'){if(code==='Escape'){if(this.draftName!==null){this.draftName=null;this.accounts();}else this.returnFromAccounts();}return;}if(this.accountMode==='account-login'){if(code==='Escape')this.accounts();return;}if(this.dialogMode==='history-reset'){if(code==='Escape')this.history(this.historyPage);return;}if(this.dialogMode==='preview'){if(code==='ArrowLeft')this.previewPage(-1);else if(code==='ArrowRight')this.previewPage(1);else if(code==='Space'){if(this.previewSeen.size===this.game.roster.length)this.launch();else this.previewPage(1);}else if(code==='Escape')this.home();return;}
+    if(['guide','vocabulary','history','attempts'].includes(this.dialogMode)){if(code==='Space'||code==='Escape')this.handle('back');return;}
+    if(this.game.state==='menu'&&code==='Space')this.begin();else if(this.game.state==='playing'&&['Space','Escape'].includes(code)){this.game.pause();this.pause();this.render();}else if(this.game.state==='paused'&&code==='Space')this.handle('resume');
   }
   render(){
-    const g=this.game,mobile=g.input.touchMode;
-    this.touchControls.hidden=!mobile||g.input.landscape||g.state!=='RUNNING';
-    this.mobileToolbar.hidden=!mobile;
-    this.pauseButton.hidden=!['RUNNING','PAUSED'].includes(g.state);
-    this.pauseButton.textContent=g.state==='PAUSED'?'继续':'暂停';this.pauseButton.setAttribute('aria-label',g.state==='PAUSED'?'继续游戏':'暂停游戏');
-    this.restartButton.disabled=g.state==='PREPARING';
-    for(const [id,compact,full] of [['distance-label','距离','行驶距离'],['elapsed-label','时间','运行时间'],['defense-label','防御','防御力'],['nitro-label','氮气','加速 / 氮气 · ↑']])document.getElementById(id).textContent=mobile?compact:full;
-    const rocketButton=this.elements['buy-rocket'],cost=ROCKETS.normalCost;
-    rocketButton.textContent=mobile?'火箭炮 · '+cost:'1 · 火箭炮 '+cost+' 金币';
-    const description='消耗 '+cost+' 金币发射火箭炮，清理前方 '+ROCKETS.range+' 米自身及左右相邻车道';
-    rocketButton.setAttribute('aria-label',description);rocketButton.title=description;
-    g.input.container.classList.toggle('level-two',g.level===2);
-    this.elements['arsenal-hud'].hidden=g.level!==2||['READY','PREPARING','RESULT'].includes(g.state);
-    this.quizTimer=null;this.quizSeconds=null;
-    const debugOption='<label class="debug-option"><input type="checkbox" data-action="debug"'+(g.debugMode?' checked':'')+'><span>调试模式 · 死亡后复活</span></label>'+g.keyboardMode.optionMarkup()+'<label class="debug-option"><input type="checkbox" data-action="debug-second-level"'+(g.debugSecondLevel?' checked':'')+'><span>调试 · 直接进入第二关</span></label><label class="debug-option"><input type="checkbox" data-action="debug-third-level"'+(g.debugThirdLevel?' checked':'')+'><span>调试 · 直接进入第三关</span></label>';
-    // 替换弹窗前保留游戏焦点，点击结束后仍能直接使用空格。
-    if(this.overlay.contains(document.activeElement))g.input.container.focus({preventScroll:true});
-    this.warning();
-    if(g.state!=='RUNNING'){this.elements['rear-alert'].hidden=true;}
-    this.elements['hud'].hidden=['READY','PREPARING','LEVEL_EXIT','LEVEL_CLEAR'].includes(g.state);
-    this.elements['level-countdown'].hidden=g.state!=='RUNNING'||!g.levelCountdown;
-    if(this.resetConfirm){
-      this.overlay.innerHTML='<section class="card" role="dialog" aria-modal="true" aria-label="重置记录确认"><div class="eyebrow">LOCAL RECORDS</div><h2>重置本游戏记录？</h2><p class="reset-copy">将删除本游戏的本机排行榜。其他网站的记录不会受影响。</p><button class="button" data-action="confirm-reset">确认重置</button><button class="button secondary" data-action="cancel-reset">取消</button></section>';return;
-    }
-    if(g.state==='READY'){
-      const startPrompt=g.keyboardMode.startMarkup()??'<button type="button" class="start-prompt" data-action="play">'+(mobile?'开始这一程':'按 <kbd>空格</kbd> 开始这一程')+'</button>';
-      const colorButtons=CAR_COLORS.map(c=>'<button class="color-chip'+(c.id===g.carColor?' selected':'')+'" data-action="pick-color" data-color="'+c.id+'" aria-label="汽车颜色 '+c.name+'" aria-pressed="'+(c.id===g.carColor)+'" title="'+c.name+'"><i style="background:'+c.css+'"></i></button>').join('');
-      this.overlay.innerHTML='<section class="card intro-card"><div class="eyebrow">FOUR SEASONS / ENDLESS ROAD</div><div class="intro-head"><h1>四季车途</h1><div class="head-pickers"><div class="color-picker"><span>汽车颜色：</span><div class="color-mini">'+colorButtons+'</div></div></div></div><blockquote class="intro-quote">从一辆自行车开始，生存满'+time(LEVELS.firstSeconds)+'进入第二关，再坚持'+time(LEVELS.secondSeconds)+'进入第三关，最后坚持'+time(LEVELS.thirdSeconds)+'即可全部通关。</blockquote><p class="driving-help">'+(mobile?'左手摇杆左右横移，右手按住刹车或加速。<br>持续按住加速，达到车型最高速后自动喷气，极速时仍耗气。':'<kbd>← / →</kbd> 左右横移 <kbd>↑</kbd> 加速 <kbd>↓</kbd> 刹车 <kbd>空格</kbd> '+(g.keyboardMode.enabled?'暂停':'开始 / 暂停'))+'</p>'+startPrompt+'<div class="best"><span>最佳距离</span><strong>'+format(g.store.data.leaderboard[0]?.score||0)+' 米</strong></div>'+this.records()+(mobile?'<details class="intro-rules"><summary>玩法说明</summary>':'')+'<div class="rules"><div class="rule"><b>侧碰吞吃</b>侧碰低级或同级车可以吞吃升级；侧碰高级车会失控旋转。</div><div class="rule"><b>警车追击</b>警车会隔一会儿撒网捕捉，捉到后要答题，答对继续。</div><div class="rule"><b>观察车流</b>避开高级车，小心追尾；极慢油罐车一碰即爆，无敌保护可免死。</div><div class="rule"><b>天降炮击</b>看到红色预警圈及时躲开，第二关要小心大恐龙踩踏。</div></div>'+(mobile?'</details>':'')+debugOption+'</section>';
-    }else if(g.state==='PREPARING')this.overlay.innerHTML='<div class="loading-status" role="status" aria-live="polite"><span class="loading-spinner" aria-hidden="true"></span><span>正在准备这一程…</span></div>';
-    else if(g.state==='LEVEL_CLEAR'&&g.level===2){
-      const cards=[['火山 · 岩浆路','每十秒三连喷发，躲开前方岩浆；自行车碰到死亡，其他车降级。'],['海水 · 浮桥','每十秒海啸横扫，扣除 60% 满防御并失控旋转；自行车碰到死亡。'],['冰山 · 冰块路','崩塌覆盖区连续横移超过 0.8 秒会打滑旋转；撞上车道冰山直接死亡。']];
-      this.overlay.innerHTML='<section class="card level-guide" role="dialog" aria-modal="true" aria-label="第二关通关"><div class="eyebrow">LEVEL COMPLETE / NEXT LEVEL</div><h2>恭喜！通过第二关。</h2><div class="level-guide-grid">'+cards.map(([title,copy])=>'<article><h3>'+title+'</h3><p>'+copy+'</p></article>').join('')+'</div><p class="level-guide-hint">第三关从零开始 · 六分钟通关 · 三分钟后四车道<br>火山 → 海水 → 冰山，每分钟轮换 · 空格进入第三关</p><button class="button" data-action="play">进入第三关</button></section>';
-    }
-    else if(g.state==='LEVEL_CLEAR'){
-      const images=g.renderer?.guideImages()??[],cards=[['大型恐龙踩踏','恐龙左右跳跃踩向你，及时横移躲开。'],['装甲坦克','装甲坦克不能碰，请绕开行驶。'],['金币与火箭炮','小金币 '+COINS.smallValue+'、大金币 '+COINS.largeValue+'；按 1 消耗 '+ROCKETS.normalCost+' 金币清理自身及左右相邻车道，射程 '+ROCKETS.range+' 米。']];
-      this.overlay.innerHTML='<section class="card level-guide" role="dialog" aria-modal="true" aria-label="第一关通关"><div class="eyebrow">LEVEL COMPLETE / NEXT LEVEL</div><h2>恭喜！通过第一关。</h2><div class="level-guide-grid">'+cards.map(([title,copy],i)=>'<article><img src="'+(images[i]??'')+'" alt="'+title+'模型"><h3>'+title+'</h3><p>'+copy+'</p></article>').join('')+'</div><p class="level-guide-hint">第二关从零开始 · 空格进入第二关</p><button class="button" data-action="play">进入第二关</button></section>';
-    }
-    else if(g.state==='PAUSED')this.overlay.innerHTML='<section class="card pause-card" role="dialog" aria-modal="true" aria-label="游戏已暂停"><div class="eyebrow">TAKE A BREATH</div><h2>游戏已暂停</h2><p>当前 '+format(g.player.distance)+' 米 · '+VEHICLES[g.player.rank].name+'<br>'+(mobile?'点击继续行驶；左侧摇杆横移，右侧刹车与加速 / 氮气。':'按空格继续，↓ 刹车，左右横移，↑ 持续加速到最高车速后自动喷气，极速时仍耗气，松开留气。')+'</p><button class="button" data-action="play">继续行驶</button><button class="button secondary" data-action="quit">结束游戏</button></section>';
-    else if(g.state==='QUIZ'&&g.quiz){
-      const question=g.quiz,seconds=Math.ceil(g.quizRemaining()),rescue=question.rescue;
-      const help=question.subject==='math'?mathHelp(question.helpTopic):null;
-      if(help&&question.helpRemaining!==undefined){
-        this.overlay.innerHTML='<article class="card math-help-card" role="dialog" aria-modal="true" aria-label="数学学习帮助"><div class="help-paused">计时已暂停 · 剩余 '+seconds+' 秒</div><h2>'+escape(help.title)+'</h2><p class="help-current">这道题：'+mathText(question.text)+'</p><div class="math-help-body">'+help.html+'</div><footer class="help-footer"><button class="button" data-action="quiz-help-close">返回答题 · 继续计时</button></footer></article>';
-        this.overlay.querySelector('[data-action="quiz-help-close"]').focus({preventScroll:true});return;
-      }
-      const subject=question.subjectLabel??{math:'数学',chinese:'语文',english:'英语'}[question.subject];
-      const keyMarkup=g.keyboardMode.quizMarkup(question);
-      const source=question.subject==='english'?'<div class="quiz-source">'+escape(question.bookTitle)+' · Unit '+question.unit+' · '+(question.type==='word'?'单词补全':'句子选词')+'</div>':question.poemSource?'<div class="quiz-source quiz-poem-source">'+escape(question.poemSource)+'</div>':'';
-      this.overlay.innerHTML='<section class="card quiz-card" role="dialog" aria-modal="true" aria-label="'+(rescue?'答题复活':'警车拦查答题')+'"><div class="eyebrow">'+(rescue?'ONE MORE CHANCE':'POLICE CHECK')+'</div><h2>'+(rescue?'第'+g.rescueUsed+'次遇险 · 答题复活':'被警车拦下 · 答题')+'</h2><div class="quiz-timer" role="timer" aria-label="答题剩余时间"><span>'+subject+' · 剩余</span><strong>'+seconds+'</strong><span>秒</span></div>'+source+'<p class="quiz-question'+(question.subject==='english'?' quiz-english':question.poemSource?' quiz-poem':'')+'">'+(question.subject==='math'?mathText(question.text):escape(question.text))+'</p>'+(keyMarkup??'<div class="quiz-options">'+question.options.map((option,index)=>'<button class="quiz-option" data-action="quiz" data-choice="'+index+'"><b>'+(index+1)+'</b>'+(question.subject==='math'?mathText(option):escape(option))+'</button>').join('')+'</div>')+'<p class="quiz-hint">'+(rescue?'答对原地复活，本局第 '+g.rescueUsed+' / '+RESCUE_LIMIT+' 次机会；答错或超时结束本局。':'答对继续行驶，答错或超时游戏结束。')+'</p></section>';
-      this.quizTimer=this.overlay.querySelector('.quiz-timer strong');this.quizSeconds=seconds;
-      if(help){
-        const button=document.createElement('button');button.type='button';button.className='quiz-help-button';button.dataset.action='quiz-help';button.innerHTML='<span aria-hidden="true">?</span> 学习帮助 <small>打开后暂停计时</small>';
-        this.overlay.querySelector('.quiz-question').after(button);
-      }
-    }
-    else if(g.state==='RESULT'){
-      const r=g.result,total=r.eatenByType.reduce((a,b)=>a+b,0),completed=r.endReason==='complete';
-      const solution=r.failedQuiz?'<div class="quiz-solution"><span>本题正确答案</span><p>'+mathText(r.failedQuiz)+'</p></div>':'';
-      this.overlay.innerHTML='<section class="card" role="dialog" aria-modal="true" aria-label="'+(completed?'全部通关':'本局结算')+'"><div class="eyebrow">JOURNEY COMPLETE</div><h2>'+ (completed?'恭喜！全部通关。':r.endReason==='quit'?'本局已结束':'旅程到这里')+'</h2><div class="result-score">'+format(r.score)+'<small>米 / 分</small></div><p class="'+(completed?'':'fatal-mark')+'">'+(completed?'第三关已完成，本次旅程圆满结束。':r.endReason==='quit'?'主动结束':CAUSES[r.deathCause]||'车辆损毁')+'</p>'+solution+'<div class="result-grid"><div><span>最高车型</span><strong>'+VEHICLES[r.highestRank].name+'</strong></div><div><span>吞吃车辆</span><strong>'+total+' 辆</strong></div><div><span>行驶时间</span><strong>'+time(r.activeSeconds)+'</strong></div><div><span>'+(g.level===3?'起始环境':'起始季节')+'</span><strong>'+r.startSeason+'</strong></div></div>'+(g.keyboardMode.startMarkup()??'<button class="button" data-action="play">'+(mobile?'再来一局':'按空格 / 点击开始新一局')+'</button>')+'<button class="button secondary" data-action="back">返回首页</button>'+this.records()+'</section>';
-    }else this.overlay.replaceChildren();
-  }
-  update(dt){
-    const g=this.game,countdown=g.levelCountdown;
-    this.elements['level-countdown'].hidden=g.state!=='RUNNING'||!countdown;
-    if(this.displayed.countdown!==countdown){this.elements['level-countdown'].textContent='即将过关 · '+countdown+' 秒';this.displayed.countdown=countdown;}
-    if(g.state==='QUIZ'&&this.quizTimer){
-      const seconds=Math.ceil(g.quizRemaining());
-      if(this.quizSeconds!==seconds){
-        this.quizTimer.textContent=String(seconds);this.quizSeconds=seconds;
-        this.quizTimer.parentElement.classList.toggle('urgent',seconds<=10);
-      }
-    }
-    const p=g.player,e=this.elements,shown=this.displayed,distance=Math.floor(p.distance),elapsed=Math.floor(g.activeSeconds),speed=Math.round(p.speed),speedRatio=Math.min(1,p.speed/VEHICLES[p.rank].playerMax);
-    if(shown.distance!==distance){e.distance.textContent=format(distance);shown.distance=distance;}
-    if(shown.elapsed!==elapsed){e.elapsed.textContent=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+String(elapsed%60).padStart(2,'0');shown.elapsed=elapsed;}
-    if(shown.speed!==speed){e.speed.textContent=String(speed);shown.speed=speed;}
-    if(shown.speedRatio!==speedRatio){e['speed-fill'].style.width=(speedRatio*100)+'%';shown.speedRatio=speedRatio;}
-    const defense=Math.round(Math.max(0,Math.min(1,p.defense/VEHICLE_DEFENSE[p.rank].max))*100);
-    if(shown.defense!==defense){e.defense.textContent=defense+'%';e['defense-fill'].style.width=defense+'%';shown.defense=defense;}
-    const nitro=g.nitro,charge=Math.floor(nitro.tanks*100),seconds=nitro.tanks*NITRO.boostSeconds;
-    const phase=nitro.boost>0?'喷气 · 剩余 '+seconds.toFixed(1)+'s':nitro.recovery>0?'回落 '+nitro.recovery.toFixed(1)+'s':nitro.tanks>0?'可喷 '+seconds.toFixed(1)+'s':'吞吃车辆回气';
-    if(shown.nitroTanks!==charge){e.nitro.textContent=Math.floor(nitro.tanks)+' / '+NITRO.capacity+' 管';e.nitro.setAttribute('aria-label','剩余氮气 '+nitro.tanks.toFixed(2)+' 管，最多 '+NITRO.capacity+' 管');shown.nitroTanks=charge;}
-    if(shown.nitroPhase!==phase){e['nitro-state'].textContent=phase;shown.nitroPhase=phase;}
-    if(shown.nitroCharge!==charge){e['nitro-fill'].style.width=Math.min(100,charge)+'%';e['nitro-reserve-fill'].style.width=Math.min(100,Math.max(0,charge-100))+'%';shown.nitroCharge=charge;}
-    if(shown.rank!==p.rank){e.rank.textContent=VEHICLES[p.rank].name;shown.rank=p.rank;}
-    if(shown.growthRank!==p.rank||shown.xp!==p.xp){
-      const threshold=UPGRADE_POINTS[p.rank];
-      e.progress.textContent=format(p.xp)+' / '+format(threshold);
-      e.progress.setAttribute('aria-label','总积分 '+p.xp+'，'+(p.rank===MAX_RANK?'坦克上限':'下一车型门槛')+' '+threshold);
-      e['growth-fill'].style.width=Math.min(100,Math.max(0,p.xp)/threshold*100)+'%';shown.growthRank=p.rank;shown.xp=p.xp;
-    }
-    const chaser=g.dinosaurs?.chaser,dinosaurDefense=chaser?Math.round(chaser.defense/DINOSAURS.defense*1000)/10:null;
-    if(shown.dinosaurDefense!==dinosaurDefense){
-      e['dinosaur-defense'].hidden=dinosaurDefense===null;e['dinosaur-defense-value'].textContent=dinosaurDefense===null?'':dinosaurDefense+'%';shown.dinosaurDefense=dinosaurDefense;
-    }
-    if(g.arsenal){
-      const inventory=g.arsenal,blocked=g.state!=='RUNNING'||Boolean(g.player.spin),full=inventory.shots.length>=ROCKETS.capacity;
-      if(shown['coin-count']!==inventory.balance||shown.arsenalBlocked!==blocked||shown.arsenalFull!==full){
-        if(shown['coin-count']!==inventory.balance){e['coin-count'].textContent='× '+format(inventory.balance);shown['coin-count']=inventory.balance;}
-        e['buy-rocket'].disabled=blocked||full||inventory.balance<ROCKETS.normalCost;
-        shown.arsenalBlocked=blocked;shown.arsenalFull=full;
-      }
-    }
-    if(g.state==='RUNNING'){
-      const rear=g.traffic.approachingRear(p);
-      if(e['rear-alert'].hidden!==!rear){if(rear)this.game.audio?.rear();e['rear-alert'].hidden=!rear;}
-      if(rear){
-        const direction=rear.sameLane?'正后方':rear.car.d<p.d?'左后方':'右后方';
-        const notice=direction+'来车 · '+Math.ceil(rear.gap)+' 米';
-        if(shown.rearNotice!==notice){e['rear-alert'].textContent=notice;shown.rearNotice=notice;}
-      }
-      this.toastSeconds-=dt;if(this.toastSeconds<=0)this.toast.hidden=true;
-    }else{e['rear-alert'].hidden=true;this.toast.hidden=true;}
+    this.invalidate?.();const g0=this.game,saved0=this.storage.currentLevel(),key=[g0.state,this.shownState,this.dialogMode,this.accountMode,this.accountBusy,this.storage.account?.id,this.storage.account?.name,this.storage.progress.selected,saved0?.id,saved0?.status,saved0?.level,g0.runId,Math.ceil(g0.remaining),Math.ceil(g0.reviewRemaining),g0.victoryRemaining!==null&&g0.victoryRemaining!==undefined,g0.score,g0.ammo,g0.correct,g0.wrong,g0.missed,g0.records.length,g0.displayCollected.heart,g0.displayCollected.star,g0.displayCollected.shell,matchMedia('(pointer: coarse)').matches].join('|');
+    if(this.renderKey===key)return;this.renderKey=key;
+    $('home-launch-controls').hidden=!!this.accountMode;$('home-accounts').hidden=!this.accountMode;const g=this.game,battle=['playing','paused','review','won'].includes(g.state),locked=g.state==='review';$('menu').hidden=battle;$('battle-hud').hidden=!battle;$('header-pause').hidden=!['playing','paused'].includes(g.state);$('compatibility').hidden=!(matchMedia('(pointer: coarse)').matches&&!battle);put('timer',g.victoryRemaining!==null&&g.victoryRemaining!==undefined?String(Math.ceil(g.remaining)):formatTime(g.remaining));put('score',String(g.score).padStart(4,'0'));put('ammo',g.ammo);put('correct-count','✓ '+g.correct);
+    put('failure-count','写错 '+g.wrong+' · 没写完 '+g.missed);
+    const recordKey=this.storage.account?.id+':'+g.runId+':'+g.records.length;if(this.recordKey!==recordKey){this.recordKey=recordKey;$('live-failures').innerHTML=g.records.filter(row=>row.kind!=='correct').map(row=>'<li><b>'+escape(row.word)+'</b> '+escape(row.answer)+' <span>'+kinds[row.kind]+'</span></li>').join('');}
+    for(const kind of ['heart','star','shell'])put('collect-'+kind,g.displayCollected[kind]);
+    const savedLevel=this.storage.currentLevel();$('home-retry').hidden=!(this.storage.account&&g.state==='menu'&&savedLevel?.status==='completed');if(savedLevel)put('home-retry','重玩第 '+savedLevel.level+' 关 · 原 12 词');
+    put('mission-level',String(this.storage.progress.selected).padStart(2,'0'));put('mission-word-count',LEVELS.wordCount+' 个词');
+    if(!battle){const label=this.storage.account?'预习第 '+this.storage.progress.selected+' 关':'选择账号后开始';if($('start-button').firstElementChild.textContent!==label)$('start-button').firstElementChild.textContent=label;}$('account-button').hidden=!this.storage.account;put('account-button',this.storage.account?this.storage.account.name+' · 切换账号':'');$('flight-frame').dataset.battle=String(battle);document.body.dataset.home=String(['menu','preparing','prepareFailed'].includes(g.state)&&!this.dialogMode);document.body.dataset.review=String(locked);document.body.dataset.victory=String(g.victoryRemaining!==null&&g.victoryRemaining!==undefined&&['playing','paused'].includes(g.state));for(const item of document.querySelectorAll('.site-header button,.site-footer input,.site-footer button'))item.disabled=locked||this.accountBusy;
+    if(g.state!==this.shownState){this.shownState=g.state;if(g.state==='paused'&&!['guide','vocabulary','history','attempts','history-reset','accounts','account-login'].includes(this.dialogMode))this.pause();if(g.state==='review'||g.state==='won')this.result();}
+    if(locked)this.updateReview();
   }
 }
