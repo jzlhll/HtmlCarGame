@@ -25,7 +25,7 @@ export function createTerrainMaterial(detail,level=0) {
   const settings=LANDSCAPE.terrain,near=level===0,textured=level<2;
   const material=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.96});
   material.userData.detailTexture=detail;material.userData.landUniforms=new Set();
-  material.customProgramCacheKey=()=> 'flight-terrain-tiers-v6-'+level;
+  material.customProgramCacheKey=()=> 'flight-terrain-tiers-v7-'+level;
   material.onBeforeCompile=shader=>{
     if(textured){shader.uniforms.landDetail={value:material.userData.detailTexture};material.userData.landUniforms.add(shader.uniforms.landDetail);shader.uniforms.landScale={value:settings.rockScale};}
     if(near){shader.uniforms.landFineScale={value:settings.detailScale};shader.uniforms.landBump={value:settings.bumpStrength};}
@@ -52,7 +52,12 @@ export function createTerrainMaterial(detail,level=0) {
         return mix(mix(corners.x,corners.y,blend.x),mix(corners.z,corners.w,blend.x),blend.y);
       }
       vec3 landTriplanar(vec3 point,vec3 weights,float bias){
-        return texture2D(landDetail,point.yz,bias).rgb*weights.x+texture2D(landDetail,point.xz,bias).rgb*weights.y+texture2D(landDetail,point.xy,bias).rgb*weights.z;
+        // 在分支外计算梯度，平地权重为零的两个方向不再读取纹理。
+        vec3 dx=dFdx(point)*exp2(bias),dy=dFdy(point)*exp2(bias),color=vec3(0.0);
+        if(weights.x>0.0)color+=textureGrad(landDetail,point.yz,dx.yz,dy.yz).rgb*weights.x;
+        if(weights.y>0.0)color+=textureGrad(landDetail,point.xz,dx.xz,dy.xz).rgb*weights.y;
+        if(weights.z>0.0)color+=textureGrad(landDetail,point.xy,dx.xy,dy.xy).rgb*weights.z;
+        return color;
       }`:''}
       ${near?'uniform float landFineScale;uniform float landBump;':''}`);
     shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`

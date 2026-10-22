@@ -25,10 +25,11 @@ export class Weather {
   sample(position) {
     let white=0,storm=0,whiteVisibility=WEATHER.whiteVisibility,current=-1;
     for(const cloud of this.world.weather?.clouds||[]){
+      const whiteCloud=cloud.kind==='white',y=(position.y-cloud.y)/(WEATHER.height*(whiteCloud?WHITE_CLOUD_SCALE.height:1));
+      if(Math.abs(y)>.5)continue;
       const dx=position.x-cloudX(cloud,this.seconds),dz=position.z-cloudZ(cloud,this.seconds),c=Math.cos(cloud.heading),s=Math.sin(cloud.heading);
-      const whiteCloud=cloud.kind==='white';
-      const x=(c*dx-s*dz)/(WEATHER.width*cloud.scaleX*(whiteCloud?WHITE_CLOUD_SCALE.width:1)),y=(position.y-cloud.y)/(WEATHER.height*(whiteCloud?WHITE_CLOUD_SCALE.height:1)),z=(s*dx+c*dz)/(WEATHER.length*cloud.scaleZ);
-      if(Math.abs(x)>.5||Math.abs(y)>.5||Math.abs(z)>.5)continue;
+      const x=(c*dx-s*dz)/(WEATHER.width*cloud.scaleX*(whiteCloud?WHITE_CLOUD_SCALE.width:1)),z=(s*dx+c*dz)/(WEATHER.length*cloud.scaleZ);
+      if(Math.abs(x)>.5||Math.abs(z)>.5)continue;
       const depth=clamp(-cloudField(x,y,z,this.world.weather.templates[cloud.variant])*3,0,1);
       if(cloud.kind==='white'&&depth>white){white=depth;whiteVisibility=cloud.thin?WEATHER.thinVisibility:WEATHER.whiteVisibility;}
       if(cloud.kind==='storm'&&depth>storm){storm=depth;current=cloud.id;}

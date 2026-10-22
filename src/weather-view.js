@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {indexGeometry} from './geometry-indexing.js';
 import { cloudField } from './weather-world.js';
 import { WEATHER, WHITE_CLOUD_SCALE, SCENERY } from './config.js';
 import { surfaceCache } from './surface-assets.js';
@@ -51,7 +52,7 @@ function* cloudGeometry(template) {
       }
     }yield;
   }
-  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));return geometry;
+  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));return yield* indexGeometry(geometry);
 }
 
 // 云团和闪电骨架在准备阶段建立，飞行时只移动既有云与闪电顶点。
@@ -62,12 +63,13 @@ export class WeatherView extends THREE.Group {
     for(let variant=0;variant<WEATHER.variants;variant++){
       const key='scene/weather/geometry/'+variant,record=cache.readable?yield {wait:cache.read(key)}:null;
       let geometry;
-      const hit=record?.positions instanceof Float32Array&&record.normals instanceof Float32Array&&record.positions.length===record.normals.length&&record.positions.length>0&&record.positions.length%9===0&&record.positions.every(Number.isFinite)&&record.normals.every(Number.isFinite);
+      const count=record?.positions?.length/3;
+      const hit=record?.positions instanceof Float32Array&&record.normals instanceof Float32Array&&record.positions.length===record.normals.length&&Number.isInteger(count)&&count>0&&record.positions.every(Number.isFinite)&&record.normals.every(Number.isFinite)&&(record.index instanceof Uint16Array||record.index instanceof Uint32Array)&&record.index.length>0&&record.index.length%3===0&&record.index.every(i=>i<count);
       if(hit){
-        geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.BufferAttribute(record.positions,3));geometry.setAttribute('normal',new THREE.BufferAttribute(record.normals,3));
+        geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.BufferAttribute(record.positions,3));geometry.setAttribute('normal',new THREE.BufferAttribute(record.normals,3));geometry.setIndex(new THREE.BufferAttribute(record.index,1));
       }else{
         geometry=yield* cloudGeometry(this.world.weather.templates[variant]);
-        if(cache.available)yield {wait:cache.write(key,{positions:geometry.attributes.position.array,normals:geometry.attributes.normal.array})};
+        if(cache.available)yield {wait:cache.write(key,{positions:geometry.attributes.position.array,normals:geometry.attributes.normal.array,index:geometry.index.array})};
       }
       geometry.computeBoundingSphere();geometries.push(geometry);console.info('Weather geometry prepared '+JSON.stringify({variant,cacheHit:hit,vertices:geometry.attributes.position.count}));yield;
     }

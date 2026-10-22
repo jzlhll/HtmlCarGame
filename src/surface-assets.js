@@ -232,7 +232,10 @@ export function resourceManifest(levelId) {
     else if (/^(main-wing|wing-leading|tailplane)-/.test(name)) dependencies=selected(['wingSpanSegments','wingChordSegments']);
     else if (name.startsWith('door-')) dependencies={...selected(['doorWidth','doorHeight','doorBorder']),
       position:settings.doorPositions[Number(name.split('-').at(-1))], bodyHeight:AIRCRAFT.bodyHeight};
-    if (name.startsWith('loop-terrain-')) dependencies={...LOOP_WORLD, variant:Number(name.split('-').at(-1))};
+    if (name.startsWith('loop-terrain-')) {
+      const variant=Number(name.split('-').at(-1));
+      dependencies={...LOOP_WORLD,variant,...(variant===2?{city:{columns:LANDSCAPE.city.columns,rows:LANDSCAPE.city.loopRows,spacing:LANDSCAPE.city.spacing,roadWidths:CITY_STREETS.widths}}:{})};
+    }
     if(name.startsWith('scenery-'))dependencies={settings:SCENERY_DETAIL,shape:name.slice(8)};
     if(name.startsWith('boundary-'))dependencies={...boundarySettings,side:Number(name.split('-').at(-1))};
     entries.push([`base/${name}`,dependencies]);
@@ -241,7 +244,7 @@ export function resourceManifest(levelId) {
   // 旧田园签名曾包含不参与生成的部署预算；保留其原值，预算调整不重建兼容地景。
   const countryTerrain={...LANDSCAPE,terrain:{...LANDSCAPE.terrain,resourceBudgetMb:25}};
   const waterGeometry=Object.fromEntries(Object.entries(REGIONAL_WATER).filter(([key])=>!key.startsWith('wave')));
-  entries.push(['scene/weather',{settings:WEATHER,levels:LEVELS.filter(level=>level.id<=Math.max(3,Number(levelId))),height:WORLD_HEIGHT.displayScale,...(arc?{arc}:{})}]);
+  entries.push(['scene/weather',{geometryRecipe:2,settings:WEATHER,levels:LEVELS.filter(level=>level.id<=Math.max(3,Number(levelId))),height:WORLD_HEIGHT.displayScale,...(arc?{arc}:{})}]);
   entries.push(['scene/streets',{settings:CITY_STREETS,tourism,city:LANDSCAPE.city,changsha:JOURNEY.changsha,changshaWest:JOURNEY.changshaWest,water:{...waterShape,shoreWidth:REGIONAL_WATER.shoreWidth},island:JOURNEY.island,lake:JOURNEY.lake,landmarks:LANDSCAPE.landmarks,...(arc?{arc}:{})}]);
   entries.push(['scene/water',{settings:waterGeometry,island:JOURNEY.island,lake:JOURNEY.lake}]);
   entries.push(['scene/terrain',{terrain:LANDSCAPE.terrain,landscape:LANDSCAPE,journey:JOURNEY,route:{id:route.id,arc:route.arc,destination:route.destination,boundary:route.boundary},tourism,treeHeights:TREE_HEIGHTS,trees:TREE_MODELS.species,recipe:1}]);

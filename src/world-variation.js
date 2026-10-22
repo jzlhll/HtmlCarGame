@@ -7,7 +7,7 @@ export function freshRunSeed() {
 export function varyBuildingSites(sites,seed) {
   for(const site of sites){
     if(!site.shift)continue;
-    let state=(Math.imul(Math.round(site.x),73856093)^Math.imul(Math.round(site.z),19349663)^seed)>>>0;
+    let state=((site.layoutSeed??(Math.imul(Math.round(site.x),73856093)^Math.imul(Math.round(site.z),19349663)))^seed)>>>0;
     const random=()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296;};
     site.shift.x=(random()*2-1)*site.shift.maxX;site.shift.z=(random()*2-1)*site.shift.maxZ;
   }

@@ -7,7 +7,7 @@ export class SpatialSceneView {
     this.source=source;this.scene=new THREE.Scene();this.scene.matrixWorldAutoUpdate=false;
     this.warmup=new THREE.Scene();this.warmup.matrixWorldAutoUpdate=false;
     this.dynamic=[];this.cells=new Map();this.large=[];this.loopGroups=[];
-    this.selected=[];this.seen=new Set();this.parts=new Map();this.warmed=new Set();
+    this.selected=[];this.seen=new Set();this.updatedLODs=new Set();this.parts=new Map();this.warmed=new Set();
     this.frustum=new THREE.Frustum();this.projectionView=new THREE.Matrix4();this.viewBounds=new THREE.Box3();
     this.corner=new THREE.Vector3();this.stats={roots:0,selected:0,candidates:0,partitions:0};
   }
@@ -24,7 +24,8 @@ export class SpatialSceneView {
     while(stack.length){
       const object=stack.pop();
       if(slotGroups.has(object))continue;
-      if(object.isLOD||object.geometry){
+      if(object.userData.spatialExpand){stack.push(...object.children);}
+      else if(object.isLOD||object.geometry){
         for(const record of yield* this.records(object)){this.insert(record);this.stats.roots++;}
       }else stack.push(...object.children);
       if(++visited%64===0)yield;
@@ -34,7 +35,8 @@ export class SpatialSceneView {
       const entries=[],pending=[group],bounds=new THREE.Box3(),inverse=group.matrixWorld.clone().invert();
       while(pending.length){
         const object=pending.pop();
-        if(object.isLOD||object.geometry){
+        if(object.userData.spatialExpand){pending.push(...object.children);}
+        else if(object.isLOD||object.geometry){
           for(const record of yield* this.records(object)){entries.push(record);bounds.union(record.worldBounds);this.stats.roots++;}
         }else pending.push(...object.children);
         if(++visited%64===0)yield;
@@ -47,8 +49,8 @@ export class SpatialSceneView {
 
   *records(source) {
     const varying=[];for(let parent=source;parent&&parent!==this.source;parent=parent.parent)varying.push(parent);
-    const custom=source.geometry&&Object.values(source.geometry.attributes).some(attribute=>attribute.isInstancedBufferAttribute);
-    const split=source.isInstancedMesh&&source.count>=GEAR_PREVIEW.instanceSplitCount&&!source.morphTexture&&!custom&&!varying.some(object=>object.userData.variableInstances);
+    const unsupported=source.geometry&&Object.values(source.geometry.attributes).some(attribute=>attribute.isInterleavedBufferAttribute);
+    const split=source.isInstancedMesh&&source.count>=GEAR_PREVIEW.instanceSplitCount&&!source.morphTexture&&!unsupported&&!varying.some(object=>object.userData.variableInstances);
     const parts=split?yield* this.partition(source):null;
     const objects=parts||[source],result=[];
     for(const object of objects){
@@ -88,19 +90,28 @@ export class SpatialSceneView {
       parts=[];
       if(buckets.size>1)for(const bucket of buckets.values()){
         const matrices=new Float32Array(bucket.ids.length*16),colors=source.instanceColor?new Float32Array(bucket.ids.length*3):null;
+        const attributes=Object.entries(geometry.attributes).filter(([,a])=>a.isInstancedBufferAttribute).map(([name,a])=>({name,source:a,data:new a.array.constructor(bucket.ids.length*a.itemSize)}));
         for(const [i,id]of bucket.ids.entries()){
           matrices.set(source.instanceMatrix.array.subarray(id*16,id*16+16),i*16);
           if(colors)colors.set(source.instanceColor.array.subarray(id*3,id*3+3),i*3);
+          for(const {source:a,data}of attributes){const offset=Math.floor(id/a.meshPerAttribute)*a.itemSize;data.set(a.array.subarray(offset,offset+a.itemSize),i*a.itemSize);}
           if(i%64===0)yield;
         }
-        parts.push({count:bucket.ids.length,matrix:new THREE.InstancedBufferAttribute(matrices,16),color:colors?new THREE.InstancedBufferAttribute(colors,3):null,bounds:bucket.bounds});yield;
+        let selectedGeometry=geometry;
+        if(attributes.length){
+          selectedGeometry=new THREE.BufferGeometry();for(const [name,a]of Object.entries(geometry.attributes))selectedGeometry.setAttribute(name,a);if(geometry.index)selectedGeometry.setIndex(geometry.index);
+          for(const {name,source:a,data}of attributes){const attribute=new THREE.InstancedBufferAttribute(data,a.itemSize,a.normalized);attribute.gpuType=a.gpuType;selectedGeometry.setAttribute(name,attribute);}
+          selectedGeometry.groups=geometry.groups.map(group=>({...group}));selectedGeometry.setDrawRange(geometry.drawRange.start,geometry.drawRange.count);
+          selectedGeometry.boundingBox=geometry.boundingBox;selectedGeometry.boundingSphere=geometry.boundingSphere;
+        }
+        parts.push({geometry:selectedGeometry,count:bucket.ids.length,matrix:new THREE.InstancedBufferAttribute(matrices,16),color:colors?new THREE.InstancedBufferAttribute(colors,3):null,bounds:bucket.bounds});yield;
       }
       geometries.set(key,parts);
     }
     if(!parts.length)return null;
     const objects=[];
     for(const part of parts){
-      const object=new THREE.InstancedMesh(source.geometry,source.material,0);
+      const object=new THREE.InstancedMesh(part.geometry,source.material,0);
       object.count=part.count;object.instanceMatrix=part.matrix;object.instanceColor=part.color;
       object.boundingBox=part.bounds;object.boundingSphere=part.bounds.getBoundingSphere(new THREE.Sphere());
       object.matrixAutoUpdate=false;object.matrixWorldAutoUpdate=false;object.matrixWorld=source.matrixWorld;
@@ -125,27 +136,32 @@ export class SpatialSceneView {
     // 主镜头裁剪会修改槽位可见性，小窗查询前按自己的相机重新筛选。
     this.loop.cull(camera);
     const scene=this.scene;scene.background=this.source.background;scene.fog=this.source.fog;scene.environment=this.source.environment;scene.overrideMaterial=this.source.overrideMaterial;
-    this.selected.length=0;this.seen.clear();this.stats.candidates=0;
+    this.selected.length=0;this.seen.clear();this.updatedLODs.clear();this.stats.candidates=0;
     for(const object of this.dynamic)this.selected.push(object);
     this.frustum.setFromProjectionMatrix(this.projectionView.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse),camera.coordinateSystem,camera.reversedDepth);
     this.viewBounds.makeEmpty();
-    for(const x of [-1,1])for(const y of [-1,1])for(const z of [-1,1])this.viewBounds.expandByPoint(this.corner.set(x,y,z).unproject(camera));
+    for(const x of [-1,1])for(const y of [-1,1])for(const z of [camera.reversedDepth?0:-1,1])this.viewBounds.expandByPoint(this.corner.set(x,y,z).unproject(camera));
     const size=GEAR_PREVIEW.spatialCellSize,bounds=this.viewBounds;
     for(let z=Math.floor(bounds.min.z/size);z<=Math.floor(bounds.max.z/size);z++)for(let x=Math.floor(bounds.min.x/size);x<=Math.floor(bounds.max.x/size);x++){
-      const records=this.cells.get(x+':'+z);if(records)for(const record of records)this.consider(record);
+      const records=this.cells.get(x+':'+z);if(records)for(const record of records)this.consider(record,camera);
     }
-    for(const record of this.large)this.consider(record);
+    for(const record of this.large)this.consider(record,camera);
     for(const group of this.loopGroups){
       if(!group.object.visible||!group.object.parent.visible)continue;
       if(!group.matrix.equals(group.object.matrixWorld)){group.matrix.copy(group.object.matrixWorld);group.worldBounds.copy(group.bounds).applyMatrix4(group.matrix);}
-      if(this.frustum.intersectsBox(group.worldBounds))for(const record of group.entries)this.consider(record);
+      if(this.frustum.intersectsBox(group.worldBounds))for(const record of group.entries)this.consider(record,camera);
     }
     this.stats.selected=this.selected.length;return scene;
   }
 
-  consider(record) {
+  consider(record,camera) {
     if(this.seen.has(record))return;this.seen.add(record);this.stats.candidates++;
-    if(!record.object.visible||record.gates.some(object=>!object.visible))return;
+    // 从外向内更新祖先LOD，不能沿用主镜头留下的森林可见状态。
+    for(let i=record.gates.length-1;i>=0;i--){
+      const gate=record.gates[i];if(!gate.visible)return;
+      if(gate.isLOD&&!this.updatedLODs.has(gate)){this.updatedLODs.add(gate);gate.update(camera);}
+    }
+    if(!record.object.visible)return;
     if(!record.matrix.equals(record.source.matrixWorld)){record.matrix.copy(record.source.matrixWorld);record.worldBounds.copy(record.bounds).applyMatrix4(record.matrix);}
     if(this.frustum.intersectsBox(record.worldBounds))this.selected.push(record.object);
   }

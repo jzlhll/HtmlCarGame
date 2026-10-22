@@ -28,7 +28,7 @@ export class TrafficIndicators {
       if (contact.kind === 'aircraft') this.point.y += AIRCRAFT.bodyHeight * game.route.trafficScale;
       this.point.project(camera);
       const x = (this.point.x + 1) * 50, y = (1 - this.point.y) * 50;
-      if (this.point.z < -1 || this.point.z > 1 || x < 3 || x > 97 || y < 8 || y > 69) continue;
+      if (this.point.z < (camera.reversedDepth?0:-1) || this.point.z > 1 || x < 3 || x > 97 || y < 8 || y > 69) continue;
       let item = this.items.get(contact.id);
       if (!item) {
         const element = document.createElement('div'); element.className = 'traffic-marker';

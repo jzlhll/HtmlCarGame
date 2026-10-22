@@ -1,6 +1,6 @@
 import { buildingCollisionParts } from './building-details.js';
 import { streetCarBox } from './city-street-layout.js';
-import { LOOP_WORLD, LANDSCAPE, TREE_CONTACT, TREE_HEIGHTS, WORLD_HEIGHT, TOURISM } from './config.js';
+import { LOOP_WORLD, LANDSCAPE, TREE_CONTACT, TREE_HEIGHTS, WORLD_HEIGHT, TOURISM, CITY_STREETS } from './config.js';
 import { terrainNoise, smoothRange } from './terrain.js';
 import { TreeField } from './tree-contact.js';
 import { treeProfiles } from './tree-species.js';
@@ -18,6 +18,7 @@ export function loopRiverZ(x, variant) {
 export function* loopTerrainData(variant) {
   const n = LOOP_WORLD.segments, size = LOOP_WORLD.tileSize, half = size / 2, seed = LOOP_WORLD.seed + variant * 101;
   const positions = new Float32Array((n + 1) ** 2 * 3), colors = new Float32Array(positions.length), uv = new Float32Array((n + 1) ** 2 * 2), indices = new Uint32Array(n*n*6);
+  const cityEdge=Math.max(5350,Math.max(LANDSCAPE.city.columns,LANDSCAPE.city.loopRows)*LANDSCAPE.city.spacing/2+Math.max(...CITY_STREETS.widths)/2+50);
   const peaks=Array.from({length:18},(_,i)=>({x:Math.sin(i*17.31+seed)*4600,z:Math.cos(i*9.17+seed)*4600,rx:280+(i%5)*110,rz:380+(i%4)*150,phase:i*2.399963}));
   for (let row = 0; row <= n; row++) {
     for (let column = 0; column <= n; column++) {
@@ -29,7 +30,7 @@ export function* loopTerrainData(variant) {
       const fine = terrainNoise(x / 70, z / 70, seed + 4);
       const edge = smoothRange(0, LOOP_WORLD.edgeBlend, half - Math.max(Math.abs(x), Math.abs(z)));
       const riverDistance = Math.abs(z - loopRiverZ(x, variant)), bank = smoothRange(95, 520, riverDistance);
-      const city = variant === 2 ? smoothRange(5350, 5750, Math.max(Math.abs(x), Math.abs(z))) : 1;
+      const city = variant === 2 ? smoothRange(cityEdge,cityEdge+400,Math.max(Math.abs(x),Math.abs(z))) : 1;
       const relief = variant === 0 ? 340 : variant === 2 ? 2400 : LOOP_WORLD.reliefMax;
       let spines=broad ** 1.5 * (0.35 + ridge * 0.44 + gullies * 0.15 + fine * 0.06);
       if(variant===1)spines=Math.min(1,spines*1.45);
@@ -132,6 +133,20 @@ export class LoopWorld {
       if(this.treeFields[loopVariant(column,row)].touch(this.treeSweep))return true;
     }
     return false;
+  }
+
+  canopyHeightAt(x,z) {
+    const size=LOOP_WORLD.tileSize;let height=-Infinity;
+    for(let column=Math.floor((x-treeReach+size/2)/size);column<=Math.floor((x+treeReach+size/2)/size);column++)for(let row=Math.floor((z-treeReach+size/2)/size);row<=Math.floor((z+treeReach+size/2)/size);row++){
+      if(isRouteCell(column,row,this.route))continue;
+      height=Math.max(height,this.treeFields[loopVariant(column,row)].canopyHeightAt(x-column*size,z-row*size));
+    }
+    return height;
+  }
+
+  cityAt(x,z) {
+    const q=this.locate(x,z),city=LANDSCAPE.city,margin=Math.max(...CITY_STREETS.widths)/2;
+    return !isRouteCell(q.column,q.row,this.route)&&q.variant===2&&Math.abs(q.x)<=city.columns*city.spacing/2+margin&&Math.abs(q.z)<=city.loopRows*city.spacing/2+margin;
   }
 
   updateVariation() { for(const box of this.cityBoxes)moveBuildingBox(box); }

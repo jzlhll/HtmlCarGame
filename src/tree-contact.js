@@ -18,14 +18,16 @@ function canopyNoise(x,z,scale,seed,periodic){
 function flatCanopyHeight(noise,periodic){
   const s=TREE_HEIGHTS,knots=periodic?s.periodicNoiseKnots:s.noiseKnots;
   for(let i=1;i<knots.length;i++)if(noise<=knots[i]||i===knots.length-1){
-    return s.heightKnots[i-1]+(s.heightKnots[i]-s.heightKnots[i-1])*smoothRange(knots[i-1],knots[i],noise);
+    const base=s.heightKnots[i-1]+(s.heightKnots[i]-s.heightKnots[i-1])*smoothRange(knots[i-1],knots[i],noise);
+    const peak=smoothRange(s.rarePeakStart,s.flat[1],base);
+    return Math.max(s.flat[0],base*(s.heightScale+(1-s.heightScale)*peak));
   }
 }
 
 export function treeDimensions(x,z,seed,floor=0,{mountain=false,periodic=false}={}) {
   const s=TREE_HEIGHTS,noise=.72*canopyNoise(x,z,s.scale,s.seed,periodic)+.28*canopyNoise(x,z,s.detailScale,s.seed+19,periodic);
   const wave=smoothRange(.18,.82,noise),flat=flatCanopyHeight(noise,periodic);
-  const short=s.mountain[0]+(s.mountain[1]-s.mountain[0])*wave,mix=mountain?1:smoothRange(...s.mountainFloor,floor);
+  const short=(s.mountain[0]+(s.mountain[1]-s.mountain[0])*wave)*s.heightScale,mix=mountain?1:smoothRange(...s.mountainFloor,floor);
   const height=Math.min(flat+(short-flat)*mix,Math.max(0,WORLD_HEIGHT.objectMax-floor));
   // 树种使用独立坐标随机流，既不偏向噪声中段，也不影响树高曲线或种植位置。
   const size=LOOP_WORLD.tileSize,tx=Math.floor(periodic?(x%size+size)%size:x),tz=Math.floor(periodic?(z%size+size)%size:z);
@@ -72,6 +74,22 @@ export class TreeField {
       }
       this.count++;if(index%128===0)yield;
     }
+  }
+
+  // 复用接触索引和叶冠椭球，查询脚下真实树冠顶面，不把空地或树冠内部算作树林上方。
+  canopyHeightAt(x,z) {
+    let height=-Infinity;
+    const cell=TREE_CONTACT.cell,bucket=this.cells.get(Math.floor(x/cell)+':'+Math.floor(z/cell));
+    for(const id of bucket||empty){
+      const batch=Math.floor(id/addressStride),index=id%addressStride,data=this.batches[batch],i=index*stride,dx=x-data[i],dz=z-data[i+2];
+      if(dx*dx+dz*dz>data[i+7]*data[i+7])continue;
+      const lx=(data[i+5]*dx-data[i+6]*dz)/data[i+3],lz=(data[i+6]*dx+data[i+5]*dz)/data[i+3];
+      for(const leaf of treeProfiles[this.species[batch][index]].leaves){
+        const distance=((lx-leaf.x)/leaf.rx)**2+((lz-leaf.z)/leaf.rz)**2;
+        if(distance<=1)height=Math.max(height,data[i+1]+(leaf.y+leaf.ry*Math.sqrt(1-distance))*data[i+4]);
+      }
+    }
+    return height;
   }
 
   touch(sweep) {
