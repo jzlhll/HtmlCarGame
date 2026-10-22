@@ -13,4 +13,4 @@ fi
 if [ ! -f node_modules/three/build/three.module.js ]; then
   npm ci || exit 1
 fi
-npm start -- --open
+npm run play -- --open

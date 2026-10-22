@@ -3,7 +3,8 @@
   "version": "1.0.1",
   "description": "本机 Three.js 民航客机模拟与键位学习游戏",
   "scripts": {
-    "start": "node scripts/serve.mjs"
+    "start": "node scripts/serve.mjs",
+    "play": "node scripts/serve.mjs --play"
   },
   "keywords": [],
   "author": "",
