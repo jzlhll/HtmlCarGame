@@ -60,13 +60,13 @@ export class UI {
     this.container.querySelector('.intro-copy').innerHTML = `第 ${route.id} 关：深圳起飞，抵达${route.destinationName}。`;
     setText(this.container.querySelector('.availability'), `${formatTime(route.deadline)} · 起飞至${route.destinationName}机场`);
     setText(this.container.querySelector('.welcome .eyebrow'), `Flight ${route.id}`);
-    const stops = [{english: 'Shenzhen airport', chinese: '深圳机场', z: 0}, ...[...route.sectors,...route.cityVisits.filter(city=>city.id!=='guangzhou').map(city=>({z:city.z,english:city.english,chinese:city.landmark?city.name+' · '+city.landmark:city.name}))].sort((a,b)=>b.z-a.z)];
+    const stops = [{english: 'Shenzhen airport', chinese: '深圳机场', z: 0}, ...[...route.sectors,...route.cityVisits.filter(city=>city.id!=='guangzhou').map(city=>({z:city.z,distance:city.distance,english:city.english,chinese:city.landmark?city.name+' · '+city.landmark:city.name}))].sort((a,b)=>(a.distance??-a.z)-(b.distance??-b.z))];
     this.container.querySelector('#route-briefing').innerHTML = `
       <div class="level-selector" aria-label="选择飞行关卡">${LEVELS.map(level => `<a href="?level=${level.id}" ${level.id === route.id ? 'aria-current="page"' : ''}>${level.id} · ${level.destinationEnglish}<small>${level.destinationName}</small></a>`).join('')}</div>
       <header><span>Flight plan<small>第 ${route.id} 关 · 深圳 → ${route.destinationName}</small></span><b>${formatTime(route.deadline)}</b></header>
       <ol class="route-stops">${stops.map(stop => `<li><span>${stop.english}<small>${stop.chinese}</small></span></li>`).join('')}</ol>
       <div class="route-profile"><span>Open scenery<small>平坦机场 · 循环地景 · 飞行上限${displayHeight(route.ceiling)} m</small></span></div>
-      <footer>${formatSpeed(route.cruiseSpeed)} km/h · ${(Math.abs(route.destination.threshold) / 1000).toFixed(1)} km<small>建议巡航 · 压缩航线 · 时限包含着陆停机</small></footer>`;
+      <footer>${formatSpeed(route.cruiseSpeed)} km/h · ${(route.length / 1000).toFixed(1)} km<small>建议巡航 · 压缩航线 · 时限包含着陆停机</small></footer>`;
   }
 
   setPreparing(preparing, progress) {

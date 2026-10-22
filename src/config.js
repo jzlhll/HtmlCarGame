@@ -1,3 +1,4 @@
+import { arcPoint, prepareRoutePath } from './route-path.js';
 export { isWithinRunway } from './runway-layout.js';
 
 export const GAME = {
@@ -455,11 +456,16 @@ export const ROUTE = {
   contactMarkerRange: 2600 * WORLD_TRAVEL.horizontalScale, contactMarkerNear: 80, birdFlapRate: 7, birdFlapAngle: 0.65,
 };
 
-// 三关共用深圳起点与前段路线；距离和海拔均为游戏化预设。
+// 四关共用深圳起点与前段路线；距离和海拔均为游戏化预设。
+export const NORTHERN_ARC = {startZ:-200000,radius:260000,angle:Math.PI/4};
+const xianEntry=arcPoint(NORTHERN_ARC,-NORTHERN_ARC.startZ+NORTHERN_ARC.radius*NORTHERN_ARC.angle);
+const xianCenter={x:xianEntry.x-Math.SQRT1_2*ROUTE.destination.length/2,z:xianEntry.z-Math.SQRT1_2*ROUTE.destination.length/2};
+
 export const LEVELS = [
   { id: 1, destinationName: '广州', destinationEnglish: 'Guangzhou', deadline: 300, cruiseSpeed: 370.4, approachDistance: 7000 * WORLD_TRAVEL.horizontalScale, threshold: -78500 },
   { id: 2, destinationName: '长沙', destinationEnglish: 'Changsha', deadline: 480, cruiseSpeed: 416.7, approachDistance: 6000 * WORLD_TRAVEL.horizontalScale, threshold: -158000 },
   { id: 3, destinationName: '武汉', destinationEnglish: 'Wuhan', deadline: 600, cruiseSpeed: 453.74, approachDistance: 7000 * WORLD_TRAVEL.horizontalScale, threshold: -206000 },
+  { id: 4, destinationName: '西安', destinationEnglish: "Xi'an", deadline: 1080, cruiseSpeed: 500, approachDistance: 7000 * WORLD_TRAVEL.horizontalScale, threshold: xianCenter.z+ROUTE.destination.length/2, x:xianCenter.x, arc:NORTHERN_ARC },
 ];
 
 // 城市按真实旅游资源选材，位置与尺度服从压缩航线及机场净空。
@@ -478,6 +484,21 @@ export const TOURISM = {
     {id:'chibi',name:'赤壁',english:'Chibi',level:3,x:-10500,z:-169000,kind:'fort',landmark:'赤壁古战场',second:'拜风台',theme:'temple'},
     {id:'xianning',name:'咸宁',english:'Xianning',level:3,x:10500,z:-181000,kind:'spring',landmark:'咸宁温泉园',second:'九宫山山庄',theme:'stilt'},
     {id:'wuhan',name:'武汉',english:'Wuhan',level:3,x:-10500,z:-190000,kind:'bridge',landmark:'武汉长江大桥',second:'湖北省博物馆',theme:'museum'},
+    {id:'xinyang',name:'信阳',english:'Xinyang',level:4,arcProgress:0.035,side:1,columns:10,rows:14,kind:'terrace',landmark:'鸡公山',theme:'lake-garden',second:'南湾湖',extra:'tea',third:'信阳茶园'},
+    {id:'zhumadian',name:'驻马店',english:'Zhumadian',level:4,arcProgress:0.095,side:-1,columns:10,rows:14,kind:'peaks',landmark:'嵖岈山',theme:'temple',second:'南海禅寺',extra:'gate',third:'天中山牌坊'},
+    {id:'nanyang',name:'南阳',english:'Nanyang',level:4,arcProgress:0.155,side:1,columns:10,rows:14,kind:'temple',landmark:'武侯祠',theme:'academy',second:'内乡县衙',extra:'museum',third:'汉画馆'},
+    {id:'pingdingshan',plaza:[2600,2400],name:'平顶山',english:'Pingdingshan',level:4,arcProgress:0.215,side:-1,columns:10,rows:14,kind:'buddha',landmark:'中原大佛',theme:'peaks',second:'尧山',extra:'temple',third:'香山寺'},
+    {id:'xuchang',name:'许昌',english:'Xuchang',level:4,arcProgress:0.275,side:1,columns:10,rows:14,kind:'fort',landmark:'曹魏古城',theme:'palace',second:'春秋楼',extra:'pagoda',third:'文峰塔'},
+    {id:'kaifeng',name:'开封',english:'Kaifeng',level:4,arcProgress:0.335,side:-1,columns:10,rows:14,kind:'song-garden',landmark:'清明上河园',theme:'palace',second:'龙亭',extra:'brick-pagoda',third:'开封铁塔'},
+    {id:'zhengzhou',name:'郑州',english:'Zhengzhou',level:4,arcProgress:0.395,side:1,columns:10,rows:14,kind:'museum',landmark:'河南博物院',theme:'sail',second:'千玺广场',extra:'terrace',third:'黄河文化公园'},
+    {id:'dengfeng',name:'登封',english:'Dengfeng',level:4,arcProgress:0.455,side:-1,columns:10,rows:14,kind:'pagoda-forest',landmark:'少林寺塔林',theme:'temple',second:'少林寺',extra:'academy',third:'嵩阳书院'},
+    {id:'jiaozuo',name:'焦作',english:'Jiaozuo',level:4,arcProgress:0.515,side:1,columns:10,rows:14,kind:'canyon',landmark:'云台山红石峡',theme:'temple',second:'青天河寺院',extra:'terrace',third:'神农山'},
+    {id:'luoyang',name:'洛阳',english:'Luoyang',level:4,arcProgress:0.575,side:-1,columns:10,rows:14,kind:'grotto',landmark:'龙门石窟',theme:'palace',second:'应天门',extra:'temple',third:'白马寺'},
+    {id:'sanmenxia',name:'三门峡',english:'Sanmenxia',level:4,arcProgress:0.635,side:1,columns:10,rows:14,kind:'dam',landmark:'黄河大坝',theme:'gate',second:'函谷关',extra:'museum',third:'虢国博物馆'},
+    {id:'huayin',name:'华阴',english:'Huayin',level:4,arcProgress:0.695,side:-1,columns:10,rows:14,kind:'peaks',landmark:'华山',theme:'temple',second:'西岳庙',extra:'fort',third:'华阴古城'},
+    {id:'weinan',name:'渭南',english:'Weinan',level:4,arcProgress:0.755,side:1,columns:10,rows:14,kind:'village',landmark:'党家村',theme:'pagoda',second:'慧照寺塔',extra:'gate',third:'渭南鼓楼'},
+    {id:'lintong',name:'临潼',english:'Lintong',level:4,arcProgress:0.815,side:-1,columns:10,rows:14,kind:'terracotta',landmark:'兵马俑',theme:'palace',second:'华清宫',extra:'terrace',third:'骊山'},
+    {id:'xian',name:'西安',english:"Xi'an",level:4,arcProgress:0.925,side:1,columns:10,rows:14,kind:'brick-pagoda',landmark:'大雁塔',theme:'city-wall',second:'西安城墙',extra:'palace',third:'大明宫'},
   ],
   visits: [
     {id:'guangzhou',name:'广州',english:'Guangzhou',level:1,z:-47000},
@@ -561,17 +582,25 @@ export function terrainElevation() { return 0; }
 export function createRoute(levelId = 1) {
   const level = LEVELS.find(item => item.id === Number(levelId)) || LEVELS[0];
   const elevation = terrainElevation(level.threshold);
-  const destination = { ...ROUTE.destination, threshold: level.threshold, elevation,
-    apron: { ...ROUTE.destination.apron, z: level.threshold - ROUTE.apronOffset } };
+  const destination = { ...ROUTE.destination, x:level.x??ROUTE.destination.x, threshold: level.threshold, elevation,
+    apron: { ...ROUTE.destination.apron, x:(level.x??0)+ROUTE.destination.apron.x, z: level.threshold - ROUTE.apronOffset } };
   const sectors = JOURNEY.sectors.filter(item => item.level <= level.id);
   if (level.id === 1) sectors.push({ z: clusterZ('village'), english: 'Village', chinese: '村庄', kind: 'village' });
   sectors.push({ z: level.threshold, english: `${level.destinationEnglish} airport`, chinese: `${level.destinationName}机场`, kind: 'airport' });
-  return { ...ROUTE, ...level, elevation, destination, sectors,
-    cities: TOURISM.cities.filter(city=>city.level<=level.id),
-    cityVisits: [...TOURISM.cities,...TOURISM.visits].filter(city=>city.level<=level.id).sort((a,b)=>b.z-a.z),
+  const cities=TOURISM.cities.filter(city=>city.level<=level.id).map(city=>{
+    if(city.arcProgress===undefined)return {...city,columns:city.columns??TOURISM.columns,rows:city.rows??TOURISM.rows,spacing:TOURISM.spacing};
+    const distance=-level.arc.startZ+level.arc.radius*level.arc.angle*city.arcProgress,visit=arcPoint(level.arc,distance),district=arcPoint(level.arc,distance,city.side*10500);
+    return {...city,x:district.x,z:district.z,visitX:visit.x,visitZ:visit.z,distance,spacing:TOURISM.spacing};
+  });
+  const arcEnd=level.arc?arcPoint(level.arc,-level.arc.startZ+level.arc.radius*level.arc.angle):null;
+  if(arcEnd){destination.approachHeading=arcEnd.heading;destination.entry={x:arcEnd.x,z:arcEnd.z};}
+  return prepareRoutePath({ ...ROUTE, ...level, elevation, destination, sectors,cellSize:LOOP_WORLD.tileSize,
+    boundary:level.arc?{...WORLD_BOUNDARY,centerX:-43000,halfWidth:69000,back:-415000}:WORLD_BOUNDARY,
+    cities,
+    cityVisits: [...cities,...TOURISM.visits.filter(city=>city.level<=level.id)].sort((a,b)=>(a.distance??-a.z)-(b.distance??-b.z)),
     transitions: JOURNEY.transitions.zones.filter(zone => zone.level <= level.id && (!zone.lastLevel || level.id <= zone.lastLevel) && zone.z > level.threshold + zone.length / 2),
     cruiseHeight: 550, mountains: [...LANDSCAPE.mountains, ...(level.id >= 2 ? JOURNEY.danxia : [])],
-    encounters: ROUTE.encounters.map((spec, index) => ({ ...spec, at: spec.at * (level.deadline / 200) + index * ROUTE.encounterExtraGapSeconds })) };
+    encounters: ROUTE.encounters.map((spec, index) => ({ ...spec, at: spec.at * (level.deadline / 200) + index * ROUTE.encounterExtraGapSeconds })) });
 }
 
 export const AUDIO = {

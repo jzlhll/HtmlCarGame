@@ -38,7 +38,7 @@ export class AirportView extends THREE.Group {
     const box=(size,position,material)=>{
       const mesh=new THREE.Mesh(new THREE.BoxGeometry(...size),material);
       if(material===building||material===glass){const uv=mesh.geometry.attributes.uv;for(let i=0;i<uv.count;i++){const face=Math.floor(i/4),width=face<2?size[2]:size[0],height=face===2||face===3?size[2]:size[1];uv.setXY(i,uv.getX(i)*width/(material===glass?32:8),uv.getY(i)*height/(material===glass?48:8));}}
-      mesh.position.set(position[0]+(destination?280:0),position[1],position[2]+offset);mesh.castShadow=true;mesh.receiveShadow=true;this.add(mesh);return mesh;
+      mesh.position.set(position[0]+(destination?280+route.destination.x:0),position[1],position[2]+offset);mesh.castShadow=true;mesh.receiveShadow=true;this.add(mesh);return mesh;
     };
     const footprint=(width,length,y,material,edgeOnly=false)=>{
       const outline=runwayOutline(runway,width,length),shape=new THREE.Shape(outline.map(p=>new THREE.Vector2(p.x,-p.z)));
@@ -122,7 +122,7 @@ export class AirportView extends THREE.Group {
     let treeCount=0;this.treeMatrices=new Float32Array(80*16);const contactPose=new THREE.Object3D();
     for (let i = 0; i < 80; i++) {
       const side = i % 2 ? -1 : 1;
-      const x = side * (350 + Math.sin(i * 2.1) * 90), z = 250 - Math.floor(i / 2) * 105 + offset;
+      const x = (destination?route.destination.x:0)+side * (350 + Math.sin(i * 2.1) * 90), z = 250 - Math.floor(i / 2) * 105 + offset;
       if(isWithinRunway({x,z},runway,60)||!destination&&coastalLandWeight(x,z)<.99)continue;
       contactPose.position.set(x,this.position.y,z);contactPose.scale.set(10,12.7,10);contactPose.updateMatrix();this.treeMatrices.set(contactPose.matrix.elements,treeCount*16);
       dummy.position.set(x, 2.5, z); dummy.updateMatrix(); trunks.setMatrixAt(treeCount, dummy.matrix);

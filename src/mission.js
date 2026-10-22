@@ -1,3 +1,4 @@
+import { projectRoute } from './route-path.js';
 import { AIRCRAFT, FLIGHT, AIRPORT_TRAFFIC, TREE_CONTACT, WORLD_TRAVEL, worldHorizontalSpeed, displayHeight, WORLD_BOUNDARY, TOURISM } from './config.js';
 import { segmentBox } from './route-world.js';
 import { GlassIntegrity } from './glass-integrity.js';
@@ -17,14 +18,15 @@ export class Mission {
     this.waterfallsPassed = new Set();
     this.citiesVisited = new Set();this.cityNotice=null;this.cityNoticeRemaining=0;
     this.parkSeconds = 0; this.approaching = false; this.finalApproachAnnounced = false; this.offCourse = false;
+    this.navigation={deviation:0,progress:0,remaining:this.route.length};
     this.events = []; this.airportTraffic = createAirportTraffic(this.route);
   }
 
   start() { this.started = true; }
   get remaining() { return Math.max(0, this.route.deadline - this.elapsed); }
-  get runwayDistance() { return this.aircraft.position.z - this.route.destination.threshold; }
+  get runwayDistance() { return this.route.arc?projectRoute(this.route,this.aircraft.position,this.navigation).remaining:this.aircraft.position.z-this.route.destination.threshold; }
   get targetAltitude() { return Math.min(this.world.baseHeightAt(this.aircraft.position.x, this.aircraft.position.z) + this.route.cruiseHeight, this.route.destination.elevation + Math.max(0, (this.runwayDistance + this.route.touchdownOffset) / WORLD_TRAVEL.horizontalScale * Math.tan(this.route.glideSlope))); }
-  get sector() { return this.route.sectors.find(item => -this.aircraft.position.z <= -item.z + 1000) || this.route.sectors.at(-1); }
+  get sector() { if(this.route.arc&&this.aircraft.position.z<this.route.arc.startZ){const progress=projectRoute(this.route,this.aircraft.position,this.navigation).progress;return this.route.cityVisits.find(city=>(city.distance??-city.z)>=progress-1000)||this.route.sectors.at(-1);}return this.route.sectors.find(item => -this.aircraft.position.z <= -item.z + 1000) || this.route.sectors.at(-1); }
   get alert() { return this.contacts.some(contact => contact.danger); }
 
   spawn(spec, index) {
@@ -115,7 +117,7 @@ export class Mission {
       for(const city of this.route.cityVisits){
         if(this.citiesVisited.has(city.id))continue;
         // 扫掠区域包含正反向及横向进入，低帧率跨过边界也只产生一次事件。
-        const zone={min:{x:-TOURISM.visitHalfWidth,y:-Infinity,z:city.z-TOURISM.visitHalfDepth},max:{x:TOURISM.visitHalfWidth,y:Infinity,z:city.z+TOURISM.visitHalfDepth}};
+        const zone={min:{x:(city.visitX||0)-TOURISM.visitHalfWidth,y:-Infinity,z:(city.visitZ??city.z)-TOURISM.visitHalfDepth},max:{x:(city.visitX||0)+TOURISM.visitHalfWidth,y:Infinity,z:(city.visitZ??city.z)+TOURISM.visitHalfDepth}};
         if(!segmentBox(previous,a.position,zone))continue;
         this.citiesVisited.add(city.id);this.cityNotice=city;this.cityNoticeRemaining=TOURISM.promptSeconds;
         events.push({type:'city-enter',key:city.id});
@@ -148,7 +150,7 @@ export class Mission {
       this.finalApproachAnnounced = true;
       events.push({type: 'final-approach', key: 'airport'});
     }
-    const offCourse = Math.abs(a.position.x) > this.route.courseDeviation;
+    const offCourse = (this.route.arc?projectRoute(this.route,a.position,this.navigation).deviation:Math.abs(a.position.x)) > this.route.courseDeviation;
     if (offCourse && !this.offCourse) events.push({type: 'off-course', key: 'route', reason: 'Off course（偏离航线）：参考左侧轨迹，回到目的地方向，倒计时仍继续。'});
     this.offCourse = offCourse;
     for (const fall of this.world.waterfalls) {

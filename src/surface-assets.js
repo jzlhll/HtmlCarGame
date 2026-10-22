@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { SURFACE_APPEARANCE, LANDSCAPE, AIRCRAFT, LOOP_WORLD, COUNTRYSIDE, JOURNEY, WORLD_TRAVEL, WORLD_BOUNDARY, REGION_BLEND, CITY_STREETS, WEATHER, LEVELS, WORLD_HEIGHT, TREE_CONTACT, TREE_MODELS, TREE_HEIGHTS, REGIONAL_WATER, FOLIAGE_TEXTURE, ROCK_SURFACE, FACADE_SURFACE, TOURISM } from './config.js';
+import { SURFACE_APPEARANCE, LANDSCAPE, AIRCRAFT, LOOP_WORLD, COUNTRYSIDE, JOURNEY, WORLD_TRAVEL, WORLD_BOUNDARY, REGION_BLEND, CITY_STREETS, WEATHER, LEVELS, WORLD_HEIGHT, TREE_CONTACT, TREE_MODELS, TREE_HEIGHTS, REGIONAL_WATER, FOLIAGE_TEXTURE, ROCK_SURFACE, FACADE_SURFACE, TOURISM, createRoute } from './config.js';
 import { fuselageGeometry, aircraftDoorGeometry, engineGeometry, fanGeometry, treeCrownGeometry, wingGeometry } from './model-geometry.js';
 import { surfacePixels, terrainPixels, environmentPixels, mipmapPixels } from './surface-recipes.js';
 import { GenerationQueue } from './generation-queue.js';
@@ -12,12 +12,12 @@ import { treeProfiles } from './tree-species.js';
 
 const textures = new Map(), geometries = new Map();
 const textureNames = ['asphalt-color','asphalt-detail','paint-detail','panel-detail','metal-detail','terrain-detail','environment','grass-color','concrete-color','facade-color','facade-detail','rubber-detail','foliage-color'];
-let preparation, baseQueue, detailQueue, cache;
+let preparation, baseQueue, detailQueue, cache, boundarySettings=WORLD_BOUNDARY;
 export const sceneCacheStats={hits:0,misses:0};
 const pixelWorker=new PixelWorker();
 
 export function surfaceCache(levelId = 1) {
-  if (!cache) cache = new SurfaceCache(levelId, resourceManifest());
+  if (!cache) {boundarySettings=createRoute(levelId).boundary;cache = new SurfaceCache(levelId, resourceManifest(levelId));}
   return cache;
 }
 
@@ -204,7 +204,8 @@ function* generateDetails(upload) {
   }
 }
 
-function resourceManifest() {
+function resourceManifest(levelId) {
+  const route=createRoute(levelId),tourism={...TOURISM,cities:TOURISM.cities.filter(city=>city.level<=Math.max(3,Number(levelId)))},arc=route.arc;
   const settings=SURFACE_APPEARANCE, selected=names=>Object.fromEntries(names.map(name=>[name,settings[name]]));
   const entries=[];
   for (const quality of ['base','detail']) for (const name of quality==='base'?textureNames:settings.detailTextures) {
@@ -223,16 +224,16 @@ function resourceManifest() {
     else if (name.startsWith('door-')) dependencies={...selected(['doorWidth','doorHeight','doorBorder']),
       position:settings.doorPositions[Number(name.split('-').at(-1))], bodyHeight:AIRCRAFT.bodyHeight};
     if (name.startsWith('loop-terrain-')) dependencies={...LOOP_WORLD, variant:Number(name.split('-').at(-1))};
-    if(name.startsWith('boundary-'))dependencies={...WORLD_BOUNDARY,side:Number(name.split('-').at(-1))};
+    if(name.startsWith('boundary-'))dependencies={...boundarySettings,side:Number(name.split('-').at(-1))};
     entries.push([`base/${name}`,dependencies]);
   }
   const waterShape=Object.fromEntries(['recipe','riverSamples','islandSamples','lakeSubdivisions'].map(k=>[k,REGIONAL_WATER[k]]));
   const waterGeometry=Object.fromEntries(Object.entries(REGIONAL_WATER).filter(([key])=>!key.startsWith('wave')));
-  entries.push(['scene/weather',{settings:WEATHER,levels:LEVELS,height:WORLD_HEIGHT.displayScale}]);
-  entries.push(['scene/streets',{settings:CITY_STREETS,tourism:TOURISM,city:LANDSCAPE.city,changsha:JOURNEY.changsha,changshaWest:JOURNEY.changshaWest,water:{...waterShape,shoreWidth:REGIONAL_WATER.shoreWidth},island:JOURNEY.island,lake:JOURNEY.lake,landmarks:LANDSCAPE.landmarks}]);
+  entries.push(['scene/weather',{settings:WEATHER,levels:LEVELS.filter(level=>level.id<=Math.max(3,Number(levelId))),height:WORLD_HEIGHT.displayScale,...(arc?{arc}:{})}]);
+  entries.push(['scene/streets',{settings:CITY_STREETS,tourism,city:LANDSCAPE.city,changsha:JOURNEY.changsha,changshaWest:JOURNEY.changshaWest,water:{...waterShape,shoreWidth:REGIONAL_WATER.shoreWidth},island:JOURNEY.island,lake:JOURNEY.lake,landmarks:LANDSCAPE.landmarks,...(arc?{arc}:{})}]);
   entries.push(['scene/water',{settings:waterGeometry,island:JOURNEY.island,lake:JOURNEY.lake}]);
   entries.push(['scene/trees',{profiles:treeProfiles,recipe:TREE_MODELS.recipe,seed:TREE_MODELS.seed,nearDetail:TREE_MODELS.nearDetail,farDetail:TREE_MODELS.farDetail,branchSegments:TREE_MODELS.branchSegments,farCrownGroups:TREE_MODELS.farCrownGroups,leaflets:TREE_MODELS.leaflets,midLeafCards:TREE_MODELS.midLeafCards}]);
-  entries.push(['scene/country',{recipe:COUNTRYSIDE.cacheRecipe,tourism:TOURISM,water:waterShape,trees:{models:TREE_MODELS.species.map(({id,height,width,tall})=>({id,height,width,tall})),heights:TREE_HEIGHTS,unitHeight:TREE_CONTACT.unitHeight},country:COUNTRYSIDE,terrain:LANDSCAPE,journey:JOURNEY,world:WORLD_TRAVEL,loop:LOOP_WORLD,blend:REGION_BLEND}]);
+  entries.push(['scene/country',{recipe:COUNTRYSIDE.cacheRecipe,tourism,water:waterShape,trees:{models:TREE_MODELS.species.map(({id,height,width,tall})=>({id,height,width,tall})),heights:TREE_HEIGHTS,unitHeight:TREE_CONTACT.unitHeight},country:COUNTRYSIDE,terrain:LANDSCAPE,journey:JOURNEY,world:WORLD_TRAVEL,loop:LOOP_WORLD,blend:REGION_BLEND,...(arc?{arc,destination:route.destination,approachRecipe:1}:{})}]);
   return entries;
 }
 
@@ -267,7 +268,7 @@ function geometryFactories() {
     return geometry;
   }]);
   for(let side=0;side<4;side++)factories.push([`boundary-${side}`,function*(){
-    const data=yield* boundaryData(side),g=new THREE.BufferGeometry();
+    const data=yield* boundaryData(side,boundarySettings),g=new THREE.BufferGeometry();
     g.setAttribute('position',new THREE.BufferAttribute(data.positions,3));
     g.setAttribute('color',new THREE.BufferAttribute(data.colors,3));
     g.setAttribute('uv',new THREE.BufferAttribute(data.uv,2));g.setIndex(new THREE.BufferAttribute(data.indices,1));

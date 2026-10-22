@@ -210,7 +210,7 @@ button:disabled:hover { filter: none; }
 button:disabled:active { transform: none; }
 
 .route-briefing { position: absolute; z-index: 3; right: 48px; top: 50%; transform: translateY(-46%); width: 370px; max-height: calc(100dvh - 150px); display: flex; flex-direction: column; padding: 22px; background: #18343ee8; border: 1px solid #bdd0ce55; border-radius: 18px; box-shadow: 0 20px 55px #10293433; }
-.level-selector { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-bottom: 18px; }
+.level-selector { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-bottom: 18px; }
 .level-selector a { padding: 8px 5px; border: 1px solid #a8c2b533; border-radius: 7px; color: #b9cec5; text-decoration: none; font-size: 12px; text-align: center; }
 .level-selector a[aria-current] { color: #f4d979; background: #f4d97912; border-color: #f4d97977; }
 .route-briefing small { display: block; font-size: 10px; color: #a5bdb4; margin-top: 3px; }

@@ -60,6 +60,7 @@ export class LoopView extends THREE.Group {
       }
       this.templates.push(group);yield 'boundary';
     }
+    const boundary=this.world.route.boundary;
     const wallMaterial=new THREE.MeshStandardMaterial({vertexColors:true,side:THREE.DoubleSide,roughness:1,bumpMap:surfaceTexture('terrain-detail'),bumpScale:6});
     wallMaterial.userData.keepOcean=true;wallMaterial.userData.boundary=true;
     for(let side=0;side<4;side++){const mesh=new THREE.Mesh(modelGeometry(`boundary-${side}`),wallMaterial);this.add(mesh);yield 'boundary';}
@@ -70,7 +71,7 @@ export class LoopView extends THREE.Group {
       shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform float loopTime;');
       shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>','#include <color_fragment>\ndiffuseColor.rgb*=.96+.04*sin(vViewPosition.x*.035+loopTime)*cos(vViewPosition.z*.02-loopTime*.7);');
     };
-    this.ocean=new THREE.Mesh(new THREE.PlaneGeometry((WORLD_BOUNDARY.halfWidth+WORLD_BOUNDARY.width)*2,WORLD_BOUNDARY.front-WORLD_BOUNDARY.back+WORLD_BOUNDARY.width*2),oceanMaterial);this.ocean.rotation.x=-Math.PI/2;this.ocean.position.set(0,LOOP_WORLD.seaLevel,(WORLD_BOUNDARY.front+WORLD_BOUNDARY.back)/2);this.add(this.ocean);
+    this.ocean=new THREE.Mesh(new THREE.PlaneGeometry((boundary.halfWidth+boundary.width)*2,boundary.front-boundary.back+boundary.width*2),oceanMaterial);this.ocean.rotation.x=-Math.PI/2;this.ocean.position.set(boundary.centerX||0,LOOP_WORLD.seaLevel,(boundary.front+boundary.back)/2);this.add(this.ocean);
     for(let z=-LOOP_WORLD.poolRadius;z<=LOOP_WORLD.poolRadius;z++)for(let x=-LOOP_WORLD.poolRadius;x<=LOOP_WORLD.poolRadius;x++){
       const slot=new THREE.Group();
       for(const template of this.templates){
@@ -139,10 +140,11 @@ vLoopWorld=(modelMatrix*loopPoint).xz;
       }
       if(this.ocean)this.ocean.matrixWorldAutoUpdate=true;
     }
+    const boundary=this.world.route.boundary;
     for(const slot of this.slots){
       const dx=Math.max(0,Math.abs(slot.group.position.x-position.x)-LOOP_WORLD.tileSize/2);
       const dz=Math.max(0,Math.abs(slot.group.position.z-position.z)-LOOP_WORLD.tileSize/2);
-      slot.group.visible=Math.abs(slot.group.position.x)<WORLD_BOUNDARY.halfWidth+LOOP_WORLD.tileSize/2&&slot.group.position.z<WORLD_BOUNDARY.front+LOOP_WORLD.tileSize/2&&slot.group.position.z>WORLD_BOUNDARY.back-LOOP_WORLD.tileSize/2&&!isRouteCell(slot.column,slot.row,this.world.route)&&Math.hypot(dx,dz)<=LOOP_WORLD.radius;
+      slot.group.visible=Math.abs(slot.group.position.x-(boundary.centerX||0))<boundary.halfWidth+LOOP_WORLD.tileSize/2&&slot.group.position.z<boundary.front+LOOP_WORLD.tileSize/2&&slot.group.position.z>boundary.back-LOOP_WORLD.tileSize/2&&!isRouteCell(slot.column,slot.row,this.world.route)&&Math.hypot(dx,dz)<=LOOP_WORLD.radius;
     }
   }
 }
