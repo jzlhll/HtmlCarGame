@@ -2,8 +2,10 @@ import * as THREE from 'three';
 import { TREE_MODELS } from './config.js';
 
 // 同一相机的一轮场景提交共用视锥；切换小视口或投影变化时立即重算。
-const frustum=new THREE.Frustum(),projection=new THREE.Matrix4(),view=new THREE.Matrix4(),projectionView=new THREE.Matrix4(),eye=new THREE.Vector3();
+const frustum=new THREE.Frustum(),projection=new THREE.Matrix4(),view=new THREE.Matrix4(),projectionView=new THREE.Matrix4(),eye=new THREE.Vector3(),origin=new THREE.Vector3();
 let frustumCamera,coordinateSystem,reversedDepth;
+// 按相机记录各LOD的历史，弱引用不延长相机或已回收场景的生命周期。
+const cameraLevels=new WeakMap();
 
 // 大树的可见树冠远离地面原点，按整片树冠范围计算距离，避免贴近时仍是简模。
 export class CanopyLOD extends THREE.LOD {
@@ -25,15 +27,21 @@ export class CanopyLOD extends THREE.LOD {
       for(const item of this.levels)item.object.visible=false;
       return;
     }
-    const distance=this.worldBounds.distanceToPoint(eye.setFromMatrixPosition(camera.matrixWorld))/camera.zoom;
+    let history=cameraLevels.get(camera);
+    if(!history)cameraLevels.set(camera,history=new WeakMap());
+    const previousLevel=history.get(this)??0;
+    eye.setFromMatrixPosition(camera.matrixWorld);
+    const distance=(this.userData.distanceFromOrigin?eye.distanceTo(origin.setFromMatrixPosition(this.matrixWorld)):this.worldBounds.distanceToPoint(eye))/camera.zoom;
     const height=camera.userData.detailViewportHeight;
     const leafDistance=this.leafSize&&height?this.leafSize*height*camera.projectionMatrix.elements[5]/(2*TREE_MODELS.leafMinPixels*camera.zoom):Infinity;
     let level=0;
     for(let i=1;i<this.levels.length;i++){
-      const item=this.levels[i],threshold=Math.min(item.distance,i===1?leafDistance:Infinity)*(this._currentLevel===i?1-item.hysteresis:1);
+      const item=this.levels[i],threshold=Math.min(item.distance,i===1?leafDistance:Infinity)*(previousLevel===i?1-item.hysteresis:1);
       if(distance<threshold)break;level=i;
     }
-    this._currentLevel=level;
+    const minimum=camera.userData.detailBudget?.[this.userData.detailKind]||0;
+    if(level<minimum)level=Math.min(minimum,this.levels.length-1);
+    history.set(this,level);this._currentLevel=level;
     for(let i=0;i<this.levels.length;i++)this.levels[i].object.visible=i===level;
   }
 }

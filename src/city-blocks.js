@@ -102,6 +102,7 @@ export function* createCityBlocks(sites, floorAt=()=>0, shared={}) {
   }
   yield 'boundary';shadows.computeBoundingSphere();group.add(shadows);
   if(movements.length){
+    group.userData.variableInstances=true;
     const update=()=>{
       for(const {target,index,x,z,shift}of movements){const offset=index*16;target.instanceMatrix.array[offset+12]=x+shift.x;target.instanceMatrix.array[offset+14]=z+shift.z;}
       for(const target of [mesh,trim,shadows]){target.instanceMatrix.needsUpdate=true;target.computeBoundingSphere();}

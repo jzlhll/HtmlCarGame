@@ -32,7 +32,7 @@ export function* createForestLOD(record,trees,centerZ=0,{treeNear=COUNTRYSIDE.tr
           leafSize=Math.max(leafSize,(model.leafSize||0)*Math.max(Math.hypot(m[offset],m[offset+1],m[offset+2]),Math.hypot(m[offset+4],m[offset+5],m[offset+6]),Math.hypot(m[offset+8],m[offset+9],m[offset+10])));
         }
         patchBounds.min.z-=centerZ;patchBounds.max.z-=centerZ;
-        const detail=new CanopyLOD(patchBounds,leafSize);detail.name='Forest detail';detail.addLevel(near,0,.12);detail.addLevel(medium,treeNear,.12);levels[0].add(detail);yield;
+        const detail=new CanopyLOD(patchBounds,leafSize);detail.name='Forest detail';detail.userData.detailKind='forestDetail';detail.addLevel(near,0,.12);detail.addLevel(medium,treeNear,.12);levels[0].add(detail);yield;
       }
     }
     rangeBounds.union(bounds);bounds.min.z-=centerZ;bounds.max.z-=centerZ;
