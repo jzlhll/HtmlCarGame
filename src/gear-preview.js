@@ -19,6 +19,7 @@ export class GearPreview {
     }
     this.visible = true;
     const bounds = this.bounds;
+    this.camera.userData.detailViewportHeight=bounds.height*renderer.getPixelRatio();
     if (!bounds.width || !bounds.height) return;
     const height = Math.min(FLIGHT.gearPreviewHeight, game.flight.altitude()), settings = GEAR_PREVIEW;
     this.offset.set(settings.side, settings.height, settings.distance).applyEuler(this.aircraft.rotation);

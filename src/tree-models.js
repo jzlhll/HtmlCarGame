@@ -23,7 +23,7 @@ function distantCrowns(profile){
 
 // 近处每片叶子具有独立轮廓和折脊，避免整张枝叶照片贴片占满视野。
 function leafBladeGeometry(profile,p,index){
-  const positions=[],normals=[],uvs=[],colors=[],count=TREE_MODELS.leaflets[profile.type];
+  const positions=[],normals=[],uvs=[],colors=[],indices=[],count=TREE_MODELS.leaflets[profile.type];
   const random=i=>{const v=Math.sin(i*127.1+index*311.7+profile.type*74.7+TREE_MODELS.seed)*43758.5453;return v-Math.floor(v);};
   for(let i=0;i<count;i++){
     const y=1-2*(i+.5)/count,a=i*2.399963+index*1.17,r=Math.sqrt(1-y*y),n=new THREE.Vector3(Math.cos(a)*r,y,Math.sin(a)*r);
@@ -33,14 +33,16 @@ function leafBladeGeometry(profile,p,index){
     const slender=profile.type===2||profile.type===3;
     const points=slender?[[0,-.5,0,.5,0],[1,0,.02,1,.5],[0,.5,0,.5,1],[-1,0,.02,0,.5]]:[[0,-.5,0,.5,0],[.82,-.22,.01,.91,.28],[.78,.18,.01,.89,.68],[0,.5,0,.5,1],[-.78,.18,.01,.11,.68],[-.82,-.22,.01,.09,.28]];
     const centerIndex=points.length;points.push([0,0,.08,.5,.5]);
-    for(let edge=0;edge<centerIndex;edge++)for(const k of [edge,(edge+1)%centerIndex,centerIndex]){
-      const[x,y,z,u,v]=points[k],q=center.clone().addScaledVector(across,x*width).addScaledVector(along,y*length).addScaledVector(n,z*length);
+    const base=positions.length/3;
+    for(let edge=0;edge<centerIndex;edge++)indices.push(base+edge,base+(edge+1)%centerIndex,base+centerIndex);
+    for(const point of points){
+      const[x,y,z,u,v]=point,q=center.clone().addScaledVector(across,x*width).addScaledVector(along,y*length).addScaledVector(n,z*length);
       const normal=n.clone().addScaledVector(across,-x*.18).addScaledVector(along,-y*.18);
       normal.set(normal.x/p.rx,normal.y/p.ry,normal.z/p.rz).normalize();
       positions.push(p.x+q.x*p.rx,p.y+q.y*p.ry,p.z+q.z*p.rz);normals.push(normal.x,normal.y,normal.z);uvs.push(u,v);colors.push(shade,shade,shade*.98);
     }
   }
-  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geometry.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));return geometry;
+  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geometry.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));geometry.setIndex(indices);return geometry;
 }
 
 function leafSprayGeometry(profile,p,index){
@@ -94,13 +96,13 @@ function* treeGeometry(profile,level) {
       const t=source.attributes.uv.getX(i),center=curve.getPointAt(t),taper=1-.72*t;
       pos.setXYZ(i,center.x+(pos.getX(i)-center.x)*taper,center.y+(pos.getY(i)-center.y)*taper,center.z+(pos.getZ(i)-center.z)*taper);
     }
-    source.computeVertexNormals();const tube=source.toNonIndexed();source.dispose();
+    source.computeVertexNormals();const tube=level===0?source:source.toNonIndexed();if(level!==0)source.dispose();
     parts.push(markPart(tube,0,[1,1,1]));yield;
   }
   for(const [index,points]of profile.roots.entries()){
     if(far)continue;
     const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)),false,'catmullrom',.5);
-    parts.push(markPart(new THREE.TubeGeometry(curve,far?2:5,profile.type===1?.0045:.007,3,false).toNonIndexed(),profile.type===1?0:1,[.9,.92,.85]));yield;
+    parts.push(markPart(new THREE.TubeGeometry(curve,5,profile.type===1?.0045:.007,3,false),profile.type===1?0:1,[.9,.92,.85]));yield;
   }
   const geometry=mergeGeometries(parts);parts.forEach(p=>p.dispose());geometry.computeBoundingBox();geometry.computeBoundingSphere();return geometry;
 }
@@ -148,16 +150,19 @@ export function* prepareTreeModels() {
   material.onBeforeCompile=compile;material.customProgramCacheKey=()=> 'six-tree-leaf-sprays-v5';
   const farMaterial=material.clone();farMaterial.side=THREE.FrontSide;farMaterial.onBeforeCompile=compile;farMaterial.customProgramCacheKey=material.customProgramCacheKey;
   for(const profile of treeProfiles){
-    const model={material,midMaterial:material,farMaterial};
+    const leafSize=Math.max(...profile.leaves.map(p=>Math.max(p.rx,p.ry,p.rz)))*.24*(profile.type===2?1.3:profile.type===4?1.4:1);
+    const model={material,midMaterial:material,farMaterial,leafSize};
     for(const level of [0,1,2]){
       const key='scene/trees/'+profile.id+'/'+level,record=cache.available?yield {wait:cache.read(key)}:null;
       const count=record?.position?.length/3;
-      const hit=Number.isInteger(count)&&count>0&&count%3===0&&['position','normal','uv','color','foliage'].every(name=>record[name] instanceof Float32Array&&record[name].length===count*(name==='uv'?2:name==='foliage'?1:3)&&record[name].every(Number.isFinite));
+      const indexed=level===0,index=record?.index;
+      const topology=indexed?(index instanceof Uint16Array||index instanceof Uint32Array)&&index.length>0&&index.length%3===0&&index.every(value=>value<count):!index&&count%3===0;
+      const hit=Number.isInteger(count)&&count>0&&topology&&['position','normal','uv','color','foliage'].every(name=>record[name] instanceof Float32Array&&record[name].length===count*(name==='uv'?2:name==='foliage'?1:3)&&record[name].every(Number.isFinite));
       let geometry;
-      if(hit){geometry=new THREE.BufferGeometry();for(const name of ['position','normal','uv','color','foliage'])geometry.setAttribute(name,new THREE.BufferAttribute(record[name],name==='uv'?2:name==='foliage'?1:3));geometry.computeBoundingBox();geometry.computeBoundingSphere();}
+      if(hit){geometry=new THREE.BufferGeometry();for(const name of ['position','normal','uv','color','foliage'])geometry.setAttribute(name,new THREE.BufferAttribute(record[name],name==='uv'?2:name==='foliage'?1:3));if(indexed)geometry.setIndex(new THREE.BufferAttribute(index,1));geometry.computeBoundingBox();geometry.computeBoundingSphere();}
       else{
         geometry=yield* treeGeometry(profile,level);
-        if(cache.available)yield {wait:cache.write(key,Object.fromEntries(Object.entries(geometry.attributes).map(([name,attribute])=>[name,attribute.array])))};
+        if(cache.available)yield {wait:cache.write(key,{...Object.fromEntries(Object.entries(geometry.attributes).map(([name,attribute])=>[name,attribute.array])),...(geometry.index?{index:geometry.index.array}:{})})};
       }
       model[['geometry','midGeometry','farGeometry'][level]]=geometry;console.info('Tree prototype prepared '+JSON.stringify({species:profile.id,level,cacheHit:hit,vertices:geometry.attributes.position.count}));yield;
     }

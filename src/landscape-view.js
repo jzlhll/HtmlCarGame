@@ -193,10 +193,16 @@ export class LandscapeView extends THREE.Group {
     this.mountains=new MountainView(this.world);this.add(this.mountains);yield* this.mountains.makeTreeResources();this.textures.push(...this.mountains.textures);if(this.islandTreeSites)yield* this.mountains.addForestChunk(this.islandTreeSites);yield 'boundary';
     this.loopView=new LoopView(this.world,()=>this.landmarkTemplate.clone(),{bank:this.mountains.treeBank,geometry:this.mountains.treeGeometry,material:this.mountains.treeMaterial,farGeometry:this.mountains.treeSpriteGeometry,farMaterial:this.mountains.treeSpriteMaterial});this.add(this.loopView);yield 'boundary';
     yield* this.addGround();yield* this.addCityBlocks();yield* this.addFarmland();this.add(yield* createDistrict(this.world.districts));yield* this.coast.build();yield* this.addTransitions();yield* this.mountains.buildRolling();yield* this.addRegionBelts();yield* this.addRegionalCities();yield* this.loopView.build();
-    this.loopView.installHorizon(this);
-    this.updateMatrixWorld(true);
-    this.traverse(object=>{object.matrixAutoUpdate=false;object.matrixWorldAutoUpdate=false;});
-    this.loopView.traverse(object=>{object.matrixAutoUpdate=false;object.matrixWorldAutoUpdate=false;});
+    yield {task:'landscape-horizon'};yield* this.loopView.installHorizonSteps(this);
+    yield {task:'landscape-matrices'};
+    const stack=[this];let visited=0;
+    while(stack.length){
+      const object=stack.pop();stack.push(...object.children);
+      // 父节点先完成世界矩阵，再分批冻结子树，避免准备结束时集中遍历整池。
+      object.matrixWorldAutoUpdate=true;object.updateWorldMatrix(false,false,true);
+      object.matrixAutoUpdate=false;object.matrixWorldAutoUpdate=false;
+      if(++visited%64===0)yield;
+    }
   }
 
   *addRegionBelts() {
@@ -376,5 +382,5 @@ export class LandscapeView extends THREE.Group {
     }
   }
 
-  update(seconds, camera, position) { if(this.fallTexture)this.fallTexture.offset.y = -seconds * 0.7; this.coast.update(seconds);this.regionalWaterView.update(seconds);this.mountains.update(camera);this.loopView.update(position,seconds); }
+  update(seconds, camera, position) { if(this.fallTexture)this.fallTexture.offset.y = -seconds * 0.7; this.coast.update(seconds);this.regionalWaterView.update(seconds);this.loopView.update(position,seconds); }
 }

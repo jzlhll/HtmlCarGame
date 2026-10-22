@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { TREE_MODELS } from './config.js';
 
 // 同一相机的一轮场景提交共用视锥；切换小视口或投影变化时立即重算。
 const frustum=new THREE.Frustum(),projection=new THREE.Matrix4(),view=new THREE.Matrix4(),projectionView=new THREE.Matrix4(),eye=new THREE.Vector3();
@@ -6,7 +7,7 @@ let frustumCamera,coordinateSystem,reversedDepth;
 
 // 大树的可见树冠远离地面原点，按整片树冠范围计算距离，避免贴近时仍是简模。
 export class CanopyLOD extends THREE.LOD {
-  constructor(bounds){super();this.isCanopyLOD=true;this.localBounds=bounds?.clone()||new THREE.Box3();this.worldBounds=new THREE.Box3();}
+  constructor(bounds,leafSize=0){super();this.leafSize=leafSize;this.isCanopyLOD=true;this.localBounds=bounds?.clone()||new THREE.Box3();this.worldBounds=new THREE.Box3();}
   updateMatrixWorld(force) {
     // 静止树林的世界矩阵已准备；循环槽移动时会先重新开放世界矩阵更新。
     if(!this.matrixWorldAutoUpdate&&!this.matrixWorldNeedsUpdate)return;
@@ -25,9 +26,11 @@ export class CanopyLOD extends THREE.LOD {
       return;
     }
     const distance=this.worldBounds.distanceToPoint(eye.setFromMatrixPosition(camera.matrixWorld))/camera.zoom;
+    const height=camera.userData.detailViewportHeight;
+    const leafDistance=this.leafSize&&height?this.leafSize*height*camera.projectionMatrix.elements[5]/(2*TREE_MODELS.leafMinPixels*camera.zoom):Infinity;
     let level=0;
     for(let i=1;i<this.levels.length;i++){
-      const item=this.levels[i],threshold=item.distance*(this._currentLevel===i?1-item.hysteresis:1);
+      const item=this.levels[i],threshold=Math.min(item.distance,i===1?leafDistance:Infinity)*(this._currentLevel===i?1-item.hysteresis:1);
       if(distance<threshold)break;level=i;
     }
     this._currentLevel=level;

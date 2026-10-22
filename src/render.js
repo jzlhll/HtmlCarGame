@@ -204,6 +204,7 @@ export class GameRenderer {
     // CSS保持逻辑尺寸；只在尺寸或DPR变化时重建绘制缓冲，避免重复分配。
     if(size.x!==width||size.y!==height||this.renderer.getPixelRatio()!==ratio)this.renderer.setDrawingBufferSize(width,height,ratio);
     if(this.camera.aspect!==width/height){this.camera.aspect=width/height;this.camera.updateProjectionMatrix();}
+    this.camera.userData.detailViewportHeight=this.renderer.domElement.height;
     this.cockpit.resize(this.camera.aspect, CAMERA.cockpitFov);
     this.invalidate();
   }
