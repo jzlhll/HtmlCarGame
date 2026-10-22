@@ -262,7 +262,7 @@ export const FLIGHT = {
 export const AIR_CURRENTS = {
   intervalSeconds:70, gustSeconds:12, turbulenceSeconds:10, rampSeconds:1,
   turbulenceChance:.15, tailwindRatio:.5, headwindRatio:-.6, correctionRatio:.5,
-  sideYawRate:8*Math.PI/180, turbulentYawRate:32*Math.PI/180,
+  sideYawRate:5*Math.PI/180, turbulentYawRate:32*Math.PI/180,
   turbulentPitchRate:6*Math.PI/180, sideBank:14*Math.PI/180, turbulentBank:65*Math.PI/180,
 };
 
