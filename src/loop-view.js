@@ -79,7 +79,12 @@ export class LoopView extends THREE.Group {
       }
       slot.position.set(x*LOOP_WORLD.tileSize,0,z*LOOP_WORLD.tileSize);
       slot.children.forEach((child,index)=>{child.visible=index===loopVariant(x,z);});
-      this.slots.push({x,z,column:x,row:z,group:slot});this.add(slot);yield;
+      const nodes=[],stack=[slot];
+      while(stack.length){
+        const object=stack.pop();nodes.push(object);stack.push(...object.children);
+        if(nodes.length%64===0)yield;
+      }
+      this.slots.push({x,z,column:x,row:z,group:slot,nodes});this.add(slot);yield;
     }
     this.cellX=Infinity;this.cellZ=Infinity;
   }
@@ -127,9 +132,10 @@ vLoopWorld=(modelMatrix*loopPoint).xz;
         slot.column=column;slot.row=row;const variant=loopVariant(column,row);
         slot.group.position.set(column*LOOP_WORLD.tileSize,0,row*LOOP_WORLD.tileSize);slot.group.updateMatrix();
         slot.group.children.forEach((child,index)=>{child.visible=index===variant;});
-        // 环形池只搬动离开边缘的槽位，隐藏模板随所属槽位一起刷新并重新冻结。
-        slot.group.traverse(object=>{object.matrixWorldAutoUpdate=true;});slot.group.updateMatrixWorld(true);
-        slot.group.traverse(object=>{object.matrixWorldAutoUpdate=false;});
+        // 准备期节点表保证父先子，隐藏模板也在单遍更新后立即冻结。
+        for(const object of slot.nodes){
+          object.matrixWorldAutoUpdate=true;object.updateWorldMatrix(false,false,true);object.matrixWorldAutoUpdate=false;
+        }
       }
       if(this.ocean)this.ocean.matrixWorldAutoUpdate=true;
     }

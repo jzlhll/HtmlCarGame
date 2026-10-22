@@ -401,6 +401,8 @@ export const AERODYNAMICS = {
 export const GEAR_PREVIEW = {
   fov: 88, near: 0.1, far: 1800, distance: 8,
   side: -6, height: 2.2, targetDrop: 0.5, targetDropLimit: 5.5,
+  spatialCellSize:1800,spatialMaxCells:16,instanceCellSize:600,instanceSplitCount:256,
+  detailBudget:{forestDetail:1,terrainGeometry:1,terrainMaterial:1},
 };
 
 export const AIRCRAFT_PREVIEW = {

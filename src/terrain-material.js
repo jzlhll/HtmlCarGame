@@ -10,9 +10,9 @@ export function createTerrainDetail() {
 // 材质与几何分别按保守包围盒选择；所有组合在准备期进入现有预热流程。
 export function createTerrainLOD(geometries,materials,bounds,{distances=LANDSCAPE.terrain.lodDistances,hysteresis=.12,receiveShadow=false,geometryByBounds=true}={}) {
   for(const geometry of geometries)if(!geometry.boundingSphere)geometry.computeBoundingSphere();
-  const surface=new CanopyLOD(bounds);surface.name='Terrain material';
+  const surface=new CanopyLOD(bounds);surface.name='Terrain material';surface.userData.detailKind='terrainMaterial';
   for(const [level,material]of materials.entries()){
-    const detail=geometryByBounds?new CanopyLOD(bounds):new THREE.LOD();
+    const detail=new CanopyLOD(bounds);detail.userData.detailKind='terrainGeometry';detail.userData.distanceFromOrigin=!geometryByBounds;
     for(const [index,geometry]of geometries.entries()){
       const mesh=new THREE.Mesh(geometry,material);mesh.receiveShadow=receiveShadow;detail.addLevel(mesh,index===0?0:distances[index-1],hysteresis);
     }
