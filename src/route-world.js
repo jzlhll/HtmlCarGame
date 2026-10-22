@@ -1,3 +1,4 @@
+import { tourismSettings, tourismParts, scenerySolid } from './tourism-layout.js';
 import { prepareWeatherWorld, varyWeather } from './weather-world.js';
 import { prepareCityStreetLayout, streetCarBox } from './city-street-layout.js';
 import { AIRCRAFT, LANDSCAPE, JOURNEY, terrainElevation, clusterZ, LOOP_WORLD, WORLD_BOUNDARY } from './config.js';
@@ -85,12 +86,26 @@ export class RouteWorld {
       }
     }
     yield {task:'regional-layout'};this.makeChangsha();yield 'boundary';
+    this.tourismParts=[];
+    for(const settings of tourismSettings(route)){
+      const sites=[],half=(settings.spacing-LANDSCAPE.city.passageWidth)/2+60;
+      for(const site of cityBuildingSites(settings,(x,z)=>settings.exclusions.some(b=>x+half>b.minX&&x-half<b.maxX&&z+half>b.minZ&&z-half<b.maxZ))){
+        this.addBuilding(site.x,site.z,site.width,site.depth,site.height,site.color,settings.name+'城市楼房',site.profile,site.shift);sites.push(this.buildings.at(-1));
+        if(sites.length%24===0)yield;
+      }
+      this.regionalCities.push({...settings,sites});
+      for(const part of tourismParts(settings)){
+        part.y+=this.baseHeightAt(part.x,part.z);this.tourismParts.push(part);
+        const solid=scenerySolid(part);this.index(this.boxCells,solid,solid.min.x,solid.max.x,solid.min.z,solid.max.z);
+      }
+      yield;
+    }
     this.districts=[...harborParts(),...parkingParts(4200,LANDSCAPE.city.center[1])];
     for(const part of this.districts)if(part.role!=='parking')this.addBox(part.x,part.y,part.z,part.width,part.height,part.depth,part.name,0);
     this.cityStreets=[];
     const landmarkExclusions=LANDSCAPE.landmarks.map(t=>({minX:t.position[0]-t.radius*1.2,maxX:t.position[0]+t.radius*1.2,minZ:t.position[1]-t.radius*1.2,maxZ:t.position[1]+t.radius*1.2}));
     for(const [index,settings]of [city,...this.regionalCities].entries()){
-      const exclusions=index===0?landmarkExclusions:[...regionalWaterExclusions(this.regionalWater),{minX:settings.x-settings.plaza[0]/2,maxX:settings.x+settings.plaza[0]/2,minZ:settings.z-settings.plaza[1]/2,maxZ:settings.z+settings.plaza[1]/2}];
+      const exclusions=index===0?landmarkExclusions:[...(settings.exclusions||[]),...regionalWaterExclusions(this.regionalWater),{minX:settings.x-settings.plaza[0]/2,maxX:settings.x+settings.plaza[0]/2,minZ:settings.z-settings.plaza[1]/2,maxZ:settings.z+settings.plaza[1]/2}];
       const network=yield* prepareCityStreetLayout(settings,exclusions,index===0?'guangzhou':settings.id,this.cacheStreetLayouts);this.cityStreets.push(network);
       for(const [i,car]of network.cars.entries()){const box=streetCarBox(car);this.addBox(car.x,(box.min.y+box.max.y)/2,car.z,box.max.x-box.min.x,box.max.y-box.min.y,box.max.z-box.min.z,box.name,0);if(i%64===0)yield;}
     }

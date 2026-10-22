@@ -1,4 +1,5 @@
-import { AIRCRAFT, FLIGHT, AIRPORT_TRAFFIC, TREE_CONTACT, WORLD_TRAVEL, worldHorizontalSpeed, displayHeight, WORLD_BOUNDARY } from './config.js';
+import { AIRCRAFT, FLIGHT, AIRPORT_TRAFFIC, TREE_CONTACT, WORLD_TRAVEL, worldHorizontalSpeed, displayHeight, WORLD_BOUNDARY, TOURISM } from './config.js';
+import { segmentBox } from './route-world.js';
 import { GlassIntegrity } from './glass-integrity.js';
 import { createAirportTraffic, airportTrafficHit, hitAirportTruck, stoppedOnRunway } from './airport-traffic.js';
 
@@ -14,6 +15,7 @@ export class Mission {
     this.started = false; this.elapsed = 0; this.flightSeconds = 0; this.path = [[aircraft.position.x, aircraft.position.z]];
     this.sampleElapsed = 0; this.contacts = []; this.nextEncounter = 0;
     this.waterfallsPassed = new Set();
+    this.citiesVisited = new Set();this.cityNotice=null;this.cityNoticeRemaining=0;
     this.parkSeconds = 0; this.approaching = false; this.finalApproachAnnounced = false; this.offCourse = false;
     this.events = []; this.airportTraffic = createAirportTraffic(this.route);
   }
@@ -106,6 +108,19 @@ export class Mission {
     this.elapsed += dt;
     if (!a.onGround && !a.landed) this.flightSeconds += dt;
     if (this.elapsed > this.route.deadline + 1e-8) return [{type: 'failed', key: 'deadline', reason: this.deadlineReason()}];
+    this.cityNoticeRemaining=Math.max(0,this.cityNoticeRemaining-dt);
+    if(this.cityNoticeRemaining===0)this.cityNotice=null;
+    if(!a.onGround&&!a.landed){
+      const previous=flight.previous.position;
+      for(const city of this.route.cityVisits){
+        if(this.citiesVisited.has(city.id))continue;
+        // 扫掠区域包含正反向及横向进入，低帧率跨过边界也只产生一次事件。
+        const zone={min:{x:-TOURISM.visitHalfWidth,y:-Infinity,z:city.z-TOURISM.visitHalfDepth},max:{x:TOURISM.visitHalfWidth,y:Infinity,z:city.z+TOURISM.visitHalfDepth}};
+        if(!segmentBox(previous,a.position,zone))continue;
+        this.citiesVisited.add(city.id);this.cityNotice=city;this.cityNoticeRemaining=TOURISM.promptSeconds;
+        events.push({type:'city-enter',key:city.id});
+      }
+    }
     this.sampleElapsed += dt;
     if (this.sampleElapsed >= this.route.sampleSeconds) {
       this.sampleElapsed %= this.route.sampleSeconds;

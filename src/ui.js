@@ -60,7 +60,7 @@ export class UI {
     this.container.querySelector('.intro-copy').innerHTML = `第 ${route.id} 关：深圳起飞，抵达${route.destinationName}。`;
     setText(this.container.querySelector('.availability'), `${formatTime(route.deadline)} · 起飞至${route.destinationName}机场`);
     setText(this.container.querySelector('.welcome .eyebrow'), `Flight ${route.id}`);
-    const stops = [{english: 'Shenzhen airport', chinese: '深圳机场', z: 0}, ...route.sectors];
+    const stops = [{english: 'Shenzhen airport', chinese: '深圳机场', z: 0}, ...[...route.sectors,...route.cityVisits.filter(city=>city.id!=='guangzhou').map(city=>({z:city.z,english:city.english,chinese:city.landmark?city.name+' · '+city.landmark:city.name}))].sort((a,b)=>b.z-a.z)];
     this.container.querySelector('#route-briefing').innerHTML = `
       <div class="level-selector" aria-label="选择飞行关卡">${LEVELS.map(level => `<a href="?level=${level.id}" ${level.id === route.id ? 'aria-current="page"' : ''}>${level.id} · ${level.destinationEnglish}<small>${level.destinationName}</small></a>`).join('')}</div>
       <header><span>Flight plan<small>第 ${route.id} 关 · 深圳 → ${route.destinationName}</small></span><b>${formatTime(route.deadline)}</b></header>
@@ -253,6 +253,10 @@ export class UI {
         warning=warning ? [`${warning[0]} · Landing speed ${range}`,[warning[1],hint].filter(Boolean).join(' '),warning[2]]
           : [`Landing speed ${range}`,hint,a.airspeed<game.route.landingMinSpeed?'warning':'info'];
       }
+    }
+    if(game.view==='COCKPIT'&&!['STARTUP','CRASH','COMPLETE','RESULT'].includes(game.phase)&&mission.cityNotice){
+      const city=mission.cityNotice,english=`Entering ${city.english.toLowerCase()}`,chinese=`进入${city.name}上空`;
+      warning=warning?[`${english} · ${warning[0]}`,`${chinese} · ${warning[1]}`,warning[2]]:[english,chinese,'info'];
     }
     const banner=this.elements['flight-status'];
     banner.hidden=!warning;

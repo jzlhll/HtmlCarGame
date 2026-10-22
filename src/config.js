@@ -81,7 +81,7 @@ export const HARBOR = {
 };
 
 export const COUNTRYSIDE = {
-  cacheRecipe: 9, treeNear: 450, treeFar: 9500,
+  cacheRecipe: 10, treeNear: 450, treeFar: 9500,
   fieldSpacing: 420, fieldDepth: 310, roadWidth: 28, treeArea: 300000,
   fieldColors: [0x74784b,0x8d8850,0x6e7a45,0x9b8b62,0x536748,0x8b795c,0xa19b6b,0x657751],
   treeColors: [0x334b2d,0x41562f,0x4c6037,0x2d442d],
@@ -364,7 +364,7 @@ export const LANDSCAPE = {
   mountains: [],
   coast: {
     seaLevel: -.12, seabed: -4, shoreBlend: 600, shoreGrid: 150, alongGrid: 250, airportGrid: 100,
-    endZ: -14000 * WORLD_TRAVEL.horizontalScale / 2, startZ: 6000, width: 12000,
+    endZ: -14000 * WORLD_TRAVEL.horizontalScale / 2, startZ: 6000, width: 36000,
     shoreline: [[6000,2400],[2000,1800],[0,1600],[-4000,1100],[-6500,0],[-9000,-2000],[-11500,-6500],[-14000,-41000]].map(([z,x])=>[z<0?z*WORLD_TRAVEL.horizontalScale/2:z,x]),
     airport: {x:115,z:RUNWAY.startOffset-RUNWAY.length/2,halfWidth:RUNWAY.length/2+400,halfLength:RUNWAY.length/2+400,edge:80},
     causeway: {minX:450,maxX:1900,minZ:-560,maxZ:-240,edge:50},
@@ -462,6 +462,29 @@ export const LEVELS = [
   { id: 3, destinationName: '武汉', destinationEnglish: 'Wuhan', deadline: 600, cruiseSpeed: 453.74, approachDistance: 7000 * WORLD_TRAVEL.horizontalScale, threshold: -206000 },
 ];
 
+// 城市按真实旅游资源选材，位置与尺度服从压缩航线及机场净空。
+export const TOURISM = {
+  recipe: 1, promptSeconds: 3, visitHalfDepth: 2400, visitHalfWidth: 18000,
+  columns: 8, rows: 12, spacing: 1200, plaza: [2400, 2400],
+  cities: [
+    {id:'shenzhen',name:'深圳',english:'Shenzhen',level:1,x:10500,z:-10000,kind:'sail',landmark:'深圳湾春茧',second:'大鹏所城',theme:'fort'},
+    {id:'dongguan',name:'东莞',english:'Dongguan',level:1,x:10500,z:-26000,kind:'garden',landmark:'可园',second:'虎门威远炮台',theme:'fort'},
+    {id:'zhaoqing',name:'肇庆',english:'Zhaoqing',level:1,x:-10500,z:-56000,kind:'cliff',landmark:'七星岩',second:'星湖牌坊',theme:'gate'},
+    {id:'shaoguan',name:'韶关',english:'Shaoguan',level:2,x:-10500,z:-75000,kind:'temple',landmark:'南华禅寺',second:'风采楼',theme:'gate'},
+    {id:'chenzhou',name:'郴州',english:'Chenzhou',level:2,x:10500,z:-83000,kind:'cliff',landmark:'高椅岭',second:'东江湖码头',theme:'marina'},
+    {id:'zhangjiajie',name:'张家界',english:'Zhangjiajie',level:2,x:-10500,z:-103000,kind:'arch',landmark:'天门山天门洞',second:'土家吊脚楼',theme:'stilt'},
+    {id:'hengyang',name:'衡阳',english:'Hengyang',level:2,x:10500,z:-106000,kind:'temple',landmark:'南岳大庙',second:'衡山祝融殿',theme:'pagoda'},
+    {id:'yueyang',name:'岳阳',english:'Yueyang',level:3,x:10500,z:-152000,kind:'pagoda',landmark:'岳阳楼',second:'洞庭湖帆船港',theme:'marina'},
+    {id:'chibi',name:'赤壁',english:'Chibi',level:3,x:-10500,z:-169000,kind:'fort',landmark:'赤壁古战场',second:'拜风台',theme:'temple'},
+    {id:'xianning',name:'咸宁',english:'Xianning',level:3,x:10500,z:-181000,kind:'spring',landmark:'咸宁温泉园',second:'九宫山山庄',theme:'stilt'},
+    {id:'wuhan',name:'武汉',english:'Wuhan',level:3,x:-10500,z:-190000,kind:'bridge',landmark:'武汉长江大桥',second:'湖北省博物馆',theme:'museum'},
+  ],
+  visits: [
+    {id:'guangzhou',name:'广州',english:'Guangzhou',level:1,z:-47000},
+    {id:'changsha',name:'长沙',english:'Changsha',level:2,z:-130000},
+  ],
+};
+
 export const JOURNEY = {
   sectors: [
     { z: -3200 * WORLD_TRAVEL.horizontalScale, english: 'Coastal expressway', chinese: '沿江高速', kind: 'coast', level: 1 },
@@ -544,6 +567,8 @@ export function createRoute(levelId = 1) {
   if (level.id === 1) sectors.push({ z: clusterZ('village'), english: 'Village', chinese: '村庄', kind: 'village' });
   sectors.push({ z: level.threshold, english: `${level.destinationEnglish} airport`, chinese: `${level.destinationName}机场`, kind: 'airport' });
   return { ...ROUTE, ...level, elevation, destination, sectors,
+    cities: TOURISM.cities.filter(city=>city.level<=level.id),
+    cityVisits: [...TOURISM.cities,...TOURISM.visits].filter(city=>city.level<=level.id).sort((a,b)=>b.z-a.z),
     transitions: JOURNEY.transitions.zones.filter(zone => zone.level <= level.id && (!zone.lastLevel || level.id <= zone.lastLevel) && zone.z > level.threshold + zone.length / 2),
     cruiseHeight: 550, mountains: [...LANDSCAPE.mountains, ...(level.id >= 2 ? JOURNEY.danxia : [])],
     encounters: ROUTE.encounters.map((spec, index) => ({ ...spec, at: spec.at * (level.deadline / 200) + index * ROUTE.encounterExtraGapSeconds })) };
