@@ -9313,7 +9313,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "I don't know why I settled on Miami, but anyway I did.",
-      "meaning": "我不知道为什么我落户到了迈阿密，但不管怎样我做了。",
+      "meaning": "我不知道自己为什么选定了迈阿密，但不管怎样，我确实这么做了。",
       "kind": "sentence"
     }
   },
@@ -13947,7 +13947,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Gun control",
-      "meaning": "枪支管理法",
+      "meaning": "枪支管制",
       "kind": "phrase"
     }
   },
@@ -14251,7 +14251,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "By herself",
-      "meaning": "她自己",
+      "meaning": "她独自；靠她自己",
       "kind": "phrase"
     }
   },
@@ -14420,7 +14420,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "In a hurry",
-      "meaning": "立即，匆忙",
+      "meaning": "急忙；匆忙",
       "kind": "phrase"
     }
   },
@@ -15469,7 +15469,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Business license",
-      "meaning": "营业执照；运业执照",
+      "meaning": "营业执照",
       "kind": "phrase"
     }
   },
@@ -21653,7 +21653,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Treasure chest",
-      "meaning": "财宝箱；宝库",
+      "meaning": "财宝箱；宝箱",
       "kind": "phrase"
     }
   },
@@ -22866,7 +22866,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Living creature",
-      "meaning": "生物；生命单位",
+      "meaning": "生物；活物",
       "kind": "phrase"
     }
   },

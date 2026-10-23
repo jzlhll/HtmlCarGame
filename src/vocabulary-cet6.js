@@ -463,7 +463,7 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "vt",
     "group": 0,
     "example": {
-      "text": "Building the new road will only aggravate the situation .",
+      "text": "Building the new road will only aggravate the situation.",
       "meaning": "建造那条新路只会使情况恶化。",
       "kind": "sentence"
     }
@@ -2396,8 +2396,8 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...a black bird with a yellow beak.",
-      "meaning": "…一只有着黄喙的黑鸟。",
+      "text": "A black bird with a yellow beak landed on the fence.",
+      "meaning": "一只长着黄色喙的黑鸟落在栅栏上。",
       "kind": "sentence"
     }
   },
@@ -2890,7 +2890,7 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "They set off at a brisk pace .",
+      "text": "They set off at a brisk pace.",
       "meaning": "他们踏着轻快的步伐上路了。",
       "kind": "sentence"
     }
@@ -4154,7 +4154,7 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "I was shocked by the doctor’s lack of compassion .",
+      "text": "I was shocked by the doctor’s lack of compassion.",
       "meaning": "我对这个医生如此缺乏同情心感到震惊。",
       "kind": "sentence"
     }
@@ -4167,7 +4167,7 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "I allowed him to go home on compassionate grounds .",
+      "text": "I allowed him to go home on compassionate grounds.",
       "meaning": "我出于同情让他回家了。",
       "kind": "sentence"
     }
@@ -4893,7 +4893,7 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "It was a reasonable explanation, but his voice lacked conviction .",
+      "text": "It was a reasonable explanation, but his voice lacked conviction.",
       "meaning": "这解释合情合理，只是他的语气不坚定。",
       "kind": "sentence"
     }
@@ -5088,7 +5088,7 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "The living room was warm and cosy .",
+      "text": "The living room was warm and cosy.",
       "meaning": "客厅暖和又舒适。",
       "kind": "sentence"
     }
@@ -5669,7 +5669,7 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "We assembled here today are issuing a new decree to be heardin every city, in every foreign capital, and in every hall of power.",
+      "text": "We assembled here today are issuing a new decree to be heard in every city, in every foreign capital, and in every hall of power.",
       "meaning": "今天我们聚集于此，是为了颁布新的命令，让它在每座城市、每个国家的首都、每座权力的殿堂回响。",
       "kind": "sentence"
     }
@@ -5810,7 +5810,7 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "The committee deferred their decision .",
+      "text": "The committee deferred their decision.",
       "meaning": "委员会延期作出决定。",
       "kind": "sentence"
     }
@@ -6019,7 +6019,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "This decreases the device thickness and depletion voltage and consequently reduces material quality requirements and cost of the detector material.",
-      "meaning": "这减少了设备的厚度和电压损耗，从而降低材料的质量要求和探测器的材料成本。",
+      "meaning": "这会减小器件厚度和耗尽电压，从而降低对材料质量的要求以及探测器的材料成本。",
       "kind": "sentence"
     }
   },
@@ -6070,8 +6070,8 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "vt",
     "group": 0,
     "example": {
-      "text": "...a government decision earlier this month to deport all illegal immigrants.",
-      "meaning": "…本月早些时候政府一项驱逐所有非法移民的决定。",
+      "text": "They protested a government decision earlier this month to deport all illegal immigrants.",
+      "meaning": "他们抗议政府本月早些时候驱逐所有非法移民的决定。",
       "kind": "sentence"
     }
   },
@@ -6304,7 +6304,7 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Two suspects have been detained by the police for questioning .",
+      "text": "Two suspects have been detained by the police for questioning.",
       "meaning": "两名嫌疑人被警方拘留审问。",
       "kind": "sentence"
     }
@@ -6343,8 +6343,8 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "During dry place, keep within the new air circulation, avoid rain and insolate, also can use some detergent to remove odor.",
-      "meaning": "在晾置期间，要保持新居内空气的流通，避免雨淋及曝晒，还可采用一些去除气味的清洁剂。",
+      "text": "While the new home is drying out, keep the air circulating, avoid rain and direct sunlight, and you can also use some detergent to remove odors.",
+      "meaning": "新居晾置期间要保持室内空气流通，避免雨淋和暴晒，还可以用些清洁剂去除异味。",
       "kind": "sentence"
     }
   },
@@ -6352,7 +6352,7 @@ export const CET6_VOCABULARY = [
     "id": "cet6-deterrent",
     "libraryId": "cet6",
     "word": "deterrent",
-    "meaning": "威慑的；制止的",
+    "meaning": "威慑力量；制止物；遏制因素",
     "partOfSpeech": "n",
     "group": 0,
     "example": {
@@ -6707,7 +6707,7 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "A modification of the common-origin theory accounts for the density discrepancy .",
+      "text": "A modification of the common-origin theory accounts for the density discrepancy.",
       "meaning": "关于共同起源的理论，有一种改进的论点解释了密度的不符。",
       "kind": "sentence"
     }
@@ -7033,7 +7033,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Domain name system",
-      "meaning": "［计］域名系统",
+      "meaning": "域名系统",
       "kind": "phrase"
     }
   },
@@ -7110,7 +7110,7 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "The prospect of flying filled me with dread .",
+      "text": "The prospect of flying filled me with dread.",
       "meaning": "想到要乘飞机我充满了恐惧。",
       "kind": "sentence"
     }
@@ -7241,7 +7241,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Dwelling place",
-      "meaning": "n. 住处；寓所",
+      "meaning": "住处；寓所",
       "kind": "phrase"
     }
   },
@@ -7392,12 +7392,12 @@ export const CET6_VOCABULARY = [
     "id": "cet6-elaboration",
     "libraryId": "cet6",
     "word": "elaboration",
-    "meaning": "苦心经营，详尽的细节",
+    "meaning": "详述；细致阐述；细节",
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "The short answer will to power requires some elaboration as to the methods whereby one might effect such a transformation of ones experience.",
-      "meaning": "简短的回答能够激励出苦心经营的需要,至于人们如何影响这样一种,个人经历的转变的方法。",
+      "text": "The short answer, “will to power”, requires some elaboration as to the methods by which one might effect such a transformation of one’s experience.",
+      "meaning": "对“权力意志”这个简短的回答，还需要进一步说明人们可以借助哪些方法来促成自身经验的这种转变。",
       "kind": "sentence"
     }
   },
@@ -7799,8 +7799,8 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "A A good encyclopaedia is a mine of information.",
-      "meaning": "一部好的百科全书是一座知识宝库。 。",
+      "text": "A good encyclopaedia is a mine of information.",
+      "meaning": "一部好的百科全书是一座知识宝库。",
       "kind": "sentence"
     }
   },
@@ -7865,7 +7865,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "There should be no suggestion of endorsement of the product or the company by WHO.",
-      "meaning": "世卫组织不得对任何产品或公司提供支持建议。",
+      "meaning": "不应有任何暗示世界卫生组织认可该产品或该公司的意味。",
       "kind": "sentence"
     }
   },
@@ -7904,7 +7904,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Enlist in",
-      "meaning": "v. 应募，参军",
+      "meaning": "应募；参军",
       "kind": "phrase"
     }
   },
@@ -8073,7 +8073,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Celestial equator",
-      "meaning": "[天]天球赤道（等于equator，equinoctial，equinoctial circle，equinoctial line）",
+      "meaning": "天球赤道",
       "kind": "phrase"
     }
   },
@@ -8177,7 +8177,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Soil erosion",
-      "meaning": "n. 水土流失；土壤侵蚀；土壤流失；泥土流失",
+      "meaning": "水土流失；土壤侵蚀",
       "kind": "phrase"
     }
   },
@@ -8224,7 +8224,7 @@ export const CET6_VOCABULARY = [
     "id": "cet6-eruption",
     "libraryId": "cet6",
     "word": "eruption",
-    "meaning": "爆发，火山灰",
+    "meaning": "爆发；喷发",
     "partOfSpeech": "n",
     "group": 0,
     "example": {
@@ -8684,7 +8684,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Crystal clear waters, beautiful white sand beaches, swaying palm trees and fabulous dive sites – that’s why the Maldives, is known for being one of the best tropical holiday destinations in the world.",
-      "meaning": "清澈透明的海水，美丽的白色沙滩，摇曳生姿的棕榈树，难以置信的的潜水胜地——这就是马尔代夫被誉为世界上最佳热带地区度假地之一的原因。",
+      "meaning": "清澈透明的海水，美丽的白色沙滩，摇曳生姿的棕榈树，绝佳的潜水胜地——这就是马尔代夫被誉为世界上最佳热带度假地之一的原因。",
       "kind": "sentence"
     }
   },
@@ -8749,7 +8749,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Feast day",
-      "meaning": "n. 节日；斋日；宗教节日",
+      "meaning": "节日；宗教节日",
       "kind": "phrase"
     }
   },
@@ -8918,7 +8918,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Fling up",
-      "meaning": "vt. 向上猛抛",
+      "meaning": "向上猛抛",
       "kind": "phrase"
     }
   },
@@ -9225,8 +9225,8 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...a shrubby plant with a strong characteristic fragrance.",
-      "meaning": "…一种有独特浓郁香味的灌木。",
+      "text": "This shrubby plant has a strong characteristic fragrance.",
+      "meaning": "这种灌木有着独特而浓烈的香味。",
       "kind": "sentence"
     }
   },
@@ -9561,8 +9561,8 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...the glamour of show biz.",
-      "meaning": "…演艺业的诱惑力。",
+      "text": "She was attracted by the glamour of show biz.",
+      "meaning": "她被演艺圈的魅力所吸引。",
       "kind": "sentence"
     }
   },
@@ -9835,7 +9835,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Grope for",
-      "meaning": "v. 探索",
+      "meaning": "摸索；探索",
       "kind": "phrase"
     }
   },
@@ -9923,8 +9923,8 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...Lake Baringo, a freshwater haven for a mixed variety of birds.",
-      "meaning": "…百瑞高湖，一个适合各种鸟类的淡水栖息地。",
+      "text": "Lake Baringo is a freshwater haven for a mixed variety of birds.",
+      "meaning": "巴林戈湖是各类鸟类的淡水栖息地。",
       "kind": "sentence"
     }
   },
@@ -10015,7 +10015,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "From henceforth",
-      "meaning": "[古语]从此 [亦作 henceforward]",
+      "meaning": "从此；从今以后",
       "kind": "phrase"
     }
   },
@@ -10062,7 +10062,7 @@ export const CET6_VOCABULARY = [
     "id": "cet6-heroin",
     "libraryId": "cet6",
     "word": "heroin",
-    "meaning": "海洛因，吗啡",
+    "meaning": "海洛因",
     "partOfSpeech": "n",
     "group": 0,
     "example": {
@@ -10248,7 +10248,7 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "The group are holding two tourists hostage (= keeping them as hostages ) .",
+      "text": "The group are holding two tourists hostage.",
       "meaning": "这伙人挟持了两名游客作为人质。",
       "kind": "sentence"
     }
@@ -10353,7 +10353,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Vernon said that as he watched the tsunami come ashore, he was unable to divorce the scientist in him from the humanist.",
-      "meaning": "弗兰克说，当他观看到海啸逼近的时候，他不能使自己从科学家和人道主义者中脱离出来。",
+      "meaning": "弗农说，当他看着海啸冲上岸时，他无法将自己身上的科学家与人文主义者分开。",
       "kind": "sentence"
     }
   },
@@ -10560,7 +10560,7 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "The question is purely hypothetical .",
+      "text": "The question is purely hypothetical.",
       "meaning": "这个问题完全基于假设。",
       "kind": "sentence"
     }
@@ -10586,7 +10586,7 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Everyone in the studio burst into hysterical laughter .",
+      "text": "Everyone in the studio burst into hysterical laughter.",
       "meaning": "演播室里的每个人都爆发出一阵狂笑。",
       "kind": "sentence"
     }
@@ -10613,7 +10613,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Application icon",
-      "meaning": "n. 应用程序图标",
+      "meaning": "应用程序图标",
       "kind": "phrase"
     }
   },
@@ -11094,7 +11094,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Indulge in",
-      "meaning": "vt. 沉湎于，沉溺于",
+      "meaning": "沉湎于；沉溺于",
       "kind": "phrase"
     }
   },
@@ -13190,7 +13190,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "She uses some wonderful images and metaphors in her writing.",
-      "meaning": "她在作品中用了一些绝妙的比喻和暗喻。",
+      "meaning": "她在作品中用了一些绝妙的意象和隐喻。",
       "kind": "sentence"
     }
   },
@@ -16009,7 +16009,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "High profile",
-      "meaning": "鲜明的姿态；引人注目的高姿态；明确的立场",
+      "meaning": "高调；引人注目",
       "kind": "phrase"
     }
   },
@@ -17907,7 +17907,7 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Good of you to arrive on time, George said, with heavy sarcasm.",
+      "text": "“Good of you to arrive on time,” George said, with heavy sarcasm.",
       "meaning": "“你到得真准时啊。”乔治毫不掩饰地挖苦道。",
       "kind": "sentence"
     }
@@ -20128,7 +20128,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Sue for",
-      "meaning": "控告",
+      "meaning": "请求；要求（如 sue for peace 求和）",
       "kind": "phrase"
     }
   },
@@ -20614,7 +20614,7 @@ export const CET6_VOCABULARY = [
     "libraryId": "cet6",
     "word": "tan",
     "meaning": "晒黑；棕褐色",
-    "partOfSpeech": "n",
+    "partOfSpeech": "v/n",
     "group": 0,
     "example": {
       "text": "She has a pale skin which doesn’t tan easily.",
@@ -20878,7 +20878,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Soil texture",
-      "meaning": "土壤质地；土壤结构；土攘组织；土壤粗密度",
+      "meaning": "土壤质地；土壤结构",
       "kind": "phrase"
     }
   },
@@ -20891,7 +20891,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Thermal energy",
-      "meaning": "热能；温热热能法，热能专业",
+      "meaning": "热能",
       "kind": "phrase"
     }
   },
@@ -20904,7 +20904,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Thigh bone",
-      "meaning": "股骨；腿节",
+      "meaning": "股骨",
       "kind": "phrase"
     }
   },
@@ -21526,7 +21526,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Bath tub",
-      "meaning": "浴盆；盆形燃烧室",
+      "meaning": "浴盆；浴缸",
       "kind": "phrase"
     }
   },
@@ -21591,7 +21591,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Turbulent boundary layer",
-      "meaning": "湍流边界层；紊两面层",
+      "meaning": "湍流边界层",
       "kind": "phrase"
     }
   },
@@ -21604,7 +21604,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Financial turmoil",
-      "meaning": "金融风暴；金融危机；金融混乱",
+      "meaning": "金融动荡；金融混乱",
       "kind": "phrase"
     }
   },
@@ -21630,7 +21630,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Annual turnover",
-      "meaning": "年营业额，年成交量；年总生物量",
+      "meaning": "年营业额；年成交量",
       "kind": "phrase"
     }
   },
@@ -21695,7 +21695,7 @@ export const CET6_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Underlying asset",
-      "meaning": "标的资产；基础资产；相关/指定资产",
+      "meaning": "标的资产；基础资产",
       "kind": "phrase"
     }
   },
@@ -21889,7 +21889,7 @@ export const CET6_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Hepatitis b vaccine",
+      "text": "Hepatitis B vaccine",
       "meaning": "乙肝疫苗",
       "kind": "phrase"
     }

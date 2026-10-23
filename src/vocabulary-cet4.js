@@ -1787,7 +1787,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Their father never showed them much affection .",
+      "text": "Their father never showed them much affection.",
       "meaning": "他们的父亲对他们从来没有表现出多少慈爱。",
       "kind": "sentence"
     }
@@ -3703,7 +3703,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "It creates an atmosphere which visitors find so appealing .",
+      "text": "It creates an atmosphere which visitors find so appealing.",
       "meaning": "它创造了一种吸引游客的氛围。",
       "kind": "sentence"
     }
@@ -5060,7 +5060,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Attend a lecture",
-      "meaning": "听关于……的讲座；上课",
+      "meaning": "听讲座；听课",
       "kind": "phrase"
     }
   },
@@ -7796,8 +7796,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...Picasso's biographer.",
-      "meaning": "…毕加索的传记作者。",
+      "text": "He is Picasso's biographer.",
+      "meaning": "他是毕加索的传记作者。",
       "kind": "sentence"
     }
   },
@@ -8384,7 +8384,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "The boat capsized (= turned over ) in heavy seas.",
+      "text": "The boat capsized in heavy seas.",
       "meaning": "船在波涛汹涌的大海上倾覆了。",
       "kind": "sentence"
     }
@@ -10913,7 +10913,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Career development",
-      "meaning": "职业发展，职业培训",
+      "meaning": "职业发展",
       "kind": "phrase"
     }
   },
@@ -11519,8 +11519,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...a tiny fossil plant, only a few centimetres high.",
-      "meaning": "…一块小小的植物化石，只有几厘米高。",
+      "text": "It is a tiny fossil plant, only a few centimetres high.",
+      "meaning": "这是一块很小的植物化石，只有几厘米高。",
       "kind": "sentence"
     }
   },
@@ -13028,7 +13028,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Reporters asked him to clarify his position (= say exactly what his beliefs are ) on welfare reform.",
+      "text": "Reporters asked him to clarify his position on welfare reform.",
       "meaning": "记者们要求他阐明他在福利改革问题上的立场。",
       "kind": "sentence"
     }
@@ -14359,7 +14359,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "President Bush gave the commencement address today at the University of Notre Dame.",
-      "meaning": "布什总统今天在巴黎圣母院大学发表了毕业典礼演说。",
+      "meaning": "布什总统今天在圣母大学发表了毕业典礼演说。",
       "kind": "sentence"
     }
   },
@@ -14605,8 +14605,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...the ultimate triumph of communism in the world.",
-      "meaning": "…共产主义在全世界的最终胜利。",
+      "text": "They believed in the ultimate triumph of communism in the world.",
+      "meaning": "他们相信共产主义最终会在全世界取得胜利。",
       "kind": "sentence"
     }
   },
@@ -14887,7 +14887,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "She was awarded a large sum in compensatory damages .",
+      "text": "She was awarded a large sum in compensatory damages.",
       "meaning": "她得到了一大笔损失赔偿金。",
       "kind": "sentence"
     }
@@ -15145,8 +15145,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Compose of",
-      "meaning": "由…组成",
+      "text": "Be composed of",
+      "meaning": "由……组成",
       "kind": "phrase"
     }
   },
@@ -15158,8 +15158,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...music by Strauss, Mozart, Beethoven, and other great composers.",
-      "meaning": "…施特劳斯、莫扎特、贝多芬及其他伟大作曲家创作的音乐。",
+      "text": "The concert featured music by Strauss, Mozart, Beethoven, and other great composers.",
+      "meaning": "音乐会上演奏了施特劳斯、莫扎特、贝多芬等伟大作曲家的作品。",
       "kind": "sentence"
     }
   },
@@ -16222,7 +16222,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Conservative party",
-      "meaning": "保守的",
+      "meaning": "保守党",
       "kind": "phrase"
     }
   },
@@ -17698,8 +17698,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...the natural laws of the cosmos.",
-      "meaning": "…宇宙的自然法则。",
+      "text": "Science studies the natural laws of the cosmos.",
+      "meaning": "科学研究宇宙的自然法则。",
       "kind": "sentence"
     }
   },
@@ -18014,7 +18014,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Married couple",
-      "meaning": "新婚夫妻",
+      "meaning": "已婚夫妇",
       "kind": "phrase"
     }
   },
@@ -18466,8 +18466,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...Ian Fleming, the creator of James Bond.",
-      "meaning": "…伊恩·弗莱明，詹姆斯·邦德的创作者。",
+      "text": "Ian Fleming was the creator of James Bond.",
+      "meaning": "伊恩·弗莱明是詹姆斯·邦德的创作者。",
       "kind": "sentence"
     }
   },
@@ -18666,7 +18666,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "The new law has been widely criticized .",
+      "text": "The new law has been widely criticized.",
       "meaning": "这项新法律受到了广泛的批评。",
       "kind": "sentence"
     }
@@ -18770,7 +18770,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "The conservation of tropical forests is of crucial importance .",
+      "text": "The conservation of tropical forests is of crucial importance.",
       "meaning": "保护热带雨林至关重要。",
       "kind": "sentence"
     }
@@ -19321,8 +19321,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...better protection for pedestrians and cyclists.",
-      "meaning": "…对行人和骑自行车的人的更好保护。",
+      "text": "The new law offers better protection for pedestrians and cyclists.",
+      "meaning": "新法律为行人和骑自行车的人提供了更好的保护。",
       "kind": "sentence"
     }
   },
@@ -19883,8 +19883,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...important improvements in the situation of debtor countries.",
-      "meaning": "…债务国境况的重大改善。",
+      "text": "The plan brought important improvements in the situation of debtor countries.",
+      "meaning": "这项计划使债务国的境况有了重大改善。",
       "kind": "sentence"
     }
   },
@@ -21230,7 +21230,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "People who are sent to prison for drunk-driving get what they deserve .",
+      "text": "People who are sent to prison for drunk-driving get what they deserve.",
       "meaning": "那些醉酒驾车被送进监狱的人是罪有应得的。",
       "kind": "sentence"
     }
@@ -22137,7 +22137,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "They have to be treated well, with dignity.",
-      "meaning": "必须善待申请人，让人有尊严。",
+      "meaning": "他们必须受到善待，要有尊严。",
       "kind": "sentence"
     }
   },
@@ -23109,7 +23109,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Her honeymoon seemed a distant memory .",
+      "text": "Her honeymoon seemed a distant memory.",
       "meaning": "她的蜜月似乎成了遥远的记忆。",
       "kind": "sentence"
     }
@@ -27308,7 +27308,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "‘I warned you not to phone me, ’ he said evenly.",
+      "text": "‘I warned you not to phone me,’ he said evenly.",
       "meaning": "“我告诫过你不要给我打电话。”他平静地说。",
       "kind": "sentence"
     }
@@ -27941,7 +27941,7 @@ export const CET4_VOCABULARY = [
     "id": "cet4-excuse",
     "libraryId": "cet4",
     "word": "excuse",
-    "meaning": "为…辩解；使免除",
+    "meaning": "原谅；为……辩解；使免除",
     "partOfSpeech": "v",
     "group": 0,
     "example": {
@@ -29956,9 +29956,9 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Animal feed",
-      "meaning": "动物饲料",
-      "kind": "phrase"
+      "text": "The cows feed on grass.",
+      "meaning": "牛吃草。",
+      "kind": "sentence"
     }
   },
   {
@@ -32238,7 +32238,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Freight forwarding",
-      "meaning": "货运代理；货物发运；运费由提货方支付",
+      "meaning": "货运代理；货物发运",
       "kind": "phrase"
     }
   },
@@ -34765,8 +34765,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Hand grip",
-      "meaning": "把手；手柄",
+      "text": "Grip the rope tightly",
+      "meaning": "紧紧抓住绳子",
       "kind": "phrase"
     }
   },
@@ -35801,7 +35801,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Hate doing",
-      "meaning": "不喜欢做某事；讨厌做某事；与生俱来厌恶",
+      "meaning": "不喜欢做某事；讨厌做某事",
       "kind": "phrase"
     }
   },
@@ -36948,7 +36948,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Hit the ball",
-      "meaning": "击球；顺利，成功",
+      "meaning": "击球",
       "kind": "phrase"
     }
   },
@@ -37655,7 +37655,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Housing market",
-      "meaning": "住宅区市场",
+      "meaning": "住房市场；房地产市场",
       "kind": "phrase"
     }
   },
@@ -39266,9 +39266,9 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Visual indication",
-      "meaning": "目测（指示）；可见指示",
-      "kind": "phrase"
+      "text": "There is no indication of trouble.",
+      "meaning": "没有出问题的迹象。",
+      "kind": "sentence"
     }
   },
   {
@@ -41014,7 +41014,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Intermediate level",
-      "meaning": "中间能级；中间水平",
+      "meaning": "中级水平",
       "kind": "phrase"
     }
   },
@@ -41429,8 +41429,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Invest with",
-      "meaning": "授予",
+      "text": "Invest money in stocks",
+      "meaning": "投资股票",
       "kind": "phrase"
     }
   },
@@ -41734,7 +41734,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Irrigation works",
-      "meaning": "灌溉结构物",
+      "meaning": "灌溉工程；水利设施",
       "kind": "phrase"
     }
   },
@@ -45425,7 +45425,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Lord and lady",
-      "meaning": "贵族与小姐",
+      "meaning": "勋爵与夫人",
       "kind": "phrase"
     }
   },
@@ -46558,8 +46558,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...a 78-year-old former Marxist.",
-      "meaning": "…一位78岁的前马克思主义者。",
+      "text": "He is a 78-year-old former Marxist.",
+      "meaning": "他是一位78岁的前马克思主义者。",
       "kind": "sentence"
     }
   },
@@ -47477,7 +47477,7 @@ export const CET4_VOCABULARY = [
     "id": "cet4-memorial",
     "libraryId": "cet4",
     "word": "memorial",
-    "meaning": "纪念的；记忆的",
+    "meaning": "纪念的；悼念的",
     "partOfSpeech": "adj",
     "group": 0,
     "example": {
@@ -47674,7 +47674,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "adj",
     "example": {
       "text": "Meritorious service",
-      "meaning": "值得表彰的服务",
+      "meaning": "功绩；卓著功勋",
       "kind": "phrase"
     },
     "id": "cet4-meritorious",
@@ -48404,7 +48404,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Ethnic minority group",
-      "meaning": "少数人种群体",
+      "meaning": "少数民族群体",
       "kind": "phrase"
     }
   },
@@ -49379,7 +49379,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "In the morning",
-      "meaning": "在清晨；次日上午",
+      "meaning": "在早上；在上午",
       "kind": "phrase"
     }
   },
@@ -49430,8 +49430,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "The gas station just neighbours to the motel.",
-      "meaning": "加油站就在汽车旅馆的附近。",
+      "text": "The gas station is just next to the motel.",
+      "meaning": "加油站就在汽车旅馆旁边。",
       "kind": "sentence"
     }
   },
@@ -51083,8 +51083,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...his niece, the daughter of his eldest sister.",
-      "meaning": "…他的外甥女，他大姐的女儿。",
+      "text": "She is his niece, the daughter of his eldest sister.",
+      "meaning": "她是他的外甥女，是他大姐的女儿。",
       "kind": "sentence"
     }
   },
@@ -51447,8 +51447,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...the warm waters of Salt Springs Island to the northeast.",
-      "meaning": "…流向东北方向的盐泉岛的温泉水。",
+      "text": "The current carries the warm waters of Salt Springs Island to the northeast.",
+      "meaning": "洋流把盐泉岛的温暖海水带向东北方向。",
       "kind": "sentence"
     }
   },
@@ -51486,8 +51486,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Northwest airlines",
-      "meaning": "西北航空（财富500强公司之一，总部位于美国，主要经营航空公司）",
+      "text": "Northwest Airlines",
+      "meaning": "西北航空",
       "kind": "phrase"
     }
   },
@@ -51862,7 +51862,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "In the nude",
-      "meaning": "裸体；公开",
+      "meaning": "裸体；赤身裸体",
       "kind": "phrase"
     }
   },
@@ -52502,7 +52502,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Odor control",
-      "meaning": "臭气控制，气味控制；四氟化硅处理",
+      "meaning": "气味控制；除臭",
       "kind": "phrase"
     }
   },
@@ -52527,8 +52527,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...the lingering odour of car exhaust.",
-      "meaning": "…挥之不去的汽车尾气的独特气味。",
+      "text": "He noticed the lingering odour of car exhaust.",
+      "meaning": "他闻到汽车尾气久久不散的气味。",
       "kind": "sentence"
     }
   },
@@ -53637,7 +53637,7 @@ export const CET4_VOCABULARY = [
     "id": "cet4-orphanage",
     "libraryId": "cet4",
     "word": "orphanage",
-    "meaning": "孤儿院，孤儿身份",
+    "meaning": "孤儿院",
     "partOfSpeech": "n",
     "group": 0,
     "example": {
@@ -54353,7 +54353,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Ozone layer",
-      "meaning": "【气】臭氧层",
+      "meaning": "臭氧层",
       "kind": "phrase"
     }
   },
@@ -54893,7 +54893,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Partial discharge",
-      "meaning": "局部放电；部分放电；部份履行",
+      "meaning": "局部放电；部分放电",
       "kind": "phrase"
     }
   },
@@ -55023,7 +55023,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Limited partnership",
-      "meaning": "有限责任合伙公司；普通合股公司",
+      "meaning": "有限责任合伙；有限合伙公司",
       "kind": "phrase"
     }
   },
@@ -56323,7 +56323,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Petrol engine",
-      "meaning": "汽油发动机；汽油机；柴油引擎",
+      "meaning": "汽油发动机；汽油机",
       "kind": "phrase"
     }
   },
@@ -56790,9 +56790,9 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Pilot study",
-      "meaning": "初步研究",
-      "kind": "phrase"
+      "text": "The pilot landed the plane safely.",
+      "meaning": "飞行员安全地把飞机降落。",
+      "kind": "sentence"
     }
   },
   {
@@ -58553,7 +58553,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "vt",
     "group": 0,
     "example": {
-      "text": "He traveled the southern states, preaching the gospel .",
+      "text": "He traveled the southern states, preaching the gospel.",
       "meaning": "他游历南方各州宣讲福音。",
       "kind": "sentence"
     }
@@ -58696,8 +58696,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...the preface to Kelman's novel.",
-      "meaning": "…凯尔曼小说的前言。",
+      "text": "He wrote the preface to Kelman's novel.",
+      "meaning": "他为凯尔曼的小说写了前言。",
       "kind": "sentence"
     }
   },
@@ -60552,7 +60552,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Shanxi province",
-      "meaning": "山西省；陕西省",
+      "meaning": "山西省",
       "kind": "phrase"
     }
   },
@@ -60590,7 +60590,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "He was accused of deliberate provocation .",
+      "text": "He was accused of deliberate provocation.",
       "meaning": "他被指责故意挑衅。",
       "kind": "sentence"
     }
@@ -60603,7 +60603,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "She was accused of being deliberately provocative .",
+      "text": "She was accused of being deliberately provocative.",
       "meaning": "她被指责故意挑衅。",
       "kind": "sentence"
     }
@@ -61709,7 +61709,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "The dark clouds remembered me to take my raincoat along.",
+      "text": "The dark clouds reminded me to take my raincoat along.",
       "meaning": "乌云提醒我带上雨衣。",
       "kind": "sentence"
     }
@@ -61801,7 +61801,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "And it is from this extended sense of connection that the magnitude of changes, the rapidity of changes, can truly begin to take place.",
-      "meaning": "并且在这扩展延伸的连接感觉当中强度会发生改变，而且是迅速的改变，这会真实的开始并且发生。",
+      "meaning": "正是从这种延伸的联系感中，规模如此巨大、速度如此之快的变化才真正开始发生。",
       "kind": "sentence"
     }
   },
@@ -63193,7 +63193,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Speed regulator",
-      "meaning": "速度调整器；蒂器，蒂机",
+      "meaning": "速度调节器",
       "kind": "phrase"
     }
   },
@@ -65711,7 +65711,7 @@ export const CET4_VOCABULARY = [
     "id": "cet4-rocky",
     "libraryId": "cet4",
     "word": "rocky",
-    "meaning": "多岩石的；稳固的",
+    "meaning": "多岩石的；摇晃的，不稳固的",
     "partOfSpeech": "adj",
     "group": 0,
     "example": {
@@ -68078,7 +68078,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Sequence of events",
-      "meaning": "事件顺序，作业顺序；事故顺序记录，事情的进展",
+      "meaning": "事件顺序；事情的先后",
       "kind": "phrase"
     }
   },
@@ -68130,7 +68130,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "National public servant",
-      "meaning": "n. 国家公务员",
+      "meaning": "国家公务员",
       "kind": "phrase"
     }
   },
@@ -69252,7 +69252,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "By my side",
-      "meaning": "逆风天使，在我身边",
+      "meaning": "在我身边",
       "kind": "phrase"
     }
   },
@@ -69399,8 +69399,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Least significant bit",
-      "meaning": "最低有效位",
+      "text": "A significant change",
+      "meaning": "一个重大的变化",
       "kind": "phrase"
     }
   },
@@ -69607,7 +69607,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Please accept my sincere apologies .",
+      "text": "Please accept my sincere apologies.",
       "meaning": "请接受我真诚的道歉。",
       "kind": "sentence"
     }
@@ -70123,7 +70123,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "The majesty of the skyscraper awed me .",
+      "text": "The majesty of the skyscraper awed me.",
       "meaning": "这幢摩天大厦的雄伟气势令我惊叹。",
       "kind": "sentence"
     }
@@ -71297,7 +71297,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Of a sort",
-      "meaning": "同一种类的",
+      "meaning": "勉强算得上的；不太像样的",
       "kind": "phrase"
     }
   },
@@ -72770,7 +72770,7 @@ export const CET4_VOCABULARY = [
     "libraryId": "cet4",
     "word": "stamp",
     "meaning": "邮票；印章；跺脚",
-    "partOfSpeech": "v",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
       "text": "A postage stamp",
@@ -73205,7 +73205,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Sirloin steak",
-      "meaning": "沙朗牛排，菲力牛排",
+      "meaning": "沙朗牛排；西冷牛排",
       "kind": "phrase"
     }
   },
@@ -73391,7 +73391,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Their opposition only stiffened my resolve .",
+      "text": "Their opposition only stiffened my resolve.",
       "meaning": "他们的反对只是更加坚定了我的决心。",
       "kind": "sentence"
     }
@@ -73692,7 +73692,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Stormy weather",
-      "meaning": "暴风雨天气；暴风雪",
+      "meaning": "暴风雨天气",
       "kind": "phrase"
     }
   },
@@ -77039,7 +77039,7 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "The government is doing everything possible to combat terrorism .",
+      "text": "The government is doing everything possible to combat terrorism.",
       "meaning": "政府正在尽其所能打击恐怖主义。",
       "kind": "sentence"
     }
@@ -77872,7 +77872,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Thunder and lightning",
-      "meaning": "雷电；指责",
+      "meaning": "雷电；电闪雷鸣",
       "kind": "phrase"
     }
   },
@@ -77950,7 +77950,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Tidal flat",
-      "meaning": "潮滩；潮汐平原；潮汐舱内甲板；潮汐滩",
+      "meaning": "潮滩；潮汐滩涂",
       "kind": "phrase"
     }
   },
@@ -78168,7 +78168,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Tiny amount",
-      "meaning": "微小额",
+      "meaning": "极少量；一点点",
       "kind": "phrase"
     }
   },
@@ -78346,7 +78346,7 @@ export const CET4_VOCABULARY = [
     "id": "cet4-tobacco",
     "libraryId": "cet4",
     "word": "tobacco",
-    "meaning": "烟草，烟叶；烟草制品；抽烟",
+    "meaning": "烟草；烟叶；烟草制品",
     "partOfSpeech": "n",
     "group": 0,
     "example": {
@@ -78648,7 +78648,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Hot topic",
-      "meaning": "热门话题；新锐",
+      "meaning": "热门话题；热点话题",
       "kind": "phrase"
     }
   },
@@ -78751,8 +78751,8 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Tour of duty",
-      "meaning": "任期；服役期；值班",
+      "text": "A tour of the city",
+      "meaning": "城市观光",
       "kind": "phrase"
     }
   },
@@ -79012,7 +79012,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Tragic hero",
-      "meaning": "悲剧英雄；英雄好汉",
+      "meaning": "悲剧英雄",
       "kind": "phrase"
     }
   },
@@ -79147,7 +79147,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Related party transaction",
-      "meaning": "关联方交易；集团内交易；内幕交易",
+      "meaning": "关联方交易；集团内部交易",
       "kind": "phrase"
     }
   },
@@ -80948,7 +80948,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Upward pressure",
-      "meaning": "上压力；向上压力；反向压力",
+      "meaning": "向上的压力；上行压力",
       "kind": "phrase"
     }
   },
@@ -81034,7 +81034,7 @@ export const CET4_VOCABULARY = [
     "id": "cet4-urge",
     "libraryId": "cet4",
     "word": "urge",
-    "meaning": "推进；催促",
+    "meaning": "催促；敦促；力劝",
     "partOfSpeech": "v",
     "group": 0,
     "example": {
@@ -81663,7 +81663,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Street vendor",
-      "meaning": "小贩；大排档",
+      "meaning": "街头小贩；摊贩",
       "kind": "phrase"
     }
   },
@@ -82414,7 +82414,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "Volcanic rock",
-      "meaning": "火山岩；火成岩；火山碎屑岩",
+      "meaning": "火山岩",
       "kind": "phrase"
     }
   },
@@ -85017,9 +85017,9 @@ export const CET4_VOCABULARY = [
     "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "In the wrong",
-      "meaning": "负有责任",
-      "kind": "phrase"
+      "text": "He answered the question wrong.",
+      "meaning": "他答错了这道题。",
+      "kind": "sentence"
     }
   },
   {
@@ -85378,7 +85378,7 @@ export const CET4_VOCABULARY = [
     "group": 0,
     "example": {
       "text": "The scholarship money she won helped her attend Cornell University, where she majored in zoology.",
-      "meaning": "她在康奈尔大学主修动物学。",
+      "meaning": "她获得的奖学金帮她进入康奈尔大学，她在那里主修动物学。",
       "kind": "sentence"
     }
   }
