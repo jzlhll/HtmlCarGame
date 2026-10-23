@@ -1,4 +1,4 @@
-// 保留原有191词；按课标二级生活、学习与基础表达主题补选309词。释义及例子由本项目编写。
+// 小学日常主题500词；按2022课标二级基础表达选编，释义与例子由本项目编写。
 export const PRIMARY_VOCABULARY = [
   {
     "id": "practice-cat",
@@ -48,17 +48,29 @@ export const PRIMARY_VOCABULARY = [
   {
     "id": "practice-book",
     "word": "book",
-    "meaning": "书",
+    "meaning": "书；预订",
     "practiceBand": 1,
     "group": 2,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Read a book",
-      "meaning": "读一本书",
-      "kind": "phrase"
-    }
+      "text": "This book tells a funny story.",
+      "meaning": "这本书讲了一个有趣的故事。",
+      "kind": "sentence",
+      "sense": "书",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "预订",
+          "partOfSpeech": "v",
+          "text": "Please book a room for tonight.",
+          "meaning": "请预订一间今晚的客房。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "practice-bag",
@@ -93,17 +105,29 @@ export const PRIMARY_VOCABULARY = [
   {
     "id": "practice-blue",
     "word": "blue",
-    "meaning": "蓝色",
+    "meaning": "蓝色的；忧郁的",
     "practiceBand": 1,
     "group": 2,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "The blue sky",
-      "meaning": "蓝天",
-      "kind": "phrase"
-    }
+      "text": "The sky is blue today.",
+      "meaning": "今天天空是蓝色的。",
+      "kind": "sentence",
+      "sense": "蓝色的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "忧郁的",
+          "partOfSpeech": "adj",
+          "text": "He felt blue after the farewell.",
+          "meaning": "告别之后他感到忧伤。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "practice-one",
@@ -183,17 +207,29 @@ export const PRIMARY_VOCABULARY = [
   {
     "id": "practice-ear",
     "word": "ear",
-    "meaning": "耳朵",
+    "meaning": "耳朵；谷穗",
     "practiceBand": 1,
     "group": 2,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "An ear for music",
-      "meaning": "音乐鉴赏力",
-      "kind": "phrase"
-    }
+      "text": "My left ear hurts.",
+      "meaning": "我的左耳疼。",
+      "kind": "sentence",
+      "sense": "耳朵",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "谷穗",
+          "partOfSpeech": "n",
+          "text": "Each ear of corn is ready to pick.",
+          "meaning": "每根玉米穗都可以采摘了。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "practice-nose",
@@ -205,8 +241,8 @@ export const PRIMARY_VOCABULARY = [
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A runny nose",
-      "meaning": "流鼻涕",
+      "text": "Touch your nose",
+      "meaning": "摸摸你的鼻子",
       "kind": "phrase"
     }
   },
@@ -266,39 +302,70 @@ export const PRIMARY_VOCABULARY = [
     "libraryId": "primary",
     "example": {
       "text": "A broken leg",
-      "meaning": "一条受伤骨折的腿",
+      "meaning": "一条骨折的腿",
       "kind": "phrase"
     }
   },
   {
     "id": "practice-head",
     "word": "head",
-    "meaning": "头",
+    "meaning": "头；负责人；朝向",
     "practiceBand": 1,
     "group": 2,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Shake your head",
-      "meaning": "摇头",
-      "kind": "phrase"
-    }
+      "text": "She turned her head.",
+      "meaning": "她转过头。",
+      "kind": "sentence",
+      "sense": "头",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "负责人",
+          "partOfSpeech": "n",
+          "text": "He is the head of the school.",
+          "meaning": "他是学校负责人。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "朝向",
+          "partOfSpeech": "v",
+          "text": "We headed for the station.",
+          "meaning": "我们朝车站走去。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "practice-ball",
     "word": "ball",
-    "meaning": "球",
+    "meaning": "球；舞会",
     "practiceBand": 1,
     "group": 2,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Catch the ball",
-      "meaning": "接球",
-      "kind": "phrase"
-    }
+      "text": "The ball rolled under the chair.",
+      "meaning": "球滚到了椅子下面。",
+      "kind": "sentence",
+      "sense": "球",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "舞会",
+          "partOfSpeech": "n",
+          "text": "They danced at the ball.",
+          "meaning": "他们在舞会上跳舞。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "practice-apple",
@@ -363,17 +430,29 @@ export const PRIMARY_VOCABULARY = [
   {
     "id": "practice-water",
     "word": "water",
-    "meaning": "水",
+    "meaning": "水；浇水",
     "practiceBand": 2,
     "group": 2,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Drink some water",
-      "meaning": "喝点水",
-      "kind": "phrase"
-    }
+      "text": "Drink some water after running.",
+      "meaning": "跑步后喝些水。",
+      "kind": "sentence",
+      "sense": "水",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "浇水",
+          "partOfSpeech": "v",
+          "text": "Water the flowers every morning.",
+          "meaning": "每天早上给花浇水。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "practice-rice",
@@ -453,17 +532,29 @@ export const PRIMARY_VOCABULARY = [
   {
     "id": "practice-duck",
     "word": "duck",
-    "meaning": "鸭子",
+    "meaning": "鸭子；低头躲避",
     "practiceBand": 2,
     "group": 2,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A yellow duck",
-      "meaning": "一只黄色鸭子",
-      "kind": "phrase"
-    }
+      "text": "A duck swam across the pond.",
+      "meaning": "一只鸭子游过池塘。",
+      "kind": "sentence",
+      "sense": "鸭子",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "低头躲避",
+          "partOfSpeech": "v",
+          "text": "He ducked to avoid the ball.",
+          "meaning": "他低头躲开了球。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "practice-frog",
@@ -498,17 +589,36 @@ export const PRIMARY_VOCABULARY = [
   {
     "id": "practice-bear",
     "word": "bear",
-    "meaning": "熊",
+    "meaning": "熊；忍受；承担",
     "practiceBand": 2,
     "group": 2,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A polar bear",
-      "meaning": "一只北极熊",
-      "kind": "phrase"
-    }
+      "text": "A bear lives in this forest.",
+      "meaning": "这片森林里生活着一只熊。",
+      "kind": "sentence",
+      "sense": "熊",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "忍受",
+          "partOfSpeech": "v",
+          "text": "I cannot bear the noise.",
+          "meaning": "我受不了这种噪音。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "承担",
+          "partOfSpeech": "v",
+          "text": "You must bear the cost yourself.",
+          "meaning": "你必须自己承担费用。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "practice-tiger",
@@ -633,17 +743,36 @@ export const PRIMARY_VOCABULARY = [
   {
     "id": "practice-school",
     "word": "school",
-    "meaning": "学校",
+    "meaning": "学校；鱼群；学派",
     "practiceBand": 3,
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Go to school",
-      "meaning": "去上学",
-      "kind": "phrase"
-    }
+      "text": "The children walk to school.",
+      "meaning": "孩子们步行去学校。",
+      "kind": "sentence",
+      "sense": "学校",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "鱼群",
+          "partOfSpeech": "n",
+          "text": "A school of fish swam past the boat.",
+          "meaning": "一群鱼游过了船边。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "学派",
+          "partOfSpeech": "n",
+          "text": "He belongs to a new school of thought.",
+          "meaning": "他属于一个新的思想流派。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "practice-teacher",
@@ -730,8 +859,8 @@ export const PRIMARY_VOCABULARY = [
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A happy family",
-      "meaning": "一个幸福的家庭",
+      "text": "A happy child",
+      "meaning": "一个高兴的孩子",
       "kind": "phrase"
     }
   },
@@ -768,17 +897,29 @@ export const PRIMARY_VOCABULARY = [
   {
     "id": "practice-long",
     "word": "long",
-    "meaning": "长的",
+    "meaning": "长的；渴望",
     "practiceBand": 3,
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A long journey",
-      "meaning": "一段漫长的旅程",
-      "kind": "phrase"
-    }
+      "text": "This is a long road.",
+      "meaning": "这是一条很长的路。",
+      "kind": "sentence",
+      "sense": "长的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "渴望",
+          "partOfSpeech": "v",
+          "text": "I long to see my family.",
+          "meaning": "我渴望见到家人。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj/v"
   },
   {
     "id": "practice-short",
@@ -918,32 +1059,63 @@ export const PRIMARY_VOCABULARY = [
   {
     "id": "practice-season",
     "word": "season",
-    "meaning": "季节",
+    "meaning": "季节；调味",
     "practiceBand": 4,
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "The rainy season",
-      "meaning": "雨季",
-      "kind": "phrase"
-    }
+      "text": "Spring is my favourite season.",
+      "meaning": "春天是我最喜欢的季节。",
+      "kind": "sentence",
+      "sense": "季节",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "调味",
+          "partOfSpeech": "v",
+          "text": "Season the soup with salt.",
+          "meaning": "用盐给汤调味。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "practice-spring",
     "word": "spring",
-    "meaning": "春天",
+    "meaning": "春天；泉水；弹簧",
     "practiceBand": 4,
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Flowers in spring",
-      "meaning": "春天的花朵",
-      "kind": "phrase"
-    }
+      "text": "Flowers bloom in spring.",
+      "meaning": "花朵在春天开放。",
+      "kind": "sentence",
+      "sense": "春天",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "泉水",
+          "partOfSpeech": "n",
+          "text": "Clear water flows from the spring.",
+          "meaning": "清水从泉眼流出。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "弹簧",
+          "partOfSpeech": "n",
+          "text": "The spring inside the clock is broken.",
+          "meaning": "钟里的弹簧断了。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "practice-summer",
@@ -1023,17 +1195,36 @@ export const PRIMARY_VOCABULARY = [
   {
     "id": "practice-subject",
     "word": "subject",
-    "meaning": "学科",
+    "meaning": "学科；主题；主语",
     "practiceBand": 4,
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "My favourite subject",
-      "meaning": "我最喜欢的学科",
-      "kind": "phrase"
-    }
+      "text": "Maths is my favourite subject.",
+      "meaning": "数学是我最喜欢的学科。",
+      "kind": "sentence",
+      "sense": "学科",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "主题",
+          "partOfSpeech": "n",
+          "text": "We discussed the subject of travel.",
+          "meaning": "我们讨论了旅行这个主题。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "主语",
+          "partOfSpeech": "n",
+          "text": "Find the subject of the sentence.",
+          "meaning": "找出这个句子的主语。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "practice-science",
@@ -1420,8 +1611,8 @@ export const PRIMARY_VOCABULARY = [
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A clever idea",
-      "meaning": "一个聪明的主意",
+      "text": "A clever student",
+      "meaning": "一个聪明的学生",
       "kind": "phrase"
     }
   },
@@ -1435,8 +1626,8 @@ export const PRIMARY_VOCABULARY = [
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A busy street",
-      "meaning": "一条繁忙的街道",
+      "text": "A busy teacher",
+      "meaning": "一位忙碌的老师",
       "kind": "phrase"
     }
   },
@@ -1486,19 +1677,19 @@ export const PRIMARY_VOCABULARY = [
     }
   },
   {
-    "id": "practice-journey",
-    "word": "journey",
-    "meaning": "旅程",
-    "practiceBand": 5,
+    "id": "primary-three",
+    "word": "three",
+    "meaning": "三",
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A train journey",
-      "meaning": "一段火车旅程",
+      "text": "Three books",
+      "meaning": "三本书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
     "id": "practice-country",
@@ -1516,34 +1707,53 @@ export const PRIMARY_VOCABULARY = [
     }
   },
   {
-    "id": "practice-planet",
-    "word": "planet",
-    "meaning": "行星",
-    "practiceBand": 6,
+    "id": "primary-four",
+    "word": "four",
+    "meaning": "四",
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A distant planet",
-      "meaning": "一颗遥远的行星",
+      "text": "Four chairs",
+      "meaning": "四把椅子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
     "id": "practice-space",
     "word": "space",
-    "meaning": "太空",
+    "meaning": "太空；空间；空格",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Travel into space",
-      "meaning": "前往太空",
-      "kind": "phrase"
-    }
+      "text": "The rocket travels into space.",
+      "meaning": "火箭飞入太空。",
+      "kind": "sentence",
+      "sense": "太空",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "空间",
+          "partOfSpeech": "n",
+          "text": "There is space for another chair.",
+          "meaning": "还有放一把椅子的空间。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "空格",
+          "partOfSpeech": "n",
+          "text": "Leave a space between the words.",
+          "meaning": "在单词之间留一个空格。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "practice-earth",
@@ -1561,19 +1771,19 @@ export const PRIMARY_VOCABULARY = [
     }
   },
   {
-    "id": "practice-future",
-    "word": "future",
-    "meaning": "未来",
-    "practiceBand": 6,
+    "id": "primary-five",
+    "word": "five",
+    "meaning": "五",
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "In the future",
-      "meaning": "在未来",
+      "text": "Five apples",
+      "meaning": "五个苹果",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
     "id": "practice-robot",
@@ -1591,34 +1801,34 @@ export const PRIMARY_VOCABULARY = [
     }
   },
   {
-    "id": "practice-machine",
-    "word": "machine",
-    "meaning": "机器",
-    "practiceBand": 6,
+    "id": "primary-seven",
+    "word": "seven",
+    "meaning": "七",
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A washing machine",
-      "meaning": "一台洗衣机",
+      "text": "Seven days",
+      "meaning": "七天",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-project",
-    "word": "project",
-    "meaning": "项目",
-    "practiceBand": 6,
+    "id": "primary-eight",
+    "word": "eight",
+    "meaning": "八",
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A school project",
-      "meaning": "一个学校项目",
+      "text": "Eight pencils",
+      "meaning": "八支铅笔",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
     "id": "practice-festival",
@@ -1636,34 +1846,34 @@ export const PRIMARY_VOCABULARY = [
     }
   },
   {
-    "id": "practice-tradition",
-    "word": "tradition",
-    "meaning": "传统",
-    "practiceBand": 6,
+    "id": "primary-nine",
+    "word": "nine",
+    "meaning": "九",
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A family tradition",
-      "meaning": "一项家庭传统",
+      "text": "Nine birds",
+      "meaning": "九只鸟",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-culture",
-    "word": "culture",
-    "meaning": "文化",
-    "practiceBand": 6,
+    "id": "primary-zero",
+    "word": "zero",
+    "meaning": "零",
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Local culture",
-      "meaning": "当地文化",
+      "text": "Zero points",
+      "meaning": "零分",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
     "id": "practice-history",
@@ -1696,49 +1906,49 @@ export const PRIMARY_VOCABULARY = [
     }
   },
   {
-    "id": "practice-protect",
-    "word": "protect",
-    "meaning": "保护",
-    "practiceBand": 6,
+    "id": "primary-eleven",
+    "word": "eleven",
+    "meaning": "十一",
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Protect the environment",
-      "meaning": "保护环境",
+      "text": "Eleven students",
+      "meaning": "十一名学生",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-recycle",
-    "word": "recycle",
-    "meaning": "回收利用",
-    "practiceBand": 6,
+    "id": "primary-twelve",
+    "word": "twelve",
+    "meaning": "十二",
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Recycle old paper",
-      "meaning": "回收废纸",
+      "text": "Twelve months",
+      "meaning": "十二个月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-energy",
-    "word": "energy",
-    "meaning": "能源",
-    "practiceBand": 6,
+    "id": "primary-thirteen",
+    "word": "thirteen",
+    "meaning": "十三",
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Save energy",
-      "meaning": "节约能源",
+      "text": "Thirteen books",
+      "meaning": "十三本书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
     "id": "practice-ocean",
@@ -1773,7 +1983,7 @@ export const PRIMARY_VOCABULARY = [
   {
     "id": "practice-mountain",
     "word": "mountain",
-    "meaning": "山脉",
+    "meaning": "山；高山",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
@@ -1786,904 +1996,966 @@ export const PRIMARY_VOCABULARY = [
     }
   },
   {
-    "id": "practice-visitor",
-    "word": "visitor",
-    "meaning": "游客",
-    "practiceBand": 6,
+    "id": "primary-fourteen",
+    "word": "fourteen",
+    "meaning": "十四",
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A welcome visitor",
-      "meaning": "一位受欢迎的来客",
+      "text": "Fourteen days",
+      "meaning": "十四天",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-friendship",
-    "word": "friendship",
-    "meaning": "友谊",
-    "practiceBand": 7,
+    "id": "primary-fifteen",
+    "word": "fifteen",
+    "meaning": "十五",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A lasting friendship",
-      "meaning": "一段长久的友谊",
+      "text": "Fifteen minutes",
+      "meaning": "十五分钟",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-activity",
-    "word": "activity",
-    "meaning": "活动",
-    "practiceBand": 7,
+    "id": "primary-sixteen",
+    "word": "sixteen",
+    "meaning": "十六",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "An outdoor activity",
-      "meaning": "一项户外活动",
+      "text": "Sixteen chairs",
+      "meaning": "十六把椅子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-information",
-    "word": "information",
-    "meaning": "信息",
-    "practiceBand": 7,
+    "id": "primary-seventeen",
+    "word": "seventeen",
+    "meaning": "十七",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Useful information",
-      "meaning": "有用的信息",
+      "text": "Seventeen students",
+      "meaning": "十七名学生",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-practice",
-    "word": "practice",
-    "meaning": "练习",
-    "practiceBand": 7,
+    "id": "primary-eighteen",
+    "word": "eighteen",
+    "meaning": "十八",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Spelling practice",
-      "meaning": "拼写练习",
+      "text": "Eighteen pencils",
+      "meaning": "十八支铅笔",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-language",
-    "word": "language",
-    "meaning": "语言",
-    "practiceBand": 7,
+    "id": "primary-nineteen",
+    "word": "nineteen",
+    "meaning": "十九",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Learn a language",
-      "meaning": "学习一门语言",
+      "text": "Nineteen apples",
+      "meaning": "十九个苹果",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-international",
-    "word": "international",
-    "meaning": "国际的",
-    "practiceBand": 7,
+    "id": "primary-twenty",
+    "word": "twenty",
+    "meaning": "二十",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "An international school",
-      "meaning": "一所国际学校",
+      "text": "Twenty minutes",
+      "meaning": "二十分钟",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-geography",
-    "word": "geography",
-    "meaning": "地理",
-    "practiceBand": 7,
+    "id": "primary-thirty",
+    "word": "thirty",
+    "meaning": "三十",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A geography lesson",
-      "meaning": "一节地理课",
+      "text": "Thirty days",
+      "meaning": "三十天",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-volunteer",
-    "word": "volunteer",
-    "meaning": "志愿者",
-    "practiceBand": 7,
+    "id": "primary-forty",
+    "word": "forty",
+    "meaning": "四十",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A volunteer teacher",
-      "meaning": "一位志愿教师",
+      "text": "Forty students",
+      "meaning": "四十名学生",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-introduce",
-    "word": "introduce",
-    "meaning": "介绍",
-    "practiceBand": 7,
+    "id": "primary-fifty",
+    "word": "fifty",
+    "meaning": "五十",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Introduce yourself",
-      "meaning": "介绍你自己",
+      "text": "Fifty pages",
+      "meaning": "五十页",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-complete",
-    "word": "complete",
-    "meaning": "完成",
-    "practiceBand": 7,
+    "id": "primary-sixty",
+    "word": "sixty",
+    "meaning": "六十",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Complete the task",
-      "meaning": "完成任务",
+      "text": "Sixty seconds",
+      "meaning": "六十秒",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-example",
-    "word": "example",
-    "meaning": "例子",
-    "practiceBand": 7,
+    "id": "primary-seventy",
+    "word": "seventy",
+    "meaning": "七十",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "For example",
-      "meaning": "例如",
+      "text": "Seventy people",
+      "meaning": "七十个人",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-magazine",
-    "word": "magazine",
-    "meaning": "杂志",
-    "practiceBand": 7,
+    "id": "primary-eighty",
+    "word": "eighty",
+    "meaning": "八十",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A children's magazine",
-      "meaning": "一本儿童杂志",
+      "text": "Eighty books",
+      "meaning": "八十本书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-article",
-    "word": "article",
-    "meaning": "文章",
-    "practiceBand": 7,
+    "id": "primary-ninety",
+    "word": "ninety",
+    "meaning": "九十",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Read an article",
-      "meaning": "阅读一篇文章",
+      "text": "Ninety minutes",
+      "meaning": "九十分钟",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-important",
-    "word": "important",
-    "meaning": "重要的",
-    "practiceBand": 7,
+    "id": "primary-hundred",
+    "word": "hundred",
+    "meaning": "百",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "An important question",
-      "meaning": "一个重要的问题",
+      "text": "A hundred people",
+      "meaning": "一百个人",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-possible",
-    "word": "possible",
-    "meaning": "可能的",
-    "practiceBand": 7,
+    "id": "primary-thousand",
+    "word": "thousand",
+    "meaning": "千",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A possible answer",
-      "meaning": "一个可能的答案",
+      "text": "A thousand trees",
+      "meaning": "一千棵树",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "practice-popular",
-    "word": "popular",
-    "meaning": "受欢迎的",
-    "practiceBand": 7,
+    "id": "primary-january",
+    "word": "January",
+    "meaning": "一月",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A popular song",
-      "meaning": "一首受欢迎的歌曲",
+      "text": "In January",
+      "meaning": "在一月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-nervous",
-    "word": "nervous",
-    "meaning": "紧张的",
-    "practiceBand": 7,
+    "id": "primary-february",
+    "word": "February",
+    "meaning": "二月",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Feel nervous",
-      "meaning": "感到紧张",
+      "text": "In February",
+      "meaning": "在二月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-honest",
-    "word": "honest",
-    "meaning": "诚实的",
-    "practiceBand": 7,
+    "id": "primary-march",
+    "word": "March",
+    "meaning": "三月",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "An honest person",
-      "meaning": "一个诚实的人",
+      "text": "In March",
+      "meaning": "在三月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-polite",
-    "word": "polite",
-    "meaning": "有礼貌的",
-    "practiceBand": 7,
+    "id": "primary-april",
+    "word": "April",
+    "meaning": "四月",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A polite reply",
-      "meaning": "一个有礼貌的答复",
+      "text": "In April",
+      "meaning": "在四月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-experience",
-    "word": "experience",
-    "meaning": "经历",
-    "practiceBand": 7,
+    "id": "primary-june",
+    "word": "June",
+    "meaning": "六月",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A new experience",
-      "meaning": "一次新的经历",
+      "text": "In June",
+      "meaning": "在六月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-environment",
-    "word": "environment",
-    "meaning": "环境",
-    "practiceBand": 8,
+    "id": "primary-july",
+    "word": "July",
+    "meaning": "七月",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Protect the environment",
-      "meaning": "保护环境",
+      "text": "In July",
+      "meaning": "在七月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-pollution",
-    "word": "pollution",
-    "meaning": "污染",
-    "practiceBand": 8,
+    "id": "primary-august",
+    "word": "August",
+    "meaning": "八月",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Air pollution",
-      "meaning": "空气污染",
+      "text": "In August",
+      "meaning": "在八月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-invention",
-    "word": "invention",
-    "meaning": "发明",
-    "practiceBand": 8,
+    "id": "primary-september",
+    "word": "September",
+    "meaning": "九月",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A useful invention",
-      "meaning": "一项有用的发明",
+      "text": "In September",
+      "meaning": "在九月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-technology",
-    "word": "technology",
-    "meaning": "科技",
-    "practiceBand": 8,
+    "id": "primary-october",
+    "word": "October",
+    "meaning": "十月",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Modern technology",
-      "meaning": "现代科技",
+      "text": "In October",
+      "meaning": "在十月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-knowledge",
-    "word": "knowledge",
-    "meaning": "知识",
-    "practiceBand": 8,
+    "id": "primary-november",
+    "word": "November",
+    "meaning": "十一月",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Share your knowledge",
-      "meaning": "分享你的知识",
+      "text": "In November",
+      "meaning": "在十一月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-education",
-    "word": "education",
-    "meaning": "教育",
-    "practiceBand": 8,
+    "id": "primary-december",
+    "word": "December",
+    "meaning": "十二月",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "School education",
-      "meaning": "学校教育",
+      "text": "In December",
+      "meaning": "在十二月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-attention",
-    "word": "attention",
-    "meaning": "注意力",
-    "practiceBand": 8,
+    "id": "primary-brown",
+    "word": "brown",
+    "meaning": "棕色的",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Pay attention",
-      "meaning": "注意",
+      "text": "A brown bear",
+      "meaning": "一只棕色的熊",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
-    "id": "practice-decision",
-    "word": "decision",
-    "meaning": "决定",
-    "practiceBand": 8,
+    "id": "primary-pink",
+    "word": "pink",
+    "meaning": "粉红色的",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Make a decision",
-      "meaning": "作出决定",
+      "text": "A pink dress",
+      "meaning": "一条粉红色的连衣裙",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
-    "id": "practice-develop",
-    "word": "develop",
-    "meaning": "发展",
-    "practiceBand": 8,
+    "id": "primary-purple",
+    "word": "purple",
+    "meaning": "紫色的",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Develop good habits",
-      "meaning": "养成好习惯",
+      "text": "A purple flower",
+      "meaning": "一朵紫色的花",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
-    "id": "practice-improve",
-    "word": "improve",
-    "meaning": "改进",
-    "practiceBand": 8,
+    "id": "primary-football",
+    "word": "football",
+    "meaning": "足球",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Improve your English",
-      "meaning": "提高你的英语水平",
+      "text": "Play football",
+      "meaning": "踢足球",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-suggest",
-    "word": "suggest",
-    "meaning": "建议",
-    "practiceBand": 8,
+    "id": "primary-basketball",
+    "word": "basketball",
+    "meaning": "篮球",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Suggest a better plan",
-      "meaning": "提出一个更好的计划",
+      "text": "Play basketball",
+      "meaning": "打篮球",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-explain",
-    "word": "explain",
-    "meaning": "解释",
-    "practiceBand": 8,
+    "id": "primary-game",
+    "word": "game",
+    "meaning": "游戏；野味",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Explain the rules",
-      "meaning": "解释规则",
-      "kind": "phrase"
-    }
+      "text": "This game is fun.",
+      "meaning": "这个游戏很有趣。",
+      "kind": "sentence",
+      "sense": "游戏",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "野味",
+          "partOfSpeech": "n",
+          "text": "The restaurant serves game.",
+          "meaning": "这家餐馆供应野味。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-discover",
-    "word": "discover",
-    "meaning": "发现",
-    "practiceBand": 8,
+    "id": "primary-computer",
+    "word": "computer",
+    "meaning": "电脑",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Discover a new place",
-      "meaning": "发现一个新地方",
+      "text": "Use a computer",
+      "meaning": "使用电脑",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-imagine",
-    "word": "imagine",
-    "meaning": "想象",
-    "practiceBand": 8,
+    "id": "primary-photo",
+    "word": "photo",
+    "meaning": "照片",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Imagine the future",
-      "meaning": "想象未来",
+      "text": "A family photo",
+      "meaning": "一张全家福照片",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-communicate",
-    "word": "communicate",
-    "meaning": "交流",
-    "practiceBand": 8,
+    "id": "primary-picture",
+    "word": "picture",
+    "meaning": "图画",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Communicate with friends",
-      "meaning": "与朋友交流",
+      "text": "Draw a picture",
+      "meaning": "画一幅画",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-challenge",
-    "word": "challenge",
-    "meaning": "挑战",
-    "practiceBand": 8,
+    "id": "primary-toy",
+    "word": "toy",
+    "meaning": "玩具",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Accept a challenge",
-      "meaning": "接受挑战",
+      "text": "A toy car",
+      "meaning": "一辆玩具车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-confident",
-    "word": "confident",
-    "meaning": "自信的",
-    "practiceBand": 8,
+    "id": "primary-clock",
+    "word": "clock",
+    "meaning": "时钟",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A confident smile",
-      "meaning": "自信的微笑",
+      "text": "A wall clock",
+      "meaning": "一个挂钟",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-patient",
-    "word": "patient",
-    "meaning": "有耐心的",
-    "practiceBand": 8,
+    "id": "primary-box",
+    "word": "box",
+    "meaning": "盒子",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A patient teacher",
-      "meaning": "一位有耐心的老师",
+      "text": "A small box",
+      "meaning": "一个小盒子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-excellent",
-    "word": "excellent",
-    "meaning": "优秀的",
-    "practiceBand": 8,
+    "id": "primary-blackboard",
+    "word": "blackboard",
+    "meaning": "黑板",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "An excellent idea",
-      "meaning": "一个极好的主意",
+      "text": "Clean the blackboard",
+      "meaning": "擦黑板",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-successful",
-    "word": "successful",
-    "meaning": "成功的",
-    "practiceBand": 8,
+    "id": "primary-park",
+    "word": "park",
+    "meaning": "公园；停车",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A successful team",
-      "meaning": "一支成功的团队",
-      "kind": "phrase"
-    }
+      "text": "We walked in the park.",
+      "meaning": "我们在公园里散步。",
+      "kind": "sentence",
+      "sense": "公园",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "停车",
+          "partOfSpeech": "v",
+          "text": "You cannot park here.",
+          "meaning": "你不能在这里停车。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
-    "id": "practice-responsibility",
-    "word": "responsibility",
-    "meaning": "责任",
-    "practiceBand": 9,
+    "id": "primary-farm",
+    "word": "farm",
+    "meaning": "农场",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Take responsibility",
-      "meaning": "承担责任",
+      "text": "On a farm",
+      "meaning": "在农场",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-opportunity",
-    "word": "opportunity",
-    "meaning": "机会",
-    "practiceBand": 9,
+    "id": "primary-farmer",
+    "word": "farmer",
+    "meaning": "农民",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A learning opportunity",
-      "meaning": "一次学习机会",
+      "text": "A busy farmer",
+      "meaning": "一位忙碌的农民",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-achievement",
-    "word": "achievement",
-    "meaning": "成就",
-    "practiceBand": 9,
+    "id": "primary-driver",
+    "word": "driver",
+    "meaning": "司机",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A great achievement",
-      "meaning": "一项伟大的成就",
+      "text": "A bus driver",
+      "meaning": "一位公交车司机",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-advantage",
-    "word": "advantage",
-    "meaning": "优势",
-    "practiceBand": 9,
+    "id": "primary-worker",
+    "word": "worker",
+    "meaning": "工人",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Take advantage of time",
-      "meaning": "充分利用时间",
+      "text": "A factory worker",
+      "meaning": "一位工厂工人",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-influence",
-    "word": "influence",
-    "meaning": "影响",
-    "practiceBand": 9,
+    "id": "primary-ship",
+    "word": "ship",
+    "meaning": "轮船；运输",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A positive influence",
-      "meaning": "积极的影响",
-      "kind": "phrase"
-    }
+      "text": "The ship left the port.",
+      "meaning": "船驶离了港口。",
+      "kind": "sentence",
+      "sense": "轮船",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "运输",
+          "partOfSpeech": "v",
+          "text": "We ship these goods by air.",
+          "meaning": "我们空运这些货物。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
-    "id": "practice-independence",
-    "word": "independence",
-    "meaning": "独立",
-    "practiceBand": 9,
+    "id": "primary-taxi",
+    "word": "taxi",
+    "meaning": "出租车",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Personal independence",
-      "meaning": "个人独立",
+      "text": "Take a taxi",
+      "meaning": "乘出租车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-competition",
-    "word": "competition",
-    "meaning": "竞争",
-    "practiceBand": 9,
+    "id": "primary-umbrella",
+    "word": "umbrella",
+    "meaning": "雨伞",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A swimming competition",
-      "meaning": "一场游泳比赛",
+      "text": "A red umbrella",
+      "meaning": "一把红雨伞",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-encourage",
-    "word": "encourage",
-    "meaning": "鼓励",
-    "practiceBand": 9,
+    "id": "primary-sweater",
+    "word": "sweater",
+    "meaning": "毛衣",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Encourage your friends",
-      "meaning": "鼓励你的朋友",
+      "text": "A warm sweater",
+      "meaning": "一件暖和的毛衣",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-creative",
-    "word": "creative",
-    "meaning": "有创造力的",
-    "practiceBand": 9,
+    "id": "primary-story",
+    "word": "story",
+    "meaning": "故事；楼层",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A creative idea",
-      "meaning": "一个有创意的想法",
-      "kind": "phrase"
-    }
+      "text": "She told us a funny story.",
+      "meaning": "她给我们讲了一个有趣的故事。",
+      "kind": "sentence",
+      "sense": "故事",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "楼层",
+          "partOfSpeech": "n",
+          "text": "The building has ten stories.",
+          "meaning": "这栋建筑有十层。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-efficient",
-    "word": "efficient",
-    "meaning": "高效的",
-    "practiceBand": 9,
+    "id": "primary-song",
+    "word": "song",
+    "meaning": "歌曲",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "An efficient worker",
-      "meaning": "一位高效的工作者",
+      "text": "Sing a song",
+      "meaning": "唱一首歌",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-necessary",
-    "word": "necessary",
-    "meaning": "必要的",
-    "practiceBand": 9,
+    "id": "primary-street",
+    "word": "street",
+    "meaning": "街道",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A necessary change",
-      "meaning": "一项必要的改变",
+      "text": "Cross the street",
+      "meaning": "过街道",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-valuable",
-    "word": "valuable",
-    "meaning": "有价值的",
-    "practiceBand": 9,
+    "id": "primary-city",
+    "word": "city",
+    "meaning": "城市",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A valuable lesson",
-      "meaning": "宝贵的一课",
+      "text": "A beautiful city",
+      "meaning": "一座美丽的城市",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-graduate",
-    "word": "graduate",
-    "meaning": "毕业",
-    "practiceBand": 9,
+    "id": "primary-thank",
+    "word": "thank",
+    "meaning": "感谢",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Graduate from school",
-      "meaning": "从学校毕业",
+      "text": "Thank your teacher",
+      "meaning": "感谢你的老师",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
-    "id": "practice-interview",
-    "word": "interview",
-    "meaning": "面试",
-    "practiceBand": 9,
+    "id": "primary-their",
+    "word": "their",
+    "meaning": "他们的；她们的；它们的",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "A job interview",
-      "meaning": "一次求职面试",
+      "text": "Their classroom",
+      "meaning": "他们的教室",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
-    "id": "practice-opinion",
-    "word": "opinion",
-    "meaning": "观点",
-    "practiceBand": 9,
+    "id": "primary-them",
+    "word": "them",
+    "meaning": "他们；她们；它们（宾格）",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "In my opinion",
-      "meaning": "在我看来",
+      "text": "Help them",
+      "meaning": "帮助他们",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
-    "id": "practice-solution",
-    "word": "solution",
-    "meaning": "解决办法",
-    "practiceBand": 9,
+    "id": "primary-that",
+    "word": "that",
+    "meaning": "那个",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Find a solution",
-      "meaning": "找到解决办法",
+      "text": "That book",
+      "meaning": "那本书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "det"
   },
   {
-    "id": "practice-research",
-    "word": "research",
-    "meaning": "研究",
-    "practiceBand": 9,
+    "id": "primary-fine",
+    "word": "fine",
+    "meaning": "健康的；精细的；罚款",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Scientific research",
-      "meaning": "科学研究",
-      "kind": "phrase"
-    }
+      "text": "I feel fine today.",
+      "meaning": "我今天感觉身体很好。",
+      "kind": "sentence",
+      "sense": "健康的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "精细的",
+          "partOfSpeech": "adj",
+          "text": "The cloth has a fine pattern.",
+          "meaning": "这块布有精细的图案。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "罚款",
+          "partOfSpeech": "n",
+          "text": "He paid a fine for parking there.",
+          "meaning": "他因在那里停车交了罚款。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj/n"
   },
   {
-    "id": "practice-support",
-    "word": "support",
-    "meaning": "支持",
-    "practiceBand": 9,
+    "id": "primary-early",
+    "word": "early",
+    "meaning": "早的",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Support your team",
-      "meaning": "支持你的团队",
+      "text": "An early bus",
+      "meaning": "早班公交车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
-    "id": "practice-respect",
-    "word": "respect",
-    "meaning": "尊重",
-    "practiceBand": 9,
+    "id": "primary-late",
+    "word": "late",
+    "meaning": "迟的；晚的",
     "group": 1,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Respect other people",
-      "meaning": "尊重他人",
+      "text": "A late train",
+      "meaning": "一班晚点的火车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "practice-chinese",
@@ -2703,7 +2975,7 @@ export const PRIMARY_VOCABULARY = [
   {
     "id": "practice-english",
     "word": "English",
-    "meaning": "英语；英国的",
+    "meaning": "英语；英格兰的",
     "practiceBand": 4,
     "group": 0,
     "verified": false,
@@ -2836,34 +3108,45 @@ export const PRIMARY_VOCABULARY = [
     }
   },
   {
-    "id": "practice-usa",
-    "word": "USA",
-    "meaning": "美国",
-    "practiceBand": 5,
+    "id": "primary-hour",
+    "word": "hour",
+    "meaning": "小时",
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Travel to the USA",
-      "meaning": "前往美国旅行",
+      "text": "An hour later",
+      "meaning": "一小时以后",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "practice-uk",
-    "word": "UK",
-    "meaning": "英国",
-    "practiceBand": 5,
+    "id": "primary-minute",
+    "word": "minute",
+    "meaning": "分钟；微小的",
     "group": 0,
     "verified": false,
     "bookId": null,
     "libraryId": "primary",
     "example": {
-      "text": "Study in the UK",
-      "meaning": "在英国学习",
-      "kind": "phrase"
-    }
+      "text": "Wait here for one minute.",
+      "meaning": "在这里等一分钟。",
+      "kind": "sentence",
+      "sense": "分钟",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "微小的",
+          "partOfSpeech": "adj",
+          "text": "There is a minute crack in the glass.",
+          "meaning": "玻璃上有一道微小的裂纹。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/adj"
   },
   {
     "id": "practice-baby",
@@ -2959,7 +3242,7 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-aunt",
     "libraryId": "primary",
     "word": "aunt",
-    "meaning": "姑母；姨母；伯母；婶母；舅母",
+    "meaning": "阿姨；姑妈；姨妈",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
@@ -2974,7 +3257,7 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-uncle",
     "libraryId": "primary",
     "word": "uncle",
-    "meaning": "叔父；伯父；舅父；姑父；姨父",
+    "meaning": "叔叔；舅舅；伯伯",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
@@ -3004,7 +3287,7 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-parent",
     "libraryId": "primary",
     "word": "parent",
-    "meaning": "父亲或母亲",
+    "meaning": "父亲或母亲；家长",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
@@ -3109,31 +3392,62 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-arm",
     "libraryId": "primary",
     "word": "arm",
-    "meaning": "手臂",
+    "meaning": "手臂；武器；武装",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Raise your arm",
-      "meaning": "抬起你的手臂",
-      "kind": "phrase"
-    }
+      "text": "She raised her right arm.",
+      "meaning": "她举起了右臂。",
+      "kind": "sentence",
+      "sense": "手臂",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "武器",
+          "partOfSpeech": "n",
+          "text": "The country imports arms.",
+          "meaning": "这个国家进口武器。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "武装",
+          "partOfSpeech": "v",
+          "text": "The guards were armed with rifles.",
+          "meaning": "卫兵们配备了步枪。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "practice-foot",
     "libraryId": "primary",
     "word": "foot",
-    "meaning": "脚",
+    "meaning": "脚；英尺",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "A small foot",
-      "meaning": "一只小脚",
-      "kind": "phrase"
-    }
+      "text": "My right foot is sore.",
+      "meaning": "我的右脚疼。",
+      "kind": "sentence",
+      "sense": "脚",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "英尺",
+          "partOfSpeech": "n",
+          "text": "The box is one foot wide.",
+          "meaning": "这个箱子宽一英尺。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "practice-body",
@@ -3190,8 +3504,8 @@ export const PRIMARY_VOCABULARY = [
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Go home together",
-      "meaning": "一起回家",
+      "text": "My new home",
+      "meaning": "我的新家",
       "kind": "phrase"
     }
   },
@@ -3229,16 +3543,28 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-table",
     "libraryId": "primary",
     "word": "table",
-    "meaning": "桌子",
+    "meaning": "桌子；表格",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "A round table",
-      "meaning": "一张圆桌",
-      "kind": "phrase"
-    }
+      "text": "The book is on the table.",
+      "meaning": "书在桌子上。",
+      "kind": "sentence",
+      "sense": "桌子",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "表格",
+          "partOfSpeech": "n",
+          "text": "The table lists all the results.",
+          "meaning": "表格列出了所有结果。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "practice-chair",
@@ -3349,16 +3675,35 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-class",
     "libraryId": "primary",
     "word": "class",
-    "meaning": "班级；课",
+    "meaning": "班级；课程；阶级",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Our English class",
-      "meaning": "我们的英语课",
-      "kind": "phrase"
-    }
+      "text": "There are thirty pupils in my class.",
+      "meaning": "我们班有三十名学生。",
+      "kind": "sentence",
+      "sense": "班级",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "课程",
+          "partOfSpeech": "n",
+          "text": "My next class is history.",
+          "meaning": "我下一节课是历史课。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "阶级",
+          "partOfSpeech": "n",
+          "text": "The book studies the working class.",
+          "meaning": "这本书研究工人阶级。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "practice-classroom",
@@ -3394,16 +3739,28 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-ruler",
     "libraryId": "primary",
     "word": "ruler",
-    "meaning": "尺子",
+    "meaning": "尺子；统治者",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "A long ruler",
-      "meaning": "一把长尺子",
-      "kind": "phrase"
-    }
+      "text": "Measure the line with a ruler.",
+      "meaning": "用尺子量一下这条线。",
+      "kind": "sentence",
+      "sense": "尺子",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "统治者",
+          "partOfSpeech": "n",
+          "text": "The ruler lived in a palace.",
+          "meaning": "统治者住在宫殿里。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "practice-paper",
@@ -3430,10 +3787,22 @@ export const PRIMARY_VOCABULARY = [
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Write a letter",
-      "meaning": "写一封信",
-      "kind": "phrase"
-    }
+      "text": "I wrote a letter to my friend.",
+      "meaning": "我给朋友写了一封信。",
+      "kind": "sentence",
+      "sense": "信",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "字母",
+          "partOfSpeech": "n",
+          "text": "The first letter of cat is c.",
+          "meaning": "cat 的第一个字母是 c。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "practice-lesson",
@@ -3544,7 +3913,7 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-answer",
     "libraryId": "primary",
     "word": "answer",
-    "meaning": "回答；答案",
+    "meaning": "答案；回答",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
@@ -3604,16 +3973,28 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-orange",
     "libraryId": "primary",
     "word": "orange",
-    "meaning": "橙子；橙色",
+    "meaning": "橙子；橙色的",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "A sweet orange",
-      "meaning": "一个甜橙",
-      "kind": "phrase"
-    }
+      "text": "She ate an orange.",
+      "meaning": "她吃了一个橙子。",
+      "kind": "sentence",
+      "sense": "橙子",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "橙色的",
+          "partOfSpeech": "adj",
+          "text": "The leaves are orange in autumn.",
+          "meaning": "树叶在秋天呈橙色。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/adj"
   },
   {
     "id": "practice-grape",
@@ -3880,10 +4261,22 @@ export const PRIMARY_VOCABULARY = [
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "A tiny mouse",
-      "meaning": "一只小老鼠",
-      "kind": "phrase"
-    }
+      "text": "A mouse ran under the table.",
+      "meaning": "一只老鼠跑到了桌子下面。",
+      "kind": "sentence",
+      "sense": "老鼠",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "鼠标",
+          "partOfSpeech": "n",
+          "text": "Click the mouse to open the file.",
+          "meaning": "点击鼠标打开文件。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "practice-pet",
@@ -3964,16 +4357,28 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-skirt",
     "libraryId": "primary",
     "word": "skirt",
-    "meaning": "裙子；短裙",
+    "meaning": "裙子；绕开",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "A blue skirt",
-      "meaning": "一条蓝色短裙",
-      "kind": "phrase"
-    }
+      "text": "She wore a blue skirt.",
+      "meaning": "她穿着一条蓝色裙子。",
+      "kind": "sentence",
+      "sense": "裙子",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "绕开",
+          "partOfSpeech": "v",
+          "text": "The road skirts the town.",
+          "meaning": "这条路绕过镇子。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "practice-dress",
@@ -3985,10 +4390,22 @@ export const PRIMARY_VOCABULARY = [
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "A pretty dress",
-      "meaning": "一条漂亮的连衣裙",
-      "kind": "phrase"
-    }
+      "text": "She wore a yellow dress.",
+      "meaning": "她穿着一条黄色连衣裙。",
+      "kind": "sentence",
+      "sense": "连衣裙",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "穿衣",
+          "partOfSpeech": "v",
+          "text": "The child can dress himself.",
+          "meaning": "这个孩子能自己穿衣服。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "practice-shoe",
@@ -4114,16 +4531,35 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-train",
     "libraryId": "primary",
     "word": "train",
-    "meaning": "火车",
+    "meaning": "火车；训练；一系列",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Travel by train",
-      "meaning": "乘火车旅行",
-      "kind": "phrase"
-    }
+      "text": "The train arrives at noon.",
+      "meaning": "火车中午到达。",
+      "kind": "sentence",
+      "sense": "火车",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "训练",
+          "partOfSpeech": "v",
+          "text": "She trains the team every week.",
+          "meaning": "她每周训练这支队伍。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "一系列",
+          "partOfSpeech": "n",
+          "text": "The noise interrupted my train of thought.",
+          "meaning": "噪音打断了我的思路。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "practice-plane",
@@ -4144,16 +4580,35 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-air",
     "libraryId": "primary",
     "word": "air",
-    "meaning": "空气",
+    "meaning": "空气；空中；神态",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Fresh air",
-      "meaning": "新鲜空气",
-      "kind": "phrase"
-    }
+      "text": "Fresh air comes through the window.",
+      "meaning": "新鲜空气从窗户吹进来。",
+      "kind": "sentence",
+      "sense": "空气",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "空中",
+          "partOfSpeech": "n",
+          "text": "The bird is high in the air.",
+          "meaning": "那只鸟在高空中。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "神态",
+          "partOfSpeech": "n",
+          "text": "He spoke with an air of confidence.",
+          "meaning": "他说话时带着自信的神态。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "practice-beach",
@@ -4294,16 +4749,35 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-plant",
     "libraryId": "primary",
     "word": "plant",
-    "meaning": "植物；种植",
+    "meaning": "植物；种植；工厂",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "A small plant",
-      "meaning": "一株小植物",
-      "kind": "phrase"
-    }
+      "text": "Water the plant every day.",
+      "meaning": "每天给植物浇水。",
+      "kind": "sentence",
+      "sense": "植物",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "种植",
+          "partOfSpeech": "v",
+          "text": "We plant trees in spring.",
+          "meaning": "我们在春天植树。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "工厂",
+          "partOfSpeech": "n",
+          "text": "He works at a car plant.",
+          "meaning": "他在一家汽车制造厂工作。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "practice-fire",
@@ -4435,8 +4909,8 @@ export const PRIMARY_VOCABULARY = [
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Come home today",
-      "meaning": "今天回家",
+      "text": "Today or tomorrow",
+      "meaning": "今天或明天",
       "kind": "phrase"
     }
   },
@@ -4474,16 +4948,35 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-time",
     "libraryId": "primary",
     "word": "time",
-    "meaning": "时间；次",
+    "meaning": "时间；次数；时代",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "On time",
-      "meaning": "准时",
-      "kind": "phrase"
-    }
+      "text": "We have enough time.",
+      "meaning": "我们有足够的时间。",
+      "kind": "sentence",
+      "sense": "时间",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "次数",
+          "partOfSpeech": "n",
+          "text": "I have read it three times.",
+          "meaning": "我读过它三次。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "时代",
+          "partOfSpeech": "n",
+          "text": "Life was different in those times.",
+          "meaning": "那个时代的生活很不一样。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "practice-walk",
@@ -4504,16 +4997,35 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-run",
     "libraryId": "primary",
     "word": "run",
-    "meaning": "跑",
+    "meaning": "跑步；经营；运行",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Run in the park",
-      "meaning": "在公园里跑步",
-      "kind": "phrase"
-    }
+      "text": "I run every morning.",
+      "meaning": "我每天早上跑步。",
+      "kind": "sentence",
+      "sense": "跑步",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "经营",
+          "partOfSpeech": "v",
+          "text": "They run a small shop.",
+          "meaning": "他们经营一家小店。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "运行",
+          "partOfSpeech": "v",
+          "text": "This program runs on my computer.",
+          "meaning": "这个程序在我的电脑上运行。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "practice-jump",
@@ -4534,16 +5046,28 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-fly",
     "libraryId": "primary",
     "word": "fly",
-    "meaning": "飞；放飞",
+    "meaning": "飞；苍蝇",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Fly a kite",
-      "meaning": "放风筝",
-      "kind": "phrase"
-    }
+      "text": "Birds fly over the trees.",
+      "meaning": "鸟儿从树上方飞过。",
+      "kind": "sentence",
+      "sense": "飞",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "苍蝇",
+          "partOfSpeech": "n",
+          "text": "A fly landed on the bread.",
+          "meaning": "一只苍蝇落在面包上。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/n"
   },
   {
     "id": "practice-swim",
@@ -4594,7 +5118,7 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-get",
     "libraryId": "primary",
     "word": "get",
-    "meaning": "得到；取得；到达",
+    "meaning": "得到；到达",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
@@ -4624,16 +5148,35 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-take",
     "libraryId": "primary",
     "word": "take",
-    "meaning": "拿；带；乘坐",
+    "meaning": "拿；乘坐；花费",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Take a bus",
-      "meaning": "乘公共汽车",
-      "kind": "phrase"
-    }
+      "text": "Take the book from the shelf.",
+      "meaning": "从架子上拿那本书。",
+      "kind": "sentence",
+      "sense": "拿",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "乘坐",
+          "partOfSpeech": "v",
+          "text": "We take the bus to school.",
+          "meaning": "我们乘公交车去学校。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "花费",
+          "partOfSpeech": "v",
+          "text": "The trip will take two hours.",
+          "meaning": "这趟行程将花费两个小时。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "practice-put",
@@ -4720,8 +5263,8 @@ export const PRIMARY_VOCABULARY = [
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Play football",
-      "meaning": "踢足球",
+      "text": "Play with friends",
+      "meaning": "和朋友一起玩",
       "kind": "phrase"
     }
   },
@@ -4759,16 +5302,35 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-draw",
     "libraryId": "primary",
     "word": "draw",
-    "meaning": "画；绘画",
+    "meaning": "画；抽取；平局",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Draw a picture",
-      "meaning": "画一幅画",
-      "kind": "phrase"
-    }
+      "text": "She can draw a horse.",
+      "meaning": "她会画马。",
+      "kind": "sentence",
+      "sense": "画",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "抽取",
+          "partOfSpeech": "v",
+          "text": "Draw a card from the pile.",
+          "meaning": "从牌堆里抽一张牌。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "平局",
+          "partOfSpeech": "n",
+          "text": "The game ended in a draw.",
+          "meaning": "比赛以平局结束。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/n"
   },
   {
     "id": "practice-cook",
@@ -4841,7 +5403,7 @@ export const PRIMARY_VOCABULARY = [
     "bookId": null,
     "example": {
       "text": "Wake up early",
-      "meaning": "早起",
+      "meaning": "早点醒来",
       "kind": "phrase"
     }
   },
@@ -4864,16 +5426,35 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-stand",
     "libraryId": "primary",
     "word": "stand",
-    "meaning": "站；站立",
+    "meaning": "站立；忍受；支架",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Stand in a line",
-      "meaning": "站成一排",
-      "kind": "phrase"
-    }
+      "text": "Please stand beside the door.",
+      "meaning": "请站在门边。",
+      "kind": "sentence",
+      "sense": "站立",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "忍受",
+          "partOfSpeech": "v",
+          "text": "I cannot stand this noise.",
+          "meaning": "我受不了这种噪音。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "支架",
+          "partOfSpeech": "n",
+          "text": "Put the camera on its stand.",
+          "meaning": "把相机放在支架上。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/n"
   },
   {
     "id": "practice-stop",
@@ -4909,16 +5490,28 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-close",
     "libraryId": "primary",
     "word": "close",
-    "meaning": "关闭；合上",
+    "meaning": "关闭；靠近的",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Close your eyes",
-      "meaning": "闭上眼睛",
-      "kind": "phrase"
-    }
+      "text": "Please close the window.",
+      "meaning": "请关上窗户。",
+      "kind": "sentence",
+      "sense": "关闭",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "靠近的",
+          "partOfSpeech": "adj",
+          "text": "The station is close to my house.",
+          "meaning": "车站离我家很近。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/adj"
   },
   {
     "id": "practice-help",
@@ -4954,7 +5547,7 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-clean",
     "libraryId": "primary",
     "word": "clean",
-    "meaning": "清洁的；打扫",
+    "meaning": "打扫；清洁的",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
@@ -4990,10 +5583,22 @@ export const PRIMARY_VOCABULARY = [
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Watch a cartoon",
-      "meaning": "看一部动画片",
-      "kind": "phrase"
-    }
+      "text": "We watch the birds in the garden.",
+      "meaning": "我们观察花园里的鸟。",
+      "kind": "sentence",
+      "sense": "观看",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "手表",
+          "partOfSpeech": "n",
+          "text": "My watch shows the correct time.",
+          "meaning": "我的手表时间准确。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/n"
   },
   {
     "id": "practice-look",
@@ -5080,8 +5685,8 @@ export const PRIMARY_VOCABULARY = [
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Say hello",
-      "meaning": "打招呼",
+      "text": "Say goodbye",
+      "meaning": "说再见",
       "kind": "phrase"
     }
   },
@@ -5254,16 +5859,28 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-live",
     "libraryId": "primary",
     "word": "live",
-    "meaning": "居住；生活",
+    "meaning": "居住；现场直播的",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Live in a small town",
-      "meaning": "住在一座小镇里",
-      "kind": "phrase"
-    }
+      "text": "They live near the school.",
+      "meaning": "他们住在学校附近。",
+      "kind": "sentence",
+      "sense": "居住",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "现场直播的",
+          "partOfSpeech": "adj",
+          "text": "We watched a live concert on television.",
+          "meaning": "我们在电视上看了现场直播的音乐会。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/adj"
   },
   {
     "id": "practice-work",
@@ -5299,16 +5916,35 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-turn",
     "libraryId": "primary",
     "word": "turn",
-    "meaning": "转向；转动",
+    "meaning": "转动；轮次；变得",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Turn left",
-      "meaning": "向左转",
-      "kind": "phrase"
-    }
+      "text": "Turn the handle to open the door.",
+      "meaning": "转动把手开门。",
+      "kind": "sentence",
+      "sense": "转动",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "轮次",
+          "partOfSpeech": "n",
+          "text": "It is your turn to play.",
+          "meaning": "轮到你玩了。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "变得",
+          "partOfSpeech": "v",
+          "text": "The leaves turn yellow in autumn.",
+          "meaning": "树叶在秋天变黄。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/n"
   },
   {
     "id": "practice-try",
@@ -5329,16 +5965,28 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-show",
     "libraryId": "primary",
     "word": "show",
-    "meaning": "展示；给……看",
+    "meaning": "展示；演出",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Show me your picture",
-      "meaning": "给我看看你的画",
-      "kind": "phrase"
-    }
+      "text": "Show me your drawing.",
+      "meaning": "给我看看你的画。",
+      "kind": "sentence",
+      "sense": "展示",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "演出",
+          "partOfSpeech": "n",
+          "text": "The show starts at eight.",
+          "meaning": "演出八点开始。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/n"
   },
   {
     "id": "practice-share",
@@ -5629,31 +6277,62 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-cool",
     "libraryId": "primary",
     "word": "cool",
-    "meaning": "凉爽的",
+    "meaning": "凉爽的；冷静的；很棒的",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "A cool morning",
-      "meaning": "一个凉爽的早晨",
-      "kind": "phrase"
-    }
+      "text": "The evening air is cool.",
+      "meaning": "晚间空气很凉爽。",
+      "kind": "sentence",
+      "sense": "凉爽的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "冷静的",
+          "partOfSpeech": "adj",
+          "text": "Keep cool in an emergency.",
+          "meaning": "遇到紧急情况要冷静。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "很棒的",
+          "partOfSpeech": "adj",
+          "text": "That is a cool idea.",
+          "meaning": "那是个很棒的主意。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "practice-fast",
     "libraryId": "primary",
     "word": "fast",
-    "meaning": "快的；快地",
+    "meaning": "快速的；禁食",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Run fast",
-      "meaning": "跑得快",
-      "kind": "phrase"
-    }
+      "text": "This is a fast train.",
+      "meaning": "这是一列快车。",
+      "kind": "sentence",
+      "sense": "快速的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "禁食",
+          "partOfSpeech": "v",
+          "text": "They fast for a day.",
+          "meaning": "他们禁食一天。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj/v"
   },
   {
     "id": "practice-slow",
@@ -5689,7 +6368,7 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-thin",
     "libraryId": "primary",
     "word": "thin",
-    "meaning": "瘦的；薄的",
+    "meaning": "薄的；瘦的",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
@@ -5734,16 +6413,28 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-safe",
     "libraryId": "primary",
     "word": "safe",
-    "meaning": "安全的",
+    "meaning": "安全的；保险箱",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "A safe place",
-      "meaning": "一个安全的地方",
-      "kind": "phrase"
-    }
+      "text": "The children are safe at home.",
+      "meaning": "孩子们在家很安全。",
+      "kind": "sentence",
+      "sense": "安全的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "保险箱",
+          "partOfSpeech": "n",
+          "text": "Keep the money in the safe.",
+          "meaning": "把钱放在保险箱里。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj/n"
   },
   {
     "id": "practice-wrong",
@@ -5764,16 +6455,35 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-right",
     "libraryId": "primary",
     "word": "right",
-    "meaning": "正确的；右边的",
+    "meaning": "正确的；右边；权利",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "The right answer",
-      "meaning": "正确的答案",
-      "kind": "phrase"
-    }
+      "text": "Your answer is right.",
+      "meaning": "你的答案是对的。",
+      "kind": "sentence",
+      "sense": "正确的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "右边",
+          "partOfSpeech": "n",
+          "text": "The shop is on your right.",
+          "meaning": "商店在你右边。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "权利",
+          "partOfSpeech": "n",
+          "text": "Everyone has the right to learn.",
+          "meaning": "每个人都有学习的权利。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj/n"
   },
   {
     "id": "practice-cute",
@@ -6094,16 +6804,28 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-can",
     "libraryId": "primary",
     "word": "can",
-    "meaning": "能；会",
+    "meaning": "能够；罐头",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "I can swim.",
-      "meaning": "我会游泳。",
-      "kind": "sentence"
-    }
+      "text": "She can swim very well.",
+      "meaning": "她游泳游得很好。",
+      "kind": "sentence",
+      "sense": "能够",
+      "partOfSpeech": "modal verb",
+      "additional": [
+        {
+          "sense": "罐头",
+          "partOfSpeech": "n",
+          "text": "Open a can of soup.",
+          "meaning": "打开一罐汤。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/n"
   },
   {
     "id": "practice-do",
@@ -6220,8 +6942,8 @@ export const PRIMARY_VOCABULARY = [
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Have breakfast",
-      "meaning": "吃早饭",
+      "text": "Have a new bike",
+      "meaning": "有一辆新自行车",
       "kind": "phrase"
     }
   },
@@ -6400,8 +7122,8 @@ export const PRIMARY_VOCABULARY = [
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "It is sunny.",
-      "meaning": "天气晴朗。",
+      "text": "It is a cat.",
+      "meaning": "它是一只猫。",
       "kind": "sentence"
     }
   },
@@ -6460,25 +7182,49 @@ export const PRIMARY_VOCABULARY = [
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "A kind teacher",
-      "meaning": "一位友善的老师",
-      "kind": "phrase"
-    }
+      "text": "She is kind to her neighbours.",
+      "meaning": "她对邻居很友善。",
+      "kind": "sentence",
+      "sense": "友善的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "种类",
+          "partOfSpeech": "n",
+          "text": "What kind of music do you like?",
+          "meaning": "你喜欢哪种音乐？",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj/n"
   },
   {
     "id": "practice-left",
     "libraryId": "primary",
     "word": "left",
-    "meaning": "左边；向左",
+    "meaning": "左边；剩下的",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Turn left",
-      "meaning": "向左转",
-      "kind": "phrase"
-    }
+      "text": "The shop is on the left.",
+      "meaning": "商店在左边。",
+      "kind": "sentence",
+      "sense": "左边",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "剩下的",
+          "partOfSpeech": "adj",
+          "text": "There are two tickets left.",
+          "meaning": "还剩两张票。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/adj"
   },
   {
     "id": "practice-let",
@@ -6499,16 +7245,49 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-light",
     "libraryId": "primary",
     "word": "light",
-    "meaning": "光；灯；轻的",
+    "meaning": "光；灯；轻的；点燃；浅色的",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Turn on the light",
-      "meaning": "开灯",
-      "kind": "phrase"
-    }
+      "text": "Light came through the window.",
+      "meaning": "光从窗户照进来。",
+      "kind": "sentence",
+      "sense": "光",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "灯",
+          "partOfSpeech": "n",
+          "text": "Turn off the light before leaving.",
+          "meaning": "离开前关灯。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "轻的",
+          "partOfSpeech": "adj",
+          "text": "This bag is very light.",
+          "meaning": "这个包很轻。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "点燃",
+          "partOfSpeech": "v",
+          "text": "Please light the candle.",
+          "meaning": "请点燃蜡烛。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "浅色的",
+          "partOfSpeech": "adj",
+          "text": "She wore a light blue dress.",
+          "meaning": "她穿了一条浅蓝色连衣裙。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/adj/v"
   },
   {
     "id": "practice-make",
@@ -6790,8 +7569,8 @@ export const PRIMARY_VOCABULARY = [
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "A glass of water",
-      "meaning": "一杯水",
+      "text": "The name of the book",
+      "meaning": "这本书的名字",
       "kind": "phrase"
     }
   },
@@ -6799,7 +7578,7 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-off",
     "libraryId": "primary",
     "word": "off",
-    "meaning": "离开；关闭",
+    "meaning": "关闭；离开",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
@@ -6820,9 +7599,9 @@ export const PRIMARY_VOCABULARY = [
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Often play football",
-      "meaning": "经常踢足球",
-      "kind": "phrase"
+      "text": "He often plays football.",
+      "meaning": "他经常踢足球。",
+      "kind": "sentence"
     }
   },
   {
@@ -6904,16 +7683,28 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-party",
     "libraryId": "primary",
     "word": "party",
-    "meaning": "聚会",
+    "meaning": "聚会；政党",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "A birthday party",
-      "meaning": "一个生日聚会",
-      "kind": "phrase"
-    }
+      "text": "We had a party on Friday.",
+      "meaning": "我们星期五举行了聚会。",
+      "kind": "sentence",
+      "sense": "聚会",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "政党",
+          "partOfSpeech": "n",
+          "text": "The party won the election.",
+          "meaning": "这个政党赢得了选举。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "practice-please",
@@ -6985,9 +7776,9 @@ export const PRIMARY_VOCABULARY = [
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Sometimes walk to school",
-      "meaning": "有时步行上学",
-      "kind": "phrase"
+      "text": "Sometimes I walk to school.",
+      "meaning": "有时我步行上学。",
+      "kind": "sentence"
     }
   },
   {
@@ -7129,7 +7920,7 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-the",
     "libraryId": "primary",
     "word": "the",
-    "meaning": "这；那（定冠词）",
+    "meaning": "特指已知的人或事物（定冠词）",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
@@ -7249,16 +8040,35 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-well",
     "libraryId": "primary",
     "word": "well",
-    "meaning": "好地；健康的",
+    "meaning": "好地；健康的；井",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "Sleep well",
-      "meaning": "睡得好",
-      "kind": "phrase"
-    }
+      "text": "She sings very well.",
+      "meaning": "她唱得很好。",
+      "kind": "sentence",
+      "sense": "好地",
+      "partOfSpeech": "adv",
+      "additional": [
+        {
+          "sense": "健康的",
+          "partOfSpeech": "adj",
+          "text": "He is feeling well today.",
+          "meaning": "他今天感觉身体很好。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "井",
+          "partOfSpeech": "n",
+          "text": "They get water from the well.",
+          "meaning": "他们从井里取水。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adv/adj/n"
   },
   {
     "id": "practice-what",
@@ -7369,22 +8179,41 @@ export const PRIMARY_VOCABULARY = [
     "id": "practice-will",
     "libraryId": "primary",
     "word": "will",
-    "meaning": "将；会",
+    "meaning": "将会；意志；遗嘱",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "I will help you.",
-      "meaning": "我会帮助你。",
-      "kind": "sentence"
-    }
+      "text": "I will help you tomorrow.",
+      "meaning": "我明天会帮助你。",
+      "kind": "sentence",
+      "sense": "将会",
+      "partOfSpeech": "modal verb",
+      "additional": [
+        {
+          "sense": "意志",
+          "partOfSpeech": "n",
+          "text": "She has a strong will.",
+          "meaning": "她意志坚强。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "遗嘱",
+          "partOfSpeech": "n",
+          "text": "He wrote a will last year.",
+          "meaning": "他去年写了一份遗嘱。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/n"
   },
   {
     "id": "practice-wish",
     "libraryId": "primary",
     "word": "wish",
-    "meaning": "希望；愿望",
+    "meaning": "愿望；希望",
     "practiceBand": 6,
     "group": 0,
     "verified": false,
@@ -7465,9 +8294,9 @@ export const PRIMARY_VOCABULARY = [
     "verified": false,
     "bookId": null,
     "example": {
-      "text": "You are welcome.",
-      "meaning": "不用谢。",
-      "kind": "sentence"
+      "text": "You and your friend",
+      "meaning": "你和你的朋友",
+      "kind": "phrase"
     }
   },
   {

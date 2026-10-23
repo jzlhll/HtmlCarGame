@@ -2,6049 +2,8761 @@
 export const INTERMEDIATE_VOCABULARY = [
   {
     "id": "intermediate-cat",
-    "libraryId": "intermediate",
     "word": "cat",
     "meaning": "猫",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A sleeping cat",
       "meaning": "一只睡着的猫",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-dog",
-    "libraryId": "intermediate",
     "word": "dog",
     "meaning": "狗",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Walk the dog",
       "meaning": "遛狗",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-pen",
-    "libraryId": "intermediate",
     "word": "pen",
     "meaning": "钢笔",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A blue pen",
       "meaning": "一支蓝色钢笔",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-book",
-    "libraryId": "intermediate",
     "word": "book",
-    "meaning": "书",
+    "meaning": "书；预订",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Read a book",
-      "meaning": "读一本书",
-      "kind": "phrase"
-    }
+      "text": "This book tells a funny story.",
+      "meaning": "这本书讲了一个有趣的故事。",
+      "kind": "sentence",
+      "sense": "书",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "预订",
+          "partOfSpeech": "v",
+          "text": "Please book a room for tonight.",
+          "meaning": "请预订一间今晚的客房。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "intermediate-bag",
-    "libraryId": "intermediate",
     "word": "bag",
     "meaning": "书包",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A school bag",
       "meaning": "一个书包",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-red",
-    "libraryId": "intermediate",
     "word": "red",
-    "meaning": "红色",
+    "meaning": "红色的",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A red apple",
       "meaning": "一个红苹果",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-blue",
-    "libraryId": "intermediate",
     "word": "blue",
-    "meaning": "蓝色",
+    "meaning": "蓝色的；忧郁的",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "The blue sky",
-      "meaning": "蓝天",
-      "kind": "phrase"
-    }
+      "text": "The sky is blue today.",
+      "meaning": "今天天空是蓝色的。",
+      "kind": "sentence",
+      "sense": "蓝色的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "忧郁的",
+          "partOfSpeech": "adj",
+          "text": "He felt blue after the farewell.",
+          "meaning": "告别之后他感到忧伤。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-one",
-    "libraryId": "intermediate",
     "word": "one",
     "meaning": "一",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "One more time",
       "meaning": "再来一次",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
     "id": "intermediate-two",
-    "libraryId": "intermediate",
     "word": "two",
     "meaning": "二",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Two good friends",
       "meaning": "两个好朋友",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
     "id": "intermediate-six",
-    "libraryId": "intermediate",
     "word": "six",
     "meaning": "六",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Six little ducks",
       "meaning": "六只小鸭子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
     "id": "intermediate-ten",
-    "libraryId": "intermediate",
     "word": "ten",
     "meaning": "十",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Ten minutes later",
       "meaning": "十分钟后",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
     "id": "intermediate-eye",
-    "libraryId": "intermediate",
     "word": "eye",
     "meaning": "眼睛",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "An eye test",
       "meaning": "视力检查",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-ear",
-    "libraryId": "intermediate",
     "word": "ear",
-    "meaning": "耳朵",
+    "meaning": "耳朵；谷穗",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "An ear for music",
-      "meaning": "音乐鉴赏力",
-      "kind": "phrase"
-    }
+      "text": "My left ear hurts.",
+      "meaning": "我的左耳疼。",
+      "kind": "sentence",
+      "sense": "耳朵",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "谷穗",
+          "partOfSpeech": "n",
+          "text": "Each ear of corn is ready to pick.",
+          "meaning": "每根玉米穗都可以采摘了。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-nose",
-    "libraryId": "intermediate",
     "word": "nose",
     "meaning": "鼻子",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A runny nose",
-      "meaning": "流鼻涕",
+      "text": "Touch your nose",
+      "meaning": "摸摸你的鼻子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-mouth",
-    "libraryId": "intermediate",
     "word": "mouth",
     "meaning": "嘴",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Open your mouth",
       "meaning": "张开嘴",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-face",
-    "libraryId": "intermediate",
     "word": "face",
     "meaning": "脸",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Wash your face",
       "meaning": "洗脸",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-hand",
-    "libraryId": "intermediate",
     "word": "hand",
     "meaning": "手",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Raise your hand",
       "meaning": "举手",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-leg",
-    "libraryId": "intermediate",
     "word": "leg",
     "meaning": "腿",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A broken leg",
-      "meaning": "一条受伤骨折的腿",
+      "meaning": "一条骨折的腿",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-head",
-    "libraryId": "intermediate",
     "word": "head",
-    "meaning": "头",
+    "meaning": "头；负责人；朝向",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Shake your head",
-      "meaning": "摇头",
-      "kind": "phrase"
-    }
+      "text": "She turned her head.",
+      "meaning": "她转过头。",
+      "kind": "sentence",
+      "sense": "头",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "负责人",
+          "partOfSpeech": "n",
+          "text": "He is the head of the school.",
+          "meaning": "他是学校负责人。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "朝向",
+          "partOfSpeech": "v",
+          "text": "We headed for the station.",
+          "meaning": "我们朝车站走去。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "intermediate-ball",
-    "libraryId": "intermediate",
     "word": "ball",
-    "meaning": "球",
+    "meaning": "球；舞会",
+    "practiceBand": 1,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Catch the ball",
-      "meaning": "接球",
-      "kind": "phrase"
-    }
+      "text": "The ball rolled under the chair.",
+      "meaning": "球滚到了椅子下面。",
+      "kind": "sentence",
+      "sense": "球",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "舞会",
+          "partOfSpeech": "n",
+          "text": "They danced at the ball.",
+          "meaning": "他们在舞会上跳舞。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-apple",
-    "libraryId": "intermediate",
     "word": "apple",
     "meaning": "苹果",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "An apple tree",
       "meaning": "一棵苹果树",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-bird",
-    "libraryId": "intermediate",
     "word": "bird",
     "meaning": "鸟",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A singing bird",
       "meaning": "一只歌唱的小鸟",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-fish",
-    "libraryId": "intermediate",
     "word": "fish",
     "meaning": "鱼",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Fresh fish",
       "meaning": "新鲜的鱼",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-milk",
-    "libraryId": "intermediate",
     "word": "milk",
     "meaning": "牛奶",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A glass of milk",
       "meaning": "一杯牛奶",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-water",
-    "libraryId": "intermediate",
     "word": "water",
-    "meaning": "水",
+    "meaning": "水；浇水",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Drink some water",
-      "meaning": "喝点水",
-      "kind": "phrase"
-    }
+      "text": "Drink some water after running.",
+      "meaning": "跑步后喝些水。",
+      "kind": "sentence",
+      "sense": "水",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "浇水",
+          "partOfSpeech": "v",
+          "text": "Water the flowers every morning.",
+          "meaning": "每天早上给花浇水。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "intermediate-rice",
-    "libraryId": "intermediate",
     "word": "rice",
     "meaning": "米饭",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A bowl of rice",
       "meaning": "一碗米饭",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-bread",
-    "libraryId": "intermediate",
     "word": "bread",
     "meaning": "面包",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A piece of bread",
       "meaning": "一片面包",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-cake",
-    "libraryId": "intermediate",
     "word": "cake",
     "meaning": "蛋糕",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A birthday cake",
       "meaning": "一个生日蛋糕",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-egg",
-    "libraryId": "intermediate",
     "word": "egg",
     "meaning": "鸡蛋",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A boiled egg",
       "meaning": "一个煮鸡蛋",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-juice",
-    "libraryId": "intermediate",
     "word": "juice",
     "meaning": "果汁",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Orange juice",
       "meaning": "橙汁",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-duck",
-    "libraryId": "intermediate",
     "word": "duck",
-    "meaning": "鸭子",
+    "meaning": "鸭子；低头躲避",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A yellow duck",
-      "meaning": "一只黄色鸭子",
-      "kind": "phrase"
-    }
+      "text": "A duck swam across the pond.",
+      "meaning": "一只鸭子游过池塘。",
+      "kind": "sentence",
+      "sense": "鸭子",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "低头躲避",
+          "partOfSpeech": "v",
+          "text": "He ducked to avoid the ball.",
+          "meaning": "他低头躲开了球。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "intermediate-frog",
-    "libraryId": "intermediate",
     "word": "frog",
     "meaning": "青蛙",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A green frog",
       "meaning": "一只绿色青蛙",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-rabbit",
-    "libraryId": "intermediate",
     "word": "rabbit",
     "meaning": "兔子",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A white rabbit",
       "meaning": "一只白兔",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-bear",
-    "libraryId": "intermediate",
     "word": "bear",
-    "meaning": "熊",
+    "meaning": "熊；忍受；承担",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A polar bear",
-      "meaning": "一只北极熊",
-      "kind": "phrase"
-    }
+      "text": "A bear lives in this forest.",
+      "meaning": "这片森林里生活着一只熊。",
+      "kind": "sentence",
+      "sense": "熊",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "忍受",
+          "partOfSpeech": "v",
+          "text": "I cannot bear the noise.",
+          "meaning": "我受不了这种噪音。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "承担",
+          "partOfSpeech": "v",
+          "text": "You must bear the cost yourself.",
+          "meaning": "你必须自己承担费用。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "intermediate-tiger",
-    "libraryId": "intermediate",
     "word": "tiger",
     "meaning": "老虎",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A wild tiger",
       "meaning": "一只野生老虎",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-lion",
-    "libraryId": "intermediate",
     "word": "lion",
     "meaning": "狮子",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A young lion",
       "meaning": "一只幼狮",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-green",
-    "libraryId": "intermediate",
     "word": "green",
-    "meaning": "绿色",
+    "meaning": "绿色的",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Green grass",
       "meaning": "绿草",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-yellow",
-    "libraryId": "intermediate",
     "word": "yellow",
-    "meaning": "黄色",
+    "meaning": "黄色的",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A yellow flower",
       "meaning": "一朵黄花",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-black",
-    "libraryId": "intermediate",
     "word": "black",
-    "meaning": "黑色",
+    "meaning": "黑色的",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A black coat",
       "meaning": "一件黑外套",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-white",
-    "libraryId": "intermediate",
     "word": "white",
-    "meaning": "白色",
+    "meaning": "白色的",
+    "practiceBand": 2,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A white shirt",
       "meaning": "一件白衬衫",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-morning",
-    "libraryId": "intermediate",
     "word": "morning",
     "meaning": "早晨",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Good morning",
       "meaning": "早上好",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-family",
-    "libraryId": "intermediate",
     "word": "family",
     "meaning": "家庭",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A family photo",
       "meaning": "一张全家福",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-school",
-    "libraryId": "intermediate",
     "word": "school",
-    "meaning": "学校",
+    "meaning": "学校；鱼群；学派",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Go to school",
-      "meaning": "去上学",
-      "kind": "phrase"
-    }
+      "text": "The children walk to school.",
+      "meaning": "孩子们步行去学校。",
+      "kind": "sentence",
+      "sense": "学校",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "鱼群",
+          "partOfSpeech": "n",
+          "text": "A school of fish swam past the boat.",
+          "meaning": "一群鱼游过了船边。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "学派",
+          "partOfSpeech": "n",
+          "text": "He belongs to a new school of thought.",
+          "meaning": "他属于一个新的思想流派。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-teacher",
-    "libraryId": "intermediate",
     "word": "teacher",
     "meaning": "老师",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A music teacher",
       "meaning": "一位音乐老师",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-father",
-    "libraryId": "intermediate",
     "word": "father",
     "meaning": "父亲",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "My father and I",
       "meaning": "我和父亲",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-mother",
-    "libraryId": "intermediate",
     "word": "mother",
     "meaning": "母亲",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Help your mother",
       "meaning": "帮助你的母亲",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-sister",
-    "libraryId": "intermediate",
     "word": "sister",
     "meaning": "姐妹",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "My younger sister",
       "meaning": "我的妹妹",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-brother",
-    "libraryId": "intermediate",
     "word": "brother",
     "meaning": "兄弟",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "My elder brother",
       "meaning": "我的哥哥",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-happy",
-    "libraryId": "intermediate",
     "word": "happy",
     "meaning": "高兴的",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A happy family",
-      "meaning": "一个幸福的家庭",
+      "text": "A happy child",
+      "meaning": "一个高兴的孩子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-hungry",
-    "libraryId": "intermediate",
     "word": "hungry",
     "meaning": "饥饿的",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Feel hungry",
       "meaning": "感到饥饿",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-small",
-    "libraryId": "intermediate",
     "word": "small",
     "meaning": "小的",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A small village",
       "meaning": "一个小村庄",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-long",
-    "libraryId": "intermediate",
     "word": "long",
-    "meaning": "长的",
+    "meaning": "长的；渴望",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A long journey",
-      "meaning": "一段漫长的旅程",
-      "kind": "phrase"
-    }
+      "text": "This is a long road.",
+      "meaning": "这是一条很长的路。",
+      "kind": "sentence",
+      "sense": "长的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "渴望",
+          "partOfSpeech": "v",
+          "text": "I long to see my family.",
+          "meaning": "我渴望见到家人。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj/v"
   },
   {
     "id": "intermediate-short",
-    "libraryId": "intermediate",
     "word": "short",
     "meaning": "短的",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A short story",
       "meaning": "一个短篇故事",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-friend",
-    "libraryId": "intermediate",
     "word": "friend",
     "meaning": "朋友",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "An old friend",
       "meaning": "一位老朋友",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-birthday",
-    "libraryId": "intermediate",
     "word": "birthday",
     "meaning": "生日",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A birthday party",
       "meaning": "一场生日聚会",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-sunny",
-    "libraryId": "intermediate",
     "word": "sunny",
     "meaning": "晴朗的",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A sunny day",
       "meaning": "晴朗的一天",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-cloudy",
-    "libraryId": "intermediate",
     "word": "cloudy",
     "meaning": "多云的",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Cloudy weather",
       "meaning": "多云的天气",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-rain",
-    "libraryId": "intermediate",
     "word": "rain",
     "meaning": "雨",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Heavy rain",
       "meaning": "大雨",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-snow",
-    "libraryId": "intermediate",
     "word": "snow",
     "meaning": "雪",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Play in the snow",
       "meaning": "在雪中玩耍",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-flower",
-    "libraryId": "intermediate",
     "word": "flower",
     "meaning": "花",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A flower shop",
       "meaning": "一家花店",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-weather",
-    "libraryId": "intermediate",
     "word": "weather",
     "meaning": "天气",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Warm weather",
       "meaning": "温暖的天气",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-season",
-    "libraryId": "intermediate",
     "word": "season",
-    "meaning": "季节",
+    "meaning": "季节；调味",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "The rainy season",
-      "meaning": "雨季",
-      "kind": "phrase"
-    }
+      "text": "Spring is my favourite season.",
+      "meaning": "春天是我最喜欢的季节。",
+      "kind": "sentence",
+      "sense": "季节",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "调味",
+          "partOfSpeech": "v",
+          "text": "Season the soup with salt.",
+          "meaning": "用盐给汤调味。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "intermediate-spring",
-    "libraryId": "intermediate",
     "word": "spring",
-    "meaning": "春天",
+    "meaning": "春天；泉水；弹簧",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Flowers in spring",
-      "meaning": "春天的花朵",
-      "kind": "phrase"
-    }
+      "text": "Flowers bloom in spring.",
+      "meaning": "花朵在春天开放。",
+      "kind": "sentence",
+      "sense": "春天",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "泉水",
+          "partOfSpeech": "n",
+          "text": "Clear water flows from the spring.",
+          "meaning": "清水从泉眼流出。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "弹簧",
+          "partOfSpeech": "n",
+          "text": "The spring inside the clock is broken.",
+          "meaning": "钟里的弹簧断了。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-summer",
-    "libraryId": "intermediate",
     "word": "summer",
     "meaning": "夏天",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Summer holiday",
       "meaning": "暑假",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-autumn",
-    "libraryId": "intermediate",
     "word": "autumn",
     "meaning": "秋天",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Autumn leaves",
       "meaning": "秋天的树叶",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-winter",
-    "libraryId": "intermediate",
     "word": "winter",
     "meaning": "冬天",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A cold winter",
       "meaning": "一个寒冷的冬天",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-library",
-    "libraryId": "intermediate",
     "word": "library",
     "meaning": "图书馆",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "The school library",
       "meaning": "学校图书馆",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-playground",
-    "libraryId": "intermediate",
     "word": "playground",
     "meaning": "操场",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "In the playground",
       "meaning": "在操场上",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-subject",
-    "libraryId": "intermediate",
     "word": "subject",
-    "meaning": "学科",
+    "meaning": "学科；主题；主语",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "My favourite subject",
-      "meaning": "我最喜欢的学科",
-      "kind": "phrase"
-    }
+      "text": "Maths is my favourite subject.",
+      "meaning": "数学是我最喜欢的学科。",
+      "kind": "sentence",
+      "sense": "学科",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "主题",
+          "partOfSpeech": "n",
+          "text": "We discussed the subject of travel.",
+          "meaning": "我们讨论了旅行这个主题。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "主语",
+          "partOfSpeech": "n",
+          "text": "Find the subject of the sentence.",
+          "meaning": "找出这个句子的主语。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-science",
-    "libraryId": "intermediate",
     "word": "science",
     "meaning": "科学",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A science lesson",
       "meaning": "一节科学课",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-music",
-    "libraryId": "intermediate",
     "word": "music",
     "meaning": "音乐",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Listen to music",
       "meaning": "听音乐",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-kitchen",
-    "libraryId": "intermediate",
     "word": "kitchen",
     "meaning": "厨房",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "In the kitchen",
       "meaning": "在厨房里",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-bedroom",
-    "libraryId": "intermediate",
     "word": "bedroom",
     "meaning": "卧室",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A tidy bedroom",
       "meaning": "一间整洁的卧室",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-bathroom",
-    "libraryId": "intermediate",
     "word": "bathroom",
     "meaning": "浴室",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Clean the bathroom",
       "meaning": "打扫浴室",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-breakfast",
-    "libraryId": "intermediate",
     "word": "breakfast",
     "meaning": "早餐",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Have breakfast",
       "meaning": "吃早餐",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-lunch",
-    "libraryId": "intermediate",
     "word": "lunch",
     "meaning": "午餐",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "After lunch",
       "meaning": "午餐后",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-dinner",
-    "libraryId": "intermediate",
     "word": "dinner",
     "meaning": "晚餐",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Cook dinner",
       "meaning": "做晚餐",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-thirsty",
-    "libraryId": "intermediate",
     "word": "thirsty",
     "meaning": "口渴的",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Feel thirsty",
       "meaning": "感到口渴",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-tired",
-    "libraryId": "intermediate",
     "word": "tired",
     "meaning": "疲倦的",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A tired worker",
       "meaning": "一位疲倦的工人",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-careful",
-    "libraryId": "intermediate",
     "word": "careful",
     "meaning": "小心的",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Be careful",
       "meaning": "小心",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-weekend",
-    "libraryId": "intermediate",
     "word": "weekend",
     "meaning": "周末",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "This weekend",
       "meaning": "这个周末",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-healthy",
-    "libraryId": "intermediate",
     "word": "healthy",
     "meaning": "健康的",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Healthy food",
       "meaning": "健康的食物",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-exercise",
-    "libraryId": "intermediate",
     "word": "exercise",
     "meaning": "锻炼",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Daily exercise",
-      "meaning": "日常锻炼",
+      "text": "Exercise every morning",
+      "meaning": "每天早上锻炼",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-hobby",
-    "libraryId": "intermediate",
     "word": "hobby",
     "meaning": "爱好",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "My favourite hobby",
       "meaning": "我最喜欢的爱好",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-holiday",
-    "libraryId": "intermediate",
     "word": "holiday",
     "meaning": "假期",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A summer holiday",
       "meaning": "一个暑假",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-museum",
-    "libraryId": "intermediate",
     "word": "museum",
     "meaning": "博物馆",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Visit a museum",
       "meaning": "参观博物馆",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-cinema",
-    "libraryId": "intermediate",
     "word": "cinema",
     "meaning": "电影院",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Go to the cinema",
       "meaning": "去电影院",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-hospital",
-    "libraryId": "intermediate",
     "word": "hospital",
     "meaning": "医院",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A children's hospital",
       "meaning": "一家儿童医院",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-station",
-    "libraryId": "intermediate",
     "word": "station",
     "meaning": "车站",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A bus station",
       "meaning": "一个汽车站",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-supermarket",
-    "libraryId": "intermediate",
     "word": "supermarket",
     "meaning": "超市",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "The nearest supermarket",
       "meaning": "最近的超市",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-famous",
-    "libraryId": "intermediate",
     "word": "famous",
     "meaning": "著名的",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A famous writer",
       "meaning": "一位著名的作家",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-delicious",
-    "libraryId": "intermediate",
     "word": "delicious",
     "meaning": "美味的",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A delicious meal",
       "meaning": "一顿美味的饭菜",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-interesting",
-    "libraryId": "intermediate",
     "word": "interesting",
     "meaning": "有趣的",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "An interesting book",
       "meaning": "一本有趣的书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-beautiful",
-    "libraryId": "intermediate",
     "word": "beautiful",
     "meaning": "美丽的",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A beautiful garden",
       "meaning": "一座美丽的花园",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-clever",
-    "libraryId": "intermediate",
     "word": "clever",
     "meaning": "聪明的",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A clever idea",
-      "meaning": "一个聪明的主意",
+      "text": "A clever student",
+      "meaning": "一个聪明的学生",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-busy",
-    "libraryId": "intermediate",
     "word": "busy",
     "meaning": "忙碌的",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A busy street",
-      "meaning": "一条繁忙的街道",
+      "text": "A busy teacher",
+      "meaning": "一位忙碌的老师",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-quiet",
-    "libraryId": "intermediate",
     "word": "quiet",
     "meaning": "安静的",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A quiet room",
       "meaning": "一间安静的房间",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-village",
-    "libraryId": "intermediate",
     "word": "village",
     "meaning": "村庄",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A mountain village",
       "meaning": "一个山村",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-island",
-    "libraryId": "intermediate",
     "word": "island",
     "meaning": "岛屿",
+    "practiceBand": 5,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A small island",
       "meaning": "一座小岛",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-journey",
-    "libraryId": "intermediate",
-    "word": "journey",
-    "meaning": "旅程",
+    "id": "intermediate-three",
+    "word": "three",
+    "meaning": "三",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A train journey",
-      "meaning": "一段火车旅程",
+      "text": "Three books",
+      "meaning": "三本书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
     "id": "intermediate-country",
-    "libraryId": "intermediate",
     "word": "country",
     "meaning": "国家",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A beautiful country",
       "meaning": "一个美丽的国家",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-planet",
-    "libraryId": "intermediate",
-    "word": "planet",
-    "meaning": "行星",
+    "id": "intermediate-four",
+    "word": "four",
+    "meaning": "四",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A distant planet",
-      "meaning": "一颗遥远的行星",
+      "text": "Four chairs",
+      "meaning": "四把椅子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
     "id": "intermediate-space",
-    "libraryId": "intermediate",
     "word": "space",
-    "meaning": "太空",
+    "meaning": "太空；空间；空格",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Travel into space",
-      "meaning": "前往太空",
-      "kind": "phrase"
-    }
+      "text": "The rocket travels into space.",
+      "meaning": "火箭飞入太空。",
+      "kind": "sentence",
+      "sense": "太空",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "空间",
+          "partOfSpeech": "n",
+          "text": "There is space for another chair.",
+          "meaning": "还有放一把椅子的空间。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "空格",
+          "partOfSpeech": "n",
+          "text": "Leave a space between the words.",
+          "meaning": "在单词之间留一个空格。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-earth",
-    "libraryId": "intermediate",
     "word": "Earth",
     "meaning": "地球",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Life on Earth",
       "meaning": "地球上的生命",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-future",
-    "libraryId": "intermediate",
-    "word": "future",
-    "meaning": "未来",
+    "id": "intermediate-five",
+    "word": "five",
+    "meaning": "五",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "In the future",
-      "meaning": "在未来",
+      "text": "Five apples",
+      "meaning": "五个苹果",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
     "id": "intermediate-robot",
-    "libraryId": "intermediate",
     "word": "robot",
     "meaning": "机器人",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A helpful robot",
       "meaning": "一个能帮忙的机器人",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-machine",
-    "libraryId": "intermediate",
-    "word": "machine",
-    "meaning": "机器",
+    "id": "intermediate-seven",
+    "word": "seven",
+    "meaning": "七",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A washing machine",
-      "meaning": "一台洗衣机",
+      "text": "Seven days",
+      "meaning": "七天",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-project",
-    "libraryId": "intermediate",
-    "word": "project",
-    "meaning": "项目",
+    "id": "intermediate-eight",
+    "word": "eight",
+    "meaning": "八",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A school project",
-      "meaning": "一个学校项目",
+      "text": "Eight pencils",
+      "meaning": "八支铅笔",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
     "id": "intermediate-festival",
-    "libraryId": "intermediate",
     "word": "festival",
     "meaning": "节日",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A music festival",
       "meaning": "一个音乐节",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-tradition",
-    "libraryId": "intermediate",
-    "word": "tradition",
-    "meaning": "传统",
+    "id": "intermediate-nine",
+    "word": "nine",
+    "meaning": "九",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A family tradition",
-      "meaning": "一项家庭传统",
+      "text": "Nine birds",
+      "meaning": "九只鸟",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-culture",
-    "libraryId": "intermediate",
-    "word": "culture",
-    "meaning": "文化",
+    "id": "intermediate-zero",
+    "word": "zero",
+    "meaning": "零",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Local culture",
-      "meaning": "当地文化",
+      "text": "Zero points",
+      "meaning": "零分",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
     "id": "intermediate-history",
-    "libraryId": "intermediate",
     "word": "history",
     "meaning": "历史",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A history lesson",
       "meaning": "一节历史课",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-nature",
-    "libraryId": "intermediate",
     "word": "nature",
     "meaning": "自然",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "The beauty of nature",
       "meaning": "大自然之美",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-protect",
-    "libraryId": "intermediate",
-    "word": "protect",
-    "meaning": "保护",
+    "id": "intermediate-eleven",
+    "word": "eleven",
+    "meaning": "十一",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Protect the environment",
-      "meaning": "保护环境",
+      "text": "Eleven students",
+      "meaning": "十一名学生",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-recycle",
-    "libraryId": "intermediate",
-    "word": "recycle",
-    "meaning": "回收利用",
+    "id": "intermediate-twelve",
+    "word": "twelve",
+    "meaning": "十二",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Recycle old paper",
-      "meaning": "回收废纸",
+      "text": "Twelve months",
+      "meaning": "十二个月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-energy",
-    "libraryId": "intermediate",
-    "word": "energy",
-    "meaning": "能源",
+    "id": "intermediate-thirteen",
+    "word": "thirteen",
+    "meaning": "十三",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Save energy",
-      "meaning": "节约能源",
+      "text": "Thirteen books",
+      "meaning": "十三本书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
     "id": "intermediate-ocean",
-    "libraryId": "intermediate",
     "word": "ocean",
     "meaning": "海洋",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "The deep ocean",
       "meaning": "深海",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-forest",
-    "libraryId": "intermediate",
     "word": "forest",
     "meaning": "森林",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A green forest",
       "meaning": "一片绿色的森林",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-mountain",
-    "libraryId": "intermediate",
     "word": "mountain",
-    "meaning": "山脉",
+    "meaning": "山；高山",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A high mountain",
       "meaning": "一座高山",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-visitor",
-    "libraryId": "intermediate",
-    "word": "visitor",
-    "meaning": "游客",
+    "id": "intermediate-fourteen",
+    "word": "fourteen",
+    "meaning": "十四",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A welcome visitor",
-      "meaning": "一位受欢迎的来客",
+      "text": "Fourteen days",
+      "meaning": "十四天",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-friendship",
-    "libraryId": "intermediate",
-    "word": "friendship",
-    "meaning": "友谊",
+    "id": "intermediate-fifteen",
+    "word": "fifteen",
+    "meaning": "十五",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A lasting friendship",
-      "meaning": "一段长久的友谊",
+      "text": "Fifteen minutes",
+      "meaning": "十五分钟",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-activity",
-    "libraryId": "intermediate",
-    "word": "activity",
-    "meaning": "活动",
+    "id": "intermediate-sixteen",
+    "word": "sixteen",
+    "meaning": "十六",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "An outdoor activity",
-      "meaning": "一项户外活动",
+      "text": "Sixteen chairs",
+      "meaning": "十六把椅子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-information",
-    "libraryId": "intermediate",
-    "word": "information",
-    "meaning": "信息",
+    "id": "intermediate-seventeen",
+    "word": "seventeen",
+    "meaning": "十七",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Useful information",
-      "meaning": "有用的信息",
+      "text": "Seventeen students",
+      "meaning": "十七名学生",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-practice",
-    "libraryId": "intermediate",
-    "word": "practice",
-    "meaning": "练习",
+    "id": "intermediate-eighteen",
+    "word": "eighteen",
+    "meaning": "十八",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Spelling practice",
-      "meaning": "拼写练习",
+      "text": "Eighteen pencils",
+      "meaning": "十八支铅笔",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-language",
-    "libraryId": "intermediate",
-    "word": "language",
-    "meaning": "语言",
+    "id": "intermediate-nineteen",
+    "word": "nineteen",
+    "meaning": "十九",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Learn a language",
-      "meaning": "学习一门语言",
+      "text": "Nineteen apples",
+      "meaning": "十九个苹果",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-international",
-    "libraryId": "intermediate",
-    "word": "international",
-    "meaning": "国际的",
+    "id": "intermediate-twenty",
+    "word": "twenty",
+    "meaning": "二十",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "An international school",
-      "meaning": "一所国际学校",
+      "text": "Twenty minutes",
+      "meaning": "二十分钟",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-geography",
-    "libraryId": "intermediate",
-    "word": "geography",
-    "meaning": "地理",
+    "id": "intermediate-thirty",
+    "word": "thirty",
+    "meaning": "三十",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A geography lesson",
-      "meaning": "一节地理课",
+      "text": "Thirty days",
+      "meaning": "三十天",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-volunteer",
-    "libraryId": "intermediate",
-    "word": "volunteer",
-    "meaning": "志愿者",
+    "id": "intermediate-forty",
+    "word": "forty",
+    "meaning": "四十",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A volunteer teacher",
-      "meaning": "一位志愿教师",
+      "text": "Forty students",
+      "meaning": "四十名学生",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-introduce",
-    "libraryId": "intermediate",
-    "word": "introduce",
-    "meaning": "介绍",
+    "id": "intermediate-fifty",
+    "word": "fifty",
+    "meaning": "五十",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Introduce yourself",
-      "meaning": "介绍你自己",
+      "text": "Fifty pages",
+      "meaning": "五十页",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-complete",
-    "libraryId": "intermediate",
-    "word": "complete",
-    "meaning": "完成",
+    "id": "intermediate-sixty",
+    "word": "sixty",
+    "meaning": "六十",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Complete the task",
-      "meaning": "完成任务",
+      "text": "Sixty seconds",
+      "meaning": "六十秒",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-example",
-    "libraryId": "intermediate",
-    "word": "example",
-    "meaning": "例子",
+    "id": "intermediate-seventy",
+    "word": "seventy",
+    "meaning": "七十",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "For example",
-      "meaning": "例如",
+      "text": "Seventy people",
+      "meaning": "七十个人",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-magazine",
-    "libraryId": "intermediate",
-    "word": "magazine",
-    "meaning": "杂志",
+    "id": "intermediate-eighty",
+    "word": "eighty",
+    "meaning": "八十",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A children's magazine",
-      "meaning": "一本儿童杂志",
+      "text": "Eighty books",
+      "meaning": "八十本书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-article",
-    "libraryId": "intermediate",
-    "word": "article",
-    "meaning": "文章",
+    "id": "intermediate-ninety",
+    "word": "ninety",
+    "meaning": "九十",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Read an article",
-      "meaning": "阅读一篇文章",
+      "text": "Ninety minutes",
+      "meaning": "九十分钟",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-important",
-    "libraryId": "intermediate",
-    "word": "important",
-    "meaning": "重要的",
+    "id": "intermediate-hundred",
+    "word": "hundred",
+    "meaning": "百",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "An important question",
-      "meaning": "一个重要的问题",
+      "text": "A hundred people",
+      "meaning": "一百个人",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-possible",
-    "libraryId": "intermediate",
-    "word": "possible",
-    "meaning": "可能的",
+    "id": "intermediate-thousand",
+    "word": "thousand",
+    "meaning": "千",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A possible answer",
-      "meaning": "一个可能的答案",
+      "text": "A thousand trees",
+      "meaning": "一千棵树",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "num"
   },
   {
-    "id": "intermediate-popular",
-    "libraryId": "intermediate",
-    "word": "popular",
-    "meaning": "受欢迎的",
+    "id": "intermediate-january",
+    "word": "January",
+    "meaning": "一月",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A popular song",
-      "meaning": "一首受欢迎的歌曲",
+      "text": "In January",
+      "meaning": "在一月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-nervous",
-    "libraryId": "intermediate",
-    "word": "nervous",
-    "meaning": "紧张的",
+    "id": "intermediate-february",
+    "word": "February",
+    "meaning": "二月",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Feel nervous",
-      "meaning": "感到紧张",
+      "text": "In February",
+      "meaning": "在二月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-honest",
-    "libraryId": "intermediate",
-    "word": "honest",
-    "meaning": "诚实的",
+    "id": "intermediate-march",
+    "word": "March",
+    "meaning": "三月",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "An honest person",
-      "meaning": "一个诚实的人",
+      "text": "In March",
+      "meaning": "在三月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-polite",
-    "libraryId": "intermediate",
-    "word": "polite",
-    "meaning": "有礼貌的",
+    "id": "intermediate-april",
+    "word": "April",
+    "meaning": "四月",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A polite reply",
-      "meaning": "一个有礼貌的答复",
+      "text": "In April",
+      "meaning": "在四月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-experience",
-    "libraryId": "intermediate",
-    "word": "experience",
-    "meaning": "经历",
+    "id": "intermediate-june",
+    "word": "June",
+    "meaning": "六月",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A new experience",
-      "meaning": "一次新的经历",
+      "text": "In June",
+      "meaning": "在六月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-environment",
-    "libraryId": "intermediate",
-    "word": "environment",
-    "meaning": "环境",
+    "id": "intermediate-july",
+    "word": "July",
+    "meaning": "七月",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Protect the environment",
-      "meaning": "保护环境",
+      "text": "In July",
+      "meaning": "在七月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-pollution",
-    "libraryId": "intermediate",
-    "word": "pollution",
-    "meaning": "污染",
+    "id": "intermediate-august",
+    "word": "August",
+    "meaning": "八月",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Air pollution",
-      "meaning": "空气污染",
+      "text": "In August",
+      "meaning": "在八月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-invention",
-    "libraryId": "intermediate",
-    "word": "invention",
-    "meaning": "发明",
+    "id": "intermediate-september",
+    "word": "September",
+    "meaning": "九月",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A useful invention",
-      "meaning": "一项有用的发明",
+      "text": "In September",
+      "meaning": "在九月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-technology",
-    "libraryId": "intermediate",
-    "word": "technology",
-    "meaning": "科技",
+    "id": "intermediate-october",
+    "word": "October",
+    "meaning": "十月",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Modern technology",
-      "meaning": "现代科技",
+      "text": "In October",
+      "meaning": "在十月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-knowledge",
-    "libraryId": "intermediate",
-    "word": "knowledge",
-    "meaning": "知识",
+    "id": "intermediate-november",
+    "word": "November",
+    "meaning": "十一月",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Share your knowledge",
-      "meaning": "分享你的知识",
+      "text": "In November",
+      "meaning": "在十一月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-education",
-    "libraryId": "intermediate",
-    "word": "education",
-    "meaning": "教育",
+    "id": "intermediate-december",
+    "word": "December",
+    "meaning": "十二月",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "School education",
-      "meaning": "学校教育",
+      "text": "In December",
+      "meaning": "在十二月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-attention",
-    "libraryId": "intermediate",
-    "word": "attention",
-    "meaning": "注意力",
+    "id": "intermediate-brown",
+    "word": "brown",
+    "meaning": "棕色的",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Pay attention",
-      "meaning": "注意",
+      "text": "A brown bear",
+      "meaning": "一只棕色的熊",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
-    "id": "intermediate-decision",
-    "libraryId": "intermediate",
-    "word": "decision",
-    "meaning": "决定",
+    "id": "intermediate-pink",
+    "word": "pink",
+    "meaning": "粉红色的",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Make a decision",
-      "meaning": "作出决定",
+      "text": "A pink dress",
+      "meaning": "一条粉红色的连衣裙",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
-    "id": "intermediate-develop",
-    "libraryId": "intermediate",
-    "word": "develop",
-    "meaning": "发展",
+    "id": "intermediate-purple",
+    "word": "purple",
+    "meaning": "紫色的",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Develop good habits",
-      "meaning": "养成好习惯",
+      "text": "A purple flower",
+      "meaning": "一朵紫色的花",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
-    "id": "intermediate-improve",
-    "libraryId": "intermediate",
-    "word": "improve",
-    "meaning": "改进",
+    "id": "intermediate-football",
+    "word": "football",
+    "meaning": "足球",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Improve your English",
-      "meaning": "提高你的英语水平",
+      "text": "Play football",
+      "meaning": "踢足球",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-suggest",
-    "libraryId": "intermediate",
-    "word": "suggest",
-    "meaning": "建议",
+    "id": "intermediate-basketball",
+    "word": "basketball",
+    "meaning": "篮球",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Suggest a better plan",
-      "meaning": "提出一个更好的计划",
+      "text": "Play basketball",
+      "meaning": "打篮球",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-explain",
-    "libraryId": "intermediate",
-    "word": "explain",
-    "meaning": "解释",
+    "id": "intermediate-game",
+    "word": "game",
+    "meaning": "游戏；野味",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Explain the rules",
-      "meaning": "解释规则",
-      "kind": "phrase"
-    }
+      "text": "This game is fun.",
+      "meaning": "这个游戏很有趣。",
+      "kind": "sentence",
+      "sense": "游戏",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "野味",
+          "partOfSpeech": "n",
+          "text": "The restaurant serves game.",
+          "meaning": "这家餐馆供应野味。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-discover",
-    "libraryId": "intermediate",
-    "word": "discover",
-    "meaning": "发现",
+    "id": "intermediate-computer",
+    "word": "computer",
+    "meaning": "电脑",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Discover a new place",
-      "meaning": "发现一个新地方",
+      "text": "Use a computer",
+      "meaning": "使用电脑",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-imagine",
-    "libraryId": "intermediate",
-    "word": "imagine",
-    "meaning": "想象",
+    "id": "intermediate-photo",
+    "word": "photo",
+    "meaning": "照片",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Imagine the future",
-      "meaning": "想象未来",
+      "text": "A family photo",
+      "meaning": "一张全家福照片",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-communicate",
-    "libraryId": "intermediate",
-    "word": "communicate",
-    "meaning": "交流",
+    "id": "intermediate-picture",
+    "word": "picture",
+    "meaning": "图画",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Communicate with friends",
-      "meaning": "与朋友交流",
+      "text": "Draw a picture",
+      "meaning": "画一幅画",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-challenge",
-    "libraryId": "intermediate",
-    "word": "challenge",
-    "meaning": "挑战",
+    "id": "intermediate-toy",
+    "word": "toy",
+    "meaning": "玩具",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Accept a challenge",
-      "meaning": "接受挑战",
+      "text": "A toy car",
+      "meaning": "一辆玩具车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-confident",
-    "libraryId": "intermediate",
-    "word": "confident",
-    "meaning": "自信的",
+    "id": "intermediate-clock",
+    "word": "clock",
+    "meaning": "时钟",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A confident smile",
-      "meaning": "自信的微笑",
+      "text": "A wall clock",
+      "meaning": "一个挂钟",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-patient",
-    "libraryId": "intermediate",
-    "word": "patient",
-    "meaning": "有耐心的",
+    "id": "intermediate-box",
+    "word": "box",
+    "meaning": "盒子",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A patient teacher",
-      "meaning": "一位有耐心的老师",
+      "text": "A small box",
+      "meaning": "一个小盒子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-excellent",
-    "libraryId": "intermediate",
-    "word": "excellent",
-    "meaning": "优秀的",
+    "id": "intermediate-blackboard",
+    "word": "blackboard",
+    "meaning": "黑板",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "An excellent idea",
-      "meaning": "一个极好的主意",
+      "text": "Clean the blackboard",
+      "meaning": "擦黑板",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-successful",
-    "libraryId": "intermediate",
-    "word": "successful",
-    "meaning": "成功的",
+    "id": "intermediate-park",
+    "word": "park",
+    "meaning": "公园；停车",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A successful team",
-      "meaning": "一支成功的团队",
-      "kind": "phrase"
-    }
+      "text": "We walked in the park.",
+      "meaning": "我们在公园里散步。",
+      "kind": "sentence",
+      "sense": "公园",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "停车",
+          "partOfSpeech": "v",
+          "text": "You cannot park here.",
+          "meaning": "你不能在这里停车。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
-    "id": "intermediate-responsibility",
-    "libraryId": "intermediate",
-    "word": "responsibility",
-    "meaning": "责任",
+    "id": "intermediate-farm",
+    "word": "farm",
+    "meaning": "农场",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Take responsibility",
-      "meaning": "承担责任",
+      "text": "On a farm",
+      "meaning": "在农场",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-opportunity",
-    "libraryId": "intermediate",
-    "word": "opportunity",
-    "meaning": "机会",
+    "id": "intermediate-farmer",
+    "word": "farmer",
+    "meaning": "农民",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A learning opportunity",
-      "meaning": "一次学习机会",
+      "text": "A busy farmer",
+      "meaning": "一位忙碌的农民",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-achievement",
-    "libraryId": "intermediate",
-    "word": "achievement",
-    "meaning": "成就",
+    "id": "intermediate-driver",
+    "word": "driver",
+    "meaning": "司机",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A great achievement",
-      "meaning": "一项伟大的成就",
+      "text": "A bus driver",
+      "meaning": "一位公交车司机",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-advantage",
-    "libraryId": "intermediate",
-    "word": "advantage",
-    "meaning": "优势",
+    "id": "intermediate-worker",
+    "word": "worker",
+    "meaning": "工人",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Take advantage of time",
-      "meaning": "充分利用时间",
+      "text": "A factory worker",
+      "meaning": "一位工厂工人",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-influence",
-    "libraryId": "intermediate",
-    "word": "influence",
-    "meaning": "影响",
+    "id": "intermediate-ship",
+    "word": "ship",
+    "meaning": "轮船；运输",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A positive influence",
-      "meaning": "积极的影响",
-      "kind": "phrase"
-    }
+      "text": "The ship left the port.",
+      "meaning": "船驶离了港口。",
+      "kind": "sentence",
+      "sense": "轮船",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "运输",
+          "partOfSpeech": "v",
+          "text": "We ship these goods by air.",
+          "meaning": "我们空运这些货物。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
-    "id": "intermediate-independence",
-    "libraryId": "intermediate",
-    "word": "independence",
-    "meaning": "独立",
+    "id": "intermediate-taxi",
+    "word": "taxi",
+    "meaning": "出租车",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Personal independence",
-      "meaning": "个人独立",
+      "text": "Take a taxi",
+      "meaning": "乘出租车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-competition",
-    "libraryId": "intermediate",
-    "word": "competition",
-    "meaning": "竞争",
+    "id": "intermediate-umbrella",
+    "word": "umbrella",
+    "meaning": "雨伞",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A swimming competition",
-      "meaning": "一场游泳比赛",
+      "text": "A red umbrella",
+      "meaning": "一把红雨伞",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-encourage",
-    "libraryId": "intermediate",
-    "word": "encourage",
-    "meaning": "鼓励",
+    "id": "intermediate-sweater",
+    "word": "sweater",
+    "meaning": "毛衣",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Encourage your friends",
-      "meaning": "鼓励你的朋友",
+      "text": "A warm sweater",
+      "meaning": "一件暖和的毛衣",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-creative",
-    "libraryId": "intermediate",
-    "word": "creative",
-    "meaning": "有创造力的",
+    "id": "intermediate-story",
+    "word": "story",
+    "meaning": "故事；楼层",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A creative idea",
-      "meaning": "一个有创意的想法",
-      "kind": "phrase"
-    }
+      "text": "She told us a funny story.",
+      "meaning": "她给我们讲了一个有趣的故事。",
+      "kind": "sentence",
+      "sense": "故事",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "楼层",
+          "partOfSpeech": "n",
+          "text": "The building has ten stories.",
+          "meaning": "这栋建筑有十层。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-efficient",
-    "libraryId": "intermediate",
-    "word": "efficient",
-    "meaning": "高效的",
+    "id": "intermediate-song",
+    "word": "song",
+    "meaning": "歌曲",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "An efficient worker",
-      "meaning": "一位高效的工作者",
+      "text": "Sing a song",
+      "meaning": "唱一首歌",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-necessary",
-    "libraryId": "intermediate",
-    "word": "necessary",
-    "meaning": "必要的",
+    "id": "intermediate-street",
+    "word": "street",
+    "meaning": "街道",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A necessary change",
-      "meaning": "一项必要的改变",
+      "text": "Cross the street",
+      "meaning": "过街道",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-valuable",
-    "libraryId": "intermediate",
-    "word": "valuable",
-    "meaning": "有价值的",
+    "id": "intermediate-city",
+    "word": "city",
+    "meaning": "城市",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A valuable lesson",
-      "meaning": "宝贵的一课",
+      "text": "A beautiful city",
+      "meaning": "一座美丽的城市",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-graduate",
-    "libraryId": "intermediate",
-    "word": "graduate",
-    "meaning": "毕业",
+    "id": "intermediate-thank",
+    "word": "thank",
+    "meaning": "感谢",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Graduate from school",
-      "meaning": "从学校毕业",
+      "text": "Thank your teacher",
+      "meaning": "感谢你的老师",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
-    "id": "intermediate-interview",
-    "libraryId": "intermediate",
-    "word": "interview",
-    "meaning": "面试",
+    "id": "intermediate-their",
+    "word": "their",
+    "meaning": "他们的；她们的；它们的",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "A job interview",
-      "meaning": "一次求职面试",
+      "text": "Their classroom",
+      "meaning": "他们的教室",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
-    "id": "intermediate-opinion",
-    "libraryId": "intermediate",
-    "word": "opinion",
-    "meaning": "观点",
+    "id": "intermediate-them",
+    "word": "them",
+    "meaning": "他们",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "In my opinion",
-      "meaning": "在我看来",
+      "text": "Help them",
+      "meaning": "帮助他们",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
-    "id": "intermediate-solution",
-    "libraryId": "intermediate",
-    "word": "solution",
-    "meaning": "解决办法",
+    "id": "intermediate-that",
+    "word": "that",
+    "meaning": "那个",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Find a solution",
-      "meaning": "找到解决办法",
+      "text": "That book",
+      "meaning": "那本书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
-    "id": "intermediate-research",
-    "libraryId": "intermediate",
-    "word": "research",
-    "meaning": "研究",
+    "id": "intermediate-fine",
+    "word": "fine",
+    "meaning": "健康的；精细的；罚款",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Scientific research",
-      "meaning": "科学研究",
-      "kind": "phrase"
-    }
+      "text": "I feel fine today.",
+      "meaning": "我今天感觉身体很好。",
+      "kind": "sentence",
+      "sense": "健康的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "精细的",
+          "partOfSpeech": "adj",
+          "text": "The cloth has a fine pattern.",
+          "meaning": "这块布有精细的图案。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "罚款",
+          "partOfSpeech": "n",
+          "text": "He paid a fine for parking there.",
+          "meaning": "他因在那里停车交了罚款。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj/n"
   },
   {
-    "id": "intermediate-support",
-    "libraryId": "intermediate",
-    "word": "support",
-    "meaning": "支持",
+    "id": "intermediate-early",
+    "word": "early",
+    "meaning": "早的",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Support your team",
-      "meaning": "支持你的团队",
+      "text": "An early bus",
+      "meaning": "早班公交车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
-    "id": "intermediate-respect",
-    "libraryId": "intermediate",
-    "word": "respect",
-    "meaning": "尊重",
+    "id": "intermediate-late",
+    "word": "late",
+    "meaning": "迟的；晚的",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Respect other people",
-      "meaning": "尊重他人",
+      "text": "A late train",
+      "meaning": "一班晚点的火车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-chinese",
-    "libraryId": "intermediate",
     "word": "Chinese",
-    "meaning": "汉语；中国的",
+    "meaning": "汉语；中国人",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Learn Chinese",
       "meaning": "学习汉语",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-english",
-    "libraryId": "intermediate",
     "word": "English",
-    "meaning": "英语；英国的",
+    "meaning": "英语",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Speak English",
       "meaning": "说英语",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-china",
-    "libraryId": "intermediate",
     "word": "China",
     "meaning": "中国",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Made in China",
       "meaning": "中国制造",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-monday",
-    "libraryId": "intermediate",
     "word": "Monday",
     "meaning": "星期一",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "On Monday morning",
       "meaning": "在星期一早上",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-tuesday",
-    "libraryId": "intermediate",
     "word": "Tuesday",
     "meaning": "星期二",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Every Tuesday",
       "meaning": "每个星期二",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-wednesday",
-    "libraryId": "intermediate",
     "word": "Wednesday",
     "meaning": "星期三",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Next Wednesday",
       "meaning": "下个星期三",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-thursday",
-    "libraryId": "intermediate",
     "word": "Thursday",
     "meaning": "星期四",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "This Thursday",
       "meaning": "这个星期四",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-friday",
-    "libraryId": "intermediate",
     "word": "Friday",
     "meaning": "星期五",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "On Friday evening",
       "meaning": "在星期五晚上",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-saturday",
-    "libraryId": "intermediate",
     "word": "Saturday",
     "meaning": "星期六",
+    "practiceBand": 4,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "Saturday afternoon",
       "meaning": "星期六下午",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-sunday",
-    "libraryId": "intermediate",
     "word": "Sunday",
     "meaning": "星期日",
+    "practiceBand": 3,
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
       "text": "A quiet Sunday",
       "meaning": "一个安静的星期日",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-usa",
-    "libraryId": "intermediate",
-    "word": "USA",
-    "meaning": "美国",
+    "id": "intermediate-hour",
+    "word": "hour",
+    "meaning": "小时",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Travel to the USA",
-      "meaning": "前往美国旅行",
+      "text": "An hour later",
+      "meaning": "一小时以后",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
-    "id": "intermediate-uk",
-    "libraryId": "intermediate",
-    "word": "UK",
-    "meaning": "英国",
+    "id": "intermediate-minute",
+    "word": "minute",
+    "meaning": "分钟；微小的",
     "group": 0,
+    "verified": false,
+    "bookId": null,
+    "libraryId": "intermediate",
     "example": {
-      "text": "Study in the UK",
-      "meaning": "在英国学习",
-      "kind": "phrase"
-    }
+      "text": "Wait here for one minute.",
+      "meaning": "在这里等一分钟。",
+      "kind": "sentence",
+      "sense": "分钟",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "微小的",
+          "partOfSpeech": "adj",
+          "text": "There is a minute crack in the glass.",
+          "meaning": "玻璃上有一道微小的裂纹。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/adj"
   },
   {
     "id": "intermediate-baby",
     "libraryId": "intermediate",
     "word": "baby",
     "meaning": "婴儿",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A sleeping baby",
       "meaning": "一个熟睡的婴儿",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-boy",
     "libraryId": "intermediate",
     "word": "boy",
     "meaning": "男孩",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A friendly boy",
       "meaning": "一个友好的男孩",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-girl",
     "libraryId": "intermediate",
     "word": "girl",
     "meaning": "女孩",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A clever girl",
       "meaning": "一个聪明的女孩",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-man",
     "libraryId": "intermediate",
     "word": "man",
     "meaning": "成年男子",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A tall man",
       "meaning": "一个高个子男人",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-woman",
     "libraryId": "intermediate",
     "word": "woman",
     "meaning": "成年女子",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A young woman",
       "meaning": "一位年轻女子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-child",
     "libraryId": "intermediate",
     "word": "child",
     "meaning": "儿童；小孩",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A happy child",
       "meaning": "一个快乐的孩子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-aunt",
     "libraryId": "intermediate",
     "word": "aunt",
-    "meaning": "姑母；姨母；伯母；婶母；舅母",
+    "meaning": "姑母；姨母；舅母",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "My kind aunt",
       "meaning": "我和蔼的阿姨",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-uncle",
     "libraryId": "intermediate",
     "word": "uncle",
-    "meaning": "叔父；伯父；舅父；姑父；姨父",
+    "meaning": "叔父；伯父；舅父",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "My funny uncle",
       "meaning": "我风趣的叔叔",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-cousin",
     "libraryId": "intermediate",
     "word": "cousin",
     "meaning": "堂兄弟姐妹；表兄弟姐妹",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "My little cousin",
       "meaning": "我年幼的表弟",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-parent",
     "libraryId": "intermediate",
     "word": "parent",
-    "meaning": "父亲或母亲",
+    "meaning": "父亲或母亲；家长",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A busy parent",
       "meaning": "一位忙碌的家长",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-grandfather",
     "libraryId": "intermediate",
     "word": "grandfather",
     "meaning": "祖父；外祖父",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "My dear grandfather",
       "meaning": "我亲爱的爷爷",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-grandmother",
     "libraryId": "intermediate",
     "word": "grandmother",
     "meaning": "祖母；外祖母",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "My dear grandmother",
       "meaning": "我亲爱的奶奶",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-people",
     "libraryId": "intermediate",
     "word": "people",
     "meaning": "人们",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Friendly people",
       "meaning": "友好的人们",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-student",
     "libraryId": "intermediate",
     "word": "student",
     "meaning": "学生",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A new student",
       "meaning": "一名新学生",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-nurse",
     "libraryId": "intermediate",
     "word": "nurse",
     "meaning": "护士",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A helpful nurse",
       "meaning": "一位乐于助人的护士",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-doctor",
     "libraryId": "intermediate",
     "word": "doctor",
     "meaning": "医生",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "See a doctor",
       "meaning": "看医生",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-arm",
     "libraryId": "intermediate",
     "word": "arm",
-    "meaning": "手臂",
+    "meaning": "手臂；武器；武装",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Raise your arm",
-      "meaning": "抬起你的手臂",
-      "kind": "phrase"
-    }
+      "text": "She raised her right arm.",
+      "meaning": "她举起了右臂。",
+      "kind": "sentence",
+      "sense": "手臂",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "武器",
+          "partOfSpeech": "n",
+          "text": "The country imports arms.",
+          "meaning": "这个国家进口武器。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "武装",
+          "partOfSpeech": "v",
+          "text": "The guards were armed with rifles.",
+          "meaning": "卫兵们配备了步枪。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "intermediate-foot",
     "libraryId": "intermediate",
     "word": "foot",
-    "meaning": "脚",
+    "meaning": "脚；英尺",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "A small foot",
-      "meaning": "一只小脚",
-      "kind": "phrase"
-    }
+      "text": "My right foot is sore.",
+      "meaning": "我的右脚疼。",
+      "kind": "sentence",
+      "sense": "脚",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "英尺",
+          "partOfSpeech": "n",
+          "text": "The box is one foot wide.",
+          "meaning": "这个箱子宽一英尺。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-body",
     "libraryId": "intermediate",
     "word": "body",
     "meaning": "身体",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A healthy body",
       "meaning": "健康的身体",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-hair",
     "libraryId": "intermediate",
     "word": "hair",
     "meaning": "头发",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Long black hair",
       "meaning": "乌黑的长发",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-house",
     "libraryId": "intermediate",
     "word": "house",
     "meaning": "房子",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A house by the river",
       "meaning": "河边的一所房子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-home",
     "libraryId": "intermediate",
     "word": "home",
-    "meaning": "家；回家",
+    "meaning": "回家；在家",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Go home together",
       "meaning": "一起回家",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-room",
     "libraryId": "intermediate",
     "word": "room",
     "meaning": "房间",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A tidy room",
       "meaning": "一间整洁的房间",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-bed",
     "libraryId": "intermediate",
     "word": "bed",
     "meaning": "床",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Go to bed early",
       "meaning": "早点上床睡觉",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-table",
     "libraryId": "intermediate",
     "word": "table",
-    "meaning": "桌子",
+    "meaning": "桌子；表格",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "A round table",
-      "meaning": "一张圆桌",
-      "kind": "phrase"
-    }
+      "text": "The book is on the table.",
+      "meaning": "书在桌子上。",
+      "kind": "sentence",
+      "sense": "桌子",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "表格",
+          "partOfSpeech": "n",
+          "text": "The table lists all the results.",
+          "meaning": "表格列出了所有结果。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-chair",
     "libraryId": "intermediate",
     "word": "chair",
     "meaning": "椅子",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A wooden chair",
       "meaning": "一把木椅",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-desk",
     "libraryId": "intermediate",
     "word": "desk",
     "meaning": "书桌；课桌",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A clean desk",
       "meaning": "一张干净的书桌",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-door",
     "libraryId": "intermediate",
     "word": "door",
     "meaning": "门",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Open the door",
       "meaning": "开门",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-window",
     "libraryId": "intermediate",
     "word": "window",
     "meaning": "窗户",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Look out of the window",
       "meaning": "向窗外看",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-wall",
     "libraryId": "intermediate",
     "word": "wall",
     "meaning": "墙",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A picture on the wall",
       "meaning": "墙上的一幅画",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-floor",
     "libraryId": "intermediate",
     "word": "floor",
     "meaning": "地板；楼层",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Sweep the floor",
       "meaning": "扫地",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-garden",
     "libraryId": "intermediate",
     "word": "garden",
     "meaning": "花园",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A beautiful garden",
       "meaning": "一个美丽的花园",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-class",
     "libraryId": "intermediate",
     "word": "class",
-    "meaning": "班级；课",
+    "meaning": "班级；课程；阶级",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Our English class",
-      "meaning": "我们的英语课",
-      "kind": "phrase"
-    }
+      "text": "There are thirty pupils in my class.",
+      "meaning": "我们班有三十名学生。",
+      "kind": "sentence",
+      "sense": "班级",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "课程",
+          "partOfSpeech": "n",
+          "text": "My next class is history.",
+          "meaning": "我下一节课是历史课。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "阶级",
+          "partOfSpeech": "n",
+          "text": "The book studies the working class.",
+          "meaning": "这本书研究工人阶级。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-classroom",
     "libraryId": "intermediate",
     "word": "classroom",
     "meaning": "教室",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A bright classroom",
       "meaning": "一间明亮的教室",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-pencil",
     "libraryId": "intermediate",
     "word": "pencil",
     "meaning": "铅笔",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A sharp pencil",
       "meaning": "一支削尖的铅笔",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-ruler",
     "libraryId": "intermediate",
     "word": "ruler",
-    "meaning": "尺子",
+    "meaning": "尺子；统治者",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "A long ruler",
-      "meaning": "一把长尺子",
-      "kind": "phrase"
-    }
+      "text": "Measure the line with a ruler.",
+      "meaning": "用尺子量一下这条线。",
+      "kind": "sentence",
+      "sense": "尺子",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "统治者",
+          "partOfSpeech": "n",
+          "text": "The ruler lived in a palace.",
+          "meaning": "统治者住在宫殿里。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-paper",
     "libraryId": "intermediate",
     "word": "paper",
     "meaning": "纸",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A piece of paper",
       "meaning": "一张纸",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-letter",
     "libraryId": "intermediate",
     "word": "letter",
     "meaning": "信；字母",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Write a letter",
-      "meaning": "写一封信",
-      "kind": "phrase"
-    }
+      "text": "I wrote a letter to my friend.",
+      "meaning": "我给朋友写了一封信。",
+      "kind": "sentence",
+      "sense": "信",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "字母",
+          "partOfSpeech": "n",
+          "text": "The first letter of cat is c.",
+          "meaning": "cat 的第一个字母是 c。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-lesson",
     "libraryId": "intermediate",
     "word": "lesson",
     "meaning": "课；一节课",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A music lesson",
       "meaning": "一节音乐课",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-read",
     "libraryId": "intermediate",
     "word": "read",
     "meaning": "阅读；读",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Read a story",
       "meaning": "读一个故事",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-write",
     "libraryId": "intermediate",
     "word": "write",
     "meaning": "写",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Write your name",
       "meaning": "写下你的名字",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-study",
     "libraryId": "intermediate",
     "word": "study",
     "meaning": "学习；研究",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Study at home",
       "meaning": "在家学习",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-learn",
     "libraryId": "intermediate",
     "word": "learn",
     "meaning": "学习；学会",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Learn a new word",
       "meaning": "学习一个新单词",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-word",
     "libraryId": "intermediate",
     "word": "word",
     "meaning": "单词；词",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A useful word",
       "meaning": "一个有用的单词",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-question",
     "libraryId": "intermediate",
     "word": "question",
     "meaning": "问题",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Ask a question",
       "meaning": "提一个问题",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-answer",
     "libraryId": "intermediate",
     "word": "answer",
-    "meaning": "回答；答案",
+    "meaning": "答案；回答",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Find the answer",
       "meaning": "找到答案",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-food",
     "libraryId": "intermediate",
     "word": "food",
     "meaning": "食物",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Healthy food",
       "meaning": "健康的食物",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-fruit",
     "libraryId": "intermediate",
     "word": "fruit",
     "meaning": "水果",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Fresh fruit",
       "meaning": "新鲜的水果",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-banana",
     "libraryId": "intermediate",
     "word": "banana",
     "meaning": "香蕉",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A ripe banana",
       "meaning": "一根熟香蕉",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-orange",
     "libraryId": "intermediate",
     "word": "orange",
-    "meaning": "橙子；橙色",
+    "meaning": "橙子；橙色的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "A sweet orange",
-      "meaning": "一个甜橙",
-      "kind": "phrase"
-    }
+      "text": "She ate an orange.",
+      "meaning": "她吃了一个橙子。",
+      "kind": "sentence",
+      "sense": "橙子",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "橙色的",
+          "partOfSpeech": "adj",
+          "text": "The leaves are orange in autumn.",
+          "meaning": "树叶在秋天呈橙色。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/adj"
   },
   {
     "id": "intermediate-grape",
     "libraryId": "intermediate",
     "word": "grape",
     "meaning": "葡萄",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A purple grape",
       "meaning": "一颗紫葡萄",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-potato",
     "libraryId": "intermediate",
     "word": "potato",
     "meaning": "土豆；马铃薯",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A baked potato",
       "meaning": "一个烤土豆",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-tomato",
     "libraryId": "intermediate",
     "word": "tomato",
     "meaning": "西红柿；番茄",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A red tomato",
       "meaning": "一个红番茄",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-vegetable",
     "libraryId": "intermediate",
     "word": "vegetable",
     "meaning": "蔬菜",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A green vegetable",
       "meaning": "一种绿色蔬菜",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-meat",
     "libraryId": "intermediate",
     "word": "meat",
     "meaning": "肉",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A piece of meat",
       "meaning": "一块肉",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-chicken",
     "libraryId": "intermediate",
     "word": "chicken",
     "meaning": "鸡；鸡肉",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Chicken soup",
       "meaning": "鸡汤",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-soup",
     "libraryId": "intermediate",
     "word": "soup",
     "meaning": "汤",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A bowl of soup",
       "meaning": "一碗汤",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-tea",
     "libraryId": "intermediate",
     "word": "tea",
     "meaning": "茶",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A cup of tea",
       "meaning": "一杯茶",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-cup",
     "libraryId": "intermediate",
     "word": "cup",
     "meaning": "杯子",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A small cup",
       "meaning": "一个小杯子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-animal",
     "libraryId": "intermediate",
     "word": "animal",
     "meaning": "动物",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A wild animal",
       "meaning": "一只野生动物",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-cow",
     "libraryId": "intermediate",
     "word": "cow",
     "meaning": "奶牛；母牛",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A black and white cow",
       "meaning": "一头黑白相间的奶牛",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-horse",
     "libraryId": "intermediate",
     "word": "horse",
     "meaning": "马",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Ride a horse",
       "meaning": "骑马",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-sheep",
     "libraryId": "intermediate",
     "word": "sheep",
     "meaning": "绵羊",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A white sheep",
       "meaning": "一只白绵羊",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-pig",
     "libraryId": "intermediate",
     "word": "pig",
     "meaning": "猪",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A little pig",
       "meaning": "一头小猪",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-monkey",
     "libraryId": "intermediate",
     "word": "monkey",
     "meaning": "猴子",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A playful monkey",
       "meaning": "一只爱玩耍的猴子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-panda",
     "libraryId": "intermediate",
     "word": "panda",
     "meaning": "熊猫",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A baby panda",
       "meaning": "一只熊猫宝宝",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-elephant",
     "libraryId": "intermediate",
     "word": "elephant",
     "meaning": "大象",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A large elephant",
       "meaning": "一头体形庞大的大象",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-mouse",
     "libraryId": "intermediate",
     "word": "mouse",
     "meaning": "老鼠；鼠标",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "A tiny mouse",
-      "meaning": "一只小老鼠",
-      "kind": "phrase"
-    }
+      "text": "A mouse ran under the table.",
+      "meaning": "一只老鼠跑到了桌子下面。",
+      "kind": "sentence",
+      "sense": "老鼠",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "鼠标",
+          "partOfSpeech": "n",
+          "text": "Click the mouse to open the file.",
+          "meaning": "点击鼠标打开文件。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-pet",
     "libraryId": "intermediate",
     "word": "pet",
     "meaning": "宠物",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A pet rabbit",
       "meaning": "一只宠物兔",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-bee",
     "libraryId": "intermediate",
     "word": "bee",
     "meaning": "蜜蜂",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A busy bee",
       "meaning": "一只忙碌的蜜蜂",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-clothes",
     "libraryId": "intermediate",
     "word": "clothes",
     "meaning": "衣服",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Clean clothes",
       "meaning": "干净的衣服",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-coat",
     "libraryId": "intermediate",
     "word": "coat",
     "meaning": "外套；大衣",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A warm coat",
       "meaning": "一件暖和的外套",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-shirt",
     "libraryId": "intermediate",
     "word": "shirt",
     "meaning": "衬衫",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A white shirt",
       "meaning": "一件白衬衫",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-skirt",
     "libraryId": "intermediate",
     "word": "skirt",
-    "meaning": "裙子；短裙",
+    "meaning": "裙子；绕开",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "A blue skirt",
-      "meaning": "一条蓝色短裙",
-      "kind": "phrase"
-    }
+      "text": "She wore a blue skirt.",
+      "meaning": "她穿着一条蓝色裙子。",
+      "kind": "sentence",
+      "sense": "裙子",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "绕开",
+          "partOfSpeech": "v",
+          "text": "The road skirts the town.",
+          "meaning": "这条路绕过镇子。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "intermediate-dress",
     "libraryId": "intermediate",
     "word": "dress",
     "meaning": "连衣裙；穿衣",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "A pretty dress",
-      "meaning": "一条漂亮的连衣裙",
-      "kind": "phrase"
-    }
+      "text": "She wore a yellow dress.",
+      "meaning": "她穿着一条黄色连衣裙。",
+      "kind": "sentence",
+      "sense": "连衣裙",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "穿衣",
+          "partOfSpeech": "v",
+          "text": "The child can dress himself.",
+          "meaning": "这个孩子能自己穿衣服。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "intermediate-shoe",
     "libraryId": "intermediate",
     "word": "shoe",
     "meaning": "鞋",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A lost shoe",
       "meaning": "一只丢失的鞋",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-sock",
     "libraryId": "intermediate",
     "word": "sock",
     "meaning": "短袜",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A wet sock",
       "meaning": "一只湿袜子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-shorts",
     "libraryId": "intermediate",
     "word": "shorts",
     "meaning": "短裤",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A pair of shorts",
       "meaning": "一条短裤",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-trousers",
     "libraryId": "intermediate",
     "word": "trousers",
     "meaning": "长裤",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A pair of trousers",
       "meaning": "一条长裤",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-bike",
     "libraryId": "intermediate",
     "word": "bike",
     "meaning": "自行车",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Ride a bike",
       "meaning": "骑自行车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-boat",
     "libraryId": "intermediate",
     "word": "boat",
     "meaning": "小船",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A fishing boat",
       "meaning": "一条渔船",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-bus",
     "libraryId": "intermediate",
     "word": "bus",
     "meaning": "公共汽车",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Wait for the bus",
       "meaning": "等公共汽车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-car",
     "libraryId": "intermediate",
     "word": "car",
     "meaning": "汽车",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A family car",
       "meaning": "一辆家用汽车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-train",
     "libraryId": "intermediate",
     "word": "train",
-    "meaning": "火车",
+    "meaning": "火车；训练；一系列",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Travel by train",
-      "meaning": "乘火车旅行",
-      "kind": "phrase"
-    }
+      "text": "The train arrives at noon.",
+      "meaning": "火车中午到达。",
+      "kind": "sentence",
+      "sense": "火车",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "训练",
+          "partOfSpeech": "v",
+          "text": "She trains the team every week.",
+          "meaning": "她每周训练这支队伍。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "一系列",
+          "partOfSpeech": "n",
+          "text": "The noise interrupted my train of thought.",
+          "meaning": "噪音打断了我的思路。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "intermediate-plane",
     "libraryId": "intermediate",
     "word": "plane",
     "meaning": "飞机",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A plane in the sky",
       "meaning": "天空中的一架飞机",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-air",
     "libraryId": "intermediate",
     "word": "air",
-    "meaning": "空气",
+    "meaning": "空气；空中；神态",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Fresh air",
-      "meaning": "新鲜空气",
-      "kind": "phrase"
-    }
+      "text": "Fresh air comes through the window.",
+      "meaning": "新鲜空气从窗户吹进来。",
+      "kind": "sentence",
+      "sense": "空气",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "空中",
+          "partOfSpeech": "n",
+          "text": "The bird is high in the air.",
+          "meaning": "那只鸟在高空中。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "神态",
+          "partOfSpeech": "n",
+          "text": "He spoke with an air of confidence.",
+          "meaning": "他说话时带着自信的神态。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-beach",
     "libraryId": "intermediate",
     "word": "beach",
     "meaning": "海滩",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Play on the beach",
       "meaning": "在海滩上玩",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-lake",
     "libraryId": "intermediate",
     "word": "lake",
     "meaning": "湖；湖泊",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A quiet lake",
       "meaning": "一片宁静的湖泊",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-river",
     "libraryId": "intermediate",
     "word": "river",
     "meaning": "河；河流",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Cross the river",
       "meaning": "过河",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-sea",
     "libraryId": "intermediate",
     "word": "sea",
     "meaning": "海；海洋",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Swim in the sea",
       "meaning": "在海里游泳",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-sun",
     "libraryId": "intermediate",
     "word": "sun",
     "meaning": "太阳",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "The warm sun",
       "meaning": "温暖的太阳",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-moon",
     "libraryId": "intermediate",
     "word": "moon",
     "meaning": "月亮",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "The full moon",
       "meaning": "满月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-star",
     "libraryId": "intermediate",
     "word": "star",
     "meaning": "星星",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A bright star",
       "meaning": "一颗明亮的星星",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-tree",
     "libraryId": "intermediate",
     "word": "tree",
     "meaning": "树",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A tall tree",
       "meaning": "一棵高大的树",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-grass",
     "libraryId": "intermediate",
     "word": "grass",
     "meaning": "草；草地",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Green grass",
       "meaning": "绿草",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-plant",
     "libraryId": "intermediate",
     "word": "plant",
-    "meaning": "植物；种植",
+    "meaning": "植物；种植；工厂",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "A small plant",
-      "meaning": "一株小植物",
-      "kind": "phrase"
-    }
+      "text": "Water the plant every day.",
+      "meaning": "每天给植物浇水。",
+      "kind": "sentence",
+      "sense": "植物",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "种植",
+          "partOfSpeech": "v",
+          "text": "We plant trees in spring.",
+          "meaning": "我们在春天植树。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "工厂",
+          "partOfSpeech": "n",
+          "text": "He works at a car plant.",
+          "meaning": "他在一家汽车制造厂工作。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/v"
   },
   {
     "id": "intermediate-fire",
     "libraryId": "intermediate",
     "word": "fire",
     "meaning": "火",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A warm fire",
       "meaning": "一堆温暖的火",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-day",
     "libraryId": "intermediate",
     "word": "day",
     "meaning": "一天；白天",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A sunny day",
       "meaning": "晴朗的一天",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-night",
     "libraryId": "intermediate",
     "word": "night",
     "meaning": "夜晚",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A quiet night",
       "meaning": "一个安静的夜晚",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-afternoon",
     "libraryId": "intermediate",
     "word": "afternoon",
     "meaning": "下午",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "This afternoon",
       "meaning": "今天下午",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-evening",
     "libraryId": "intermediate",
     "word": "evening",
     "meaning": "傍晚；晚上",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "In the evening",
       "meaning": "在晚上",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-week",
     "libraryId": "intermediate",
     "word": "week",
     "meaning": "星期；周",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Next week",
       "meaning": "下周",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-month",
     "libraryId": "intermediate",
     "word": "month",
     "meaning": "月；月份",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Last month",
       "meaning": "上个月",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-year",
     "libraryId": "intermediate",
     "word": "year",
     "meaning": "年",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A new year",
       "meaning": "新的一年",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-today",
     "libraryId": "intermediate",
     "word": "today",
     "meaning": "今天",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Come home today",
-      "meaning": "今天回家",
+      "text": "Today or tomorrow",
+      "meaning": "今天或明天",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-tomorrow",
     "libraryId": "intermediate",
     "word": "tomorrow",
     "meaning": "明天",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "See you tomorrow",
       "meaning": "明天见",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-yesterday",
     "libraryId": "intermediate",
     "word": "yesterday",
     "meaning": "昨天",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Yesterday morning",
       "meaning": "昨天早上",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-time",
     "libraryId": "intermediate",
     "word": "time",
-    "meaning": "时间；次",
+    "meaning": "时间；次数；时代",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "On time",
-      "meaning": "准时",
-      "kind": "phrase"
-    }
+      "text": "We have enough time.",
+      "meaning": "我们有足够的时间。",
+      "kind": "sentence",
+      "sense": "时间",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "次数",
+          "partOfSpeech": "n",
+          "text": "I have read it three times.",
+          "meaning": "我读过它三次。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "时代",
+          "partOfSpeech": "n",
+          "text": "Life was different in those times.",
+          "meaning": "那个时代的生活很不一样。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-walk",
     "libraryId": "intermediate",
     "word": "walk",
     "meaning": "步行；散步",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Walk to school",
       "meaning": "步行去上学",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-run",
     "libraryId": "intermediate",
     "word": "run",
-    "meaning": "跑",
+    "meaning": "跑步；经营；运行",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Run in the park",
-      "meaning": "在公园里跑步",
-      "kind": "phrase"
-    }
+      "text": "I run every morning.",
+      "meaning": "我每天早上跑步。",
+      "kind": "sentence",
+      "sense": "跑步",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "经营",
+          "partOfSpeech": "v",
+          "text": "They run a small shop.",
+          "meaning": "他们经营一家小店。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "运行",
+          "partOfSpeech": "v",
+          "text": "This program runs on my computer.",
+          "meaning": "这个程序在我的电脑上运行。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-jump",
     "libraryId": "intermediate",
     "word": "jump",
     "meaning": "跳；跳跃",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Jump over a rope",
       "meaning": "跳过一根绳子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-fly",
     "libraryId": "intermediate",
     "word": "fly",
-    "meaning": "飞；放飞",
+    "meaning": "飞；苍蝇",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Fly a kite",
-      "meaning": "放风筝",
-      "kind": "phrase"
-    }
+      "text": "Birds fly over the trees.",
+      "meaning": "鸟儿从树上方飞过。",
+      "kind": "sentence",
+      "sense": "飞",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "苍蝇",
+          "partOfSpeech": "n",
+          "text": "A fly landed on the bread.",
+          "meaning": "一只苍蝇落在面包上。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/n"
   },
   {
     "id": "intermediate-swim",
     "libraryId": "intermediate",
     "word": "swim",
     "meaning": "游泳",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Swim in the pool",
       "meaning": "在游泳池里游泳",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-go",
     "libraryId": "intermediate",
     "word": "go",
     "meaning": "去",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Go to the library",
       "meaning": "去图书馆",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-come",
     "libraryId": "intermediate",
     "word": "come",
     "meaning": "来",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Come to my party",
       "meaning": "来参加我的聚会",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-get",
     "libraryId": "intermediate",
     "word": "get",
-    "meaning": "得到；取得；到达",
+    "meaning": "得到；到达",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Get a gift",
       "meaning": "得到一份礼物",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "vt"
   },
   {
     "id": "intermediate-give",
     "libraryId": "intermediate",
     "word": "give",
     "meaning": "给；给予",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Give me a book",
       "meaning": "给我一本书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-take",
     "libraryId": "intermediate",
     "word": "take",
-    "meaning": "拿；带；乘坐",
+    "meaning": "拿；乘坐；花费",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Take a bus",
-      "meaning": "乘公共汽车",
-      "kind": "phrase"
-    }
+      "text": "Take the book from the shelf.",
+      "meaning": "从架子上拿那本书。",
+      "kind": "sentence",
+      "sense": "拿",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "乘坐",
+          "partOfSpeech": "v",
+          "text": "We take the bus to school.",
+          "meaning": "我们乘公交车去学校。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "花费",
+          "partOfSpeech": "v",
+          "text": "The trip will take two hours.",
+          "meaning": "这趟行程将花费两个小时。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-put",
     "libraryId": "intermediate",
     "word": "put",
     "meaning": "放；放置",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Put the book on the desk",
       "meaning": "把书放在书桌上",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-bring",
     "libraryId": "intermediate",
     "word": "bring",
     "meaning": "带来",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Bring your lunch",
       "meaning": "带上你的午饭",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-buy",
     "libraryId": "intermediate",
     "word": "buy",
     "meaning": "买；购买",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Buy a new book",
       "meaning": "买一本新书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-sell",
     "libraryId": "intermediate",
     "word": "sell",
     "meaning": "卖；出售",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Sell fresh fruit",
       "meaning": "卖新鲜水果",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-catch",
     "libraryId": "intermediate",
     "word": "catch",
     "meaning": "接住；抓住；赶上",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Catch the ball",
       "meaning": "接住球",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-play",
     "libraryId": "intermediate",
     "word": "play",
     "meaning": "玩；参加运动；演奏",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Play football",
-      "meaning": "踢足球",
+      "text": "Play with friends",
+      "meaning": "和朋友一起玩",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-sing",
     "libraryId": "intermediate",
     "word": "sing",
     "meaning": "唱；唱歌",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Sing a song",
       "meaning": "唱一首歌",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-dance",
     "libraryId": "intermediate",
     "word": "dance",
     "meaning": "跳舞；舞蹈",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Dance to the music",
       "meaning": "随着音乐跳舞",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-draw",
     "libraryId": "intermediate",
     "word": "draw",
-    "meaning": "画；绘画",
+    "meaning": "画；抽取；平局",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Draw a picture",
-      "meaning": "画一幅画",
-      "kind": "phrase"
-    }
+      "text": "She can draw a horse.",
+      "meaning": "她会画马。",
+      "kind": "sentence",
+      "sense": "画",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "抽取",
+          "partOfSpeech": "v",
+          "text": "Draw a card from the pile.",
+          "meaning": "从牌堆里抽一张牌。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "平局",
+          "partOfSpeech": "n",
+          "text": "The game ended in a draw.",
+          "meaning": "比赛以平局结束。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/n"
   },
   {
     "id": "intermediate-cook",
     "libraryId": "intermediate",
     "word": "cook",
-    "meaning": "烹饪；厨师",
+    "meaning": "烹饪；做饭",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Cook dinner",
       "meaning": "做晚饭",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-eat",
     "libraryId": "intermediate",
     "word": "eat",
     "meaning": "吃",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Eat breakfast",
       "meaning": "吃早饭",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-drink",
     "libraryId": "intermediate",
     "word": "drink",
-    "meaning": "喝；饮料",
+    "meaning": "喝；饮用",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Drink some water",
       "meaning": "喝点水",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-sleep",
     "libraryId": "intermediate",
     "word": "sleep",
     "meaning": "睡觉；睡眠",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Sleep well",
       "meaning": "睡个好觉",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-wake",
     "libraryId": "intermediate",
     "word": "wake",
     "meaning": "醒来；唤醒",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Wake up early",
-      "meaning": "早起",
+      "meaning": "早点醒来",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-sit",
     "libraryId": "intermediate",
     "word": "sit",
     "meaning": "坐",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Sit on the chair",
       "meaning": "坐在椅子上",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-stand",
     "libraryId": "intermediate",
     "word": "stand",
-    "meaning": "站；站立",
+    "meaning": "站立；忍受；支架",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Stand in a line",
-      "meaning": "站成一排",
-      "kind": "phrase"
-    }
+      "text": "Please stand beside the door.",
+      "meaning": "请站在门边。",
+      "kind": "sentence",
+      "sense": "站立",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "忍受",
+          "partOfSpeech": "v",
+          "text": "I cannot stand this noise.",
+          "meaning": "我受不了这种噪音。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "支架",
+          "partOfSpeech": "n",
+          "text": "Put the camera on its stand.",
+          "meaning": "把相机放在支架上。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/n"
   },
   {
     "id": "intermediate-stop",
     "libraryId": "intermediate",
     "word": "stop",
     "meaning": "停止；停下",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Stop at the gate",
       "meaning": "在大门口停下",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-open",
     "libraryId": "intermediate",
     "word": "open",
-    "meaning": "打开；开着的",
+    "meaning": "打开；开启",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Open your book",
       "meaning": "打开你的书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-close",
     "libraryId": "intermediate",
     "word": "close",
-    "meaning": "关闭；合上",
+    "meaning": "关闭；靠近的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Close your eyes",
-      "meaning": "闭上眼睛",
-      "kind": "phrase"
-    }
+      "text": "Please close the window.",
+      "meaning": "请关上窗户。",
+      "kind": "sentence",
+      "sense": "关闭",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "靠近的",
+          "partOfSpeech": "adj",
+          "text": "The station is close to my house.",
+          "meaning": "车站离我家很近。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/adj"
   },
   {
     "id": "intermediate-help",
     "libraryId": "intermediate",
     "word": "help",
     "meaning": "帮助",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Help a friend",
       "meaning": "帮助一位朋友",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-wash",
     "libraryId": "intermediate",
     "word": "wash",
     "meaning": "洗；清洗",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Wash your hands",
       "meaning": "洗手",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-clean",
     "libraryId": "intermediate",
     "word": "clean",
-    "meaning": "清洁的；打扫",
+    "meaning": "打扫；清扫",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Clean your room",
       "meaning": "打扫你的房间",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-wear",
     "libraryId": "intermediate",
     "word": "wear",
     "meaning": "穿；戴",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Wear a hat",
       "meaning": "戴一顶帽子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-watch",
     "libraryId": "intermediate",
     "word": "watch",
     "meaning": "观看；手表",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Watch a cartoon",
-      "meaning": "看一部动画片",
-      "kind": "phrase"
-    }
+      "text": "We watch the birds in the garden.",
+      "meaning": "我们观察花园里的鸟。",
+      "kind": "sentence",
+      "sense": "观看",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "手表",
+          "partOfSpeech": "n",
+          "text": "My watch shows the correct time.",
+          "meaning": "我的手表时间准确。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/n"
   },
   {
     "id": "intermediate-look",
     "libraryId": "intermediate",
     "word": "look",
     "meaning": "看",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Look at the stars",
       "meaning": "看星星",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-see",
     "libraryId": "intermediate",
     "word": "see",
     "meaning": "看见；见到",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "See a rainbow",
       "meaning": "看见一道彩虹",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-hear",
     "libraryId": "intermediate",
     "word": "hear",
     "meaning": "听见",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Hear a bird sing",
       "meaning": "听见一只鸟在唱歌",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-listen",
     "libraryId": "intermediate",
     "word": "listen",
     "meaning": "听",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Listen to a story",
       "meaning": "听一个故事",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-speak",
     "libraryId": "intermediate",
     "word": "speak",
     "meaning": "说话；讲某种语言",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Speak slowly",
       "meaning": "慢慢说",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-say",
     "libraryId": "intermediate",
     "word": "say",
     "meaning": "说",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Say hello",
-      "meaning": "打招呼",
+      "text": "Say goodbye",
+      "meaning": "说再见",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-tell",
     "libraryId": "intermediate",
     "word": "tell",
     "meaning": "告诉；讲述",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Tell a short story",
       "meaning": "讲一个小故事",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-talk",
     "libraryId": "intermediate",
     "word": "talk",
     "meaning": "交谈；谈话",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Talk with a friend",
       "meaning": "和一位朋友交谈",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-ask",
     "libraryId": "intermediate",
     "word": "ask",
     "meaning": "问；请求",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Ask a question",
       "meaning": "问一个问题",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-think",
     "libraryId": "intermediate",
     "word": "think",
     "meaning": "想；认为",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Think about the answer",
       "meaning": "想一想答案",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-know",
     "libraryId": "intermediate",
     "word": "know",
     "meaning": "知道；认识",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Know the answer",
       "meaning": "知道答案",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-find",
     "libraryId": "intermediate",
     "word": "find",
     "meaning": "找到；发现",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Find my bag",
       "meaning": "找到我的书包",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-use",
     "libraryId": "intermediate",
     "word": "use",
     "meaning": "使用",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Use a pencil",
       "meaning": "使用铅笔",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-wait",
     "libraryId": "intermediate",
     "word": "wait",
     "meaning": "等待",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Wait for the bus",
       "meaning": "等公共汽车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-want",
     "libraryId": "intermediate",
     "word": "want",
     "meaning": "想要",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Want some water",
       "meaning": "想要一些水",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-like",
     "libraryId": "intermediate",
     "word": "like",
     "meaning": "喜欢",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Like reading books",
       "meaning": "喜欢读书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-love",
     "libraryId": "intermediate",
     "word": "love",
     "meaning": "爱；喜爱",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Love my family",
       "meaning": "爱我的家人",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-live",
     "libraryId": "intermediate",
     "word": "live",
-    "meaning": "居住；生活",
+    "meaning": "居住；现场直播的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Live in a small town",
-      "meaning": "住在一座小镇里",
-      "kind": "phrase"
-    }
+      "text": "They live near the school.",
+      "meaning": "他们住在学校附近。",
+      "kind": "sentence",
+      "sense": "居住",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "现场直播的",
+          "partOfSpeech": "adj",
+          "text": "We watched a live concert on television.",
+          "meaning": "我们在电视上看了现场直播的音乐会。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/adj"
   },
   {
     "id": "intermediate-work",
     "libraryId": "intermediate",
     "word": "work",
-    "meaning": "工作",
+    "meaning": "工作；干活",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Work together",
       "meaning": "一起工作",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-move",
     "libraryId": "intermediate",
     "word": "move",
     "meaning": "移动；搬动",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Move the chair",
       "meaning": "搬动椅子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-turn",
     "libraryId": "intermediate",
     "word": "turn",
-    "meaning": "转向；转动",
+    "meaning": "转动；轮次；变得",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Turn left",
-      "meaning": "向左转",
-      "kind": "phrase"
-    }
+      "text": "Turn the handle to open the door.",
+      "meaning": "转动把手开门。",
+      "kind": "sentence",
+      "sense": "转动",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "轮次",
+          "partOfSpeech": "n",
+          "text": "It is your turn to play.",
+          "meaning": "轮到你玩了。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "变得",
+          "partOfSpeech": "v",
+          "text": "The leaves turn yellow in autumn.",
+          "meaning": "树叶在秋天变黄。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/n"
   },
   {
     "id": "intermediate-try",
     "libraryId": "intermediate",
     "word": "try",
     "meaning": "尝试；努力",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Try again",
       "meaning": "再试一次",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-show",
     "libraryId": "intermediate",
     "word": "show",
-    "meaning": "展示；给……看",
+    "meaning": "展示；演出",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Show me your picture",
-      "meaning": "给我看看你的画",
-      "kind": "phrase"
-    }
+      "text": "Show me your drawing.",
+      "meaning": "给我看看你的画。",
+      "kind": "sentence",
+      "sense": "展示",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "演出",
+          "partOfSpeech": "n",
+          "text": "The show starts at eight.",
+          "meaning": "演出八点开始。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/n"
   },
   {
     "id": "intermediate-share",
     "libraryId": "intermediate",
     "word": "share",
     "meaning": "分享",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Share a book",
       "meaning": "分享一本书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-visit",
     "libraryId": "intermediate",
     "word": "visit",
     "meaning": "拜访；参观",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Visit my grandparents",
       "meaning": "看望我的祖父母",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-big",
     "libraryId": "intermediate",
     "word": "big",
     "meaning": "大的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A big house",
       "meaning": "一座大房子",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-little",
     "libraryId": "intermediate",
     "word": "little",
     "meaning": "小的；少量的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A little cat",
       "meaning": "一只小猫",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-tall",
     "libraryId": "intermediate",
     "word": "tall",
     "meaning": "高的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A tall tree",
       "meaning": "一棵高树",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-old",
     "libraryId": "intermediate",
     "word": "old",
     "meaning": "年老的；旧的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "An old man",
       "meaning": "一位老人",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-young",
     "libraryId": "intermediate",
     "word": "young",
     "meaning": "年轻的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A young teacher",
       "meaning": "一位年轻的老师",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-new",
     "libraryId": "intermediate",
     "word": "new",
     "meaning": "新的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A new bike",
       "meaning": "一辆新自行车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-good",
     "libraryId": "intermediate",
     "word": "good",
     "meaning": "好的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A good idea",
       "meaning": "一个好主意",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-bad",
     "libraryId": "intermediate",
     "word": "bad",
     "meaning": "坏的；不好的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Bad weather",
       "meaning": "坏天气",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-nice",
     "libraryId": "intermediate",
     "word": "nice",
     "meaning": "好的；令人愉快的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A nice day",
       "meaning": "美好的一天",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-sad",
     "libraryId": "intermediate",
     "word": "sad",
     "meaning": "难过的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Feel sad",
       "meaning": "感到难过",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-angry",
     "libraryId": "intermediate",
     "word": "angry",
     "meaning": "生气的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "An angry face",
       "meaning": "一张生气的脸",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-excited",
     "libraryId": "intermediate",
     "word": "excited",
     "meaning": "兴奋的；激动的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Excited about the trip",
       "meaning": "为旅行感到兴奋",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-easy",
     "libraryId": "intermediate",
     "word": "easy",
     "meaning": "容易的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "An easy question",
       "meaning": "一个简单的问题",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-difficult",
     "libraryId": "intermediate",
     "word": "difficult",
     "meaning": "困难的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A difficult word",
       "meaning": "一个难词",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-hot",
     "libraryId": "intermediate",
     "word": "hot",
     "meaning": "热的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Hot water",
       "meaning": "热水",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-cold",
     "libraryId": "intermediate",
     "word": "cold",
     "meaning": "冷的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A cold day",
       "meaning": "寒冷的一天",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-warm",
     "libraryId": "intermediate",
     "word": "warm",
     "meaning": "温暖的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A warm coat",
       "meaning": "一件暖和的外套",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-cool",
     "libraryId": "intermediate",
     "word": "cool",
-    "meaning": "凉爽的",
+    "meaning": "凉爽的；冷静的；很棒的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "A cool morning",
-      "meaning": "一个凉爽的早晨",
-      "kind": "phrase"
-    }
+      "text": "The evening air is cool.",
+      "meaning": "晚间空气很凉爽。",
+      "kind": "sentence",
+      "sense": "凉爽的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "冷静的",
+          "partOfSpeech": "adj",
+          "text": "Keep cool in an emergency.",
+          "meaning": "遇到紧急情况要冷静。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "很棒的",
+          "partOfSpeech": "adj",
+          "text": "That is a cool idea.",
+          "meaning": "那是个很棒的主意。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-fast",
     "libraryId": "intermediate",
     "word": "fast",
-    "meaning": "快的；快地",
+    "meaning": "快速的；禁食",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Run fast",
-      "meaning": "跑得快",
-      "kind": "phrase"
-    }
+      "text": "This is a fast train.",
+      "meaning": "这是一列快车。",
+      "kind": "sentence",
+      "sense": "快速的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "禁食",
+          "partOfSpeech": "v",
+          "text": "They fast for a day.",
+          "meaning": "他们禁食一天。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj/v"
   },
   {
     "id": "intermediate-slow",
     "libraryId": "intermediate",
     "word": "slow",
     "meaning": "慢的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A slow train",
       "meaning": "一列慢车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-strong",
     "libraryId": "intermediate",
     "word": "strong",
     "meaning": "强壮的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A strong boy",
       "meaning": "一个强壮的男孩",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-thin",
     "libraryId": "intermediate",
     "word": "thin",
     "meaning": "瘦的；薄的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A thin book",
       "meaning": "一本薄书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-dirty",
     "libraryId": "intermediate",
     "word": "dirty",
     "meaning": "脏的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Dirty hands",
       "meaning": "脏手",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-tidy",
     "libraryId": "intermediate",
     "word": "tidy",
     "meaning": "整洁的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A tidy room",
       "meaning": "一个整洁的房间",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-safe",
     "libraryId": "intermediate",
     "word": "safe",
-    "meaning": "安全的",
+    "meaning": "安全的；保险箱",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "A safe place",
-      "meaning": "一个安全的地方",
-      "kind": "phrase"
-    }
+      "text": "The children are safe at home.",
+      "meaning": "孩子们在家很安全。",
+      "kind": "sentence",
+      "sense": "安全的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "保险箱",
+          "partOfSpeech": "n",
+          "text": "Keep the money in the safe.",
+          "meaning": "把钱放在保险箱里。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj/n"
   },
   {
     "id": "intermediate-wrong",
     "libraryId": "intermediate",
     "word": "wrong",
     "meaning": "错误的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "The wrong answer",
       "meaning": "错误的答案",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-right",
     "libraryId": "intermediate",
     "word": "right",
-    "meaning": "正确的；右边的",
+    "meaning": "正确的；右边；权利",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "The right answer",
-      "meaning": "正确的答案",
-      "kind": "phrase"
-    }
+      "text": "Your answer is right.",
+      "meaning": "你的答案是对的。",
+      "kind": "sentence",
+      "sense": "正确的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "右边",
+          "partOfSpeech": "n",
+          "text": "The shop is on your right.",
+          "meaning": "商店在你右边。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "权利",
+          "partOfSpeech": "n",
+          "text": "Everyone has the right to learn.",
+          "meaning": "每个人都有学习的权利。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj/n"
   },
   {
     "id": "intermediate-cute",
     "libraryId": "intermediate",
     "word": "cute",
     "meaning": "可爱的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A cute baby",
       "meaning": "一个可爱的婴儿",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-great",
     "libraryId": "intermediate",
     "word": "great",
     "meaning": "很棒的；伟大的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A great idea",
       "meaning": "一个很棒的主意",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-wonderful",
     "libraryId": "intermediate",
     "word": "wonderful",
     "meaning": "精彩的；美妙的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A wonderful story",
       "meaning": "一个精彩的故事",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-about",
     "libraryId": "intermediate",
     "word": "about",
     "meaning": "关于；大约",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A story about animals",
       "meaning": "一个关于动物的故事",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-after",
     "libraryId": "intermediate",
     "word": "after",
     "meaning": "在……之后",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "After school",
       "meaning": "放学后",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-again",
     "libraryId": "intermediate",
     "word": "again",
     "meaning": "再一次",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Try again",
       "meaning": "再试一次",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-ago",
     "libraryId": "intermediate",
     "word": "ago",
     "meaning": "以前",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Two days ago",
       "meaning": "两天以前",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-all",
     "libraryId": "intermediate",
     "word": "all",
     "meaning": "全部；所有的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "All my friends",
       "meaning": "我所有的朋友",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-also",
     "libraryId": "intermediate",
     "word": "also",
     "meaning": "也",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "I also like music.",
       "meaning": "我也喜欢音乐。",
       "kind": "sentence"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-always",
     "libraryId": "intermediate",
     "word": "always",
     "meaning": "总是",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Always on time",
       "meaning": "总是准时",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-and",
     "libraryId": "intermediate",
     "word": "and",
     "meaning": "和；并且",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "You and me",
       "meaning": "你和我",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "conj"
   },
   {
     "id": "intermediate-any",
     "libraryId": "intermediate",
     "word": "any",
     "meaning": "任何；一些",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Any questions",
       "meaning": "任何问题",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-at",
     "libraryId": "intermediate",
     "word": "at",
     "meaning": "在……处；在……时",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "At school",
       "meaning": "在学校",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-be",
     "libraryId": "intermediate",
     "word": "be",
     "meaning": "是；成为",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Be kind to others",
       "meaning": "友善地对待别人",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-because",
     "libraryId": "intermediate",
     "word": "because",
     "meaning": "因为",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Because of the rain",
       "meaning": "因为下雨",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "conj"
   },
   {
     "id": "intermediate-before",
     "libraryId": "intermediate",
     "word": "before",
     "meaning": "在……之前",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Before lunch",
       "meaning": "午饭前",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-behind",
     "libraryId": "intermediate",
     "word": "behind",
     "meaning": "在……后面",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Behind the door",
       "meaning": "在门后",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-beside",
     "libraryId": "intermediate",
     "word": "beside",
     "meaning": "在……旁边",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Beside the window",
       "meaning": "在窗户旁边",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-between",
     "libraryId": "intermediate",
     "word": "between",
     "meaning": "在……之间",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Between two trees",
       "meaning": "在两棵树之间",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-but",
     "libraryId": "intermediate",
     "word": "but",
     "meaning": "但是",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Small but strong",
       "meaning": "小但是强壮",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "conj"
   },
   {
     "id": "intermediate-by",
     "libraryId": "intermediate",
     "word": "by",
     "meaning": "通过；在……旁边",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "By bus",
       "meaning": "乘公共汽车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-can",
     "libraryId": "intermediate",
     "word": "can",
-    "meaning": "能；会",
+    "meaning": "能够；罐头",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "I can swim.",
-      "meaning": "我会游泳。",
-      "kind": "sentence"
-    }
+      "text": "She can swim very well.",
+      "meaning": "她游泳游得很好。",
+      "kind": "sentence",
+      "sense": "能够",
+      "partOfSpeech": "modal verb",
+      "additional": [
+        {
+          "sense": "罐头",
+          "partOfSpeech": "n",
+          "text": "Open a can of soup.",
+          "meaning": "打开一罐汤。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/n"
   },
   {
     "id": "intermediate-do",
     "libraryId": "intermediate",
     "word": "do",
     "meaning": "做",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Do homework",
       "meaning": "做家庭作业",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-down",
     "libraryId": "intermediate",
     "word": "down",
     "meaning": "向下",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Sit down",
       "meaning": "坐下",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-every",
     "libraryId": "intermediate",
     "word": "every",
     "meaning": "每一个",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Every morning",
       "meaning": "每天早上",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-far",
     "libraryId": "intermediate",
     "word": "far",
     "meaning": "远的；远地",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Far from home",
       "meaning": "远离家",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-feel",
     "libraryId": "intermediate",
     "word": "feel",
     "meaning": "感觉；感到",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Feel happy",
       "meaning": "感到开心",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-for",
     "libraryId": "intermediate",
     "word": "for",
     "meaning": "给；为了",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A gift for you",
       "meaning": "给你的一份礼物",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-from",
     "libraryId": "intermediate",
     "word": "from",
     "meaning": "从；来自",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A letter from a friend",
       "meaning": "一封朋友的来信",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-have",
     "libraryId": "intermediate",
     "word": "have",
     "meaning": "有；吃；喝",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Have breakfast",
-      "meaning": "吃早饭",
+      "text": "Have a new bike",
+      "meaning": "有一辆新自行车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-he",
     "libraryId": "intermediate",
     "word": "he",
     "meaning": "他",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "He is my brother.",
       "meaning": "他是我的哥哥。",
       "kind": "sentence"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-hello",
     "libraryId": "intermediate",
     "word": "hello",
     "meaning": "你好",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Say hello",
       "meaning": "打招呼",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "int"
   },
   {
     "id": "intermediate-her",
     "libraryId": "intermediate",
     "word": "her",
     "meaning": "她的；她",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Her schoolbag",
       "meaning": "她的书包",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-here",
     "libraryId": "intermediate",
     "word": "here",
     "meaning": "这里",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Come here",
       "meaning": "来这里",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-him",
     "libraryId": "intermediate",
     "word": "him",
     "meaning": "他",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Give him a book",
       "meaning": "给他一本书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-his",
     "libraryId": "intermediate",
     "word": "his",
     "meaning": "他的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "His new bike",
       "meaning": "他的新自行车",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-how",
     "libraryId": "intermediate",
     "word": "how",
     "meaning": "怎样；如何",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "How to make a kite",
       "meaning": "怎样做风筝",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-hurt",
     "libraryId": "intermediate",
     "word": "hurt",
     "meaning": "疼痛；使受伤",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "My feet hurt.",
       "meaning": "我的脚疼。",
       "kind": "sentence"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-ice",
     "libraryId": "intermediate",
     "word": "ice",
     "meaning": "冰",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A piece of ice",
       "meaning": "一块冰",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-idea",
     "libraryId": "intermediate",
     "word": "idea",
     "meaning": "主意；想法",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A good idea",
       "meaning": "一个好主意",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-in",
     "libraryId": "intermediate",
     "word": "in",
     "meaning": "在……里面",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "In the classroom",
       "meaning": "在教室里",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-it",
     "libraryId": "intermediate",
     "word": "it",
     "meaning": "它",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "It is sunny.",
-      "meaning": "天气晴朗。",
+      "text": "It is a cat.",
+      "meaning": "它是一只猫。",
       "kind": "sentence"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-its",
     "libraryId": "intermediate",
     "word": "its",
     "meaning": "它的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Its long tail",
       "meaning": "它的长尾巴",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-job",
     "libraryId": "intermediate",
     "word": "job",
     "meaning": "工作",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A new job",
       "meaning": "一份新工作",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-keep",
     "libraryId": "intermediate",
     "word": "keep",
     "meaning": "保持；保留",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Keep the room clean",
       "meaning": "保持房间干净",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-kind",
     "libraryId": "intermediate",
     "word": "kind",
     "meaning": "友善的；种类",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "A kind teacher",
-      "meaning": "一位友善的老师",
-      "kind": "phrase"
-    }
+      "text": "She is kind to her neighbours.",
+      "meaning": "她对邻居很友善。",
+      "kind": "sentence",
+      "sense": "友善的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "种类",
+          "partOfSpeech": "n",
+          "text": "What kind of music do you like?",
+          "meaning": "你喜欢哪种音乐？",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj/n"
   },
   {
     "id": "intermediate-left",
     "libraryId": "intermediate",
     "word": "left",
-    "meaning": "左边；向左",
+    "meaning": "左边；剩下的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Turn left",
-      "meaning": "向左转",
-      "kind": "phrase"
-    }
+      "text": "The shop is on the left.",
+      "meaning": "商店在左边。",
+      "kind": "sentence",
+      "sense": "左边",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "剩下的",
+          "partOfSpeech": "adj",
+          "text": "There are two tickets left.",
+          "meaning": "还剩两张票。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/adj"
   },
   {
     "id": "intermediate-let",
     "libraryId": "intermediate",
     "word": "let",
     "meaning": "让；允许",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Let me help you",
       "meaning": "让我来帮你",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-light",
     "libraryId": "intermediate",
     "word": "light",
-    "meaning": "光；灯；轻的",
+    "meaning": "光；灯；轻的；点燃；浅色的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Turn on the light",
-      "meaning": "开灯",
-      "kind": "phrase"
-    }
+      "text": "Light came through the window.",
+      "meaning": "光从窗户照进来。",
+      "kind": "sentence",
+      "sense": "光",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "灯",
+          "partOfSpeech": "n",
+          "text": "Turn off the light before leaving.",
+          "meaning": "离开前关灯。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "轻的",
+          "partOfSpeech": "adj",
+          "text": "This bag is very light.",
+          "meaning": "这个包很轻。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "点燃",
+          "partOfSpeech": "v",
+          "text": "Please light the candle.",
+          "meaning": "请点燃蜡烛。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "浅色的",
+          "partOfSpeech": "adj",
+          "text": "She wore a light blue dress.",
+          "meaning": "她穿了一条浅蓝色连衣裙。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n/adj/v"
   },
   {
     "id": "intermediate-make",
     "libraryId": "intermediate",
     "word": "make",
     "meaning": "制作；使得",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Make a kite",
       "meaning": "做风筝",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-many",
     "libraryId": "intermediate",
     "word": "many",
     "meaning": "许多",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Many books",
       "meaning": "许多书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-map",
     "libraryId": "intermediate",
     "word": "map",
     "meaning": "地图",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A map of China",
       "meaning": "一张中国地图",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-maths",
     "libraryId": "intermediate",
     "word": "maths",
     "meaning": "数学",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "A maths lesson",
       "meaning": "一节数学课",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-may",
     "libraryId": "intermediate",
     "word": "may",
     "meaning": "可以；可能",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "May I come in?",
       "meaning": "我可以进来吗？",
       "kind": "sentence"
-    }
+    },
+    "partOfSpeech": "aux"
   },
   {
     "id": "intermediate-me",
     "libraryId": "intermediate",
     "word": "me",
     "meaning": "我",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Help me",
       "meaning": "帮助我",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-meet",
     "libraryId": "intermediate",
     "word": "meet",
     "meaning": "遇见；见面",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Meet a friend",
       "meaning": "与一位朋友见面",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-money",
     "libraryId": "intermediate",
     "word": "money",
     "meaning": "钱",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Save money",
       "meaning": "存钱",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-much",
     "libraryId": "intermediate",
     "word": "much",
-    "meaning": "许多；非常",
+    "meaning": "许多；大量",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Too much water",
       "meaning": "太多的水",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-must",
     "libraryId": "intermediate",
     "word": "must",
     "meaning": "必须",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "We must be careful.",
       "meaning": "我们必须小心。",
       "kind": "sentence"
-    }
+    },
+    "partOfSpeech": "aux"
   },
   {
     "id": "intermediate-my",
     "libraryId": "intermediate",
     "word": "my",
     "meaning": "我的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "My best friend",
       "meaning": "我最好的朋友",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-name",
     "libraryId": "intermediate",
     "word": "name",
     "meaning": "名字",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Write your name",
       "meaning": "写下你的名字",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-near",
     "libraryId": "intermediate",
     "word": "near",
     "meaning": "在……附近",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Near the school",
       "meaning": "在学校附近",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-never",
     "libraryId": "intermediate",
     "word": "never",
     "meaning": "从不",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Never give up",
       "meaning": "永不放弃",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-next",
     "libraryId": "intermediate",
     "word": "next",
     "meaning": "下一个的；接下来的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Next week",
       "meaning": "下周",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-no",
     "libraryId": "intermediate",
     "word": "no",
-    "meaning": "不；没有",
+    "meaning": "没有；无",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "No problem",
       "meaning": "没问题",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-not",
     "libraryId": "intermediate",
     "word": "not",
     "meaning": "不",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Not at all",
       "meaning": "一点也不",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-now",
     "libraryId": "intermediate",
     "word": "now",
     "meaning": "现在",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Right now",
       "meaning": "现在；立即",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-of",
     "libraryId": "intermediate",
     "word": "of",
     "meaning": "……的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "A glass of water",
-      "meaning": "一杯水",
+      "text": "The name of the book",
+      "meaning": "这本书的名字",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-off",
     "libraryId": "intermediate",
     "word": "off",
-    "meaning": "离开；关闭",
+    "meaning": "离开；关上",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Turn off the light",
       "meaning": "关灯",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-often",
     "libraryId": "intermediate",
     "word": "often",
     "meaning": "经常",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Often play football",
-      "meaning": "经常踢足球",
-      "kind": "phrase"
-    }
+      "text": "He often plays football.",
+      "meaning": "他经常踢足球。",
+      "kind": "sentence"
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-on",
     "libraryId": "intermediate",
     "word": "on",
     "meaning": "在……上面",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "On the table",
       "meaning": "在桌子上",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-or",
     "libraryId": "intermediate",
     "word": "or",
     "meaning": "或者",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Tea or milk",
       "meaning": "茶或者牛奶",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "conj"
   },
   {
     "id": "intermediate-our",
     "libraryId": "intermediate",
     "word": "our",
     "meaning": "我们的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Our classroom",
       "meaning": "我们的教室",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-out",
     "libraryId": "intermediate",
     "word": "out",
     "meaning": "向外；在外",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Go out",
       "meaning": "出去",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-over",
     "libraryId": "intermediate",
     "word": "over",
     "meaning": "在……上方；越过",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Over the bridge",
       "meaning": "越过桥",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-party",
     "libraryId": "intermediate",
     "word": "party",
-    "meaning": "聚会",
+    "meaning": "聚会；政党",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "A birthday party",
-      "meaning": "一个生日聚会",
-      "kind": "phrase"
-    }
+      "text": "We had a party on Friday.",
+      "meaning": "我们星期五举行了聚会。",
+      "kind": "sentence",
+      "sense": "聚会",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "政党",
+          "partOfSpeech": "n",
+          "text": "The party won the election.",
+          "meaning": "这个政党赢得了选举。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-please",
     "libraryId": "intermediate",
     "word": "please",
     "meaning": "请",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Please sit down",
       "meaning": "请坐",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "int"
   },
   {
     "id": "intermediate-she",
     "libraryId": "intermediate",
     "word": "she",
     "meaning": "她",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "She likes music.",
       "meaning": "她喜欢音乐。",
       "kind": "sentence"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-so",
     "libraryId": "intermediate",
     "word": "so",
     "meaning": "如此；所以",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "So happy",
       "meaning": "如此开心",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-some",
     "libraryId": "intermediate",
     "word": "some",
     "meaning": "一些",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Some apples",
       "meaning": "一些苹果",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-sometimes",
     "libraryId": "intermediate",
     "word": "sometimes",
     "meaning": "有时",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Sometimes walk to school",
-      "meaning": "有时步行上学",
-      "kind": "phrase"
-    }
+      "text": "Sometimes I walk to school.",
+      "meaning": "有时我步行上学。",
+      "kind": "sentence"
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-sorry",
     "libraryId": "intermediate",
     "word": "sorry",
     "meaning": "抱歉的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "I am sorry.",
       "meaning": "对不起。",
       "kind": "sentence"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-then",
     "libraryId": "intermediate",
     "word": "then",
     "meaning": "然后；那时",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "And then",
       "meaning": "然后",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-there",
     "libraryId": "intermediate",
     "word": "there",
     "meaning": "那里",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Over there",
       "meaning": "在那边",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-these",
     "libraryId": "intermediate",
     "word": "these",
     "meaning": "这些",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "These books",
       "meaning": "这些书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-they",
     "libraryId": "intermediate",
     "word": "they",
     "meaning": "他们；她们；它们",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "They are my friends.",
       "meaning": "他们是我的朋友。",
       "kind": "sentence"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-this",
     "libraryId": "intermediate",
     "word": "this",
     "meaning": "这个",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "This book",
       "meaning": "这本书",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-those",
     "libraryId": "intermediate",
     "word": "those",
     "meaning": "那些",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Those birds",
       "meaning": "那些鸟",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-to",
     "libraryId": "intermediate",
     "word": "to",
     "meaning": "向；到",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Go to school",
       "meaning": "去上学",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-too",
     "libraryId": "intermediate",
     "word": "too",
     "meaning": "也；太",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Too hot",
       "meaning": "太热",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-the",
     "libraryId": "intermediate",
     "word": "the",
-    "meaning": "这；那（定冠词）",
+    "meaning": "特指的人或事物",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Open the door",
       "meaning": "打开门",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "art"
   },
   {
     "id": "intermediate-under",
     "libraryId": "intermediate",
     "word": "under",
     "meaning": "在……下面",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Under the tree",
       "meaning": "在树下",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-up",
     "libraryId": "intermediate",
     "word": "up",
     "meaning": "向上",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Stand up",
       "meaning": "站起来",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-us",
     "libraryId": "intermediate",
     "word": "us",
     "meaning": "我们",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Come with us",
       "meaning": "和我们一起来",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-very",
     "libraryId": "intermediate",
     "word": "very",
     "meaning": "非常",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Very happy",
       "meaning": "非常开心",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-an",
     "libraryId": "intermediate",
     "word": "an",
-    "meaning": "一个（不定冠词）",
+    "meaning": "一个",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "An apple",
       "meaning": "一个苹果",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "art"
   },
   {
     "id": "intermediate-we",
     "libraryId": "intermediate",
     "word": "we",
     "meaning": "我们",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "We play together.",
       "meaning": "我们一起玩。",
       "kind": "sentence"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-welcome",
     "libraryId": "intermediate",
     "word": "welcome",
     "meaning": "欢迎",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Welcome to our school",
       "meaning": "欢迎来到我们的学校",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-well",
     "libraryId": "intermediate",
     "word": "well",
-    "meaning": "好地；健康的",
+    "meaning": "好地；健康的；井",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "Sleep well",
-      "meaning": "睡得好",
-      "kind": "phrase"
-    }
+      "text": "She sings very well.",
+      "meaning": "她唱得很好。",
+      "kind": "sentence",
+      "sense": "好地",
+      "partOfSpeech": "adv",
+      "additional": [
+        {
+          "sense": "健康的",
+          "partOfSpeech": "adj",
+          "text": "He is feeling well today.",
+          "meaning": "他今天感觉身体很好。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "井",
+          "partOfSpeech": "n",
+          "text": "They get water from the well.",
+          "meaning": "他们从井里取水。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adv/adj/n"
   },
   {
     "id": "intermediate-what",
     "libraryId": "intermediate",
     "word": "what",
     "meaning": "什么",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "What to do",
       "meaning": "做什么",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-when",
     "libraryId": "intermediate",
     "word": "when",
     "meaning": "什么时候",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "When is your birthday?",
       "meaning": "你的生日是什么时候？",
       "kind": "sentence"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-where",
     "libraryId": "intermediate",
     "word": "where",
     "meaning": "在哪里",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Where is my bag?",
       "meaning": "我的书包在哪里？",
       "kind": "sentence"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-which",
     "libraryId": "intermediate",
     "word": "which",
     "meaning": "哪一个",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Which one",
       "meaning": "哪一个",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj"
   },
   {
     "id": "intermediate-who",
     "libraryId": "intermediate",
     "word": "who",
     "meaning": "谁",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Who is your teacher?",
       "meaning": "谁是你的老师？",
       "kind": "sentence"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-whose",
     "libraryId": "intermediate",
     "word": "whose",
     "meaning": "谁的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Whose bag",
       "meaning": "谁的书包",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-why",
     "libraryId": "intermediate",
     "word": "why",
     "meaning": "为什么",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Why are you happy?",
       "meaning": "你为什么开心？",
       "kind": "sentence"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-will",
     "libraryId": "intermediate",
     "word": "will",
-    "meaning": "将；会",
+    "meaning": "将会；意志；遗嘱",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "I will help you.",
-      "meaning": "我会帮助你。",
-      "kind": "sentence"
-    }
+      "text": "I will help you tomorrow.",
+      "meaning": "我明天会帮助你。",
+      "kind": "sentence",
+      "sense": "将会",
+      "partOfSpeech": "modal verb",
+      "additional": [
+        {
+          "sense": "意志",
+          "partOfSpeech": "n",
+          "text": "She has a strong will.",
+          "meaning": "她意志坚强。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "遗嘱",
+          "partOfSpeech": "n",
+          "text": "He wrote a will last year.",
+          "meaning": "他去年写了一份遗嘱。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "v/n"
   },
   {
     "id": "intermediate-wish",
     "libraryId": "intermediate",
     "word": "wish",
-    "meaning": "希望；愿望",
+    "meaning": "愿望；希望",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Make a wish",
       "meaning": "许个愿",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-with",
     "libraryId": "intermediate",
     "word": "with",
     "meaning": "和；与",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Play with friends",
       "meaning": "和朋友一起玩",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "prep"
   },
   {
     "id": "intermediate-world",
     "libraryId": "intermediate",
     "word": "world",
     "meaning": "世界",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Around the world",
       "meaning": "世界各地",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-worry",
     "libraryId": "intermediate",
     "word": "worry",
-    "meaning": "担心",
+    "meaning": "担心；发愁",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Do not worry",
       "meaning": "不要担心",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v"
   },
   {
     "id": "intermediate-yes",
     "libraryId": "intermediate",
     "word": "yes",
     "meaning": "是；对",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Yes, please",
       "meaning": "好的，谢谢",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adv"
   },
   {
     "id": "intermediate-you",
     "libraryId": "intermediate",
     "word": "you",
     "meaning": "你；你们",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
-      "text": "You are welcome.",
-      "meaning": "不用谢。",
-      "kind": "sentence"
-    }
+      "text": "You and your friend",
+      "meaning": "你和你的朋友",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-your",
     "libraryId": "intermediate",
     "word": "your",
     "meaning": "你的；你们的",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Your favourite food",
       "meaning": "你最喜欢的食物",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "pron"
   },
   {
     "id": "intermediate-zoo",
     "libraryId": "intermediate",
     "word": "zoo",
     "meaning": "动物园",
+    "practiceBand": 6,
     "group": 0,
+    "verified": false,
+    "bookId": null,
     "example": {
       "text": "Visit the zoo",
       "meaning": "参观动物园",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n"
   },
   {
     "id": "intermediate-ability",
     "libraryId": "intermediate",
     "word": "ability",
-    "meaning": "能力；能耐；才能；本领",
+    "meaning": "能力；才能",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Innovation ability",
-      "meaning": "创新能力",
+      "text": "The ability to swim",
+      "meaning": "游泳的能力",
       "kind": "phrase"
     }
   },
   {
+    "word": "able",
+    "meaning": "能够；有能力的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Be able to swim",
+      "meaning": "能够游泳",
+      "kind": "phrase"
+    },
     "id": "intermediate-able",
     "libraryId": "intermediate",
-    "word": "able",
-    "meaning": "能；[经管] 有能力的；能干的；能够…的",
-    "group": 0,
-    "example": {
-      "text": "Able person",
-      "meaning": "能人；有能力的人；有用的人才",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "above",
+    "meaning": "在……上方；超过",
+    "partOfSpeech": "prep",
+    "example": {
+      "text": "Above the clouds",
+      "meaning": "在云层上方",
+      "kind": "phrase"
+    },
     "id": "intermediate-above",
     "libraryId": "intermediate",
-    "word": "above",
-    "meaning": "超过；在……上面；在……之上；在上面",
-    "group": 0,
-    "example": {
-      "text": "Above oneself",
-      "meaning": "自高自大；趾高气扬；兴高采烈",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-abroad",
     "libraryId": "intermediate",
     "word": "abroad",
-    "meaning": "在国外；到海外；往国外的；海外",
+    "meaning": "在国外；到海外",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "Went abroad",
-      "meaning": "出国",
+      "text": "Study abroad",
+      "meaning": "出国留学；海外学习",
       "kind": "phrase"
     }
   },
@@ -6052,11 +8764,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-absent",
     "libraryId": "intermediate",
     "word": "absent",
-    "meaning": "缺席的；缺少的；心不在焉的；茫然的",
+    "meaning": "缺席的；心不在焉的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Absent minded",
-      "meaning": "健忘的",
+      "text": "Be absent from school",
+      "meaning": "缺课",
       "kind": "phrase"
     }
   },
@@ -6064,35 +8777,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-accent",
     "libraryId": "intermediate",
     "word": "accent",
-    "meaning": "口音；重音；强调；特点",
+    "meaning": "口音；重音",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "He had a strong Irish accent",
+      "text": "He had a strong Irish accent.",
       "meaning": "他有浓重的爱尔兰口音。",
       "kind": "sentence"
     }
   },
   {
+    "word": "accept",
+    "meaning": "接受；同意",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Accept an invitation",
+      "meaning": "接受邀请",
+      "kind": "phrase"
+    },
     "id": "intermediate-accept",
     "libraryId": "intermediate",
-    "word": "accept",
-    "meaning": "接受；承认；承担；承兑",
-    "group": 0,
-    "example": {
-      "text": "Accept of",
-      "meaning": "v. 承兑",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-accident",
     "libraryId": "intermediate",
     "word": "accident",
-    "meaning": "事故；意外；[法] 意外事件；机遇",
+    "meaning": "事故；意外",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Traffic accident",
-      "meaning": "交通事故",
+      "text": "Have an accident",
+      "meaning": "出了事故",
       "kind": "phrase"
     }
   },
@@ -6100,11 +8816,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-ache",
     "libraryId": "intermediate",
     "word": "ache",
-    "meaning": "疼痛；渴望；痛；想念",
+    "meaning": "疼痛",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Stomach ache",
-      "meaning": "胃疼",
+      "text": "Ache all over",
+      "meaning": "全身疼痛",
       "kind": "phrase"
     }
   },
@@ -6112,143 +8829,179 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-achieve",
     "libraryId": "intermediate",
     "word": "achieve",
-    "meaning": "取得；获得；实现；成功",
+    "meaning": "实现；取得",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Achieve success",
-      "meaning": "取得成功；获得成功",
+      "text": "Achieve one's goals",
+      "meaning": "实现目标",
       "kind": "phrase"
     }
   },
   {
+    "word": "across",
+    "meaning": "穿过；在……对面",
+    "partOfSpeech": "prep",
+    "example": {
+      "text": "Walk across the street",
+      "meaning": "走过街道",
+      "kind": "phrase"
+    },
     "id": "intermediate-across",
     "libraryId": "intermediate",
-    "word": "across",
-    "meaning": "穿过；横穿；横过；在对面",
-    "group": 0,
-    "example": {
-      "text": "Back across",
-      "meaning": "后背宽",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "act",
+    "meaning": "行动；扮演",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Act in a play",
+      "meaning": "在一部戏剧中表演",
+      "kind": "phrase"
+    },
     "id": "intermediate-act",
     "libraryId": "intermediate",
-    "word": "act",
-    "meaning": "扮演；装作；举动像；行为",
-    "group": 0,
-    "example": {
-      "text": "Act as",
-      "meaning": "担当",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-action",
     "libraryId": "intermediate",
     "word": "action",
-    "meaning": "行动；活动；功能；战斗",
+    "meaning": "行动；行为",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Legal action",
-      "meaning": "法律诉讼",
+      "text": "Course of action",
+      "meaning": "做法；行动步骤",
       "kind": "phrase"
     }
   },
   {
+    "word": "active",
+    "meaning": "积极的；活跃的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An active student",
+      "meaning": "一名活跃的学生",
+      "kind": "phrase"
+    },
     "id": "intermediate-active",
     "libraryId": "intermediate",
-    "word": "active",
-    "meaning": "积极的；活跃的；主动的；有效的",
-    "group": 0,
-    "example": {
-      "text": "Surface active",
-      "meaning": "表面活性的",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "activity",
+    "meaning": "活动",
+    "example": {
+      "text": "An outdoor activity",
+      "meaning": "一项户外活动",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-activity",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "add",
+    "meaning": "添加；增加",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Add some water",
+      "meaning": "加一些水",
+      "kind": "phrase"
+    },
     "id": "intermediate-add",
     "libraryId": "intermediate",
-    "word": "add",
-    "meaning": "加；增加；加起来；做加法",
-    "group": 0,
-    "example": {
-      "text": "Add up",
-      "meaning": "v. 合计",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "address",
+    "meaning": "地址；演讲",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Write your address here.",
+      "meaning": "请在这里写下你的地址。",
+      "kind": "sentence",
+      "sense": "地址",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "演讲",
+          "partOfSpeech": "n",
+          "text": "She gave an address to the students.",
+          "meaning": "她向学生们发表了演讲。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-address",
     "libraryId": "intermediate",
-    "word": "address",
-    "meaning": "演说；从事；忙于；写姓名地址",
-    "group": 0,
-    "example": {
-      "text": "Email address",
-      "meaning": "电子邮箱信箱",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "advertisement",
+    "meaning": "广告",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A newspaper advertisement",
+      "meaning": "一则报纸广告",
+      "kind": "phrase"
+    },
     "id": "intermediate-advertisement",
     "libraryId": "intermediate",
-    "word": "advertisement",
-    "meaning": "广告；宣传；公告；广告活动",
-    "group": 0,
-    "example": {
-      "text": "Advertisement company",
-      "meaning": "广告公司",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-advice",
     "libraryId": "intermediate",
     "word": "advice",
-    "meaning": "建议；忠告；劝告；通知",
+    "meaning": "建议；忠告",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Good advice",
-      "meaning": "好建议",
+      "text": "Take the advice",
+      "meaning": "采纳建议",
       "kind": "phrase"
     }
   },
   {
+    "word": "advise",
+    "meaning": "建议；劝告",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Advise him to rest",
+      "meaning": "建议他休息",
+      "kind": "phrase"
+    },
     "id": "intermediate-advise",
     "libraryId": "intermediate",
-    "word": "advise",
-    "meaning": "建议；劝告；忠告；通知",
-    "group": 0,
-    "example": {
-      "text": "Please advise",
-      "meaning": "请指导；请指示",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "afford",
+    "meaning": "买得起；负担得起",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Afford a new bike",
+      "meaning": "买得起一辆新自行车",
+      "kind": "phrase"
+    },
     "id": "intermediate-afford",
     "libraryId": "intermediate",
-    "word": "afford",
-    "meaning": "给予；提供；买得起；负担得起",
-    "group": 0,
-    "example": {
-      "text": "Can afford",
-      "meaning": "买得起；有能力负担",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-afraid",
     "libraryId": "intermediate",
     "word": "afraid",
-    "meaning": "害怕的；恐怕；担心的；恐惧的",
+    "meaning": "害怕的；担心的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "I'm afraid",
-      "meaning": "我害怕；恐怕",
+      "text": "Be afraid of dogs",
+      "meaning": "害怕狗",
       "kind": "phrase"
     }
   },
@@ -6256,11 +9009,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-against",
     "libraryId": "intermediate",
     "word": "against",
-    "meaning": "反对；违反；靠；倚",
+    "meaning": "反对；倚靠",
+    "partOfSpeech": "prep",
     "group": 0,
     "example": {
-      "text": "Up against",
-      "meaning": "面临",
+      "text": "Go against the rules",
+      "meaning": "违反规则",
       "kind": "phrase"
     }
   },
@@ -6268,59 +9022,64 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-age",
     "libraryId": "intermediate",
     "word": "age",
-    "meaning": "年龄；时代；寿命；使用年限",
+    "meaning": "年龄；时代",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Of age",
-      "meaning": "成年",
+      "text": "At the age of ten",
+      "meaning": "十岁时",
       "kind": "phrase"
     }
   },
   {
+    "word": "agree",
+    "meaning": "同意；赞成",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Agree with you",
+      "meaning": "同意你的看法",
+      "kind": "phrase"
+    },
     "id": "intermediate-agree",
     "libraryId": "intermediate",
-    "word": "agree",
-    "meaning": "同意；赞成；承认；约定",
-    "group": 0,
-    "example": {
-      "text": "Agree upon",
-      "meaning": "对…取得一致意见",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-agreement",
     "libraryId": "intermediate",
     "word": "agreement",
-    "meaning": "协议；同意；一致；协定",
+    "meaning": "同意；协议",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "General agreement",
-      "meaning": "总协定",
+      "text": "In agreement with",
+      "meaning": "同意",
       "kind": "phrase"
     }
   },
   {
+    "word": "airline",
+    "meaning": "航空公司",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An airline ticket",
+      "meaning": "一张机票",
+      "kind": "phrase"
+    },
     "id": "intermediate-airline",
     "libraryId": "intermediate",
-    "word": "airline",
-    "meaning": "航空公司；航线；航线的",
-    "group": 0,
-    "example": {
-      "text": "Airline ticket",
-      "meaning": "飞机票",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-airplane",
     "libraryId": "intermediate",
     "word": "airplane",
     "meaning": "飞机",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "By airplane",
-      "meaning": "搭飞机",
+      "text": "Fly an airplane",
+      "meaning": "开飞机",
       "kind": "phrase"
     }
   },
@@ -6328,79 +9087,86 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-airport",
     "libraryId": "intermediate",
     "word": "airport",
-    "meaning": "机场；航空站；航空港",
+    "meaning": "机场",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "International airport",
-      "meaning": "国际机场",
+      "text": "At the airport",
+      "meaning": "在机场",
       "kind": "phrase"
     }
   },
   {
+    "word": "alive",
+    "meaning": "活着的；有活力的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Stay alive",
+      "meaning": "活下来",
+      "kind": "phrase"
+    },
     "id": "intermediate-alive",
     "libraryId": "intermediate",
-    "word": "alive",
-    "meaning": "活着的；活泼的；有生气的；在世的",
-    "group": 0,
-    "example": {
-      "text": "Come alive",
-      "meaning": "活跃起来；看上去像真的",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "allow",
+    "meaning": "允许；准许",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Allow me to help",
+      "meaning": "允许我帮忙",
+      "kind": "phrase"
+    },
     "id": "intermediate-allow",
     "libraryId": "intermediate",
-    "word": "allow",
-    "meaning": "允许；给予；认可；准许",
-    "group": 0,
-    "example": {
-      "text": "Allow of",
-      "meaning": "容许",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "almost",
+    "meaning": "几乎；差不多",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Almost all the students",
+      "meaning": "几乎所有学生",
+      "kind": "phrase"
+    },
     "id": "intermediate-almost",
     "libraryId": "intermediate",
-    "word": "almost",
-    "meaning": "差不多；几乎",
-    "group": 0,
-    "example": {
-      "text": "Almost all",
-      "meaning": "几乎处处",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "alone",
+    "meaning": "独自；单独地",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Stay at home alone",
+      "meaning": "独自在家",
+      "kind": "phrase"
+    },
     "id": "intermediate-alone",
     "libraryId": "intermediate",
-    "word": "alone",
-    "meaning": "独自的；单独的；孤独的；独自地",
-    "group": 0,
-    "example": {
-      "text": "Feel alone",
-      "meaning": "感到孤单",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "along",
+    "meaning": "沿着",
+    "partOfSpeech": "prep",
+    "example": {
+      "text": "Walk along the river",
+      "meaning": "沿河步行",
+      "kind": "phrase"
+    },
     "id": "intermediate-along",
     "libraryId": "intermediate",
-    "word": "along",
-    "meaning": "一起；向前；来到；沿着",
-    "group": 0,
-    "example": {
-      "text": "Right along",
-      "meaning": "继续地",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-aloud",
     "libraryId": "intermediate",
     "word": "aloud",
     "meaning": "大声地；出声地",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "Read aloud",
@@ -6412,7 +9178,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-already",
     "libraryId": "intermediate",
     "word": "already",
-    "meaning": "已经；早已；先前",
+    "meaning": "已经；早已",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "The performance had already started when we arrived.",
@@ -6424,7 +9191,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-although",
     "libraryId": "intermediate",
     "word": "although",
-    "meaning": "尽管；虽然；但是；然而",
+    "meaning": "尽管；虽然",
+    "partOfSpeech": "conj",
     "group": 0,
     "example": {
       "text": "Although in poor health, she continued to carry out her duties.",
@@ -6436,35 +9204,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-america",
     "libraryId": "intermediate",
     "word": "America",
-    "meaning": "美洲（包括北美和南美洲）；美国；美洲",
+    "meaning": "美国；美洲",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "North america",
-      "meaning": "北美洲",
+      "text": "A trip to America",
+      "meaning": "美国之行",
       "kind": "phrase"
     }
   },
   {
+    "word": "American",
+    "meaning": "美国的；美国人的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An American writer",
+      "meaning": "一位美国作家",
+      "kind": "phrase"
+    },
     "id": "intermediate-american",
     "libraryId": "intermediate",
-    "word": "American",
-    "meaning": "美国人；美洲人；美国英语；美国的",
-    "group": 0,
-    "example": {
-      "text": "American culture",
-      "meaning": "美国文化",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-among",
     "libraryId": "intermediate",
     "word": "among",
-    "meaning": "在…中间；在…之中；在…之间",
+    "meaning": "在……之中",
+    "partOfSpeech": "prep",
     "group": 0,
     "example": {
-      "text": "From among",
-      "meaning": "从…中间；从…当中",
+      "text": "Among the trees",
+      "meaning": "在树丛中",
       "kind": "phrase"
     }
   },
@@ -6472,11 +9243,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-ancient",
     "libraryId": "intermediate",
     "word": "ancient",
-    "meaning": "古代的；古老的；过时的；年老的",
+    "meaning": "古代的；古老的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Ancient chinese",
-      "meaning": "n. 古代汉语",
+      "text": "In ancient times",
+      "meaning": "在古代",
       "kind": "phrase"
     }
   },
@@ -6484,11 +9256,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-another",
     "libraryId": "intermediate",
     "word": "another",
-    "meaning": "又一；另一；另外的；不同的",
+    "meaning": "另一个；又一个",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
-      "text": "Another one",
-      "meaning": "另一个",
+      "text": "One after another",
+      "meaning": "一个接一个地",
       "kind": "phrase"
     }
   },
@@ -6497,22 +9270,24 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "ant",
     "meaning": "蚂蚁",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Fire ant",
-      "meaning": "火蚁",
-      "kind": "phrase"
+      "text": "An ant is carrying a leaf.",
+      "meaning": "一只蚂蚁正搬着一片叶子。",
+      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-anyone",
     "libraryId": "intermediate",
     "word": "anyone",
-    "meaning": "任何人；任何一个；随便哪一个人；无论谁",
+    "meaning": "任何人；任何一个",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
-      "text": "If anyone sees Lisa, ask her to call me.",
-      "meaning": "如果有谁看见莉萨，叫她打电话给我。",
+      "text": "They offer help and advice to anyone interested in becoming a teacher.",
+      "meaning": "他们为任何有兴趣当老师的人提供帮助和咨询。",
       "kind": "sentence"
     }
   },
@@ -6520,11 +9295,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-anything",
     "libraryId": "intermediate",
     "word": "anything",
-    "meaning": "任何事；无论什么东西；随便什么事情；任何东西",
+    "meaning": "任何事物；一切",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
-      "text": "If anything",
-      "meaning": "如果有什么区别的话",
+      "text": "Anything else",
+      "meaning": "其他任何东西",
       "kind": "phrase"
     }
   },
@@ -6532,47 +9308,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-anyway",
     "libraryId": "intermediate",
     "word": "anyway",
-    "meaning": "无论如何；不管怎样；总之；不管怎么说",
+    "meaning": "不管怎样",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "This idea probably won’t work, but let’s try it anyway.",
-      "meaning": "这个办法可能行不通，不过我们还是试试吧。",
+      "text": "I don't know why I settled on Miami, but anyway I did.",
+      "meaning": "我不知道为什么我落户到了迈阿密，但不管怎样我做了。",
       "kind": "sentence"
     }
   },
   {
+    "word": "anywhere",
+    "meaning": "在任何地方；到任何地方",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Sit anywhere you like",
+      "meaning": "坐在你喜欢的任何地方",
+      "kind": "phrase"
+    },
     "id": "intermediate-anywhere",
     "libraryId": "intermediate",
-    "word": "anywhere",
-    "meaning": "在任何地方；无论何处；任何地方；在什么地方",
-    "group": 0,
-    "example": {
-      "text": "Get anywhere",
-      "meaning": "有点成就",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-appear",
     "libraryId": "intermediate",
     "word": "appear",
-    "meaning": "出现；显得；似乎；出庭",
+    "meaning": "出现；似乎",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Appear under",
-      "meaning": "以…出现",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-april",
-    "libraryId": "intermediate",
-    "word": "April",
-    "meaning": "四月",
-    "group": 0,
-    "example": {
-      "text": "April fool",
-      "meaning": "愚人节；愚人节中受愚弄者",
+      "text": "Appear at the door",
+      "meaning": "出现在门口",
       "kind": "phrase"
     }
   },
@@ -6580,11 +9347,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-area",
     "libraryId": "intermediate",
     "word": "area",
-    "meaning": "区域；地区；面积；范围",
+    "meaning": "地区；面积",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Urban area",
-      "meaning": "城市地区",
+      "text": "In the area",
+      "meaning": "在这个地区；在该领域",
       "kind": "phrase"
     }
   },
@@ -6592,11 +9360,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-army",
     "libraryId": "intermediate",
     "word": "army",
-    "meaning": "陆军；军队",
+    "meaning": "军队；陆军",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Red army",
-      "meaning": "n. 红军",
+      "text": "In the army",
+      "meaning": "在军队中",
       "kind": "phrase"
     }
   },
@@ -6604,11 +9373,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-around",
     "libraryId": "intermediate",
     "word": "around",
-    "meaning": "大约；到处；在附近；四处",
+    "meaning": "大约；到处；在附近",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "All around",
-      "meaning": "周围；到处，四处",
+      "meaning": "周围；到处",
       "kind": "phrase"
     }
   },
@@ -6616,11 +9386,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-arrive",
     "libraryId": "intermediate",
     "word": "arrive",
-    "meaning": "到达；成功；达成；出生",
+    "meaning": "到达；抵达",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Arrive home",
-      "meaning": "到家",
+      "text": "Arrive at the station",
+      "meaning": "到达车站",
       "kind": "phrase"
     }
   },
@@ -6628,59 +9399,102 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-art",
     "libraryId": "intermediate",
     "word": "art",
-    "meaning": "艺术；美术；艺术品；艺术的",
+    "meaning": "艺术；美术；艺术品",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Contemporary art",
-      "meaning": "当代艺术",
+      "text": "Works of art",
+      "meaning": "艺术品",
       "kind": "phrase"
     }
   },
   {
+    "word": "article",
+    "meaning": "文章；物品；冠词；条款",
+    "example": {
+      "text": "I read an article about space.",
+      "meaning": "我读了一篇关于太空的文章。",
+      "kind": "sentence",
+      "sense": "文章",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "物品",
+          "partOfSpeech": "n",
+          "text": "These articles are for sale.",
+          "meaning": "这些物品正在出售。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "冠词",
+          "partOfSpeech": "n",
+          "text": "The word \"the\" is an article.",
+          "meaning": "the 这个词是冠词。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "条款",
+          "partOfSpeech": "n",
+          "text": "Article five explains this rule.",
+          "meaning": "第五条解释了这项规则。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-article",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "as",
+    "meaning": "像……一样；如同",
+    "partOfSpeech": "conj",
+    "example": {
+      "text": "As tall as you",
+      "meaning": "和你一样高",
+      "kind": "phrase"
+    },
     "id": "intermediate-as",
     "libraryId": "intermediate",
-    "word": "as",
-    "meaning": "因为；随着；虽然；依照",
-    "group": 0,
-    "example": {
-      "text": "As one",
-      "meaning": "一致的",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-asia",
     "libraryId": "intermediate",
     "word": "Asia",
     "meaning": "亚洲",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Southeast asia",
+      "text": "Southeast Asia",
       "meaning": "东南亚",
       "kind": "phrase"
     }
   },
   {
+    "word": "Asian",
+    "meaning": "亚洲的；亚洲人的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Asian countries",
+      "meaning": "亚洲国家",
+      "kind": "phrase"
+    },
     "id": "intermediate-asian",
     "libraryId": "intermediate",
-    "word": "Asian",
-    "meaning": "亚洲人；亚洲的；亚洲人的",
-    "group": 0,
-    "example": {
-      "text": "Asian american",
-      "meaning": "亚裔美国人",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-asleep",
     "libraryId": "intermediate",
     "word": "asleep",
-    "meaning": "睡着的；麻木的；长眠的；熟睡地",
+    "meaning": "睡着的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Fallen asleep",
-      "meaning": "睡着了",
+      "text": "Fall asleep",
+      "meaning": "入睡",
       "kind": "phrase"
     }
   },
@@ -6688,35 +9502,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-atlantic",
     "libraryId": "intermediate",
     "word": "Atlantic",
-    "meaning": "大西洋；大西洋的",
+    "meaning": "大西洋",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Atlantic ocean",
+      "text": "The Atlantic Ocean",
       "meaning": "大西洋",
       "kind": "phrase"
     }
   },
   {
-    "id": "intermediate-august",
-    "libraryId": "intermediate",
-    "word": "August",
-    "meaning": "威严的；令人敬畏的；八月（简写为Aug）；八月",
-    "group": 0,
+    "word": "attention",
+    "meaning": "注意力",
     "example": {
-      "text": "The world premiere took place in August 1956.",
-      "meaning": "全球首映是在1956年8月。",
-      "kind": "sentence"
-    }
+      "text": "Pay attention",
+      "meaning": "注意",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-attention",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-australia",
     "libraryId": "intermediate",
     "word": "Australia",
-    "meaning": "澳大利亚；澳洲",
+    "meaning": "澳大利亚",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "South australia",
-      "meaning": "南澳大利亚",
+      "text": "A trip to Australia",
+      "meaning": "澳大利亚之行",
       "kind": "phrase"
     }
   },
@@ -6724,11 +9541,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-australian",
     "libraryId": "intermediate",
     "word": "Australian",
-    "meaning": "澳大利亚的；澳大利亚人的；澳大利亚人",
+    "meaning": "澳大利亚的；澳大利亚人的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Australian dollar",
-      "meaning": "澳币",
+      "text": "An Australian city",
+      "meaning": "一座澳大利亚城市",
       "kind": "phrase"
     }
   },
@@ -6736,7 +9554,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-available",
     "libraryId": "intermediate",
     "word": "available",
-    "meaning": "可获得的；可购得的；可找到的；有空的",
+    "meaning": "可获得的；可用的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Available resources",
@@ -6748,11 +9567,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-avoid",
     "libraryId": "intermediate",
     "word": "avoid",
-    "meaning": "避免；避开；躲避；消除",
+    "meaning": "避免；避开",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Avoid doing",
-      "meaning": "避免做某事；逃避…",
+      "meaning": "避免做某事",
       "kind": "phrase"
     }
   },
@@ -6760,11 +9580,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-away",
     "libraryId": "intermediate",
     "word": "away",
-    "meaning": "离去；离开；在远处；向远处",
+    "meaning": "离开；远离",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "Far away",
-      "meaning": "遥远的",
+      "text": "Far away from",
+      "meaning": "远离",
       "kind": "phrase"
     }
   },
@@ -6772,19 +9593,46 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-back",
     "libraryId": "intermediate",
     "word": "back",
-    "meaning": "后面；背部；靠背；足球等的后卫",
+    "meaning": "背部；后面；支持；回来",
+    "partOfSpeech": "n/v/adv",
     "group": 0,
     "example": {
-      "text": "Go back",
-      "meaning": "回去；追溯",
-      "kind": "phrase"
+      "text": "My back hurts today.",
+      "meaning": "我今天背疼。",
+      "kind": "sentence",
+      "sense": "背部",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "后面",
+          "partOfSpeech": "n",
+          "text": "Sit at the back of the room.",
+          "meaning": "坐在房间后面。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "支持",
+          "partOfSpeech": "v",
+          "text": "We back your plan.",
+          "meaning": "我们支持你的计划。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "回来",
+          "partOfSpeech": "adv",
+          "text": "I will be back soon.",
+          "meaning": "我很快会回来。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-background",
     "libraryId": "intermediate",
     "word": "background",
-    "meaning": "背景；隐蔽的位置；作…的背景；背景的",
+    "meaning": "背景",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Cultural background",
@@ -6793,26 +9641,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "balloon",
+    "meaning": "气球",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A red balloon",
+      "meaning": "一个红气球",
+      "kind": "phrase"
+    },
     "id": "intermediate-balloon",
     "libraryId": "intermediate",
-    "word": "balloon",
-    "meaning": "激增；膨胀如气球；气球；像气球般鼓起的",
-    "group": 0,
-    "example": {
-      "text": "Air balloon",
-      "meaning": "气球",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-bamboo",
     "libraryId": "intermediate",
     "word": "bamboo",
-    "meaning": "竹；竹子；为…装上篾条；竹制的",
+    "meaning": "竹子",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Bamboo leaves",
-      "meaning": "竹叶",
+      "text": "Bamboo shoot",
+      "meaning": "竹笋，笋",
       "kind": "phrase"
     }
   },
@@ -6820,19 +9670,32 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-bank",
     "libraryId": "intermediate",
     "word": "bank",
-    "meaning": "银行；岸；浅滩；储库",
+    "meaning": "银行；河岸",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Commercial bank",
-      "meaning": "商业银行",
-      "kind": "phrase"
+      "text": "I put my money in the bank.",
+      "meaning": "我把钱存进银行。",
+      "kind": "sentence",
+      "sense": "银行",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "河岸",
+          "partOfSpeech": "n",
+          "text": "We sat on the bank of the river.",
+          "meaning": "我们坐在河岸上。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-basic",
     "libraryId": "intermediate",
     "word": "basic",
-    "meaning": "基本的；基础的；基础；要素",
+    "meaning": "基本的；基础的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Basic principle",
@@ -6844,7 +9707,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-basket",
     "libraryId": "intermediate",
     "word": "basket",
-    "meaning": "篮子；（篮球比赛的）得分；一篮之量；篮筐",
+    "meaning": "篮子；筐",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Picnic basket",
@@ -6853,38 +9717,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
-    "id": "intermediate-basketball",
-    "libraryId": "intermediate",
-    "word": "basketball",
-    "meaning": "篮球；篮球运动",
-    "group": 0,
+    "word": "beef",
+    "meaning": "牛肉",
+    "partOfSpeech": "n",
     "example": {
-      "text": "Play basketball",
-      "meaning": "打篮球",
+      "text": "Roast beef",
+      "meaning": "烤牛肉",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-beef",
     "libraryId": "intermediate",
-    "word": "beef",
-    "meaning": "牛肉；肌肉；食用牛；牢骚",
-    "group": 0,
-    "example": {
-      "text": "Beef cattle",
-      "meaning": "菜牛",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-behaviour",
     "libraryId": "intermediate",
     "word": "behaviour",
-    "meaning": "行为；习性；运行状况（=behavior）；[U] 行为",
+    "meaning": "行为；举止",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Social behaviour",
-      "meaning": "社会行为",
+      "text": "Good behaviour",
+      "meaning": "品行良好；得体的行为",
       "kind": "phrase"
     }
   },
@@ -6892,11 +9746,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-believe",
     "libraryId": "intermediate",
     "word": "believe",
-    "meaning": "信任；料想；笃信宗教；相信",
+    "meaning": "相信；认为",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Make believe",
-      "meaning": "v. 假装；假扮",
+      "text": "Believe his story",
+      "meaning": "相信他的话",
       "kind": "phrase"
     }
   },
@@ -6904,11 +9759,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-bell",
     "libraryId": "intermediate",
     "word": "bell",
-    "meaning": "铃；钟；钟声；铃声",
+    "meaning": "铃；钟",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Golden bell",
-      "meaning": "连翘",
+      "text": "Ring the bell",
+      "meaning": "鸣钟；按门铃",
       "kind": "phrase"
     }
   },
@@ -6916,7 +9772,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-below",
     "libraryId": "intermediate",
     "word": "below",
-    "meaning": "在下面；在较低处；在本页下面；在…下面",
+    "meaning": "在……下面；低于",
+    "partOfSpeech": "prep",
     "group": 0,
     "example": {
       "text": "Far below",
@@ -6928,11 +9785,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-besides",
     "libraryId": "intermediate",
     "word": "besides",
-    "meaning": "此外；而且；除…之外；再说",
+    "meaning": "此外；而且",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "I need the money. And besides, when I agree to do something, I do it.",
-      "meaning": "我需要这笔钱，而且，我一旦答应做什么事情就会做到。",
+      "text": "Besides, I have no time.",
+      "meaning": "此外，我没有时间。",
       "kind": "sentence"
     }
   },
@@ -6940,35 +9798,56 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-beyond",
     "libraryId": "intermediate",
     "word": "beyond",
-    "meaning": "超过；越过；那一边；在较远的一边",
+    "meaning": "在……那边；超出",
+    "partOfSpeech": "prep",
     "group": 0,
     "example": {
-      "text": "Beyond oneself",
-      "meaning": "精神错乱；忘形",
+      "text": "Beyond the river",
+      "meaning": "在河那边",
       "kind": "phrase"
     }
   },
   {
+    "word": "bill",
+    "meaning": "账单；钞票；法案",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Please bring us the bill.",
+      "meaning": "请把账单拿给我们。",
+      "kind": "sentence",
+      "sense": "账单",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "钞票",
+          "partOfSpeech": "n",
+          "text": "He paid with a ten-dollar bill.",
+          "meaning": "他用一张十美元钞票付了钱。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "法案",
+          "partOfSpeech": "n",
+          "text": "The bill became law last year.",
+          "meaning": "这项法案去年成为了法律。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-bill",
     "libraryId": "intermediate",
-    "word": "bill",
-    "meaning": "[法] 法案；广告；账单；[金融] 票据",
-    "group": 0,
-    "example": {
-      "text": "Dollar bill",
-      "meaning": "美元钞票",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-birth",
     "libraryId": "intermediate",
     "word": "birth",
-    "meaning": "出生；血统；出身；起源",
+    "meaning": "出生；诞生",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "At birth",
-      "meaning": "生下来时",
+      "text": "Date of birth",
+      "meaning": "出生日期",
       "kind": "phrase"
     }
   },
@@ -6976,91 +9855,104 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-biscuit",
     "libraryId": "intermediate",
     "word": "biscuit",
-    "meaning": "小点心；饼干；(英)饼干；(美)软饼",
+    "meaning": "饼干",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "A packet of chocolate biscuits",
       "meaning": "一包巧克力饼干",
-      "kind": "sentence"
+      "kind": "phrase"
     }
   },
   {
+    "word": "bit",
+    "meaning": "一点；少量",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A bit of help",
+      "meaning": "一点帮助",
+      "kind": "phrase"
+    },
     "id": "intermediate-bit",
     "libraryId": "intermediate",
-    "word": "bit",
-    "meaning": "[计] 比特（二进位制信息单位）；少量；马嚼子；辅币",
-    "group": 0,
-    "example": {
-      "text": "Little bit",
-      "meaning": "一点点",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "bitter",
+    "meaning": "苦的；痛苦的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A bitter taste",
+      "meaning": "苦味",
+      "kind": "phrase"
+    },
     "id": "intermediate-bitter",
     "libraryId": "intermediate",
-    "word": "bitter",
-    "meaning": "苦的；痛苦的；尖刻的；充满仇恨的",
-    "group": 0,
-    "example": {
-      "text": "Bitter cold",
-      "meaning": "严寒",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-blackboard",
-    "libraryId": "intermediate",
-    "word": "blackboard",
-    "meaning": "黑板",
-    "group": 0,
+    "word": "blind",
+    "meaning": "失明的；看不见的",
+    "partOfSpeech": "adj",
     "example": {
-      "text": "Blackboard eraser",
-      "meaning": "n. 黑板擦",
+      "text": "A blind person",
+      "meaning": "一位视障人士",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-blind",
     "libraryId": "intermediate",
-    "word": "blind",
-    "meaning": "盲目的；瞎的；盲目地；看不见地",
-    "group": 0,
-    "example": {
-      "text": "Blind date",
-      "meaning": "n. 从未见面的男女经第三者安排所作的约会",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-blood",
     "libraryId": "intermediate",
     "word": "blood",
-    "meaning": "血；血液；血统；从…抽血",
+    "meaning": "血；血液",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Blood pressure",
-      "meaning": "n. 血压",
+      "text": "High blood pressure",
+      "meaning": "高血压",
       "kind": "phrase"
     }
   },
   {
+    "word": "board",
+    "meaning": "木板；董事会；登上",
+    "partOfSpeech": "n/v",
+    "example": {
+      "text": "Put the board across the gap.",
+      "meaning": "把木板架在缺口上。",
+      "kind": "sentence",
+      "sense": "木板",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "董事会",
+          "partOfSpeech": "n",
+          "text": "The board approved the plan.",
+          "meaning": "董事会批准了这项计划。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "登上",
+          "partOfSpeech": "v",
+          "text": "We boarded the train at noon.",
+          "meaning": "我们中午上了火车。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-board",
     "libraryId": "intermediate",
-    "word": "board",
-    "meaning": "董事会；木板；甲板；膳食",
-    "group": 0,
-    "example": {
-      "text": "Management board",
-      "meaning": "管理委员会",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-boring",
     "libraryId": "intermediate",
     "word": "boring",
-    "meaning": "无聊的；令人厌烦的；钻孔；使厌烦",
+    "meaning": "无聊的；令人厌烦的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "So boring",
@@ -7069,146 +9961,145 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "born",
+    "meaning": "出生的；天生的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Be born in spring",
+      "meaning": "出生在春天",
+      "kind": "phrase"
+    },
     "id": "intermediate-born",
     "libraryId": "intermediate",
-    "word": "born",
-    "meaning": "出世（bear的过去分词）；天生的；出生的；产生的",
-    "group": 0,
-    "example": {
-      "text": "Was born",
-      "meaning": "出生",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "borrow",
+    "meaning": "借；借用",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Borrow a book",
+      "meaning": "借一本书",
+      "kind": "phrase"
+    },
     "id": "intermediate-borrow",
     "libraryId": "intermediate",
-    "word": "borrow",
-    "meaning": "借；借用；从其他语言中引入；借入",
-    "group": 0,
-    "example": {
-      "text": "Borrow money",
-      "meaning": "借钱；借债",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-boss",
     "libraryId": "intermediate",
     "word": "boss",
-    "meaning": "老板；首领；工头；指挥",
+    "meaning": "老板；首领；工头",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Party boss",
-      "meaning": "党魁",
-      "kind": "phrase"
+      "text": "I’ll have to ask my boss for a day off.",
+      "meaning": "我得向老板请一天假。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "both",
+    "meaning": "两者都",
+    "partOfSpeech": "pron",
+    "example": {
+      "text": "Both of us",
+      "meaning": "我们两个人",
+      "kind": "phrase"
+    },
     "id": "intermediate-both",
     "libraryId": "intermediate",
-    "word": "both",
-    "meaning": "两个的；两者的；并；又",
-    "group": 0,
-    "example": {
-      "text": "Both and",
-      "meaning": "两个都；既...又...",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "bottle",
+    "meaning": "瓶子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A bottle of water",
+      "meaning": "一瓶水",
+      "kind": "phrase"
+    },
     "id": "intermediate-bottle",
     "libraryId": "intermediate",
-    "word": "bottle",
-    "meaning": "瓶子；一瓶的容量；控制；把…装入瓶中",
-    "group": 0,
-    "example": {
-      "text": "Glass bottle",
-      "meaning": "玻璃瓶",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-bottom",
     "libraryId": "intermediate",
     "word": "bottom",
-    "meaning": "底部；末端；臀部；尽头",
+    "meaning": "底部；末端",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Bottom layer",
-      "meaning": "底层",
+      "text": "At the bottom",
+      "meaning": "在底部；在底端",
       "kind": "phrase"
     }
   },
   {
+    "word": "bowl",
+    "meaning": "碗",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A bowl of rice",
+      "meaning": "一碗米饭",
+      "kind": "phrase"
+    },
     "id": "intermediate-bowl",
     "libraryId": "intermediate",
-    "word": "bowl",
-    "meaning": "碗；木球；大酒杯；玩保龄球",
-    "group": 0,
-    "example": {
-      "text": "Super bowl",
-      "meaning": "美国橄榄球超级杯大赛",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-box",
-    "libraryId": "intermediate",
-    "word": "box",
-    "meaning": "箱；盒子；包厢；一拳",
-    "group": 0,
+    "word": "brain",
+    "meaning": "脑；大脑",
+    "partOfSpeech": "n",
     "example": {
-      "text": "Gear box",
-      "meaning": "齿轮箱",
+      "text": "The human brain",
+      "meaning": "人的大脑",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-brain",
     "libraryId": "intermediate",
-    "word": "brain",
-    "meaning": "头脑；智力；脑袋；猛击…的头部",
-    "group": 0,
-    "example": {
-      "text": "Human brain",
-      "meaning": "人脑",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "brave",
+    "meaning": "勇敢的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A brave child",
+      "meaning": "一个勇敢的孩子",
+      "kind": "phrase"
+    },
     "id": "intermediate-brave",
     "libraryId": "intermediate",
-    "word": "brave",
-    "meaning": "勇敢的；华丽的；勇敢地面对；勇士",
-    "group": 0,
-    "example": {
-      "text": "Brave oneself",
-      "meaning": "自夸，自负；大言不惭",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "breath",
+    "meaning": "呼吸；一口气",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Take a deep breath",
+      "meaning": "深吸一口气",
+      "kind": "phrase"
+    },
     "id": "intermediate-breath",
     "libraryId": "intermediate",
-    "word": "breath",
-    "meaning": "呼吸；气息；一口气；（呼吸的）一次",
-    "group": 0,
-    "example": {
-      "text": "Deep breath",
-      "meaning": "深呼吸",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-breathe",
     "libraryId": "intermediate",
     "word": "breathe",
-    "meaning": "呼吸；低语；松口气；（风）轻拂",
+    "meaning": "呼吸",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Breathe out",
-      "meaning": "呼出",
+      "text": "Breathe deeply",
+      "meaning": "深呼吸",
       "kind": "phrase"
     }
   },
@@ -7216,67 +10107,60 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-bridge",
     "libraryId": "intermediate",
     "word": "bridge",
-    "meaning": "桥；桥牌；桥接器；船桥",
+    "meaning": "桥；桥梁",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Arch bridge",
-      "meaning": "拱形桥",
+      "text": "Build a bridge",
+      "meaning": "建一座桥",
       "kind": "phrase"
     }
   },
   {
+    "word": "bright",
+    "meaning": "明亮的；聪明的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A bright room",
+      "meaning": "一间明亮的房间",
+      "kind": "phrase"
+    },
     "id": "intermediate-bright",
     "libraryId": "intermediate",
-    "word": "bright",
-    "meaning": "明亮的；鲜明的；聪明的；愉快的",
-    "group": 0,
-    "example": {
-      "text": "Bright color",
-      "meaning": "明亮的颜色",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-brown",
-    "libraryId": "intermediate",
-    "word": "brown",
-    "meaning": "棕色的；褐色的；太阳晒黑的；变成褐色",
-    "group": 0,
+    "word": "brush",
+    "meaning": "刷子；画笔",
+    "partOfSpeech": "n",
     "example": {
-      "text": "Brown rice",
-      "meaning": "糙米",
+      "text": "A new brush",
+      "meaning": "一把新刷子",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-brush",
     "libraryId": "intermediate",
-    "word": "brush",
-    "meaning": "刷子；画笔；毛笔；争吵",
-    "group": 0,
-    "example": {
-      "text": "Carbon brush",
-      "meaning": "碳刷",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "building",
+    "meaning": "建筑物；楼房",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A tall building",
+      "meaning": "一幢高楼",
+      "kind": "phrase"
+    },
     "id": "intermediate-building",
     "libraryId": "intermediate",
-    "word": "building",
-    "meaning": "建筑；建筑物；建立；增加（build的ing形式）",
-    "group": 0,
-    "example": {
-      "text": "Building material",
-      "meaning": "建筑材料",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-business",
     "libraryId": "intermediate",
     "word": "business",
-    "meaning": "商业；[贸易] 生意；[贸易] 交易；事情",
+    "meaning": "商业；生意",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Business development",
@@ -7285,86 +10169,93 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "butter",
+    "meaning": "黄油",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Bread and butter",
+      "meaning": "面包和黄油",
+      "kind": "phrase"
+    },
     "id": "intermediate-butter",
     "libraryId": "intermediate",
-    "word": "butter",
-    "meaning": "涂黄油于；讨好；黄油；奶油",
-    "group": 0,
-    "example": {
-      "text": "Peanut butter",
-      "meaning": "花生酱",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-butterfly",
     "libraryId": "intermediate",
     "word": "butterfly",
-    "meaning": "蝴蝶；蝶泳；举止轻浮的人；追求享乐的人",
+    "meaning": "蝴蝶",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Butterfly valve",
-      "meaning": "蝶形阀",
+      "text": "Butterfly effect",
+      "meaning": "蝴蝶效应",
       "kind": "phrase"
     }
   },
   {
+    "word": "bye",
+    "meaning": "再见",
+    "partOfSpeech": "int",
+    "example": {
+      "text": "Bye for now!",
+      "meaning": "先再见了！",
+      "kind": "sentence"
+    },
     "id": "intermediate-bye",
     "libraryId": "intermediate",
-    "word": "bye",
-    "meaning": "再见；轮空；次要的东西；次要的",
-    "group": 0,
-    "example": {
-      "text": "Bye bye bye",
-      "meaning": "再见再见再见",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "cabbage",
+    "meaning": "卷心菜；甘蓝",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A fresh cabbage",
+      "meaning": "一棵新鲜卷心菜",
+      "kind": "phrase"
+    },
     "id": "intermediate-cabbage",
     "libraryId": "intermediate",
-    "word": "cabbage",
-    "meaning": "卷心菜；甘蓝菜；洋白菜；（俚)脑袋",
-    "group": 0,
-    "example": {
-      "text": "Red cabbage",
-      "meaning": "红叶卷心菜；红球甘蓝",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-call",
     "libraryId": "intermediate",
     "word": "call",
-    "meaning": "呼叫；拜访；叫牌；电话",
+    "meaning": "打电话；叫；称呼",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Phone call",
-      "meaning": "电话",
+      "text": "Call your mother",
+      "meaning": "给你妈妈打电话",
       "kind": "phrase"
     }
   },
   {
+    "word": "camel",
+    "meaning": "骆驼",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A camel in the desert",
+      "meaning": "沙漠中的一只骆驼",
+      "kind": "phrase"
+    },
     "id": "intermediate-camel",
     "libraryId": "intermediate",
-    "word": "camel",
-    "meaning": "[畜牧][脊椎] 骆驼；打捞浮筒；工作作风官僚；驼色的",
-    "group": 0,
-    "example": {
-      "text": "Bactrian camel",
-      "meaning": "双峰驼",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-camera",
     "libraryId": "intermediate",
     "word": "camera",
-    "meaning": "照相机；摄影机；摄像机",
+    "meaning": "照相机；摄影机",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Ccd camera",
-      "meaning": "电荷耦合摄像机",
+      "text": "A high-speed camera",
+      "meaning": "一台高速摄像机",
       "kind": "phrase"
     }
   },
@@ -7372,11 +10263,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-camp",
     "libraryId": "intermediate",
     "word": "camp",
-    "meaning": "露营；扎营；营地；野营",
+    "meaning": "露营；扎营",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Training camp",
-      "meaning": "集训营",
+      "text": "Camp in the forest",
+      "meaning": "在森林里露营",
       "kind": "phrase"
     }
   },
@@ -7384,11 +10276,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-canada",
     "libraryId": "intermediate",
     "word": "Canada",
-    "meaning": "加拿大（北美洲国家）；加拿大",
+    "meaning": "加拿大（北美洲国家）",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Air canada",
-      "meaning": "n. 加拿大航空公司",
+      "text": "A trip to Canada",
+      "meaning": "加拿大之行",
       "kind": "phrase"
     }
   },
@@ -7396,11 +10289,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-cancel",
     "libraryId": "intermediate",
     "word": "cancel",
-    "meaning": "取消；删去；撤销；废除",
+    "meaning": "取消；删去",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Cancel button",
-      "meaning": "取消按钮",
+      "text": "Cancel the meeting",
+      "meaning": "取消会议",
       "kind": "phrase"
     }
   },
@@ -7408,11 +10302,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-candle",
     "libraryId": "intermediate",
     "word": "candle",
-    "meaning": "蜡烛；烛光；烛形物；对着光检查",
+    "meaning": "蜡烛",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Candle holder",
-      "meaning": "烛台",
+      "text": "Candle light",
+      "meaning": "烛光",
       "kind": "phrase"
     }
   },
@@ -7420,31 +10315,34 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-cancer",
     "libraryId": "intermediate",
     "word": "cancer",
-    "meaning": "癌症；恶性肿瘤；癌；肿瘤",
+    "meaning": "癌症",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Breast cancer",
-      "meaning": "乳腺癌",
+      "text": "Cancer research",
+      "meaning": "癌症研究；肿瘤研究",
       "kind": "phrase"
     }
   },
   {
+    "word": "candy",
+    "meaning": "糖果",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A candy store",
+      "meaning": "一家糖果店",
+      "kind": "phrase"
+    },
     "id": "intermediate-candy",
     "libraryId": "intermediate",
-    "word": "candy",
-    "meaning": "用糖煮；使结晶为砂糖；美化；糖果（等于sweets）",
-    "group": 0,
-    "example": {
-      "text": "Candy store",
-      "meaning": "糖果店",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-cap",
     "libraryId": "intermediate",
     "word": "cap",
-    "meaning": "盖；帽子；脱帽致意；覆盖",
+    "meaning": "盖；帽子",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Bottle cap",
@@ -7456,107 +10354,134 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-capital",
     "libraryId": "intermediate",
     "word": "capital",
-    "meaning": "首都；省会；资金；大写字母",
+    "meaning": "首都；资本；大写字母",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Capital market",
-      "meaning": "资本市场",
-      "kind": "phrase"
+      "text": "Beijing is the capital of China.",
+      "meaning": "北京是中国的首都。",
+      "kind": "sentence",
+      "sense": "首都",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "资本",
+          "partOfSpeech": "n",
+          "text": "They need capital to start a business.",
+          "meaning": "他们需要资本来创业。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "大写字母",
+          "partOfSpeech": "n",
+          "text": "Write your name in capitals.",
+          "meaning": "用大写字母写下你的名字。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-captain",
     "libraryId": "intermediate",
     "word": "captain",
-    "meaning": "队长；首领；船长；上尉",
+    "meaning": "船长；队长",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Sea captain",
-      "meaning": "船长",
+      "text": "A ship captain",
+      "meaning": "一位船长",
       "kind": "phrase"
     }
   },
   {
+    "word": "card",
+    "meaning": "卡片；纸牌",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A birthday card",
+      "meaning": "一张生日贺卡",
+      "kind": "phrase"
+    },
     "id": "intermediate-card",
     "libraryId": "intermediate",
-    "word": "card",
-    "meaning": "卡片；纸牌；明信片；记于卡片上",
-    "group": 0,
-    "example": {
-      "text": "Ic card",
-      "meaning": "智能卡",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-care",
     "libraryId": "intermediate",
     "word": "care",
-    "meaning": "关怀；照料；谨慎；忧虑",
+    "meaning": "关心；照顾",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Health care",
-      "meaning": "卫生保健",
+      "text": "Take care of",
+      "meaning": "照顾",
       "kind": "phrase"
     }
   },
   {
+    "word": "careless",
+    "meaning": "粗心的；不小心的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A careless mistake",
+      "meaning": "一个粗心造成的错误",
+      "kind": "phrase"
+    },
     "id": "intermediate-careless",
     "libraryId": "intermediate",
-    "word": "careless",
-    "meaning": "粗心的；无忧无虑的；淡漠的；草率的",
-    "group": 0,
-    "example": {
-      "text": "Careless about",
-      "meaning": "对…粗心",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "carry",
+    "meaning": "携带；搬运",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Carry a heavy bag",
+      "meaning": "提一个沉重的袋子",
+      "kind": "phrase"
+    },
     "id": "intermediate-carry",
     "libraryId": "intermediate",
-    "word": "carry",
-    "meaning": "拿；扛；携带；支持",
-    "group": 0,
-    "example": {
-      "text": "Carry around",
-      "meaning": "随身携带",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-cause",
     "libraryId": "intermediate",
     "word": "cause",
-    "meaning": "原因；事业；目标；引起",
+    "meaning": "原因；事业；目标",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Root cause",
-      "meaning": "根本原因",
+      "text": "Cause and effect",
+      "meaning": "因果关系；原因与结果",
       "kind": "phrase"
     }
   },
   {
+    "word": "CD",
+    "meaning": "光盘；激光唱片",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A music CD",
+      "meaning": "一张音乐光盘",
+      "kind": "phrase"
+    },
     "id": "intermediate-cd",
     "libraryId": "intermediate",
-    "word": "CD",
-    "meaning": "光盘；激光唱片（Compact Disc）；呼叫设备（Calling Device）；中央地区（Central District）",
-    "group": 0,
-    "example": {
-      "text": "Cd player",
-      "meaning": "CD播放器；激光唱机",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-ceiling",
     "libraryId": "intermediate",
     "word": "ceiling",
-    "meaning": "天花板；上限；顶蓬",
+    "meaning": "天花板；上限",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Ceiling price",
-      "meaning": "最高限价",
+      "text": "Glass ceiling",
+      "meaning": "玻璃天花板；玻璃顶棚",
       "kind": "phrase"
     }
   },
@@ -7564,11 +10489,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-celebrate",
     "libraryId": "intermediate",
     "word": "celebrate",
-    "meaning": "庆祝；举行；赞美；祝贺",
+    "meaning": "庆祝；庆贺",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Celebrate christmas",
-      "meaning": "庆祝圣诞",
+      "text": "Celebrate with",
+      "meaning": "庆祝",
       "kind": "phrase"
     }
   },
@@ -7576,35 +10502,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-cent",
     "libraryId": "intermediate",
     "word": "cent",
-    "meaning": "分；一分的硬币；森特（等于半音程的百分之一）；分币",
+    "meaning": "分；分币",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Red cent",
-      "meaning": "一便士，一分钱",
+      "text": "Ten cents",
+      "meaning": "十美分",
       "kind": "phrase"
     }
   },
   {
+    "word": "centre",
+    "meaning": "中心；中央",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The centre of the room",
+      "meaning": "房间的中央",
+      "kind": "phrase"
+    },
     "id": "intermediate-centre",
     "libraryId": "intermediate",
-    "word": "centre",
-    "meaning": "以…为中心；中心；中央的；集中于",
-    "group": 0,
-    "example": {
-      "text": "Research centre",
-      "meaning": "研究中心",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-century",
     "libraryId": "intermediate",
     "word": "century",
-    "meaning": "世纪；百年；（板球）一百分",
+    "meaning": "世纪；百年",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Century park",
-      "meaning": "世纪公园",
+      "text": "The twentieth century",
+      "meaning": "20世纪",
       "kind": "phrase"
     }
   },
@@ -7612,11 +10541,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-certain",
     "libraryId": "intermediate",
     "word": "certain",
-    "meaning": "某一；必然的；确信；无疑的",
+    "meaning": "确定的；肯定的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Certain level",
-      "meaning": "某一水平",
+      "text": "Be certain of success",
+      "meaning": "确信会成功",
       "kind": "phrase"
     }
   },
@@ -7624,107 +10554,145 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-chairman",
     "libraryId": "intermediate",
     "word": "chairman",
-    "meaning": "主席；会长；董事长；会议主持人",
+    "meaning": "主席；董事长",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Board chairman",
-      "meaning": "n. 董事长",
+      "text": "Vice chairman",
+      "meaning": "副主席；副会长",
       "kind": "phrase"
     }
   },
   {
+    "word": "chalk",
+    "meaning": "粉笔",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A piece of chalk",
+      "meaning": "一支粉笔",
+      "kind": "phrase"
+    },
     "id": "intermediate-chalk",
     "libraryId": "intermediate",
-    "word": "chalk",
-    "meaning": "用粉笔写；用白垩粉擦；记录；规划",
-    "group": 0,
-    "example": {
-      "text": "French chalk",
-      "meaning": "n. 滑石粉",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-chance",
     "libraryId": "intermediate",
     "word": "chance",
-    "meaning": "机会；际遇；运气；侥幸",
+    "meaning": "机会；可能性",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Main chance",
-      "meaning": "获利最大的机会",
+      "text": "Have a chance",
+      "meaning": "有机会；有希望",
       "kind": "phrase"
     }
   },
   {
+    "word": "change",
+    "meaning": "改变；零钱",
+    "partOfSpeech": "v/n",
+    "example": {
+      "text": "We need to change our plan.",
+      "meaning": "我们需要改变计划。",
+      "kind": "sentence",
+      "sense": "改变",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "零钱",
+          "partOfSpeech": "n",
+          "text": "Keep the change, please.",
+          "meaning": "零钱不用找了。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-change",
     "libraryId": "intermediate",
-    "word": "change",
-    "meaning": "改变；交换；变化；找回的零钱",
-    "group": 0,
-    "example": {
-      "text": "Phase change",
-      "meaning": "相变",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "chant",
+    "meaning": "吟唱；口号",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A football chant",
+      "meaning": "一句足球助威口号",
+      "kind": "phrase"
+    },
     "id": "intermediate-chant",
     "libraryId": "intermediate",
-    "word": "chant",
-    "meaning": "圣歌；赞美诗；唱；诵扬",
-    "group": 0,
-    "example": {
-      "text": "Gregorian chant",
-      "meaning": "格列高利圣咏（教皇格列高利一世采用，常无伴奏）",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "cheap",
+    "meaning": "便宜的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A cheap ticket",
+      "meaning": "一张便宜的票",
+      "kind": "phrase"
+    },
     "id": "intermediate-cheap",
     "libraryId": "intermediate",
-    "word": "cheap",
-    "meaning": "便宜的；小气的；不值钱的；便宜地",
-    "group": 0,
-    "example": {
-      "text": "Cheap labor",
-      "meaning": "廉价劳动",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "cheat",
+    "meaning": "作弊；欺骗",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Cheat in an exam",
+      "meaning": "考试作弊",
+      "kind": "phrase"
+    },
     "id": "intermediate-cheat",
     "libraryId": "intermediate",
-    "word": "cheat",
-    "meaning": "欺骗；骗取；作弊；骗子",
-    "group": 0,
-    "example": {
-      "text": "Cheat death",
-      "meaning": "逃脱死亡",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-check",
     "libraryId": "intermediate",
     "word": "check",
-    "meaning": "检查；核对；制止；抑制",
+    "meaning": "检查；支票；抑制",
+    "partOfSpeech": "v/n",
     "group": 0,
     "example": {
-      "text": "Fill in the cash book carefully and always check your calculations.",
-      "meaning": "仔细填写现金账簿，每次都要检查计算结果。",
-      "kind": "sentence"
+      "text": "Please check your answer.",
+      "meaning": "请检查你的答案。",
+      "kind": "sentence",
+      "sense": "检查",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "支票",
+          "partOfSpeech": "n",
+          "text": "She paid by check.",
+          "meaning": "她用支票付款。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "抑制",
+          "partOfSpeech": "v",
+          "text": "These measures check the spread of disease.",
+          "meaning": "这些措施抑制疾病传播。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-cheer",
     "libraryId": "intermediate",
     "word": "cheer",
-    "meaning": "欢呼；使高兴；为…加油；愉快",
+    "meaning": "使振作；欢呼",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Cheer up",
-      "meaning": "使高兴；高兴起来；使振奋",
+      "text": "Cheer you up",
+      "meaning": "让你振作起来",
       "kind": "phrase"
     }
   },
@@ -7732,35 +10700,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-cheese",
     "libraryId": "intermediate",
     "word": "cheese",
-    "meaning": "[食品] 奶酪；干酪；要人；停止",
+    "meaning": "奶酪",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Cream cheese",
-      "meaning": "n. 奶油干酪",
+      "meaning": "奶油奶酪",
       "kind": "phrase"
     }
   },
   {
+    "word": "chemistry",
+    "meaning": "化学",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A chemistry lesson",
+      "meaning": "一节化学课",
+      "kind": "phrase"
+    },
     "id": "intermediate-chemistry",
     "libraryId": "intermediate",
-    "word": "chemistry",
-    "meaning": "化学；化学过程",
-    "group": 0,
-    "example": {
-      "text": "Organic chemistry",
-      "meaning": "有机化学",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-chess",
     "libraryId": "intermediate",
     "word": "chess",
-    "meaning": "国际象棋；西洋棋；棋",
+    "meaning": "国际象棋",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Play chess",
-      "meaning": "下棋",
+      "text": "Game of chess",
+      "meaning": "国际象棋对局",
       "kind": "phrase"
     }
   },
@@ -7768,23 +10739,36 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-chest",
     "libraryId": "intermediate",
     "word": "chest",
-    "meaning": "胸；胸部；衣柜；箱子",
+    "meaning": "胸部；箱子",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Chest pain",
-      "meaning": "胸痛",
-      "kind": "phrase"
+      "text": "He felt a pain in his chest.",
+      "meaning": "他感到胸部疼痛。",
+      "kind": "sentence",
+      "sense": "胸部",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "箱子",
+          "partOfSpeech": "n",
+          "text": "The old chest was full of books.",
+          "meaning": "旧箱子里装满了书。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-chocolate",
     "libraryId": "intermediate",
     "word": "chocolate",
-    "meaning": "巧克力；巧克力糖；巧克力色；巧克力色的",
+    "meaning": "巧克力，巧克力糖；巧克力色",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Dark chocolate",
-      "meaning": "黑巧克力",
+      "text": "Chocolate ice cream",
+      "meaning": "巧克力冰淇淋",
       "kind": "phrase"
     }
   },
@@ -7792,11 +10776,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-choice",
     "libraryId": "intermediate",
     "word": "choice",
-    "meaning": "选择；选择权；精选品；精选的",
+    "meaning": "选择；选择权",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "First choice",
-      "meaning": "第一选择",
+      "text": "Have no choice",
+      "meaning": "没有选择的余地",
       "kind": "phrase"
     }
   },
@@ -7805,6 +10790,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "chopsticks",
     "meaning": "筷子",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Disposable chopsticks",
@@ -7817,46 +10803,37 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "Christmas",
     "meaning": "圣诞节；圣诞节期间",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Merry christmas",
-      "meaning": "圣诞快乐",
+      "text": "At Christmas",
+      "meaning": "在圣诞节期间",
       "kind": "phrase"
     }
   },
   {
+    "word": "church",
+    "meaning": "教堂；教会",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An old church",
+      "meaning": "一座古老的教堂",
+      "kind": "phrase"
+    },
     "id": "intermediate-church",
     "libraryId": "intermediate",
-    "word": "church",
-    "meaning": "教堂；礼拜；教派；教会的",
-    "group": 0,
-    "example": {
-      "text": "In church",
-      "meaning": "在教堂",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-circle",
     "libraryId": "intermediate",
     "word": "circle",
-    "meaning": "循环；周期；圆；圈子",
+    "meaning": "圆圈；圈子",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Virtuous circle",
-      "meaning": "良性循环",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-city",
-    "libraryId": "intermediate",
-    "word": "city",
-    "meaning": "城市；都市；城市的；都会的",
-    "group": 0,
-    "example": {
-      "text": "Garden city",
-      "meaning": "花园城市",
+      "text": "In a circle",
+      "meaning": "成圆圈",
       "kind": "phrase"
     }
   },
@@ -7864,7 +10841,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-clap",
     "libraryId": "intermediate",
     "word": "clap",
-    "meaning": "鼓掌；拍手；啪地关上；拍手声",
+    "meaning": "鼓掌；拍手",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Clap hands",
@@ -7873,26 +10851,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
-    "id": "intermediate-classmate",
-    "libraryId": "intermediate",
     "word": "classmate",
     "meaning": "同班同学",
-    "group": 0,
+    "partOfSpeech": "n",
     "example": {
-      "text": "He acquainted his classmate with my younger brother.",
-      "meaning": "他把我的弟弟介绍给他的同班同学。",
-      "kind": "sentence"
-    }
+      "text": "My new classmate",
+      "meaning": "我的新同学",
+      "kind": "phrase"
+    },
+    "id": "intermediate-classmate",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-clear",
     "libraryId": "intermediate",
     "word": "clear",
-    "meaning": "清楚的；清澈的；晴朗的；无罪的",
+    "meaning": "清楚的；晴朗的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Clear about",
-      "meaning": "明白",
+      "text": "Make clear",
+      "meaning": "说明清楚",
       "kind": "phrase"
     }
   },
@@ -7900,7 +10880,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-climb",
     "libraryId": "intermediate",
     "word": "climb",
-    "meaning": "爬；攀登；上升；增长",
+    "meaning": "爬；攀登；上升",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Climb up",
@@ -7909,22 +10890,11 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
-    "id": "intermediate-clock",
-    "libraryId": "intermediate",
-    "word": "clock",
-    "meaning": "时钟；计时器；记录；记时",
-    "group": 0,
-    "example": {
-      "text": "Alarm clock",
-      "meaning": "闹钟",
-      "kind": "phrase"
-    }
-  },
-  {
     "id": "intermediate-clone",
     "libraryId": "intermediate",
     "word": "clone",
-    "meaning": "克隆；无性系；无性繁殖；靠营养生殖而由母体分离繁殖的植物",
+    "meaning": "克隆；克隆体",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Clone technology",
@@ -7936,11 +10906,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-cloud",
     "libraryId": "intermediate",
     "word": "cloud",
-    "meaning": "云；阴云；云状物；一大群",
+    "meaning": "云；云朵",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Cloud computing",
-      "meaning": "云计算",
+      "text": "A white cloud",
+      "meaning": "一朵白云",
       "kind": "phrase"
     }
   },
@@ -7948,83 +10919,112 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-club",
     "libraryId": "intermediate",
     "word": "club",
-    "meaning": "俱乐部；社团；夜总会；棍棒",
+    "meaning": "俱乐部；球杆",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Football club",
-      "meaning": "足球俱乐部",
-      "kind": "phrase"
+      "text": "She joined a chess club.",
+      "meaning": "她加入了国际象棋俱乐部。",
+      "kind": "sentence",
+      "sense": "俱乐部",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "球杆",
+          "partOfSpeech": "n",
+          "text": "He bought a new golf club.",
+          "meaning": "他买了一根新高尔夫球杆。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-coach",
     "libraryId": "intermediate",
     "word": "coach",
-    "meaning": "教练；旅客车厢；长途公车；四轮大马车",
+    "meaning": "教练；长途汽车",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Assistant coach",
-      "meaning": "助理教练",
-      "kind": "phrase"
+      "text": "Our coach taught us a new skill.",
+      "meaning": "教练教了我们一项新技巧。",
+      "kind": "sentence",
+      "sense": "教练",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "长途汽车",
+          "partOfSpeech": "n",
+          "text": "We travelled to the city by coach.",
+          "meaning": "我们乘长途汽车去了城里。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-coal",
     "libraryId": "intermediate",
     "word": "coal",
-    "meaning": "上煤；加煤；煤；煤块",
+    "meaning": "煤；煤炭",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Coal mining",
-      "meaning": "煤矿开采",
+      "text": "Coal mine",
+      "meaning": "煤矿",
       "kind": "phrase"
     }
   },
   {
+    "word": "coast",
+    "meaning": "海岸；沿海地区",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Along the coast",
+      "meaning": "沿着海岸",
+      "kind": "phrase"
+    },
     "id": "intermediate-coast",
     "libraryId": "intermediate",
-    "word": "coast",
-    "meaning": "滑行；沿岸航行；海岸；滑坡",
-    "group": 0,
-    "example": {
-      "text": "East coast",
-      "meaning": "东海岸",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "coffee",
+    "meaning": "咖啡",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A cup of coffee",
+      "meaning": "一杯咖啡",
+      "kind": "phrase"
+    },
     "id": "intermediate-coffee",
     "libraryId": "intermediate",
-    "word": "coffee",
-    "meaning": "咖啡；咖啡豆；咖啡色；咖啡树",
-    "group": 0,
-    "example": {
-      "text": "Drink coffee",
-      "meaning": "喝咖啡",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "coin",
+    "meaning": "硬币",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A gold coin",
+      "meaning": "一枚金币",
+      "kind": "phrase"
+    },
     "id": "intermediate-coin",
     "libraryId": "intermediate",
-    "word": "coin",
-    "meaning": "铸造（货币）；杜撰；创造；硬币",
-    "group": 0,
-    "example": {
-      "text": "False coin",
-      "meaning": "n. 假币",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-coke",
     "libraryId": "intermediate",
     "word": "coke",
-    "meaning": "焦炭；可卡因；可口可乐（Coca-Cola）；焦化",
+    "meaning": "可乐；焦炭",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Coke oven",
-      "meaning": "炼焦炉",
+      "text": "A glass of coke",
+      "meaning": "一杯可乐",
       "kind": "phrase"
     }
   },
@@ -8032,7 +11032,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-collect",
     "libraryId": "intermediate",
     "word": "collect",
-    "meaning": "收集；募捐；由收件人付款地；由收件人付款的",
+    "meaning": "收集；募捐",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Collect data",
@@ -8045,10 +11046,11 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "college",
     "meaning": "大学；学院；学会",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "In college",
-      "meaning": "在大学",
+      "text": "College entrance examination",
+      "meaning": "高考；大学入学考试",
       "kind": "phrase"
     }
   },
@@ -8056,7 +11058,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-comfortable",
     "libraryId": "intermediate",
     "word": "comfortable",
-    "meaning": "舒适的；舒服的；盖被；宽裕的",
+    "meaning": "舒适的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Comfortable temperature",
@@ -8068,83 +11071,127 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-common",
     "libraryId": "intermediate",
     "word": "common",
-    "meaning": "共同的；普通的；一般的；通常的",
+    "meaning": "常见的；共同的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Common sense",
-      "meaning": "常识",
+      "text": "A common mistake",
+      "meaning": "一个常见的错误",
       "kind": "phrase"
     }
+  },
+  {
+    "word": "communicate",
+    "meaning": "交流",
+    "example": {
+      "text": "Communicate with friends",
+      "meaning": "与朋友交流",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "intermediate-communicate",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-communication",
     "libraryId": "intermediate",
     "word": "communication",
-    "meaning": "通讯；[通信] 通信；交流；信函",
+    "meaning": "交流；通讯",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Communication system",
-      "meaning": "通信系统",
+      "text": "Means of communication",
+      "meaning": "通信手段",
       "kind": "phrase"
     }
   },
   {
+    "word": "company",
+    "meaning": "公司；陪伴",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "He works for a small company.",
+      "meaning": "他在一家小公司工作。",
+      "kind": "sentence",
+      "sense": "公司",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "陪伴",
+          "partOfSpeech": "n",
+          "text": "I enjoy your company.",
+          "meaning": "我喜欢有你陪伴。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-company",
     "libraryId": "intermediate",
-    "word": "company",
-    "meaning": "公司；陪伴；同伴；连队",
-    "group": 0,
-    "example": {
-      "text": "Trading company",
-      "meaning": "贸易公司",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "compare",
+    "meaning": "比较；对照",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Compare the two pictures",
+      "meaning": "比较这两幅图片",
+      "kind": "phrase"
+    },
     "id": "intermediate-compare",
     "libraryId": "intermediate",
-    "word": "compare",
-    "meaning": "比较；比拟；喻为；[语]构成",
-    "group": 0,
-    "example": {
-      "text": "Compare notes",
-      "meaning": "交换意见",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "competition",
+    "meaning": "比赛；竞争",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A swimming competition",
+      "meaning": "一场游泳比赛",
+      "kind": "phrase"
+    },
+    "id": "intermediate-competition",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "complete",
+    "meaning": "完成",
+    "example": {
+      "text": "Complete the task",
+      "meaning": "完成任务",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "intermediate-complete",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "composition",
+    "meaning": "作文；作品",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Write a composition",
+      "meaning": "写一篇作文",
+      "kind": "phrase"
+    },
     "id": "intermediate-composition",
     "libraryId": "intermediate",
-    "word": "composition",
-    "meaning": "作文；作曲；作品；[材] 构成",
-    "group": 0,
-    "example": {
-      "text": "Body composition",
-      "meaning": "身体组成",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-computer",
-    "libraryId": "intermediate",
-    "word": "computer",
-    "meaning": "计算机；电脑；电子计算机",
-    "group": 0,
-    "example": {
-      "text": "Computer simulation",
-      "meaning": "计算机模拟",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-concert",
     "libraryId": "intermediate",
     "word": "concert",
-    "meaning": "音乐会；一致；和谐；使协调",
+    "meaning": "音乐会",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Concert hall",
-      "meaning": "音乐厅",
+      "text": "A piano concert",
+      "meaning": "一场钢琴音乐会",
       "kind": "phrase"
     }
   },
@@ -8152,11 +11199,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-condition",
     "libraryId": "intermediate",
     "word": "condition",
-    "meaning": "条件；情况；环境；身份",
+    "meaning": "条件；状况",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Present condition",
-      "meaning": "目前的状态",
+      "text": "In good condition",
+      "meaning": "情况良好",
       "kind": "phrase"
     }
   },
@@ -8164,11 +11212,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-conference",
     "libraryId": "intermediate",
     "word": "conference",
-    "meaning": "会议；讨论；协商；联盟",
+    "meaning": "会议；研讨会",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "News conference",
-      "meaning": "记者招待会",
+      "text": "International conference",
+      "meaning": "国际会议",
       "kind": "phrase"
     }
   },
@@ -8176,11 +11225,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-connect",
     "libraryId": "intermediate",
     "word": "connect",
-    "meaning": "连接；联合；关连；衔接",
+    "meaning": "连接；联系",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Network connect",
-      "meaning": "网络连接",
+      "text": "Connect with",
+      "meaning": "与……联系",
       "kind": "phrase"
     }
   },
@@ -8188,11 +11238,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-continue",
     "libraryId": "intermediate",
     "word": "continue",
-    "meaning": "继续；延续；仍旧；连续",
+    "meaning": "继续，延续；仍旧，连续",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Continue with",
-      "meaning": "继续做",
+      "text": "Continue to do",
+      "meaning": "继续做某事",
       "kind": "phrase"
     }
   },
@@ -8200,59 +11251,64 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-control",
     "libraryId": "intermediate",
     "word": "control",
-    "meaning": "控制；管理；抑制；操纵装置",
+    "meaning": "控制；管理",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Control system",
-      "meaning": "控制系统",
+      "text": "Out of control",
+      "meaning": "失去控制",
       "kind": "phrase"
     }
   },
   {
+    "word": "conversation",
+    "meaning": "交谈；谈话",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Have a conversation",
+      "meaning": "进行交谈",
+      "kind": "phrase"
+    },
     "id": "intermediate-conversation",
     "libraryId": "intermediate",
-    "word": "conversation",
-    "meaning": "交谈；会话；社交；交往",
-    "group": 0,
-    "example": {
-      "text": "Telephone conversation",
-      "meaning": "打电话",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "cooker",
+    "meaning": "炊具；炉灶",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A rice cooker",
+      "meaning": "电饭煲",
+      "kind": "phrase"
+    },
     "id": "intermediate-cooker",
     "libraryId": "intermediate",
-    "word": "cooker",
-    "meaning": "炊具；烹饪用水果；窜改者",
-    "group": 0,
-    "example": {
-      "text": "Induction cooker",
-      "meaning": "n. 电磁炉",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "copy",
+    "meaning": "副本；一份",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A copy of the book",
+      "meaning": "这本书的一个副本",
+      "kind": "phrase"
+    },
     "id": "intermediate-copy",
     "libraryId": "intermediate",
-    "word": "copy",
-    "meaning": "复制；复印；抄袭；副本",
-    "group": 0,
-    "example": {
-      "text": "Certified copy",
-      "meaning": "经核证的副本",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-corner",
     "libraryId": "intermediate",
     "word": "corner",
-    "meaning": "角落；拐角处；地区；偏僻处",
+    "meaning": "角落；拐角",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "English corner",
-      "meaning": "英语角",
+      "text": "In the corner",
+      "meaning": "在角落里",
       "kind": "phrase"
     }
   },
@@ -8260,71 +11316,88 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-correct",
     "libraryId": "intermediate",
     "word": "correct",
-    "meaning": "改正；告诫；正确的；恰当的",
+    "meaning": "正确的；恰当的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Correct operation",
-      "meaning": "正确动作",
+      "text": "The correct answer",
+      "meaning": "正确答案",
       "kind": "phrase"
     }
   },
   {
+    "word": "cotton",
+    "meaning": "棉花；棉布",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A cotton shirt",
+      "meaning": "一件棉衬衫",
+      "kind": "phrase"
+    },
     "id": "intermediate-cotton",
     "libraryId": "intermediate",
-    "word": "cotton",
-    "meaning": "棉花；棉布；棉线；一致",
-    "group": 0,
-    "example": {
-      "text": "Cotton fiber",
-      "meaning": "棉纤维",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-cough",
     "libraryId": "intermediate",
     "word": "cough",
-    "meaning": "咳嗽；咳嗽声；咳嗽病；咳出",
+    "meaning": "咳嗽",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Whooping cough",
-      "meaning": "百日咳",
+      "text": "Cough syrup",
+      "meaning": "止咳糖浆；咳嗽糖浆",
       "kind": "phrase"
     }
   },
   {
+    "word": "could",
+    "meaning": "能够；可以",
+    "partOfSpeech": "aux",
+    "example": {
+      "text": "Could you help me?",
+      "meaning": "你能帮帮我吗？",
+      "kind": "sentence"
+    },
     "id": "intermediate-could",
     "libraryId": "intermediate",
-    "word": "could",
-    "meaning": "能够；能（can的过去式）；能；会",
-    "group": 0,
-    "example": {
-      "text": "Could break",
-      "meaning": "可能破碎",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "count",
+    "meaning": "数数；重要",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Count the apples in the basket.",
+      "meaning": "数一数篮子里的苹果。",
+      "kind": "sentence",
+      "sense": "数数",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "重要",
+          "partOfSpeech": "v",
+          "text": "Every minute counts.",
+          "meaning": "每一分钟都很重要。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-count",
     "libraryId": "intermediate",
-    "word": "count",
-    "meaning": "计算；认为；计数；伯爵",
-    "group": 0,
-    "example": {
-      "text": "No count",
-      "meaning": "未计数",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-countryside",
     "libraryId": "intermediate",
     "word": "countryside",
-    "meaning": "农村；乡下；乡下的全体居民",
+    "meaning": "农村；乡下",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "In the countryside",
-      "meaning": "在乡村，在农村；在乡下",
+      "meaning": "在乡下",
       "kind": "phrase"
     }
   },
@@ -8332,11 +11405,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-couple",
     "libraryId": "intermediate",
     "word": "couple",
-    "meaning": "对；夫妇；数个；结合",
+    "meaning": "夫妇；一对",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Young couple",
-      "meaning": "青年夫妇",
+      "text": "A young couple",
+      "meaning": "一对年轻夫妇",
       "kind": "phrase"
     }
   },
@@ -8344,11 +11418,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-courage",
     "libraryId": "intermediate",
     "word": "courage",
-    "meaning": "勇气；胆量；胆略；胆识",
+    "meaning": "勇气；胆量",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Take courage",
-      "meaning": "鼓起勇气",
+      "text": "Moral courage",
+      "meaning": "道德勇气，道义勇气",
       "kind": "phrase"
     }
   },
@@ -8356,31 +11431,63 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-course",
     "libraryId": "intermediate",
     "word": "course",
-    "meaning": "科目；课程；过程；进程",
+    "meaning": "课程；进程；一道菜",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Golf course",
-      "meaning": "n. 高尔夫球场",
-      "kind": "phrase"
+      "text": "I am taking an English course.",
+      "meaning": "我正在上一门英语课程。",
+      "kind": "sentence",
+      "sense": "课程",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "进程",
+          "partOfSpeech": "n",
+          "text": "The course of events surprised us.",
+          "meaning": "事情的发展进程让我们吃惊。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "一道菜",
+          "partOfSpeech": "n",
+          "text": "Soup was the first course.",
+          "meaning": "第一道菜是汤。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-cover",
     "libraryId": "intermediate",
     "word": "cover",
-    "meaning": "包括；采访；报导；涉及",
+    "meaning": "覆盖；封面",
+    "partOfSpeech": "v/n",
     "group": 0,
     "example": {
-      "text": "Cover letter",
-      "meaning": "附信",
-      "kind": "phrase"
+      "text": "Snow covers the mountain.",
+      "meaning": "雪覆盖着山。",
+      "kind": "sentence",
+      "sense": "覆盖",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "封面",
+          "partOfSpeech": "n",
+          "text": "The book has a blue cover.",
+          "meaning": "这本书有蓝色的封面。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-crayon",
     "libraryId": "intermediate",
     "word": "crayon",
-    "meaning": "蜡笔；有色粉笔；以蜡笔作画；用颜色粉笔画",
+    "meaning": "蜡笔，有色粉笔",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "He coloured the picture with crayon.",
@@ -8392,11 +11499,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-crazy",
     "libraryId": "intermediate",
     "word": "crazy",
-    "meaning": "疯狂的；狂热的；着迷的；精神失常的",
+    "meaning": "疯狂的；狂热的，着迷的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Crazy about",
-      "meaning": "热衷，着迷；狂热的",
+      "text": "A little crazy",
+      "meaning": "有点儿疯狂",
       "kind": "phrase"
     }
   },
@@ -8404,35 +11512,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-create",
     "libraryId": "intermediate",
     "word": "create",
-    "meaning": "创造；创作；造成；引起",
+    "meaning": "创造，创作；造成",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Create button",
-      "meaning": "创建按钮",
-      "kind": "phrase"
+      "text": "The new factory is expected to create more than 400 new jobs.",
+      "meaning": "这家新工厂预计能创造400多个新的就业机会。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "cross",
+    "meaning": "穿过；横过",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Cross the road",
+      "meaning": "过马路",
+      "kind": "phrase"
+    },
     "id": "intermediate-cross",
     "libraryId": "intermediate",
-    "word": "cross",
-    "meaning": "交叉；十字；十字架；十字形物",
-    "group": 0,
-    "example": {
-      "text": "Red cross",
-      "meaning": "n. 红十字会",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-cruel",
     "libraryId": "intermediate",
     "word": "cruel",
-    "meaning": "残酷的；残忍的；使人痛苦的；让人受难的",
+    "meaning": "残酷的；残忍的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Extremely cruel",
-      "meaning": "极其残忍；惨绝人寰",
+      "meaning": "极其残忍",
       "kind": "phrase"
     }
   },
@@ -8440,19 +11551,34 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-cry",
     "libraryId": "intermediate",
     "word": "cry",
-    "meaning": "叫喊；哭出；大声说；叫声",
+    "meaning": "哭；喊叫",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Cry over",
-      "meaning": "为...而哭",
-      "kind": "phrase"
+      "text": "The baby is crying.",
+      "meaning": "婴儿在哭。",
+      "kind": "sentence"
     }
+  },
+  {
+    "word": "culture",
+    "meaning": "文化",
+    "example": {
+      "text": "Local culture",
+      "meaning": "当地文化",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-culture",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-daily",
     "libraryId": "intermediate",
     "word": "daily",
-    "meaning": "日常的；每日的；日报；朝来夜去的女佣",
+    "meaning": "日常的；每日的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Daily life",
@@ -8464,11 +11590,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-danger",
     "libraryId": "intermediate",
     "word": "danger",
-    "meaning": "危险；危险物；威胁；危险事物",
+    "meaning": "危险；威胁",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "In danger",
-      "meaning": "在危险中",
+      "meaning": "处于危险中",
       "kind": "phrase"
     }
   },
@@ -8476,7 +11603,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-dangerous",
     "libraryId": "intermediate",
     "word": "dangerous",
-    "meaning": "危险的；不安全的",
+    "meaning": "危险的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Dangerous goods",
@@ -8488,11 +11616,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-dare",
     "libraryId": "intermediate",
     "word": "dare",
-    "meaning": "挑战；挑动；敢冒；不惧",
+    "meaning": "敢，敢做",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Dare to be",
-      "meaning": "敢于做",
+      "text": "How dare you",
+      "meaning": "你怎么敢",
       "kind": "phrase"
     }
   },
@@ -8500,59 +11629,82 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-dark",
     "libraryId": "intermediate",
     "word": "dark",
-    "meaning": "黑暗的；深色的；模糊的；无知的",
+    "meaning": "黑暗的；深色的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Before dark",
-      "meaning": "黄昏以前",
+      "text": "In the dark",
+      "meaning": "在黑暗中",
       "kind": "phrase"
     }
   },
   {
+    "word": "date",
+    "meaning": "日期；约会；椰枣",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Write the date on the form.",
+      "meaning": "在表格上写下日期。",
+      "kind": "sentence",
+      "sense": "日期",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "约会",
+          "partOfSpeech": "n",
+          "text": "They went on a date last night.",
+          "meaning": "他们昨晚约会了。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "椰枣",
+          "partOfSpeech": "n",
+          "text": "She ate a sweet date.",
+          "meaning": "她吃了一颗甜椰枣。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-date",
     "libraryId": "intermediate",
-    "word": "date",
-    "meaning": "日期；约会；年代；枣椰子",
-    "group": 0,
-    "example": {
-      "text": "Delivery date",
-      "meaning": "交货日期",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-daughter",
     "libraryId": "intermediate",
     "word": "daughter",
-    "meaning": "女儿；[遗][农学] 子代；女儿的；子代的",
+    "meaning": "女儿",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Only daughter",
-      "meaning": "独生女",
-      "kind": "phrase"
+      "text": "She’s got two daughters and one son.",
+      "meaning": "她有两个女儿和一个儿子。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "dead",
+    "meaning": "死的；失去生命的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A dead tree",
+      "meaning": "一棵枯树",
+      "kind": "phrase"
+    },
     "id": "intermediate-dead",
     "libraryId": "intermediate",
-    "word": "dead",
-    "meaning": "无生命的；呆板的；废弃了的；完全地",
-    "group": 0,
-    "example": {
-      "text": "Dead body",
-      "meaning": "死尸",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-deaf",
     "libraryId": "intermediate",
     "word": "deaf",
-    "meaning": "聋的；不愿听的；装聋的",
+    "meaning": "聋的；不愿听的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Partially deaf",
-      "meaning": "听力部分残疾",
+      "text": "Turn a deaf ear",
+      "meaning": "充耳不闻",
       "kind": "phrase"
     }
   },
@@ -8560,23 +11712,36 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-deal",
     "libraryId": "intermediate",
     "word": "deal",
-    "meaning": "处理；给予；分配；发牌",
+    "meaning": "交易；处理",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Great deal",
-      "meaning": "大量",
-      "kind": "phrase"
+      "text": "They made a deal yesterday.",
+      "meaning": "他们昨天达成了一笔交易。",
+      "kind": "sentence",
+      "sense": "交易",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "处理",
+          "partOfSpeech": "v",
+          "text": "We must deal with this problem.",
+          "meaning": "我们必须处理这个问题。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-dear",
     "libraryId": "intermediate",
     "word": "dear",
-    "meaning": "亲爱的；尊敬的；昂贵的；高价地",
+    "meaning": "亲爱的；尊敬的；昂贵的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Dear friend",
-      "meaning": "亲密朋友",
+      "text": "Dear Sir or Madam",
+      "meaning": "尊敬的先生或女士",
       "kind": "phrase"
     }
   },
@@ -8584,71 +11749,77 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-death",
     "libraryId": "intermediate",
     "word": "death",
-    "meaning": "死；死亡；死神；毁灭",
+    "meaning": "死亡；死",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Death penalty",
-      "meaning": "死刑",
+      "text": "Life and death",
+      "meaning": "生与死，死活",
       "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-december",
-    "libraryId": "intermediate",
-    "word": "December",
-    "meaning": "十二月",
-    "group": 0,
-    "example": {
-      "text": "This is me at school in December.",
-      "meaning": "这就是十二月在学校中的我。",
-      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-decide",
     "libraryId": "intermediate",
     "word": "decide",
-    "meaning": "决定；解决；判决；对…作出抉择",
+    "meaning": "决定；下决心",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Decide upon",
-      "meaning": "vt. 考虑后决定；对…作出决定",
+      "text": "Decide to do",
+      "meaning": "决定做某事",
       "kind": "phrase"
     }
   },
   {
+    "word": "decision",
+    "meaning": "决定",
+    "example": {
+      "text": "Make a decision",
+      "meaning": "作出决定",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-decision",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "deep",
+    "meaning": "深的；深厚的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A deep lake",
+      "meaning": "一个很深的湖",
+      "kind": "phrase"
+    },
     "id": "intermediate-deep",
     "libraryId": "intermediate",
-    "word": "deep",
-    "meaning": "深处；深渊；深的；低沉的",
-    "group": 0,
-    "example": {
-      "text": "Deep breath",
-      "meaning": "深呼吸",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "dentist",
+    "meaning": "牙医",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Visit the dentist",
+      "meaning": "看牙医",
+      "kind": "phrase"
+    },
     "id": "intermediate-dentist",
     "libraryId": "intermediate",
-    "word": "dentist",
-    "meaning": "牙科医生",
-    "group": 0,
-    "example": {
-      "text": "Visit your dentist twice a year for a checkup.",
-      "meaning": "每年看两次牙医做检查。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-depend",
     "libraryId": "intermediate",
     "word": "depend",
-    "meaning": "依赖；依靠；取决于；相信",
+    "meaning": "依靠；取决于",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Depend upon",
-      "meaning": "依赖；取决于",
+      "text": "Depend on yourself",
+      "meaning": "依靠自己",
       "kind": "phrase"
     }
   },
@@ -8656,35 +11827,51 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-describe",
     "libraryId": "intermediate",
     "word": "describe",
-    "meaning": "描述；形容；描绘；描写",
+    "meaning": "描述；形容",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Describe as",
-      "meaning": "v. 描述为",
+      "meaning": "描述为",
       "kind": "phrase"
     }
   },
   {
+    "word": "develop",
+    "meaning": "发展；养成",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Develop good habits",
+      "meaning": "养成好习惯",
+      "kind": "phrase"
+    },
+    "id": "intermediate-develop",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "development",
+    "meaning": "发展；成长",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The development of a child",
+      "meaning": "一个孩子的成长",
+      "kind": "phrase"
+    },
     "id": "intermediate-development",
     "libraryId": "intermediate",
-    "word": "development",
-    "meaning": "发展；开发；发育；住宅小区（专指由同一开发商开发的）",
-    "group": 0,
-    "example": {
-      "text": "Sustainable development",
-      "meaning": "可持续发展",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-dialogue",
     "libraryId": "intermediate",
     "word": "dialogue",
-    "meaning": "对话；意见交换；用对话表达",
+    "meaning": "对话；意见交换",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Dialogue box",
-      "meaning": "对话框",
+      "text": "A short dialogue",
+      "meaning": "一段简短的对话",
       "kind": "phrase"
     }
   },
@@ -8692,59 +11879,75 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-diary",
     "libraryId": "intermediate",
     "word": "diary",
-    "meaning": "日志；日记；日记簿",
+    "meaning": "日记；日记本",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Personal diary",
-      "meaning": "个人日记；私人日记",
+      "text": "Keep a diary",
+      "meaning": "记日记",
       "kind": "phrase"
     }
   },
   {
+    "word": "dictionary",
+    "meaning": "词典；字典",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An English dictionary",
+      "meaning": "一本英语词典",
+      "kind": "phrase"
+    },
     "id": "intermediate-dictionary",
     "libraryId": "intermediate",
-    "word": "dictionary",
-    "meaning": "字典；词典",
-    "group": 0,
-    "example": {
-      "text": "Electronic dictionary",
-      "meaning": "电子字典",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "die",
+    "meaning": "死亡；骰子",
+    "partOfSpeech": "v/n",
+    "example": {
+      "text": "Plants die without water.",
+      "meaning": "植物缺水会死亡。",
+      "kind": "sentence",
+      "sense": "死亡",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "骰子",
+          "partOfSpeech": "n",
+          "text": "Roll the die once.",
+          "meaning": "掷一次骰子。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-die",
     "libraryId": "intermediate",
-    "word": "die",
-    "meaning": "死亡；凋零；熄灭；冲模",
-    "group": 0,
-    "example": {
-      "text": "Forging die",
-      "meaning": "锻模",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "difference",
+    "meaning": "不同；差异",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Find the difference",
+      "meaning": "找出不同之处",
+      "kind": "phrase"
+    },
     "id": "intermediate-difference",
     "libraryId": "intermediate",
-    "word": "difference",
-    "meaning": "差异；不同；争执；差别",
-    "group": 0,
-    "example": {
-      "text": "Significant difference",
-      "meaning": "显著性差异",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-different",
     "libraryId": "intermediate",
     "word": "different",
-    "meaning": "不同的；个别的；与众不同的；有差异的",
+    "meaning": "不同的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Different kinds",
-      "meaning": "不同的种类",
+      "text": "In different ways",
+      "meaning": "以不同方式",
       "kind": "phrase"
     }
   },
@@ -8752,35 +11955,51 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-difficulty",
     "libraryId": "intermediate",
     "word": "difficulty",
-    "meaning": "困难；困境；费力；异议",
+    "meaning": "困难；困境",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Have difficulty",
-      "meaning": "有困难",
+      "text": "In difficulty",
+      "meaning": "处于困境",
       "kind": "phrase"
     }
   },
   {
+    "word": "direct",
+    "meaning": "直接的；直达的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A direct flight",
+      "meaning": "一趟直达航班",
+      "kind": "phrase"
+    },
     "id": "intermediate-direct",
     "libraryId": "intermediate",
-    "word": "direct",
-    "meaning": "直接的；直系的；亲身的；恰好的",
-    "group": 0,
+    "group": 0
+  },
+  {
+    "word": "discover",
+    "meaning": "发现",
     "example": {
-      "text": "Direct effect",
-      "meaning": "直接效应",
+      "text": "Discover a new place",
+      "meaning": "发现一个新地方",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v",
+    "id": "intermediate-discover",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-discovery",
     "libraryId": "intermediate",
     "word": "discovery",
-    "meaning": "发现；发觉；被发现的事物",
+    "meaning": "发现；发觉",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Scientific discovery",
-      "meaning": "科学发现",
+      "text": "Make a discovery",
+      "meaning": "做出新的发现",
       "kind": "phrase"
     }
   },
@@ -8788,11 +12007,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-discuss",
     "libraryId": "intermediate",
     "word": "discuss",
-    "meaning": "讨论；论述；辩论；谈论",
+    "meaning": "讨论；商议",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Discuss with",
-      "meaning": "商洽；与…谈论",
+      "meaning": "与……讨论",
       "kind": "phrase"
     }
   },
@@ -8800,95 +12020,103 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-discussion",
     "libraryId": "intermediate",
     "word": "discussion",
-    "meaning": "讨论；议论；谈论；论述",
+    "meaning": "讨论；商议",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Under discussion",
-      "meaning": "正在讨论中",
+      "text": "Have a discussion",
+      "meaning": "讨论一下，进行讨论",
       "kind": "phrase"
     }
   },
   {
+    "word": "disease",
+    "meaning": "疾病",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Prevent disease",
+      "meaning": "预防疾病",
+      "kind": "phrase"
+    },
     "id": "intermediate-disease",
     "libraryId": "intermediate",
-    "word": "disease",
-    "meaning": "病；[医] 疾病；弊病；传染",
-    "group": 0,
-    "example": {
-      "text": "Heart disease",
-      "meaning": "心脏病",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "dish",
+    "meaning": "盘子；一道菜",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A tasty dish",
+      "meaning": "一道可口的菜",
+      "kind": "phrase"
+    },
     "id": "intermediate-dish",
     "libraryId": "intermediate",
-    "word": "dish",
-    "meaning": "盘；餐具；一盘食物；外貌有吸引力的人",
-    "group": 0,
-    "example": {
-      "text": "Petri dish",
-      "meaning": "有盖培养皿",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-dismiss",
     "libraryId": "intermediate",
     "word": "dismiss",
-    "meaning": "解散；解雇；开除；让离开",
+    "meaning": "解雇；解散",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Dismiss from",
-      "meaning": "解雇；开除",
+      "meaning": "解雇",
       "kind": "phrase"
     }
   },
   {
+    "word": "disturb",
+    "meaning": "打扰；妨碍",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Do not disturb.",
+      "meaning": "请勿打扰。",
+      "kind": "sentence"
+    },
     "id": "intermediate-disturb",
     "libraryId": "intermediate",
-    "word": "disturb",
-    "meaning": "打扰；妨碍；使不安；弄乱",
-    "group": 0,
-    "example": {
-      "text": "Do not disturb",
-      "meaning": "请勿打扰（美国连续剧）",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-divide",
     "libraryId": "intermediate",
     "word": "divide",
-    "meaning": "划分；除；分开；使产生分歧",
+    "meaning": "分开；分配",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Digital divide",
-      "meaning": "数字鸿沟",
+      "text": "Divide the work",
+      "meaning": "分配工作",
       "kind": "phrase"
     }
   },
   {
+    "word": "doll",
+    "meaning": "玩具娃娃",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A pretty doll",
+      "meaning": "一个漂亮的玩具娃娃",
+      "kind": "phrase"
+    },
     "id": "intermediate-doll",
     "libraryId": "intermediate",
-    "word": "doll",
-    "meaning": "洋娃娃；玩偶；无头脑的美丽女人；把…打扮得花枝招展",
-    "group": 0,
-    "example": {
-      "text": "Barbie doll",
-      "meaning": "芭比娃娃；没有头脑的人；徒有其表的人",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-dollar",
     "libraryId": "intermediate",
     "word": "dollar",
-    "meaning": "美元；元；元(货币单位)",
+    "meaning": "美元",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Us dollar",
-      "meaning": "美元",
+      "text": "A Hong Kong dollar",
+      "meaning": "一港元",
       "kind": "phrase"
     }
   },
@@ -8896,11 +12124,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-double",
     "libraryId": "intermediate",
     "word": "double",
-    "meaning": "两倍；双精度型；双重的；两倍的",
+    "meaning": "双重的；两倍的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Double layer",
-      "meaning": "双层",
+      "text": "Double effect",
+      "meaning": "双重效果",
       "kind": "phrase"
     }
   },
@@ -8908,11 +12137,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-doubt",
     "libraryId": "intermediate",
     "word": "doubt",
-    "meaning": "怀疑；疑问；疑惑；不信",
+    "meaning": "怀疑；疑问",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Doubt about",
-      "meaning": "v. 怀疑",
+      "text": "Cast doubt on",
+      "meaning": "对……产生怀疑",
       "kind": "phrase"
     }
   },
@@ -8920,83 +12150,77 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-downstairs",
     "libraryId": "intermediate",
     "word": "downstairs",
-    "meaning": "在楼下；楼下的；楼下；到楼下",
+    "meaning": "楼下的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Go downstairs",
-      "meaning": "下楼",
-      "kind": "phrase"
+      "text": "She repainted the downstairs rooms and closed off the second floor.",
+      "meaning": "她重新粉刷了楼下的房间，并把二楼封上了。",
+      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-dozen",
     "libraryId": "intermediate",
     "word": "dozen",
-    "meaning": "十二个；一打；一打的；打",
+    "meaning": "十二个，一打",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Daily dozen",
-      "meaning": "每日健身操；例行公事",
+      "text": "A dozen eggs",
+      "meaning": "一打鸡蛋",
       "kind": "phrase"
     }
   },
   {
+    "word": "drawer",
+    "meaning": "抽屉",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Open the drawer",
+      "meaning": "打开抽屉",
+      "kind": "phrase"
+    },
     "id": "intermediate-drawer",
     "libraryId": "intermediate",
-    "word": "drawer",
-    "meaning": "抽屉；开票人；出票人；起草者",
-    "group": 0,
-    "example": {
-      "text": "Bottom drawer",
-      "meaning": "嫁衣",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-driver",
-    "libraryId": "intermediate",
-    "word": "driver",
-    "meaning": "驾驶员；驱动程序；起子；传动器",
-    "group": 0,
+    "word": "drop",
+    "meaning": "滴；少量",
+    "partOfSpeech": "n",
     "example": {
-      "text": "Bus driver",
-      "meaning": "公交车司机",
+      "text": "A drop of water",
+      "meaning": "一滴水",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-drop",
     "libraryId": "intermediate",
-    "word": "drop",
-    "meaning": "滴；使降低；使终止；随口漏出",
-    "group": 0,
-    "example": {
-      "text": "Drop by",
-      "meaning": "顺便拜访",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "drug",
+    "meaning": "药；毒品",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A new drug",
+      "meaning": "一种新药",
+      "kind": "phrase"
+    },
     "id": "intermediate-drug",
     "libraryId": "intermediate",
-    "word": "drug",
-    "meaning": "药；毒品；麻醉药；滞销货",
-    "group": 0,
-    "example": {
-      "text": "Drug resistance",
-      "meaning": "抗药性",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-drum",
     "libraryId": "intermediate",
     "word": "drum",
-    "meaning": "击鼓；大力争取；鼓；鼓声",
+    "meaning": "鼓；鼓声",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Drum tower",
-      "meaning": "鼓楼",
+      "text": "Play the drums",
+      "meaning": "打鼓",
       "kind": "phrase"
     }
   },
@@ -9004,11 +12228,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-dry",
     "libraryId": "intermediate",
     "word": "dry",
-    "meaning": "干的；口渴的；枯燥无味的；禁酒的",
+    "meaning": "干的；干燥的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Run dry",
-      "meaning": "不产奶",
+      "text": "Dry clothes",
+      "meaning": "干衣服",
       "kind": "phrase"
     }
   },
@@ -9016,199 +12241,164 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-dumpling",
     "libraryId": "intermediate",
     "word": "dumpling",
-    "meaning": "饺子；汤团；面团布丁",
+    "meaning": "饺子；汤团",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Rice dumpling",
-      "meaning": "粽子",
+      "text": "A Chinese dumpling",
+      "meaning": "一个中国饺子",
       "kind": "phrase"
     }
   },
   {
-    "id": "intermediate-during",
-    "libraryId": "intermediate",
     "word": "during",
     "meaning": "在……期间",
-    "group": 0,
+    "partOfSpeech": "prep",
     "example": {
-      "text": "During the holidays",
-      "meaning": "在假期期间",
+      "text": "During the summer",
+      "meaning": "在夏季期间",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-during",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-duty",
     "libraryId": "intermediate",
     "word": "duty",
-    "meaning": "责任；[税收] 关税；职务；义务",
+    "meaning": "责任；职责",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Custom duty",
-      "meaning": "关税",
+      "text": "Sense of duty",
+      "meaning": "责任感",
       "kind": "phrase"
     }
   },
   {
+    "word": "each",
+    "meaning": "每个；各自",
+    "partOfSpeech": "pron",
+    "example": {
+      "text": "Each of us",
+      "meaning": "我们每个人",
+      "kind": "phrase"
+    },
     "id": "intermediate-each",
     "libraryId": "intermediate",
-    "word": "each",
-    "meaning": "每；各自的；每个；各自",
-    "group": 0,
-    "example": {
-      "text": "Each other",
-      "meaning": "彼此，互相",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-early",
-    "libraryId": "intermediate",
-    "word": "early",
-    "meaning": "早期的；早熟的；提早；在初期",
-    "group": 0,
+    "word": "east",
+    "meaning": "东方；东部",
+    "partOfSpeech": "n",
     "example": {
-      "text": "Early warning",
-      "meaning": "预先警报",
+      "text": "In the east",
+      "meaning": "在东方",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-east",
     "libraryId": "intermediate",
-    "word": "east",
-    "meaning": "东方；东风；东方国家；东方的",
-    "group": 0,
-    "example": {
-      "text": "East asia",
-      "meaning": "东亚",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-edge",
     "libraryId": "intermediate",
     "word": "edge",
-    "meaning": "边缘；优势；刀刃；锋利",
+    "meaning": "边缘；刀刃",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Edge detection",
-      "meaning": "边缘检测",
+      "text": "On the edge",
+      "meaning": "在边缘上",
       "kind": "phrase"
     }
+  },
+  {
+    "word": "education",
+    "meaning": "教育",
+    "example": {
+      "text": "School education",
+      "meaning": "学校教育",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-education",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-effort",
     "libraryId": "intermediate",
     "word": "effort",
-    "meaning": "努力；成就；尝试；努力的成果",
+    "meaning": "努力；尽力",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Great effort",
-      "meaning": "巨大努力",
+      "text": "Make every effort",
+      "meaning": "尽一切努力",
       "kind": "phrase"
     }
   },
   {
-    "id": "intermediate-eight",
-    "libraryId": "intermediate",
-    "word": "eight",
-    "meaning": "八；八个；第八；八的",
-    "group": 0,
+    "word": "eighth",
+    "meaning": "第八",
+    "partOfSpeech": "num",
     "example": {
-      "text": "Eight ball",
-      "meaning": "八号球；球形全向传声器",
+      "text": "The eighth floor",
+      "meaning": "第八层",
       "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-eighteen",
-    "libraryId": "intermediate",
-    "word": "eighteen",
-    "meaning": "十八；十八个；十八个的；十八的",
-    "group": 0,
-    "example": {
-      "text": "Jim was eighteen (= 18 years old ).",
-      "meaning": "吉姆18岁。",
-      "kind": "sentence"
-    }
-  },
-  {
+    },
     "id": "intermediate-eighth",
     "libraryId": "intermediate",
-    "word": "eighth",
-    "meaning": "第八的；八分之一的；第八；八分之一",
-    "group": 0,
-    "example": {
-      "text": "On the eighth day of Christmas.",
-      "meaning": "在圣诞节的第八天。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-eighty",
-    "libraryId": "intermediate",
-    "word": "eighty",
-    "meaning": "八十；八十岁；八十年代；八十的",
-    "group": 0,
+    "word": "either",
+    "meaning": "两者中的任何一个",
+    "partOfSpeech": "pron",
     "example": {
-      "text": "Eighty years old",
-      "meaning": "八十岁",
+      "text": "Either of the two",
+      "meaning": "两者中的任何一个",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-either",
     "libraryId": "intermediate",
-    "word": "either",
-    "meaning": "两者之中任一的；两者之中每一的；任何一个；也（用于否定句或否定词组后）",
-    "group": 0,
-    "example": {
-      "text": "Either or",
-      "meaning": "二者择一的；要么…要么…",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-elder",
     "libraryId": "intermediate",
     "word": "elder",
-    "meaning": "老人；长辈；年长者；父辈",
+    "meaning": "长辈；年长者",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Elder brother",
-      "meaning": "哥哥，兄长",
+      "text": "A meeting of the village elders",
+      "meaning": "村里长辈们的集会",
       "kind": "phrase"
     }
   },
   {
+    "word": "electric",
+    "meaning": "电的；用电的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An electric light",
+      "meaning": "一盏电灯",
+      "kind": "phrase"
+    },
     "id": "intermediate-electric",
     "libraryId": "intermediate",
-    "word": "electric",
-    "meaning": "电的；电动的；发电的；导电的",
-    "group": 0,
-    "example": {
-      "text": "Electric field",
-      "meaning": "电场",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-eleven",
-    "libraryId": "intermediate",
-    "word": "eleven",
-    "meaning": "十一；十一个；十一的；十一个的",
-    "group": 0,
-    "example": {
-      "text": "I never go to bed before eleven (= 11 o’clock ).",
-      "meaning": "我从不在11点钟以前上床睡觉。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-else",
     "libraryId": "intermediate",
     "word": "else",
-    "meaning": "其他；否则；另外；别的",
+    "meaning": "其他；另外",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "Someone else",
@@ -9217,46 +12407,76 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "empty",
+    "meaning": "空的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An empty box",
+      "meaning": "一个空盒子",
+      "kind": "phrase"
+    },
     "id": "intermediate-empty",
     "libraryId": "intermediate",
-    "word": "empty",
-    "meaning": "空的；无意义的；无知的；徒劳的",
-    "group": 0,
-    "example": {
-      "text": "Empty stomach",
-      "meaning": "空腹",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "encourage",
+    "meaning": "鼓励",
+    "example": {
+      "text": "Encourage your friends",
+      "meaning": "鼓励你的朋友",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "intermediate-encourage",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "end",
+    "meaning": "结束；末尾",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "At the end of the story",
+      "meaning": "在故事结尾",
+      "kind": "phrase"
+    },
     "id": "intermediate-end",
     "libraryId": "intermediate",
-    "word": "end",
-    "meaning": "结束；目标；尽头；末端",
-    "group": 0,
-    "example": {
-      "text": "High end",
-      "meaning": "高端",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "enemy",
+    "meaning": "敌人；对手",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An old enemy",
+      "meaning": "旧敌",
+      "kind": "phrase"
+    },
     "id": "intermediate-enemy",
     "libraryId": "intermediate",
-    "word": "enemy",
-    "meaning": "敌人；仇敌；敌军；敌人的",
-    "group": 0,
+    "group": 0
+  },
+  {
+    "word": "energy",
+    "meaning": "能源；精力",
     "example": {
-      "text": "Natural enemy",
-      "meaning": "天敌",
+      "text": "Save energy",
+      "meaning": "节约能源",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-energy",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-engineer",
     "libraryId": "intermediate",
     "word": "engineer",
-    "meaning": "工程师；工兵；火车司机；设计",
+    "meaning": "工程师",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Software engineer",
@@ -9268,11 +12488,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-england",
     "libraryId": "intermediate",
     "word": "England",
-    "meaning": "英格兰；英国",
+    "meaning": "英格兰",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "New england",
-      "meaning": "新英格兰",
+      "text": "A trip to England",
+      "meaning": "英格兰之行",
       "kind": "phrase"
     }
   },
@@ -9280,47 +12501,64 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-enjoy",
     "libraryId": "intermediate",
     "word": "enjoy",
-    "meaning": "欣赏；享受；喜爱；使过得快活",
+    "meaning": "享受；喜爱",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Enjoy themselves",
-      "meaning": "玩得开心",
+      "text": "Enjoy your life",
+      "meaning": "享受生活",
       "kind": "phrase"
     }
   },
   {
+    "word": "enough",
+    "meaning": "足够的；充足的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Enough time",
+      "meaning": "足够的时间",
+      "kind": "phrase"
+    },
     "id": "intermediate-enough",
     "libraryId": "intermediate",
-    "word": "enough",
-    "meaning": "足够地；充足地；很多；充足",
-    "group": 0,
-    "example": {
-      "text": "Good enough",
-      "meaning": "足够好的",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-enter",
     "libraryId": "intermediate",
     "word": "enter",
-    "meaning": "进入；开始；参加；[计] 输入",
+    "meaning": "进入；开始；参加",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Enter by",
-      "meaning": "通过…进入",
+      "text": "Enter the contest",
+      "meaning": "加入竞赛；参加比赛",
       "kind": "phrase"
     }
+  },
+  {
+    "word": "environment",
+    "meaning": "环境",
+    "example": {
+      "text": "Protect the environment",
+      "meaning": "保护环境",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-environment",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-eraser",
     "libraryId": "intermediate",
     "word": "eraser",
-    "meaning": "橡皮；擦除器；[计] 清除器",
+    "meaning": "橡皮；橡皮擦",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Blackboard eraser",
-      "meaning": "n. 黑板擦",
+      "text": "A pink eraser",
+      "meaning": "一块粉色橡皮",
       "kind": "phrase"
     }
   },
@@ -9329,11 +12567,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "especially",
     "meaning": "特别；尤其；格外",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "Especially english",
-      "meaning": "具有英国特征的",
-      "kind": "phrase"
+      "text": "I never liked long walks, especially in winter.",
+      "meaning": "我向来不喜欢长距离散步，尤其在冬天。",
+      "kind": "sentence"
     }
   },
   {
@@ -9341,46 +12580,68 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "Europe",
     "meaning": "欧洲",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Western europe",
+      "text": "Western Europe",
       "meaning": "西欧",
       "kind": "phrase"
     }
   },
   {
+    "word": "European",
+    "meaning": "欧洲的；欧洲人的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A European country",
+      "meaning": "一个欧洲国家",
+      "kind": "phrase"
+    },
     "id": "intermediate-european",
     "libraryId": "intermediate",
-    "word": "European",
-    "meaning": "欧洲的；欧洲人的；欧洲人",
-    "group": 0,
-    "example": {
-      "text": "European countries",
-      "meaning": "欧洲国家",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-even",
     "libraryId": "intermediate",
     "word": "even",
-    "meaning": "[数] 偶数的；平坦的；相等的；甚至",
+    "meaning": "甚至；平坦的；偶数的",
+    "partOfSpeech": "adv/adj",
     "group": 0,
     "example": {
-      "text": "And even",
-      "meaning": "乃至",
-      "kind": "phrase"
+      "text": "Even a child can do this.",
+      "meaning": "连小孩都能做到。",
+      "kind": "sentence",
+      "sense": "甚至",
+      "partOfSpeech": "adv",
+      "additional": [
+        {
+          "sense": "平坦的",
+          "partOfSpeech": "adj",
+          "text": "The floor is smooth and even.",
+          "meaning": "地板光滑平整。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "偶数的",
+          "partOfSpeech": "adj",
+          "text": "Six is an even number.",
+          "meaning": "六是偶数。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-ever",
     "libraryId": "intermediate",
     "word": "ever",
-    "meaning": "永远；曾经；究竟；在任何时候",
+    "meaning": "曾经；永远",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "Ever since",
-      "meaning": "adv. 从那时到现在",
+      "meaning": "从那时起",
       "kind": "phrase"
     }
   },
@@ -9388,7 +12649,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-everybody",
     "libraryId": "intermediate",
     "word": "everybody",
-    "meaning": "每个人；人人；每人；各人",
+    "meaning": "每个人；人人",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
       "text": "Everybody is welcome.",
@@ -9400,7 +12662,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-everyday",
     "libraryId": "intermediate",
     "word": "everyday",
-    "meaning": "每天的；日常的；平时；寻常日子",
+    "meaning": "每天的，日常的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Everyday life",
@@ -9409,22 +12672,24 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "everyone",
+    "meaning": "每个人；人人",
+    "partOfSpeech": "pron",
+    "example": {
+      "text": "Everyone is welcome.",
+      "meaning": "欢迎每个人。",
+      "kind": "sentence"
+    },
     "id": "intermediate-everyone",
     "libraryId": "intermediate",
-    "word": "everyone",
-    "meaning": "每个人；人人；每人；各人",
-    "group": 0,
-    "example": {
-      "text": "Send my best wishes to everyone in the family.",
-      "meaning": "请向全家人致以最美好的祝愿。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-everything",
     "libraryId": "intermediate",
     "word": "everything",
-    "meaning": "每件事物；最重要的东西；（有关的）一切；万事",
+    "meaning": "一切；所有事物",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
       "text": "And everything",
@@ -9436,11 +12701,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-everywhere",
     "libraryId": "intermediate",
     "word": "everywhere",
-    "meaning": "到处；每个地方；各处；无论何处",
+    "meaning": "到处；各处",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "Almost everywhere",
-      "meaning": "几乎所有",
+      "text": "Everywhere you go",
+      "meaning": "无论你去哪里",
       "kind": "phrase"
     }
   },
@@ -9448,31 +12714,60 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-examine",
     "libraryId": "intermediate",
     "word": "examine",
-    "meaning": "检查；调查；检测；考试",
+    "meaning": "检查；调查",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Examine and approve",
-      "meaning": "审批",
-      "kind": "phrase"
+      "text": "The doctor examined her carefully.",
+      "meaning": "医生仔细给她做了检查。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "example",
+    "meaning": "例子",
+    "example": {
+      "text": "For example",
+      "meaning": "例如",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-example",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "excellent",
+    "meaning": "优秀的；极好的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An excellent idea",
+      "meaning": "一个极好的主意",
+      "kind": "phrase"
+    },
+    "id": "intermediate-excellent",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "except",
+    "meaning": "除……之外",
+    "partOfSpeech": "prep",
+    "example": {
+      "text": "Everyone except me",
+      "meaning": "除了我之外的所有人",
+      "kind": "phrase"
+    },
     "id": "intermediate-except",
     "libraryId": "intermediate",
-    "word": "except",
-    "meaning": "不计；把…除外；除…之外；除了",
-    "group": 0,
-    "example": {
-      "text": "Except as",
-      "meaning": "除…之外",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-excite",
     "libraryId": "intermediate",
     "word": "excite",
-    "meaning": "激起；刺激…；使…兴奋；使兴奋",
+    "meaning": "使兴奋；使激动",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "His playing is technically brilliant, but it doesn’t excite me.",
@@ -9481,26 +12776,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "excuse",
+    "meaning": "原谅；宽恕",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Excuse me",
+      "meaning": "打扰一下",
+      "kind": "phrase"
+    },
     "id": "intermediate-excuse",
     "libraryId": "intermediate",
-    "word": "excuse",
-    "meaning": "借口；理由；原谅；为…申辩",
-    "group": 0,
-    "example": {
-      "text": "Without excuse",
-      "meaning": "adj. 无故",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-expect",
     "libraryId": "intermediate",
     "word": "expect",
-    "meaning": "期望；指望；认为；预料",
+    "meaning": "期望；预料",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Expect to do",
-      "meaning": "期待去做；期望做某事",
+      "meaning": "期望做某事",
       "kind": "phrase"
     }
   },
@@ -9508,47 +12805,88 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-expensive",
     "libraryId": "intermediate",
     "word": "expensive",
-    "meaning": "昂贵的；花钱的；花钱多的；高消费的",
+    "meaning": "昂贵的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Less expensive",
-      "meaning": "adj. 比较便宜的",
+      "text": "An expensive car",
+      "meaning": "一辆昂贵的汽车",
       "kind": "phrase"
     }
   },
   {
+    "word": "experience",
+    "meaning": "经历；经验",
+    "example": {
+      "text": "A new experience",
+      "meaning": "一次新的经历",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-experience",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "experiment",
+    "meaning": "实验；试验",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A science experiment",
+      "meaning": "一项科学实验",
+      "kind": "phrase"
+    },
     "id": "intermediate-experiment",
     "libraryId": "intermediate",
-    "word": "experiment",
-    "meaning": "尝试；进行实验；实验；试验",
-    "group": 0,
+    "group": 0
+  },
+  {
+    "word": "explain",
+    "meaning": "解释",
     "example": {
-      "text": "Orthogonal experiment",
-      "meaning": "正交试验",
+      "text": "Explain the rules",
+      "meaning": "解释规则",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "v",
+    "id": "intermediate-explain",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-express",
     "libraryId": "intermediate",
     "word": "express",
-    "meaning": "表达；快递；明确的；迅速的",
+    "meaning": "表达；快车",
+    "partOfSpeech": "v/n",
     "group": 0,
     "example": {
-      "text": "Express oneself",
-      "meaning": "表达自己的思想",
-      "kind": "phrase"
+      "text": "Please express your opinion clearly.",
+      "meaning": "请清楚地表达你的观点。",
+      "kind": "sentence",
+      "sense": "表达",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "快车",
+          "partOfSpeech": "n",
+          "text": "We took the express to the city.",
+          "meaning": "我们乘快车去了城里。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-fact",
     "libraryId": "intermediate",
     "word": "fact",
-    "meaning": "事实；实际；真相；现实",
+    "meaning": "事实；真相",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Fact sheet",
-      "meaning": "情况说明书",
+      "text": "In fact",
+      "meaning": "事实上",
       "kind": "phrase"
     }
   },
@@ -9556,11 +12894,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-factory",
     "libraryId": "intermediate",
     "word": "factory",
-    "meaning": "工厂；制造厂；代理店",
+    "meaning": "工厂",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Hardware factory",
-      "meaning": "五金厂",
+      "text": "Electronics factory",
+      "meaning": "电子厂，电子工厂；无线电元件厂",
       "kind": "phrase"
     }
   },
@@ -9568,83 +12907,93 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-fail",
     "libraryId": "intermediate",
     "word": "fail",
-    "meaning": "失败；不及格；破产；缺乏",
+    "meaning": "失败；不及格",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Without fail",
-      "meaning": "务必；必定，无疑",
+      "text": "Fail to do",
+      "meaning": "失败；未做成",
       "kind": "phrase"
     }
   },
   {
+    "word": "fair",
+    "meaning": "公平的；集市；浅色的",
+    "partOfSpeech": "adj/n",
+    "example": {
+      "text": "We want a fair result.",
+      "meaning": "我们希望得到公平的结果。",
+      "kind": "sentence",
+      "sense": "公平的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "集市",
+          "partOfSpeech": "n",
+          "text": "We bought fruit at the fair.",
+          "meaning": "我们在集市上买了水果。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "浅色的",
+          "partOfSpeech": "adj",
+          "text": "She has fair hair.",
+          "meaning": "她有一头浅色的头发。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-fair",
     "libraryId": "intermediate",
-    "word": "fair",
-    "meaning": "公平的；美丽的；白皙的；[气象] 晴朗的",
-    "group": 0,
-    "example": {
-      "text": "Fair competition",
-      "meaning": "公平竞争",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-fan",
     "libraryId": "intermediate",
     "word": "fan",
-    "meaning": "风扇；迷；爱好者",
+    "meaning": "风扇；爱好者",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "An electric fan",
-      "meaning": "一台电风扇",
-      "kind": "phrase"
+      "text": "Turn on the fan, please.",
+      "meaning": "请打开风扇。",
+      "kind": "sentence",
+      "sense": "风扇",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "爱好者",
+          "partOfSpeech": "n",
+          "text": "He is a football fan.",
+          "meaning": "他是个足球迷。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "fantastic",
+    "meaning": "极好的；了不起的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A fantastic idea",
+      "meaning": "极好的想法",
+      "kind": "phrase"
+    },
     "id": "intermediate-fantastic",
     "libraryId": "intermediate",
-    "word": "fantastic",
-    "meaning": "奇异的；空想的；异想天开的；古怪的",
-    "group": 0,
-    "example": {
-      "text": "Fantastic job",
-      "meaning": "干的太好了；好样的",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-farm",
-    "libraryId": "intermediate",
-    "word": "farm",
-    "meaning": "种田；务农；经营农场；农场",
-    "group": 0,
-    "example": {
-      "text": "Farm products",
-      "meaning": "农产品",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-farmer",
-    "libraryId": "intermediate",
-    "word": "farmer",
-    "meaning": "农夫；农民；农场主",
-    "group": 0,
-    "example": {
-      "text": "Dairy farmer",
-      "meaning": "奶农；畜牧工人",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-fat",
     "libraryId": "intermediate",
     "word": "fat",
-    "meaning": "肥的；胖的；油腻的；丰满的",
+    "meaning": "脂肪，肥肉",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Blood fat",
-      "meaning": "血脂",
+      "text": "Body fat",
+      "meaning": "体脂肪；体脂重",
       "kind": "phrase"
     }
   },
@@ -9652,143 +13001,116 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-fear",
     "libraryId": "intermediate",
     "word": "fear",
-    "meaning": "害怕；恐惧；敬畏；担心",
+    "meaning": "害怕；恐惧",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "In fear",
-      "meaning": "害怕",
+      "text": "Out of fear",
+      "meaning": "出于恐惧",
       "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-february",
-    "libraryId": "intermediate",
-    "word": "February",
-    "meaning": "二月",
-    "group": 0,
-    "example": {
-      "text": "He joined the Army in February 1943.",
-      "meaning": "他1943年2月参军。",
-      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-feeling",
     "libraryId": "intermediate",
     "word": "feeling",
-    "meaning": "感觉；触觉；感情；情绪",
+    "meaning": "感觉；感情",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Good feeling",
-      "meaning": "好感",
+      "text": "Natural feeling",
+      "meaning": "自然的感情",
       "kind": "phrase"
     }
   },
   {
+    "word": "fetch",
+    "meaning": "去取来；拿来",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Fetch some water",
+      "meaning": "取些水来",
+      "kind": "phrase"
+    },
     "id": "intermediate-fetch",
     "libraryId": "intermediate",
-    "word": "fetch",
-    "meaning": "取来；接来；到达；吸引",
-    "group": 0,
-    "example": {
-      "text": "Fetch information",
-      "meaning": "提取信息",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-fever",
     "libraryId": "intermediate",
     "word": "fever",
-    "meaning": "发烧；发热；狂热；使发烧",
+    "meaning": "发烧，发热；狂热",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "High fever",
-      "meaning": "发高烧",
+      "text": "Have a fever",
+      "meaning": "发烧",
       "kind": "phrase"
     }
   },
   {
+    "word": "few",
+    "meaning": "少数的；不多的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Few people know.",
+      "meaning": "很少有人知道。",
+      "kind": "sentence"
+    },
     "id": "intermediate-few",
     "libraryId": "intermediate",
-    "word": "few",
-    "meaning": "很少的；几乎没有的；很少；很少数",
-    "group": 0,
-    "example": {
-      "text": "Every few",
-      "meaning": "每隔几…",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-field",
     "libraryId": "intermediate",
     "word": "field",
-    "meaning": "领域；牧场；旷野；战场",
+    "meaning": "田地；领域",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Oil field",
-      "meaning": "油田",
+      "text": "In the field",
+      "meaning": "在田野里",
       "kind": "phrase"
     }
   },
   {
-    "id": "intermediate-fifteen",
-    "libraryId": "intermediate",
-    "word": "fifteen",
-    "meaning": "十五；十五个；十五人组成的橄榄球队；十五的",
-    "group": 0,
+    "word": "fifth",
+    "meaning": "第五",
+    "partOfSpeech": "num",
     "example": {
-      "text": "Fifteen minutes",
-      "meaning": "15分钟",
+      "text": "The fifth lesson",
+      "meaning": "第五课",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-fifth",
     "libraryId": "intermediate",
-    "word": "fifth",
-    "meaning": "第五的；五分之一的；第五；五分之一",
-    "group": 0,
-    "example": {
-      "text": "Fifth column",
-      "meaning": "n. 第五纵队",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-fifty",
-    "libraryId": "intermediate",
-    "word": "fifty",
-    "meaning": "五十；五十个；编号为50的东西；五十的",
-    "group": 0,
+    "word": "fill",
+    "meaning": "填满；装满",
+    "partOfSpeech": "v",
     "example": {
-      "text": "Fifty percent",
-      "meaning": "百分之五十",
+      "text": "Fill the bottle with water",
+      "meaning": "把瓶子装满水",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-fill",
     "libraryId": "intermediate",
-    "word": "fill",
-    "meaning": "装满；使充满；满足；堵塞",
-    "group": 0,
-    "example": {
-      "text": "Fill out",
-      "meaning": "填写；变丰满，变大",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-film",
     "libraryId": "intermediate",
     "word": "film",
-    "meaning": "电影；薄膜；胶卷；轻烟",
+    "meaning": "电影；胶卷",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Thin film",
-      "meaning": "薄膜",
+      "text": "See a film",
+      "meaning": "看电影",
       "kind": "phrase"
     }
   },
@@ -9796,7 +13118,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-final",
     "libraryId": "intermediate",
     "word": "final",
-    "meaning": "最终的；决定性的；不可更改的；决赛",
+    "meaning": "最终的；决定性的；不可更改的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Final decision",
@@ -9805,26 +13128,15 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
-    "id": "intermediate-fine",
-    "libraryId": "intermediate",
-    "word": "fine",
-    "meaning": "好的；优良的；细小的；精美的",
-    "group": 0,
-    "example": {
-      "text": "Fine chemicals",
-      "meaning": "精细化学品",
-      "kind": "phrase"
-    }
-  },
-  {
     "id": "intermediate-finger",
     "libraryId": "intermediate",
     "word": "finger",
-    "meaning": "手指；指针；指状物；伸出",
+    "meaning": "手指",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Middle finger",
-      "meaning": "中指",
+      "text": "Finger food",
+      "meaning": "手指食物；小点心",
       "kind": "phrase"
     }
   },
@@ -9832,11 +13144,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-finish",
     "libraryId": "intermediate",
     "word": "finish",
-    "meaning": "完成；结束；用完；完美",
+    "meaning": "完成；结束",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Finish work",
-      "meaning": "结束工作",
+      "text": "Finish with",
+      "meaning": "完成，结束；与…断绝关系",
       "kind": "phrase"
     }
   },
@@ -9844,11 +13157,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-first",
     "libraryId": "intermediate",
     "word": "first",
-    "meaning": "第一；首先；优先；宁愿",
+    "meaning": "首先；第一",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "Quality first",
-      "meaning": "质量第一",
+      "text": "First of all",
+      "meaning": "首先",
       "kind": "phrase"
     }
   },
@@ -9856,7 +13170,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-fisherman",
     "libraryId": "intermediate",
     "word": "fisherman",
-    "meaning": "渔夫；渔人；渔民；打鱼人",
+    "meaning": "渔民，渔夫，打鱼人",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "A local fisherman",
@@ -9868,23 +13183,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-fit",
     "libraryId": "intermediate",
     "word": "fit",
-    "meaning": "安装；使……适应；使……合身；与……相符",
+    "meaning": "适合；合身",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Feel fit",
-      "meaning": "精神很好",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-five",
-    "libraryId": "intermediate",
-    "word": "five",
-    "meaning": "五；五个；五美元钞票；五的",
-    "group": 0,
-    "example": {
-      "text": "Five dynasties",
-      "meaning": "五代",
+      "text": "Fit me well",
+      "meaning": "很合身",
       "kind": "phrase"
     }
   },
@@ -9892,11 +13196,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-fix",
     "libraryId": "intermediate",
     "word": "fix",
-    "meaning": "使固定；修理；安装；准备",
+    "meaning": "修理；固定",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Quick fix",
-      "meaning": "权宜之计",
+      "text": "Fix the bike",
+      "meaning": "修理自行车",
       "kind": "phrase"
     }
   },
@@ -9904,35 +13209,56 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-flag",
     "libraryId": "intermediate",
     "word": "flag",
-    "meaning": "标记；衰退；枯萎；标志",
+    "meaning": "旗；旗帜",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "National flag",
-      "meaning": "n. 国旗",
+      "text": "Flag of truce",
+      "meaning": "白旗，休战旗",
       "kind": "phrase"
     }
   },
   {
+    "word": "flat",
+    "meaning": "平坦的；公寓；没气的",
+    "partOfSpeech": "adj/n",
+    "example": {
+      "text": "The land here is flat.",
+      "meaning": "这里的土地很平坦。",
+      "kind": "sentence",
+      "sense": "平坦的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "公寓",
+          "partOfSpeech": "n",
+          "text": "They live in a small flat.",
+          "meaning": "他们住在一套小公寓里。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "没气的",
+          "partOfSpeech": "adj",
+          "text": "My bike has a flat tyre.",
+          "meaning": "我的自行车轮胎没气了。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-flat",
     "libraryId": "intermediate",
-    "word": "flat",
-    "meaning": "平的；单调的；不景气的；干脆的",
-    "group": 0,
-    "example": {
-      "text": "Flat panel",
-      "meaning": "扁平面板",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-flu",
     "libraryId": "intermediate",
     "word": "flu",
-    "meaning": "流感；流行性感冒",
+    "meaning": "流感",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Swine flu",
-      "meaning": "猪流感",
+      "text": "Have the flu",
+      "meaning": "得了流感，患流感",
       "kind": "phrase"
     }
   },
@@ -9940,23 +13266,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-follow",
     "libraryId": "intermediate",
     "word": "follow",
-    "meaning": "跟随；遵循；追求；密切注意",
+    "meaning": "跟随；遵循",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "As follow",
-      "meaning": "adv. 依下列各项",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-football",
-    "libraryId": "intermediate",
-    "word": "football",
-    "meaning": "足球；橄榄球；踢足球；打橄榄球",
-    "group": 0,
-    "example": {
-      "text": "Play football",
-      "meaning": "踢足球",
+      "text": "Follow the trend",
+      "meaning": "跟随时尚",
       "kind": "phrase"
     }
   },
@@ -9964,31 +13279,34 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-force",
     "libraryId": "intermediate",
     "word": "force",
-    "meaning": "力量；武力；军队；魄力",
+    "meaning": "力量；武力",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Labour force",
-      "meaning": "n. 劳动力",
+      "text": "By force",
+      "meaning": "强迫地；靠武力；凭藉暴力",
       "kind": "phrase"
     }
   },
   {
+    "word": "foreign",
+    "meaning": "外国的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A foreign language",
+      "meaning": "一门外语",
+      "kind": "phrase"
+    },
     "id": "intermediate-foreign",
     "libraryId": "intermediate",
-    "word": "foreign",
-    "meaning": "外国的；外交的；异质的；不相关的",
-    "group": 0,
-    "example": {
-      "text": "Foreign investment",
-      "meaning": "国外投资",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-foreigner",
     "libraryId": "intermediate",
     "word": "foreigner",
-    "meaning": "外地人；外国人",
+    "meaning": "外国人",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Some of the local people are suspicious of foreigners.",
@@ -10000,11 +13318,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-fork",
     "libraryId": "intermediate",
     "word": "fork",
-    "meaning": "叉；餐叉；耙；叉起",
+    "meaning": "叉；餐叉；耙",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Tuning fork",
-      "meaning": "音叉",
+      "text": "Knife and fork",
+      "meaning": "刀叉",
       "kind": "phrase"
     }
   },
@@ -10012,151 +13331,156 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-form",
     "libraryId": "intermediate",
     "word": "form",
-    "meaning": "形式；形状；形态；外形",
+    "meaning": "表格；形式；形成",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Form a",
-      "meaning": "普惠制原产地证明书",
-      "kind": "phrase"
+      "text": "Please fill in this form.",
+      "meaning": "请填写这张表格。",
+      "kind": "sentence",
+      "sense": "表格",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "形式",
+          "partOfSpeech": "n",
+          "text": "The poem has an unusual form.",
+          "meaning": "这首诗的形式很特别。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "形成",
+          "partOfSpeech": "v",
+          "text": "Ice forms on the lake in winter.",
+          "meaning": "冬天湖面会结冰。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
-    "id": "intermediate-forty",
-    "libraryId": "intermediate",
-    "word": "forty",
-    "meaning": "四十；四十的；四十个的；第四十",
-    "group": 0,
+    "word": "forward",
+    "meaning": "向前",
+    "partOfSpeech": "adv",
     "example": {
-      "text": "Forty thousand",
-      "meaning": "四万",
+      "text": "Move forward",
+      "meaning": "向前移动",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-forward",
     "libraryId": "intermediate",
-    "word": "forward",
-    "meaning": "向前的；早的；迅速的；向前地",
-    "group": 0,
-    "example": {
-      "text": "Brought forward",
-      "meaning": "提出",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-four",
-    "libraryId": "intermediate",
-    "word": "four",
-    "meaning": "四；四个；四的；四个的",
-    "group": 0,
+    "word": "fourth",
+    "meaning": "第四",
+    "partOfSpeech": "num",
     "example": {
-      "text": "Four seasons",
-      "meaning": "四季",
+      "text": "The fourth page",
+      "meaning": "第四页",
       "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-fourteen",
-    "libraryId": "intermediate",
-    "word": "fourteen",
-    "meaning": "十四；十四个；第十四；十四的记号",
-    "group": 0,
-    "example": {
-      "text": "Fourteen thousand",
-      "meaning": "一万四",
-      "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-fourth",
     "libraryId": "intermediate",
-    "word": "fourth",
-    "meaning": "第四的；第四个的；四分之一的；第四",
-    "group": 0,
-    "example": {
-      "text": "Fourth quarter",
-      "meaning": "第四季度；第四节",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "fox",
+    "meaning": "狐狸",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A red fox",
+      "meaning": "一只赤狐",
+      "kind": "phrase"
+    },
     "id": "intermediate-fox",
     "libraryId": "intermediate",
-    "word": "fox",
-    "meaning": "欺骗；使变酸；狐狸；狡猾的人",
-    "group": 0,
-    "example": {
-      "text": "Fox fur",
-      "meaning": "狐皮",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-free",
     "libraryId": "intermediate",
     "word": "free",
-    "meaning": "免费的；自由的；不受约束的；[化学] 游离的",
+    "meaning": "免费的；自由的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "For free",
-      "meaning": "免费",
+      "text": "Free and easy",
+      "meaning": "无拘无束的",
       "kind": "phrase"
     }
   },
   {
+    "word": "fresh",
+    "meaning": "新鲜的；清新的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Fresh bread",
+      "meaning": "新鲜的面包",
+      "kind": "phrase"
+    },
     "id": "intermediate-fresh",
     "libraryId": "intermediate",
-    "word": "fresh",
-    "meaning": "新鲜的；清新的；淡水的；无经验的",
-    "group": 0,
-    "example": {
-      "text": "Fresh air",
-      "meaning": "新鲜空气",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-fridge",
     "libraryId": "intermediate",
     "word": "fridge",
     "meaning": "电冰箱",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "No, but a fridge and a stove.",
-      "meaning": "没有，但有一台冰箱和一个电炉。",
-      "kind": "sentence"
+      "text": "Keep milk in the fridge",
+      "meaning": "把牛奶放在冰箱里",
+      "kind": "phrase"
     }
   },
   {
     "id": "intermediate-friendly",
     "libraryId": "intermediate",
     "word": "friendly",
-    "meaning": "友好的；亲切的；支持的；融洽的",
+    "meaning": "友好的；亲切的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Environmental friendly",
-      "meaning": "环保的",
+      "text": "Be friendly with",
+      "meaning": "对……友好；和某人友好相处",
       "kind": "phrase"
     }
   },
   {
+    "word": "friendship",
+    "meaning": "友谊",
+    "example": {
+      "text": "A lasting friendship",
+      "meaning": "一段长久的友谊",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-friendship",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "front",
+    "meaning": "前面；前部",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "In front of the school",
+      "meaning": "在学校前面",
+      "kind": "phrase"
+    },
     "id": "intermediate-front",
     "libraryId": "intermediate",
-    "word": "front",
-    "meaning": "前面；正面；前线；面对",
-    "group": 0,
-    "example": {
-      "text": "In front",
-      "meaning": "在…前面",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-full",
     "libraryId": "intermediate",
     "word": "full",
     "meaning": "满的；完整的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "A full bottle",
@@ -10165,158 +13489,202 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
-    "id": "intermediate-fun",
-    "libraryId": "intermediate",
     "word": "fun",
-    "meaning": "乐趣；玩笑；有趣的人或事；供娱乐用的",
-    "group": 0,
+    "meaning": "乐趣；快乐",
+    "partOfSpeech": "n",
     "example": {
       "text": "Have fun",
       "meaning": "玩得开心",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-fun",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
+    "word": "funny",
+    "meaning": "有趣的；滑稽的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A funny story",
+      "meaning": "一个有趣的故事",
+      "kind": "phrase"
+    },
     "id": "intermediate-funny",
     "libraryId": "intermediate",
-    "word": "funny",
-    "meaning": "有趣的；好笑的；滑稽的；（口）稀奇的",
-    "group": 0,
-    "example": {
-      "text": "Funny story",
-      "meaning": "幽默故事",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-game",
-    "libraryId": "intermediate",
-    "word": "game",
-    "meaning": "游戏；比赛；勇敢的；赌博",
-    "group": 0,
+    "word": "future",
+    "meaning": "未来",
     "example": {
-      "text": "Olympic game",
-      "meaning": "奥林匹克运动会",
+      "text": "In the future",
+      "meaning": "在未来",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-future",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-gate",
     "libraryId": "intermediate",
     "word": "gate",
-    "meaning": "大门；出入口；门道；给…装大门",
+    "meaning": "大门；出入口",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "And gate",
-      "meaning": "“与”门",
+      "text": "School gate",
+      "meaning": "校门；学校大门",
       "kind": "phrase"
     }
   },
   {
+    "word": "general",
+    "meaning": "总体的；大致的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A general idea",
+      "meaning": "一个大致的想法",
+      "kind": "phrase"
+    },
     "id": "intermediate-general",
     "libraryId": "intermediate",
-    "word": "general",
-    "meaning": "一般的；普通的；综合的；大体的",
-    "group": 0,
-    "example": {
-      "text": "(army) general",
-      "meaning": "将军",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "gentleman",
+    "meaning": "先生；绅士",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A polite gentleman",
+      "meaning": "一位有礼貌的绅士",
+      "kind": "phrase"
+    },
     "id": "intermediate-gentleman",
     "libraryId": "intermediate",
-    "word": "gentleman",
-    "meaning": "先生；绅士；有身份的人；有教养的人",
-    "group": 0,
+    "group": 0
+  },
+  {
+    "word": "geography",
+    "meaning": "地理",
     "example": {
-      "text": "Old gentleman",
-      "meaning": "n. 恶魔；魔王",
+      "text": "A geography lesson",
+      "meaning": "一节地理课",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-geography",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-gift",
     "libraryId": "intermediate",
     "word": "gift",
-    "meaning": "礼物；天赋；赠品；赋予",
+    "meaning": "礼物；天赋；赠品",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Birthday gift",
-      "meaning": "生日礼物",
+      "text": "Gift box",
+      "meaning": "礼品盒；礼物盒；彩盒",
       "kind": "phrase"
     }
   },
   {
-    "id": "intermediate-giraffe",
-    "libraryId": "intermediate",
     "word": "giraffe",
     "meaning": "长颈鹿",
-    "group": 0,
+    "partOfSpeech": "n",
     "example": {
-      "text": "Can I get the mommy giraffe for Christmas?",
-      "meaning": "我在圣诞节能得到一个长颈鹿妈妈吗？",
-      "kind": "sentence"
-    }
+      "text": "A tall giraffe",
+      "meaning": "一只高高的长颈鹿",
+      "kind": "phrase"
+    },
+    "id": "intermediate-giraffe",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-glad",
     "libraryId": "intermediate",
     "word": "glad",
-    "meaning": "高兴的；乐意的；令人高兴的；灿烂美丽的",
+    "meaning": "高兴的；乐意的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Glad of",
-      "meaning": "对……感到高兴",
+      "text": "Glad to meet you",
+      "meaning": "见到你很高兴",
       "kind": "phrase"
     }
   },
   {
+    "word": "glass",
+    "meaning": "玻璃；玻璃杯；眼镜",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The table is made of glass.",
+      "meaning": "这张桌子由玻璃制成。",
+      "kind": "sentence",
+      "sense": "玻璃",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "玻璃杯",
+          "partOfSpeech": "n",
+          "text": "She drank a glass of milk.",
+          "meaning": "她喝了一杯牛奶。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "眼镜",
+          "partOfSpeech": "n",
+          "text": "He wears glasses to read.",
+          "meaning": "他戴着眼镜阅读。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-glass",
     "libraryId": "intermediate",
-    "word": "glass",
-    "meaning": "玻璃；玻璃制品；镜子；反映",
-    "group": 0,
-    "example": {
-      "text": "Glass fiber",
-      "meaning": "玻璃纤维",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "glove",
+    "meaning": "手套",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A warm glove",
+      "meaning": "一只保暖的手套",
+      "kind": "phrase"
+    },
     "id": "intermediate-glove",
     "libraryId": "intermediate",
-    "word": "glove",
-    "meaning": "手套；给…戴手套",
-    "group": 0,
-    "example": {
-      "text": "Data glove",
-      "meaning": "数据手套",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "goat",
+    "meaning": "山羊",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A white goat",
+      "meaning": "一只白山羊",
+      "kind": "phrase"
+    },
     "id": "intermediate-goat",
     "libraryId": "intermediate",
-    "word": "goat",
-    "meaning": "山羊；替罪羊（美俚）；色鬼（美俚）",
-    "group": 0,
-    "example": {
-      "text": "Goat skin",
-      "meaning": "山羊皮",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-god",
     "libraryId": "intermediate",
     "word": "god",
-    "meaning": "神；（大写首字母时）上帝；膜拜；崇拜",
+    "meaning": "神；（大写首字母时）上帝",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "God bless",
-      "meaning": "上帝保佑",
+      "text": "God of heaven",
+      "meaning": "天神",
       "kind": "phrase"
     }
   },
@@ -10324,35 +13692,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-goal",
     "libraryId": "intermediate",
     "word": "goal",
-    "meaning": "目标；球门；得分数；终点",
+    "meaning": "目标；球门",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Strategic goal",
-      "meaning": "战略目标",
+      "text": "Set a goal",
+      "meaning": "确立一个目标",
       "kind": "phrase"
     }
   },
   {
+    "word": "gold",
+    "meaning": "黄金；金子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A gold ring",
+      "meaning": "一枚金戒指",
+      "kind": "phrase"
+    },
     "id": "intermediate-gold",
     "libraryId": "intermediate",
-    "word": "gold",
-    "meaning": "金；黄金；金色；金币",
-    "group": 0,
-    "example": {
-      "text": "Wow gold",
-      "meaning": "魔兽世界金币",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-golden",
     "libraryId": "intermediate",
     "word": "golden",
-    "meaning": "金色的；黄金般的；珍贵的；金制的",
+    "meaning": "金色的；金制的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Golden opportunity",
-      "meaning": "绝好的机会",
+      "text": "Golden age",
+      "meaning": "黄金时代；鼎盛时期",
       "kind": "phrase"
     }
   },
@@ -10360,10 +13731,11 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-government",
     "libraryId": "intermediate",
     "word": "government",
-    "meaning": "政府；政体；管辖；治理",
+    "meaning": "政府；政体；管辖",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Chinese government",
+      "text": "The Chinese government",
       "meaning": "中国政府",
       "kind": "phrase"
     }
@@ -10372,12 +13744,31 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-grade",
     "libraryId": "intermediate",
     "word": "grade",
-    "meaning": "年级；等级；成绩；级别",
+    "meaning": "年级；分数；分级",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Food grade",
-      "meaning": "食品级",
-      "kind": "phrase"
+      "text": "She is in the fifth grade.",
+      "meaning": "她在五年级。",
+      "kind": "sentence",
+      "sense": "年级",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "分数",
+          "partOfSpeech": "n",
+          "text": "He got a good grade in English.",
+          "meaning": "他的英语成绩很好。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "分级",
+          "partOfSpeech": "v",
+          "text": "The fruit is graded by size.",
+          "meaning": "水果按大小分级。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
@@ -10385,10 +13776,11 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "grammar",
     "meaning": "语法；语法书",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Case grammar",
-      "meaning": "格文法",
+      "text": "Grammar and vocabulary",
+      "meaning": "语法与词汇",
       "kind": "phrase"
     }
   },
@@ -10397,6 +13789,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "grandchild",
     "meaning": "孙子；孙女；外孙子女",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "A young grandchild",
@@ -10409,10 +13802,11 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "granddaughter",
     "meaning": "孙女；外孙女",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "...a drawing of my granddaughter Amelia.",
-      "meaning": "…一幅我孙女阿梅莉亚的画像。",
+      "text": "My granddaughter is five years old.",
+      "meaning": "我的孙女五岁了。",
       "kind": "sentence"
     }
   },
@@ -10420,7 +13814,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-grandparent",
     "libraryId": "intermediate",
     "word": "grandparent",
-    "meaning": "祖父母；祖父或祖母；外祖父母；外祖父或外祖母",
+    "meaning": "祖父母；外祖父母",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "My grandparents live in Sussex.",
@@ -10432,7 +13827,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-grandson",
     "libraryId": "intermediate",
     "word": "grandson",
-    "meaning": "孙子；外孙；外孙子",
+    "meaning": "孙子；外孙",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "My grandson's birthday was on Tuesday.",
@@ -10444,83 +13840,101 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-granny",
     "libraryId": "intermediate",
     "word": "granny",
-    "meaning": "奶奶；外婆；婆婆妈妈的人",
+    "meaning": "奶奶；外婆",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Granny smith",
-      "meaning": "绿苹果（澳大利亚的一种青绿色苹果）",
-      "kind": "phrase"
+      "text": "My granny lives with us.",
+      "meaning": "我奶奶和我们住在一起。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "greeting",
+    "meaning": "问候；招呼",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A friendly greeting",
+      "meaning": "一句友好的问候",
+      "kind": "phrase"
+    },
     "id": "intermediate-greeting",
     "libraryId": "intermediate",
-    "word": "greeting",
-    "meaning": "问候；招呼；祝贺；致敬",
-    "group": 0,
-    "example": {
-      "text": "Greeting card",
-      "meaning": "贺卡",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "ground",
+    "meaning": "地面；理由",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The ball fell to the ground.",
+      "meaning": "球落到了地上。",
+      "kind": "sentence",
+      "sense": "地面",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "理由",
+          "partOfSpeech": "n",
+          "text": "There are grounds for concern.",
+          "meaning": "有理由感到担忧。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-ground",
     "libraryId": "intermediate",
-    "word": "ground",
-    "meaning": "地面；土地；范围；战场",
-    "group": 0,
-    "example": {
-      "text": "Ground water",
-      "meaning": "地下水",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-group",
     "libraryId": "intermediate",
     "word": "group",
-    "meaning": "组；团体；群的；团体的",
+    "meaning": "组；团体",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Group company",
-      "meaning": "集团公司",
+      "text": "A group of",
+      "meaning": "一组，一群",
       "kind": "phrase"
     }
   },
   {
+    "word": "guard",
+    "meaning": "警卫；看守",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A security guard",
+      "meaning": "一位保安",
+      "kind": "phrase"
+    },
     "id": "intermediate-guard",
     "libraryId": "intermediate",
-    "word": "guard",
-    "meaning": "守卫；警戒；护卫队；防护装置",
-    "group": 0,
-    "example": {
-      "text": "Security guard",
-      "meaning": "保安人员",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "guess",
+    "meaning": "猜测；猜想",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Guess the answer",
+      "meaning": "猜答案",
+      "kind": "phrase"
+    },
     "id": "intermediate-guess",
     "libraryId": "intermediate",
-    "word": "guess",
-    "meaning": "猜测；认为；推测；猜中",
-    "group": 0,
-    "example": {
-      "text": "Guess who",
-      "meaning": "猜猜是谁",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-guest",
     "libraryId": "intermediate",
     "word": "guest",
-    "meaning": "客人；宾客；顾客；款待",
+    "meaning": "客人；嘉宾",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Guest room",
-      "meaning": "客房",
+      "text": "Distinguished guest",
+      "meaning": "嘉宾；上宾；尊贵的客人",
       "kind": "phrase"
     }
   },
@@ -10528,11 +13942,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-gun",
     "libraryId": "intermediate",
     "word": "gun",
-    "meaning": "枪支；枪状物；持枪歹徒；用枪射击",
+    "meaning": "枪；枪支",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Machine gun",
-      "meaning": "机关枪",
+      "text": "Gun control",
+      "meaning": "枪支管理法",
       "kind": "phrase"
     }
   },
@@ -10541,6 +13956,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "gym",
     "meaning": "健身房；体育；体育馆",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "I go to the gym as often as I can.",
@@ -10549,86 +13965,93 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "half",
+    "meaning": "一半",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Half an apple",
+      "meaning": "半个苹果",
+      "kind": "phrase"
+    },
     "id": "intermediate-half",
     "libraryId": "intermediate",
-    "word": "half",
-    "meaning": "一半；半场；半学年；一半地",
-    "group": 0,
-    "example": {
-      "text": "In half",
-      "meaning": "分成两半",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-hall",
     "libraryId": "intermediate",
     "word": "hall",
-    "meaning": "过道；门厅；走廊；会堂",
+    "meaning": "大厅；礼堂",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Exhibition hall",
-      "meaning": "展览厅",
+      "text": "In the hall",
+      "meaning": "在大厅里；在饭厅",
       "kind": "phrase"
     }
   },
   {
+    "word": "ham",
+    "meaning": "火腿",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Ham and eggs",
+      "meaning": "火腿和鸡蛋",
+      "kind": "phrase"
+    },
     "id": "intermediate-ham",
     "libraryId": "intermediate",
-    "word": "ham",
-    "meaning": "火腿；业余无线电爱好者；蹩脚演员；表演过火",
-    "group": 0,
-    "example": {
-      "text": "Ham sandwich",
-      "meaning": "火腿三明治",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "hamburger",
+    "meaning": "汉堡包",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A beef hamburger",
+      "meaning": "一个牛肉汉堡包",
+      "kind": "phrase"
+    },
     "id": "intermediate-hamburger",
     "libraryId": "intermediate",
-    "word": "hamburger",
-    "meaning": "汉堡包；火腿汉堡；牛肉饼；肉饼",
-    "group": 0,
-    "example": {
-      "text": "The whole stadium stink of the hamburger.",
-      "meaning": "整个体育场内散发着汉堡包的香味。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-handbag",
-    "libraryId": "intermediate",
     "word": "handbag",
     "meaning": "手提包",
-    "group": 0,
+    "partOfSpeech": "n",
     "example": {
-      "text": "Leather handbag",
-      "meaning": "皮手提包，皮手袋",
+      "text": "A leather handbag",
+      "meaning": "一个皮手提包",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-handbag",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
+    "word": "handsome",
+    "meaning": "英俊的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A handsome young man",
+      "meaning": "一个英俊的年轻人",
+      "kind": "phrase"
+    },
     "id": "intermediate-handsome",
     "libraryId": "intermediate",
-    "word": "handsome",
-    "meaning": "（男子）英俊的；可观的；大方的；慷慨的",
-    "group": 0,
-    "example": {
-      "text": "Handsome boy",
-      "meaning": "帅小伙",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-happen",
     "libraryId": "intermediate",
     "word": "happen",
-    "meaning": "发生；碰巧；偶然遇到；恰好",
+    "meaning": "发生；碰巧",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Happen on",
-      "meaning": "偶然遇到或发现",
+      "text": "Happen to be",
+      "meaning": "碰巧是；恰巧是",
       "kind": "phrase"
     }
   },
@@ -10636,47 +14059,69 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-hard",
     "libraryId": "intermediate",
     "word": "hard",
-    "meaning": "努力的；硬的；困难的；辛苦的",
+    "meaning": "坚硬的；困难的；努力地",
+    "partOfSpeech": "adj/adv",
     "group": 0,
     "example": {
-      "text": "Study hard",
-      "meaning": "努力学习",
-      "kind": "phrase"
+      "text": "The stone is very hard.",
+      "meaning": "这块石头很硬。",
+      "kind": "sentence",
+      "sense": "坚硬的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "困难的",
+          "partOfSpeech": "adj",
+          "text": "This is a hard question.",
+          "meaning": "这是个难题。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "努力地",
+          "partOfSpeech": "adv",
+          "text": "She works hard every day.",
+          "meaning": "她每天都努力工作。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-hardly",
     "libraryId": "intermediate",
     "word": "hardly",
-    "meaning": "几乎不；简直不；刚刚；仅仅",
+    "meaning": "几乎不",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "Hardly any",
-      "meaning": "几乎没有",
+      "text": "Hardly ever",
+      "meaning": "几乎从不",
       "kind": "phrase"
     }
   },
   {
+    "word": "hat",
+    "meaning": "帽子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A blue hat",
+      "meaning": "一顶蓝帽子",
+      "kind": "phrase"
+    },
     "id": "intermediate-hat",
     "libraryId": "intermediate",
-    "word": "hat",
-    "meaning": "帽子；给……戴上帽子；帽子(一般指有边的)",
-    "group": 0,
-    "example": {
-      "text": "Top hat",
-      "meaning": "大礼帽",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-hate",
     "libraryId": "intermediate",
     "word": "hate",
-    "meaning": "憎恨；厌恶；遗憾；反感",
+    "meaning": "讨厌；憎恨",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Hate doing",
-      "meaning": "不喜欢做某事；讨厌做某事；与生俱来厌恶",
+      "meaning": "讨厌做某事",
       "kind": "phrase"
     }
   },
@@ -10684,35 +14129,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-health",
     "libraryId": "intermediate",
     "word": "health",
-    "meaning": "健康；卫生；保健；兴旺",
+    "meaning": "健康",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Health care",
-      "meaning": "卫生保健",
+      "text": "Good health",
+      "meaning": "身体健康",
       "kind": "phrase"
     }
   },
   {
+    "word": "heart",
+    "meaning": "心脏；心",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A healthy heart",
+      "meaning": "一颗健康的心脏",
+      "kind": "phrase"
+    },
     "id": "intermediate-heart",
     "libraryId": "intermediate",
-    "word": "heart",
-    "meaning": "心脏；感情；勇气；心形",
-    "group": 0,
-    "example": {
-      "text": "Heart disease",
-      "meaning": "心脏病",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-heat",
     "libraryId": "intermediate",
     "word": "heat",
-    "meaning": "高温；压力；热度；热烈",
+    "meaning": "加热；变热",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Heat treatment",
-      "meaning": "热处理",
+      "text": "Heat up",
+      "meaning": "加热",
       "kind": "phrase"
     }
   },
@@ -10721,6 +14169,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "heaven",
     "meaning": "天堂；天空",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "A little piece of heaven",
@@ -10732,35 +14181,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-heavy",
     "libraryId": "intermediate",
     "word": "heavy",
-    "meaning": "沉重的；繁重的；巨大的；拥挤的",
+    "meaning": "重的；大量的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Heavy metal",
-      "meaning": "重金属摇滚乐",
+      "text": "Heavy traffic",
+      "meaning": "拥挤的交通",
       "kind": "phrase"
     }
   },
   {
+    "word": "height",
+    "meaning": "高度；身高",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The height of the tree",
+      "meaning": "这棵树的高度",
+      "kind": "phrase"
+    },
     "id": "intermediate-height",
     "libraryId": "intermediate",
-    "word": "height",
-    "meaning": "高地；高度；身高；顶点",
-    "group": 0,
-    "example": {
-      "text": "Wave height",
-      "meaning": "波形高度",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-helpful",
     "libraryId": "intermediate",
     "word": "helpful",
-    "meaning": "有帮助的；有益的；有用的；给予帮助的",
+    "meaning": "有帮助的；有用的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "It is helpful if we address a few key questions here.",
-      "meaning": "如果我们在这里解决一些关键问题会很有用的。",
+      "text": "Thank you for your advice; it’s been very helpful.",
+      "meaning": "谢谢你的建议，它非常有用。",
       "kind": "sentence"
     }
   },
@@ -10768,11 +14220,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-hen",
     "libraryId": "intermediate",
     "word": "hen",
-    "meaning": "母鸡；女人；雌禽",
+    "meaning": "母鸡",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "She does not like the hen that pecks all day.",
-      "meaning": "她不喜欢这个整天啄来啄去的母鸡。",
+      "text": "The hen laid three eggs.",
+      "meaning": "母鸡下了三个蛋。",
       "kind": "sentence"
     }
   },
@@ -10780,11 +14233,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-hers",
     "libraryId": "intermediate",
     "word": "hers",
-    "meaning": "她的（所有格）；她的；她的(所有物)",
+    "meaning": "她的",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
       "text": "Of hers",
-      "meaning": "(属于)她的",
+      "meaning": "她的",
       "kind": "phrase"
     }
   },
@@ -10792,107 +14246,116 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-herself",
     "libraryId": "intermediate",
     "word": "herself",
-    "meaning": "她自己（she的反身代词）；她亲自；她自己",
+    "meaning": "她自己；她亲自",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
       "text": "By herself",
-      "meaning": "她自己；她独立地",
+      "meaning": "她自己",
       "kind": "phrase"
     }
   },
   {
+    "word": "high",
+    "meaning": "高的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A high mountain",
+      "meaning": "一座高山",
+      "kind": "phrase"
+    },
     "id": "intermediate-high",
     "libraryId": "intermediate",
-    "word": "high",
-    "meaning": "高的；高级的；崇高的；高音调的",
-    "group": 0,
-    "example": {
-      "text": "High quality",
-      "meaning": "高品质",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-hill",
     "libraryId": "intermediate",
     "word": "hill",
-    "meaning": "小山；丘陵；斜坡；山冈",
+    "meaning": "小山；丘陵",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Hill station",
-      "meaning": "山中避暑之地",
+      "text": "Green hill",
+      "meaning": "青山，绿色的小山",
       "kind": "phrase"
     }
   },
   {
+    "word": "himself",
+    "meaning": "他自己",
+    "partOfSpeech": "pron",
+    "example": {
+      "text": "He made it himself.",
+      "meaning": "这是他自己做的。",
+      "kind": "sentence"
+    },
     "id": "intermediate-himself",
     "libraryId": "intermediate",
-    "word": "himself",
-    "meaning": "他自己；他亲自；他本人",
-    "group": 0,
-    "example": {
-      "text": "By himself",
-      "meaning": "由他独力地",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "hometown",
+    "meaning": "家乡；故乡",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Return to my hometown",
+      "meaning": "回到我的家乡",
+      "kind": "phrase"
+    },
     "id": "intermediate-hometown",
     "libraryId": "intermediate",
-    "word": "hometown",
-    "meaning": "家乡；故乡；家乡的",
-    "group": 0,
-    "example": {
-      "text": "She expressed the wish to be interred in the graveyard of hometown.",
-      "meaning": "她表达了死后葬在故乡的墓地上的愿望。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-homework",
     "libraryId": "intermediate",
     "word": "homework",
-    "meaning": "家庭作业；课外作业；课后作业",
+    "meaning": "家庭作业",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Do homework",
-      "meaning": "做作业，做功课；做家庭作业",
+      "text": "Do my homework",
+      "meaning": "做作业",
       "kind": "phrase"
     }
   },
   {
+    "word": "honest",
+    "meaning": "诚实的",
+    "example": {
+      "text": "An honest person",
+      "meaning": "一个诚实的人",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "adj",
+    "id": "intermediate-honest",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "hope",
+    "meaning": "希望；期待",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Hope to see you soon",
+      "meaning": "希望很快见到你",
+      "kind": "phrase"
+    },
     "id": "intermediate-hope",
     "libraryId": "intermediate",
-    "word": "hope",
-    "meaning": "希望；期望；信心",
-    "group": 0,
-    "example": {
-      "text": "Only hope",
-      "meaning": "只有希望",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-hotel",
     "libraryId": "intermediate",
     "word": "hotel",
-    "meaning": "旅馆；饭店；客栈；使…在饭店下榻",
+    "meaning": "旅馆；宾馆",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Luxury hotel",
-      "meaning": "豪华饭店",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-hour",
-    "libraryId": "intermediate",
-    "word": "hour",
-    "meaning": "小时；钟头；课时；…点钟",
-    "group": 0,
-    "example": {
-      "text": "An hour",
-      "meaning": "一小时",
+      "text": "A five-star hotel",
+      "meaning": "一家五星级酒店",
       "kind": "phrase"
     }
   },
@@ -10900,7 +14363,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-housework",
     "libraryId": "intermediate",
     "word": "housework",
-    "meaning": "家务事；家务劳动",
+    "meaning": "家务事",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Do housework",
@@ -10909,62 +14373,54 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "however",
+    "meaning": "然而；不过",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "However, I disagree.",
+      "meaning": "不过，我不同意。",
+      "kind": "sentence"
+    },
     "id": "intermediate-however",
     "libraryId": "intermediate",
-    "word": "however",
-    "meaning": "无论如何；不管怎样（接副词或形容词）；然而；可是",
-    "group": 0,
-    "example": {
-      "text": "An extremely unpleasant disease that is, however, easy to treat",
-      "meaning": "一种让人极其难受却容易治疗的病",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "huge",
+    "meaning": "巨大的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A huge success",
+      "meaning": "巨大的成功",
+      "kind": "phrase"
+    },
     "id": "intermediate-huge",
     "libraryId": "intermediate",
-    "word": "huge",
-    "meaning": "巨大的；庞大的；无限的",
-    "group": 0,
-    "example": {
-      "text": "Huge system",
-      "meaning": "巨系统",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "human",
+    "meaning": "人的；人类的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Human life",
+      "meaning": "人类生活",
+      "kind": "phrase"
+    },
     "id": "intermediate-human",
     "libraryId": "intermediate",
-    "word": "human",
-    "meaning": "人的；人类的；人；人类",
-    "group": 0,
-    "example": {
-      "text": "Human body",
-      "meaning": "人体",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-hundred",
-    "libraryId": "intermediate",
-    "word": "hundred",
-    "meaning": "一百；许多；一百的；许多的",
-    "group": 0,
-    "example": {
-      "text": "One hundred",
-      "meaning": "一百",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-hurry",
     "libraryId": "intermediate",
     "word": "hurry",
-    "meaning": "匆忙；急忙；仓促（做某事）；催促",
+    "meaning": "匆忙",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Hurry back",
-      "meaning": "迅速回来",
+      "text": "In a hurry",
+      "meaning": "立即，匆忙",
       "kind": "phrase"
     }
   },
@@ -10972,83 +14428,129 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-husband",
     "libraryId": "intermediate",
     "word": "husband",
-    "meaning": "节约地使用（或管理）；丈夫",
+    "meaning": "丈夫",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Husband and wife",
-      "meaning": "夫妻",
-      "kind": "phrase"
+      "text": "Her husband is a doctor.",
+      "meaning": "她丈夫是一名医生。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "if",
+    "meaning": "如果；是否",
+    "partOfSpeech": "conj",
+    "example": {
+      "text": "If it rains, stay inside.",
+      "meaning": "如果下雨，就待在室内。",
+      "kind": "sentence"
+    },
     "id": "intermediate-if",
     "libraryId": "intermediate",
-    "word": "if",
-    "meaning": "（表条件）如果；即使；是否；（表假设）假如",
-    "group": 0,
-    "example": {
-      "text": "As if",
-      "meaning": "犹如，好似",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "ill",
+    "meaning": "生病的；不舒服的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Feel ill",
+      "meaning": "感到不舒服",
+      "kind": "phrase"
+    },
     "id": "intermediate-ill",
     "libraryId": "intermediate",
-    "word": "ill",
-    "meaning": "生病的；坏的；邪恶的；不吉利的",
-    "group": 0,
-    "example": {
-      "text": "Fell ill",
-      "meaning": "生病",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-illness",
     "libraryId": "intermediate",
     "word": "illness",
     "meaning": "病；疾病",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Mental illness",
-      "meaning": "精神病",
+      "text": "A serious illness",
+      "meaning": "严重的疾病",
       "kind": "phrase"
     }
   },
   {
+    "word": "imagine",
+    "meaning": "想象",
+    "example": {
+      "text": "Imagine the future",
+      "meaning": "想象未来",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "intermediate-imagine",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "immediately",
+    "meaning": "立即；马上",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Act immediately",
+      "meaning": "立即行动",
+      "kind": "phrase"
+    },
     "id": "intermediate-immediately",
     "libraryId": "intermediate",
-    "word": "immediately",
-    "meaning": "立即；立刻；直接地；一…就",
-    "group": 0,
-    "example": {
-      "text": "Immediately following",
-      "meaning": "紧跟着",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "important",
+    "meaning": "重要的",
+    "example": {
+      "text": "An important question",
+      "meaning": "一个重要的问题",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "adj",
+    "id": "intermediate-important",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "improve",
+    "meaning": "改进",
+    "example": {
+      "text": "Improve your English",
+      "meaning": "提高你的英语水平",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "intermediate-improve",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "inch",
+    "meaning": "英寸",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "One inch long",
+      "meaning": "一英寸长",
+      "kind": "phrase"
+    },
     "id": "intermediate-inch",
     "libraryId": "intermediate",
-    "word": "inch",
-    "meaning": "英寸；身高；少许；使缓慢地移动",
-    "group": 0,
-    "example": {
-      "text": "Every inch",
-      "meaning": "彻底",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-include",
     "libraryId": "intermediate",
     "word": "include",
-    "meaning": "包含；包括；计入",
+    "meaning": "包括；包含",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Include in",
-      "meaning": "包括在…中",
+      "meaning": "包括在……中",
       "kind": "phrase"
     }
   },
@@ -11056,11 +14558,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-increase",
     "libraryId": "intermediate",
     "word": "increase",
-    "meaning": "增加；增长；提高；增大",
+    "meaning": "增加；增长",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Increase production",
-      "meaning": "增产",
+      "text": "On the increase",
+      "meaning": "正在增加，正在增长",
       "kind": "phrase"
     }
   },
@@ -11068,11 +14571,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-india",
     "libraryId": "intermediate",
     "word": "India",
-    "meaning": "印度（南亚国家）；印度",
+    "meaning": "印度（南亚国家）",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "East india company",
-      "meaning": "东印度公司",
+      "text": "A trip to India",
+      "meaning": "印度之行",
       "kind": "phrase"
     }
   },
@@ -11080,11 +14584,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-indian",
     "libraryId": "intermediate",
     "word": "Indian",
-    "meaning": "印度的；印第安人的；印第安语的；印度人",
+    "meaning": "印度的；印第安人的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Indian ocean",
-      "meaning": "n. 印度洋",
+      "text": "Indian food",
+      "meaning": "印度食物",
       "kind": "phrase"
     }
   },
@@ -11092,7 +14597,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-industry",
     "libraryId": "intermediate",
     "word": "industry",
-    "meaning": "产业；工业；勤勉；勤劳",
+    "meaning": "工业；产业",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Chemical industry",
@@ -11101,26 +14607,54 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "influence",
+    "meaning": "影响",
+    "example": {
+      "text": "A positive influence",
+      "meaning": "积极的影响",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-influence",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "information",
+    "meaning": "信息",
+    "example": {
+      "text": "Useful information",
+      "meaning": "有用的信息",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-information",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "ink",
+    "meaning": "墨水",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Ink in a pen",
+      "meaning": "钢笔里的墨水",
+      "kind": "phrase"
+    },
     "id": "intermediate-ink",
     "libraryId": "intermediate",
-    "word": "ink",
-    "meaning": "签署；涂墨水于；墨水；墨汁",
-    "group": 0,
-    "example": {
-      "text": "Printing ink",
-      "meaning": "印刷用油墨",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-inside",
     "libraryId": "intermediate",
     "word": "inside",
-    "meaning": "里面；内部；内情；内脏",
+    "meaning": "在里面",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "Inside out",
-      "meaning": "彻底地；里面翻到外面",
+      "text": "Go inside",
+      "meaning": "进去",
       "kind": "phrase"
     }
   },
@@ -11128,11 +14662,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-insist",
     "libraryId": "intermediate",
     "word": "insist",
-    "meaning": "坚持；强调；坚持要求；坚决主张",
+    "meaning": "坚持；坚决要求",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Insist upon",
-      "meaning": "坚持…",
+      "text": "Insist on",
+      "meaning": "坚持",
       "kind": "phrase"
     }
   },
@@ -11140,83 +14675,147 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-instead",
     "libraryId": "intermediate",
     "word": "instead",
-    "meaning": "代替；反而；相反；作为替代",
+    "meaning": "代替；反而；相反",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "Instead of",
-      "meaning": "代替；不是…而是…",
+      "meaning": "代替",
       "kind": "phrase"
     }
   },
   {
+    "word": "instruction",
+    "meaning": "指示；说明",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Follow the instructions",
+      "meaning": "按照说明操作",
+      "kind": "phrase"
+    },
     "id": "intermediate-instruction",
     "libraryId": "intermediate",
-    "word": "instruction",
-    "meaning": "指令；命令；指示；教导",
-    "group": 0,
-    "example": {
-      "text": "Computer-aided instruction",
-      "meaning": "电脑辅助教学",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-intention",
     "libraryId": "intermediate",
     "word": "intention",
-    "meaning": "意图；目的；意向；愈合",
+    "meaning": "意图；目的",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Original intention",
-      "meaning": "初衷；原始意图",
+      "meaning": "初衷",
       "kind": "phrase"
     }
   },
   {
+    "word": "interest",
+    "meaning": "兴趣；利息；利益",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "She has an interest in science.",
+      "meaning": "她对科学有兴趣。",
+      "kind": "sentence",
+      "sense": "兴趣",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "利息",
+          "partOfSpeech": "n",
+          "text": "The bank pays interest on savings.",
+          "meaning": "银行为存款支付利息。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "利益",
+          "partOfSpeech": "n",
+          "text": "The plan protects public interests.",
+          "meaning": "这项计划保护公共利益。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-interest",
     "libraryId": "intermediate",
-    "word": "interest",
-    "meaning": "兴趣；爱好；利息；趣味",
-    "group": 0,
-    "example": {
-      "text": "Public interest",
-      "meaning": "公共利益",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "international",
+    "meaning": "国际的",
+    "example": {
+      "text": "An international school",
+      "meaning": "一所国际学校",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "adj",
+    "id": "intermediate-international",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "Internet",
+    "meaning": "互联网",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Search the Internet",
+      "meaning": "搜索互联网",
+      "kind": "phrase"
+    },
     "id": "intermediate-internet",
     "libraryId": "intermediate",
-    "word": "Internet",
-    "meaning": "因特网；互联网",
-    "group": 0,
+    "group": 0
+  },
+  {
+    "word": "interview",
+    "meaning": "面试",
     "example": {
-      "text": "Internet access",
-      "meaning": "互联网接入",
+      "text": "A job interview",
+      "meaning": "一次求职面试",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-interview",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-into",
     "libraryId": "intermediate",
     "word": "into",
-    "meaning": "到…里；深入…之中；成为…状况；进入到…之内",
+    "meaning": "进入；到……里面",
+    "partOfSpeech": "prep",
     "group": 0,
     "example": {
       "text": "Go into",
-      "meaning": "进入；加入；变得；探究",
+      "meaning": "进入",
       "kind": "phrase"
     }
+  },
+  {
+    "word": "introduce",
+    "meaning": "介绍",
+    "example": {
+      "text": "Introduce yourself",
+      "meaning": "介绍你自己",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "intermediate-introduce",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-introduction",
     "libraryId": "intermediate",
     "word": "introduction",
-    "meaning": "介绍；引进；采用；入门",
+    "meaning": "介绍；引进",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Business introduction",
-      "meaning": "业务介绍",
+      "text": "Letter of introduction",
+      "meaning": "介绍信",
       "kind": "phrase"
     }
   },
@@ -11224,47 +14823,82 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-invent",
     "libraryId": "intermediate",
     "word": "invent",
-    "meaning": "发明；创造；虚构；捏造",
+    "meaning": "发明；创造；虚构",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Alexander Graham Bell invented the telephone in 1876.",
-      "meaning": "亚历山大 · 格雷厄姆 · 贝尔于1876年发明了电话。",
+      "meaning": "亚历山大·格雷厄姆·贝尔于1876年发明了电话。",
       "kind": "sentence"
     }
+  },
+  {
+    "word": "invention",
+    "meaning": "发明",
+    "example": {
+      "text": "A useful invention",
+      "meaning": "一项有用的发明",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-invention",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-invite",
     "libraryId": "intermediate",
     "word": "invite",
-    "meaning": "邀请；招待；招致；征求",
+    "meaning": "邀请，招待；招致",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Invite public bidding",
-      "meaning": "（公开）招标",
-      "kind": "phrase"
+      "text": "I’m afraid I wasn’t invited.",
+      "meaning": "恐怕我没有受到邀请。",
+      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-iron",
     "libraryId": "intermediate",
     "word": "iron",
-    "meaning": "熨斗；烙铁；坚强；熨",
+    "meaning": "铁；熨斗；熨烫",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Iron oxide",
-      "meaning": "氧化铁",
-      "kind": "phrase"
+      "text": "This gate is made of iron.",
+      "meaning": "这扇门由铁制成。",
+      "kind": "sentence",
+      "sense": "铁",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "熨斗",
+          "partOfSpeech": "n",
+          "text": "The iron is too hot.",
+          "meaning": "熨斗太烫了。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "熨烫",
+          "partOfSpeech": "v",
+          "text": "Please iron this shirt.",
+          "meaning": "请熨一下这件衬衫。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-itself",
     "libraryId": "intermediate",
     "word": "itself",
-    "meaning": "它自己；它本身；自身；本身",
+    "meaning": "它自己；它本身",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
-      "text": "Of itself",
-      "meaning": "自行",
+      "text": "In itself",
+      "meaning": "以其本身而言，本质上",
       "kind": "phrase"
     }
   },
@@ -11272,7 +14906,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-jacket",
     "libraryId": "intermediate",
     "word": "jacket",
-    "meaning": "羽绒滑雪衫；西装短外套；短上衣；夹克",
+    "meaning": "夹克；短上衣",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Leather jacket",
@@ -11281,46 +14916,37 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
-    "id": "intermediate-january",
-    "libraryId": "intermediate",
-    "word": "January",
-    "meaning": "一月",
-    "group": 0,
-    "example": {
-      "text": "In January",
-      "meaning": "在一月",
-      "kind": "phrase"
-    }
-  },
-  {
     "id": "intermediate-japan",
     "libraryId": "intermediate",
     "word": "Japan",
-    "meaning": "日本（东亚国家名）；日本；日本国",
+    "meaning": "日本（东亚国家名）",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Japan airlines",
-      "meaning": "日本航空",
+      "text": "A trip to Japan",
+      "meaning": "日本之行",
       "kind": "phrase"
     }
   },
   {
+    "word": "Japanese",
+    "meaning": "日语",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Learn Japanese",
+      "meaning": "学习日语",
+      "kind": "phrase"
+    },
     "id": "intermediate-japanese",
     "libraryId": "intermediate",
-    "word": "Japanese",
-    "meaning": "日本（人）的；日语的；日本人；日语",
-    "group": 0,
-    "example": {
-      "text": "Japanese yen",
-      "meaning": "日元",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-jeans",
     "libraryId": "intermediate",
     "word": "jeans",
     "meaning": "牛仔裤；工装裤",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Blue jeans",
@@ -11332,11 +14958,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-join",
     "libraryId": "intermediate",
     "word": "join",
-    "meaning": "参加；结合；连接；接合点",
+    "meaning": "参加；结合；连接",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Join hands",
-      "meaning": "携手，联手；齐心协力",
+      "text": "Join in",
+      "meaning": "加入；参加",
       "kind": "phrase"
     }
   },
@@ -11344,11 +14971,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-joke",
     "libraryId": "intermediate",
     "word": "joke",
-    "meaning": "玩笑；笑话；笑柄；开…的玩笑",
+    "meaning": "玩笑；笑话",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "In joke",
-      "meaning": "开玩笑",
+      "text": "Make a joke",
+      "meaning": "开玩笑，讲笑话",
       "kind": "phrase"
     }
   },
@@ -11356,35 +14984,25 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-joy",
     "libraryId": "intermediate",
     "word": "joy",
-    "meaning": "欢乐；快乐；乐趣；高兴",
+    "meaning": "欢乐；快乐",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "With joy",
-      "meaning": "高兴地",
+      "text": "Tears of joy",
+      "meaning": "高兴的泪水，喜极而泣",
       "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-june",
-    "libraryId": "intermediate",
-    "word": "June",
-    "meaning": "六月",
-    "group": 0,
-    "example": {
-      "text": "He spent two and a half weeks with us in June 1986.",
-      "meaning": "1986年6月，他和我们呆了两个半星期。",
-      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-just",
     "libraryId": "intermediate",
     "word": "just",
-    "meaning": "只是；仅仅；刚才；刚刚",
+    "meaning": "只是；刚刚；正好",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "Just as",
-      "meaning": "正象",
+      "text": "More than just",
+      "meaning": "不只是",
       "kind": "phrase"
     }
   },
@@ -11392,23 +15010,43 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-key",
     "libraryId": "intermediate",
     "word": "key",
-    "meaning": "（打字机等的）键；关键；钥匙；键入",
+    "meaning": "钥匙；关键；按键",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "On key",
-      "meaning": "上机",
-      "kind": "phrase"
+      "text": "I lost the key to the door.",
+      "meaning": "我丢了门钥匙。",
+      "kind": "sentence",
+      "sense": "钥匙",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "关键",
+          "partOfSpeech": "n",
+          "text": "Practice is the key to success.",
+          "meaning": "练习是成功的关键。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "按键",
+          "partOfSpeech": "n",
+          "text": "Press any key to continue.",
+          "meaning": "按任意键继续。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-keyboard",
     "libraryId": "intermediate",
     "word": "keyboard",
-    "meaning": "键盘；键入；用键盘式排字机排字",
+    "meaning": "键盘",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Keyboard entry",
-      "meaning": "键盘输入",
+      "text": "Keyboard input",
+      "meaning": "键入，键盘输入",
       "kind": "phrase"
     }
   },
@@ -11416,47 +15054,51 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-kick",
     "libraryId": "intermediate",
     "word": "kick",
-    "meaning": "踢；反冲；朝后座；后座力",
+    "meaning": "踢",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Kick oneself",
-      "meaning": "严厉自责",
+      "text": "Kick the ball",
+      "meaning": "踢球",
       "kind": "phrase"
     }
   },
   {
+    "word": "kid",
+    "meaning": "孩子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A young kid",
+      "meaning": "一个小孩子",
+      "kind": "phrase"
+    },
     "id": "intermediate-kid",
     "libraryId": "intermediate",
-    "word": "kid",
-    "meaning": "小孩；小山羊；欺骗；取笑",
-    "group": 0,
-    "example": {
-      "text": "No kid",
-      "meaning": "不要孩子；不开玩笑",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "kill",
+    "meaning": "杀死",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Cold weather can kill plants.",
+      "meaning": "寒冷天气会冻死植物。",
+      "kind": "sentence"
+    },
     "id": "intermediate-kill",
     "libraryId": "intermediate",
-    "word": "kill",
-    "meaning": "杀死；扼杀；使终止；抵消",
-    "group": 0,
-    "example": {
-      "text": "Kill off",
-      "meaning": "消灭",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-kilo",
     "libraryId": "intermediate",
     "word": "kilo",
-    "meaning": "千克；公斤",
+    "meaning": "千克",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "This kind of chocolate is retailed at one pound a kilo.",
-      "meaning": "这种巧克力糖零售每公斤一英镑。",
+      "text": "I'd like a kilo of pasta.",
+      "meaning": "我想要一千克的意大利面。",
       "kind": "sentence"
     }
   },
@@ -11464,79 +15106,99 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-kilometer",
     "libraryId": "intermediate",
     "word": "kilometer",
-    "meaning": "[计量] 公里；[计量] 千米（等于kilometre）；千米",
+    "meaning": "千米；公里",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Square kilometer",
-      "meaning": "平方公里",
+      "text": "Two kilometers",
+      "meaning": "两千米",
       "kind": "phrase"
     }
   },
   {
+    "word": "king",
+    "meaning": "国王",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A wise king",
+      "meaning": "一位英明的国王",
+      "kind": "phrase"
+    },
     "id": "intermediate-king",
     "libraryId": "intermediate",
-    "word": "king",
-    "meaning": "国王；最有势力者；王棋；统治",
-    "group": 0,
-    "example": {
-      "text": "King lear",
-      "meaning": "李尔王",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "kiss",
+    "meaning": "亲吻",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Kiss the baby",
+      "meaning": "亲吻婴儿",
+      "kind": "phrase"
+    },
     "id": "intermediate-kiss",
     "libraryId": "intermediate",
-    "word": "kiss",
-    "meaning": "吻；（风等）轻拂；轻拂；[C]吻",
-    "group": 0,
-    "example": {
-      "text": "French kiss",
-      "meaning": "法国式接吻",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "kite",
+    "meaning": "风筝",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Fly a kite",
+      "meaning": "放风筝",
+      "kind": "phrase"
+    },
     "id": "intermediate-kite",
     "libraryId": "intermediate",
-    "word": "kite",
-    "meaning": "风筝；使用空头支票；像风筝一样飞；轻快地移动",
-    "group": 0,
-    "example": {
-      "text": "Kite flying",
-      "meaning": "放风筝；开空头支票；签发通融票据以资弥补",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-knee",
     "libraryId": "intermediate",
     "word": "knee",
-    "meaning": "膝盖；膝；用膝盖碰；膝关节",
+    "meaning": "膝盖",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Knee pad",
-      "meaning": "n. 护膝",
+      "text": "Knee joint",
+      "meaning": "膝关节",
       "kind": "phrase"
     }
   },
   {
+    "word": "knock",
+    "meaning": "敲",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Knock on the door",
+      "meaning": "敲门",
+      "kind": "phrase"
+    },
     "id": "intermediate-knock",
     "libraryId": "intermediate",
-    "word": "knock",
-    "meaning": "敲；打；敲击；敲打",
-    "group": 0,
+    "group": 0
+  },
+  {
+    "word": "knowledge",
+    "meaning": "知识",
     "example": {
-      "text": "Knock off",
-      "meaning": "击倒；停工；中断",
+      "text": "Share your knowledge",
+      "meaning": "分享你的知识",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-knowledge",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-lab",
     "libraryId": "intermediate",
     "word": "lab",
-    "meaning": "实验室；研究室",
+    "meaning": "实验室，研究室",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Lab test",
@@ -11548,107 +15210,138 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-lady",
     "libraryId": "intermediate",
     "word": "lady",
-    "meaning": "女士；夫人；小姐；妻子",
+    "meaning": "女士；夫人",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Beautiful lady",
-      "meaning": "美丽的女人",
+      "text": "An old lady",
+      "meaning": "一位老太太",
       "kind": "phrase"
     }
   },
   {
+    "word": "lamb",
+    "meaning": "羔羊；羊羔",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A young lamb",
+      "meaning": "一只小羊羔",
+      "kind": "phrase"
+    },
     "id": "intermediate-lamb",
     "libraryId": "intermediate",
-    "word": "lamb",
-    "meaning": "羔羊；小羊；羔羊肉；生小羊",
-    "group": 0,
-    "example": {
-      "text": "Lamb wave",
-      "meaning": "蓝姆波",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "lamp",
+    "meaning": "灯",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A desk lamp",
+      "meaning": "一盏台灯",
+      "kind": "phrase"
+    },
     "id": "intermediate-lamp",
     "libraryId": "intermediate",
-    "word": "lamp",
-    "meaning": "灯；照射器；照亮；发亮",
-    "group": 0,
-    "example": {
-      "text": "Street lamp",
-      "meaning": "n. 路灯",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-land",
     "libraryId": "intermediate",
     "word": "land",
-    "meaning": "国土；陆地；地面；使…登陆",
+    "meaning": "陆地；降落",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "On land",
-      "meaning": "在陆地上",
-      "kind": "phrase"
+      "text": "The sailors finally saw land.",
+      "meaning": "水手们终于看到了陆地。",
+      "kind": "sentence",
+      "sense": "陆地",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "降落",
+          "partOfSpeech": "v",
+          "text": "The plane will land at noon.",
+          "meaning": "飞机将在中午降落。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "language",
+    "meaning": "语言",
+    "example": {
+      "text": "Learn a language",
+      "meaning": "学习一门语言",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-language",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "large",
+    "meaning": "大的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A large room",
+      "meaning": "一个大房间",
+      "kind": "phrase"
+    },
     "id": "intermediate-large",
     "libraryId": "intermediate",
-    "word": "large",
-    "meaning": "大的；多数的；广博的；大大地",
-    "group": 0,
-    "example": {
-      "text": "Large capacity",
-      "meaning": "大容量",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "last",
+    "meaning": "最后的；持续",
+    "partOfSpeech": "adj/v",
+    "example": {
+      "text": "This is the last bus today.",
+      "meaning": "这是今天最后一班公交车。",
+      "kind": "sentence",
+      "sense": "最后的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "持续",
+          "partOfSpeech": "v",
+          "text": "The meeting will last an hour.",
+          "meaning": "会议将持续一小时。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-last",
     "libraryId": "intermediate",
-    "word": "last",
-    "meaning": "末尾；最后；上个；鞋楦（做鞋的模型）",
-    "group": 0,
-    "example": {
-      "text": "Last year",
-      "meaning": "去年",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-late",
-    "libraryId": "intermediate",
-    "word": "late",
-    "meaning": "晚的；迟的；已故的；最近的",
-    "group": 0,
+    "word": "laugh",
+    "meaning": "笑",
+    "partOfSpeech": "v",
     "example": {
-      "text": "Late night",
-      "meaning": "深夜",
+      "text": "Laugh out loud",
+      "meaning": "大声笑",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-laugh",
     "libraryId": "intermediate",
-    "word": "laugh",
-    "meaning": "笑；引人发笑的事或人；笑声；大笑",
-    "group": 0,
-    "example": {
-      "text": "Laugh off",
-      "meaning": "用笑摆脱",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-law",
     "libraryId": "intermediate",
     "word": "law",
-    "meaning": "法律；规律；法治；法学",
+    "meaning": "法律；规律",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Criminal law",
-      "meaning": "刑法",
+      "text": "Rule of law",
+      "meaning": "法治；法律规则",
       "kind": "phrase"
     }
   },
@@ -11656,11 +15349,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-lay",
     "libraryId": "intermediate",
     "word": "lay",
-    "meaning": "躺下；产卵；搁放；放置",
+    "meaning": "放置；铺放",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Lay eggs",
-      "meaning": "产蛋",
+      "text": "Lay the book on the table",
+      "meaning": "把书放在桌上",
       "kind": "phrase"
     }
   },
@@ -11668,35 +15362,49 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-lazy",
     "libraryId": "intermediate",
     "word": "lazy",
-    "meaning": "懒惰的；懒洋洋的；怠惰的；慢吞吞的",
+    "meaning": "懒惰的；懒散的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Lazy boy",
-      "meaning": "n. 懒惰的男孩",
+      "meaning": "懒惰的男孩",
       "kind": "phrase"
     }
   },
   {
+    "word": "lead",
+    "meaning": "带领；铅",
+    "partOfSpeech": "v/n",
+    "example": {
+      "text": "She will lead us to the station.",
+      "meaning": "她将带我们去车站。",
+      "kind": "sentence",
+      "sense": "带领",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "铅",
+          "partOfSpeech": "n",
+          "text": "Lead is a heavy metal.",
+          "meaning": "铅是一种重金属。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-lead",
     "libraryId": "intermediate",
-    "word": "lead",
-    "meaning": "领导；铅；导线；榜样",
-    "group": 0,
-    "example": {
-      "text": "Lead free",
-      "meaning": "adj. 无铅的",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-leader",
     "libraryId": "intermediate",
     "word": "leader",
-    "meaning": "领导者；首领；指挥者；领袖",
+    "meaning": "领导者；领袖",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Market leader",
-      "meaning": "市场领袖",
+      "text": "Team leader",
+      "meaning": "组长；团队领导",
       "kind": "phrase"
     }
   },
@@ -11704,59 +15412,64 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-leaf",
     "libraryId": "intermediate",
     "word": "leaf",
-    "meaning": "叶子；（书籍等的）一张；扇页；生叶",
+    "meaning": "叶子；树叶",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Leaf blade",
-      "meaning": "叶片",
+      "text": "In leaf",
+      "meaning": "有叶子的；叶茂的；长满叶子的",
       "kind": "phrase"
     }
   },
   {
+    "word": "least",
+    "meaning": "最少；最不",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "The least expensive book",
+      "meaning": "最便宜的书",
+      "kind": "phrase"
+    },
     "id": "intermediate-least",
     "libraryId": "intermediate",
-    "word": "least",
-    "meaning": "最小的；最少的（little的最高级）；最小；最少",
-    "group": 0,
-    "example": {
-      "text": "At least",
-      "meaning": "至少",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-lemonade",
     "libraryId": "intermediate",
     "word": "lemonade",
     "meaning": "柠檬水",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Would you like a lemonade?",
-      "meaning": "你要来一杯柠檬汽水吗？",
-      "kind": "sentence"
+      "text": "A glass of lemonade",
+      "meaning": "一杯柠檬水",
+      "kind": "phrase"
     }
   },
   {
+    "word": "level",
+    "meaning": "水平",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A high level",
+      "meaning": "很高的水平",
+      "kind": "phrase"
+    },
     "id": "intermediate-level",
     "libraryId": "intermediate",
-    "word": "level",
-    "meaning": "水平；标准；水平面；水平的",
-    "group": 0,
-    "example": {
-      "text": "Basic level",
-      "meaning": "基本水平",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-license",
     "libraryId": "intermediate",
     "word": "license",
-    "meaning": "执照；许可证；特许；许可",
+    "meaning": "执照；许可证",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "License plate",
-      "meaning": "牌照",
+      "text": "Business license",
+      "meaning": "营业执照；运业执照",
       "kind": "phrase"
     }
   },
@@ -11764,83 +15477,148 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-lie",
     "libraryId": "intermediate",
     "word": "lie",
-    "meaning": "躺；说谎；位于；展现",
+    "meaning": "躺；位于；说谎",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Lie down",
-      "meaning": "躺下",
-      "kind": "phrase"
+      "text": "Please lie down on the bed.",
+      "meaning": "请躺在床上。",
+      "kind": "sentence",
+      "sense": "躺",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "位于",
+          "partOfSpeech": "v",
+          "text": "The village lies beside the river.",
+          "meaning": "村庄位于河边。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "说谎",
+          "partOfSpeech": "v",
+          "text": "Do not lie to your friends.",
+          "meaning": "不要对朋友说谎。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-lift",
     "libraryId": "intermediate",
     "word": "lift",
-    "meaning": "举起；提升；鼓舞；空运",
+    "meaning": "举起；电梯",
+    "partOfSpeech": "v/n",
     "group": 0,
     "example": {
-      "text": "Artificial lift",
-      "meaning": "人工升举",
-      "kind": "phrase"
+      "text": "Can you lift this box?",
+      "meaning": "你能举起这个箱子吗？",
+      "kind": "sentence",
+      "sense": "举起",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "电梯",
+          "partOfSpeech": "n",
+          "text": "Take the lift to the third floor.",
+          "meaning": "乘电梯到三楼。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "line",
+    "meaning": "线；队伍；台词",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Draw a straight line.",
+      "meaning": "画一条直线。",
+      "kind": "sentence",
+      "sense": "线",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "队伍",
+          "partOfSpeech": "n",
+          "text": "Please wait in line.",
+          "meaning": "请排队等候。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "台词",
+          "partOfSpeech": "n",
+          "text": "The actor forgot his lines.",
+          "meaning": "演员忘了台词。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-line",
     "libraryId": "intermediate",
-    "word": "line",
-    "meaning": "路线；航线；排；绳",
-    "group": 0,
-    "example": {
-      "text": "Production line",
-      "meaning": "生产线",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "list",
+    "meaning": "清单",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A shopping list",
+      "meaning": "一张购物清单",
+      "kind": "phrase"
+    },
     "id": "intermediate-list",
     "libraryId": "intermediate",
-    "word": "list",
-    "meaning": "[计] 列表；清单；目录；列于表上",
-    "group": 0,
-    "example": {
-      "text": "Price list",
-      "meaning": "价目表",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-litter",
     "libraryId": "intermediate",
     "word": "litter",
-    "meaning": "垃圾；轿；担架；一窝（动物的幼崽）",
+    "meaning": "垃圾；一窝幼崽",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "People who drop litter can be fined in some cities.",
-      "meaning": "在有些城市，乱扔垃圾的人会被罚款。",
-      "kind": "sentence"
+      "text": "There is litter on the beach.",
+      "meaning": "海滩上有垃圾。",
+      "kind": "sentence",
+      "sense": "垃圾",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "一窝幼崽",
+          "partOfSpeech": "n",
+          "text": "The cat had a litter of kittens.",
+          "meaning": "这只猫生了一窝小猫。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "lively",
+    "meaning": "活泼的；热闹的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A lively discussion",
+      "meaning": "热烈的讨论",
+      "kind": "phrase"
+    },
     "id": "intermediate-lively",
     "libraryId": "intermediate",
-    "word": "lively",
-    "meaning": "活泼的；生动的；真实的；生气勃勃的",
-    "group": 0,
-    "example": {
-      "text": "Look lively",
-      "meaning": "行动敏捷些；拿出劲头来",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-lock",
     "libraryId": "intermediate",
     "word": "lock",
-    "meaning": "锁；锁上；隐藏；水闸",
+    "meaning": "锁上；锁住",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Ship lock",
-      "meaning": "船闸",
+      "text": "Lock up",
+      "meaning": "锁起来",
       "kind": "phrase"
     }
   },
@@ -11849,6 +15627,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "London",
     "meaning": "伦敦",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "A trip to London",
@@ -11860,11 +15639,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-lonely",
     "libraryId": "intermediate",
     "word": "lonely",
-    "meaning": "寂寞的；偏僻的；孤独者；孤独的",
+    "meaning": "寂寞的；偏僻的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Lonely lonely",
-      "meaning": "孤独寂寞",
+      "text": "Feel lonely",
+      "meaning": "感到孤独，感到寂寞",
       "kind": "phrase"
     }
   },
@@ -11872,31 +15652,34 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-lot",
     "libraryId": "intermediate",
     "word": "lot",
-    "meaning": "份额；许多；命运；阄",
+    "meaning": "许多；大量",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Parking lot",
-      "meaning": "n. 停车场",
+      "text": "A lot of",
+      "meaning": "许多",
       "kind": "phrase"
     }
   },
   {
+    "word": "loud",
+    "meaning": "响亮的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A loud noise",
+      "meaning": "一阵很响的噪声",
+      "kind": "phrase"
+    },
     "id": "intermediate-loud",
     "libraryId": "intermediate",
-    "word": "loud",
-    "meaning": "大声的；高声的；不断的；喧吵的",
-    "group": 0,
-    "example": {
-      "text": "Out loud",
-      "meaning": "响亮地；大声地",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-lovely",
     "libraryId": "intermediate",
     "word": "lovely",
-    "meaning": "可爱的；令人愉快的；爱恋的；秀丽的",
+    "meaning": "可爱的；美好的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Lovely girl",
@@ -11905,26 +15688,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "low",
+    "meaning": "低的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A low wall",
+      "meaning": "一堵矮墙",
+      "kind": "phrase"
+    },
     "id": "intermediate-low",
     "libraryId": "intermediate",
-    "word": "low",
-    "meaning": "低的；浅的；卑贱的；粗俗的",
-    "group": 0,
-    "example": {
-      "text": "Low temperature",
-      "meaning": "低温",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-luck",
     "libraryId": "intermediate",
     "word": "luck",
-    "meaning": "运气；幸运；带来好运的东西；靠运气",
+    "meaning": "运气；好运",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "In luck",
-      "meaning": "运气好",
+      "text": "Out of luck",
+      "meaning": "运气不好",
       "kind": "phrase"
     }
   },
@@ -11932,47 +15717,77 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-lucky",
     "libraryId": "intermediate",
     "word": "lucky",
-    "meaning": "幸运的；侥幸的；吉祥的；吉利的",
+    "meaning": "幸运的；侥幸的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Lucky draw",
-      "meaning": "幸运抽奖",
+      "text": "Lucky day",
+      "meaning": "幸运日；黄道吉日",
       "kind": "phrase"
     }
+  },
+  {
+    "word": "machine",
+    "meaning": "机器",
+    "example": {
+      "text": "A washing machine",
+      "meaning": "一台洗衣机",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-machine",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-mad",
     "libraryId": "intermediate",
     "word": "mad",
-    "meaning": "疯狂的；发疯的；愚蠢的；着迷的",
+    "meaning": "发疯的；生气的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Mad dog",
-      "meaning": "疯狗",
+      "text": "Get mad",
+      "meaning": "变的恼怒，发火；变得着迷",
       "kind": "phrase"
     }
   },
   {
+    "word": "madam",
+    "meaning": "女士；夫人",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Good morning, madam.",
+      "meaning": "女士，早上好。",
+      "kind": "sentence"
+    },
     "id": "intermediate-madam",
     "libraryId": "intermediate",
-    "word": "madam",
-    "meaning": "夫人；女士；鸨母；太太",
-    "group": 0,
+    "group": 0
+  },
+  {
+    "word": "magazine",
+    "meaning": "杂志",
     "example": {
-      "text": "Dear sir or madam",
-      "meaning": "尊敬的先生或女士（信笺的开头语）",
+      "text": "A children's magazine",
+      "meaning": "一本儿童杂志",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-magazine",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-magic",
     "libraryId": "intermediate",
     "word": "magic",
-    "meaning": "巫术；魔法；戏法；不可思议的",
+    "meaning": "魔法；魔术",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Magic words",
-      "meaning": "咒语",
+      "text": "Black magic",
+      "meaning": "魔法",
       "kind": "phrase"
     }
   },
@@ -11980,91 +15795,86 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-mail",
     "libraryId": "intermediate",
     "word": "mail",
-    "meaning": "邮件；邮政；邮递；盔甲",
+    "meaning": "邮件；邮政",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Voice mail",
-      "meaning": "语音邮件",
+      "text": "By air mail",
+      "meaning": "寄航空邮件",
       "kind": "phrase"
     }
   },
   {
+    "word": "main",
+    "meaning": "主要的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A main road",
+      "meaning": "一条主干道",
+      "kind": "phrase"
+    },
     "id": "intermediate-main",
     "libraryId": "intermediate",
-    "word": "main",
-    "meaning": "主要部分；要点；体力；总管道",
-    "group": 0,
-    "example": {
-      "text": "Main products",
-      "meaning": "主要产品",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "manage",
+    "meaning": "管理",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Manage a team",
+      "meaning": "管理一个团队",
+      "kind": "phrase"
+    },
     "id": "intermediate-manage",
     "libraryId": "intermediate",
-    "word": "manage",
-    "meaning": "管理；经营；控制；设法",
-    "group": 0,
-    "example": {
-      "text": "Manage without",
-      "meaning": "没有…而仍设法对付过去",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-manager",
     "libraryId": "intermediate",
     "word": "manager",
-    "meaning": "经理；管理人员；管理人",
+    "meaning": "经理；管理人员",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "General manager",
-      "meaning": "总经理",
+      "text": "Deputy general manager",
+      "meaning": "副总经理",
       "kind": "phrase"
     }
   },
   {
-    "id": "intermediate-march",
-    "libraryId": "intermediate",
-    "word": "March",
-    "meaning": "三月；行军；前进；游行示威",
-    "group": 0,
+    "word": "mark",
+    "meaning": "标记；痕迹",
+    "partOfSpeech": "n",
     "example": {
-      "text": "Long march",
-      "meaning": "长征",
+      "text": "A mark on the wall",
+      "meaning": "墙上的一个痕迹",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-mark",
     "libraryId": "intermediate",
-    "word": "mark",
-    "meaning": "标志；马克；符号；痕迹",
-    "group": 0,
-    "example": {
-      "text": "Question mark",
-      "meaning": "问号",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "market",
+    "meaning": "市场",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A local market",
+      "meaning": "一个当地市场",
+      "kind": "phrase"
+    },
     "id": "intermediate-market",
     "libraryId": "intermediate",
-    "word": "market",
-    "meaning": "市场；行情；股票市场；市面",
-    "group": 0,
-    "example": {
-      "text": "Market competition",
-      "meaning": "市场竞争",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-marriage",
     "libraryId": "intermediate",
     "word": "marriage",
-    "meaning": "结婚；婚姻生活；密切结合；合并",
+    "meaning": "婚姻；结婚",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Marriage law",
@@ -12076,7 +15886,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-marry",
     "libraryId": "intermediate",
     "word": "marry",
-    "meaning": "嫁；娶；与……结婚；和…结婚",
+    "meaning": "嫁；娶；与……结婚",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Marry him",
@@ -12085,34 +15896,55 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "master",
+    "meaning": "掌握",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Master a new skill",
+      "meaning": "掌握一项新技能",
+      "kind": "phrase"
+    },
     "id": "intermediate-master",
     "libraryId": "intermediate",
-    "word": "master",
-    "meaning": "控制；精通；征服；硕士",
-    "group": 0,
-    "example": {
-      "text": "Master bedroom",
-      "meaning": "主卧室",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "match",
+    "meaning": "比赛；火柴；相配",
+    "partOfSpeech": "n/v",
+    "example": {
+      "text": "We watched a football match.",
+      "meaning": "我们看了一场足球比赛。",
+      "kind": "sentence",
+      "sense": "比赛",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "火柴",
+          "partOfSpeech": "n",
+          "text": "He lit the candle with a match.",
+          "meaning": "他用火柴点燃了蜡烛。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "相配",
+          "partOfSpeech": "v",
+          "text": "These shoes match your coat.",
+          "meaning": "这双鞋和你的外套很配。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-match",
     "libraryId": "intermediate",
-    "word": "match",
-    "meaning": "使比赛；使相配；敌得过；比得上",
-    "group": 0,
-    "example": {
-      "text": "League match",
-      "meaning": "联赛",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-math",
     "libraryId": "intermediate",
     "word": "math",
-    "meaning": "数学（等于mathematics）；数学",
+    "meaning": "数学",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Math problem",
@@ -12124,7 +15956,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-maybe",
     "libraryId": "intermediate",
     "word": "maybe",
-    "meaning": "也许；可能；大概；可能性",
+    "meaning": "也许；可能；大概",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "He said he’d finish the work soon – maybe tomorrow.",
@@ -12136,11 +15969,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-meal",
     "libraryId": "intermediate",
     "word": "meal",
-    "meaning": "一餐；一顿饭；膳食；进餐",
+    "meaning": "一餐；一顿饭",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Evening meal",
-      "meaning": "晚餐",
+      "text": "A full meal",
+      "meaning": "丰盛的一餐",
       "kind": "phrase"
     }
   },
@@ -12148,11 +15982,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-meaning",
     "libraryId": "intermediate",
     "word": "meaning",
-    "meaning": "意义；含义；意图；意味深长的",
+    "meaning": "意思；含义",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Social meaning",
-      "meaning": "社会意义",
+      "text": "Meaning of life",
+      "meaning": "生活的意义",
       "kind": "phrase"
     }
   },
@@ -12160,11 +15995,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-medical",
     "libraryId": "intermediate",
     "word": "medical",
-    "meaning": "医学的；药的；内科的；医生",
+    "meaning": "医学的；药的；内科的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Medical service",
-      "meaning": "医疗服务",
+      "text": "Medical science",
+      "meaning": "医学科学",
       "kind": "phrase"
     }
   },
@@ -12172,11 +16008,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-medicine",
     "libraryId": "intermediate",
     "word": "medicine",
-    "meaning": "药；医学；内科；巫术",
+    "meaning": "药；医学",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Chinese medicine",
-      "meaning": "中医",
+      "text": "Chinese herbal medicine",
+      "meaning": "中药",
       "kind": "phrase"
     }
   },
@@ -12184,11 +16021,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-meeting",
     "libraryId": "intermediate",
     "word": "meeting",
-    "meaning": "会议；会见；集会；汇合点",
+    "meaning": "会议；集会",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Annual meeting",
-      "meaning": "年会",
+      "text": "At the meeting",
+      "meaning": "在会上",
       "kind": "phrase"
     }
   },
@@ -12197,118 +16035,128 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "member",
     "meaning": "成员；会员；议员",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Party member",
-      "meaning": "党员",
+      "text": "Become a member",
+      "meaning": "成为一名成员/会员",
       "kind": "phrase"
     }
   },
   {
+    "word": "memory",
+    "meaning": "记忆；记忆力",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A good memory",
+      "meaning": "很好的记忆力",
+      "kind": "phrase"
+    },
     "id": "intermediate-memory",
     "libraryId": "intermediate",
-    "word": "memory",
-    "meaning": "记忆；记忆力；内存；[计] 存储器",
-    "group": 0,
-    "example": {
-      "text": "From memory",
-      "meaning": "根据记忆",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "mend",
+    "meaning": "修补",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Mend a shirt",
+      "meaning": "修补一件衬衫",
+      "kind": "phrase"
+    },
     "id": "intermediate-mend",
     "libraryId": "intermediate",
-    "word": "mend",
-    "meaning": "修理；修补；改善；修改",
-    "group": 0,
-    "example": {
-      "text": "On the mend",
-      "meaning": "在好转中",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-mention",
     "libraryId": "intermediate",
     "word": "mention",
-    "meaning": "提到；谈到；提及；论及",
+    "meaning": "提到；说起",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Honorable mention",
-      "meaning": "n. 优秀奖；鼓励奖；荣誉奖",
+      "text": "Not to mention",
+      "meaning": "更不用说",
       "kind": "phrase"
     }
   },
   {
+    "word": "menu",
+    "meaning": "菜单",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A restaurant menu",
+      "meaning": "一份餐馆菜单",
+      "kind": "phrase"
+    },
     "id": "intermediate-menu",
     "libraryId": "intermediate",
-    "word": "menu",
-    "meaning": "菜单；饭菜；菜肴",
-    "group": 0,
-    "example": {
-      "text": "Drop-down menu",
-      "meaning": "下拉式菜单",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-message",
     "libraryId": "intermediate",
     "word": "message",
-    "meaning": "消息；差使；启示；预言",
+    "meaning": "信息；口信",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Your message",
-      "meaning": "您的消息",
+      "text": "Leave a message",
+      "meaning": "留言",
       "kind": "phrase"
     }
   },
   {
+    "word": "metal",
+    "meaning": "金属",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A metal box",
+      "meaning": "一个金属盒子",
+      "kind": "phrase"
+    },
     "id": "intermediate-metal",
     "libraryId": "intermediate",
-    "word": "metal",
-    "meaning": "金属；合金；以金属覆盖；金属制的",
-    "group": 0,
-    "example": {
-      "text": "Heavy metal",
-      "meaning": "重金属摇滚乐",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-method",
     "libraryId": "intermediate",
     "word": "method",
-    "meaning": "方法；条理；类函数；使用体验派表演方法的",
+    "meaning": "方法；办法",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Calculation method",
-      "meaning": "计算方法",
+      "text": "Design method",
+      "meaning": "设计方法，设计法",
       "kind": "phrase"
     }
   },
   {
+    "word": "middle",
+    "meaning": "中间",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "In the middle of the room",
+      "meaning": "在房间中间",
+      "kind": "phrase"
+    },
     "id": "intermediate-middle",
     "libraryId": "intermediate",
-    "word": "middle",
-    "meaning": "中间的；中部的；中级的；中等的",
-    "group": 0,
-    "example": {
-      "text": "Middle school",
-      "meaning": "n. 中学",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-mile",
     "libraryId": "intermediate",
     "word": "mile",
-    "meaning": "英里；一英里赛跑；较大的距离",
+    "meaning": "英里",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Sea mile",
-      "meaning": "海里",
+      "text": "A mile off",
+      "meaning": "在一英里外",
       "kind": "phrase"
     }
   },
@@ -12316,83 +16164,124 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-mind",
     "libraryId": "intermediate",
     "word": "mind",
-    "meaning": "理智；精神；意见；智力",
+    "meaning": "头脑；介意",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Don't mind",
-      "meaning": "不在乎",
-      "kind": "phrase"
+      "text": "Keep an open mind.",
+      "meaning": "保持开放的头脑。",
+      "kind": "sentence",
+      "sense": "头脑",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "介意",
+          "partOfSpeech": "v",
+          "text": "Do you mind if I sit here?",
+          "meaning": "你介意我坐这里吗？",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "mine",
+    "meaning": "我的；矿井；地雷",
+    "partOfSpeech": "pron/n",
+    "example": {
+      "text": "This pencil is mine.",
+      "meaning": "这支铅笔是我的。",
+      "kind": "sentence",
+      "sense": "我的",
+      "partOfSpeech": "pron",
+      "additional": [
+        {
+          "sense": "矿井",
+          "partOfSpeech": "n",
+          "text": "He works in a coal mine.",
+          "meaning": "他在煤矿工作。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "地雷",
+          "partOfSpeech": "n",
+          "text": "The soldiers found a mine in the road.",
+          "meaning": "士兵们在路上发现了一枚地雷。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-mine",
     "libraryId": "intermediate",
-    "word": "mine",
-    "meaning": "矿；矿藏；矿山；矿井",
-    "group": 0,
-    "example": {
-      "text": "Copper mine",
-      "meaning": "铜矿",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-minute",
-    "libraryId": "intermediate",
-    "word": "minute",
-    "meaning": "分；分钟；片刻；一会儿",
-    "group": 0,
+    "word": "mirror",
+    "meaning": "镜子",
+    "partOfSpeech": "n",
     "example": {
-      "text": "Per minute",
-      "meaning": "每分钟",
+      "text": "A wall mirror",
+      "meaning": "一面壁镜",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-mirror",
     "libraryId": "intermediate",
-    "word": "mirror",
-    "meaning": "镜子；真实的写照；榜样；反射",
-    "group": 0,
-    "example": {
-      "text": "Primary mirror",
-      "meaning": "主镜",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-miss",
     "libraryId": "intermediate",
     "word": "miss",
-    "meaning": "女士；小姐；年轻未婚女子；未击中",
+    "meaning": "错过；想念；未击中",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Miss grant",
-      "meaning": "格兰特小姐",
+      "text": "Miss the bus",
+      "meaning": "错过公交车",
       "kind": "phrase"
     }
   },
   {
+    "word": "model",
+    "meaning": "模型；模特；榜样",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "He built a model of a ship.",
+      "meaning": "他做了一个船的模型。",
+      "kind": "sentence",
+      "sense": "模型",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "模特",
+          "partOfSpeech": "n",
+          "text": "She works as a model.",
+          "meaning": "她是一名模特。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "榜样",
+          "partOfSpeech": "n",
+          "text": "He is a model for younger students.",
+          "meaning": "他是低年级学生的榜样。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-model",
     "libraryId": "intermediate",
-    "word": "model",
-    "meaning": "模型；典型；模范；模特儿",
-    "group": 0,
-    "example": {
-      "text": "Mathematical model",
-      "meaning": "数学模型",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-modern",
     "libraryId": "intermediate",
     "word": "modern",
-    "meaning": "现代的；近代的；时髦的；现代人",
+    "meaning": "现代的，近代的；时髦的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Modern society",
-      "meaning": "现代社会",
+      "text": "In modern times",
+      "meaning": "在现代",
       "kind": "phrase"
     }
   },
@@ -12400,11 +16289,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-moment",
     "libraryId": "intermediate",
     "word": "moment",
-    "meaning": "片刻；瞬间；时刻；重要",
+    "meaning": "片刻；瞬间",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Every moment",
-      "meaning": "时时刻刻",
+      "text": "For a moment",
+      "meaning": "片刻",
       "kind": "phrase"
     }
   },
@@ -12412,19 +16302,39 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-monitor",
     "libraryId": "intermediate",
     "word": "monitor",
-    "meaning": "班长；监视器",
+    "meaning": "监视；显示器；班长",
+    "partOfSpeech": "v/n",
     "group": 0,
     "example": {
-      "text": "The class monitor",
-      "meaning": "班长",
-      "kind": "phrase"
+      "text": "We monitor the water quality.",
+      "meaning": "我们监测水质。",
+      "kind": "sentence",
+      "sense": "监视",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "显示器",
+          "partOfSpeech": "n",
+          "text": "The image appears on the monitor.",
+          "meaning": "图像出现在显示器上。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "班长",
+          "partOfSpeech": "n",
+          "text": "She was chosen as class monitor.",
+          "meaning": "她被选为班长。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-motorcycle",
     "libraryId": "intermediate",
     "word": "motorcycle",
-    "meaning": "摩托车；机动车；骑摩托车",
+    "meaning": "摩托车；机动车",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Motorcycle accessories",
@@ -12436,119 +16346,155 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-movie",
     "libraryId": "intermediate",
     "word": "movie",
-    "meaning": "电影；电影院；电影业；电影的",
+    "meaning": "电影",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Movie star",
-      "meaning": "电影明星",
+      "text": "See a movie",
+      "meaning": "看电影",
       "kind": "phrase"
     }
   },
   {
+    "word": "murder",
+    "meaning": "谋杀",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A murder investigation",
+      "meaning": "一起谋杀案的调查",
+      "kind": "phrase"
+    },
     "id": "intermediate-murder",
     "libraryId": "intermediate",
-    "word": "murder",
-    "meaning": "谋杀；凶杀；谋杀罪；杀害",
-    "group": 0,
-    "example": {
-      "text": "Attempted murder",
-      "meaning": "谋杀未遂",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-myself",
     "libraryId": "intermediate",
     "word": "myself",
-    "meaning": "我自己；我亲自；我的正常的健康状况和正常情绪；我本人",
+    "meaning": "我自己；我亲自",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
-      "text": "By myself",
-      "meaning": "独立完成",
-      "kind": "phrase"
+      "text": "I blame myself for what has happened.",
+      "meaning": "发生这一切都怪我自己。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "national",
+    "meaning": "国家的；全国的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A national park",
+      "meaning": "一座国家公园",
+      "kind": "phrase"
+    },
     "id": "intermediate-national",
     "libraryId": "intermediate",
-    "word": "national",
-    "meaning": "国家的；国民的；民族的；国立的",
-    "group": 0,
-    "example": {
-      "text": "National economy",
-      "meaning": "国民经济",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "natural",
+    "meaning": "自然的；天然的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "The natural environment",
+      "meaning": "自然环境",
+      "kind": "phrase"
+    },
     "id": "intermediate-natural",
     "libraryId": "intermediate",
-    "word": "natural",
-    "meaning": "自然的；物质的；天生的；不做作的",
-    "group": 0,
-    "example": {
-      "text": "Natural gas",
-      "meaning": "天然气",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "nearly",
+    "meaning": "几乎；差不多",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Nearly every day",
+      "meaning": "几乎每天",
+      "kind": "phrase"
+    },
     "id": "intermediate-nearly",
     "libraryId": "intermediate",
-    "word": "nearly",
-    "meaning": "差不多；几乎；密切地；将近",
-    "group": 0,
-    "example": {
-      "text": "Nearly ready",
-      "meaning": "快准备好了",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "necessary",
+    "meaning": "必要的",
+    "example": {
+      "text": "A necessary change",
+      "meaning": "一项必要的改变",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "adj",
+    "id": "intermediate-necessary",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "neck",
+    "meaning": "脖子；颈部",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A long neck",
+      "meaning": "长长的脖子",
+      "kind": "phrase"
+    },
     "id": "intermediate-neck",
     "libraryId": "intermediate",
-    "word": "neck",
-    "meaning": "脖子；衣领；海峡；搂著脖子亲吻",
-    "group": 0,
-    "example": {
-      "text": "Bottle neck",
-      "meaning": "瓶颈",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "need",
+    "meaning": "需要",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Need some help",
+      "meaning": "需要一些帮助",
+      "kind": "phrase"
+    },
     "id": "intermediate-need",
     "libraryId": "intermediate",
-    "word": "need",
-    "meaning": "需要；要求；缺乏；必要之物",
-    "group": 0,
-    "example": {
-      "text": "Urgent need",
-      "meaning": "迫切需要",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "neither",
+    "meaning": "两者都不",
+    "partOfSpeech": "pron",
+    "example": {
+      "text": "Neither of them can swim.",
+      "meaning": "他们两人都不会游泳。",
+      "kind": "sentence"
+    },
     "id": "intermediate-neither",
     "libraryId": "intermediate",
-    "word": "neither",
-    "meaning": "也不；既不；两个都不；既不……也不",
-    "group": 0,
+    "group": 0
+  },
+  {
+    "word": "nervous",
+    "meaning": "紧张的",
     "example": {
-      "text": "Neither one",
-      "meaning": "没有一个",
+      "text": "Feel nervous",
+      "meaning": "感到紧张",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj",
+    "id": "intermediate-nervous",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-news",
     "libraryId": "intermediate",
     "word": "news",
-    "meaning": "新闻；消息；新闻报导",
+    "meaning": "新闻；消息",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "News conference",
-      "meaning": "记者招待会",
+      "text": "On the news",
+      "meaning": "在广播或电视新闻中",
       "kind": "phrase"
     }
   },
@@ -12556,95 +16502,64 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-newspaper",
     "libraryId": "intermediate",
     "word": "newspaper",
-    "meaning": "报纸；报",
+    "meaning": "报纸",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Newspaper reporter",
-      "meaning": "记者",
+      "text": "In the newspaper",
+      "meaning": "在报纸上",
       "kind": "phrase"
     }
   },
   {
-    "id": "intermediate-nine",
-    "libraryId": "intermediate",
-    "word": "nine",
-    "meaning": "九；九个；九的；九个的",
-    "group": 0,
+    "word": "ninth",
+    "meaning": "第九",
+    "partOfSpeech": "num",
     "example": {
-      "text": "Nine to five",
-      "meaning": "朝九晚五",
+      "text": "The ninth lesson",
+      "meaning": "第九课",
       "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-nineteen",
-    "libraryId": "intermediate",
-    "word": "nineteen",
-    "meaning": "十九；十九个",
-    "group": 0,
-    "example": {
-      "text": "I was only nineteen (= 19 years old ).",
-      "meaning": "我当时只有19岁。",
-      "kind": "sentence"
-    }
-  },
-  {
-    "id": "intermediate-ninety",
-    "libraryId": "intermediate",
-    "word": "ninety",
-    "meaning": "九十；九十的；九十岁的；九十个",
-    "group": 0,
-    "example": {
-      "text": "Ninety minutes",
-      "meaning": "九十分钟",
-      "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-ninth",
     "libraryId": "intermediate",
-    "word": "ninth",
-    "meaning": "第九；第九的；九分之一的；九分之一",
-    "group": 0,
-    "example": {
-      "text": "Double ninth festival",
-      "meaning": "重阳节",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "nobody",
+    "meaning": "没有人",
+    "partOfSpeech": "pron",
+    "example": {
+      "text": "Nobody is here.",
+      "meaning": "这里没有人。",
+      "kind": "sentence"
+    },
     "id": "intermediate-nobody",
     "libraryId": "intermediate",
-    "word": "nobody",
-    "meaning": "无人；没有人；没有任何人；无名小卒",
-    "group": 0,
-    "example": {
-      "text": "Nobody else",
-      "meaning": "没有其他人",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "nod",
+    "meaning": "点头",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Nod your head",
+      "meaning": "点头",
+      "kind": "phrase"
+    },
     "id": "intermediate-nod",
     "libraryId": "intermediate",
-    "word": "nod",
-    "meaning": "点头；打盹；摆动；点头表示",
-    "group": 0,
-    "example": {
-      "text": "Nod off",
-      "meaning": "打盹",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-noise",
     "libraryId": "intermediate",
     "word": "noise",
-    "meaning": "[环境] 噪音；响声；杂音；谣传",
+    "meaning": "噪音；响声",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Noise ratio",
-      "meaning": "噪声比",
+      "text": "Traffic noise",
+      "meaning": "交通噪音，交通噪声",
       "kind": "phrase"
     }
   },
@@ -12652,7 +16567,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-none",
     "libraryId": "intermediate",
     "word": "none",
-    "meaning": "没有人；一个也没有；没有任何东西；没有的",
+    "meaning": "一个也没有；没有人",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
       "text": "Although these were good students, none had a score above 60.",
@@ -12661,310 +16577,328 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "noodle",
+    "meaning": "面条",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Noodle soup",
+      "meaning": "汤面",
+      "kind": "phrase"
+    },
     "id": "intermediate-noodle",
     "libraryId": "intermediate",
-    "word": "noodle",
-    "meaning": "面条；笨蛋",
-    "group": 0,
-    "example": {
-      "text": "Rice noodle",
-      "meaning": "米线",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-noon",
-    "libraryId": "intermediate",
     "word": "noon",
-    "meaning": "中午；正午；全盛期",
-    "group": 0,
+    "meaning": "中午；正午",
+    "partOfSpeech": "n",
     "example": {
       "text": "At noon",
-      "meaning": "adv. 在中午",
+      "meaning": "在中午",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-noon",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
+    "word": "nor",
+    "meaning": "也不",
+    "partOfSpeech": "conj",
+    "example": {
+      "text": "He cannot sing, nor can I.",
+      "meaning": "他不会唱歌，我也不会。",
+      "kind": "sentence"
+    },
     "id": "intermediate-nor",
     "libraryId": "intermediate",
-    "word": "nor",
-    "meaning": "也不；也不是；也没有；不",
-    "group": 0,
-    "example": {
-      "text": "Nor yet",
-      "meaning": "也没有，也不",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "normal",
+    "meaning": "正常的；通常的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A normal day",
+      "meaning": "普通的一天",
+      "kind": "phrase"
+    },
     "id": "intermediate-normal",
     "libraryId": "intermediate",
-    "word": "normal",
-    "meaning": "正常的；正规的；标准的；正常",
-    "group": 0,
-    "example": {
-      "text": "Normal university",
-      "meaning": "师范大学",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "north",
+    "meaning": "北；北方",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "In the north",
+      "meaning": "在北方",
+      "kind": "phrase"
+    },
     "id": "intermediate-north",
     "libraryId": "intermediate",
-    "word": "north",
-    "meaning": "北；北方；北方的；朝北的",
-    "group": 0,
-    "example": {
-      "text": "North america",
-      "meaning": "北美洲",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "northern",
+    "meaning": "北方的；北部的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Northern China",
+      "meaning": "中国北方",
+      "kind": "phrase"
+    },
     "id": "intermediate-northern",
     "libraryId": "intermediate",
-    "word": "northern",
-    "meaning": "北部的；北方的；北部方言",
-    "group": 0,
-    "example": {
-      "text": "Northern hemisphere",
-      "meaning": "北半球",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "note",
+    "meaning": "笔记；便条",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Write a short note",
+      "meaning": "写一张简短的便条",
+      "kind": "phrase"
+    },
     "id": "intermediate-note",
     "libraryId": "intermediate",
-    "word": "note",
-    "meaning": "笔记；音符；票据；注解",
-    "group": 0,
-    "example": {
-      "text": "Please note",
-      "meaning": "清注意",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "notebook",
+    "meaning": "笔记本",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Write in a notebook",
+      "meaning": "在笔记本上写字",
+      "kind": "phrase"
+    },
     "id": "intermediate-notebook",
     "libraryId": "intermediate",
-    "word": "notebook",
-    "meaning": "笔记本；笔记簿；手册；期票簿",
-    "group": 0,
-    "example": {
-      "text": "Notebook computer",
-      "meaning": "笔记型电脑",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "nothing",
+    "meaning": "没有什么；没有东西",
+    "partOfSpeech": "pron",
+    "example": {
+      "text": "Nothing in the box",
+      "meaning": "盒子里什么也没有",
+      "kind": "phrase"
+    },
     "id": "intermediate-nothing",
     "libraryId": "intermediate",
-    "word": "nothing",
-    "meaning": "没什么；毫不；无；零",
-    "group": 0,
-    "example": {
-      "text": "No nothing",
-      "meaning": "什么也没有",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "notice",
+    "meaning": "注意到",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Notice a mistake",
+      "meaning": "注意到一个错误",
+      "kind": "phrase"
+    },
     "id": "intermediate-notice",
     "libraryId": "intermediate",
-    "word": "notice",
-    "meaning": "通知；布告；注意；公告",
-    "group": 0,
-    "example": {
-      "text": "Take notice",
-      "meaning": "注意",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-november",
-    "libraryId": "intermediate",
-    "word": "November",
-    "meaning": "十一月",
-    "group": 0,
-    "example": {
-      "text": "Autumn will be king September , October and November .",
-      "meaning": "秋天将会是九月，十月和十一月之王。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-number",
     "libraryId": "intermediate",
     "word": "number",
-    "meaning": "数；（杂志等的）期；号码；数字",
+    "meaning": "数字；号码",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Phone number",
-      "meaning": "电话号码",
+      "text": "Number of people",
+      "meaning": "人数",
       "kind": "phrase"
     }
   },
   {
+    "word": "object",
+    "meaning": "物体；目标；反对",
+    "partOfSpeech": "n/v",
+    "example": {
+      "text": "A bright object appeared in the sky.",
+      "meaning": "天空中出现了一个明亮的物体。",
+      "kind": "sentence",
+      "sense": "物体",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "目标",
+          "partOfSpeech": "n",
+          "text": "The object of the game is to score points.",
+          "meaning": "这个游戏的目标是得分。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "反对",
+          "partOfSpeech": "v",
+          "text": "I object to this plan.",
+          "meaning": "我反对这项计划。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-object",
     "libraryId": "intermediate",
-    "word": "object",
-    "meaning": "目标；物体；客体；宾语",
-    "group": 0,
-    "example": {
-      "text": "Material object",
-      "meaning": "实物",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-october",
-    "libraryId": "intermediate",
-    "word": "October",
-    "meaning": "[天] 十月；十月",
-    "group": 0,
+    "word": "offer",
+    "meaning": "提供；主动提出",
+    "partOfSpeech": "v",
     "example": {
-      "text": "October revolution",
-      "meaning": "俄国十月革命",
+      "text": "Offer some help",
+      "meaning": "提供一些帮助",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-offer",
     "libraryId": "intermediate",
-    "word": "offer",
-    "meaning": "提供；出价；试图；提议",
-    "group": 0,
-    "example": {
-      "text": "On offer",
-      "meaning": "出售中",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-office",
     "libraryId": "intermediate",
     "word": "office",
-    "meaning": "办公室；政府机关；官职；营业处",
+    "meaning": "办公室；办事处",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Post office",
-      "meaning": "n. 邮局",
+      "text": "In the office",
+      "meaning": "在办公室里",
       "kind": "phrase"
     }
   },
   {
+    "word": "officer",
+    "meaning": "警官；军官",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A police officer",
+      "meaning": "一位警官",
+      "kind": "phrase"
+    },
     "id": "intermediate-officer",
     "libraryId": "intermediate",
-    "word": "officer",
-    "meaning": "军官；警官；公务员；政府官员",
-    "group": 0,
-    "example": {
-      "text": "Customs officer",
-      "meaning": "海关官员",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-oil",
     "libraryId": "intermediate",
     "word": "oil",
-    "meaning": "油；石油；油画颜料；加油",
+    "meaning": "油；石油",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Oil field",
-      "meaning": "油田",
+      "text": "Oil and gas",
+      "meaning": "油和天然气；油和煤气",
       "kind": "phrase"
     }
   },
   {
+    "word": "OK",
+    "meaning": "好；可以",
+    "partOfSpeech": "int",
+    "example": {
+      "text": "OK, let's go.",
+      "meaning": "好，我们走吧。",
+      "kind": "sentence"
+    },
     "id": "intermediate-ok",
     "libraryId": "intermediate",
-    "word": "OK",
-    "meaning": "好的；不错的；行；很好",
-    "group": 0,
-    "example": {
-      "text": "I'm ok",
-      "meaning": "我很好",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "once",
+    "meaning": "一次；曾经",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Once a week",
+      "meaning": "每周一次",
+      "kind": "phrase"
+    },
     "id": "intermediate-once",
     "libraryId": "intermediate",
-    "word": "once",
-    "meaning": "一次；曾经；一旦；一回",
-    "group": 0,
-    "example": {
-      "text": "Paul’s been to Wexford once before.",
-      "meaning": "保罗曾去过韦克斯福德一次。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-oneself",
     "libraryId": "intermediate",
     "word": "oneself",
-    "meaning": "自己；亲自；自身；本人",
+    "meaning": "自己；亲自",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
-      "text": "Of oneself",
-      "meaning": "自动地，自发地",
+      "text": "For oneself",
+      "meaning": "为自己；独力地",
       "kind": "phrase"
     }
   },
   {
+    "word": "only",
+    "meaning": "唯一的；仅有的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An only child",
+      "meaning": "独生子女",
+      "kind": "phrase"
+    },
     "id": "intermediate-only",
     "libraryId": "intermediate",
-    "word": "only",
-    "meaning": "只；仅仅；不料；唯一的",
-    "group": 0,
-    "example": {
-      "text": "Only when",
-      "meaning": "只有当…才能",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "operation",
+    "meaning": "手术；操作",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A successful operation",
+      "meaning": "一次成功的手术",
+      "kind": "phrase"
+    },
     "id": "intermediate-operation",
     "libraryId": "intermediate",
-    "word": "operation",
-    "meaning": "操作；经营；[外科] 手术；[数][计] 运算",
-    "group": 0,
-    "example": {
-      "text": "And operation",
-      "meaning": "与操作",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "order",
+    "meaning": "点餐；订购",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Order some food",
+      "meaning": "点一些食物",
+      "kind": "phrase"
+    },
     "id": "intermediate-order",
     "libraryId": "intermediate",
-    "word": "order",
-    "meaning": "命令；顺序；规则；[贸易] 定单",
-    "group": 0,
-    "example": {
-      "text": "Social order",
-      "meaning": "社会秩序",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "other",
+    "meaning": "其他的；另外的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Other people",
+      "meaning": "其他人",
+      "kind": "phrase"
+    },
     "id": "intermediate-other",
     "libraryId": "intermediate",
-    "word": "other",
-    "meaning": "其他的；另外的；另外一个；别的",
-    "group": 0,
-    "example": {
-      "text": "Or other",
-      "meaning": "或者说",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-ours",
     "libraryId": "intermediate",
     "word": "ours",
     "meaning": "我们的",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
       "text": "I’ll show you to your room. Ours is next door.",
@@ -12977,6 +16911,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "ourselves",
     "meaning": "我们自己；我们亲自",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
       "text": "By ourselves",
@@ -12985,22 +16920,24 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "outside",
+    "meaning": "在外面；向外面",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Wait outside",
+      "meaning": "在外面等候",
+      "kind": "phrase"
+    },
     "id": "intermediate-outside",
     "libraryId": "intermediate",
-    "word": "outside",
-    "meaning": "外面的；外部的；外来的；外部",
-    "group": 0,
-    "example": {
-      "text": "Go outside",
-      "meaning": "外出；往外走",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-overcoat",
     "libraryId": "intermediate",
     "word": "overcoat",
-    "meaning": "大衣；外套；外衣",
+    "meaning": "大衣，外套",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "He placed his cap and overcoat on a chair.",
@@ -13009,98 +16946,106 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "own",
+    "meaning": "自己的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "My own room",
+      "meaning": "我自己的房间",
+      "kind": "phrase"
+    },
     "id": "intermediate-own",
     "libraryId": "intermediate",
-    "word": "own",
-    "meaning": "拥有；承认；自己的；特有的",
-    "group": 0,
-    "example": {
-      "text": "Your own",
-      "meaning": "你自己的",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-owner",
     "libraryId": "intermediate",
     "word": "owner",
-    "meaning": "[经] 所有者；物主；所有人",
+    "meaning": "所有者；物主",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Copyright owner",
-      "meaning": "版权拥有人",
+      "text": "Ship owner",
+      "meaning": "船东；船主；船舶所有人",
       "kind": "phrase"
     }
   },
   {
+    "word": "Pacific",
+    "meaning": "太平洋",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The Pacific Ocean",
+      "meaning": "太平洋",
+      "kind": "phrase"
+    },
     "id": "intermediate-pacific",
     "libraryId": "intermediate",
-    "word": "pacific",
-    "meaning": "和平的；温和的；平静的；太平洋",
-    "group": 0,
-    "example": {
-      "text": "Pacific ocean",
-      "meaning": "n. 太平洋",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "package",
+    "meaning": "包裹；包装",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Open a package",
+      "meaning": "打开一个包裹",
+      "kind": "phrase"
+    },
     "id": "intermediate-package",
     "libraryId": "intermediate",
-    "word": "package",
-    "meaning": "包；包裹；套装软件；[计] 程序包",
-    "group": 0,
-    "example": {
-      "text": "Stimulus package",
-      "meaning": "刺激计划",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-page",
     "libraryId": "intermediate",
     "word": "page",
-    "meaning": "页；记录；大事件；时期",
+    "meaning": "页；页面",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Web page",
-      "meaning": "网页",
+      "text": "Turn the page",
+      "meaning": "翻页",
       "kind": "phrase"
     }
   },
   {
+    "word": "paint",
+    "meaning": "画；给……涂漆",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Paint a picture",
+      "meaning": "画一幅画",
+      "kind": "phrase"
+    },
     "id": "intermediate-paint",
     "libraryId": "intermediate",
-    "word": "paint",
-    "meaning": "油漆；绘画；装饰；涂色于",
-    "group": 0,
-    "example": {
-      "text": "Spray paint",
-      "meaning": "喷漆",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "pair",
+    "meaning": "一双；一对",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A pair of shoes",
+      "meaning": "一双鞋",
+      "kind": "phrase"
+    },
     "id": "intermediate-pair",
     "libraryId": "intermediate",
-    "word": "pair",
-    "meaning": "一对；一双；一副；把…组成一对",
-    "group": 0,
-    "example": {
-      "text": "Electron pair",
-      "meaning": "电子对",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-palace",
     "libraryId": "intermediate",
     "word": "palace",
-    "meaning": "宫殿；宅邸；豪华住宅；宫",
+    "meaning": "宫殿；王宫",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Palace museum",
-      "meaning": "故宫博物院",
+      "text": "A royal palace",
+      "meaning": "一座王宫",
       "kind": "phrase"
     }
   },
@@ -13109,6 +17054,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "pancake",
     "meaning": "薄煎饼",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "A pancake for breakfast",
@@ -13117,86 +17063,98 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "pardon",
+    "meaning": "原谅",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Please pardon me.",
+      "meaning": "请原谅我。",
+      "kind": "sentence"
+    },
     "id": "intermediate-pardon",
     "libraryId": "intermediate",
-    "word": "pardon",
-    "meaning": "原谅；赦免；宽恕；对不起",
-    "group": 0,
-    "example": {
-      "text": "Pardon for",
-      "meaning": "原谅",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-park",
-    "libraryId": "intermediate",
-    "word": "park",
-    "meaning": "公园；[交] 停车场；停放；放置",
-    "group": 0,
+    "word": "part",
+    "meaning": "部分",
+    "partOfSpeech": "n",
     "example": {
-      "text": "Industrial park",
-      "meaning": "工业园区",
+      "text": "Part of the story",
+      "meaning": "故事的一部分",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-part",
     "libraryId": "intermediate",
-    "word": "part",
-    "meaning": "部分；角色；零件；一些",
-    "group": 0,
-    "example": {
-      "text": "Upper part",
-      "meaning": "上部",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-pass",
     "libraryId": "intermediate",
     "word": "pass",
-    "meaning": "及格；经过；护照；途径",
+    "meaning": "通过；及格；通行证",
+    "partOfSpeech": "v/n",
     "group": 0,
     "example": {
-      "text": "Pass filter",
-      "meaning": "过滤器",
-      "kind": "phrase"
+      "text": "The bus will pass the school.",
+      "meaning": "公交车将经过学校。",
+      "kind": "sentence",
+      "sense": "通过",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "及格",
+          "partOfSpeech": "v",
+          "text": "I hope to pass the exam.",
+          "meaning": "我希望通过考试。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "通行证",
+          "partOfSpeech": "n",
+          "text": "Show your pass at the gate.",
+          "meaning": "在门口出示通行证。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "passage",
+    "meaning": "一段文字；通道",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Read a short passage",
+      "meaning": "读一段短文",
+      "kind": "phrase"
+    },
     "id": "intermediate-passage",
     "libraryId": "intermediate",
-    "word": "passage",
-    "meaning": "一段（文章）；走廊；通路；段落",
-    "group": 0,
-    "example": {
-      "text": "Drake passage",
-      "meaning": "德雷克海峡",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "passenger",
+    "meaning": "乘客；旅客",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A passenger on the bus",
+      "meaning": "一位公共汽车乘客",
+      "kind": "phrase"
+    },
     "id": "intermediate-passenger",
     "libraryId": "intermediate",
-    "word": "passenger",
-    "meaning": "旅客；乘客；过路人；碍手碍脚的人",
-    "group": 0,
-    "example": {
-      "text": "Passenger transport",
-      "meaning": "客运",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-passport",
     "libraryId": "intermediate",
     "word": "passport",
-    "meaning": "护照；通行证；手段；达到目的的手段",
+    "meaning": "护照",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Passport number",
-      "meaning": "护照号；护照号码",
+      "meaning": "护照号码",
       "kind": "phrase"
     }
   },
@@ -13204,35 +17162,62 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-past",
     "libraryId": "intermediate",
     "word": "past",
-    "meaning": "过去；往事；过去的；结束的",
+    "meaning": "过去；往事",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Past year",
-      "meaning": "去年",
+      "text": "In the past",
+      "meaning": "在过去",
       "kind": "phrase"
     }
   },
   {
+    "word": "path",
+    "meaning": "小路；道路",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A path through the forest",
+      "meaning": "穿过森林的小路",
+      "kind": "phrase"
+    },
     "id": "intermediate-path",
     "libraryId": "intermediate",
-    "word": "path",
-    "meaning": "道路；小路；轨道；小径",
-    "group": 0,
+    "group": 0
+  },
+  {
+    "word": "patient",
+    "meaning": "有耐心的；病人",
     "example": {
-      "text": "Shortest path",
-      "meaning": "最短路径",
-      "kind": "phrase"
-    }
+      "text": "Please be patient with the children.",
+      "meaning": "请对孩子们耐心一点。",
+      "kind": "sentence",
+      "sense": "有耐心的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "病人",
+          "partOfSpeech": "n",
+          "text": "The doctor examined the patient.",
+          "meaning": "医生检查了病人。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "partOfSpeech": "adj/n",
+    "id": "intermediate-patient",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-peace",
     "libraryId": "intermediate",
     "word": "peace",
-    "meaning": "和平；平静；和睦；秩序",
+    "meaning": "和平；平静",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "World peace",
-      "meaning": "世界和平",
+      "text": "The Nobel Peace Prize",
+      "meaning": "诺贝尔和平奖",
       "kind": "phrase"
     }
   },
@@ -13240,107 +17225,134 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-pear",
     "libraryId": "intermediate",
     "word": "pear",
-    "meaning": "[园艺] 梨树；梨子；梨；梨树",
+    "meaning": "梨树；梨子",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Balsam pear",
-      "meaning": "苦瓜",
+      "text": "Pear tree",
+      "meaning": "梨树",
       "kind": "phrase"
     }
   },
   {
+    "word": "percent",
+    "meaning": "百分之……",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Ten percent of the students",
+      "meaning": "百分之十的学生",
+      "kind": "phrase"
+    },
     "id": "intermediate-percent",
     "libraryId": "intermediate",
-    "word": "percent",
-    "meaning": "百分比；百分率；部分；百分数",
-    "group": 0,
-    "example": {
-      "text": "Recovery percent",
-      "meaning": "采收率",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "perfect",
+    "meaning": "完美的；极好的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A perfect day",
+      "meaning": "美好的一天",
+      "kind": "phrase"
+    },
     "id": "intermediate-perfect",
     "libraryId": "intermediate",
-    "word": "perfect",
-    "meaning": "完美的；最好的；精通的；使完美",
-    "group": 0,
-    "example": {
-      "text": "Perfect market",
-      "meaning": "完全市场",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "perhaps",
+    "meaning": "也许；可能",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Perhaps it will rain.",
+      "meaning": "也许会下雨。",
+      "kind": "sentence"
+    },
     "id": "intermediate-perhaps",
     "libraryId": "intermediate",
-    "word": "perhaps",
-    "meaning": "或许；（表示不确定）也许；（用于粗略的估计）或许；（表示勉强同意或其实不赞成）也许",
-    "group": 0,
-    "example": {
-      "text": "‘I don’t think you understand.’ ‘Well, perhaps not .’",
-      "meaning": "“我想你不明白。”“嗯，也许吧。”",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "period",
+    "meaning": "时期；句号；月经",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "This was a difficult period.",
+      "meaning": "这是一段艰难时期。",
+      "kind": "sentence",
+      "sense": "时期",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "句号",
+          "partOfSpeech": "n",
+          "text": "Put a period at the end.",
+          "meaning": "在末尾加上句号。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "月经",
+          "partOfSpeech": "n",
+          "text": "She has a regular period.",
+          "meaning": "她的月经很规律。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-period",
     "libraryId": "intermediate",
-    "word": "period",
-    "meaning": "周期；期间；时期；月经",
-    "group": 0,
-    "example": {
-      "text": "Transition period",
-      "meaning": "过渡时期",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "person",
+    "meaning": "人",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A friendly person",
+      "meaning": "一个友好的人",
+      "kind": "phrase"
+    },
     "id": "intermediate-person",
     "libraryId": "intermediate",
-    "word": "person",
-    "meaning": "人；身体；容貌；外表",
-    "group": 0,
-    "example": {
-      "text": "Per person",
-      "meaning": "每人",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "personal",
+    "meaning": "个人的；私人的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Personal information",
+      "meaning": "个人信息",
+      "kind": "phrase"
+    },
     "id": "intermediate-personal",
     "libraryId": "intermediate",
-    "word": "personal",
-    "meaning": "个人的；身体的；亲自的；人事消息栏",
-    "group": 0,
-    "example": {
-      "text": "Personal data",
-      "meaning": "个人资料",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "physics",
+    "meaning": "物理学",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A physics lesson",
+      "meaning": "一节物理课",
+      "kind": "phrase"
+    },
     "id": "intermediate-physics",
     "libraryId": "intermediate",
-    "word": "physics",
-    "meaning": "物理学；物理现象；物理",
-    "group": 0,
-    "example": {
-      "text": "College physics",
-      "meaning": "大学物理",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-piano",
     "libraryId": "intermediate",
     "word": "piano",
     "meaning": "钢琴",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Piano music",
-      "meaning": "钢琴曲",
+      "text": "Play the piano",
+      "meaning": "弹钢琴",
       "kind": "phrase"
     }
   },
@@ -13348,7 +17360,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-pick",
     "libraryId": "intermediate",
     "word": "pick",
-    "meaning": "挑选；采摘；挖；选择",
+    "meaning": "挑选；采摘；挖",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Pick out",
@@ -13357,214 +17370,237 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "picnic",
+    "meaning": "野餐",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Have a picnic",
+      "meaning": "去野餐",
+      "kind": "phrase"
+    },
     "id": "intermediate-picnic",
     "libraryId": "intermediate",
-    "word": "picnic",
-    "meaning": "野餐；去野餐；[picnicked-picnicked；picnicking] 去野餐",
-    "group": 0,
-    "example": {
-      "text": "No picnic",
-      "meaning": "不容易",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-picture",
-    "libraryId": "intermediate",
-    "word": "picture",
-    "meaning": "照片；图画；影片；景色",
-    "group": 0,
+    "word": "pie",
+    "meaning": "馅饼",
+    "partOfSpeech": "n",
     "example": {
-      "text": "Motion picture",
-      "meaning": "n. 电影",
+      "text": "Apple pie",
+      "meaning": "苹果馅饼",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-pie",
     "libraryId": "intermediate",
-    "word": "pie",
-    "meaning": "馅饼；饼图；爱说话的人；使杂乱",
-    "group": 0,
-    "example": {
-      "text": "Pie chart",
-      "meaning": "圆形分格统计图表",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "piece",
+    "meaning": "片；块；件",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A piece of cake",
+      "meaning": "一块蛋糕",
+      "kind": "phrase"
+    },
     "id": "intermediate-piece",
     "libraryId": "intermediate",
-    "word": "piece",
-    "meaning": "块；件；篇；硬币",
-    "group": 0,
-    "example": {
-      "text": "Piece together",
-      "meaning": "拼凑",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "pilot",
+    "meaning": "飞行员",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An airline pilot",
+      "meaning": "一名航空公司飞行员",
+      "kind": "phrase"
+    },
     "id": "intermediate-pilot",
     "libraryId": "intermediate",
-    "word": "pilot",
-    "meaning": "飞行员；领航员；试点的；驾驶",
-    "group": 0,
-    "example": {
-      "text": "Fighter pilot",
-      "meaning": "战斗机飞行员",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-pink",
-    "libraryId": "intermediate",
-    "word": "pink",
-    "meaning": "粉红色；化身；典范；石竹花",
-    "group": 0,
+    "word": "pioneer",
+    "meaning": "先驱；开拓者",
+    "partOfSpeech": "n",
     "example": {
-      "text": "Light pink",
-      "meaning": "淡粉红色",
+      "text": "A pioneer in medicine",
+      "meaning": "医学领域的先驱",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-pioneer",
     "libraryId": "intermediate",
-    "word": "pioneer",
-    "meaning": "先锋；拓荒者；开辟；倡导",
-    "group": 0,
-    "example": {
-      "text": "Young pioneer",
-      "meaning": "少先队员",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-pity",
     "libraryId": "intermediate",
     "word": "pity",
-    "meaning": "怜悯；同情；遗憾；对……表示怜悯",
+    "meaning": "同情；遗憾",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "What a pity",
-      "meaning": "多可惜啊",
+      "text": "Out of pity",
+      "meaning": "出于同情；出于怜悯",
       "kind": "phrase"
     }
   },
   {
+    "word": "place",
+    "meaning": "地方；地点",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A quiet place",
+      "meaning": "一个安静的地方",
+      "kind": "phrase"
+    },
     "id": "intermediate-place",
     "libraryId": "intermediate",
-    "word": "place",
-    "meaning": "地方；住所；座位；放置",
-    "group": 0,
-    "example": {
-      "text": "First place",
-      "meaning": "第一名",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "plain",
+    "meaning": "平原；明显的；朴素的",
+    "partOfSpeech": "n/adj",
+    "example": {
+      "text": "The river flows across the plain.",
+      "meaning": "河流流过平原。",
+      "kind": "sentence",
+      "sense": "平原",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "明显的",
+          "partOfSpeech": "adj",
+          "text": "The answer is plain to everyone.",
+          "meaning": "答案对每个人都显而易见。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "朴素的",
+          "partOfSpeech": "adj",
+          "text": "She wore a plain dress.",
+          "meaning": "她穿着一条朴素的连衣裙。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-plain",
     "libraryId": "intermediate",
-    "word": "plain",
-    "meaning": "平的；简单的；朴素的；清晰的",
-    "group": 0,
-    "example": {
-      "text": "Central plain",
-      "meaning": "湖心平原",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "plan",
+    "meaning": "计划",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Make a plan",
+      "meaning": "制订一个计划",
+      "kind": "phrase"
+    },
     "id": "intermediate-plan",
     "libraryId": "intermediate",
-    "word": "plan",
-    "meaning": "计划；平面图；设计；打算",
-    "group": 0,
-    "example": {
-      "text": "In plan",
-      "meaning": "作为平面图",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "planet",
+    "meaning": "行星",
+    "example": {
+      "text": "A distant planet",
+      "meaning": "一颗遥远的行星",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-planet",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "plastic",
+    "meaning": "塑料的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A plastic bag",
+      "meaning": "一个塑料袋",
+      "kind": "phrase"
+    },
     "id": "intermediate-plastic",
     "libraryId": "intermediate",
-    "word": "plastic",
-    "meaning": "塑料的；（外科）造型的；可塑的；塑料制品",
-    "group": 0,
-    "example": {
-      "text": "Plastic packaging",
-      "meaning": "塑料封装",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "plate",
+    "meaning": "盘子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A clean plate",
+      "meaning": "一个干净的盘子",
+      "kind": "phrase"
+    },
     "id": "intermediate-plate",
     "libraryId": "intermediate",
-    "word": "plate",
-    "meaning": "碟；金属板；金属牌；感光底片",
-    "group": 0,
-    "example": {
-      "text": "License plate",
-      "meaning": "牌照",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-pleasant",
     "libraryId": "intermediate",
     "word": "pleasant",
-    "meaning": "令人愉快的；舒适的；讨人喜欢的；和蔼可亲的",
+    "meaning": "令人愉快的；舒适的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Pleasant sensation",
-      "meaning": "快感",
-      "kind": "phrase"
+      "text": "It had been a pleasant evening.",
+      "meaning": "那是个愉快的夜晚。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "pleasure",
+    "meaning": "愉快；乐事",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Read for pleasure",
+      "meaning": "为消遣而阅读",
+      "kind": "phrase"
+    },
     "id": "intermediate-pleasure",
     "libraryId": "intermediate",
-    "word": "pleasure",
-    "meaning": "快乐；希望；娱乐；令人高兴的事",
-    "group": 0,
-    "example": {
-      "text": "Pleasure trip",
-      "meaning": "n. 游览",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-plenty",
     "libraryId": "intermediate",
     "word": "plenty",
-    "meaning": "丰富；大量；充足；足够的",
+    "meaning": "丰富，大量；充足",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "In plenty",
-      "meaning": "大量；充足",
+      "text": "Plenty of time",
+      "meaning": "大量时间",
       "kind": "phrase"
     }
   },
   {
+    "word": "pocket",
+    "meaning": "口袋",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Put it in your pocket",
+      "meaning": "把它放进你的口袋",
+      "kind": "phrase"
+    },
     "id": "intermediate-pocket",
     "libraryId": "intermediate",
-    "word": "pocket",
-    "meaning": "口袋；钱；容器；隐藏",
-    "group": 0,
-    "example": {
-      "text": "Pocket money",
-      "meaning": "零用钱",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-poem",
     "libraryId": "intermediate",
     "word": "poem",
-    "meaning": "诗；韵文；诗体文",
+    "meaning": "诗",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Love poem",
@@ -13576,79 +17612,141 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-point",
     "libraryId": "intermediate",
     "word": "point",
-    "meaning": "要点；得分；标点；[机] 尖端",
+    "meaning": "点；观点；得分",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Focal point",
-      "meaning": "焦点",
-      "kind": "phrase"
+      "text": "Mark a point on the map.",
+      "meaning": "在地图上标一个点。",
+      "kind": "sentence",
+      "sense": "点",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "观点",
+          "partOfSpeech": "n",
+          "text": "You made an interesting point.",
+          "meaning": "你提出了一个有趣的观点。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "得分",
+          "partOfSpeech": "n",
+          "text": "Our team scored another point.",
+          "meaning": "我们队又得了一分。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-police",
     "libraryId": "intermediate",
     "word": "police",
-    "meaning": "警察；警方；治安；监督",
+    "meaning": "警察；警方",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Traffic police",
-      "meaning": "交通警察",
+      "text": "Local police station",
+      "meaning": "当地警察局",
       "kind": "phrase"
     }
   },
   {
+    "word": "policy",
+    "meaning": "政策；方针",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A school policy",
+      "meaning": "一项学校政策",
+      "kind": "phrase"
+    },
     "id": "intermediate-policy",
     "libraryId": "intermediate",
-    "word": "policy",
-    "meaning": "政策；方针；保险单",
-    "group": 0,
-    "example": {
-      "text": "Monetary policy",
-      "meaning": "货币政策",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "polite",
+    "meaning": "有礼貌的",
+    "example": {
+      "text": "A polite reply",
+      "meaning": "一个有礼貌的答复",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "adj",
+    "id": "intermediate-polite",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "pond",
+    "meaning": "池塘",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A fish in the pond",
+      "meaning": "池塘里的一条鱼",
+      "kind": "phrase"
+    },
     "id": "intermediate-pond",
     "libraryId": "intermediate",
-    "word": "pond",
-    "meaning": "筑成池塘；池塘",
-    "group": 0,
-    "example": {
-      "text": "Tailing pond",
-      "meaning": "尾矿池",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-pool",
     "libraryId": "intermediate",
     "word": "pool",
-    "meaning": "联营；撞球；水塘；共同资金",
+    "meaning": "水池；共用",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Swimming pool",
-      "meaning": "游泳池",
-      "kind": "phrase"
+      "text": "They swam in the pool.",
+      "meaning": "他们在池子里游泳。",
+      "kind": "sentence",
+      "sense": "水池",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "共用",
+          "partOfSpeech": "v",
+          "text": "We pool our money to buy books.",
+          "meaning": "我们凑钱买书。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "poor",
+    "meaning": "贫穷的；可怜的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A poor family",
+      "meaning": "一个贫困的家庭",
+      "kind": "phrase"
+    },
     "id": "intermediate-poor",
     "libraryId": "intermediate",
-    "word": "poor",
-    "meaning": "贫穷的；可怜的；贫乏的；卑鄙的",
-    "group": 0,
+    "group": 0
+  },
+  {
+    "word": "popular",
+    "meaning": "受欢迎的",
     "example": {
-      "text": "Poor performance",
-      "meaning": "表现不佳",
+      "text": "A popular song",
+      "meaning": "一首受欢迎的歌曲",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "adj",
+    "id": "intermediate-popular",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-population",
     "libraryId": "intermediate",
     "word": "population",
-    "meaning": "人口；[生物] 种群；[生物] 群体；全体居民",
+    "meaning": "人口；全体居民",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Population growth",
@@ -13657,22 +17755,24 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "pork",
+    "meaning": "猪肉",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Pork and vegetables",
+      "meaning": "猪肉和蔬菜",
+      "kind": "phrase"
+    },
     "id": "intermediate-pork",
     "libraryId": "intermediate",
-    "word": "pork",
-    "meaning": "猪肉；与女子性交",
-    "group": 0,
-    "example": {
-      "text": "Pork chop",
-      "meaning": "猪排",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-position",
     "libraryId": "intermediate",
     "word": "position",
-    "meaning": "位置；方位；职位；工作",
+    "meaning": "位置；职位；姿势",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Geographical position",
@@ -13681,22 +17781,55 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "possible",
+    "meaning": "可能的",
+    "example": {
+      "text": "A possible answer",
+      "meaning": "一个可能的答案",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "adj",
+    "id": "intermediate-possible",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "post",
+    "meaning": "邮寄；柱子；职位",
+    "partOfSpeech": "v/n",
+    "example": {
+      "text": "I will post the letter tomorrow.",
+      "meaning": "我明天寄这封信。",
+      "kind": "sentence",
+      "sense": "邮寄",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "柱子",
+          "partOfSpeech": "n",
+          "text": "The fence has wooden posts.",
+          "meaning": "围栏有木制柱子。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "职位",
+          "partOfSpeech": "n",
+          "text": "She applied for a teaching post.",
+          "meaning": "她申请了一个教师职位。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-post",
     "libraryId": "intermediate",
-    "word": "post",
-    "meaning": "岗位；邮件；标杆；张贴",
-    "group": 0,
-    "example": {
-      "text": "Post office",
-      "meaning": "n. 邮局",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-postcard",
     "libraryId": "intermediate",
     "word": "postcard",
     "meaning": "明信片",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Picture postcard",
@@ -13709,6 +17842,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "postman",
     "meaning": "邮递员；邮差",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "That postman is in charge of this route.",
@@ -13717,62 +17851,130 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "pound",
+    "meaning": "英镑；磅；猛击",
+    "partOfSpeech": "n/v",
+    "example": {
+      "text": "The book costs one pound.",
+      "meaning": "这本书售价一英镑。",
+      "kind": "sentence",
+      "sense": "英镑",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "磅",
+          "partOfSpeech": "n",
+          "text": "The bag weighs one pound.",
+          "meaning": "这个包重一磅。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "猛击",
+          "partOfSpeech": "v",
+          "text": "He pounded on the door.",
+          "meaning": "他猛敲房门。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-pound",
     "libraryId": "intermediate",
-    "word": "pound",
-    "meaning": "英镑；重击；重击声；兽栏",
-    "group": 0,
-    "example": {
-      "text": "Pound sterling",
-      "meaning": "n. 英镑",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "practice",
+    "meaning": "练习",
+    "example": {
+      "text": "Spelling practice",
+      "meaning": "拼写练习",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-practice",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "praise",
+    "meaning": "赞扬；称赞",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Words of praise",
+      "meaning": "赞扬的话",
+      "kind": "phrase"
+    },
     "id": "intermediate-praise",
     "libraryId": "intermediate",
-    "word": "praise",
-    "meaning": "赞扬；称赞；荣耀；崇拜",
-    "group": 0,
-    "example": {
-      "text": "Public praise",
-      "meaning": "口碑，公众的称赞",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "prepare",
+    "meaning": "准备",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Prepare for a test",
+      "meaning": "为测验做准备",
+      "kind": "phrase"
+    },
     "id": "intermediate-prepare",
     "libraryId": "intermediate",
-    "word": "prepare",
-    "meaning": "准备；使适合；装备；起草",
-    "group": 0,
-    "example": {
-      "text": "Prepare yourself",
-      "meaning": "自己做好准备",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "present",
+    "meaning": "礼物；目前的；出席的；呈现；现在",
+    "partOfSpeech": "n/adj/v",
+    "example": {
+      "text": "This present is for you.",
+      "meaning": "这份礼物是给你的。",
+      "kind": "sentence",
+      "sense": "礼物",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "目前的",
+          "partOfSpeech": "adj",
+          "text": "Our present plan is simple.",
+          "meaning": "我们目前的计划很简单。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "出席的",
+          "partOfSpeech": "adj",
+          "text": "Everyone was present at the meeting.",
+          "meaning": "所有人都出席了会议。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "呈现",
+          "partOfSpeech": "v",
+          "text": "She will present the results tomorrow.",
+          "meaning": "她明天将展示结果。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "现在",
+          "partOfSpeech": "n",
+          "text": "We should live in the present.",
+          "meaning": "我们应当活在当下。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-present",
     "libraryId": "intermediate",
-    "word": "present",
-    "meaning": "提出；介绍；呈现；赠送",
-    "group": 0,
-    "example": {
-      "text": "Present oneself",
-      "meaning": "出席",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-president",
     "libraryId": "intermediate",
     "word": "president",
-    "meaning": "总统；董事长；校长；主席",
+    "meaning": "总统；主席；校长",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Former president",
-      "meaning": "前任总统",
+      "text": "Vice president",
+      "meaning": "副总统；副主席",
       "kind": "phrase"
     }
   },
@@ -13780,83 +17982,90 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-pretty",
     "libraryId": "intermediate",
     "word": "pretty",
-    "meaning": "漂亮的；可爱的；优美的；相当地",
+    "meaning": "漂亮的；可爱的；优美的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Pretty soon",
-      "meaning": "不久",
+      "text": "Pretty girl",
+      "meaning": "漂亮女孩",
       "kind": "phrase"
     }
   },
   {
+    "word": "prevent",
+    "meaning": "阻止；防止",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Prevent a fire",
+      "meaning": "预防火灾",
+      "kind": "phrase"
+    },
     "id": "intermediate-prevent",
     "libraryId": "intermediate",
-    "word": "prevent",
-    "meaning": "预防；防止；阻止；妨碍",
-    "group": 0,
-    "example": {
-      "text": "Prevent from",
-      "meaning": "阻止，制止；妨碍",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "price",
+    "meaning": "价格",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A low price",
+      "meaning": "低廉的价格",
+      "kind": "phrase"
+    },
     "id": "intermediate-price",
     "libraryId": "intermediate",
-    "word": "price",
-    "meaning": "价格；价值；代价；给……定价",
-    "group": 0,
-    "example": {
-      "text": "Market price",
-      "meaning": "市价",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "pride",
+    "meaning": "自豪；骄傲",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Take pride in your work",
+      "meaning": "为你的工作感到自豪",
+      "kind": "phrase"
+    },
     "id": "intermediate-pride",
     "libraryId": "intermediate",
-    "word": "pride",
-    "meaning": "自豪；骄傲；自尊心；使得意",
-    "group": 0,
-    "example": {
-      "text": "National pride",
-      "meaning": "民族自豪感",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "primary",
+    "meaning": "小学的；初级的；主要的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A primary school",
+      "meaning": "一所小学",
+      "kind": "phrase"
+    },
     "id": "intermediate-primary",
     "libraryId": "intermediate",
-    "word": "primary",
-    "meaning": "主要的；初级的；基本的；原色",
-    "group": 0,
-    "example": {
-      "text": "Primary school",
-      "meaning": "小学",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "print",
+    "meaning": "打印；印刷",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Print a photo",
+      "meaning": "打印一张照片",
+      "kind": "phrase"
+    },
     "id": "intermediate-print",
     "libraryId": "intermediate",
-    "word": "print",
-    "meaning": "印刷业；印花布；印刷字体；印章",
-    "group": 0,
-    "example": {
-      "text": "Print preview",
-      "meaning": "打印预览",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-prison",
     "libraryId": "intermediate",
     "word": "prison",
-    "meaning": "监狱；监禁；拘留所；关押",
+    "meaning": "监狱；监禁；拘留所",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "In prison",
-      "meaning": "坐牢",
+      "text": "Go to prison",
+      "meaning": "入狱；被监禁",
       "kind": "phrase"
     }
   },
@@ -13864,103 +18073,112 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-prisoner",
     "libraryId": "intermediate",
     "word": "prisoner",
-    "meaning": "囚犯；犯人；俘虏；刑事被告",
+    "meaning": "囚犯；俘虏",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Political prisoner",
-      "meaning": "政治犯",
-      "kind": "phrase"
+      "text": "Relationships between the staff and the prisoners are good.",
+      "meaning": "狱警和犯人相处良好。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "private",
+    "meaning": "私人的；私有的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A private room",
+      "meaning": "一间私人房间",
+      "kind": "phrase"
+    },
     "id": "intermediate-private",
     "libraryId": "intermediate",
-    "word": "private",
-    "meaning": "私人的；私有的；私下的；列兵",
-    "group": 0,
-    "example": {
-      "text": "Private ownership",
-      "meaning": "私人所有制",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "prize",
+    "meaning": "奖；奖品",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Win first prize",
+      "meaning": "获得一等奖",
+      "kind": "phrase"
+    },
     "id": "intermediate-prize",
     "libraryId": "intermediate",
-    "word": "prize",
-    "meaning": "奖品；奖赏；战利品；珍视",
-    "group": 0,
-    "example": {
-      "text": "Nobel prize",
-      "meaning": "诺贝尔奖",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-problem",
     "libraryId": "intermediate",
     "word": "problem",
-    "meaning": "难题；引起麻烦的人；成问题的；难处理的",
+    "meaning": "问题；难题",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "No problem",
-      "meaning": "没问题",
+      "text": "Difficult problem",
+      "meaning": "难题；难问题",
       "kind": "phrase"
     }
   },
   {
+    "word": "produce",
+    "meaning": "生产；产生",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Produce fresh milk",
+      "meaning": "生产鲜奶",
+      "kind": "phrase"
+    },
     "id": "intermediate-produce",
     "libraryId": "intermediate",
-    "word": "produce",
-    "meaning": "生产；引起；创作；生育",
-    "group": 0,
-    "example": {
-      "text": "Farm produce",
-      "meaning": "农产品",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-progress",
     "libraryId": "intermediate",
     "word": "progress",
-    "meaning": "进步；发展；前进；进行",
+    "meaning": "进步，发展；前进",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Social progress",
-      "meaning": "社会进步",
+      "text": "Make progress in",
+      "meaning": "在……方面取得进步",
       "kind": "phrase"
     }
   },
   {
+    "word": "promise",
+    "meaning": "承诺；诺言",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Make a promise",
+      "meaning": "许下诺言",
+      "kind": "phrase"
+    },
     "id": "intermediate-promise",
     "libraryId": "intermediate",
-    "word": "promise",
-    "meaning": "许诺；允诺；希望；给人以…的指望或希望",
-    "group": 0,
-    "example": {
-      "text": "Promise oneself",
-      "meaning": "指望",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "pronounce",
+    "meaning": "发音；宣告",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Pronounce a word",
+      "meaning": "读出这个单词",
+      "kind": "phrase"
+    },
     "id": "intermediate-pronounce",
     "libraryId": "intermediate",
-    "word": "pronounce",
-    "meaning": "发音；宣判；断言；宣布",
-    "group": 0,
-    "example": {
-      "text": "Pronounce on",
-      "meaning": "对…发表意见",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-pronunciation",
     "libraryId": "intermediate",
     "word": "pronunciation",
-    "meaning": "发音；读法；发音法",
+    "meaning": "发音；读法",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Correct pronunciation",
@@ -13972,19 +18190,34 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-proper",
     "libraryId": "intermediate",
     "word": "proper",
-    "meaning": "适当的；本身的；特有的；正派的",
+    "meaning": "适当的；恰当的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "City proper",
-      "meaning": "城市市区部分",
+      "text": "At a proper time",
+      "meaning": "在适当的时候",
       "kind": "phrase"
     }
+  },
+  {
+    "word": "protect",
+    "meaning": "保护",
+    "example": {
+      "text": "Protect the environment",
+      "meaning": "保护环境",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "intermediate-protect",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-proud",
     "libraryId": "intermediate",
     "word": "proud",
-    "meaning": "自豪的；得意的；自负的；骄傲的",
+    "meaning": "自豪的；骄傲的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Proud of",
@@ -13996,11 +18229,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-prove",
     "libraryId": "intermediate",
     "word": "prove",
-    "meaning": "证明；检验；显示；证实",
+    "meaning": "证明；检验；显示",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Prove yourself",
-      "meaning": "证明你自己",
+      "text": "Prove to be",
+      "meaning": "结果是，证明为",
       "kind": "phrase"
     }
   },
@@ -14008,295 +18242,329 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-provide",
     "libraryId": "intermediate",
     "word": "provide",
-    "meaning": "提供；规定；准备；装备",
+    "meaning": "提供；规定",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Provide service",
-      "meaning": "提供服务",
+      "text": "Provide help",
+      "meaning": "提供帮助",
       "kind": "phrase"
     }
   },
   {
+    "word": "public",
+    "meaning": "公共的；公众的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A public library",
+      "meaning": "一座公共图书馆",
+      "kind": "phrase"
+    },
     "id": "intermediate-public",
     "libraryId": "intermediate",
-    "word": "public",
-    "meaning": "公众的；政府的；公用的；公立的",
-    "group": 0,
-    "example": {
-      "text": "Public security",
-      "meaning": "公共安全",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-pull",
     "libraryId": "intermediate",
     "word": "pull",
-    "meaning": "拉；拔；拖；拉绳",
+    "meaning": "拉；拖；拔",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Pull together",
-      "meaning": "齐心协力",
+      "text": "Pull the rope",
+      "meaning": "拉绳子",
       "kind": "phrase"
     }
   },
   {
+    "word": "punish",
+    "meaning": "惩罚；处罚",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Punish bad behaviour",
+      "meaning": "惩罚不良行为",
+      "kind": "phrase"
+    },
     "id": "intermediate-punish",
     "libraryId": "intermediate",
-    "word": "punish",
-    "meaning": "惩罚；严厉对待；贪婪地吃喝；处罚",
-    "group": 0,
-    "example": {
-      "text": "Punish with",
-      "meaning": "用...惩罚",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-pupil",
     "libraryId": "intermediate",
     "word": "pupil",
-    "meaning": "学生；[解剖] 瞳孔；未成年人；瞳孔",
+    "meaning": "学生；瞳孔",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Exit pupil",
-      "meaning": "出射光瞳；后透光孔",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-purple",
-    "libraryId": "intermediate",
-    "word": "purple",
-    "meaning": "紫色的；帝王的；华而不实的；紫色",
-    "group": 0,
-    "example": {
-      "text": "Purple red",
-      "meaning": "紫红色",
-      "kind": "phrase"
+      "text": "Each pupil has a book.",
+      "meaning": "每个学生都有一本书。",
+      "kind": "sentence",
+      "sense": "学生",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "瞳孔",
+          "partOfSpeech": "n",
+          "text": "The pupil gets smaller in bright light.",
+          "meaning": "瞳孔在强光下变小。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-purse",
     "libraryId": "intermediate",
     "word": "purse",
-    "meaning": "(女士)手提袋；(国家、家庭、团体等的) 财力；（嘴巴）皱起；使缩拢",
+    "meaning": "钱包；女用小包",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Public purse",
-      "meaning": "国库；公共资金",
+      "text": "Coin purse",
+      "meaning": "零钱包",
       "kind": "phrase"
     }
   },
   {
+    "word": "push",
+    "meaning": "推；推动",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Push the door open",
+      "meaning": "把门推开",
+      "kind": "phrase"
+    },
     "id": "intermediate-push",
     "libraryId": "intermediate",
-    "word": "push",
-    "meaning": "推动；增加；对…施加压力；逼迫",
-    "group": 0,
-    "example": {
-      "text": "Push ahead",
-      "meaning": "向前推进",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "quarter",
+    "meaning": "四分之一；一刻钟",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A quarter of an hour",
+      "meaning": "一刻钟",
+      "kind": "phrase"
+    },
     "id": "intermediate-quarter",
     "libraryId": "intermediate",
-    "word": "quarter",
-    "meaning": "四分之一；地区；季度；一刻钟",
-    "group": 0,
-    "example": {
-      "text": "One quarter",
-      "meaning": "num. 四分之一",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "queen",
+    "meaning": "女王；王后",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The king and queen",
+      "meaning": "国王和王后",
+      "kind": "phrase"
+    },
     "id": "intermediate-queen",
     "libraryId": "intermediate",
-    "word": "queen",
-    "meaning": "女王；王后；（纸牌中的）皇后；（蜜蜂等的）蜂王",
-    "group": 0,
-    "example": {
-      "text": "Queen anne",
-      "meaning": "安妮女皇",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "quick",
+    "meaning": "快的；迅速的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A quick answer",
+      "meaning": "迅速的回答",
+      "kind": "phrase"
+    },
     "id": "intermediate-quick",
     "libraryId": "intermediate",
-    "word": "quick",
-    "meaning": "核心；伤口的嫩肉；快的；迅速的",
-    "group": 0,
-    "example": {
-      "text": "Quick profit",
-      "meaning": "暴利",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "quite",
+    "meaning": "相当；很",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Quite cold",
+      "meaning": "相当冷",
+      "kind": "phrase"
+    },
     "id": "intermediate-quite",
     "libraryId": "intermediate",
-    "word": "quite",
-    "meaning": "很；相当；完全；颇",
-    "group": 0,
-    "example": {
-      "text": "Quite something",
-      "meaning": "非同寻常",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "race",
+    "meaning": "比赛；种族",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "She won the race.",
+      "meaning": "她赢得了比赛。",
+      "kind": "sentence",
+      "sense": "比赛",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "种族",
+          "partOfSpeech": "n",
+          "text": "The law protects people of every race.",
+          "meaning": "法律保护各种族的人。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-race",
     "libraryId": "intermediate",
-    "word": "race",
-    "meaning": "属；种；种族；人种",
-    "group": 0,
-    "example": {
-      "text": "Human race",
-      "meaning": "人类",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-radio",
     "libraryId": "intermediate",
     "word": "radio",
-    "meaning": "收音机；无线电广播设备；用无线电进行通信；用无线电传送",
+    "meaning": "收音机；无线电广播设备",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Radio frequency",
-      "meaning": "无线电频率",
+      "text": "On the radio",
+      "meaning": "在广播中",
       "kind": "phrase"
     }
   },
   {
+    "word": "railway",
+    "meaning": "铁路",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A railway station",
+      "meaning": "一座火车站",
+      "kind": "phrase"
+    },
     "id": "intermediate-railway",
     "libraryId": "intermediate",
-    "word": "railway",
-    "meaning": "（英）铁路；轨道；铁道部门；乘火车旅行",
-    "group": 0,
-    "example": {
-      "text": "Railway station",
-      "meaning": "火车站",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "raincoat",
+    "meaning": "雨衣",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Put on your raincoat",
+      "meaning": "穿上你的雨衣",
+      "kind": "phrase"
+    },
     "id": "intermediate-raincoat",
     "libraryId": "intermediate",
-    "word": "raincoat",
-    "meaning": "（美）雨衣；雨衣",
-    "group": 0,
-    "example": {
-      "text": "The dark clouds remembered me to take my raincoat along.",
-      "meaning": "乌云提醒我带上雨衣。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "rainy",
+    "meaning": "多雨的；下雨的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A rainy day",
+      "meaning": "下雨的一天",
+      "kind": "phrase"
+    },
     "id": "intermediate-rainy",
     "libraryId": "intermediate",
-    "word": "rainy",
-    "meaning": "下雨的；多雨的",
-    "group": 0,
-    "example": {
-      "text": "Rainy season",
-      "meaning": "雨季",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-raise",
     "libraryId": "intermediate",
     "word": "raise",
-    "meaning": "提高；筹集；养育；升起",
+    "meaning": "举起；提高；筹集",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Raise fund",
-      "meaning": "筹集资金",
+      "text": "Raise your hand",
+      "meaning": "举起手",
       "kind": "phrase"
     }
   },
   {
+    "word": "rapid",
+    "meaning": "迅速的；快速的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Rapid growth",
+      "meaning": "迅速增长",
+      "kind": "phrase"
+    },
     "id": "intermediate-rapid",
     "libraryId": "intermediate",
-    "word": "rapid",
-    "meaning": "迅速的；急促的；飞快的；险峻的",
-    "group": 0,
-    "example": {
-      "text": "Rapid prototyping",
-      "meaning": "快速原型",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "rat",
+    "meaning": "大鼠；老鼠",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A rat in the garden",
+      "meaning": "花园里的一只老鼠",
+      "kind": "phrase"
+    },
     "id": "intermediate-rat",
     "libraryId": "intermediate",
-    "word": "rat",
-    "meaning": "鼠；卑鄙小人；叛徒；捕鼠",
-    "group": 0,
-    "example": {
-      "text": "White rat",
-      "meaning": "白鼠",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-rather",
     "libraryId": "intermediate",
     "word": "rather",
-    "meaning": "宁可；宁愿；相当；当然啦（回答问题时用）",
+    "meaning": "宁可，宁愿；相当",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "Rather too",
-      "meaning": "adv. 稍微...一点",
+      "text": "Rather than",
+      "meaning": "而不是；宁可…也不愿",
       "kind": "phrase"
     }
   },
   {
+    "word": "reach",
+    "meaning": "到达；够到",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Reach the station",
+      "meaning": "到达车站",
+      "kind": "phrase"
+    },
     "id": "intermediate-reach",
     "libraryId": "intermediate",
-    "word": "reach",
-    "meaning": "达到；延伸；伸出手；传开",
-    "group": 0,
-    "example": {
-      "text": "Reach out",
-      "meaning": "vt. 伸出",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-ready",
     "libraryId": "intermediate",
     "word": "ready",
-    "meaning": "准备好；现成的；迅速的；情愿的",
+    "meaning": "准备好的；现成的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Get ready",
-      "meaning": "准备好",
+      "text": "Get ready for",
+      "meaning": "为……做准备",
       "kind": "phrase"
     }
   },
   {
+    "word": "real",
+    "meaning": "真实的；真正的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A real story",
+      "meaning": "一个真实的故事",
+      "kind": "phrase"
+    },
     "id": "intermediate-real",
     "libraryId": "intermediate",
-    "word": "real",
-    "meaning": "实际的；真实的；实在的；真正地",
-    "group": 0,
-    "example": {
-      "text": "Real madrid",
-      "meaning": "皇家马德里队",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-receive",
     "libraryId": "intermediate",
     "word": "receive",
-    "meaning": "收到；接待；接纳；接到",
+    "meaning": "收到；接待；接纳",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "All the children will receive a small gift.",
@@ -14308,11 +18576,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-recent",
     "libraryId": "intermediate",
     "word": "recent",
-    "meaning": "最近的；近代的；新近的；近来的",
+    "meaning": "最近的；近代的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "More recent",
-      "meaning": "较新的",
+      "text": "In recent years",
+      "meaning": "最近几年中",
       "kind": "phrase"
     }
   },
@@ -14320,7 +18589,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-recite",
     "libraryId": "intermediate",
     "word": "recite",
-    "meaning": "背诵；叙述；列举；朗诵",
+    "meaning": "背诵；朗诵",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Recite a poem",
@@ -14329,22 +18599,42 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "record",
+    "meaning": "记录；录制；唱片",
+    "partOfSpeech": "n/v",
+    "example": {
+      "text": "Keep a record of your work.",
+      "meaning": "记录你的工作。",
+      "kind": "sentence",
+      "sense": "记录",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "录制",
+          "partOfSpeech": "v",
+          "text": "We will record the concert.",
+          "meaning": "我们将录制这场音乐会。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "唱片",
+          "partOfSpeech": "n",
+          "text": "She bought an old record.",
+          "meaning": "她买了一张旧唱片。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-record",
     "libraryId": "intermediate",
-    "word": "record",
-    "meaning": "记录；记载；标明；将录音",
-    "group": 0,
-    "example": {
-      "text": "World record",
-      "meaning": "世界纪录",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-recorder",
     "libraryId": "intermediate",
     "word": "recorder",
-    "meaning": "录音机；记录器；记录员；八孔直笛",
+    "meaning": "录音机；记录器",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Tape recorder",
@@ -14356,71 +18646,88 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-refuse",
     "libraryId": "intermediate",
     "word": "refuse",
-    "meaning": "垃圾；废物；拒绝；不愿",
+    "meaning": "拒绝；垃圾",
+    "partOfSpeech": "v/n",
     "group": 0,
     "example": {
-      "text": "Municipal refuse",
-      "meaning": "城市垃圾",
-      "kind": "phrase"
+      "text": "I refuse to give up.",
+      "meaning": "我拒绝放弃。",
+      "kind": "sentence",
+      "sense": "拒绝",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "垃圾",
+          "partOfSpeech": "n",
+          "text": "The refuse is collected on Fridays.",
+          "meaning": "垃圾每周五收集。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "regard",
+    "meaning": "把……看作；认为",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Regard him as a friend",
+      "meaning": "把他看作朋友",
+      "kind": "phrase"
+    },
     "id": "intermediate-regard",
     "libraryId": "intermediate",
-    "word": "regard",
-    "meaning": "注意；尊重；问候；凝视",
-    "group": 0,
-    "example": {
-      "text": "Regard as",
-      "meaning": "vt. 把…认作",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-regret",
     "libraryId": "intermediate",
     "word": "regret",
-    "meaning": "遗憾；抱歉；悲叹；后悔",
+    "meaning": "遗憾；后悔",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Regret doing",
-      "meaning": "对做过的事表示遗憾、后悔",
+      "text": "To express regret",
+      "meaning": "表示遗憾",
       "kind": "phrase"
     }
   },
   {
+    "word": "relation",
+    "meaning": "关系；联系",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The relation between diet and health",
+      "meaning": "饮食与健康的关系",
+      "kind": "phrase"
+    },
     "id": "intermediate-relation",
     "libraryId": "intermediate",
-    "word": "relation",
-    "meaning": "关系；叙述；故事；亲属关系",
-    "group": 0,
-    "example": {
-      "text": "Public relation",
-      "meaning": "公共关系",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "relax",
+    "meaning": "放松；休息",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Relax after school",
+      "meaning": "放学后放松一下",
+      "kind": "phrase"
+    },
     "id": "intermediate-relax",
     "libraryId": "intermediate",
-    "word": "relax",
-    "meaning": "放松；休息；松懈；松弛",
-    "group": 0,
-    "example": {
-      "text": "Relax oneself",
-      "meaning": "放松自己；放松某人自己",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-remain",
     "libraryId": "intermediate",
     "word": "remain",
-    "meaning": "保持；依然；留下；剩余",
+    "meaning": "保持；留下；剩余",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Remain invincible",
-      "meaning": "立于不败之地",
+      "text": "Remain silent",
+      "meaning": "保持沉默",
       "kind": "phrase"
     }
   },
@@ -14428,11 +18735,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-remember",
     "libraryId": "intermediate",
     "word": "remember",
-    "meaning": "记得；牢记；纪念；代…问好",
+    "meaning": "记得；记住",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Remember doing",
-      "meaning": "记着已经做过的事",
+      "text": "Remember to do",
+      "meaning": "记得去做某事",
       "kind": "phrase"
     }
   },
@@ -14440,83 +18748,114 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-repair",
     "libraryId": "intermediate",
     "word": "repair",
-    "meaning": "修理；修复；修补；修补部位",
+    "meaning": "修理；修复",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Repair work",
-      "meaning": "修理作业",
+      "text": "Repair the bike",
+      "meaning": "修理自行车",
       "kind": "phrase"
     }
   },
   {
+    "word": "repeat",
+    "meaning": "重复",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Repeat the word",
+      "meaning": "重复这个单词",
+      "kind": "phrase"
+    },
     "id": "intermediate-repeat",
     "libraryId": "intermediate",
-    "word": "repeat",
-    "meaning": "重复；复制；背诵；副本",
-    "group": 0,
-    "example": {
-      "text": "Repeat oneself",
-      "meaning": "不自觉地重复",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "reply",
+    "meaning": "回复；回答",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Reply to a letter",
+      "meaning": "回信",
+      "kind": "phrase"
+    },
     "id": "intermediate-reply",
     "libraryId": "intermediate",
-    "word": "reply",
-    "meaning": "回答；[法] 答辩；回击；答复",
-    "group": 0,
-    "example": {
-      "text": "In reply",
-      "meaning": "作为答复",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "report",
+    "meaning": "报告；报道",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Report the news",
+      "meaning": "报道新闻",
+      "kind": "phrase"
+    },
     "id": "intermediate-report",
     "libraryId": "intermediate",
-    "word": "report",
-    "meaning": "报告；报道；成绩单；报导",
-    "group": 0,
-    "example": {
-      "text": "Research report",
-      "meaning": "研究报告",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-require",
     "libraryId": "intermediate",
     "word": "require",
-    "meaning": "需要；要求；命令；规定",
+    "meaning": "需要；要求；命令",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "What’s required is a complete reorganization of the system.",
-      "meaning": "需要做的是彻底整顿整个系统。",
+      "text": "Campbell’s broken leg will probably require surgery.",
+      "meaning": "坎贝尔的一条腿骨折，可能需要手术。",
       "kind": "sentence"
     }
   },
   {
+    "word": "research",
+    "meaning": "研究",
+    "example": {
+      "text": "Scientific research",
+      "meaning": "科学研究",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-research",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "rest",
+    "meaning": "休息；其余部分",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "You need a short rest.",
+      "meaning": "你需要短暂休息。",
+      "kind": "sentence",
+      "sense": "休息",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "其余部分",
+          "partOfSpeech": "n",
+          "text": "Save the rest of the cake.",
+          "meaning": "把剩下的蛋糕留着。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-rest",
     "libraryId": "intermediate",
-    "word": "rest",
-    "meaning": "使休息；使轻松；把…寄托于；休息",
-    "group": 0,
-    "example": {
-      "text": "Without rest",
-      "meaning": "立即",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-restaurant",
     "libraryId": "intermediate",
     "word": "restaurant",
-    "meaning": "餐馆；[经] 饭店；饭店",
+    "meaning": "餐馆；饭店",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Buffet restaurant",
-      "meaning": "自助餐厅",
+      "text": "Chinese restaurant",
+      "meaning": "中餐馆",
       "kind": "phrase"
     }
   },
@@ -14524,11 +18863,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-result",
     "libraryId": "intermediate",
     "word": "result",
-    "meaning": "结果；成绩；答案；比赛结果",
+    "meaning": "结果；成绩",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Experimental result",
-      "meaning": "实验结果",
+      "text": "As a result",
+      "meaning": "结果",
       "kind": "phrase"
     }
   },
@@ -14536,7 +18876,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-retell",
     "libraryId": "intermediate",
     "word": "retell",
-    "meaning": "复述；再讲；重述；重讲",
+    "meaning": "复述；重讲",
+    "partOfSpeech": "vt",
     "group": 0,
     "example": {
       "text": "Lucilla often asks her sisters to retell the story.",
@@ -14545,49 +18886,53 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "return",
+    "meaning": "返回；归还",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Return home",
+      "meaning": "回家",
+      "kind": "phrase"
+    },
     "id": "intermediate-return",
     "libraryId": "intermediate",
-    "word": "return",
-    "meaning": "返回；报答；归还；回球",
-    "group": 0,
-    "example": {
-      "text": "And return",
-      "meaning": "并且回程",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "review",
+    "meaning": "复习；回顾",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Review your notes",
+      "meaning": "复习你的笔记",
+      "kind": "phrase"
+    },
     "id": "intermediate-review",
     "libraryId": "intermediate",
-    "word": "review",
-    "meaning": "回顾；复习；评论；检讨",
-    "group": 0,
-    "example": {
-      "text": "Comprehensive review",
-      "meaning": "全面审查",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "rich",
+    "meaning": "富有的；富饶的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A rich country",
+      "meaning": "一个富裕的国家",
+      "kind": "phrase"
+    },
     "id": "intermediate-rich",
     "libraryId": "intermediate",
-    "word": "rich",
-    "meaning": "富有的；肥沃的；昂贵的；富的",
-    "group": 0,
-    "example": {
-      "text": "Rich experience",
-      "meaning": "丰富的经验",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-riddle",
     "libraryId": "intermediate",
     "word": "riddle",
-    "meaning": "解谜；给出谜；充满于；谜语",
+    "meaning": "谜语；谜一般的人",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "See if you can solve this riddle .",
+      "text": "See if you can solve this riddle.",
       "meaning": "看看你能不能猜出这个谜语。",
       "kind": "sentence"
     }
@@ -14596,115 +18941,172 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-risk",
     "libraryId": "intermediate",
     "word": "risk",
-    "meaning": "风险；危险；冒险；冒…的危险",
+    "meaning": "风险；危险；冒险",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "At risk",
-      "meaning": "处于危险中",
+      "text": "Take the risk",
+      "meaning": "承担风险",
       "kind": "phrase"
     }
   },
   {
+    "word": "road",
+    "meaning": "路；道路",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Cross the road",
+      "meaning": "过马路",
+      "kind": "phrase"
+    },
     "id": "intermediate-road",
     "libraryId": "intermediate",
-    "word": "road",
-    "meaning": "公路；马路；道路；手段",
-    "group": 0,
-    "example": {
-      "text": "Road traffic",
-      "meaning": "道路交通",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-rock",
     "libraryId": "intermediate",
     "word": "rock",
-    "meaning": "岩石；摇滚乐；暗礁；摇动",
+    "meaning": "岩石；摇滚乐；摇动",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Rock burst",
-      "meaning": "岩层突裂",
-      "kind": "phrase"
+      "text": "He sat on a large rock.",
+      "meaning": "他坐在一块大岩石上。",
+      "kind": "sentence",
+      "sense": "岩石",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "摇滚乐",
+          "partOfSpeech": "n",
+          "text": "She listens to rock.",
+          "meaning": "她听摇滚乐。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "摇动",
+          "partOfSpeech": "v",
+          "text": "Rock the baby gently.",
+          "meaning": "轻轻摇晃宝宝。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-role",
     "libraryId": "intermediate",
     "word": "role",
-    "meaning": "角色；任务；作用；职责",
+    "meaning": "角色；作用",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Dominant role",
-      "meaning": "主要角色",
+      "text": "Play a role",
+      "meaning": "发挥作用；扮演一个角色",
       "kind": "phrase"
     }
   },
   {
+    "word": "rope",
+    "meaning": "绳子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A long rope",
+      "meaning": "一根长绳",
+      "kind": "phrase"
+    },
     "id": "intermediate-rope",
     "libraryId": "intermediate",
-    "word": "rope",
-    "meaning": "绳；绳索；捆；绑",
-    "group": 0,
-    "example": {
-      "text": "Rope skipping",
-      "meaning": "n. 跳绳",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-rose",
     "libraryId": "intermediate",
     "word": "rose",
-    "meaning": "玫瑰；粉红色；蔷薇（花）；粉红色的葡萄酒",
+    "meaning": "玫瑰；蔷薇",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "White rose",
-      "meaning": "白玫瑰",
+      "text": "Rose garden",
+      "meaning": "玫瑰园；蔷薇园",
       "kind": "phrase"
     }
   },
   {
+    "word": "round",
+    "meaning": "圆的；一轮",
+    "partOfSpeech": "adj/n",
+    "example": {
+      "text": "The table is round.",
+      "meaning": "桌子是圆的。",
+      "kind": "sentence",
+      "sense": "圆的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "一轮",
+          "partOfSpeech": "n",
+          "text": "This is the final round of the game.",
+          "meaning": "这是比赛的最后一轮。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-round",
     "libraryId": "intermediate",
-    "word": "round",
-    "meaning": "圆的；轮；回合",
-    "group": 0,
-    "example": {
-      "text": "A round table",
-      "meaning": "一张圆桌",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-row",
     "libraryId": "intermediate",
     "word": "row",
-    "meaning": "行；排；划船；街道",
+    "meaning": "排；划船；争吵",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Row spacing",
-      "meaning": "行距",
-      "kind": "phrase"
+      "text": "We sat in the front row.",
+      "meaning": "我们坐在前排。",
+      "kind": "sentence",
+      "sense": "排",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "划船",
+          "partOfSpeech": "v",
+          "text": "They row across the lake.",
+          "meaning": "他们划船过湖。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "争吵",
+          "partOfSpeech": "n",
+          "text": "They had a row over the money.",
+          "meaning": "他们为钱吵了一架。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "rubber",
+    "meaning": "橡皮；橡胶",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Use a rubber",
+      "meaning": "用橡皮",
+      "kind": "phrase"
+    },
     "id": "intermediate-rubber",
     "libraryId": "intermediate",
-    "word": "rubber",
-    "meaning": "橡胶；橡皮；合成橡胶；按摩师",
-    "group": 0,
-    "example": {
-      "text": "Natural rubber",
-      "meaning": "天然橡胶",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-rubbish",
     "libraryId": "intermediate",
     "word": "rubbish",
-    "meaning": "垃圾；废物；废话；毫无价值的",
+    "meaning": "垃圾，废物；废话",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Rubbish bin",
@@ -14713,50 +19115,54 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "rule",
+    "meaning": "规则",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A school rule",
+      "meaning": "一条校规",
+      "kind": "phrase"
+    },
     "id": "intermediate-rule",
     "libraryId": "intermediate",
-    "word": "rule",
-    "meaning": "统治；管辖；裁定；规则",
-    "group": 0,
-    "example": {
-      "text": "Colonial rule",
-      "meaning": "殖民统治",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "rush",
+    "meaning": "匆忙；冲",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Rush to school",
+      "meaning": "匆忙赶往学校",
+      "kind": "phrase"
+    },
     "id": "intermediate-rush",
     "libraryId": "intermediate",
-    "word": "rush",
-    "meaning": "冲进；匆促；急流；灯心草",
-    "group": 0,
-    "example": {
-      "text": "Gold rush",
-      "meaning": "淘金热",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "Russian",
+    "meaning": "俄语",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Learn Russian",
+      "meaning": "学习俄语",
+      "kind": "phrase"
+    },
     "id": "intermediate-russian",
     "libraryId": "intermediate",
-    "word": "Russian",
-    "meaning": "俄国的；俄语的；俄语；俄国人",
-    "group": 0,
-    "example": {
-      "text": "Russian federation",
-      "meaning": "俄罗斯联邦",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-safety",
     "libraryId": "intermediate",
     "word": "safety",
-    "meaning": "安全；保险；安全设备；保险装置",
+    "meaning": "安全；安全性",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Safety management",
-      "meaning": "安全管理",
+      "text": "Health and safety",
+      "meaning": "健康与安全",
       "kind": "phrase"
     }
   },
@@ -14764,35 +19170,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-sail",
     "libraryId": "intermediate",
     "word": "sail",
-    "meaning": "航行；启航；开船；帆",
+    "meaning": "航行；启航",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "In sail",
-      "meaning": "◎扬帆",
+      "text": "Sail across the lake",
+      "meaning": "在湖上航行",
       "kind": "phrase"
     }
   },
   {
+    "word": "salad",
+    "meaning": "沙拉",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A vegetable salad",
+      "meaning": "一份蔬菜沙拉",
+      "kind": "phrase"
+    },
     "id": "intermediate-salad",
     "libraryId": "intermediate",
-    "word": "salad",
-    "meaning": "色拉；尤指莴苣；沙拉；凉拌菜",
-    "group": 0,
-    "example": {
-      "text": "Fruit salad",
-      "meaning": "水果沙拉",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-sale",
     "libraryId": "intermediate",
     "word": "sale",
-    "meaning": "销售；出售；拍卖；销售额",
+    "meaning": "出售；销售；廉价出售",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Domestic sale",
-      "meaning": "内销",
+      "text": "For sale",
+      "meaning": "待售",
       "kind": "phrase"
     }
   },
@@ -14800,11 +19209,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-salt",
     "libraryId": "intermediate",
     "word": "salt",
-    "meaning": "盐；风趣；刺激性；咸水的",
+    "meaning": "盐；食盐",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Salt water",
-      "meaning": "咸水",
+      "text": "Salt and pepper",
+      "meaning": "盐和胡椒",
       "kind": "phrase"
     }
   },
@@ -14812,11 +19222,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-same",
     "libraryId": "intermediate",
     "word": "same",
-    "meaning": "相同的；同一的；上述的（通常与the连用）；无变化的",
+    "meaning": "相同的；同一的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Same time",
-      "meaning": "同时",
+      "text": "Much the same",
+      "meaning": "几乎相同，大致一样",
       "kind": "phrase"
     }
   },
@@ -14824,31 +19235,34 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-sand",
     "libraryId": "intermediate",
     "word": "sand",
-    "meaning": "沙；沙地；沙洲；沙滩",
+    "meaning": "沙；沙滩",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Molding sand",
-      "meaning": "型砂",
+      "text": "A grain of sand",
+      "meaning": "一粒沙子",
       "kind": "phrase"
     }
   },
   {
+    "word": "sandwich",
+    "meaning": "三明治",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A cheese sandwich",
+      "meaning": "一个奶酪三明治",
+      "kind": "phrase"
+    },
     "id": "intermediate-sandwich",
     "libraryId": "intermediate",
-    "word": "sandwich",
-    "meaning": "夹入；挤进；把做成三明治；三明治",
-    "group": 0,
-    "example": {
-      "text": "Sandwich panel",
-      "meaning": "夹层板",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-sausage",
     "libraryId": "intermediate",
     "word": "sausage",
-    "meaning": "香肠；腊肠；装香肠的碎肉",
+    "meaning": "香肠；腊肠",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Beef sausage",
@@ -14860,11 +19274,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-save",
     "libraryId": "intermediate",
     "word": "save",
-    "meaning": "节省；保存；储蓄；解救",
+    "meaning": "拯救；节省；储蓄",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Save energy",
-      "meaning": "节约能源",
+      "text": "Save a life",
+      "meaning": "挽救生命",
       "kind": "phrase"
     }
   },
@@ -14872,7 +19287,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-scarf",
     "libraryId": "intermediate",
     "word": "scarf",
-    "meaning": "围巾；嵌接；嵌接处；头巾领巾",
+    "meaning": "围巾；头巾",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "He reached up to loosen the scarf around his neck.",
@@ -14885,6 +19301,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "schoolbag",
     "meaning": "书包",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "She ran back to the classroom to get her schoolbag.",
@@ -14897,6 +19314,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "scientist",
     "meaning": "科学家",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Computer scientist",
@@ -14908,179 +19326,239 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-score",
     "libraryId": "intermediate",
     "word": "score",
-    "meaning": "分数；二十；配乐；刻痕",
+    "meaning": "得分；乐谱；二十个",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Total score",
-      "meaning": "总分数",
-      "kind": "phrase"
+      "text": "The final score was two to one.",
+      "meaning": "最终比分是二比一。",
+      "kind": "sentence",
+      "sense": "得分",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "乐谱",
+          "partOfSpeech": "n",
+          "text": "The musician studied the score.",
+          "meaning": "音乐家研读了乐谱。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "二十个",
+          "partOfSpeech": "n",
+          "text": "A score of people waited outside.",
+          "meaning": "二十个人在外面等候。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-screen",
     "libraryId": "intermediate",
     "word": "screen",
-    "meaning": "屏；幕；屏风；筛",
+    "meaning": "屏幕；屏风；筛查",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Screen printing",
-      "meaning": "丝网印刷术",
-      "kind": "phrase"
+      "text": "The picture filled the screen.",
+      "meaning": "画面占满了屏幕。",
+      "kind": "sentence",
+      "sense": "屏幕",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "屏风",
+          "partOfSpeech": "n",
+          "text": "A screen divided the room.",
+          "meaning": "一道屏风把房间隔开。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "筛查",
+          "partOfSpeech": "v",
+          "text": "The clinic screens patients for the disease.",
+          "meaning": "诊所筛查患者是否患有这种疾病。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "search",
+    "meaning": "搜寻；寻找",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Search for a lost bag",
+      "meaning": "寻找一个丢失的书包",
+      "kind": "phrase"
+    },
     "id": "intermediate-search",
     "libraryId": "intermediate",
-    "word": "search",
-    "meaning": "搜寻；调查；探求；探究",
-    "group": 0,
-    "example": {
-      "text": "Search engine",
-      "meaning": "搜索引擎",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "seat",
+    "meaning": "座位",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Take a seat",
+      "meaning": "坐下",
+      "kind": "phrase"
+    },
     "id": "intermediate-seat",
     "libraryId": "intermediate",
-    "word": "seat",
-    "meaning": "座位；所在地；职位；使…坐下",
-    "group": 0,
-    "example": {
-      "text": "Back seat",
-      "meaning": "后座",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "second",
+    "meaning": "第二；秒",
+    "partOfSpeech": "num/n",
+    "example": {
+      "text": "This is my second visit.",
+      "meaning": "这是我第二次来访。",
+      "kind": "sentence",
+      "sense": "第二",
+      "partOfSpeech": "num",
+      "additional": [
+        {
+          "sense": "秒",
+          "partOfSpeech": "n",
+          "text": "The light flashes once a second.",
+          "meaning": "灯每秒闪烁一次。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-second",
     "libraryId": "intermediate",
-    "word": "second",
-    "meaning": "秒；第二名；瞬间；二等品",
-    "group": 0,
-    "example": {
-      "text": "Second time",
-      "meaning": "第二次",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-secret",
     "libraryId": "intermediate",
     "word": "secret",
-    "meaning": "秘密；秘诀；机密；秘密的",
+    "meaning": "秘密；秘诀；机密",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Top secret",
-      "meaning": "adj. 绝对机密的",
+      "text": "Secret of success",
+      "meaning": "成功的秘诀",
       "kind": "phrase"
     }
   },
   {
+    "word": "secretary",
+    "meaning": "秘书",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A school secretary",
+      "meaning": "一位学校秘书",
+      "kind": "phrase"
+    },
     "id": "intermediate-secretary",
     "libraryId": "intermediate",
-    "word": "secretary",
-    "meaning": "秘书；书记；部长；大臣",
-    "group": 0,
-    "example": {
-      "text": "Secretary general",
-      "meaning": "秘书长",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "seem",
+    "meaning": "似乎；好像",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Seem happy",
+      "meaning": "看起来很高兴",
+      "kind": "phrase"
+    },
     "id": "intermediate-seem",
     "libraryId": "intermediate",
-    "word": "seem",
-    "meaning": "似乎；像是；装作；好像",
-    "group": 0,
-    "example": {
-      "text": "Seem like",
-      "meaning": "看起来像；看上去像…；好像…",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-seldom",
     "libraryId": "intermediate",
     "word": "seldom",
-    "meaning": "很少；不常；罕见",
+    "meaning": "很少，不常",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "Seldom or never",
-      "meaning": "极难得,简直不,几乎不： He seldom or never drinks. 他简直可以说滴酒不沾。",
-      "kind": "phrase"
+      "text": "Karen had seldom seen him so angry.",
+      "meaning": "卡伦很少见他这么生气过。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "sense",
+    "meaning": "感觉；感官",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A sense of smell",
+      "meaning": "嗅觉",
+      "kind": "phrase"
+    },
     "id": "intermediate-sense",
     "libraryId": "intermediate",
-    "word": "sense",
-    "meaning": "感觉；功能；观念；道理",
-    "group": 0,
-    "example": {
-      "text": "Common sense",
-      "meaning": "常识",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-sentence",
     "libraryId": "intermediate",
     "word": "sentence",
-    "meaning": "[语][计] 句子；命题；宣判；判决",
+    "meaning": "句子；判决",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "His voice dropped at the end of the sentence.",
-      "meaning": "到句子结尾处，他压低了嗓音。",
-      "kind": "sentence"
+      "text": "Write a sentence with this word.",
+      "meaning": "用这个词写一个句子。",
+      "kind": "sentence",
+      "sense": "句子",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "判决",
+          "partOfSpeech": "n",
+          "text": "The judge gave him a prison sentence.",
+          "meaning": "法官判他入狱。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-separate",
     "libraryId": "intermediate",
     "word": "separate",
-    "meaning": "使分离；使分开；使分居；单独的",
+    "meaning": "使分离；使分开；使分居",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Separate system",
-      "meaning": "分流制",
+      "text": "Separate from",
+      "meaning": "分离；把…和…分开",
       "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-september",
-    "libraryId": "intermediate",
-    "word": "September",
-    "meaning": "九月",
-    "group": 0,
-    "example": {
-      "text": "Her son, Jerome, was born in September.",
-      "meaning": "她的儿子杰罗姆出生于9月。",
-      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-serious",
     "libraryId": "intermediate",
     "word": "serious",
-    "meaning": "严肃的；严重的；认真的；庄重的",
+    "meaning": "认真的；严肃的；严重的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Serious illness",
-      "meaning": "重大疾病",
-      "kind": "phrase"
+      "text": "Are you serious?",
+      "meaning": "你是当真的吗？",
+      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-servant",
     "libraryId": "intermediate",
     "word": "servant",
-    "meaning": "仆人；佣人；公务员；雇工",
+    "meaning": "仆人，佣人；公务员；雇工",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Servant girl",
-      "meaning": "n. 女仆",
+      "text": "National public servant",
+      "meaning": "国家公务员",
       "kind": "phrase"
     }
   },
@@ -15088,71 +19566,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-service",
     "libraryId": "intermediate",
     "word": "service",
-    "meaning": "服务；服侍；服役；仪式",
+    "meaning": "服务；服役",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Of service",
-      "meaning": "有帮助的",
+      "text": "Quality of service",
+      "meaning": "服务质量，服务水准",
       "kind": "phrase"
     }
   },
   {
-    "id": "intermediate-seven",
-    "libraryId": "intermediate",
-    "word": "seven",
-    "meaning": "七个；七；七的；七个的",
-    "group": 0,
+    "word": "seventh",
+    "meaning": "第七",
+    "partOfSpeech": "num",
     "example": {
-      "text": "Seven years",
-      "meaning": "七年",
+      "text": "The seventh day",
+      "meaning": "第七天",
       "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-seventeen",
-    "libraryId": "intermediate",
-    "word": "seventeen",
-    "meaning": "十七；十七个；十七岁的；十七的",
-    "group": 0,
-    "example": {
-      "text": "A group of seventeen American military officers",
-      "meaning": "由17名美国军官组成的团体",
-      "kind": "sentence"
-    }
-  },
-  {
+    },
     "id": "intermediate-seventh",
     "libraryId": "intermediate",
-    "word": "seventh",
-    "meaning": "第七；七分之一；第七的；七分之一的",
-    "group": 0,
-    "example": {
-      "text": "Seventh day",
-      "meaning": "安息日",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-seventy",
-    "libraryId": "intermediate",
-    "word": "seventy",
-    "meaning": "七十；七十个；七十岁；七十年代",
-    "group": 0,
-    "example": {
-      "text": "We lost touch during the seventies.",
-      "meaning": "我们在70年代失去了联系。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-several",
     "libraryId": "intermediate",
     "word": "several",
-    "meaning": "几个的；各自的；几个；数个",
+    "meaning": "几个的；数个的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Several times",
-      "meaning": "几次",
+      "text": "Several people",
+      "meaning": "几个人",
       "kind": "phrase"
     }
   },
@@ -15160,67 +19605,60 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-shame",
     "libraryId": "intermediate",
     "word": "shame",
-    "meaning": "羞耻；羞愧；憾事；带来耻辱的人",
+    "meaning": "羞耻；遗憾",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "In shame",
-      "meaning": "因为耻辱；因为害羞",
+      "text": "Sense of shame",
+      "meaning": "羞耻感",
       "kind": "phrase"
     }
   },
   {
+    "word": "shape",
+    "meaning": "形状",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A round shape",
+      "meaning": "圆形",
+      "kind": "phrase"
+    },
     "id": "intermediate-shape",
     "libraryId": "intermediate",
-    "word": "shape",
-    "meaning": "形状；模型；身材；具体化",
-    "group": 0,
-    "example": {
-      "text": "Good shape",
-      "meaning": "良形",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-ship",
-    "libraryId": "intermediate",
-    "word": "ship",
-    "meaning": "运送；乘船；以船运送；船",
-    "group": 0,
-    "example": {
-      "text": "Ship lock",
-      "meaning": "船闸",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-shop",
     "libraryId": "intermediate",
     "word": "shop",
-    "meaning": "商店；店铺；购物；工厂",
+    "meaning": "商店；店铺",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Shop assistant",
-      "meaning": "店员",
+      "text": "Shop sign",
+      "meaning": "店铺招牌；牌号",
       "kind": "phrase"
     }
   },
   {
+    "word": "should",
+    "meaning": "应该",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "You should drink some water.",
+      "meaning": "你应该喝点水。",
+      "kind": "sentence"
+    },
     "id": "intermediate-should",
     "libraryId": "intermediate",
-    "word": "should",
-    "meaning": "应该；就；可能；将要",
-    "group": 0,
-    "example": {
-      "text": "Should be",
-      "meaning": "应该是",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-shoulder",
     "libraryId": "intermediate",
     "word": "shoulder",
     "meaning": "肩；肩膀",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "A shoulder bag",
@@ -15232,7 +19670,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-shout",
     "libraryId": "intermediate",
     "word": "shout",
-    "meaning": "呼喊；喊叫；大声说；呼叫",
+    "meaning": "呼喊；喊叫；大声说",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Shout out",
@@ -15244,167 +19683,181 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-shower",
     "libraryId": "intermediate",
     "word": "shower",
-    "meaning": "淋浴；（倾泻般出现的）一阵；一大批；阵雨",
+    "meaning": "淋浴；阵雨",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Shower room",
-      "meaning": "浴室",
+      "text": "Take a shower",
+      "meaning": "洗淋浴",
       "kind": "phrase"
     }
   },
   {
+    "word": "shy",
+    "meaning": "害羞的；胆怯的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A shy child",
+      "meaning": "一个害羞的孩子",
+      "kind": "phrase"
+    },
     "id": "intermediate-shy",
     "libraryId": "intermediate",
-    "word": "shy",
-    "meaning": "害羞的；畏缩的；胆怯的；投",
-    "group": 0,
-    "example": {
-      "text": "Shy girl",
-      "meaning": "害羞的女孩",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "sick",
+    "meaning": "生病的；恶心的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A sick child",
+      "meaning": "一个生病的孩子",
+      "kind": "phrase"
+    },
     "id": "intermediate-sick",
     "libraryId": "intermediate",
-    "word": "sick",
-    "meaning": "厌恶的；病态的；不舒服；渴望的",
-    "group": 0,
-    "example": {
-      "text": "Feel sick",
-      "meaning": "觉得要呕吐",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "side",
+    "meaning": "边；一侧",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The other side of the river",
+      "meaning": "河的另一边",
+      "kind": "phrase"
+    },
     "id": "intermediate-side",
     "libraryId": "intermediate",
-    "word": "side",
-    "meaning": "方面；侧面；旁边；支持",
-    "group": 0,
-    "example": {
-      "text": "One side",
-      "meaning": "一方",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-sight",
     "libraryId": "intermediate",
     "word": "sight",
-    "meaning": "视力；景象；眼界；见解",
+    "meaning": "视力；景象",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "At sight",
-      "meaning": "一见就",
+      "text": "Lose one's sight",
+      "meaning": "失明；失去视力",
       "kind": "phrase"
     }
   },
   {
+    "word": "silence",
+    "meaning": "沉默；寂静",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Sit in silence",
+      "meaning": "静静地坐着",
+      "kind": "phrase"
+    },
     "id": "intermediate-silence",
     "libraryId": "intermediate",
-    "word": "silence",
-    "meaning": "沉默；寂静；缄默；不谈",
-    "group": 0,
-    "example": {
-      "text": "In silence",
-      "meaning": "沉默地",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-silent",
     "libraryId": "intermediate",
     "word": "silent",
-    "meaning": "沉默的；寂静的；无记载的；无声电影",
+    "meaning": "沉默的；寂静的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Remain silent",
-      "meaning": "保持沉默",
+      "text": "Keep silent",
+      "meaning": "保持沉默；缄默",
       "kind": "phrase"
     }
   },
   {
+    "word": "silk",
+    "meaning": "丝；丝绸",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A silk scarf",
+      "meaning": "一条丝巾",
+      "kind": "phrase"
+    },
     "id": "intermediate-silk",
     "libraryId": "intermediate",
-    "word": "silk",
-    "meaning": "丝绸；蚕丝；丝织物；丝的",
-    "group": 0,
-    "example": {
-      "text": "Silk road",
-      "meaning": "丝绸之路",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-silly",
     "libraryId": "intermediate",
     "word": "silly",
-    "meaning": "愚蠢的；不明事理的；没头脑的；傻瓜",
+    "meaning": "愚蠢的；傻的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Silly season",
-      "meaning": "新闻缺乏时期",
+      "text": "Silly idea",
+      "meaning": "愚蠢的想法",
       "kind": "phrase"
     }
   },
   {
+    "word": "similar",
+    "meaning": "相似的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Similar to mine",
+      "meaning": "和我的相似",
+      "kind": "phrase"
+    },
     "id": "intermediate-similar",
     "libraryId": "intermediate",
-    "word": "similar",
-    "meaning": "相似的；类似物；类似的；像",
-    "group": 0,
-    "example": {
-      "text": "Similar test",
-      "meaning": "相似检验",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "simple",
+    "meaning": "简单的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A simple question",
+      "meaning": "一个简单的问题",
+      "kind": "phrase"
+    },
     "id": "intermediate-simple",
     "libraryId": "intermediate",
-    "word": "simple",
-    "meaning": "简单的；单纯的；天真的；笨蛋",
-    "group": 0,
-    "example": {
-      "text": "Simple life",
-      "meaning": "简单生活",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "since",
+    "meaning": "自从……以来",
+    "partOfSpeech": "prep",
+    "example": {
+      "text": "Since last year",
+      "meaning": "自去年以来",
+      "kind": "phrase"
+    },
     "id": "intermediate-since",
     "libraryId": "intermediate",
-    "word": "since",
-    "meaning": "因为；由于；既然；自…以来",
-    "group": 0,
-    "example": {
-      "text": "Ever since",
-      "meaning": "adv. 从那时到现在",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "single",
+    "meaning": "单个的；单程的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A single ticket",
+      "meaning": "一张单程票",
+      "kind": "phrase"
+    },
     "id": "intermediate-single",
     "libraryId": "intermediate",
-    "word": "single",
-    "meaning": "单一的；单身的；单程的；一个",
-    "group": 0,
-    "example": {
-      "text": "Single chip",
-      "meaning": "单晶片",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-sir",
     "libraryId": "intermediate",
     "word": "sir",
-    "meaning": "先生；（用于姓名前）爵士；阁下；（中小学生对男教师的称呼）先生",
+    "meaning": "先生；阁下",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Dear sir or madam",
-      "meaning": "尊敬的先生或女士（信笺的开头语）",
+      "meaning": "尊敬的先生或女士",
       "kind": "phrase"
     }
   },
@@ -15412,103 +19865,86 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-situation",
     "libraryId": "intermediate",
     "word": "situation",
-    "meaning": "情况；形势；处境；位置",
+    "meaning": "情况；形势；处境",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Present situation",
+      "text": "Current situation",
       "meaning": "现状",
       "kind": "phrase"
     }
   },
   {
-    "id": "intermediate-sixteen",
-    "libraryId": "intermediate",
-    "word": "sixteen",
-    "meaning": "十六的；十六个的；十六；十六个",
-    "group": 0,
+    "word": "sixth",
+    "meaning": "第六",
+    "partOfSpeech": "num",
     "example": {
-      "text": "He moved to London when he was sixteen (= 16 years old ) .",
-      "meaning": "他 16 岁时搬到了伦敦。",
-      "kind": "sentence"
-    }
-  },
-  {
+      "text": "The sixth lesson",
+      "meaning": "第六课",
+      "kind": "phrase"
+    },
     "id": "intermediate-sixth",
     "libraryId": "intermediate",
-    "word": "sixth",
-    "meaning": "月的第六日；（与the连用的）第六个；六分之一；（与 the 连用）第六的",
-    "group": 0,
+    "group": 0
+  },
+  {
+    "word": "size",
+    "meaning": "大小；尺寸",
+    "partOfSpeech": "n",
     "example": {
-      "text": "Sixth sense",
-      "meaning": "第六感，直觉",
+      "text": "The right size",
+      "meaning": "合适的尺寸",
       "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-sixty",
-    "libraryId": "intermediate",
-    "word": "sixty",
-    "meaning": "六十；六十个",
-    "group": 0,
-    "example": {
-      "text": "Sixty years ago",
-      "meaning": "六十年前",
-      "kind": "sentence"
-    }
-  },
-  {
+    },
     "id": "intermediate-size",
     "libraryId": "intermediate",
-    "word": "size",
-    "meaning": "大小；尺寸；一定尺寸的；依大小排列",
-    "group": 0,
-    "example": {
-      "text": "For size",
-      "meaning": "为了试尺码",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "skate",
+    "meaning": "滑冰",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Skate on the ice",
+      "meaning": "在冰上滑冰",
+      "kind": "phrase"
+    },
     "id": "intermediate-skate",
     "libraryId": "intermediate",
-    "word": "skate",
-    "meaning": "滑冰；滑过；溜冰；冰鞋",
-    "group": 0,
-    "example": {
-      "text": "Ice skate",
-      "meaning": "溜冰鞋；溜冰",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-skill",
     "libraryId": "intermediate",
     "word": "skill",
-    "meaning": "技能；技巧；本领；技术",
+    "meaning": "技能，技巧；本领，技术",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Professional skill",
-      "meaning": "专业技能",
+      "text": "Communication skill",
+      "meaning": "沟通技巧；传播技能",
       "kind": "phrase"
     }
   },
   {
-    "id": "intermediate-sky",
-    "libraryId": "intermediate",
     "word": "sky",
-    "meaning": "天空；顶点；把…投向空中；把…挂得过高",
-    "group": 0,
+    "meaning": "天空",
+    "partOfSpeech": "n",
     "example": {
-      "text": "Blue sky",
+      "text": "A blue sky",
       "meaning": "蓝天",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-sky",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-sleepy",
     "libraryId": "intermediate",
     "word": "sleepy",
-    "meaning": "欲睡的；困乏的；不活跃的；想睡的",
+    "meaning": "困倦的；瞌睡的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Feel sleepy",
@@ -15517,130 +19953,141 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "smart",
+    "meaning": "聪明的；机灵的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A smart student",
+      "meaning": "一名聪明的学生",
+      "kind": "phrase"
+    },
     "id": "intermediate-smart",
     "libraryId": "intermediate",
-    "word": "smart",
-    "meaning": "聪明的；巧妙的；敏捷的；厉害的",
-    "group": 0,
-    "example": {
-      "text": "Smart card",
-      "meaning": "智能卡",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-smile",
     "libraryId": "intermediate",
     "word": "smile",
-    "meaning": "微笑；笑容；喜色；露出笑容",
+    "meaning": "微笑；笑容",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Big smile",
-      "meaning": "笑容满面",
+      "text": "Wear a smile",
+      "meaning": "面带笑容",
       "kind": "phrase"
     }
   },
   {
+    "word": "smoke",
+    "meaning": "烟",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Smoke from a fire",
+      "meaning": "火产生的烟",
+      "kind": "phrase"
+    },
     "id": "intermediate-smoke",
     "libraryId": "intermediate",
-    "word": "smoke",
-    "meaning": "烟；抽烟；无常的事物；冒烟",
-    "group": 0,
-    "example": {
-      "text": "Tobacco smoke",
-      "meaning": "烟草烟雾",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-smooth",
     "libraryId": "intermediate",
     "word": "smooth",
-    "meaning": "顺利的；光滑的；平稳的；使光滑",
+    "meaning": "光滑的；平稳的；顺利的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Smooth muscle",
-      "meaning": "平滑肌",
+      "text": "A smooth surface",
+      "meaning": "光滑的表面",
       "kind": "phrase"
     }
   },
   {
+    "word": "snake",
+    "meaning": "蛇",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A long snake",
+      "meaning": "一条长蛇",
+      "kind": "phrase"
+    },
     "id": "intermediate-snake",
     "libraryId": "intermediate",
-    "word": "snake",
-    "meaning": "蛇；阴险的人；迂回前进；蜿蜒",
-    "group": 0,
-    "example": {
-      "text": "Snake venom",
-      "meaning": "蛇毒",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "snowy",
+    "meaning": "下雪的；多雪的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A snowy day",
+      "meaning": "下雪的一天",
+      "kind": "phrase"
+    },
     "id": "intermediate-snowy",
     "libraryId": "intermediate",
-    "word": "snowy",
-    "meaning": "下雪的；多雪的；被雪覆盖的；洁白无瑕的",
-    "group": 0,
-    "example": {
-      "text": "Snowy white",
-      "meaning": "n. 雪白色",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-soap",
     "libraryId": "intermediate",
     "word": "soap",
-    "meaning": "肥皂；将肥皂涂在……上；对……拍马屁（俚语）",
+    "meaning": "肥皂",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Toilet soap",
-      "meaning": "香皂",
+      "text": "Liquid soap",
+      "meaning": "液体肥皂",
       "kind": "phrase"
     }
   },
   {
+    "word": "social",
+    "meaning": "社交的；社会的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Social activities",
+      "meaning": "社交活动",
+      "kind": "phrase"
+    },
     "id": "intermediate-social",
     "libraryId": "intermediate",
-    "word": "social",
-    "meaning": "社会的；社交的；群居的；联谊会",
-    "group": 0,
-    "example": {
-      "text": "Social progress",
-      "meaning": "社会进步",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "society",
+    "meaning": "社会；社团",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Modern society",
+      "meaning": "现代社会",
+      "kind": "phrase"
+    },
     "id": "intermediate-society",
     "libraryId": "intermediate",
-    "word": "society",
-    "meaning": "社会；交往；社团；社交界",
-    "group": 0,
-    "example": {
-      "text": "Human society",
-      "meaning": "人类社会",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "socks",
+    "meaning": "袜子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A pair of socks",
+      "meaning": "一双袜子",
+      "kind": "phrase"
+    },
     "id": "intermediate-socks",
     "libraryId": "intermediate",
-    "word": "socks",
-    "meaning": "袜子（sock的复数）",
-    "group": 0,
-    "example": {
-      "text": "...a pair of knee-high socks.",
-      "meaning": "…一双齐膝的短袜。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-sofa",
     "libraryId": "intermediate",
     "word": "sofa",
-    "meaning": "沙发；长椅；长沙发",
+    "meaning": "沙发",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Sofa bed",
@@ -15649,110 +20096,106 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "soft",
+    "meaning": "柔软的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A soft pillow",
+      "meaning": "一个柔软的枕头",
+      "kind": "phrase"
+    },
     "id": "intermediate-soft",
     "libraryId": "intermediate",
-    "word": "soft",
-    "meaning": "软的；柔软的；温柔的；温和的",
-    "group": 0,
-    "example": {
-      "text": "Soft tissue",
-      "meaning": "软组织",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "soldier",
+    "meaning": "士兵；军人",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A young soldier",
+      "meaning": "一位年轻的士兵",
+      "kind": "phrase"
+    },
     "id": "intermediate-soldier",
     "libraryId": "intermediate",
-    "word": "soldier",
-    "meaning": "军人；[昆] 兵蚁；懒汉；一片烤面包",
-    "group": 0,
-    "example": {
-      "text": "Foot soldier",
-      "meaning": "步兵",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "solid",
+    "meaning": "固体的；坚固的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Solid food",
+      "meaning": "固体食物",
+      "kind": "phrase"
+    },
     "id": "intermediate-solid",
     "libraryId": "intermediate",
-    "word": "solid",
-    "meaning": "固体的；可靠的；立体的；结实的",
-    "group": 0,
-    "example": {
-      "text": "Solid state",
-      "meaning": "固态",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-somebody",
     "libraryId": "intermediate",
     "word": "somebody",
-    "meaning": "大人物；重要人物；有人；某人",
+    "meaning": "有人；某人",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
-      "text": "Somebody else",
-      "meaning": "别人",
-      "kind": "phrase"
+      "text": "There’s somebody waiting to see you.",
+      "meaning": "有人等着要见你。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "someone",
+    "meaning": "某人；有人",
+    "partOfSpeech": "pron",
+    "example": {
+      "text": "Someone is at the door.",
+      "meaning": "门口有人。",
+      "kind": "sentence"
+    },
     "id": "intermediate-someone",
     "libraryId": "intermediate",
-    "word": "someone",
-    "meaning": "有人；某人；重要人物",
-    "group": 0,
-    "example": {
-      "text": "Have Brooks or someone fax this to New York right away.",
-      "meaning": "叫布鲁克斯或谁立刻把这个发传真到纽约。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-something",
     "libraryId": "intermediate",
     "word": "something",
-    "meaning": "某事；某物；重要的人；值得重视的事",
+    "meaning": "某事；某物",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
-      "text": "Something else",
-      "meaning": "别的东西",
+      "text": "Something or other",
+      "meaning": "某事物",
       "kind": "phrase"
     }
   },
   {
+    "word": "somewhere",
+    "meaning": "在某处；到某处",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Somewhere quiet",
+      "meaning": "某个安静的地方",
+      "kind": "phrase"
+    },
     "id": "intermediate-somewhere",
     "libraryId": "intermediate",
-    "word": "somewhere",
-    "meaning": "在某处；到某处；某个地方；大约",
-    "group": 0,
-    "example": {
-      "text": "Somewhere around",
-      "meaning": "n. 大约",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-son",
     "libraryId": "intermediate",
     "word": "son",
-    "meaning": "儿子；孩子（对年轻人的称呼）；男性后裔；孩子",
+    "meaning": "儿子；男孩",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Adopted son",
-      "meaning": "养子",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-song",
-    "libraryId": "intermediate",
-    "word": "song",
-    "meaning": "歌曲；歌唱；诗歌；鸣声",
-    "group": 0,
-    "example": {
-      "text": "Song dynasty",
-      "meaning": "宋朝",
+      "text": "Eldest son",
+      "meaning": "长子",
       "kind": "phrase"
     }
   },
@@ -15760,71 +20203,95 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-soon",
     "libraryId": "intermediate",
     "word": "soon",
-    "meaning": "快；不久；一会儿；立刻",
+    "meaning": "很快；不久",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "So soon",
-      "meaning": "这么快",
+      "text": "See you soon",
+      "meaning": "回头见",
       "kind": "phrase"
     }
   },
   {
+    "word": "sort",
+    "meaning": "种类",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "This sort of music",
+      "meaning": "这种音乐",
+      "kind": "phrase"
+    },
     "id": "intermediate-sort",
     "libraryId": "intermediate",
-    "word": "sort",
-    "meaning": "种类；方式；品质；分类",
-    "group": 0,
-    "example": {
-      "text": "Sort out",
-      "meaning": "挑选出",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-sound",
     "libraryId": "intermediate",
     "word": "sound",
-    "meaning": "声音；听起来",
+    "meaning": "声音；听起来；健全的",
+    "partOfSpeech": "n/v/adj",
     "group": 0,
     "example": {
-      "text": "The sound of rain",
-      "meaning": "雨声",
-      "kind": "phrase"
+      "text": "I heard a strange sound.",
+      "meaning": "我听到了奇怪的声音。",
+      "kind": "sentence",
+      "sense": "声音",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "听起来",
+          "partOfSpeech": "v",
+          "text": "Your idea sounds good.",
+          "meaning": "你的想法听起来不错。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "健全的",
+          "partOfSpeech": "adj",
+          "text": "The house has a sound structure.",
+          "meaning": "这所房子的结构很坚固。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "sour",
+    "meaning": "酸的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A sour lemon",
+      "meaning": "一个酸柠檬",
+      "kind": "phrase"
+    },
     "id": "intermediate-sour",
     "libraryId": "intermediate",
-    "word": "sour",
-    "meaning": "酸的；发酵的；刺耳的；酸臭的",
-    "group": 0,
-    "example": {
-      "text": "Sour cream",
-      "meaning": "酸奶油",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "south",
+    "meaning": "南；南方",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "In the south",
+      "meaning": "在南方",
+      "kind": "phrase"
+    },
     "id": "intermediate-south",
     "libraryId": "intermediate",
-    "word": "south",
-    "meaning": "南方；南边；南部；在南方",
-    "group": 0,
-    "example": {
-      "text": "South korea",
-      "meaning": "南韩",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-southern",
     "libraryId": "intermediate",
     "word": "southern",
-    "meaning": "南的；南方的；南方人；南部的",
+    "meaning": "南方的，南部的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Southern hemisphere",
-      "meaning": "南半球",
+      "text": "A southern accent",
+      "meaning": "南部口音",
       "kind": "phrase"
     }
   },
@@ -15832,35 +20299,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-speaker",
     "libraryId": "intermediate",
     "word": "speaker",
-    "meaning": "演讲者；扬声器；说话者；说某种语言的人",
+    "meaning": "说话者；演讲者；扬声器",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Speaker system",
-      "meaning": "扬声器系统",
+      "text": "Native speaker",
+      "meaning": "母语者",
       "kind": "phrase"
     }
   },
   {
+    "word": "special",
+    "meaning": "特别的；特殊的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A special gift",
+      "meaning": "一份特别的礼物",
+      "kind": "phrase"
+    },
     "id": "intermediate-special",
     "libraryId": "intermediate",
-    "word": "special",
-    "meaning": "特使；特派人员；特刊；特色菜",
-    "group": 0,
-    "example": {
-      "text": "In special",
-      "meaning": "特殊的",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-speech",
     "libraryId": "intermediate",
     "word": "speech",
-    "meaning": "演讲；讲话；[语] 语音；演说",
+    "meaning": "演讲；讲话；语音",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Speech recognition",
-      "meaning": "语音辨识",
+      "text": "Make a speech",
+      "meaning": "发表演讲",
       "kind": "phrase"
     }
   },
@@ -15868,11 +20338,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-speed",
     "libraryId": "intermediate",
     "word": "speed",
-    "meaning": "超速；加速；迅速前行；兴隆",
+    "meaning": "加速；超速",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "High speed",
-      "meaning": "高速全速",
+      "text": "Speed up",
+      "meaning": "加速；使加速",
       "kind": "phrase"
     }
   },
@@ -15880,131 +20351,185 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-spirit",
     "libraryId": "intermediate",
     "word": "spirit",
-    "meaning": "精神；心灵；情绪；志气",
+    "meaning": "精神；灵魂；烈酒",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "In spirit",
-      "meaning": "在精神上",
-      "kind": "phrase"
+      "text": "The team showed great spirit.",
+      "meaning": "这支队伍展现了昂扬的精神。",
+      "kind": "sentence",
+      "sense": "精神",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "灵魂",
+          "partOfSpeech": "n",
+          "text": "The story is about a wandering spirit.",
+          "meaning": "这个故事讲述了一个游荡的灵魂。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "烈酒",
+          "partOfSpeech": "n",
+          "text": "The shop sells wine and spirits.",
+          "meaning": "这家商店卖葡萄酒和烈酒。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-spoon",
     "libraryId": "intermediate",
     "word": "spoon",
-    "meaning": "匙；勺子；一杓的量；用匙舀",
+    "meaning": "匙，勺子；一杓的量",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Soup spoon",
-      "meaning": "汤匙",
+      "text": "Fork and spoon",
+      "meaning": "叉子与勺子",
       "kind": "phrase"
     }
   },
   {
+    "word": "square",
+    "meaning": "正方形的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A square table",
+      "meaning": "一张正方形的桌子",
+      "kind": "phrase"
+    },
     "id": "intermediate-square",
     "libraryId": "intermediate",
-    "word": "square",
-    "meaning": "平方的；正方形的；直角的；正直的",
-    "group": 0,
-    "example": {
-      "text": "Square metre",
-      "meaning": "平方米",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-stairs",
     "libraryId": "intermediate",
     "word": "stairs",
-    "meaning": "楼梯；梯级（stair的复数）",
+    "meaning": "楼梯；梯级",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Down stairs",
-      "meaning": "下楼",
-      "kind": "phrase"
+      "text": "The boy thumped down the stairs.",
+      "meaning": "小男孩咚咚地跑下楼梯。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "stamp",
+    "meaning": "邮票",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A postage stamp",
+      "meaning": "一枚邮票",
+      "kind": "phrase"
+    },
     "id": "intermediate-stamp",
     "libraryId": "intermediate",
-    "word": "stamp",
-    "meaning": "邮票；印记；标志；跺脚",
-    "group": 0,
-    "example": {
-      "text": "Stamp duty",
-      "meaning": "印花税",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-standard",
     "libraryId": "intermediate",
     "word": "standard",
-    "meaning": "标准；水准；旗；度量衡标准",
+    "meaning": "标准；水准",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Quality standard",
-      "meaning": "质量标准",
+      "text": "Standard of living",
+      "meaning": "生活水平；生活标准",
       "kind": "phrase"
     }
   },
   {
+    "word": "start",
+    "meaning": "开始",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Start a new lesson",
+      "meaning": "开始新的一课",
+      "kind": "phrase"
+    },
     "id": "intermediate-start",
     "libraryId": "intermediate",
-    "word": "start",
-    "meaning": "开始；启动；起点；发动",
-    "group": 0,
-    "example": {
-      "text": "Good start",
-      "meaning": "开门红",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-state",
     "libraryId": "intermediate",
     "word": "state",
-    "meaning": "国家；州；情形；规定",
+    "meaning": "状态；州；陈述；国家",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "State council",
-      "meaning": "国务院",
-      "kind": "phrase"
+      "text": "The house is in a good state.",
+      "meaning": "这所房子状况良好。",
+      "kind": "sentence",
+      "sense": "状态",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "州",
+          "partOfSpeech": "n",
+          "text": "Texas is a state in the USA.",
+          "meaning": "得克萨斯州是美国的一个州。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "陈述",
+          "partOfSpeech": "v",
+          "text": "Please state your reason clearly.",
+          "meaning": "请清楚地陈述你的理由。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "国家",
+          "partOfSpeech": "n",
+          "text": "The state provides free education.",
+          "meaning": "国家提供免费教育。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "stay",
+    "meaning": "停留；待",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Stay at home",
+      "meaning": "待在家里",
+      "kind": "phrase"
+    },
     "id": "intermediate-stay",
     "libraryId": "intermediate",
-    "word": "stay",
-    "meaning": "停留；坚持；暂住；停下",
-    "group": 0,
-    "example": {
-      "text": "Stay home",
-      "meaning": "呆在家里",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "steam",
+    "meaning": "蒸汽",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Steam from hot water",
+      "meaning": "热水产生的蒸汽",
+      "kind": "phrase"
+    },
     "id": "intermediate-steam",
     "libraryId": "intermediate",
-    "word": "steam",
-    "meaning": "蒸；散发；用蒸汽处理；蒸汽",
-    "group": 0,
-    "example": {
-      "text": "Steam pressure",
-      "meaning": "n. 蒸汽压力",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-steel",
     "libraryId": "intermediate",
     "word": "steel",
-    "meaning": "钢铁；钢制品；坚固；钢化",
+    "meaning": "钢铁；钢制品；坚固",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Stainless steel",
-      "meaning": "不锈钢",
+      "text": "Iron and steel",
+      "meaning": "钢铁",
       "kind": "phrase"
     }
   },
@@ -16012,47 +20537,62 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-step",
     "libraryId": "intermediate",
     "word": "step",
-    "meaning": "步；脚步；步骤；步伐",
+    "meaning": "步骤；脚步",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Step by",
-      "meaning": "走过",
+      "text": "Step by step",
+      "meaning": "逐步地",
       "kind": "phrase"
     }
   },
   {
+    "word": "still",
+    "meaning": "仍然；静止的",
+    "partOfSpeech": "adv/adj",
+    "example": {
+      "text": "She is still waiting.",
+      "meaning": "她仍在等候。",
+      "kind": "sentence",
+      "sense": "仍然",
+      "partOfSpeech": "adv",
+      "additional": [
+        {
+          "sense": "静止的",
+          "partOfSpeech": "adj",
+          "text": "Keep still while I take the photo.",
+          "meaning": "拍照时保持不动。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-still",
     "libraryId": "intermediate",
-    "word": "still",
-    "meaning": "仍然；更；静止地；静止的",
-    "group": 0,
-    "example": {
-      "text": "Still remains",
-      "meaning": "仍然是",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "stomach",
+    "meaning": "胃；肚子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An empty stomach",
+      "meaning": "空空的肚子",
+      "kind": "phrase"
+    },
     "id": "intermediate-stomach",
     "libraryId": "intermediate",
-    "word": "stomach",
-    "meaning": "胃；腹部；胃口；忍受",
-    "group": 0,
-    "example": {
-      "text": "Empty stomach",
-      "meaning": "空腹",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-stone",
     "libraryId": "intermediate",
     "word": "stone",
-    "meaning": "石头；结石；[宝] 宝石；石的",
+    "meaning": "石头；宝石",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Stone age",
-      "meaning": "石器时代",
+      "text": "Stone by stone",
+      "meaning": "一块石头一块石头地；一点一滴地",
       "kind": "phrase"
     }
   },
@@ -16060,47 +20600,49 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-store",
     "libraryId": "intermediate",
     "word": "store",
-    "meaning": "商店；储备；贮藏；仓库",
+    "meaning": "商店；储存",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Chain store",
-      "meaning": "连锁商店",
-      "kind": "phrase"
+      "text": "There is a store near my house.",
+      "meaning": "我家附近有一家商店。",
+      "kind": "sentence",
+      "sense": "商店",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "储存",
+          "partOfSpeech": "v",
+          "text": "Store the food in a cool place.",
+          "meaning": "把食物存放在阴凉处。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "storm",
+    "meaning": "暴风雨",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A heavy storm",
+      "meaning": "一场猛烈的暴风雨",
+      "kind": "phrase"
+    },
     "id": "intermediate-storm",
     "libraryId": "intermediate",
-    "word": "storm",
-    "meaning": "暴风雨；大动荡；起风暴；横冲直撞",
-    "group": 0,
-    "example": {
-      "text": "Tropical storm",
-      "meaning": "热带风暴",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-story",
-    "libraryId": "intermediate",
-    "word": "story",
-    "meaning": "故事；小说；新闻报道；来历",
-    "group": 0,
-    "example": {
-      "text": "Inside story",
-      "meaning": "内幕新闻",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-strange",
     "libraryId": "intermediate",
     "word": "strange",
-    "meaning": "奇怪的；陌生的；外行的；奇怪地",
+    "meaning": "奇怪的；陌生的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Feel strange",
-      "meaning": "感到不舒服",
+      "text": "Strange to say",
+      "meaning": "说来奇怪",
       "kind": "phrase"
     }
   },
@@ -16108,12 +20650,13 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-stranger",
     "libraryId": "intermediate",
     "word": "stranger",
-    "meaning": "陌生人；外地人；局外人；新来者",
+    "meaning": "陌生人；外地人；局外人",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Perfect stranger",
-      "meaning": "完全不认识的人",
-      "kind": "phrase"
+      "text": "Children must not talk to strangers.",
+      "meaning": "小孩子千万不要同陌生人说话。",
+      "kind": "sentence"
     }
   },
   {
@@ -16121,58 +20664,50 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "strawberry",
     "meaning": "草莓；草莓色",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Strawberry ice",
-      "meaning": "草莓冰",
+      "text": "Strawberry ice cream",
+      "meaning": "草莓冰激凌",
       "kind": "phrase"
     }
   },
   {
+    "word": "stream",
+    "meaning": "小溪；溪流",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A clear stream",
+      "meaning": "一条清澈的小溪",
+      "kind": "phrase"
+    },
     "id": "intermediate-stream",
     "libraryId": "intermediate",
-    "word": "stream",
-    "meaning": "溪流；流动；潮流；光线",
-    "group": 0,
-    "example": {
-      "text": "Data stream",
-      "meaning": "数据流",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-street",
-    "libraryId": "intermediate",
-    "word": "street",
-    "meaning": "街道；街道的；马路",
-    "group": 0,
+    "word": "strict",
+    "meaning": "严格的",
+    "partOfSpeech": "adj",
     "example": {
-      "text": "Main street",
-      "meaning": "大街",
+      "text": "A strict teacher",
+      "meaning": "一位严格的老师",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-strict",
     "libraryId": "intermediate",
-    "word": "strict",
-    "meaning": "严格的；绝对的；精确的；详细的",
-    "group": 0,
-    "example": {
-      "text": "Strict control",
-      "meaning": "严格控制",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-stupid",
     "libraryId": "intermediate",
     "word": "stupid",
-    "meaning": "愚蠢的；麻木的；乏味的；傻瓜",
+    "meaning": "愚蠢的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "It was stupid of me to lose my temper.",
-      "meaning": "我大发脾气，真是太愚蠢了。",
+      "meaning": "我发脾气真是太愚蠢了。",
       "kind": "sentence"
     }
   },
@@ -16180,11 +20715,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-succeed",
     "libraryId": "intermediate",
     "word": "succeed",
-    "meaning": "成功；继承；继任；兴旺",
+    "meaning": "成功；继承",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Succeed someone as",
-      "meaning": "接任某人的职务",
+      "text": "Succeed in doing",
+      "meaning": "成功做成某事",
       "kind": "phrase"
     }
   },
@@ -16192,59 +20728,90 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-success",
     "libraryId": "intermediate",
     "word": "success",
-    "meaning": "成功；成就；胜利；大获成功的人或事物",
+    "meaning": "成功，成就；胜利；大获成功的人或事物",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "With success",
-      "meaning": "成功地",
+      "text": "Secret of success",
+      "meaning": "成功的秘诀",
       "kind": "phrase"
     }
   },
   {
+    "word": "successful",
+    "meaning": "成功的",
+    "example": {
+      "text": "A successful team",
+      "meaning": "一支成功的团队",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "adj",
+    "id": "intermediate-successful",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "such",
+    "meaning": "这样的",
+    "partOfSpeech": "det",
+    "example": {
+      "text": "Such a lovely day",
+      "meaning": "如此美好的一天",
+      "kind": "phrase"
+    },
     "id": "intermediate-such",
     "libraryId": "intermediate",
-    "word": "such",
-    "meaning": "这样的；如此的；那么；这种的",
-    "group": 0,
-    "example": {
-      "text": "Such as",
-      "meaning": "比如；诸如",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "sudden",
+    "meaning": "突然的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A sudden change",
+      "meaning": "突然的变化",
+      "kind": "phrase"
+    },
     "id": "intermediate-sudden",
     "libraryId": "intermediate",
-    "word": "sudden",
-    "meaning": "突然的；意外的；快速的；突然发生的事",
-    "group": 0,
-    "example": {
-      "text": "Sudden attack",
-      "meaning": "奇袭",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-sugar",
     "libraryId": "intermediate",
     "word": "sugar",
-    "meaning": "糖；食糖；甜言蜜语；加糖于",
+    "meaning": "糖；食糖",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Sugar content",
-      "meaning": "糖含量",
+      "text": "White granulated sugar",
+      "meaning": "白砂糖",
       "kind": "phrase"
     }
+  },
+  {
+    "word": "suggest",
+    "meaning": "建议",
+    "example": {
+      "text": "Suggest a better plan",
+      "meaning": "提出一个更好的计划",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "intermediate-suggest",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-suggestion",
     "libraryId": "intermediate",
     "word": "suggestion",
-    "meaning": "建议；示意；微量；细微的迹象",
+    "meaning": "建议；暗示",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Suggestion box",
-      "meaning": "n. 意见箱",
+      "text": "Make a suggestion",
+      "meaning": "提出建议",
       "kind": "phrase"
     }
   },
@@ -16252,7 +20819,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-supper",
     "libraryId": "intermediate",
     "word": "supper",
-    "meaning": "晚餐；晚饭；夜宵",
+    "meaning": "晚餐，晚饭；夜宵",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "After supper",
@@ -16264,11 +20832,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-supply",
     "libraryId": "intermediate",
     "word": "supply",
-    "meaning": "供给；补给；供应品；提供",
+    "meaning": "供给，补给；供应品",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Short supply",
-      "meaning": "供不应求",
+      "text": "In short supply",
+      "meaning": "供应不足；缺乏",
       "kind": "phrase"
     }
   },
@@ -16276,7 +20845,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-suppose",
     "libraryId": "intermediate",
     "word": "suppose",
-    "meaning": "假设；认为；让（虚拟语气）；推想",
+    "meaning": "假设；认为",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Suppose it rains tomorrow",
@@ -16288,11 +20858,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-sure",
     "libraryId": "intermediate",
     "word": "sure",
-    "meaning": "确信的；可靠的；必定的；当然",
+    "meaning": "确信的；可靠的；必定的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Pretty sure",
-      "meaning": "相当肯定",
+      "text": "That's for sure",
+      "meaning": "那是肯定的",
       "kind": "phrase"
     }
   },
@@ -16300,79 +20871,73 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-surface",
     "libraryId": "intermediate",
     "word": "surface",
-    "meaning": "表面；表层；外观；表面的",
+    "meaning": "表面；表层；外观",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Surface treatment",
-      "meaning": "表面处理",
+      "text": "On the surface",
+      "meaning": "在表面上，外表上",
       "kind": "phrase"
     }
   },
   {
+    "word": "surprise",
+    "meaning": "使惊讶",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Surprise your friends",
+      "meaning": "让你的朋友们感到惊讶",
+      "kind": "phrase"
+    },
     "id": "intermediate-surprise",
     "libraryId": "intermediate",
-    "word": "surprise",
-    "meaning": "惊奇；诧异；突然袭击；使惊奇",
-    "group": 0,
-    "example": {
-      "text": "By surprise",
-      "meaning": "出其不意地",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-sweater",
-    "libraryId": "intermediate",
-    "word": "sweater",
-    "meaning": "毛线衣；运动衫；大量出汗的人；发汗剂",
-    "group": 0,
+    "word": "sweet",
+    "meaning": "甜的",
+    "partOfSpeech": "adj",
     "example": {
-      "text": "A wool sweater",
-      "meaning": "一件羊毛衫",
+      "text": "A sweet taste",
+      "meaning": "甜味",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-sweet",
     "libraryId": "intermediate",
-    "word": "sweet",
-    "meaning": "甜的；悦耳的；芳香的；亲切的",
-    "group": 0,
-    "example": {
-      "text": "Sweet potato",
-      "meaning": "甘薯",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "swimming",
+    "meaning": "游泳",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Go swimming",
+      "meaning": "去游泳",
+      "kind": "phrase"
+    },
     "id": "intermediate-swimming",
     "libraryId": "intermediate",
-    "word": "swimming",
-    "meaning": "游泳；目眩；游泳的；游泳用的",
-    "group": 0,
-    "example": {
-      "text": "Swimming pool",
-      "meaning": "游泳池",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "swing",
+    "meaning": "秋千",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Play on a swing",
+      "meaning": "荡秋千",
+      "kind": "phrase"
+    },
     "id": "intermediate-swing",
     "libraryId": "intermediate",
-    "word": "swing",
-    "meaning": "摇摆；摆动；秋千；音律",
-    "group": 0,
-    "example": {
-      "text": "Swing arm",
-      "meaning": "摇动臂",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-symbol",
     "libraryId": "intermediate",
     "word": "symbol",
-    "meaning": "象征；符号；标志；记号",
+    "meaning": "象征；符号；标志",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Status symbol",
@@ -16381,122 +20946,132 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "tail",
+    "meaning": "尾巴",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A long tail",
+      "meaning": "一条长尾巴",
+      "kind": "phrase"
+    },
     "id": "intermediate-tail",
     "libraryId": "intermediate",
-    "word": "tail",
-    "meaning": "尾巴；踪迹；辫子；燕尾服",
-    "group": 0,
-    "example": {
-      "text": "Short tail",
-      "meaning": "短尾巴",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "tale",
+    "meaning": "故事；传说",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A fairy tale",
+      "meaning": "一个童话故事",
+      "kind": "phrase"
+    },
     "id": "intermediate-tale",
     "libraryId": "intermediate",
-    "word": "tale",
-    "meaning": "故事；传说；叙述；流言蜚语",
-    "group": 0,
-    "example": {
-      "text": "Folk tale",
-      "meaning": "民间故事",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "tape",
+    "meaning": "胶带；磁带",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A roll of tape",
+      "meaning": "一卷胶带",
+      "kind": "phrase"
+    },
     "id": "intermediate-tape",
     "libraryId": "intermediate",
-    "word": "tape",
-    "meaning": "胶带；磁带；带子；卷尺",
-    "group": 0,
-    "example": {
-      "text": "Adhesive tape",
-      "meaning": "胶布",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "task",
+    "meaning": "任务",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Finish a task",
+      "meaning": "完成一项任务",
+      "kind": "phrase"
+    },
     "id": "intermediate-task",
     "libraryId": "intermediate",
-    "word": "task",
-    "meaning": "分派任务；工作；作业；任务",
-    "group": 0,
-    "example": {
-      "text": "Main task",
-      "meaning": "主任务",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "taste",
+    "meaning": "尝；品尝",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Taste the soup",
+      "meaning": "尝一尝汤",
+      "kind": "phrase"
+    },
     "id": "intermediate-taste",
     "libraryId": "intermediate",
-    "word": "taste",
-    "meaning": "味道；品味；审美；尝",
-    "group": 0,
-    "example": {
-      "text": "Sweet taste",
-      "meaning": "甜味",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-taxi",
-    "libraryId": "intermediate",
-    "word": "taxi",
-    "meaning": "乘出租车；滑行；出租汽车；出租车",
-    "group": 0,
-    "example": {
-      "text": "By taxi",
-      "meaning": "坐计程车",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-team",
     "libraryId": "intermediate",
     "word": "team",
-    "meaning": "队；组；使合作；合作",
+    "meaning": "队；组",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Football team",
-      "meaning": "足球队",
+      "text": "In the team",
+      "meaning": "在队里",
       "kind": "phrase"
     }
   },
   {
+    "word": "technology",
+    "meaning": "科技",
+    "example": {
+      "text": "Modern technology",
+      "meaning": "现代科技",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-technology",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "telephone",
+    "meaning": "电话",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Answer the telephone",
+      "meaning": "接电话",
+      "kind": "phrase"
+    },
     "id": "intermediate-telephone",
     "libraryId": "intermediate",
-    "word": "telephone",
-    "meaning": "（美）电话；电话机；电话耳机；打电话",
-    "group": 0,
-    "example": {
-      "text": "Telephone number",
-      "meaning": "n. 电话号码",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "television",
+    "meaning": "电视；电视机",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Watch television",
+      "meaning": "看电视",
+      "kind": "phrase"
+    },
     "id": "intermediate-television",
     "libraryId": "intermediate",
-    "word": "television",
-    "meaning": "电视；电视机；电视业",
-    "group": 0,
-    "example": {
-      "text": "Network television",
-      "meaning": "网络电视",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-temperature",
     "libraryId": "intermediate",
     "word": "temperature",
-    "meaning": "温度；体温；气温；发烧",
+    "meaning": "温度；体温；发烧",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "High temperature",
-      "meaning": "高温",
+      "text": "Temperature and humidity",
+      "meaning": "温度与湿度",
       "kind": "phrase"
     }
   },
@@ -16504,127 +21079,117 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-tenth",
     "libraryId": "intermediate",
     "word": "tenth",
-    "meaning": "第十；十分之一；十分之一的；第十个的",
+    "meaning": "第十",
+    "partOfSpeech": "num",
     "group": 0,
     "example": {
-      "text": "Nine tenths",
-      "meaning": "几乎全部",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-tent",
-    "libraryId": "intermediate",
-    "word": "tent",
-    "meaning": "帐篷；住处；帷幕；用帐篷遮盖",
-    "group": 0,
-    "example": {
-      "text": "Big tent",
-      "meaning": "大帐篷政策（包容各种不同的政治和社会观点）",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-term",
-    "libraryId": "intermediate",
-    "word": "term",
-    "meaning": "术语；学期；期限；条款",
-    "group": 0,
-    "example": {
-      "text": "Long term",
-      "meaning": "长期的",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-terrible",
-    "libraryId": "intermediate",
-    "word": "terrible",
-    "meaning": "可怕的；很糟的；令人讨厌的；很",
-    "group": 0,
-    "example": {
-      "text": "Feel terrible",
-      "meaning": "感觉不舒服",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-test",
-    "libraryId": "intermediate",
-    "word": "test",
-    "meaning": "试验；检验；测试；考查",
-    "group": 0,
-    "example": {
-      "text": "Test result",
-      "meaning": "试验结果",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-text",
-    "libraryId": "intermediate",
-    "word": "text",
-    "meaning": "[计] 文本；课文；主题；发短信",
-    "group": 0,
-    "example": {
-      "text": "Full text",
-      "meaning": "全文",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-than",
-    "libraryId": "intermediate",
-    "word": "than",
-    "meaning": "比（用于形容词、副词的比较级之后）；除…外（用于other等之后）；与其…（用于 rather等之后）；一…就（用于 no sooner等之后）",
-    "group": 0,
-    "example": {
-      "text": "Than ever",
-      "meaning": "比以前",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-thank",
-    "libraryId": "intermediate",
-    "word": "thank",
-    "meaning": "感谢；谢谢；向…表示谢意",
-    "group": 0,
-    "example": {
-      "text": "Thank heaven",
-      "meaning": "谢天谢地",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-that",
-    "libraryId": "intermediate",
-    "word": "that",
-    "meaning": "那；那个；那么；那样",
-    "group": 0,
-    "example": {
-      "text": "That far",
-      "meaning": "那么远；到那里为止",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-their",
-    "libraryId": "intermediate",
-    "word": "their",
-    "meaning": "他们的；她们的；它们的",
-    "group": 0,
-    "example": {
-      "text": "In America, they go out with their friends.",
-      "meaning": "在美国，他们与他们的朋友出去。",
+      "text": "He has just published his tenth novel.",
+      "meaning": "他刚刚发表了他的第十本小说。",
       "kind": "sentence"
     }
+  },
+  {
+    "word": "tent",
+    "meaning": "帐篷",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Put up a tent",
+      "meaning": "搭帐篷",
+      "kind": "phrase"
+    },
+    "id": "intermediate-tent",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "term",
+    "meaning": "学期；术语；期限",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The new term starts in September.",
+      "meaning": "新学期九月开始。",
+      "kind": "sentence",
+      "sense": "学期",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "术语",
+          "partOfSpeech": "n",
+          "text": "This is a scientific term.",
+          "meaning": "这是一个科学术语。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "期限",
+          "partOfSpeech": "n",
+          "text": "The loan has a term of five years.",
+          "meaning": "贷款期限为五年。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "id": "intermediate-term",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "terrible",
+    "meaning": "糟糕的；可怕的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Terrible weather",
+      "meaning": "糟糕的天气",
+      "kind": "phrase"
+    },
+    "id": "intermediate-terrible",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "test",
+    "meaning": "测验；考试",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Take a test",
+      "meaning": "参加一次测验",
+      "kind": "phrase"
+    },
+    "id": "intermediate-test",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "text",
+    "meaning": "课文；文本",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Read the text aloud",
+      "meaning": "大声朗读课文",
+      "kind": "phrase"
+    },
+    "id": "intermediate-text",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "than",
+    "meaning": "比",
+    "partOfSpeech": "prep",
+    "example": {
+      "text": "Taller than me",
+      "meaning": "比我高",
+      "kind": "phrase"
+    },
+    "id": "intermediate-than",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-theirs",
     "libraryId": "intermediate",
     "word": "theirs",
     "meaning": "他们的；她们的；它们的",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
       "text": "Our house is number 25, and theirs is just opposite.",
@@ -16633,254 +21198,228 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
-    "id": "intermediate-them",
-    "libraryId": "intermediate",
-    "word": "them",
-    "meaning": "他们；它们；她们",
-    "group": 0,
+    "word": "themselves",
+    "meaning": "他们自己；她们自己；它们自己",
+    "partOfSpeech": "pron",
     "example": {
-      "text": "One of them",
-      "meaning": "他们中的一个",
-      "kind": "phrase"
-    }
-  },
-  {
+      "text": "They made it themselves.",
+      "meaning": "他们自己做的。",
+      "kind": "sentence"
+    },
     "id": "intermediate-themselves",
     "libraryId": "intermediate",
-    "word": "themselves",
-    "meaning": "他们自己；他们亲自",
-    "group": 0,
-    "example": {
-      "text": "By themselves",
-      "meaning": "独力地",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "thick",
+    "meaning": "厚的；浓密的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A thick book",
+      "meaning": "一本厚书",
+      "kind": "phrase"
+    },
     "id": "intermediate-thick",
     "libraryId": "intermediate",
-    "word": "thick",
-    "meaning": "最拥挤部分；活动最多部分；事物的粗大浓密部分；厚的",
-    "group": 0,
-    "example": {
-      "text": "Thick wall",
-      "meaning": "厚壁",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "thing",
+    "meaning": "东西；事情",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A useful thing",
+      "meaning": "一件有用的东西",
+      "kind": "phrase"
+    },
     "id": "intermediate-thing",
     "libraryId": "intermediate",
-    "word": "thing",
-    "meaning": "事情；东西；事物；情况",
-    "group": 0,
-    "example": {
-      "text": "Whole thing",
-      "meaning": "全部事情",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "third",
+    "meaning": "第三",
+    "partOfSpeech": "num",
+    "example": {
+      "text": "The third floor",
+      "meaning": "三楼",
+      "kind": "phrase"
+    },
     "id": "intermediate-third",
     "libraryId": "intermediate",
-    "word": "third",
-    "meaning": "第三；三分之一；第三的；三分之一的",
-    "group": 0,
-    "example": {
-      "text": "Third generation",
-      "meaning": "第三代",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-thirteen",
-    "libraryId": "intermediate",
-    "word": "thirteen",
-    "meaning": "十三；十三岁；十三个；十三的",
-    "group": 0,
+    "word": "though",
+    "meaning": "虽然；尽管",
+    "partOfSpeech": "conj",
     "example": {
-      "text": "When it happened, I was thirteen (= 13 years old ) .",
-      "meaning": "那事发生时，我13岁。",
+      "text": "Though it is cold, we are happy.",
+      "meaning": "虽然天气冷，我们还是很高兴。",
       "kind": "sentence"
-    }
-  },
-  {
-    "id": "intermediate-thirty",
-    "libraryId": "intermediate",
-    "word": "thirty",
-    "meaning": "三十年代；三十；三十个的；三十个",
-    "group": 0,
-    "example": {
-      "text": "In the thirties, air travel really began to take off.",
-      "meaning": "在30年代，乘飞机旅行迅速流行了起来。",
-      "kind": "sentence"
-    }
-  },
-  {
+    },
     "id": "intermediate-though",
     "libraryId": "intermediate",
-    "word": "though",
-    "meaning": "可是；虽然；不过；然而",
-    "group": 0,
-    "example": {
-      "text": "Even though",
-      "meaning": "虽然，即使",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-thought",
     "libraryId": "intermediate",
     "word": "thought",
-    "meaning": "思想；思考；想法；关心",
+    "meaning": "思想；想法",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Thought about",
-      "meaning": "想到",
+      "text": "School of thought",
+      "meaning": "学派；思想派别",
       "kind": "phrase"
     }
   },
   {
-    "id": "intermediate-thousand",
-    "libraryId": "intermediate",
-    "word": "thousand",
-    "meaning": "一千；一千个；许许多多；成千的",
-    "group": 0,
+    "word": "thread",
+    "meaning": "线；细线",
+    "partOfSpeech": "n",
     "example": {
-      "text": "Ten thousand",
-      "meaning": "一万",
+      "text": "A needle and thread",
+      "meaning": "针线",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-thread",
     "libraryId": "intermediate",
-    "word": "thread",
-    "meaning": "线；螺纹；思路；衣服",
-    "group": 0,
-    "example": {
-      "text": "Screw thread",
-      "meaning": "n. 螺纹",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-three",
-    "libraryId": "intermediate",
-    "word": "three",
-    "meaning": "三；三个；三的；三个的",
-    "group": 0,
+    "word": "through",
+    "meaning": "穿过；通过",
+    "partOfSpeech": "prep",
     "example": {
-      "text": "Three months",
-      "meaning": "三个月",
+      "text": "Walk through the forest",
+      "meaning": "步行穿过森林",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-through",
     "libraryId": "intermediate",
-    "word": "through",
-    "meaning": "通过；穿过；凭借；彻底",
-    "group": 0,
-    "example": {
-      "text": "Once through",
-      "meaning": "单程的",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-ticket",
     "libraryId": "intermediate",
     "word": "ticket",
-    "meaning": "加标签于；指派；对…开出交通违规罚单；票",
+    "meaning": "票；车票；入场券",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Air ticket",
-      "meaning": "机票",
+      "text": "Round trip ticket",
+      "meaning": "往返票；来回票",
       "kind": "phrase"
     }
   },
   {
+    "word": "tie",
+    "meaning": "系；领带；平局",
+    "partOfSpeech": "v/n",
+    "example": {
+      "text": "Tie your shoes before running.",
+      "meaning": "跑步前系好鞋带。",
+      "kind": "sentence",
+      "sense": "系",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "领带",
+          "partOfSpeech": "n",
+          "text": "He wore a blue tie.",
+          "meaning": "他戴着一条蓝领带。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "平局",
+          "partOfSpeech": "n",
+          "text": "The game ended in a tie.",
+          "meaning": "比赛以平局结束。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-tie",
     "libraryId": "intermediate",
-    "word": "tie",
-    "meaning": "系；约束；打结；与…成平局",
-    "group": 0,
-    "example": {
-      "text": "Cup tie",
-      "meaning": "优胜杯决赛",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "till",
+    "meaning": "直到",
+    "partOfSpeech": "prep",
+    "example": {
+      "text": "Wait till Friday",
+      "meaning": "等到星期五",
+      "kind": "phrase"
+    },
     "id": "intermediate-till",
     "libraryId": "intermediate",
-    "word": "till",
-    "meaning": "[地理][水文] 冰碛；放钱的抽屉；备用现金；直到",
-    "group": 0,
-    "example": {
-      "text": "I didn’t have a boyfriend till I was 17.",
-      "meaning": "我直到17岁才有男朋友。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "tiny",
+    "meaning": "极小的；微小的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A tiny bird",
+      "meaning": "一只极小的鸟",
+      "kind": "phrase"
+    },
     "id": "intermediate-tiny",
     "libraryId": "intermediate",
-    "word": "tiny",
-    "meaning": "微小的；很少的；极小的",
-    "group": 0,
-    "example": {
-      "text": "Tiny amount",
-      "meaning": "微小额",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-together",
     "libraryId": "intermediate",
     "word": "together",
-    "meaning": "一起；同时；相互；连续地",
+    "meaning": "一起；同时",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "Run together",
-      "meaning": "◎和…一起跑：",
+      "text": "All together",
+      "meaning": "一起",
       "kind": "phrase"
     }
   },
   {
+    "word": "toilet",
+    "meaning": "厕所；卫生间",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Where is the toilet?",
+      "meaning": "厕所在哪里？",
+      "kind": "sentence"
+    },
     "id": "intermediate-toilet",
     "libraryId": "intermediate",
-    "word": "toilet",
-    "meaning": "厕所；盥洗室；梳妆；打扮",
-    "group": 0,
-    "example": {
-      "text": "Toilet seat",
-      "meaning": "马桶座圈",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "ton",
+    "meaning": "吨",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A ton of rice",
+      "meaning": "一吨大米",
+      "kind": "phrase"
+    },
     "id": "intermediate-ton",
     "libraryId": "intermediate",
-    "word": "ton",
-    "meaning": "吨；很多；大量；许多",
-    "group": 0,
-    "example": {
-      "text": "Metric ton",
-      "meaning": "n. 公吨",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-tongue",
     "libraryId": "intermediate",
     "word": "tongue",
-    "meaning": "舌头；语言；舔；斥责",
+    "meaning": "舌头；语言",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Native tongue",
-      "meaning": "母语",
+      "text": "Mother tongue",
+      "meaning": "母语；本国语言",
       "kind": "phrase"
     }
   },
@@ -16888,7 +21427,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-tonight",
     "libraryId": "intermediate",
     "word": "tonight",
-    "meaning": "在今晚；今晚",
+    "meaning": "在今晚",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "I think I’ll go to bed early tonight.",
@@ -16897,22 +21437,24 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "tool",
+    "meaning": "工具",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A useful tool",
+      "meaning": "一个有用的工具",
+      "kind": "phrase"
+    },
     "id": "intermediate-tool",
     "libraryId": "intermediate",
-    "word": "tool",
-    "meaning": "工具；用具；器械；机床",
-    "group": 0,
-    "example": {
-      "text": "Machine tool",
-      "meaning": "机床",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-toothache",
     "libraryId": "intermediate",
     "word": "toothache",
-    "meaning": "[口腔] 牙痛；牙痛；牙疼",
+    "meaning": "牙痛，牙疼",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "I had terrible toothache all last night.",
@@ -16925,6 +21467,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "toothbrush",
     "meaning": "牙刷",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Electric toothbrush",
@@ -16937,138 +21480,137 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "toothpaste",
     "meaning": "牙膏",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Shaving supplies, toothpaste, and soap were found inside.",
-      "meaning": "在里面找到了剃须用品、牙膏和肥皂。",
-      "kind": "sentence"
+      "text": "A tube of toothpaste",
+      "meaning": "一管牙膏",
+      "kind": "phrase"
     }
   },
   {
+    "word": "top",
+    "meaning": "顶部；顶端",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The top of the mountain",
+      "meaning": "山顶",
+      "kind": "phrase"
+    },
     "id": "intermediate-top",
     "libraryId": "intermediate",
-    "word": "top",
-    "meaning": "顶部；顶端；上部；首席",
-    "group": 0,
-    "example": {
-      "text": "Top level",
-      "meaning": "最高级的",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "total",
+    "meaning": "总数；合计",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A total of ten students",
+      "meaning": "共十名学生",
+      "kind": "phrase"
+    },
     "id": "intermediate-total",
     "libraryId": "intermediate",
-    "word": "total",
-    "meaning": "全部的；完全的；整个的；总数达",
-    "group": 0,
-    "example": {
-      "text": "In total",
-      "meaning": "总计",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "touch",
+    "meaning": "触摸；碰",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Touch the screen",
+      "meaning": "触摸屏幕",
+      "kind": "phrase"
+    },
     "id": "intermediate-touch",
     "libraryId": "intermediate",
-    "word": "touch",
-    "meaning": "接触；触动；使轻度受害；触觉",
-    "group": 0,
-    "example": {
-      "text": "Human touch",
-      "meaning": "人类接触",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "tourist",
+    "meaning": "游客；旅行者",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A tourist from China",
+      "meaning": "一位来自中国的游客",
+      "kind": "phrase"
+    },
     "id": "intermediate-tourist",
     "libraryId": "intermediate",
-    "word": "tourist",
-    "meaning": "旅行者；观光客；旅游的；在旅行参观",
-    "group": 0,
-    "example": {
-      "text": "Tourist resources",
-      "meaning": "旅游资源",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-towel",
     "libraryId": "intermediate",
     "word": "towel",
-    "meaning": "毛巾；手巾；[纸] 纸巾；用毛巾擦",
+    "meaning": "毛巾；纸巾",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Bath towel",
-      "meaning": "浴巾",
+      "text": "Paper towel",
+      "meaning": "纸巾",
       "kind": "phrase"
     }
   },
   {
+    "word": "tower",
+    "meaning": "塔",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A tall tower",
+      "meaning": "一座高塔",
+      "kind": "phrase"
+    },
     "id": "intermediate-tower",
     "libraryId": "intermediate",
-    "word": "tower",
-    "meaning": "塔；高楼；堡垒；高耸",
-    "group": 0,
-    "example": {
-      "text": "Cooling tower",
-      "meaning": "冷却塔",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "town",
+    "meaning": "城镇；镇",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A small town",
+      "meaning": "一个小镇",
+      "kind": "phrase"
+    },
     "id": "intermediate-town",
     "libraryId": "intermediate",
-    "word": "town",
-    "meaning": "城镇；市镇；市内商业区；镇",
-    "group": 0,
-    "example": {
-      "text": "Market town",
-      "meaning": "n. 集镇",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-toy",
-    "libraryId": "intermediate",
-    "word": "toy",
-    "meaning": "玩具；小装饰品；不值钱的东西；玩弄",
-    "group": 0,
-    "example": {
-      "text": "Toy factory",
-      "meaning": "玩具厂",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-trade",
     "libraryId": "intermediate",
     "word": "trade",
-    "meaning": "贸易；交易；行业；职业",
+    "meaning": "贸易，交易；行业；职业",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "International trade",
-      "meaning": "国际贸易",
+      "text": "Foreign trade",
+      "meaning": "外贸，对外贸易",
       "kind": "phrase"
     }
   },
   {
+    "word": "traditional",
+    "meaning": "传统的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Traditional Chinese music",
+      "meaning": "中国传统音乐",
+      "kind": "phrase"
+    },
     "id": "intermediate-traditional",
     "libraryId": "intermediate",
-    "word": "traditional",
-    "meaning": "传统的；惯例的；口传的；传说的",
-    "group": 0,
-    "example": {
-      "text": "Traditional chinese",
-      "meaning": "繁体中文",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-traffic",
     "libraryId": "intermediate",
     "word": "traffic",
-    "meaning": "交通；运输；贸易；[通信] 通信量",
+    "meaning": "交通；运输",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Traffic accident",
@@ -17080,11 +21622,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-training",
     "libraryId": "intermediate",
     "word": "training",
-    "meaning": "训练；培养；瞄准；整枝",
+    "meaning": "培训",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Personnel training",
-      "meaning": "人员培训",
+      "text": "Education and training",
+      "meaning": "教育与培训",
       "kind": "phrase"
     }
   },
@@ -17092,7 +21635,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-translate",
     "libraryId": "intermediate",
     "word": "translate",
-    "meaning": "翻译；转化；解释；转变为",
+    "meaning": "翻译；转化",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Translate into",
@@ -17104,47 +21648,62 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-treasure",
     "libraryId": "intermediate",
     "word": "treasure",
-    "meaning": "财富；财产；财宝；珍品",
+    "meaning": "财宝；珍品",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Priceless treasure",
-      "meaning": "无价之宝",
+      "text": "Treasure chest",
+      "meaning": "财宝箱；宝库",
       "kind": "phrase"
     }
   },
   {
+    "word": "treatment",
+    "meaning": "治疗；处理",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Medical treatment",
+      "meaning": "医疗",
+      "kind": "phrase"
+    },
     "id": "intermediate-treatment",
     "libraryId": "intermediate",
-    "word": "treatment",
-    "meaning": "治疗；疗法；处理；对待",
-    "group": 0,
-    "example": {
-      "text": "Heat treatment",
-      "meaning": "热处理",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-trip",
     "libraryId": "intermediate",
     "word": "trip",
-    "meaning": "绊倒；远足；犯错误；轻快地走",
+    "meaning": "旅行；绊倒",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Day trip",
-      "meaning": "当天来回的短途旅行",
-      "kind": "phrase"
+      "text": "We went on a trip to the coast.",
+      "meaning": "我们去海边旅行了。",
+      "kind": "sentence",
+      "sense": "旅行",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "绊倒",
+          "partOfSpeech": "v",
+          "text": "Do not trip over the cable.",
+          "meaning": "不要被电缆绊倒。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-trouble",
     "libraryId": "intermediate",
     "word": "trouble",
-    "meaning": "麻烦；烦恼；故障；动乱",
+    "meaning": "麻烦；烦恼；故障",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Have trouble",
-      "meaning": "v. 在...有困难",
+      "text": "Out of trouble",
+      "meaning": "摆脱麻烦；脱离了困境",
       "kind": "phrase"
     }
   },
@@ -17152,7 +21711,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-truck",
     "libraryId": "intermediate",
     "word": "truck",
-    "meaning": "卡车；交易；手推车；驾驶卡车",
+    "meaning": "卡车；货车",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Heavy truck",
@@ -17161,98 +21721,80 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "true",
+    "meaning": "真实的；正确的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A true story",
+      "meaning": "一个真实的故事",
+      "kind": "phrase"
+    },
     "id": "intermediate-true",
     "libraryId": "intermediate",
-    "word": "true",
-    "meaning": "真实的；正确的；真实地；准确地",
-    "group": 0,
-    "example": {
-      "text": "True value",
-      "meaning": "真值",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "trust",
+    "meaning": "信任；信赖",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Trust your friends",
+      "meaning": "信任你的朋友",
+      "kind": "phrase"
+    },
     "id": "intermediate-trust",
     "libraryId": "intermediate",
-    "word": "trust",
-    "meaning": "信任；信赖；责任；托拉斯",
-    "group": 0,
-    "example": {
-      "text": "In trust",
-      "meaning": "被托管",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "truth",
+    "meaning": "真相；事实",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Tell the truth",
+      "meaning": "说实话",
+      "kind": "phrase"
+    },
     "id": "intermediate-truth",
     "libraryId": "intermediate",
-    "word": "truth",
-    "meaning": "真理；事实；诚实；实质",
-    "group": 0,
-    "example": {
-      "text": "Eternal truth",
-      "meaning": "永恒的真理",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "twelfth",
+    "meaning": "第十二",
+    "partOfSpeech": "num",
+    "example": {
+      "text": "The twelfth lesson",
+      "meaning": "第十二课",
+      "kind": "phrase"
+    },
     "id": "intermediate-twelfth",
     "libraryId": "intermediate",
-    "word": "twelfth",
-    "meaning": "第十二的；第十二个的；十二分之一的；第十二",
-    "group": 0,
-    "example": {
-      "text": "Twelfth night",
-      "meaning": "[宗]主显节前夕",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-twelve",
-    "libraryId": "intermediate",
-    "word": "twelve",
-    "meaning": "十二；十二个；十二的；十二个的",
-    "group": 0,
+    "word": "twentieth",
+    "meaning": "第二十",
+    "partOfSpeech": "num",
     "example": {
-      "text": "Twelve apostles",
-      "meaning": "耶稣之十二信徒",
+      "text": "The twentieth page",
+      "meaning": "第二十页",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-twentieth",
     "libraryId": "intermediate",
-    "word": "twentieth",
-    "meaning": "二十分之一；第二十的；二十分之一的；第二十",
-    "group": 0,
-    "example": {
-      "text": "The twentieth century",
-      "meaning": "20世纪",
-      "kind": "phrase"
-    }
-  },
-  {
-    "id": "intermediate-twenty",
-    "libraryId": "intermediate",
-    "word": "twenty",
-    "meaning": "二十；二十年代；二十的；二十个",
-    "group": 0,
-    "example": {
-      "text": "Twenty five",
-      "meaning": "二十五",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-twice",
     "libraryId": "intermediate",
     "word": "twice",
     "meaning": "两次；两倍",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "In twice",
-      "meaning": "分两次",
+      "text": "Twice a week",
+      "meaning": "每周两次",
       "kind": "phrase"
     }
   },
@@ -17260,59 +21802,51 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-ugly",
     "libraryId": "intermediate",
     "word": "ugly",
-    "meaning": "丑陋的；邪恶的；令人厌恶的；难看的",
+    "meaning": "丑陋的；难看的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Ugly duckling",
-      "meaning": "丑小鸭；小时难看长大后变得才貌出众的人",
+      "meaning": "丑小鸭",
       "kind": "phrase"
     }
   },
   {
-    "id": "intermediate-umbrella",
-    "libraryId": "intermediate",
-    "word": "umbrella",
-    "meaning": "雨伞；保护伞；庇护；伞形结构",
-    "group": 0,
+    "word": "underground",
+    "meaning": "地下的",
+    "partOfSpeech": "adj",
     "example": {
-      "text": "Umbrella stand",
-      "meaning": "伞架",
+      "text": "An underground room",
+      "meaning": "一间地下房间",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-underground",
     "libraryId": "intermediate",
-    "word": "underground",
-    "meaning": "在地下；秘密地；地下的；秘密的",
-    "group": 0,
-    "example": {
-      "text": "Underground space",
-      "meaning": "地下空间",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "unit",
+    "meaning": "单元；单位",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The first unit",
+      "meaning": "第一单元",
+      "kind": "phrase"
+    },
     "id": "intermediate-unit",
     "libraryId": "intermediate",
-    "word": "unit",
-    "meaning": "单位；单元；装置；[军] 部队",
-    "group": 0,
-    "example": {
-      "text": "Per unit",
-      "meaning": "每单位",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-university",
     "libraryId": "intermediate",
     "word": "university",
-    "meaning": "大学；综合性大学；大学校舍",
+    "meaning": "大学",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Normal university",
-      "meaning": "师范大学",
+      "text": "A famous university",
+      "meaning": "一所著名大学",
       "kind": "phrase"
     }
   },
@@ -17320,35 +21854,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-unless",
     "libraryId": "intermediate",
     "word": "unless",
-    "meaning": "除非；如果不；除…之外",
+    "meaning": "除非，如果不",
+    "partOfSpeech": "conj",
     "group": 0,
     "example": {
-      "text": "Unless and until",
-      "meaning": "直到…才",
-      "kind": "phrase"
+      "text": "I can’t leave her unless I know she’s all right.",
+      "meaning": "除非我知道她没事，否则我不能离开她。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "until",
+    "meaning": "直到",
+    "partOfSpeech": "prep",
+    "example": {
+      "text": "Wait until tomorrow",
+      "meaning": "等到明天",
+      "kind": "phrase"
+    },
     "id": "intermediate-until",
     "libraryId": "intermediate",
-    "word": "until",
-    "meaning": "在…以前；直到…时；到…为止；直到…",
-    "group": 0,
-    "example": {
-      "text": "Up until last year, they didn’t even own a car.",
-      "meaning": "一直到去年，他们连汽车也没有。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-upstairs",
     "libraryId": "intermediate",
     "word": "upstairs",
-    "meaning": "在楼上；向楼上；上楼；往楼上",
+    "meaning": "在楼上；向楼上",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "Go upstairs",
-      "meaning": "上楼；爬楼梯",
+      "meaning": "上楼",
       "kind": "phrase"
     }
   },
@@ -17356,11 +21893,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-used",
     "libraryId": "intermediate",
     "word": "used",
-    "meaning": "习惯的；二手的；使用过的；用（use的过去式）",
+    "meaning": "习惯的；二手的，使用过的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Used car",
-      "meaning": "二手车",
+      "text": "Get used to",
+      "meaning": "习惯于…",
       "kind": "phrase"
     }
   },
@@ -17368,11 +21906,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-useful",
     "libraryId": "intermediate",
     "word": "useful",
-    "meaning": "有用的；有益的；有帮助的",
+    "meaning": "有用的，有益的；有帮助的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Useful data",
-      "meaning": "有用数据和资料",
+      "text": "Be useful for",
+      "meaning": "对…有用；具有…用途",
       "kind": "phrase"
     }
   },
@@ -17381,10 +21920,11 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "useless",
     "meaning": "无用的；无效的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "They wrote his suggestion off as a useless idea.",
-      "meaning": "他们把他的建议看做是无用的想法。",
+      "meaning": "他们把他的建议看作毫无用处的想法。",
       "kind": "sentence"
     }
   },
@@ -17392,35 +21932,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-usual",
     "libraryId": "intermediate",
     "word": "usual",
-    "meaning": "通常的；惯例的；平常的；惯常的",
+    "meaning": "通常的，惯例的；平常的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Usual method",
-      "meaning": "通常方法",
+      "text": "Usual practice",
+      "meaning": "惯例，通常办法",
       "kind": "phrase"
     }
   },
   {
+    "word": "vacation",
+    "meaning": "假期",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A summer vacation",
+      "meaning": "一个暑假",
+      "kind": "phrase"
+    },
     "id": "intermediate-vacation",
     "libraryId": "intermediate",
-    "word": "vacation",
-    "meaning": "假期；（房屋）搬出；休假；度假",
-    "group": 0,
-    "example": {
-      "text": "Summer vacation",
-      "meaning": "暑假",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-value",
     "libraryId": "intermediate",
     "word": "value",
-    "meaning": "值；价值；价格；重要性",
+    "meaning": "价值；重要性",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Practical value",
-      "meaning": "实际价值",
+      "text": "Of great value",
+      "meaning": "很有价值的",
       "kind": "phrase"
     }
   },
@@ -17429,6 +21972,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "VCD",
     "meaning": "视频光盘",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Watch a VCD",
@@ -17437,38 +21981,41 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "vehicle",
+    "meaning": "车辆；交通工具",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An electric vehicle",
+      "meaning": "一辆电动车",
+      "kind": "phrase"
+    },
     "id": "intermediate-vehicle",
     "libraryId": "intermediate",
-    "word": "vehicle",
-    "meaning": "[车辆] 车辆；工具；交通工具；运载工具",
-    "group": 0,
-    "example": {
-      "text": "Electric vehicle",
-      "meaning": "电动车辆",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "victory",
+    "meaning": "胜利",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Celebrate a victory",
+      "meaning": "庆祝一次胜利",
+      "kind": "phrase"
+    },
     "id": "intermediate-victory",
     "libraryId": "intermediate",
-    "word": "victory",
-    "meaning": "胜利；成功；克服；[C] 胜利",
-    "group": 0,
-    "example": {
-      "text": "Victory over",
-      "meaning": "战胜",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-video",
     "libraryId": "intermediate",
     "word": "video",
-    "meaning": "[电子] 视频；录像；录像机；电视",
+    "meaning": "视频；录像",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Video frequency",
-      "meaning": "视频率",
+      "text": "Digital video",
+      "meaning": "数字视频，数字录像",
       "kind": "phrase"
     }
   },
@@ -17476,7 +22023,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-violin",
     "libraryId": "intermediate",
     "word": "violin",
-    "meaning": "小提琴；小提琴手",
+    "meaning": "小提琴",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Violin concerto",
@@ -17485,70 +22033,89 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "visitor",
+    "meaning": "来访者；游客",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A visitor from another school",
+      "meaning": "一位来自另一所学校的来访者",
+      "kind": "phrase"
+    },
+    "id": "intermediate-visitor",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "voice",
+    "meaning": "嗓音；声音",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A loud voice",
+      "meaning": "响亮的嗓音",
+      "kind": "phrase"
+    },
     "id": "intermediate-voice",
     "libraryId": "intermediate",
-    "word": "voice",
-    "meaning": "声音；嗓音；发言权；愿望",
-    "group": 0,
-    "example": {
-      "text": "Voice mail",
-      "meaning": "语音邮件",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-volleyball",
     "libraryId": "intermediate",
     "word": "volleyball",
     "meaning": "排球",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Volleyball team",
-      "meaning": "排球队",
+      "text": "Beach volleyball",
+      "meaning": "沙滩排球",
       "kind": "phrase"
     }
   },
   {
+    "word": "war",
+    "meaning": "战争",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The end of the war",
+      "meaning": "战争的结束",
+      "kind": "phrase"
+    },
     "id": "intermediate-war",
     "libraryId": "intermediate",
-    "word": "war",
-    "meaning": "战争；斗争；军事；战术",
-    "group": 0,
-    "example": {
-      "text": "World war",
-      "meaning": "世界大战",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "warn",
+    "meaning": "警告；提醒",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Warn about danger",
+      "meaning": "提醒注意危险",
+      "kind": "phrase"
+    },
     "id": "intermediate-warn",
     "libraryId": "intermediate",
-    "word": "warn",
-    "meaning": "警告；提醒；通知；告诫",
-    "group": 0,
-    "example": {
-      "text": "Warn about",
-      "meaning": "就...提出警告",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "waste",
+    "meaning": "浪费",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A waste of time",
+      "meaning": "浪费时间",
+      "kind": "phrase"
+    },
     "id": "intermediate-waste",
     "libraryId": "intermediate",
-    "word": "waste",
-    "meaning": "浪费；废物；荒地；损耗",
-    "group": 0,
-    "example": {
-      "text": "Waste gas",
-      "meaning": "废气",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-watermelon",
     "libraryId": "intermediate",
     "word": "watermelon",
     "meaning": "西瓜",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Watermelon juice",
@@ -17560,55 +22127,60 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-way",
     "libraryId": "intermediate",
     "word": "way",
-    "meaning": "方法；道路；方向；行业",
+    "meaning": "方法；道路；方向",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Best way",
-      "meaning": "最佳方法",
+      "text": "In this way",
+      "meaning": "这样；用这种方法",
       "kind": "phrase"
     }
   },
   {
+    "word": "weak",
+    "meaning": "虚弱的；无力的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Feel weak",
+      "meaning": "感到虚弱",
+      "kind": "phrase"
+    },
     "id": "intermediate-weak",
     "libraryId": "intermediate",
-    "word": "weak",
-    "meaning": "[经] 疲软的；虚弱的；无力的；不牢固的",
-    "group": 0,
-    "example": {
-      "text": "Weak acid",
-      "meaning": "弱酸",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-wealth",
     "libraryId": "intermediate",
     "word": "wealth",
-    "meaning": "财富；大量；富有；财产",
+    "meaning": "财富；大量；富有",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Wealth management",
-      "meaning": "财富管理",
+      "text": "Wealth of society",
+      "meaning": "社会财富",
       "kind": "phrase"
     }
   },
   {
+    "word": "website",
+    "meaning": "网站",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A school website",
+      "meaning": "一个学校网站",
+      "kind": "phrase"
+    },
     "id": "intermediate-website",
     "libraryId": "intermediate",
-    "word": "website",
-    "meaning": "网站（全球资讯网的主机站）；网站",
-    "group": 0,
-    "example": {
-      "text": "Website design",
-      "meaning": "网站设计",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-weekday",
     "libraryId": "intermediate",
     "word": "weekday",
-    "meaning": "平日；普通日；工作日；平常日",
+    "meaning": "工作日；平日",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "If you want to avoid the crowds, it's best to come on a weekday.",
@@ -17617,70 +22189,76 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "weigh",
+    "meaning": "称……的重量；重达",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Weigh the bag",
+      "meaning": "称一下书包的重量",
+      "kind": "phrase"
+    },
     "id": "intermediate-weigh",
     "libraryId": "intermediate",
-    "word": "weigh",
-    "meaning": "权衡；考虑；称…重量；称重量",
-    "group": 0,
-    "example": {
-      "text": "Weigh out",
-      "meaning": "v. 称出",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-weight",
     "libraryId": "intermediate",
     "word": "weight",
-    "meaning": "重量；重力；负担；砝码",
+    "meaning": "重量；体重；重担",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Body weight",
-      "meaning": "体重",
+      "text": "The weight of the box",
+      "meaning": "箱子的重量",
       "kind": "phrase"
     }
   },
   {
+    "word": "west",
+    "meaning": "西；西方",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "In the west",
+      "meaning": "在西方",
+      "kind": "phrase"
+    },
     "id": "intermediate-west",
     "libraryId": "intermediate",
-    "word": "west",
-    "meaning": "西；西方；西部；西方的",
-    "group": 0,
-    "example": {
-      "text": "West lake",
-      "meaning": "杭州西湖",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "western",
+    "meaning": "西方的；西部的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Western China",
+      "meaning": "中国西部",
+      "kind": "phrase"
+    },
     "id": "intermediate-western",
     "libraryId": "intermediate",
-    "word": "western",
-    "meaning": "西方的；西部的；有西方特征的；西方人",
-    "group": 0,
-    "example": {
-      "text": "Western culture",
-      "meaning": "西方文化",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "wet",
+    "meaning": "湿的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Wet clothes",
+      "meaning": "湿衣服",
+      "kind": "phrase"
+    },
     "id": "intermediate-wet",
     "libraryId": "intermediate",
-    "word": "wet",
-    "meaning": "[气象][物] 潮湿的；有雨的；雨天；湿气",
-    "group": 0,
-    "example": {
-      "text": "Wet paint",
-      "meaning": "油漆未干",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-whale",
     "libraryId": "intermediate",
     "word": "whale",
-    "meaning": "猛揍；使惨败；鲸；巨大的东西",
+    "meaning": "鲸；巨大的东西",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "White whale",
@@ -17692,7 +22270,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-whatever",
     "libraryId": "intermediate",
     "word": "whatever",
-    "meaning": "不管什么样的；无论什么；诸如此类；不管什么",
+    "meaning": "无论什么；诸如此类",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
       "text": "Or whatever",
@@ -17704,7 +22283,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-wheat",
     "libraryId": "intermediate",
     "word": "wheat",
-    "meaning": "小麦；小麦色；淡黄色；朴实的人",
+    "meaning": "小麦；小麦色",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Wheat flour",
@@ -17713,166 +22293,216 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "wheel",
+    "meaning": "车轮；轮子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A bicycle wheel",
+      "meaning": "一个自行车轮",
+      "kind": "phrase"
+    },
     "id": "intermediate-wheel",
     "libraryId": "intermediate",
-    "word": "Wheel",
-    "meaning": "车轮；方向盘；转动；使变换方向",
-    "group": 0,
-    "example": {
-      "text": "Gear wheel",
-      "meaning": "齿轮",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "whenever",
+    "meaning": "无论何时；每当",
+    "partOfSpeech": "conj",
+    "example": {
+      "text": "Come whenever you like.",
+      "meaning": "你什么时候想来都可以。",
+      "kind": "sentence"
+    },
     "id": "intermediate-whenever",
     "libraryId": "intermediate",
-    "word": "whenever",
-    "meaning": "每当；无论何时；不论何时；随便什么时候",
-    "group": 0,
-    "example": {
-      "text": "Or whenever",
-      "meaning": "[口语] 或任何时候",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "whether",
+    "meaning": "是否",
+    "partOfSpeech": "conj",
+    "example": {
+      "text": "I wonder whether it will rain.",
+      "meaning": "我想知道是否会下雨。",
+      "kind": "sentence"
+    },
     "id": "intermediate-whether",
     "libraryId": "intermediate",
-    "word": "whether",
-    "meaning": "是否；不论；两个中的哪一个；会不会",
-    "group": 0,
-    "example": {
-      "text": "Whether or",
-      "meaning": "是…还是…",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-while",
     "libraryId": "intermediate",
     "word": "while",
-    "meaning": "虽然；然而；当……的时候；一会儿",
+    "meaning": "一会儿；一段时间",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "While away",
-      "meaning": "消磨；消磨时间",
+      "text": "After a while",
+      "meaning": "过了一会儿",
       "kind": "phrase"
     }
   },
   {
+    "word": "whole",
+    "meaning": "完整的；整个的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "The whole day",
+      "meaning": "一整天",
+      "kind": "phrase"
+    },
     "id": "intermediate-whole",
     "libraryId": "intermediate",
-    "word": "whole",
-    "meaning": "完整的；纯粹的；整体；全部",
-    "group": 0,
-    "example": {
-      "text": "Whole body",
-      "meaning": "全身",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "whom",
+    "meaning": "谁（宾格）",
+    "partOfSpeech": "pron",
+    "example": {
+      "text": "To whom should I give the book?",
+      "meaning": "我应该把这本书给谁？",
+      "kind": "sentence"
+    },
     "id": "intermediate-whom",
     "libraryId": "intermediate",
-    "word": "whom",
-    "meaning": "谁（who的宾格）；谁",
-    "group": 0,
-    "example": {
-      "text": "Do any other family members reside with you? Yes/No If yes, whom?",
-      "meaning": "是否有其他家庭成员和你住一起？如果是，谁？",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "wide",
+    "meaning": "宽的；宽阔的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A wide river",
+      "meaning": "一条宽阔的河",
+      "kind": "phrase"
+    },
     "id": "intermediate-wide",
     "libraryId": "intermediate",
-    "word": "wide",
-    "meaning": "广泛的；宽的；广阔的；张大的",
-    "group": 0,
-    "example": {
-      "text": "Wide application",
-      "meaning": "应用广泛",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "wife",
+    "meaning": "妻子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "His wife and children",
+      "meaning": "他的妻子和孩子们",
+      "kind": "phrase"
+    },
     "id": "intermediate-wife",
     "libraryId": "intermediate",
-    "word": "wife",
-    "meaning": "妻子；已婚妇女；夫人",
-    "group": 0,
-    "example": {
-      "text": "Second wife",
-      "meaning": "第二任妻子",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-wind",
     "libraryId": "intermediate",
     "word": "wind",
-    "meaning": "风；呼吸；气味；卷绕",
+    "meaning": "风；缠绕；蜿蜒",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Wind tunnel",
-      "meaning": "风洞",
-      "kind": "phrase"
+      "text": "The wind is strong today.",
+      "meaning": "今天风很大。",
+      "kind": "sentence",
+      "sense": "风",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "缠绕",
+          "partOfSpeech": "v",
+          "text": "Wind the thread around the reel.",
+          "meaning": "把线绕在线轴上。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "蜿蜒",
+          "partOfSpeech": "v",
+          "text": "The road winds through the hills.",
+          "meaning": "道路蜿蜒穿过群山。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "windy",
+    "meaning": "多风的；有风的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A windy day",
+      "meaning": "刮风的一天",
+      "kind": "phrase"
+    },
     "id": "intermediate-windy",
     "libraryId": "intermediate",
-    "word": "windy",
-    "meaning": "多风的；有风的；腹胀的；吹牛的",
-    "group": 0,
-    "example": {
-      "text": "Windy day",
-      "meaning": "有风的日子；刮风的天气",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "wine",
+    "meaning": "葡萄酒",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A bottle of wine",
+      "meaning": "一瓶葡萄酒",
+      "kind": "phrase"
+    },
     "id": "intermediate-wine",
     "libraryId": "intermediate",
-    "word": "wine",
-    "meaning": "酒；葡萄酒；紫红色；喝酒",
-    "group": 0,
-    "example": {
-      "text": "A glass of wine",
-      "meaning": "一杯葡萄酒",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "wing",
+    "meaning": "翅膀；建筑侧翼；派别",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The bird hurt its wing.",
+      "meaning": "鸟弄伤了翅膀。",
+      "kind": "sentence",
+      "sense": "翅膀",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "建筑侧翼",
+          "partOfSpeech": "n",
+          "text": "The hospital opened a new wing.",
+          "meaning": "医院启用了新的侧翼楼。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "派别",
+          "partOfSpeech": "n",
+          "text": "He belongs to the left wing of the party.",
+          "meaning": "他属于这个政党的左派。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-wing",
     "libraryId": "intermediate",
-    "word": "wing",
-    "meaning": "翼；翅膀；飞翔；派别",
-    "group": 0,
-    "example": {
-      "text": "Hind wing",
-      "meaning": "后翅",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "winner",
+    "meaning": "获胜者",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The winner of the race",
+      "meaning": "比赛获胜者",
+      "kind": "phrase"
+    },
     "id": "intermediate-winner",
     "libraryId": "intermediate",
-    "word": "winner",
-    "meaning": "胜利者",
-    "group": 0,
-    "example": {
-      "text": "Five lucky winners will each receive a signed copy of the album.",
-      "meaning": "五位幸运的获胜者每人将得到一张签名专辑。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-wise",
     "libraryId": "intermediate",
     "word": "wise",
-    "meaning": "明智的；聪明的；博学的；使知道",
+    "meaning": "明智的；聪明的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Wise choice",
@@ -17881,34 +22511,37 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "without",
+    "meaning": "没有；不带",
+    "partOfSpeech": "prep",
+    "example": {
+      "text": "Tea without sugar",
+      "meaning": "不加糖的茶",
+      "kind": "phrase"
+    },
     "id": "intermediate-without",
     "libraryId": "intermediate",
-    "word": "without",
-    "meaning": "没有；超过；在…外面；户外",
-    "group": 0,
-    "example": {
-      "text": "Go without",
-      "meaning": "没有…也行",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-wonder",
     "libraryId": "intermediate",
     "word": "wonder",
-    "meaning": "惊奇；奇迹；惊愕；怀疑",
+    "meaning": "想知道；怀疑",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "No wonder",
-      "meaning": "难怪",
-      "kind": "phrase"
+      "text": "I wonder if he will come.",
+      "meaning": "我想知道他会不会来。",
+      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-wood",
     "libraryId": "intermediate",
     "word": "wood",
-    "meaning": "木材；木制品；树林；收集木材",
+    "meaning": "木材；木制品；树林",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Wood furniture",
@@ -17917,34 +22550,24 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
-    "id": "intermediate-worker",
-    "libraryId": "intermediate",
-    "word": "worker",
-    "meaning": "工人；劳动者；职蚁",
-    "group": 0,
+    "word": "worth",
+    "meaning": "值得的；价值……的",
+    "partOfSpeech": "adj",
     "example": {
-      "text": "Skilled worker",
-      "meaning": "技术工入",
+      "text": "Worth reading",
+      "meaning": "值得一读",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-worth",
     "libraryId": "intermediate",
-    "word": "worth",
-    "meaning": "值…的；价值；财产；相当于…价值的",
-    "group": 0,
-    "example": {
-      "text": "Well worth",
-      "meaning": "很值得",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-would",
     "libraryId": "intermediate",
     "word": "would",
-    "meaning": "将；将要；愿意；will的过去式",
+    "meaning": "将，将要；愿意",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Would like",
@@ -17956,11 +22579,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-wound",
     "libraryId": "intermediate",
     "word": "wound",
-    "meaning": "创伤；伤口；使受伤；伤害",
+    "meaning": "伤口；创伤",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Wound gasket",
-      "meaning": "缠绕垫",
+      "text": "Wound healing",
+      "meaning": "伤口愈合",
       "kind": "phrase"
     }
   },
@@ -17968,119 +22592,140 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-yard",
     "libraryId": "intermediate",
     "word": "yard",
-    "meaning": "院子；码（英制中丈量长度单位；1码=3英尺）；庭院",
+    "meaning": "院子；码",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Back yard",
-      "meaning": "后院",
-      "kind": "phrase"
+      "text": "The children played in the yard.",
+      "meaning": "孩子们在院子里玩。",
+      "kind": "sentence",
+      "sense": "院子",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "码",
+          "partOfSpeech": "n",
+          "text": "The cloth is one yard long.",
+          "meaning": "这块布长一码。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-yet",
     "libraryId": "intermediate",
     "word": "yet",
-    "meaning": "还；但是；已经；然而",
+    "meaning": "但是；然而",
+    "partOfSpeech": "conj",
     "group": 0,
     "example": {
-      "text": "As yet",
-      "meaning": "至今仍",
+      "text": "And yet",
+      "meaning": "可是，然而",
       "kind": "phrase"
     }
   },
   {
+    "word": "yours",
+    "meaning": "你的；你们的",
+    "partOfSpeech": "pron",
+    "example": {
+      "text": "This book is yours.",
+      "meaning": "这本书是你的。",
+      "kind": "sentence"
+    },
     "id": "intermediate-yours",
     "libraryId": "intermediate",
-    "word": "yours",
-    "meaning": "你（们）的东西；你的责任[义务]；你的家属；来信",
-    "group": 0,
-    "example": {
-      "text": "All yours",
-      "meaning": "拿去吧",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-yourself",
     "libraryId": "intermediate",
     "word": "yourself",
-    "meaning": "你自己；你亲自",
+    "meaning": "你自己",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
-      "text": "For yourself",
-      "meaning": "为你自己",
+      "text": "Do it yourself",
+      "meaning": "自己动手干",
       "kind": "phrase"
     }
   },
   {
+    "word": "yourselves",
+    "meaning": "你们自己",
+    "partOfSpeech": "pron",
+    "example": {
+      "text": "Do it yourselves.",
+      "meaning": "你们自己做。",
+      "kind": "sentence"
+    },
     "id": "intermediate-yourselves",
     "libraryId": "intermediate",
-    "word": "yourselves",
-    "meaning": "你们自己；你们本人（yourself的复数）；你们亲自",
-    "group": 0,
-    "example": {
-      "text": "Not just for yourselves, but for your generation and generations to come.",
-      "meaning": "不只是为你们自己，而且是为你们一代人以及未来的几代人。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "zebra",
+    "meaning": "斑马",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A zebra in the zoo",
+      "meaning": "动物园里的一匹斑马",
+      "kind": "phrase"
+    },
     "id": "intermediate-zebra",
     "libraryId": "intermediate",
-    "word": "zebra",
-    "meaning": "[脊椎] 斑马；有斑纹的；斑马",
-    "group": 0,
-    "example": {
-      "text": "Zebra crossing",
-      "meaning": "n. 斑马线",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-zero",
+    "word": "pollution",
+    "meaning": "污染",
+    "example": {
+      "text": "Air pollution",
+      "meaning": "空气污染",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-pollution",
     "libraryId": "intermediate",
-    "word": "zero",
-    "meaning": "零点；零度；零",
-    "group": 0,
-    "example": {
-      "text": "Below zero",
-      "meaning": "零度以下",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "pretend",
+    "meaning": "假装",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Pretend to be asleep",
+      "meaning": "假装睡着了",
+      "kind": "phrase"
+    },
     "id": "intermediate-pretend",
     "libraryId": "intermediate",
-    "word": "pretend",
-    "meaning": "假装；佯作；伪装；佯装",
-    "group": 0,
-    "example": {
-      "text": "To pretend ignorance of the situation would be irresponsible.",
-      "meaning": "装作不知情是不负责任的做法。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-mystery",
     "libraryId": "intermediate",
     "word": "mystery",
-    "meaning": "秘密；神秘的事物；迷；神秘",
+    "meaning": "谜；神秘的事",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Murder mystery",
-      "meaning": "谋杀之谜",
-      "kind": "phrase"
+      "text": "The mystery remains unsolved.",
+      "meaning": "这个谜仍未解开。",
+      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-flight",
     "libraryId": "intermediate",
     "word": "flight",
-    "meaning": "航班；班机；飞行；飞翔",
+    "meaning": "航班；飞行",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Flight attendant",
-      "meaning": "空中服务人员",
+      "text": "A direct flight",
+      "meaning": "直达航班",
       "kind": "phrase"
     }
   },
@@ -18088,11 +22733,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-hang",
     "libraryId": "intermediate",
     "word": "hang",
-    "meaning": "[hung-hung] 悬挂；吊；徘徊；[hanged-hanged] 吊",
+    "meaning": "悬挂；徘徊",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Hang out",
-      "meaning": "挂出；闲逛",
+      "text": "Hang the coat on the hook",
+      "meaning": "把外套挂在钩子上",
       "kind": "phrase"
     }
   },
@@ -18100,79 +22746,97 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-anybody",
     "libraryId": "intermediate",
     "word": "anybody",
-    "meaning": "任何人；随便哪一个人；无论谁；重要人物",
+    "meaning": "任何人，无论谁",
+    "partOfSpeech": "pron",
     "group": 0,
     "example": {
-      "text": "Anybody else",
-      "meaning": "n. 别人",
-      "kind": "phrase"
+      "text": "Anybody can join the club.",
+      "meaning": "任何人都可以加入这个俱乐部。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "straight",
+    "meaning": "直的；笔直的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A straight line",
+      "meaning": "一条直线",
+      "kind": "phrase"
+    },
     "id": "intermediate-straight",
     "libraryId": "intermediate",
-    "word": "straight",
-    "meaning": "直的；笔直的；连续的；不间断的",
-    "group": 0,
-    "example": {
-      "text": "Go straight",
-      "meaning": "改过自新",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "photograph",
+    "meaning": "照片",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Take a photograph",
+      "meaning": "拍一张照片",
+      "kind": "phrase"
+    },
     "id": "intermediate-photograph",
     "libraryId": "intermediate",
-    "word": "photograph",
-    "meaning": "拍照；照片；相片；为…拍照",
-    "group": 0,
-    "example": {
-      "text": "Aerial photograph",
-      "meaning": "航空照片；航摄像片",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-throw",
     "libraryId": "intermediate",
     "word": "throw",
-    "meaning": "[threw-thrown] 投；扔；抛；使突然陷入",
+    "meaning": "扔；抛",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Free throw",
-      "meaning": "罚球",
+      "text": "Throw the ball",
+      "meaning": "抛球",
       "kind": "phrase"
     }
   },
   {
+    "word": "pay",
+    "meaning": "支付；付款",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Pay for the ticket",
+      "meaning": "支付票款",
+      "kind": "phrase"
+    },
     "id": "intermediate-pay",
     "libraryId": "intermediate",
-    "word": "pay",
-    "meaning": "付钱；支付；交纳；工资",
-    "group": 0,
-    "example": {
-      "text": "How would you like to pay?",
-      "meaning": "你想怎么付款？",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "toast",
+    "meaning": "烤面包；祝酒",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "I had toast for breakfast.",
+      "meaning": "我早餐吃了烤面包。",
+      "kind": "sentence",
+      "sense": "烤面包",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "祝酒",
+          "partOfSpeech": "n",
+          "text": "We raised a toast to our friends.",
+          "meaning": "我们举杯向朋友们祝酒。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-toast",
     "libraryId": "intermediate",
-    "word": "toast",
-    "meaning": "烘；烤；敬酒；为…干杯",
-    "group": 0,
-    "example": {
-      "text": "Buttered toast",
-      "meaning": "n. 奶油土司",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-frustrate",
     "libraryId": "intermediate",
     "word": "frustrate",
-    "meaning": "使沮丧；使灰心；失败；挫败",
+    "meaning": "使沮丧；使受挫",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "The fact that he’s working with amateurs really frustrates him.",
@@ -18181,22 +22845,24 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "authority",
+    "meaning": "权力；权限",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Authority to decide",
+      "meaning": "作决定的权力",
+      "kind": "phrase"
+    },
     "id": "intermediate-authority",
     "libraryId": "intermediate",
-    "word": "authority",
-    "meaning": "权力；管辖权；权威；当局",
-    "group": 0,
-    "example": {
-      "text": "Administrative authority",
-      "meaning": "行政当局",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-creature",
     "libraryId": "intermediate",
     "word": "creature",
-    "meaning": "生物；动物；人；创造物",
+    "meaning": "生物；动物",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Living creature",
@@ -18208,19 +22874,21 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-outgoing",
     "libraryId": "intermediate",
     "word": "outgoing",
-    "meaning": "外出的；离开的；即将离职的；友好的",
+    "meaning": "外向的；友好的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Outgoing message",
-      "meaning": "n. 出局信息",
-      "kind": "phrase"
+      "text": "We’re looking for someone with an outgoing personality.",
+      "meaning": "我们在找一个性格外向的人。",
+      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-instrument",
     "libraryId": "intermediate",
     "word": "instrument",
-    "meaning": "乐器；仪器；器械；工具",
+    "meaning": "乐器；仪器，器械",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Musical instrument",
@@ -18232,59 +22900,75 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-medium",
     "libraryId": "intermediate",
     "word": "medium",
-    "meaning": "中等的；平均的；媒介；工具",
+    "meaning": "中等的；媒介",
+    "partOfSpeech": "adj/n",
     "group": 0,
     "example": {
-      "text": "Medium sized",
-      "meaning": "adj. 中等大小的",
-      "kind": "phrase"
+      "text": "I need a medium size.",
+      "meaning": "我需要中号。",
+      "kind": "sentence",
+      "sense": "中等的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "媒介",
+          "partOfSpeech": "n",
+          "text": "Radio is a medium of communication.",
+          "meaning": "广播是一种传播媒介。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "root",
+    "meaning": "根；根源",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The root of a tree",
+      "meaning": "树根",
+      "kind": "phrase"
+    },
     "id": "intermediate-root",
     "libraryId": "intermediate",
-    "word": "root",
-    "meaning": "生根；扎根；根；根本",
-    "group": 0,
-    "example": {
-      "text": "Root cause",
-      "meaning": "根本原因",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "lend",
+    "meaning": "借给",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Lend me a pencil",
+      "meaning": "借给我一支铅笔",
+      "kind": "phrase"
+    },
     "id": "intermediate-lend",
     "libraryId": "intermediate",
-    "word": "lend",
-    "meaning": "[lent-lent] 把…借给；出借；贷；增添",
-    "group": 0,
-    "example": {
-      "text": "Lend out",
-      "meaning": "vt. 租出去；借出",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "perform",
+    "meaning": "表演；执行",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Perform a dance",
+      "meaning": "表演一支舞蹈",
+      "kind": "phrase"
+    },
     "id": "intermediate-perform",
     "libraryId": "intermediate",
-    "word": "perform",
-    "meaning": "做；履行；完成；演出",
-    "group": 0,
-    "example": {
-      "text": "Perform maintenance",
-      "meaning": "修理",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-concentrate",
     "libraryId": "intermediate",
     "word": "concentrate",
-    "meaning": "全神贯注；全力以赴；集中；聚集",
+    "meaning": "全神贯注，全力以赴；集中，聚集；浓缩",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Copper concentrate",
-      "meaning": "铜精矿",
+      "text": "Concentrate on",
+      "meaning": "集中精力于；全神贯注于",
       "kind": "phrase"
     }
   },
@@ -18292,11 +22976,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-better",
     "libraryId": "intermediate",
     "word": "better",
-    "meaning": "更；更好地；更好的；有好转的",
+    "meaning": "更好的；有好转的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Had better",
-      "meaning": "最好",
+      "text": "For the better",
+      "meaning": "好转，向好的方向发展",
       "kind": "phrase"
     }
   },
@@ -18304,7 +22989,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-suitable",
     "libraryId": "intermediate",
     "word": "suitable",
-    "meaning": "适当的；相配的；合适的；适宜的",
+    "meaning": "合适的；适宜的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Suitable candidate",
@@ -18313,110 +22999,130 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "block",
+    "meaning": "阻挡",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Block the road",
+      "meaning": "挡住道路",
+      "kind": "phrase"
+    },
     "id": "intermediate-block",
     "libraryId": "intermediate",
-    "word": "block",
-    "meaning": "阻碍；堵塞；大块；一排房屋",
-    "group": 0,
-    "example": {
-      "text": "Block copolymer",
-      "meaning": "嵌段共聚物",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-bulb",
     "libraryId": "intermediate",
     "word": "bulb",
-    "meaning": "植物的球茎；灯泡；电灯泡；球状物",
+    "meaning": "灯泡；球茎",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Light bulb",
-      "meaning": "电灯泡",
-      "kind": "phrase"
+      "text": "The bulb in this lamp is broken.",
+      "meaning": "这盏灯的灯泡坏了。",
+      "kind": "sentence",
+      "sense": "灯泡",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "球茎",
+          "partOfSpeech": "n",
+          "text": "Plant each bulb in the soil.",
+          "meaning": "把每个球茎种进土里。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "understand",
+    "meaning": "理解；明白",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Understand the question",
+      "meaning": "理解这个问题",
+      "kind": "phrase"
+    },
     "id": "intermediate-understand",
     "libraryId": "intermediate",
-    "word": "understand",
-    "meaning": "[understood-understood] 理解；懂；了解；意识到",
-    "group": 0,
-    "example": {
-      "text": "Do you understand",
-      "meaning": "你能理解吗？",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "alright",
+    "meaning": "好的；平安的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Everything is alright.",
+      "meaning": "一切都好。",
+      "kind": "sentence"
+    },
     "id": "intermediate-alright",
     "libraryId": "intermediate",
-    "word": "alright",
-    "meaning": "好；好吧",
-    "group": 0,
-    "example": {
-      "text": "Caretaker: You are alright?",
-      "meaning": "看守人：你还好吧？",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "loving",
+    "meaning": "充满爱意的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A loving family",
+      "meaning": "充满爱的家庭",
+      "kind": "phrase"
+    },
     "id": "intermediate-loving",
     "libraryId": "intermediate",
-    "word": "loving",
-    "meaning": "爱的；充满爱的；钟爱的",
-    "group": 0,
-    "example": {
-      "text": "Loving heart",
-      "meaning": "爱心",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-unhappy",
     "libraryId": "intermediate",
     "word": "unhappy",
-    "meaning": "不快乐的；不幸的；悲惨的；不幸福的",
+    "meaning": "不快乐的；不幸的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "If you’re so unhappy, why don’t you change jobs?",
-      "meaning": "你要是那么不开心，为什么不换个工作呢？",
+      "text": "Leslie had an unhappy childhood.",
+      "meaning": "莱斯利的童年很不幸。",
       "kind": "sentence"
     }
   },
   {
+    "word": "million",
+    "meaning": "百万",
+    "partOfSpeech": "num",
+    "example": {
+      "text": "One million people",
+      "meaning": "一百万人",
+      "kind": "phrase"
+    },
     "id": "intermediate-million",
     "libraryId": "intermediate",
-    "word": "million",
-    "meaning": "百万；无数；百万的；无数的",
-    "group": 0,
-    "example": {
-      "text": "Thanks a million",
-      "meaning": "非常感谢",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-southeast",
-    "libraryId": "intermediate",
     "word": "southeast",
-    "meaning": "向东南；东南方的；东南部的；来自东南的",
-    "group": 0,
+    "meaning": "东南",
+    "partOfSpeech": "n",
     "example": {
-      "text": "Southeast asia",
+      "text": "Southeast Asia",
       "meaning": "东南亚",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-southeast",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-champion",
     "libraryId": "intermediate",
     "word": "champion",
-    "meaning": "拥护；冠军；拥护者；战士",
+    "meaning": "冠军；拥护者",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Defending champion",
-      "meaning": "卫冕冠军",
+      "text": "Reigning world champion",
+      "meaning": "卫冕世界冠军",
       "kind": "phrase"
     }
   },
@@ -18424,35 +23130,56 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-matter",
     "libraryId": "intermediate",
     "word": "matter",
-    "meaning": "要紧；有关系；事情；情况",
+    "meaning": "事情；物质；要紧",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Dark matter",
-      "meaning": "暗物质",
-      "kind": "phrase"
+      "text": "We must discuss an important matter.",
+      "meaning": "我们必须讨论一件重要的事。",
+      "kind": "sentence",
+      "sense": "事情",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "物质",
+          "partOfSpeech": "n",
+          "text": "All matter has mass.",
+          "meaning": "所有物质都有质量。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "要紧",
+          "partOfSpeech": "v",
+          "text": "Your opinion matters to us.",
+          "meaning": "你的意见对我们很重要。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "conjunction",
+    "meaning": "连词；结合",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A coordinating conjunction",
+      "meaning": "并列连词",
+      "kind": "phrase"
+    },
     "id": "intermediate-conjunction",
     "libraryId": "intermediate",
-    "word": "conjunction",
-    "meaning": "联合；连词；接合；连接",
-    "group": 0,
-    "example": {
-      "text": "In conjunction",
-      "meaning": "互相协调",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-documentary",
     "libraryId": "intermediate",
     "word": "documentary",
-    "meaning": "文件的；文献的；纪录片；纪录的",
+    "meaning": "纪录片",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Documentary credit",
-      "meaning": "押汇信用证",
+      "text": "Documentary film",
+      "meaning": "纪录片",
       "kind": "phrase"
     }
   },
@@ -18460,71 +23187,77 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-product",
     "libraryId": "intermediate",
     "word": "product",
-    "meaning": "产品；产物；乘积；结果",
+    "meaning": "产品；产物",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Product quality",
+      "text": "Quality of product",
       "meaning": "产品质量",
       "kind": "phrase"
     }
   },
   {
+    "word": "peel",
+    "meaning": "果皮；蔬菜皮",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Orange peel",
+      "meaning": "橙子皮",
+      "kind": "phrase"
+    },
     "id": "intermediate-peel",
     "libraryId": "intermediate",
-    "word": "peel",
-    "meaning": "削…的皮；剥…的壳；皮；外衣",
-    "group": 0,
-    "example": {
-      "text": "Peel strength",
-      "meaning": "剥离强度",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-con",
     "libraryId": "intermediate",
     "word": "con",
-    "meaning": "反对票；反对论",
+    "meaning": "反对；反对票",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Con man",
-      "meaning": "骗子",
-      "kind": "phrase"
+      "text": "Much has been written on the subject pro and con.",
+      "meaning": "对那问题已有很多赞成和反对的文章。",
+      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-manner",
     "libraryId": "intermediate",
     "word": "manner",
-    "meaning": "方式；方法；态度；举止",
+    "meaning": "方式；态度",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Good manner",
-      "meaning": "好方法；有礼貌",
+      "text": "In this manner",
+      "meaning": "以这种方式；如此",
       "kind": "phrase"
     }
   },
   {
+    "word": "upon",
+    "meaning": "在……上；一……就",
+    "partOfSpeech": "prep",
+    "example": {
+      "text": "Upon arrival",
+      "meaning": "一到达",
+      "kind": "phrase"
+    },
     "id": "intermediate-upon",
     "libraryId": "intermediate",
-    "word": "upon",
-    "meaning": "在…之上；在…上面",
-    "group": 0,
-    "example": {
-      "text": "We are completely dependent upon your help.",
-      "meaning": "我们完全依赖你的帮助。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-charity",
     "libraryId": "intermediate",
     "word": "charity",
-    "meaning": "慈善；施舍；慈善机构；慈善（行为）",
+    "meaning": "慈善，施舍；慈善机构",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "In charity",
-      "meaning": "◎出于恻隐之心",
+      "text": "Charity work",
+      "meaning": "慈善工作",
       "kind": "phrase"
     }
   },
@@ -18532,23 +23265,36 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-lap",
     "libraryId": "intermediate",
     "word": "lap",
-    "meaning": "腰以下到膝为止的大腿部；一圈；一段旅程；膝盖",
+    "meaning": "大腿部；一圈",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Lap time",
-      "meaning": "游泳比赛中一次来回所需之时间",
-      "kind": "phrase"
+      "text": "The child sat on her lap.",
+      "meaning": "孩子坐在她的大腿上。",
+      "kind": "sentence",
+      "sense": "大腿部",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "一圈",
+          "partOfSpeech": "n",
+          "text": "He ran one lap around the track.",
+          "meaning": "他绕跑道跑了一圈。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-less",
     "libraryId": "intermediate",
     "word": "less",
-    "meaning": "更少地；更小地；更少的；更小的",
+    "meaning": "更少的，更小的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Less than",
-      "meaning": "小于",
+      "text": "Less and less",
+      "meaning": "越来越少；越来越少的",
       "kind": "phrase"
     }
   },
@@ -18556,11 +23302,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-tutor",
     "libraryId": "intermediate",
     "word": "tutor",
-    "meaning": "辅导；导师；家庭教师；约束",
+    "meaning": "导师；家庭教师",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Tutor system",
-      "meaning": "导师制",
+      "text": "Private tutor",
+      "meaning": "私人教师，家庭教师",
       "kind": "phrase"
     }
   },
@@ -18569,6 +23316,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "girlfriend",
     "meaning": "女朋友；女性朋友",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "He’s never had a girlfriend.",
@@ -18580,31 +23328,34 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-bush",
     "libraryId": "intermediate",
     "word": "bush",
-    "meaning": "灌木；灌木丛；矮树丛；以灌木装饰",
+    "meaning": "灌木，灌木丛",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Drill bush",
-      "meaning": "钻套",
-      "kind": "phrase"
+      "text": "The child was hiding in the bushes.",
+      "meaning": "那孩子躲在灌木丛里。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "design",
+    "meaning": "设计",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Design a poster",
+      "meaning": "设计一张海报",
+      "kind": "phrase"
+    },
     "id": "intermediate-design",
     "libraryId": "intermediate",
-    "word": "design",
-    "meaning": "设计；预订；指定；谋划",
-    "group": 0,
-    "example": {
-      "text": "Product design",
-      "meaning": "产品设计",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-extra",
     "libraryId": "intermediate",
     "word": "extra",
     "meaning": "额外的；另外",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Extra time",
@@ -18616,11 +23367,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-department",
     "libraryId": "intermediate",
     "word": "department",
-    "meaning": "部；局；处；科",
+    "meaning": "部，局，处，科；系",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Administration department",
-      "meaning": "行政部",
+      "text": "Department of education",
+      "meaning": "教育部；教育系",
       "kind": "phrase"
     }
   },
@@ -18628,7 +23380,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-exhibition",
     "libraryId": "intermediate",
     "word": "exhibition",
-    "meaning": "展览；显示；展览会；展览品",
+    "meaning": "展览",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Exhibition hall",
@@ -18640,19 +23393,21 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-burn",
     "libraryId": "intermediate",
     "word": "burn",
-    "meaning": "[burnt/burned-burnt/burned] 燃烧；点燃；燃烧；烧毁",
+    "meaning": "燃烧；烧毁",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Burn off",
-      "meaning": "烧尽",
-      "kind": "phrase"
+      "text": "The fire is burning.",
+      "meaning": "火在燃烧。",
+      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-obey",
     "libraryId": "intermediate",
     "word": "obey",
-    "meaning": "服从；听从；按照……行动；顺从",
+    "meaning": "服从，听从",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Obey the order",
@@ -18661,122 +23416,156 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "unfamiliar",
+    "meaning": "不熟悉的；陌生的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An unfamiliar place",
+      "meaning": "陌生的地方",
+      "kind": "phrase"
+    },
     "id": "intermediate-unfamiliar",
     "libraryId": "intermediate",
-    "word": "unfamiliar",
-    "meaning": "不熟悉的",
-    "group": 0,
-    "example": {
-      "text": "A crowd of unfamiliar faces",
-      "meaning": "一群陌生的面孔",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-spoken",
-    "libraryId": "intermediate",
     "word": "spoken",
-    "meaning": "口头的；口语的；说（speak的过去分词）",
-    "group": 0,
+    "meaning": "口头的；口语的",
+    "partOfSpeech": "adj",
     "example": {
-      "text": "Spoken english",
+      "text": "Spoken English",
       "meaning": "英语口语",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-spoken",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
+    "word": "sport",
+    "meaning": "运动",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "My favourite sport",
+      "meaning": "我最喜欢的运动",
+      "kind": "phrase"
+    },
     "id": "intermediate-sport",
     "libraryId": "intermediate",
-    "word": "sport",
-    "meaning": "炫耀；卖弄；运动；游戏",
-    "group": 0,
-    "example": {
-      "text": "Good sport",
-      "meaning": "n. 输得起的运动员",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "unimportant",
+    "meaning": "不重要的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An unimportant detail",
+      "meaning": "一个不重要的细节",
+      "kind": "phrase"
+    },
     "id": "intermediate-unimportant",
     "libraryId": "intermediate",
-    "word": "unimportant",
-    "meaning": "不重要的；琐碎的",
-    "group": 0,
-    "example": {
-      "text": "Unimportant details",
-      "meaning": "无关紧要的细枝末节",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "recycle",
+    "meaning": "回收利用",
+    "example": {
+      "text": "Recycle old paper",
+      "meaning": "回收废纸",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "intermediate-recycle",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "press",
+    "meaning": "按压；新闻界",
+    "partOfSpeech": "v/n",
+    "example": {
+      "text": "Press the green button.",
+      "meaning": "按下绿色按钮。",
+      "kind": "sentence",
+      "sense": "按压",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "新闻界",
+          "partOfSpeech": "n",
+          "text": "The press reported the event.",
+          "meaning": "新闻界报道了这件事。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-press",
     "libraryId": "intermediate",
-    "word": "press",
-    "meaning": "压；按；挤；压榨",
-    "group": 0,
-    "example": {
-      "text": "Press down",
-      "meaning": "压",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-africa",
     "libraryId": "intermediate",
     "word": "Africa",
     "meaning": "非洲",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "South africa",
-      "meaning": "南非",
+      "text": "A trip to Africa",
+      "meaning": "非洲之行",
       "kind": "phrase"
     }
   },
   {
+    "word": "opposite",
+    "meaning": "对面的；相反的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "The opposite side",
+      "meaning": "对面",
+      "kind": "phrase"
+    },
     "id": "intermediate-opposite",
     "libraryId": "intermediate",
-    "word": "opposite",
-    "meaning": "对面的；对立的；相反的；对立面",
-    "group": 0,
-    "example": {
-      "text": "Opposite sex",
-      "meaning": "异性",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-pack",
     "libraryId": "intermediate",
     "word": "pack",
-    "meaning": "捆扎；打包；挤在一起；塞满",
+    "meaning": "打包；塞满",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Battery pack",
-      "meaning": "电池组",
+      "text": "Pack up",
+      "meaning": "整理；把…打包",
       "kind": "phrase"
     }
   },
   {
+    "word": "offend",
+    "meaning": "冒犯；使不快",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "I did not mean to offend you.",
+      "meaning": "我无意冒犯你。",
+      "kind": "sentence"
+    },
     "id": "intermediate-offend",
     "libraryId": "intermediate",
-    "word": "offend",
-    "meaning": "冒犯；得罪；伤害…的感情；使厌恶",
-    "group": 0,
-    "example": {
-      "text": "Offend against",
-      "meaning": "违犯；犯罪",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-cut",
     "libraryId": "intermediate",
     "word": "cut",
-    "meaning": "[cut-cut；cutting] 切；剪；修剪",
+    "meaning": "切；剪；削减",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Tax cut",
-      "meaning": "减税",
+      "text": "Cut the cake",
+      "meaning": "切蛋糕",
       "kind": "phrase"
     }
   },
@@ -18784,7 +23573,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-probably",
     "libraryId": "intermediate",
     "word": "probably",
-    "meaning": "大概；或许；很可能",
+    "meaning": "大概，或许，很可能",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "Probably the best choice",
@@ -18796,7 +23586,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-entertainment",
     "libraryId": "intermediate",
     "word": "entertainment",
-    "meaning": "娱乐；表演会；招待；款待",
+    "meaning": "娱乐；招待",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Entertainment industry",
@@ -18808,59 +23599,82 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-battery",
     "libraryId": "intermediate",
     "word": "battery",
-    "meaning": "电池；蓄电池；排炮；炮组",
+    "meaning": "电池；一系列",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Battery charger",
-      "meaning": "电池充电器",
+      "text": "Lithium ion battery",
+      "meaning": "锂离子电池",
       "kind": "phrase"
     }
   },
   {
+    "word": "chase",
+    "meaning": "追赶",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Chase a ball",
+      "meaning": "追一个球",
+      "kind": "phrase"
+    },
     "id": "intermediate-chase",
     "libraryId": "intermediate",
-    "word": "chase",
-    "meaning": "追捕；追求；寻求；追逐",
-    "group": 0,
-    "example": {
-      "text": "Jpmorgan chase",
-      "meaning": "摩根大通公司",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-pop",
     "libraryId": "intermediate",
     "word": "pop",
-    "meaning": "突然[出人意料]地从〔某物〕中出来；蹦出；离开；脱落",
+    "meaning": "流行音乐；砰地一声；突然出现",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Pop music",
-      "meaning": "流行音乐",
-      "kind": "phrase"
+      "text": "She listens to pop.",
+      "meaning": "她听流行音乐。",
+      "kind": "sentence",
+      "sense": "流行音乐",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "砰地一声",
+          "partOfSpeech": "n",
+          "text": "The balloon burst with a pop.",
+          "meaning": "气球砰的一声爆了。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "突然出现",
+          "partOfSpeech": "v",
+          "text": "A message popped up on the screen.",
+          "meaning": "屏幕上突然出现了一条消息。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "found",
+    "meaning": "建立；创办",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Found a school",
+      "meaning": "创办一所学校",
+      "kind": "phrase"
+    },
     "id": "intermediate-found",
     "libraryId": "intermediate",
-    "word": "found",
-    "meaning": "创立；创办；创建；建立",
-    "group": 0,
-    "example": {
-      "text": "Found out",
-      "meaning": "找出",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-escape",
     "libraryId": "intermediate",
     "word": "escape",
-    "meaning": "逃脱；逃走；避免；躲避",
+    "meaning": "逃脱，逃走；避免，躲避",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Escape velocity",
-      "meaning": "n. 逃逸速度",
+      "text": "Escape from",
+      "meaning": "逃脱",
       "kind": "phrase"
     }
   },
@@ -18868,11 +23682,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-latest",
     "libraryId": "intermediate",
     "word": "latest",
-    "meaning": "最近的；最迟地；最后地；最新的事物",
+    "meaning": "最迟地；最后地",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "Latest version",
-      "meaning": "最新版本",
+      "text": "At the latest",
+      "meaning": "最迟；至迟",
       "kind": "phrase"
     }
   },
@@ -18880,7 +23695,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-tragedy",
     "libraryId": "intermediate",
     "word": "tragedy",
-    "meaning": "惨事；灾难；悲剧；惨案",
+    "meaning": "惨事，灾难；悲剧",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "The tragedy happened as they were returning home from a night out.",
@@ -18889,26 +23705,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "Jew",
+    "meaning": "犹太人",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Her grandfather was a Jew.",
+      "meaning": "她的祖父是犹太人。",
+      "kind": "sentence"
+    },
     "id": "intermediate-jew",
     "libraryId": "intermediate",
-    "word": "Jew",
-    "meaning": "犹太人；犹太教徒",
-    "group": 0,
-    "example": {
-      "text": "If a Christian wrong a Jew, what should his sufferance be by Christian example? Why, revenge.",
-      "meaning": "要是一个犹太人欺侮了一个基督徒，那基督徒怎样表现他的谦逊？报仇。 妹。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-fashion",
     "libraryId": "intermediate",
     "word": "fashion",
-    "meaning": "流行款式；时兴式样；时尚；时兴",
+    "meaning": "流行款式，时兴式样；时尚，时兴",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Fashion designer",
-      "meaning": "时装设计师",
+      "text": "Out of fashion",
+      "meaning": "过时的；不流行的",
       "kind": "phrase"
     }
   },
@@ -18916,7 +23734,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-anymore",
     "libraryId": "intermediate",
     "word": "anymore",
-    "meaning": "再；更；还；目前",
+    "meaning": "不再；再也",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "She told me not to phone her anymore.",
@@ -18928,91 +23747,99 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-smell",
     "libraryId": "intermediate",
     "word": "smell",
-    "meaning": "气味；闻出；闻到；嗅到",
+    "meaning": "气味，嗅觉；臭味",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Sweet smell",
-      "meaning": "闻起来香",
+      "text": "Sense of smell",
+      "meaning": "嗅觉",
       "kind": "phrase"
     }
   },
   {
+    "word": "unable",
+    "meaning": "不能的；无法的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Unable to swim",
+      "meaning": "不会游泳",
+      "kind": "phrase"
+    },
     "id": "intermediate-unable",
     "libraryId": "intermediate",
-    "word": "unable",
-    "meaning": "不能的；不会的；[劳经] 无能力的；不能胜任的",
-    "group": 0,
-    "example": {
-      "text": "Unable to establish",
-      "meaning": "不能成立",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-avenue",
     "libraryId": "intermediate",
     "word": "avenue",
-    "meaning": "林荫道；道路；大街；林荫大道",
+    "meaning": "大街；途径",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Seventh avenue",
-      "meaning": "第七大道",
+      "text": "A wide avenue",
+      "meaning": "一条宽阔的大街",
       "kind": "phrase"
     }
   },
   {
+    "word": "shoot",
+    "meaning": "拍摄；射击",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Shoot a film",
+      "meaning": "拍摄一部电影",
+      "kind": "phrase"
+    },
     "id": "intermediate-shoot",
     "libraryId": "intermediate",
-    "word": "shoot",
-    "meaning": "[shot-shot] 发射；射击；投；射门",
-    "group": 0,
-    "example": {
-      "text": "Trouble shoot",
-      "meaning": "故障查找",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "realize",
+    "meaning": "意识到；实现",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Realize your dream",
+      "meaning": "实现你的梦想",
+      "kind": "phrase"
+    },
     "id": "intermediate-realize",
     "libraryId": "intermediate",
-    "word": "realize",
-    "meaning": "认识到；了解；实现；将某物卖得",
-    "group": 0,
-    "example": {
-      "text": "Realize the value",
-      "meaning": "实现价值",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "eastern",
+    "meaning": "东方的；东部的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An eastern city",
+      "meaning": "一座东部城市",
+      "kind": "phrase"
+    },
     "id": "intermediate-eastern",
     "libraryId": "intermediate",
-    "word": "eastern",
-    "meaning": "东方的；东部的；朝东的；东洋的",
-    "group": 0,
-    "example": {
-      "text": "Eastern europe",
-      "meaning": "东欧",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "marathon",
+    "meaning": "马拉松赛跑",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A marathon race",
+      "meaning": "一场马拉松比赛",
+      "kind": "phrase"
+    },
     "id": "intermediate-marathon",
     "libraryId": "intermediate",
-    "word": "marathon",
-    "meaning": "马拉松长跑；持久比赛；〈喻〉拖时长久令人；马拉松赛跑",
-    "group": 0,
-    "example": {
-      "text": "Boston marathon",
-      "meaning": "波士顿马拉松赛",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-uncomfortable",
     "libraryId": "intermediate",
     "word": "uncomfortable",
-    "meaning": "不舒服的；不舒适的；感到不安的；不自在的",
+    "meaning": "不舒服的；不自在的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "This sofa is so uncomfortable.",
@@ -19021,26 +23848,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "pro",
+    "meaning": "职业选手；专业人士",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A tennis pro",
+      "meaning": "一位职业网球运动员",
+      "kind": "phrase"
+    },
     "id": "intermediate-pro",
     "libraryId": "intermediate",
-    "word": "pro",
-    "meaning": "〔相对于业余爱好者而言的〕专业人士；职业人员〔尤指职业运动员〕；职业性的；专业的",
-    "group": 0,
-    "example": {
-      "text": "Pro bono",
-      "meaning": "无偿的；为了公益；为慈善机构和穷人提供的免费专业服务",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-district",
     "libraryId": "intermediate",
     "word": "district",
-    "meaning": "地区；区域；管区；行政区",
+    "meaning": "区，地区",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Business district",
-      "meaning": "商务区",
+      "text": "Central business district",
+      "meaning": "商业中心区",
       "kind": "phrase"
     }
   },
@@ -19048,59 +23877,75 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-impossible",
     "libraryId": "intermediate",
     "word": "impossible",
-    "meaning": "不可能的；办不到的；不可能存在的；难以忍受的",
+    "meaning": "不可能的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Mission impossible",
-      "meaning": "不可能的任务，棘手的任务",
+      "text": "Nothing is impossible",
+      "meaning": "没有什么不可能",
       "kind": "phrase"
     }
   },
   {
+    "word": "wave",
+    "meaning": "波浪；挥手",
+    "partOfSpeech": "n/v",
+    "example": {
+      "text": "A large wave hit the boat.",
+      "meaning": "一个大浪打中了船。",
+      "kind": "sentence",
+      "sense": "波浪",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "挥手",
+          "partOfSpeech": "v",
+          "text": "She waved to her friend.",
+          "meaning": "她向朋友挥手。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-wave",
     "libraryId": "intermediate",
-    "word": "wave",
-    "meaning": "挥手示意；波动；飘动；高潮",
-    "group": 0,
-    "example": {
-      "text": "Shock wave",
-      "meaning": "冲击波",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "schoolwork",
+    "meaning": "学校作业；功课",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Finish your schoolwork",
+      "meaning": "完成你的功课",
+      "kind": "phrase"
+    },
     "id": "intermediate-schoolwork",
     "libraryId": "intermediate",
-    "word": "schoolwork",
-    "meaning": "学校作业；课堂作业；家庭作业",
-    "group": 0,
-    "example": {
-      "text": "My mother would help me with my schoolwork.",
-      "meaning": "我的母亲会帮我做功课。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "furry",
+    "meaning": "毛茸茸的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A furry animal",
+      "meaning": "毛茸茸的动物",
+      "kind": "phrase"
+    },
     "id": "intermediate-furry",
     "libraryId": "intermediate",
-    "word": "furry",
-    "meaning": "毛皮的；盖着毛皮的",
-    "group": 0,
-    "example": {
-      "text": "Pink furry slippers",
-      "meaning": "毛茸茸的粉色拖鞋",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-pain",
     "libraryId": "intermediate",
     "word": "pain",
-    "meaning": "使痛苦；痛；疼痛；痛苦",
+    "meaning": "疼痛；痛苦",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "In pain",
-      "meaning": "痛苦",
+      "text": "Low back pain",
+      "meaning": "下背痛，下腰痛",
       "kind": "phrase"
     }
   },
@@ -19108,7 +23953,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-center",
     "libraryId": "intermediate",
     "word": "center",
-    "meaning": "集中于；圆心；正中；中心",
+    "meaning": "圆心，正中；中心",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Research center",
@@ -19120,31 +23966,34 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-most",
     "libraryId": "intermediate",
     "word": "most",
-    "meaning": "最；极其；十分；最多的",
+    "meaning": "最多的；大多数的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Most people",
-      "meaning": "多数人",
+      "text": "Most of them",
+      "meaning": "他们中的大多数",
       "kind": "phrase"
     }
   },
   {
+    "word": "teen",
+    "meaning": "青少年的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A teen magazine",
+      "meaning": "一本青少年杂志",
+      "kind": "phrase"
+    },
     "id": "intermediate-teen",
     "libraryId": "intermediate",
-    "word": "teen",
-    "meaning": "青少年的；少年男女；青少年",
-    "group": 0,
-    "example": {
-      "text": "A rock star and teen idol",
-      "meaning": "一位摇滚歌星兼青春偶像",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-lifestyle",
     "libraryId": "intermediate",
     "word": "lifestyle",
     "meaning": "生活方式",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Healthy lifestyle",
@@ -19156,11 +24005,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-program",
     "libraryId": "intermediate",
     "word": "program",
-    "meaning": "节目单；节目；表演；演出",
+    "meaning": "节目；计划；程序",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Computer program",
-      "meaning": "计算机程序",
+      "text": "A TV program",
+      "meaning": "一个电视节目",
       "kind": "phrase"
     }
   },
@@ -19168,7 +24018,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-specifically",
     "libraryId": "intermediate",
     "word": "specifically",
-    "meaning": "明确地；特定地；具体地；特别地",
+    "meaning": "明确地，特定地，具体地",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "More specifically",
@@ -19180,7 +24031,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-hey",
     "libraryId": "intermediate",
     "word": "hey",
-    "meaning": "嘿；喂！（引起注意等）；你好！（表示问候）；干草（等于hay）",
+    "meaning": "喂！（引起注意等）；你好！（表示问候）",
+    "partOfSpeech": "int",
     "group": 0,
     "example": {
       "text": "Hey, wait a minute!",
@@ -19192,11 +24044,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-gallery",
     "libraryId": "intermediate",
     "word": "gallery",
-    "meaning": "画廊；美术馆；楼座；廊台",
+    "meaning": "画廊；美术馆",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Photo gallery",
-      "meaning": "图片库",
+      "text": "National art gallery",
+      "meaning": "国家艺术馆",
       "kind": "phrase"
     }
   },
@@ -19204,55 +24057,73 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-destroy",
     "libraryId": "intermediate",
     "word": "destroy",
-    "meaning": "破坏；毁灭；消灭；毁坏",
+    "meaning": "破坏，毁灭",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Companies that are polluting and destroying the environment",
-      "meaning": "污染和破坏环境的公司",
+      "text": "The fire destroyed the old building.",
+      "meaning": "大火烧毁了那座旧楼。",
       "kind": "sentence"
     }
   },
   {
+    "word": "creative",
+    "meaning": "有创造力的",
+    "example": {
+      "text": "A creative idea",
+      "meaning": "一个有创意的想法",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "adj",
+    "id": "intermediate-creative",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "artist",
+    "meaning": "艺术家",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A young artist",
+      "meaning": "一位年轻的艺术家",
+      "kind": "phrase"
+    },
     "id": "intermediate-artist",
     "libraryId": "intermediate",
-    "word": "artist",
-    "meaning": "艺术家；画家；能手；美术家（尤指画家）",
-    "group": 0,
-    "example": {
-      "text": "Graphic artist",
-      "meaning": "艺术家",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-alien",
     "libraryId": "intermediate",
     "word": "alien",
-    "meaning": "外国的；外星的；陌生的；格格不入的",
+    "meaning": "外星的；陌生的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Alien from",
-      "meaning": "相异的",
+      "text": "An alien planet",
+      "meaning": "一颗外星球",
       "kind": "phrase"
     }
   },
   {
+    "word": "theme",
+    "meaning": "主题",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The theme of the story",
+      "meaning": "故事的主题",
+      "kind": "phrase"
+    },
     "id": "intermediate-theme",
     "libraryId": "intermediate",
-    "word": "theme",
-    "meaning": "主题；题目；【音】主旋律；主旋律",
-    "group": 0,
-    "example": {
-      "text": "Theme music",
-      "meaning": "主题音乐",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-wallet",
     "libraryId": "intermediate",
     "word": "wallet",
-    "meaning": "皮夹子；钱包；皮夹",
+    "meaning": "钱包，皮夹",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "He took a credit card out of his wallet.",
@@ -19265,10 +24136,11 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "tennis",
     "meaning": "网球",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Play tennis",
-      "meaning": "v. 打网球",
+      "meaning": "打网球",
       "kind": "phrase"
     }
   },
@@ -19276,31 +24148,34 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-chat",
     "libraryId": "intermediate",
     "word": "chat",
-    "meaning": "[chatted-chatted；chatting] 闲谈；聊天；闲谈",
+    "meaning": "聊天；闲谈",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Chat room",
-      "meaning": "聊天室",
+      "text": "Have a chat",
+      "meaning": "聊天；谈天；闲谈",
       "kind": "phrase"
     }
   },
   {
+    "word": "travel",
+    "meaning": "旅行",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Travel by train",
+      "meaning": "乘火车旅行",
+      "kind": "phrase"
+    },
     "id": "intermediate-travel",
     "libraryId": "intermediate",
-    "word": "travel",
-    "meaning": "旅行；行进；被传送；被传播",
-    "group": 0,
-    "example": {
-      "text": "Travel agency",
-      "meaning": "旅行社",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-fiction",
     "libraryId": "intermediate",
     "word": "fiction",
-    "meaning": "小说；虚构；编造；谎言",
+    "meaning": "小说",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Science fiction",
@@ -19312,7 +24187,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-dad",
     "libraryId": "intermediate",
     "word": "dad",
-    "meaning": "爸爸；爹爹",
+    "meaning": "爸爸",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "She lives with her mom and dad.",
@@ -19321,26 +24197,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "sixteenth",
+    "meaning": "第十六",
+    "partOfSpeech": "num",
+    "example": {
+      "text": "The sixteenth page",
+      "meaning": "第十六页",
+      "kind": "phrase"
+    },
     "id": "intermediate-sixteenth",
     "libraryId": "intermediate",
-    "word": "sixteenth",
-    "meaning": "第十六；十六分之一；第十六的；十六分之一的",
-    "group": 0,
-    "example": {
-      "text": "From the sixteenth of January to the seventh of February is our Winter Holiday.",
-      "meaning": "我们的寒假放假时间是从一月十六号截至到二月七日。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-appointment",
     "libraryId": "intermediate",
     "word": "appointment",
-    "meaning": "约会；约定；任命；委派",
+    "meaning": "约会；任命",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Appointment system",
-      "meaning": "委任制",
+      "text": "Make an appointment",
+      "meaning": "约会，预约",
       "kind": "phrase"
     }
   },
@@ -19348,11 +24226,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-hit",
     "libraryId": "intermediate",
     "word": "hit",
-    "meaning": "[hit-hit；hitting] 打；击中；碰撞",
+    "meaning": "打；击中；碰撞",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Hit out",
-      "meaning": "猛打",
+      "text": "Hit the mark",
+      "meaning": "打中目标；达到目的；成功",
       "kind": "phrase"
     }
   },
@@ -19360,23 +24239,43 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-major",
     "libraryId": "intermediate",
     "word": "major",
-    "meaning": "较大的；主要的；主修；专攻",
+    "meaning": "主要的；主修；少校",
+    "partOfSpeech": "adj/v/n",
     "group": 0,
     "example": {
-      "text": "Major factor",
-      "meaning": "主要因素",
-      "kind": "phrase"
+      "text": "This is a major problem.",
+      "meaning": "这是个主要问题。",
+      "kind": "sentence",
+      "sense": "主要的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "主修",
+          "partOfSpeech": "v",
+          "text": "She will major in history.",
+          "meaning": "她将主修历史。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "少校",
+          "partOfSpeech": "n",
+          "text": "The major gave an order.",
+          "meaning": "少校下达了命令。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-beat",
     "libraryId": "intermediate",
     "word": "beat",
-    "meaning": "[beat-beaten] 打；击；敲；打败",
+    "meaning": "打；打败；跳动",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Beat down",
-      "meaning": "打倒；杀价；大雨倾盆而下；强烈地照射下来",
+      "text": "Beat the drum",
+      "meaning": "敲鼓",
       "kind": "phrase"
     }
   },
@@ -19384,7 +24283,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-worldwide",
     "libraryId": "intermediate",
     "word": "worldwide",
-    "meaning": "在世界各地；在全世界；世界范围的；全世界的",
+    "meaning": "在世界各地，在全世界",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "His books have sold more than 20 million copies worldwide.",
@@ -19396,59 +24296,82 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-consider",
     "libraryId": "intermediate",
     "word": "consider",
-    "meaning": "考虑；细想；认为；把…看作",
+    "meaning": "考虑；认为",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Consider doing",
-      "meaning": "考虑做…",
+      "text": "Consider doing something",
+      "meaning": "考虑做某事",
       "kind": "phrase"
     }
   },
   {
+    "word": "particular",
+    "meaning": "特定的；特别的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A particular day",
+      "meaning": "特定的一天",
+      "kind": "phrase"
+    },
     "id": "intermediate-particular",
     "libraryId": "intermediate",
-    "word": "particular",
-    "meaning": "特定的；某一的；不寻常的；特别的",
-    "group": 0,
-    "example": {
-      "text": "In particular",
-      "meaning": "尤其，特别",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-build",
     "libraryId": "intermediate",
     "word": "build",
-    "meaning": "建筑；建造；盖；造",
+    "meaning": "建立；建筑",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Build confidence",
-      "meaning": "树立信心",
+      "text": "Build a bridge",
+      "meaning": "修建一座桥",
       "kind": "phrase"
     }
   },
   {
+    "word": "mean",
+    "meaning": "意思是；刻薄的；平均数",
+    "partOfSpeech": "v/adj/n",
+    "example": {
+      "text": "What does this word mean?",
+      "meaning": "这个词是什么意思？",
+      "kind": "sentence",
+      "sense": "意思是",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "刻薄的",
+          "partOfSpeech": "adj",
+          "text": "It was mean to laugh at him.",
+          "meaning": "嘲笑他很刻薄。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "平均数",
+          "partOfSpeech": "n",
+          "text": "Find the mean of these numbers.",
+          "meaning": "求这些数的平均数。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-mean",
     "libraryId": "intermediate",
-    "word": "mean",
-    "meaning": "[meant-meant] 表示…的意思；意欲；打算；意指",
-    "group": 0,
-    "example": {
-      "text": "Mean by",
-      "meaning": "意思是…",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-chew",
     "libraryId": "intermediate",
     "word": "chew",
-    "meaning": "咀嚼；咬住；不停地啃；咀嚼物",
+    "meaning": "咀嚼",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Chew gum",
-      "meaning": "嚼口香糖",
+      "text": "Chew your food",
+      "meaning": "咀嚼食物",
       "kind": "phrase"
     }
   },
@@ -19457,6 +24380,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "casually",
     "meaning": "随意地；不经意地",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "Dress casually",
@@ -19468,7 +24392,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-modest",
     "libraryId": "intermediate",
     "word": "modest",
-    "meaning": "谦虚的；谨慎的；适度的；谦逊的",
+    "meaning": "谦虚的，谨慎的；适度的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "You’re too modest! You’ve been a huge help to us.",
@@ -19477,38 +24402,79 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "shock",
+    "meaning": "震惊；震动",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A great shock",
+      "meaning": "极大的震惊",
+      "kind": "phrase"
+    },
     "id": "intermediate-shock",
     "libraryId": "intermediate",
-    "word": "shock",
-    "meaning": "震动；冲击；震惊；惊愕",
-    "group": 0,
+    "group": 0
+  },
+  {
+    "word": "opportunity",
+    "meaning": "机会",
     "example": {
-      "text": "Hemorrhagic shock",
-      "meaning": "出血性休克",
+      "text": "A learning opportunity",
+      "meaning": "一次学习机会",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-opportunity",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-court",
     "libraryId": "intermediate",
     "word": "court",
-    "meaning": "献殷勤；追求；求爱；招致",
+    "meaning": "法庭；球场；王室；庭院",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Supreme court",
-      "meaning": "最高法院",
-      "kind": "phrase"
+      "text": "The case will go to court.",
+      "meaning": "这起案件将上法庭。",
+      "kind": "sentence",
+      "sense": "法庭",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "球场",
+          "partOfSpeech": "n",
+          "text": "They played on the tennis court.",
+          "meaning": "他们在网球场上打球。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "王室",
+          "partOfSpeech": "n",
+          "text": "She was a musician at the royal court.",
+          "meaning": "她是王室的乐师。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "庭院",
+          "partOfSpeech": "n",
+          "text": "The building has an inner court.",
+          "meaning": "这栋建筑有一个内庭。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-route",
     "libraryId": "intermediate",
     "word": "route",
-    "meaning": "路线；路程；路",
+    "meaning": "路线，路程",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Travel route",
-      "meaning": "n. 旅运路线",
+      "text": "Route selection",
+      "meaning": "路线选择",
       "kind": "phrase"
     }
   },
@@ -19516,7 +24482,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-adult",
     "libraryId": "intermediate",
     "word": "adult",
-    "meaning": "发育成熟的；成熟的；成人的；成年人",
+    "meaning": "发育成熟的；成熟的，成人的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Adult education",
@@ -19525,106 +24492,173 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "relative",
+    "meaning": "亲属；亲戚",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Visit a relative",
+      "meaning": "拜访一位亲戚",
+      "kind": "phrase"
+    },
     "id": "intermediate-relative",
     "libraryId": "intermediate",
-    "word": "relative",
-    "meaning": "相对的；比较的；有关的；相关的",
-    "group": 0,
-    "example": {
-      "text": "Relative humidity",
-      "meaning": "相对湿度",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-attitude",
     "libraryId": "intermediate",
     "word": "attitude",
-    "meaning": "态度；看法；意见；姿势",
+    "meaning": "态度；看法",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Positive attitude",
-      "meaning": "积极态度",
+      "text": "Attitude is everything",
+      "meaning": "态度决定一切",
       "kind": "phrase"
     }
   },
   {
+    "word": "spare",
+    "meaning": "空闲的；备用的；抽出",
+    "partOfSpeech": "adj/v",
+    "example": {
+      "text": "I read in my spare time.",
+      "meaning": "我在空闲时间读书。",
+      "kind": "sentence",
+      "sense": "空闲的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "备用的",
+          "partOfSpeech": "adj",
+          "text": "We keep a spare tyre in the car.",
+          "meaning": "我们在车里备有一个轮胎。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "抽出",
+          "partOfSpeech": "v",
+          "text": "Can you spare a few minutes?",
+          "meaning": "你能抽出几分钟吗？",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-spare",
     "libraryId": "intermediate",
-    "word": "spare",
-    "meaning": "备用的；多余的；空闲的；留出",
-    "group": 0,
-    "example": {
-      "text": "Spare oneself",
-      "meaning": "偷懒",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "chip",
+    "meaning": "芯片；薯片；缺口",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "This chip stores the data.",
+      "meaning": "这块芯片储存数据。",
+      "kind": "sentence",
+      "sense": "芯片",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "薯片",
+          "partOfSpeech": "n",
+          "text": "He ate a potato chip.",
+          "meaning": "他吃了一片薯片。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "缺口",
+          "partOfSpeech": "n",
+          "text": "There is a chip in the cup.",
+          "meaning": "杯子上有一个缺口。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-chip",
     "libraryId": "intermediate",
-    "word": "chip",
-    "meaning": "削下；碎片；芯片；屑片",
-    "group": 0,
-    "example": {
-      "text": "Single chip",
-      "meaning": "单晶片",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "staff",
+    "meaning": "全体员工；手杖",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The staff helped the visitors.",
+      "meaning": "全体员工帮助了访客。",
+      "kind": "sentence",
+      "sense": "全体员工",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "手杖",
+          "partOfSpeech": "n",
+          "text": "The old man carried a wooden staff.",
+          "meaning": "老人拄着一根木手杖。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-staff",
     "libraryId": "intermediate",
-    "word": "staff",
-    "meaning": "为…配备人员；任职于；全体职工；工作人员",
-    "group": 0,
-    "example": {
-      "text": "Technical staff",
-      "meaning": "技术人员",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-stage",
     "libraryId": "intermediate",
     "word": "stage",
-    "meaning": "舞台；后台；平台；高台",
+    "meaning": "舞台；阶段",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Initial stage",
-      "meaning": "原始期",
-      "kind": "phrase"
+      "text": "The singer walked onto the stage.",
+      "meaning": "歌手走上舞台。",
+      "kind": "sentence",
+      "sense": "舞台",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "阶段",
+          "partOfSpeech": "n",
+          "text": "The project is at an early stage.",
+          "meaning": "这个项目处于早期阶段。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "junk",
+    "meaning": "垃圾；废物",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A pile of junk",
+      "meaning": "一堆废物",
+      "kind": "phrase"
+    },
     "id": "intermediate-junk",
     "libraryId": "intermediate",
-    "word": "junk",
-    "meaning": "丢弃；废弃；废旧物品；破烂",
-    "group": 0,
-    "example": {
-      "text": "Junk food",
-      "meaning": "垃圾食物；无营养的速食；华而不实的东西",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-waiter",
     "libraryId": "intermediate",
     "word": "waiter",
-    "meaning": "侍者；服务员",
+    "meaning": "侍者，服务员",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Head waiter",
-      "meaning": "饭店领班",
-      "kind": "phrase"
+      "text": "We have a job for you as a waiter.",
+      "meaning": "我们可以为你提供一份服务员的工作。",
+      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-spotlight",
     "libraryId": "intermediate",
     "word": "spotlight",
-    "meaning": "用聚光灯照；特别关注；突出报道；聚光灯",
+    "meaning": "聚光灯；公众的注意",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "In the spotlight",
@@ -19633,26 +24667,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "represent",
+    "meaning": "代表",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Represent our school",
+      "meaning": "代表我们学校",
+      "kind": "phrase"
+    },
     "id": "intermediate-represent",
     "libraryId": "intermediate",
-    "word": "represent",
-    "meaning": "作为…的代表；描述；表示；象征",
-    "group": 0,
-    "example": {
-      "text": "Represent for",
-      "meaning": "代表；象征",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-dig",
     "libraryId": "intermediate",
     "word": "dig",
-    "meaning": "挖（土等）；掘（洞）；挖苦；嘲讽",
+    "meaning": "挖（土等），掘（洞）",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Dig deep",
-      "meaning": "◎挖深",
+      "text": "Dig a hole",
+      "meaning": "挖坑",
       "kind": "phrase"
     }
   },
@@ -19660,11 +24696,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-hold",
     "libraryId": "intermediate",
     "word": "hold",
-    "meaning": "[held-held] 拿；握；使保持某种状态；持有",
+    "meaning": "握住；举行；容纳",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Hold fast",
-      "meaning": "v. 紧紧抓住",
+      "text": "Hold the cup",
+      "meaning": "握住杯子",
       "kind": "phrase"
     }
   },
@@ -19672,31 +24709,34 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-later",
     "libraryId": "intermediate",
     "word": "later",
-    "meaning": "后来；过一会儿；后来的；以后的",
+    "meaning": "后来；过一会儿",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "For later",
-      "meaning": "供以后用",
+      "text": "Later on",
+      "meaning": "后来；稍后",
       "kind": "phrase"
     }
   },
   {
+    "word": "lookout",
+    "meaning": "瞭望；监视",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A lookout tower",
+      "meaning": "一座瞭望塔",
+      "kind": "phrase"
+    },
     "id": "intermediate-lookout",
     "libraryId": "intermediate",
-    "word": "lookout",
-    "meaning": "警戒；监视；■望台；监视哨",
-    "group": 0,
-    "example": {
-      "text": "Lookout mountain",
-      "meaning": "观景峰",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-possibly",
     "libraryId": "intermediate",
     "word": "possibly",
-    "meaning": "大概；也许；可能地",
+    "meaning": "大概，也许",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "This last task is possibly the most difficult.",
@@ -19705,34 +24745,37 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "misleading",
+    "meaning": "误导的；使人误解的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Misleading information",
+      "meaning": "误导性信息",
+      "kind": "phrase"
+    },
     "id": "intermediate-misleading",
     "libraryId": "intermediate",
-    "word": "misleading",
-    "meaning": "令人误解的；导致错误结论的；引入歧途的；欺骗的",
-    "group": 0,
-    "example": {
-      "text": "The article was misleading, and the newspaper has apologized.",
-      "meaning": "那篇文章具有误导性，那家报纸已致歉。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "blank",
+    "meaning": "空白的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A blank page",
+      "meaning": "一张空白页",
+      "kind": "phrase"
+    },
     "id": "intermediate-blank",
     "libraryId": "intermediate",
-    "word": "blank",
-    "meaning": "空白的；空着的；茫然的；无表情的",
-    "group": 0,
-    "example": {
-      "text": "Blank space",
-      "meaning": "空白区",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-importance",
     "libraryId": "intermediate",
     "word": "importance",
     "meaning": "重要性",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "The importance of exercise",
@@ -19744,35 +24787,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-custom",
     "libraryId": "intermediate",
     "word": "custom",
-    "meaning": "习惯；风俗；惯例；海关",
+    "meaning": "风俗；习惯",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Folk custom",
-      "meaning": "n. 民间习俗",
+      "text": "Local custom",
+      "meaning": "当地风俗；地方习惯",
       "kind": "phrase"
     }
   },
   {
+    "word": "permission",
+    "meaning": "许可；允许",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Ask for permission",
+      "meaning": "请求许可",
+      "kind": "phrase"
+    },
     "id": "intermediate-permission",
     "libraryId": "intermediate",
-    "word": "permission",
-    "meaning": "许可；允许；同意；准许",
-    "group": 0,
-    "example": {
-      "text": "Without permission",
-      "meaning": "未经许可",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-hole",
     "libraryId": "intermediate",
     "word": "hole",
-    "meaning": "洞；孔眼；漏洞；缺陷",
+    "meaning": "洞，孔眼；漏洞，缺陷",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Black hole",
-      "meaning": "n. 黑洞",
+      "meaning": "黑洞",
       "kind": "phrase"
     }
   },
@@ -19780,7 +24826,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-material",
     "libraryId": "intermediate",
     "word": "material",
-    "meaning": "物质的；实际的；客观存在的；重要的",
+    "meaning": "材料，原料；素材；布料",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Raw material",
@@ -19789,22 +24836,24 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
-    "id": "intermediate-adverb",
-    "libraryId": "intermediate",
     "word": "adverb",
     "meaning": "副词",
-    "group": 0,
+    "partOfSpeech": "n",
     "example": {
-      "text": "An adverbial is often one word, an adverb.",
-      "meaning": "状语经常只是一个副词。例如。",
-      "kind": "sentence"
-    }
+      "text": "An adverb of time",
+      "meaning": "一个时间副词",
+      "kind": "phrase"
+    },
+    "id": "intermediate-adverb",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-hum",
     "libraryId": "intermediate",
     "word": "hum",
-    "meaning": "[hummed-hummed；humming] 哼曲子；发出嗡嗡声；忙碌",
+    "meaning": "哼唱；发出嗡嗡声",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "He began to hum a tune.",
@@ -19813,22 +24862,24 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "thirteenth",
+    "meaning": "第十三",
+    "partOfSpeech": "num",
+    "example": {
+      "text": "The thirteenth lesson",
+      "meaning": "第十三课",
+      "kind": "phrase"
+    },
     "id": "intermediate-thirteenth",
     "libraryId": "intermediate",
-    "word": "thirteenth",
-    "meaning": "第十三；十三分之一",
-    "group": 0,
-    "example": {
-      "text": "At that moment, the thirteenth fairy arrived.",
-      "meaning": "就在这时，第十三位仙女出现了。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-attempt",
     "libraryId": "intermediate",
     "word": "attempt",
-    "meaning": "尝试；企图；努力；试图",
+    "meaning": "尝试；努力",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Attempt to do",
@@ -19837,22 +24888,35 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "balance",
+    "meaning": "平衡；余额",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "She lost her balance on the ice.",
+      "meaning": "她在冰上失去了平衡。",
+      "kind": "sentence",
+      "sense": "平衡",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "余额",
+          "partOfSpeech": "n",
+          "text": "Check the balance in your account.",
+          "meaning": "查看账户余额。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-balance",
     "libraryId": "intermediate",
-    "word": "balance",
-    "meaning": "使平衡；使均衡；称；权衡",
-    "group": 0,
-    "example": {
-      "text": "Balance sheet",
-      "meaning": "资产负债表",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-cookie",
     "libraryId": "intermediate",
     "word": "cookie",
-    "meaning": "饼干；小甜点",
+    "meaning": "饼干",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Cookie jar",
@@ -19861,46 +24925,72 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "belt",
+    "meaning": "腰带",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A leather belt",
+      "meaning": "一条皮腰带",
+      "kind": "phrase"
+    },
     "id": "intermediate-belt",
     "libraryId": "intermediate",
-    "word": "belt",
-    "meaning": "地带；地区；腰带；皮带",
-    "group": 0,
-    "example": {
-      "text": "Conveyor belt",
-      "meaning": "传送带",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-chop",
     "libraryId": "intermediate",
     "word": "chop",
-    "meaning": "切；劈；砍；〔羊、猪等〕排骨",
+    "meaning": "砍；排骨",
+    "partOfSpeech": "v/n",
     "group": 0,
     "example": {
-      "text": "He went outside to chop some more wood for the fire.",
-      "meaning": "他出去再砍些木材来生火。",
-      "kind": "sentence"
+      "text": "Chop the wood into pieces.",
+      "meaning": "把木头砍成小块。",
+      "kind": "sentence",
+      "sense": "砍",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "排骨",
+          "partOfSpeech": "n",
+          "text": "He ordered a pork chop.",
+          "meaning": "他点了一份猪排。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "cream",
+    "meaning": "奶油；乳霜",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Add some cream to the soup.",
+      "meaning": "往汤里加一些奶油。",
+      "kind": "sentence",
+      "sense": "奶油",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "乳霜",
+          "partOfSpeech": "n",
+          "text": "She put cream on her hands.",
+          "meaning": "她在手上涂了乳霜。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-cream",
     "libraryId": "intermediate",
-    "word": "cream",
-    "meaning": "奶油色的；奶油；护肤霜；奶油色",
-    "group": 0,
-    "example": {
-      "text": "Ice cream",
-      "meaning": "冰淇淋",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-baseball",
     "libraryId": "intermediate",
     "word": "baseball",
-    "meaning": "棒球；棒球运动",
+    "meaning": "棒球",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Baseball game",
@@ -19909,22 +24999,24 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "upset",
+    "meaning": "心烦的；难过的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Feel upset",
+      "meaning": "感到难过",
+      "kind": "phrase"
+    },
     "id": "intermediate-upset",
     "libraryId": "intermediate",
-    "word": "upset",
-    "meaning": "心烦的；苦恼的；不适的；困扰",
-    "group": 0,
-    "example": {
-      "text": "Upset stomach",
-      "meaning": "肚子痛",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-thief",
     "libraryId": "intermediate",
     "word": "thief",
     "meaning": "小偷",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Catch a thief",
@@ -19936,7 +25028,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-embarrassed",
     "libraryId": "intermediate",
     "word": "embarrassed",
-    "meaning": "尴尬的；为难的；陷入困境的；窘迫的",
+    "meaning": "尴尬的；为难的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Feel embarrassed",
@@ -19945,94 +25038,102 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "unpleasant",
+    "meaning": "令人不快的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An unpleasant smell",
+      "meaning": "一种难闻的气味",
+      "kind": "phrase"
+    },
     "id": "intermediate-unpleasant",
     "libraryId": "intermediate",
-    "word": "unpleasant",
-    "meaning": "使人不愉快的；厌恶的；煞风景的；不和的",
-    "group": 0,
-    "example": {
-      "text": "An extremely unpleasant smell",
-      "meaning": "极其难闻的味道",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "skin",
+    "meaning": "皮肤",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Soft skin",
+      "meaning": "柔软的皮肤",
+      "kind": "phrase"
+    },
     "id": "intermediate-skin",
     "libraryId": "intermediate",
-    "word": "skin",
-    "meaning": "皮；兽皮；毛皮；外皮",
-    "group": 0,
-    "example": {
-      "text": "Dry skin",
-      "meaning": "干性皮肤",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "barbecue",
+    "meaning": "户外烧烤",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A summer barbecue",
+      "meaning": "一次夏日户外烧烤",
+      "kind": "phrase"
+    },
     "id": "intermediate-barbecue",
     "libraryId": "intermediate",
-    "word": "barbecue",
-    "meaning": "在烤架上烧烤；烧烤野餐；金属烤架；烤肉",
-    "group": 0,
-    "example": {
-      "text": "Korean barbecue",
-      "meaning": "韩国烤肉",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-cigarette",
     "libraryId": "intermediate",
     "word": "cigarette",
-    "meaning": "香烟；纸烟；卷烟",
+    "meaning": "香烟",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Cigarette smoking",
-      "meaning": "吸烟",
+      "text": "Cigarette lighter",
+      "meaning": "香烟打火机",
       "kind": "phrase"
     }
   },
   {
+    "word": "positive",
+    "meaning": "积极的；肯定的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A positive attitude",
+      "meaning": "积极的态度",
+      "kind": "phrase"
+    },
     "id": "intermediate-positive",
     "libraryId": "intermediate",
-    "word": "positive",
-    "meaning": "积极的；正面的；肯定的；【电】正的",
-    "group": 0,
-    "example": {
-      "text": "Positive attitude",
-      "meaning": "积极态度",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-instance",
     "libraryId": "intermediate",
     "word": "instance",
-    "meaning": "例子；实例；事例；情况",
+    "meaning": "例子，实例，事例；情况",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "For instance",
-      "meaning": "例如",
+      "text": "In this instance",
+      "meaning": "在此情况下",
       "kind": "phrase"
     }
   },
   {
+    "word": "opera",
+    "meaning": "歌剧",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Watch an opera",
+      "meaning": "看一场歌剧",
+      "kind": "phrase"
+    },
     "id": "intermediate-opera",
     "libraryId": "intermediate",
-    "word": "opera",
-    "meaning": "歌剧；歌剧院；歌剧团",
-    "group": 0,
-    "example": {
-      "text": "Opera house",
-      "meaning": "n. 歌剧院",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-thrill",
     "libraryId": "intermediate",
     "word": "thrill",
-    "meaning": "兴奋；激动；引起激动的事物；震动",
+    "meaning": "激动；令人激动的事",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Winning first place must have been quite a thrill.",
@@ -20044,7 +25145,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-serve",
     "libraryId": "intermediate",
     "word": "serve",
-    "meaning": "为…服务；任；招待；接待",
+    "meaning": "服务；招待；供应",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Serve the community",
@@ -20053,26 +25155,59 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "solution",
+    "meaning": "解决办法",
+    "example": {
+      "text": "Find a solution",
+      "meaning": "找到解决办法",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-solution",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "host",
+    "meaning": "主人；主持人；宿主",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The host welcomed us.",
+      "meaning": "主人欢迎了我们。",
+      "kind": "sentence",
+      "sense": "主人",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "主持人",
+          "partOfSpeech": "n",
+          "text": "The host introduced the next singer.",
+          "meaning": "主持人介绍了下一位歌手。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "宿主",
+          "partOfSpeech": "n",
+          "text": "The insect needs a host to survive.",
+          "meaning": "这种昆虫需要宿主才能生存。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-host",
     "libraryId": "intermediate",
-    "word": "host",
-    "meaning": "主人；东道主；节目主持人；许多",
-    "group": 0,
-    "example": {
-      "text": "Host plant",
-      "meaning": "寄主植物",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-combine",
     "libraryId": "intermediate",
     "word": "combine",
-    "meaning": "联合；结合；联合企业；联合收割机",
+    "meaning": "联合，结合",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Combine harvester",
-      "meaning": "联合收割机",
+      "text": "Combine with",
+      "meaning": "与……结合",
       "kind": "phrase"
     }
   },
@@ -20080,11 +25215,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-turtle",
     "libraryId": "intermediate",
     "word": "turtle",
-    "meaning": "海龟；玳瑁",
+    "meaning": "海龟",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Sea turtle",
-      "meaning": "海龟",
+      "text": "A little turtle",
+      "meaning": "一只小海龟",
       "kind": "phrase"
     }
   },
@@ -20092,7 +25228,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-comedy",
     "libraryId": "intermediate",
     "word": "comedy",
-    "meaning": "喜剧；喜剧性；有趣的事情；喜剧场面",
+    "meaning": "喜剧，喜剧性",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Comedy film",
@@ -20104,11 +25241,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-equipment",
     "libraryId": "intermediate",
     "word": "equipment",
-    "meaning": "装备；配备；设备；器材",
+    "meaning": "设备，装备；器材",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Processing equipment",
-      "meaning": "工艺设备",
+      "text": "Machinery and equipment",
+      "meaning": "机器及设备",
       "kind": "phrase"
     }
   },
@@ -20116,11 +25254,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-pressure",
     "libraryId": "intermediate",
     "word": "pressure",
-    "meaning": "对…施加压力；迫使；说服；压",
+    "meaning": "压力；压强",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Blood pressure",
-      "meaning": "n. 血压",
+      "text": "Under great pressure",
+      "meaning": "在巨大压力下",
       "kind": "phrase"
     }
   },
@@ -20128,55 +25267,60 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-trash",
     "libraryId": "intermediate",
     "word": "trash",
-    "meaning": "垃圾；废物；拙劣的文学作品；没用",
+    "meaning": "垃圾；废物",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Trash can",
-      "meaning": "垃圾桶",
+      "text": "Empty the trash",
+      "meaning": "倒垃圾",
       "kind": "phrase"
     }
   },
   {
+    "word": "feed",
+    "meaning": "喂养",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Feed the birds",
+      "meaning": "喂鸟",
+      "kind": "phrase"
+    },
     "id": "intermediate-feed",
     "libraryId": "intermediate",
-    "word": "feed",
-    "meaning": "[fed-fed] 喂；为…提供食物；吃；以…为",
-    "group": 0,
-    "example": {
-      "text": "Feed oneself",
-      "meaning": "自己吃",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "forget",
+    "meaning": "忘记",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Forget a name",
+      "meaning": "忘记一个名字",
+      "kind": "phrase"
+    },
     "id": "intermediate-forget",
     "libraryId": "intermediate",
-    "word": "forget",
-    "meaning": "[forgot-forgotten] 忘记；遗忘；忘记；忽略",
-    "group": 0,
-    "example": {
-      "text": "Never forget",
-      "meaning": "永不忘记",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-convenient",
     "libraryId": "intermediate",
     "word": "convenient",
-    "meaning": "方便的；便利的；[废语]适当的；[口语]近便的",
+    "meaning": "方便的，便利的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Convenient for",
-      "meaning": "adj. 便于…",
-      "kind": "phrase"
+      "text": "Mail-order catalogs are a convenient way to shop.",
+      "meaning": "使用邮购目录是一种方便的购物方式。",
+      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-stair",
     "libraryId": "intermediate",
     "word": "stair",
-    "meaning": "梯级；楼梯；阶梯",
+    "meaning": "楼梯，阶梯；梯级",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Stair railing",
@@ -20188,11 +25332,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-belong",
     "libraryId": "intermediate",
     "word": "belong",
-    "meaning": "属于；应归入；居住；适宜",
+    "meaning": "属于，应归入",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Belong in",
-      "meaning": "v. 应归入",
+      "meaning": "应归入",
       "kind": "phrase"
     }
   },
@@ -20200,103 +25345,112 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-best",
     "libraryId": "intermediate",
     "word": "best",
-    "meaning": "最好；最；最好的；最好的人",
+    "meaning": "最好的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Best way",
-      "meaning": "最佳方法",
+      "text": "The best student",
+      "meaning": "最好的学生",
       "kind": "phrase"
     }
   },
   {
+    "word": "mess",
+    "meaning": "杂乱；混乱",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A terrible mess",
+      "meaning": "一片狼藉",
+      "kind": "phrase"
+    },
     "id": "intermediate-mess",
     "libraryId": "intermediate",
-    "word": "mess",
-    "meaning": "凌乱的状态；脏乱的状态；混乱的局面；困",
-    "group": 0,
-    "example": {
-      "text": "Mess up",
-      "meaning": "陷入困境；搞糟",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "native",
+    "meaning": "本地的；出生地的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Native plants",
+      "meaning": "本地植物",
+      "kind": "phrase"
+    },
     "id": "intermediate-native",
     "libraryId": "intermediate",
-    "word": "native",
-    "meaning": "出生地的；当地的；土生土长者；本国人",
-    "group": 0,
-    "example": {
-      "text": "Native place",
-      "meaning": "籍贯",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-microwave",
-    "libraryId": "intermediate",
     "word": "microwave",
     "meaning": "微波；微波炉",
-    "group": 0,
+    "partOfSpeech": "n",
     "example": {
-      "text": "Microwave oven",
-      "meaning": "微波炉",
+      "text": "A microwave oven",
+      "meaning": "一台微波炉",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-microwave",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
+    "word": "structure",
+    "meaning": "结构；构造",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The structure of a sentence",
+      "meaning": "句子结构",
+      "kind": "phrase"
+    },
     "id": "intermediate-structure",
     "libraryId": "intermediate",
-    "word": "structure",
-    "meaning": "构造；建造；结构；建筑物",
-    "group": 0,
-    "example": {
-      "text": "Industrial structure",
-      "meaning": "产业结构",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "outdoor",
+    "meaning": "户外的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Outdoor activities",
+      "meaning": "户外活动",
+      "kind": "phrase"
+    },
     "id": "intermediate-outdoor",
     "libraryId": "intermediate",
-    "word": "outdoor",
-    "meaning": "在户外；在野外；户外的；野外的",
-    "group": 0,
-    "example": {
-      "text": "Outdoor advertising",
-      "meaning": "户外广告",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "online",
+    "meaning": "在线的；联网的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An online lesson",
+      "meaning": "一节在线课程",
+      "kind": "phrase"
+    },
     "id": "intermediate-online",
     "libraryId": "intermediate",
-    "word": "online",
-    "meaning": "在线的；联机的；联网的",
-    "group": 0,
-    "example": {
-      "text": "Online shopping",
-      "meaning": "网络购物",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "writer",
+    "meaning": "作家；作者",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A famous writer",
+      "meaning": "一位著名的作家",
+      "kind": "phrase"
+    },
     "id": "intermediate-writer",
     "libraryId": "intermediate",
-    "word": "writer",
-    "meaning": "作者；作家",
-    "group": 0,
-    "example": {
-      "text": "Freelance writer",
-      "meaning": "自由撰稿人",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-fence",
     "libraryId": "intermediate",
     "word": "fence",
     "meaning": "栅栏；围栏",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "A wooden fence",
@@ -20308,11 +25462,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-theatre",
     "libraryId": "intermediate",
     "word": "theatre",
-    "meaning": "戏院；剧场；影剧院；电影院",
+    "meaning": "戏院，剧场；影剧院",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Movie theatre",
-      "meaning": "电影院",
+      "text": "At the theatre",
+      "meaning": "在剧院",
       "kind": "phrase"
     }
   },
@@ -20320,71 +25475,149 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-firm",
     "libraryId": "intermediate",
     "word": "firm",
-    "meaning": "坚实的；结实的；稳固的；坚定的",
+    "meaning": "公司；坚固的；坚定的",
+    "partOfSpeech": "n/adj",
     "group": 0,
     "example": {
-      "text": "Law firm",
-      "meaning": "法律事务所",
-      "kind": "phrase"
+      "text": "She works for a law firm.",
+      "meaning": "她在一家律师事务所工作。",
+      "kind": "sentence",
+      "sense": "公司",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "坚固的",
+          "partOfSpeech": "adj",
+          "text": "The ground is firm enough to stand on.",
+          "meaning": "这块地面坚实得可以站人。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "坚定的",
+          "partOfSpeech": "adj",
+          "text": "He gave a firm reply.",
+          "meaning": "他给出了坚定的答复。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-character",
     "libraryId": "intermediate",
     "word": "character",
-    "meaning": "性格；特色；特性；人物",
+    "meaning": "性格；角色；字符",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Chinese character",
-      "meaning": "汉字",
-      "kind": "phrase"
+      "text": "She has a cheerful character.",
+      "meaning": "她性格开朗。",
+      "kind": "sentence",
+      "sense": "性格",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "角色",
+          "partOfSpeech": "n",
+          "text": "My favourite character is the doctor.",
+          "meaning": "我最喜欢的角色是那位医生。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "字符",
+          "partOfSpeech": "n",
+          "text": "This password has eight characters.",
+          "meaning": "这个密码有八个字符。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-brazilian",
     "libraryId": "intermediate",
     "word": "Brazilian",
-    "meaning": "巴西的；巴西人的；巴西人",
+    "meaning": "巴西的；巴西人的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Do you want to know more about Brazilian Culture?",
-      "meaning": "你想了解更多关于巴西的文化吗？",
+      "text": "Do you want to know more about Brazilian culture?",
+      "meaning": "你想了解更多巴西文化吗？",
       "kind": "sentence"
     }
   },
   {
+    "word": "stick",
+    "meaning": "棍子；粘住；坚持",
+    "partOfSpeech": "n/v",
+    "example": {
+      "text": "The dog carried a stick.",
+      "meaning": "狗叼着一根棍子。",
+      "kind": "sentence",
+      "sense": "棍子",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "粘住",
+          "partOfSpeech": "v",
+          "text": "Stick the picture on the wall.",
+          "meaning": "把图片贴到墙上。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "坚持",
+          "partOfSpeech": "v",
+          "text": "Stick to your plan.",
+          "meaning": "坚持你的计划。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-stick",
     "libraryId": "intermediate",
-    "word": "stick",
-    "meaning": "粘；贴；柴枝；枝条",
-    "group": 0,
-    "example": {
-      "text": "Memory stick",
-      "meaning": "记忆棒",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "band",
+    "meaning": "乐队；带子；波段",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The band played a new song.",
+      "meaning": "乐队演奏了一首新歌。",
+      "kind": "sentence",
+      "sense": "乐队",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "带子",
+          "partOfSpeech": "n",
+          "text": "She tied her hair with a rubber band.",
+          "meaning": "她用橡皮筋扎起了头发。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "波段",
+          "partOfSpeech": "n",
+          "text": "The radio receives signals in this band.",
+          "meaning": "这台收音机接收这个波段的信号。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-band",
     "libraryId": "intermediate",
-    "word": "band",
-    "meaning": "乐队；群；伙；带",
-    "group": 0,
-    "example": {
-      "text": "Band gap",
-      "meaning": "带隙",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-mall",
     "libraryId": "intermediate",
     "word": "mall",
-    "meaning": "购物中心；商店区；商场",
+    "meaning": "购物中心，商店区",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Pedestrian mall",
-      "meaning": "步行街",
+      "text": "Shopping mall",
+      "meaning": "大商场，大型购物中心",
       "kind": "phrase"
     }
   },
@@ -20392,11 +25625,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-quality",
     "libraryId": "intermediate",
     "word": "quality",
-    "meaning": "优良的；优质的；质；质量",
+    "meaning": "质，质量；品德，品质；性质，特性",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "High quality",
-      "meaning": "高品质",
+      "text": "Quality of life",
+      "meaning": "生活质量",
       "kind": "phrase"
     }
   },
@@ -20405,10 +25639,11 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "labor",
     "meaning": "劳动；工作",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Labor force",
-      "meaning": "劳动力",
+      "text": "Division of labor",
+      "meaning": "劳动分工",
       "kind": "phrase"
     }
   },
@@ -20416,7 +25651,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-rude",
     "libraryId": "intermediate",
     "word": "rude",
-    "meaning": "粗鲁的；无礼的；粗糙的；粗陋的",
+    "meaning": "粗鲁的，无礼的；粗糙的，粗陋的；猛烈的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "I didn’t mean to be rude, but I had to leave early.",
@@ -20428,11 +25664,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-association",
     "libraryId": "intermediate",
     "word": "association",
-    "meaning": "协会；联盟；社团；联合",
+    "meaning": "协会，联盟，社团；联合，结合",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Alumni association",
-      "meaning": "校友会",
+      "text": "In association with",
+      "meaning": "与…相联系；与…联合",
       "kind": "phrase"
     }
   },
@@ -20440,11 +25677,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-mix",
     "libraryId": "intermediate",
     "word": "mix",
-    "meaning": "使混合；配制；相混；搞混",
+    "meaning": "使混合，配制；相混，搞混",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Mix together",
-      "meaning": "混合",
+      "text": "Mix and match",
+      "meaning": "混合搭配",
       "kind": "phrase"
     }
   },
@@ -20452,67 +25690,104 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-bother",
     "libraryId": "intermediate",
     "word": "bother",
-    "meaning": "打扰；麻烦；使不安；迷惑",
+    "meaning": "打扰，麻烦；使不安，迷惑",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Bother about",
-      "meaning": "烦恼",
+      "text": "Don't bother",
+      "meaning": "不用麻烦了；不打扰了",
       "kind": "phrase"
     }
   },
   {
+    "word": "wolf",
+    "meaning": "狼",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A grey wolf",
+      "meaning": "一只灰狼",
+      "kind": "phrase"
+    },
     "id": "intermediate-wolf",
     "libraryId": "intermediate",
-    "word": "wolf",
-    "meaning": "狼；残忍贪婪之人；色狼；大吃",
-    "group": 0,
-    "example": {
-      "text": "Wolf down",
-      "meaning": "v. 狼吞虎咽地吃",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "transportation",
+    "meaning": "交通；运输",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Public transportation",
+      "meaning": "公共交通",
+      "kind": "phrase"
+    },
     "id": "intermediate-transportation",
     "libraryId": "intermediate",
-    "word": "transportation",
-    "meaning": "运输；运输系统；运输工具；运送",
-    "group": 0,
-    "example": {
-      "text": "Road transportation",
-      "meaning": "公路运输",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "agent",
+    "meaning": "代理人",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A travel agent",
+      "meaning": "一名旅行代理商",
+      "kind": "phrase"
+    },
     "id": "intermediate-agent",
     "libraryId": "intermediate",
-    "word": "agent",
-    "meaning": "代理人；代理商；经纪人；药剂",
-    "group": 0,
-    "example": {
-      "text": "Sales agent",
-      "meaning": "销售代理商",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "treat",
+    "meaning": "对待；治疗；款待",
+    "partOfSpeech": "v/n",
+    "example": {
+      "text": "Treat everyone with respect.",
+      "meaning": "尊重地对待每个人。",
+      "kind": "sentence",
+      "sense": "对待",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "治疗",
+          "partOfSpeech": "v",
+          "text": "The doctor treated the wound.",
+          "meaning": "医生处理了伤口。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "款待",
+          "partOfSpeech": "n",
+          "text": "The ice cream was a special treat.",
+          "meaning": "这份冰淇淋是一次特别的款待。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-treat",
     "libraryId": "intermediate",
-    "word": "treat",
-    "meaning": "对待；处理；治疗；医治",
-    "group": 0,
+    "group": 0
+  },
+  {
+    "word": "project",
+    "meaning": "项目",
     "example": {
-      "text": "Treat as",
-      "meaning": "对待；把…看作…",
+      "text": "A school project",
+      "meaning": "一个学校项目",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-project",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-suitcase",
     "libraryId": "intermediate",
     "word": "suitcase",
-    "meaning": "手提箱；衣箱；[轻] 手提箱",
+    "meaning": "手提箱，衣箱",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "It did not take Andrew long to pack a suitcase.",
@@ -20524,7 +25799,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-beard",
     "libraryId": "intermediate",
     "word": "beard",
-    "meaning": "胡须；公然反对；抓…的胡须；颌毛",
+    "meaning": "胡须，络腮胡子",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Full beard",
@@ -20533,34 +25809,37 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "hunger",
+    "meaning": "饥饿",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A feeling of hunger",
+      "meaning": "饥饿的感觉",
+      "kind": "phrase"
+    },
     "id": "intermediate-hunger",
     "libraryId": "intermediate",
-    "word": "hunger",
-    "meaning": "渴望；渴望得到；饿；饥饿",
-    "group": 0,
-    "example": {
-      "text": "Hunger strike",
-      "meaning": "n. 绝食抗议",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "laboratory",
+    "meaning": "实验室",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A school laboratory",
+      "meaning": "一间学校实验室",
+      "kind": "phrase"
+    },
     "id": "intermediate-laboratory",
     "libraryId": "intermediate",
-    "word": "laboratory",
-    "meaning": "实验室；研究室",
-    "group": 0,
-    "example": {
-      "text": "Laboratory test",
-      "meaning": "实验试验",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-russia",
     "libraryId": "intermediate",
     "word": "Russia",
     "meaning": "俄罗斯",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Travel to Russia",
@@ -20572,11 +25851,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-twin",
     "libraryId": "intermediate",
     "word": "twin",
-    "meaning": "孪生的；成双的；孪生儿之一；双胞胎之一",
+    "meaning": "孪生的；双胞胎之一",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Twin sister",
-      "meaning": "双胞胎姐妹之一",
+      "meaning": "双胞胎姐妹",
       "kind": "phrase"
     }
   },
@@ -20584,11 +25864,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-comment",
     "libraryId": "intermediate",
     "word": "comment",
-    "meaning": "评论；意见；闲话；议论",
+    "meaning": "评论",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "General comment",
-      "meaning": "一般评论",
+      "text": "Comment on",
+      "meaning": "对……评论",
       "kind": "phrase"
     }
   },
@@ -20597,10 +25878,11 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "elevator",
     "meaning": "电梯；升降机",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Passenger elevator",
-      "meaning": "乘客电梯",
+      "text": "Take the elevator",
+      "meaning": "乘电梯",
       "kind": "phrase"
     }
   },
@@ -20608,11 +25890,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-lost",
     "libraryId": "intermediate",
     "word": "lost",
-    "meaning": "失去的；丧失的；错过的；迷惑的",
+    "meaning": "迷路的；丢失的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Got lost",
-      "meaning": "迷路",
+      "text": "A lost child",
+      "meaning": "一个迷路的孩子",
       "kind": "phrase"
     }
   },
@@ -20620,7 +25903,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-calculator",
     "libraryId": "intermediate",
     "word": "calculator",
-    "meaning": "计算器；计算者",
+    "meaning": "计算器",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Electronic calculator",
@@ -20629,82 +25913,118 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "biology",
+    "meaning": "生物学",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A biology lesson",
+      "meaning": "一节生物课",
+      "kind": "phrase"
+    },
     "id": "intermediate-biology",
     "libraryId": "intermediate",
-    "word": "biology",
-    "meaning": "生物学；（一个地区全部的）生物；生态学",
-    "group": 0,
-    "example": {
-      "text": "Marine biology",
-      "meaning": "海洋生物学",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-lose",
     "libraryId": "intermediate",
     "word": "lose",
-    "meaning": "[lost-lost] 失去；损失；迷失；使迷路",
+    "meaning": "失去；丢失；输掉",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Lose oneself",
-      "meaning": "迷路",
+      "text": "Lose interest in",
+      "meaning": "对……失去兴趣",
       "kind": "phrase"
     }
   },
   {
+    "word": "toward",
+    "meaning": "朝；向",
+    "partOfSpeech": "prep",
+    "example": {
+      "text": "Walk toward the door",
+      "meaning": "朝门走去",
+      "kind": "phrase"
+    },
     "id": "intermediate-toward",
     "libraryId": "intermediate",
-    "word": "toward",
-    "meaning": "向；朝；面对；接近",
-    "group": 0,
-    "example": {
-      "text": "Go toward",
-      "meaning": "朝...方向走去",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "favorite",
+    "meaning": "最喜欢的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "My favorite song",
+      "meaning": "我最喜欢的歌曲",
+      "kind": "phrase"
+    },
     "id": "intermediate-favorite",
     "libraryId": "intermediate",
-    "word": "favorite",
-    "meaning": "特别喜爱的；特别喜欢的人或事物",
-    "group": 0,
-    "example": {
-      "text": "New favorite",
-      "meaning": "新宠；新欢",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-uniform",
     "libraryId": "intermediate",
     "word": "uniform",
-    "meaning": "相同的；一致的；制服；统一的",
+    "meaning": "制服；一致的",
+    "partOfSpeech": "n/adj",
     "group": 0,
     "example": {
-      "text": "In uniform",
-      "meaning": "穿制服",
-      "kind": "phrase"
+      "text": "The nurse wears a uniform.",
+      "meaning": "护士穿着制服。",
+      "kind": "sentence",
+      "sense": "制服",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "一致的",
+          "partOfSpeech": "adj",
+          "text": "The walls are a uniform colour.",
+          "meaning": "墙壁的颜色一致。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-fall",
     "libraryId": "intermediate",
     "word": "fall",
-    "meaning": "[fell-fallen] 落下；降落；跌倒；塌倒",
+    "meaning": "落下；秋天；瀑布",
+    "partOfSpeech": "v/n",
     "group": 0,
     "example": {
-      "text": "Free fall",
-      "meaning": "自由下落",
-      "kind": "phrase"
+      "text": "Leaves fall from the trees.",
+      "meaning": "叶子从树上落下。",
+      "kind": "sentence",
+      "sense": "落下",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "秋天",
+          "partOfSpeech": "n",
+          "text": "The weather is cool in fall.",
+          "meaning": "秋天天气凉爽。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "瀑布",
+          "partOfSpeech": "n",
+          "text": "We visited the falls yesterday.",
+          "meaning": "我们昨天参观了瀑布。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-indoors",
     "libraryId": "intermediate",
     "word": "indoors",
-    "meaning": "在屋内；在室内；在屋里",
+    "meaning": "在屋内，在室内",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "It rained all day so we had to stay indoors.",
@@ -20713,70 +26033,107 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
-    "id": "intermediate-comma",
-    "libraryId": "intermediate",
-    "word": "comma",
-    "meaning": "逗号；停顿",
-    "group": 0,
+    "word": "opinion",
+    "meaning": "观点",
     "example": {
-      "text": "How to extract string separated by comma with PHP?",
-      "meaning": "如何提取和PHP字符串通过逗号分开吗?。",
-      "kind": "sentence"
-    }
+      "text": "In my opinion",
+      "meaning": "在我看来",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-opinion",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
+    "word": "comma",
+    "meaning": "逗号",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A comma between two words",
+      "meaning": "两个词之间的逗号",
+      "kind": "phrase"
+    },
+    "id": "intermediate-comma",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "prefer",
+    "meaning": "更喜欢",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Prefer tea to coffee",
+      "meaning": "比起咖啡更喜欢茶",
+      "kind": "phrase"
+    },
     "id": "intermediate-prefer",
     "libraryId": "intermediate",
-    "word": "prefer",
-    "meaning": "更喜欢；宁愿；提出；提升",
-    "group": 0,
-    "example": {
-      "text": "Prefer doing",
-      "meaning": "喜欢做某事",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-theater",
     "libraryId": "intermediate",
     "word": "theater",
-    "meaning": "戏院；剧场；影剧院",
+    "meaning": "戏院，剧场；影剧院",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Movie theater",
-      "meaning": "n. 电影院",
+      "text": "Home theater",
+      "meaning": "家庭影院",
       "kind": "phrase"
     }
   },
   {
+    "word": "spell",
+    "meaning": "拼写；咒语；一段时间",
+    "partOfSpeech": "v/n",
+    "example": {
+      "text": "Can you spell your name?",
+      "meaning": "你会拼写你的名字吗？",
+      "kind": "sentence",
+      "sense": "拼写",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "咒语",
+          "partOfSpeech": "n",
+          "text": "The witch cast a spell.",
+          "meaning": "女巫施了一个咒语。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "一段时间",
+          "partOfSpeech": "n",
+          "text": "We had a spell of hot weather.",
+          "meaning": "我们经历了一段炎热天气。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-spell",
     "libraryId": "intermediate",
-    "word": "spell",
-    "meaning": "咒语；符咒；魅力；连续的一段时间",
-    "group": 0,
-    "example": {
-      "text": "Spell out",
-      "meaning": "讲清楚",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "steal",
+    "meaning": "偷；窃取",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Steal a bike",
+      "meaning": "偷一辆自行车",
+      "kind": "phrase"
+    },
     "id": "intermediate-steal",
     "libraryId": "intermediate",
-    "word": "steal",
-    "meaning": "[stole-stolen] 偷盗；行窃；悄悄地移动；剽窃",
-    "group": 0,
-    "example": {
-      "text": "Steal away",
-      "meaning": "（把某物）偷走；溜掉",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-scientific",
     "libraryId": "intermediate",
     "word": "scientific",
-    "meaning": "科学的；科学上的；系统的；科学(上)的",
+    "meaning": "科学的，科学上的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Scientific research",
@@ -20785,26 +26142,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "terrorist",
+    "meaning": "恐怖分子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The police caught a terrorist.",
+      "meaning": "警察抓住了一名恐怖分子。",
+      "kind": "sentence"
+    },
     "id": "intermediate-terrorist",
     "libraryId": "intermediate",
-    "word": "terrorist",
-    "meaning": "恐怖主义者；恐怖分子",
-    "group": 0,
-    "example": {
-      "text": "A terrorist bomb that left 168 people dead",
-      "meaning": "恐怖分子引爆造成168人死亡的炸弹",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-attendant",
     "libraryId": "intermediate",
     "word": "attendant",
-    "meaning": "伴随的；随之而产生的；服务人员；侍者",
+    "meaning": "服务人员，侍者；随从",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Flight attendant",
-      "meaning": "空中服务人员",
+      "meaning": "空乘人员",
       "kind": "phrase"
     }
   },
@@ -20812,143 +26171,173 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-spend",
     "libraryId": "intermediate",
     "word": "spend",
-    "meaning": "[spent-spent] 花费；用；花；度过",
+    "meaning": "花费；度过",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Spend oneself",
-      "meaning": "精疲力竭，耗尽精力",
+      "text": "Spend money on",
+      "meaning": "把钱花在……上",
       "kind": "phrase"
     }
   },
   {
+    "word": "advantage",
+    "meaning": "优势；有利条件",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A clear advantage",
+      "meaning": "一个明显的优势",
+      "kind": "phrase"
+    },
+    "id": "intermediate-advantage",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "assistant",
+    "meaning": "助手；助理",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A classroom assistant",
+      "meaning": "一名课堂助教",
+      "kind": "phrase"
+    },
     "id": "intermediate-assistant",
     "libraryId": "intermediate",
-    "word": "assistant",
-    "meaning": "助理的；辅助的；助手；助教",
-    "group": 0,
-    "example": {
-      "text": "...the assistant secretary of defence.",
-      "meaning": "…助理国防部长。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "dessert",
+    "meaning": "餐后甜点",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A sweet dessert",
+      "meaning": "一份甜点",
+      "kind": "phrase"
+    },
     "id": "intermediate-dessert",
     "libraryId": "intermediate",
-    "word": "dessert",
-    "meaning": "甜食；甜点；餐后甜点；甜点心",
-    "group": 0,
-    "example": {
-      "text": "Dessert wine",
-      "meaning": "餐后甜酒",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "carrot",
+    "meaning": "胡萝卜",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A fresh carrot",
+      "meaning": "一根新鲜胡萝卜",
+      "kind": "phrase"
+    },
     "id": "intermediate-carrot",
     "libraryId": "intermediate",
-    "word": "carrot",
-    "meaning": "胡萝卜；胡罗卜",
-    "group": 0,
-    "example": {
-      "text": "Carrot and stick",
-      "meaning": "软硬兼施的；胡萝卜棍棒并用的",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-bicycle",
-    "libraryId": "intermediate",
     "word": "bicycle",
-    "meaning": "自行车；骑自行车",
-    "group": 0,
+    "meaning": "自行车",
+    "partOfSpeech": "n",
     "example": {
       "text": "Ride a bicycle",
       "meaning": "骑自行车",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-bicycle",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
+    "word": "kangaroo",
+    "meaning": "袋鼠",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A jumping kangaroo",
+      "meaning": "一只跳跃的袋鼠",
+      "kind": "phrase"
+    },
     "id": "intermediate-kangaroo",
     "libraryId": "intermediate",
-    "word": "kangaroo",
-    "meaning": "袋鼠；大袋鼠",
-    "group": 0,
-    "example": {
-      "text": "Kangaroo island",
-      "meaning": "n. 袋鼠岛（澳大利亚岛，等于坎加鲁岛）",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-awful",
     "libraryId": "intermediate",
     "word": "awful",
-    "meaning": "极坏的；糟糕的；令人不快的；可怕的",
+    "meaning": "糟糕的；极坏的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Awful weather",
-      "meaning": "气候恶劣；非常糟糕的天气",
+      "meaning": "糟糕的天气",
       "kind": "phrase"
     }
   },
   {
-    "id": "intermediate-yeah",
-    "libraryId": "intermediate",
     "word": "yeah",
     "meaning": "是的；对",
-    "group": 0,
+    "partOfSpeech": "int",
     "example": {
       "text": "Yeah, that sounds good.",
       "meaning": "对，听起来不错。",
       "kind": "sentence"
-    }
+    },
+    "id": "intermediate-yeah",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
+    "word": "resolution",
+    "meaning": "决心；决议；分辨率",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "She made a resolution to exercise.",
+      "meaning": "她下决心锻炼。",
+      "kind": "sentence",
+      "sense": "决心",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "决议",
+          "partOfSpeech": "n",
+          "text": "The council passed a resolution.",
+          "meaning": "议会通过了一项决议。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "分辨率",
+          "partOfSpeech": "n",
+          "text": "This screen has a high resolution.",
+          "meaning": "这个屏幕的分辨率很高。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-resolution",
     "libraryId": "intermediate",
-    "word": "resolution",
-    "meaning": "正式决定；决议；坚决；决心",
-    "group": 0,
-    "example": {
-      "text": "Frequency resolution",
-      "meaning": "频率分解",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-july",
-    "libraryId": "intermediate",
-    "word": "July",
-    "meaning": "七月",
-    "group": 0,
+    "word": "educate",
+    "meaning": "教育",
+    "partOfSpeech": "v",
     "example": {
-      "text": "In july",
-      "meaning": "在七月",
+      "text": "Educate young children",
+      "meaning": "教育幼儿",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-educate",
     "libraryId": "intermediate",
-    "word": "educate",
-    "meaning": "教育；培养；训练",
-    "group": 0,
-    "example": {
-      "text": "The Ormerod School educates handicapped children.",
-      "meaning": "奥默罗德学校的教育对象为残疾儿童。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-lighting",
     "libraryId": "intermediate",
     "word": "lighting",
-    "meaning": "照明；照明设备；光线",
+    "meaning": "照明；光线",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Lighting up",
-      "meaning": "点火",
+      "text": "Lighting design",
+      "meaning": "灯光设计，照明设计",
       "kind": "phrase"
     }
   },
@@ -20956,11 +26345,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-exam",
     "libraryId": "intermediate",
     "word": "exam",
-    "meaning": "考试；试题；检查；调查",
+    "meaning": "考试；检查",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Mid-term exam",
-      "meaning": "期中考试",
+      "text": "Take an exam",
+      "meaning": "参加考试",
       "kind": "phrase"
     }
   },
@@ -20968,7 +26358,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-poster",
     "libraryId": "intermediate",
     "word": "poster",
-    "meaning": "招贴；海报；广告",
+    "meaning": "招贴，海报，广告",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Poster design",
@@ -20980,7 +26371,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-throat",
     "libraryId": "intermediate",
     "word": "throat",
-    "meaning": "咽喉；嗓子；喉咙；嗓音",
+    "meaning": "咽喉，嗓子",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Sore throat",
@@ -20989,38 +26381,41 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "symphony",
+    "meaning": "交响曲",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Listen to a symphony",
+      "meaning": "听一首交响曲",
+      "kind": "phrase"
+    },
     "id": "intermediate-symphony",
     "libraryId": "intermediate",
-    "word": "symphony",
-    "meaning": "交响乐；交响曲；和谐；协调",
-    "group": 0,
-    "example": {
-      "text": "Symphony orchestra",
-      "meaning": "交响乐团",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "French",
+    "meaning": "法语",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Learn French",
+      "meaning": "学习法语",
+      "kind": "phrase"
+    },
     "id": "intermediate-french",
     "libraryId": "intermediate",
-    "word": "French",
-    "meaning": "法国人；法国的；法语的；法国人的",
-    "group": 0,
-    "example": {
-      "text": "French revolution",
-      "meaning": "法国大革命",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-vocabulary",
     "libraryId": "intermediate",
     "word": "vocabulary",
-    "meaning": "词汇；词汇量；词汇表；词表",
+    "meaning": "词汇；词汇量；词汇表",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Basic vocabulary",
-      "meaning": "基本词汇",
+      "text": "Grammar and vocabulary",
+      "meaning": "语法与词汇",
       "kind": "phrase"
     }
   },
@@ -21028,7 +26423,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-retire",
     "libraryId": "intermediate",
     "word": "retire",
-    "meaning": "退休；退役；退下；退出",
+    "meaning": "退休；退役",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Retire from",
@@ -21040,31 +26436,34 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-aggressive",
     "libraryId": "intermediate",
     "word": "aggressive",
-    "meaning": "侵犯的；侵略的；挑衅的；敢作敢为的",
+    "meaning": "好斗的；有进取心的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Aggressive attitude",
-      "meaning": "侵犯态度",
+      "text": "Aggressive behavior",
+      "meaning": "攻击性行为",
       "kind": "phrase"
     }
   },
   {
+    "word": "sweep",
+    "meaning": "扫；打扫",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Sweep the floor",
+      "meaning": "扫地",
+      "kind": "phrase"
+    },
     "id": "intermediate-sweep",
     "libraryId": "intermediate",
-    "word": "sweep",
-    "meaning": "[swept-swept] 扫；打扫；拂；扫过",
-    "group": 0,
-    "example": {
-      "text": "Sweep efficiency",
-      "meaning": "波及系数",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-unfriendly",
     "libraryId": "intermediate",
     "word": "unfriendly",
-    "meaning": "不友好的；冷漠的",
+    "meaning": "不友好的，冷漠的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "The old man looked cross and unfriendly.",
@@ -21077,6 +26476,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "fourteenth",
     "meaning": "第十四",
+    "partOfSpeech": "num",
     "group": 0,
     "example": {
       "text": "The fourteenth chapter",
@@ -21085,94 +26485,118 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
-    "id": "intermediate-photo",
-    "libraryId": "intermediate",
-    "word": "photo",
-    "meaning": "照片；相片",
-    "group": 0,
+    "word": "thirtieth",
+    "meaning": "第三十",
+    "partOfSpeech": "num",
     "example": {
-      "text": "Photo gallery",
-      "meaning": "图片库",
+      "text": "The thirtieth day",
+      "meaning": "第三十天",
       "kind": "phrase"
-    }
-  },
-  {
+    },
     "id": "intermediate-thirtieth",
     "libraryId": "intermediate",
-    "word": "thirtieth",
-    "meaning": "第三十；三十分之一",
-    "group": 0,
-    "example": {
-      "text": "Thirty-three thousand people think that Thursday is their thirtieth birthday.",
-      "meaning": "三万三千人认为星期四是他们的第三十个生日。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "rural",
+    "meaning": "乡村的；农村的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A rural school",
+      "meaning": "一所乡村学校",
+      "kind": "phrase"
+    },
     "id": "intermediate-rural",
     "libraryId": "intermediate",
-    "word": "rural",
-    "meaning": "乡村的；农村的；田园的",
-    "group": 0,
-    "example": {
-      "text": "Rural economics",
-      "meaning": "农村经济",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-leave",
     "libraryId": "intermediate",
     "word": "leave",
-    "meaning": "[left-left] 离开；出发；留下；遗留",
+    "meaning": "离开；留下；休假",
+    "partOfSpeech": "v/n",
     "group": 0,
     "example": {
-      "text": "Leave home",
-      "meaning": "离开家",
-      "kind": "phrase"
+      "text": "We leave at seven.",
+      "meaning": "我们七点离开。",
+      "kind": "sentence",
+      "sense": "离开",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "留下",
+          "partOfSpeech": "v",
+          "text": "Leave your bag here.",
+          "meaning": "把你的包留在这里。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "休假",
+          "partOfSpeech": "n",
+          "text": "She is on leave this week.",
+          "meaning": "她这周休假。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "seventeenth",
+    "meaning": "第十七",
+    "partOfSpeech": "num",
+    "example": {
+      "text": "The seventeenth page",
+      "meaning": "第十七页",
+      "kind": "phrase"
+    },
     "id": "intermediate-seventeenth",
     "libraryId": "intermediate",
-    "word": "seventeenth",
-    "meaning": "第十七；十七分之一",
-    "group": 0,
-    "example": {
-      "text": "The seventeenth to Hezir, the eighteenth to Aphses.",
-      "meaning": "第十七是希悉，第十八是哈辟悉。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "shelf",
+    "meaning": "架子；搁板",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A book on the shelf",
+      "meaning": "架子上的书",
+      "kind": "phrase"
+    },
     "id": "intermediate-shelf",
     "libraryId": "intermediate",
-    "word": "shelf",
-    "meaning": "架子；搁板；搁板状物；暗礁",
-    "group": 0,
-    "example": {
-      "text": "Book shelf",
-      "meaning": "书架",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "shell",
+    "meaning": "外壳；炮弹",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The egg has a hard shell.",
+      "meaning": "鸡蛋有一层硬壳。",
+      "kind": "sentence",
+      "sense": "外壳",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "炮弹",
+          "partOfSpeech": "n",
+          "text": "A shell exploded near the bridge.",
+          "meaning": "一枚炮弹在桥附近爆炸了。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-shell",
     "libraryId": "intermediate",
-    "word": "shell",
-    "meaning": "剥…的壳；炮击；壳；贝壳",
-    "group": 0,
-    "example": {
-      "text": "Shell structure",
-      "meaning": "壳结构",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-therefore",
     "libraryId": "intermediate",
     "word": "therefore",
-    "meaning": "因此；所以",
+    "meaning": "因此，所以",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "Their car was bigger and therefore more comfortable.",
@@ -21184,11 +26608,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-exchange",
     "libraryId": "intermediate",
     "word": "exchange",
-    "meaning": "调换；交换；互换；交易所",
+    "meaning": "交换，互换；交易所；兑换，兑换率",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Stock exchange",
-      "meaning": "证券交易所",
+      "text": "In exchange for",
+      "meaning": "作为…的交换",
       "kind": "phrase"
     }
   },
@@ -21196,11 +26621,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-bored",
     "libraryId": "intermediate",
     "word": "bored",
-    "meaning": "无聊的；无趣的；厌烦的；烦人的",
+    "meaning": "无聊的，无趣的；厌烦的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Bored pile",
-      "meaning": "螺旋钻孔桩；填充桩；螺旋桩",
+      "text": "Get bored",
+      "meaning": "感到厌烦；感到无聊",
       "kind": "phrase"
     }
   },
@@ -21208,11 +26634,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-choose",
     "libraryId": "intermediate",
     "word": "choose",
-    "meaning": "[chose-chosen] 选择；挑选；选择；决定",
+    "meaning": "选择，挑选",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "As you choose",
-      "meaning": "随你的便",
+      "text": "Choose to do",
+      "meaning": "选择去做某事",
       "kind": "phrase"
     }
   },
@@ -21220,11 +26647,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-ride",
     "libraryId": "intermediate",
     "word": "ride",
-    "meaning": "骑；乘；骑马；乘车",
+    "meaning": "骑；乘",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Bus ride",
-      "meaning": "乘公共汽车",
+      "text": "Ride a bike",
+      "meaning": "骑自行车",
       "kind": "phrase"
     }
   },
@@ -21232,11 +26660,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-behave",
     "libraryId": "intermediate",
     "word": "behave",
-    "meaning": "表现；表现得体；有礼貌；运转",
+    "meaning": "表现；表现得体，有礼貌；运转",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Behave oneself",
-      "meaning": "使举止规矩",
+      "text": "Behave well",
+      "meaning": "表现好",
       "kind": "phrase"
     }
   },
@@ -21244,11 +26673,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-medal",
     "libraryId": "intermediate",
     "word": "medal",
-    "meaning": "奖牌；奖章；勋章；纪念章",
+    "meaning": "奖牌；勋章",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Medal tally",
-      "meaning": "奖牌总数",
+      "text": "Win a gold medal",
+      "meaning": "赢得金牌",
       "kind": "phrase"
     }
   },
@@ -21256,55 +26686,78 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-mistake",
     "libraryId": "intermediate",
     "word": "mistake",
-    "meaning": "〔行为、看法、言辞等上的〕错误；弄错；误解；误会",
+    "meaning": "错误；失误",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Make mistake",
-      "meaning": "犯错",
+      "text": "Make a mistake",
+      "meaning": "犯错误",
       "kind": "phrase"
     }
   },
   {
+    "word": "pour",
+    "meaning": "倒；倾倒",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Pour some water",
+      "meaning": "倒一些水",
+      "kind": "phrase"
+    },
     "id": "intermediate-pour",
     "libraryId": "intermediate",
-    "word": "pour",
-    "meaning": "灌；倒；倾泻；流出",
-    "group": 0,
-    "example": {
-      "text": "Pour water",
-      "meaning": "倒水",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "popcorn",
+    "meaning": "爆米花",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A bag of popcorn",
+      "meaning": "一袋爆米花",
+      "kind": "phrase"
+    },
     "id": "intermediate-popcorn",
     "libraryId": "intermediate",
-    "word": "popcorn",
-    "meaning": "爆米花；爆玉米花",
-    "group": 0,
-    "example": {
-      "text": "That one next to the one that look like popcorn.",
-      "meaning": "那朵看起来像爆米花的旁边的那朵。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "spot",
+    "meaning": "地点；斑点；发现",
+    "partOfSpeech": "n/v",
+    "example": {
+      "text": "This is a good spot for a picnic.",
+      "meaning": "这是个野餐的好地方。",
+      "kind": "sentence",
+      "sense": "地点",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "斑点",
+          "partOfSpeech": "n",
+          "text": "The dog has a black spot on its back.",
+          "meaning": "狗背上有一个黑色斑点。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "发现",
+          "partOfSpeech": "v",
+          "text": "Can you spot the difference?",
+          "meaning": "你能发现区别吗？",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-spot",
     "libraryId": "intermediate",
-    "word": "spot",
-    "meaning": "地点；处所；斑点；污点",
-    "group": 0,
-    "example": {
-      "text": "Spot market",
-      "meaning": "现货市场",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-silver",
     "libraryId": "intermediate",
     "word": "silver",
-    "meaning": "镀银；银；银器；银币",
+    "meaning": "银；银器；银币",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "A silver ring",
@@ -21313,22 +26766,24 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "aid",
+    "meaning": "帮助；援助",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Give aid to others",
+      "meaning": "帮助他人",
+      "kind": "phrase"
+    },
     "id": "intermediate-aid",
     "libraryId": "intermediate",
-    "word": "aid",
-    "meaning": "帮助；救助；助手；辅助手段",
-    "group": 0,
-    "example": {
-      "text": "Legal aid",
-      "meaning": "法律援助",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-singer",
     "libraryId": "intermediate",
     "word": "singer",
-    "meaning": "歌手；歌唱家",
+    "meaning": "歌手",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Pop singer",
@@ -21337,34 +26792,50 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "aim",
+    "meaning": "瞄准；以……为目标",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Aim at the target",
+      "meaning": "瞄准目标",
+      "kind": "phrase"
+    },
     "id": "intermediate-aim",
     "libraryId": "intermediate",
-    "word": "aim",
-    "meaning": "瞄准；对准；目的是；旨在",
-    "group": 0,
-    "example": {
-      "text": "Take aim",
-      "meaning": "瞄准",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "confident",
+    "meaning": "自信的",
+    "example": {
+      "text": "A confident smile",
+      "meaning": "自信的微笑",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "adj",
+    "id": "intermediate-confident",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "local",
+    "meaning": "当地的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A local shop",
+      "meaning": "一家当地商店",
+      "kind": "phrase"
+    },
     "id": "intermediate-local",
     "libraryId": "intermediate",
-    "word": "local",
-    "meaning": "地方性的；本地的；局部的；狭隘的",
-    "group": 0,
-    "example": {
-      "text": "Local time",
-      "meaning": "当地时间",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-restroom",
     "libraryId": "intermediate",
     "word": "restroom",
     "meaning": "洗手间",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Where is the restroom?",
@@ -21373,94 +26844,102 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "polar",
+    "meaning": "极地的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A polar bear",
+      "meaning": "一只北极熊",
+      "kind": "phrase"
+    },
     "id": "intermediate-polar",
     "libraryId": "intermediate",
-    "word": "polar",
-    "meaning": "地极的；近地极的；磁极的；正好相反的",
-    "group": 0,
-    "example": {
-      "text": "Polar bear",
-      "meaning": "北极熊",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-shark",
     "libraryId": "intermediate",
     "word": "shark",
-    "meaning": "鲨鱼；勒索者；诈骗者；放高利贷的人",
+    "meaning": "鲨鱼",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Whale shark",
-      "meaning": "鲸鲨",
+      "text": "Shark fin",
+      "meaning": "鱼翅",
       "kind": "phrase"
     }
   },
   {
+    "word": "more",
+    "meaning": "更多的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "More information",
+      "meaning": "更多信息",
+      "kind": "phrase"
+    },
     "id": "intermediate-more",
     "libraryId": "intermediate",
-    "word": "more",
-    "meaning": "更；更多；更多的；更大的",
-    "group": 0,
-    "example": {
-      "text": "And more",
-      "meaning": "更多",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-shake",
     "libraryId": "intermediate",
     "word": "shake",
-    "meaning": "[shook-shaken] 摇动；摇；颤抖；震动",
+    "meaning": "摇动；颤抖；握手",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Shake off",
-      "meaning": "摆脱；抖落",
+      "text": "Shake hands with",
+      "meaning": "与……握手",
       "kind": "phrase"
     }
   },
   {
+    "word": "honor",
+    "meaning": "荣幸；荣誉",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An honor to meet you",
+      "meaning": "很荣幸见到你",
+      "kind": "phrase"
+    },
     "id": "intermediate-honor",
     "libraryId": "intermediate",
-    "word": "honor",
-    "meaning": "尊敬；敬意；荣誉；光荣",
-    "group": 0,
-    "example": {
-      "text": "Honor roll",
-      "meaning": "中小学优等学生名单",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "cage",
+    "meaning": "笼子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A bird cage",
+      "meaning": "一个鸟笼",
+      "kind": "phrase"
+    },
     "id": "intermediate-cage",
     "libraryId": "intermediate",
-    "word": "cage",
-    "meaning": "笼子；笼；兽笼；牢房",
-    "group": 0,
-    "example": {
-      "text": "Squirrel cage",
-      "meaning": "adj. 鼠笼式的",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "unhealthy",
+    "meaning": "不健康的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Unhealthy food",
+      "meaning": "不健康的食物",
+      "kind": "phrase"
+    },
     "id": "intermediate-unhealthy",
     "libraryId": "intermediate",
-    "word": "unhealthy",
-    "meaning": "不健康的；危险的；有害身心健康的",
-    "group": 0,
-    "example": {
-      "text": "Unhealthy tendency",
-      "meaning": "不正之风",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-insect",
     "libraryId": "intermediate",
     "word": "insect",
-    "meaning": "昆虫；虫；卑鄙的人",
+    "meaning": "昆虫",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Insect pest",
@@ -21472,43 +26951,58 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-net",
     "libraryId": "intermediate",
     "word": "net",
-    "meaning": "净的；纯的；网；网状系统",
+    "meaning": "网；净额的",
+    "partOfSpeech": "n/adj",
     "group": 0,
     "example": {
-      "text": "Net profit",
-      "meaning": "净利润",
-      "kind": "phrase"
+      "text": "The fish was caught in a net.",
+      "meaning": "鱼被网住了。",
+      "kind": "sentence",
+      "sense": "网",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "净额的",
+          "partOfSpeech": "adj",
+          "text": "Our net profit increased this year.",
+          "meaning": "我们今年的净利润增加了。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "border",
+    "meaning": "边界",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A national border",
+      "meaning": "一条国界",
+      "kind": "phrase"
+    },
     "id": "intermediate-border",
     "libraryId": "intermediate",
-    "word": "border",
-    "meaning": "给…加上边；围；邻接；毗连",
-    "group": 0,
-    "example": {
-      "text": "Border area",
-      "meaning": "边境区域",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "shall",
+    "meaning": "将；会（用于提议或征求意见）",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Shall we go now?",
+      "meaning": "我们现在走好吗？",
+      "kind": "sentence"
+    },
     "id": "intermediate-shall",
     "libraryId": "intermediate",
-    "word": "shall",
-    "meaning": "〔某事〕必定；一定〔发生〕；应；会",
-    "group": 0,
-    "example": {
-      "text": "Shall we",
-      "meaning": "我们…好吗",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-nearby",
     "libraryId": "intermediate",
     "word": "nearby",
-    "meaning": "在附近；附近的；邻近的；在…附近",
+    "meaning": "在附近",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "He might easily have been seen by someone who lived nearby.",
@@ -21520,107 +27014,116 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-pronoun",
     "libraryId": "intermediate",
     "word": "pronoun",
-    "meaning": "代词；代名词",
+    "meaning": "代词",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Personal pronoun",
-      "meaning": "n. 人称代名词",
+      "text": "Demonstrative pronoun",
+      "meaning": "指示代词",
       "kind": "phrase"
     }
   },
   {
+    "word": "talented",
+    "meaning": "有天赋的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A talented musician",
+      "meaning": "有天赋的音乐家",
+      "kind": "phrase"
+    },
     "id": "intermediate-talented",
     "libraryId": "intermediate",
-    "word": "talented",
-    "meaning": "有才能的；有才干的；天才的",
-    "group": 0,
-    "example": {
-      "text": "Talented person",
-      "meaning": "人才；有天赋的人",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "predict",
+    "meaning": "预测；预言",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Predict the weather",
+      "meaning": "预测天气",
+      "kind": "phrase"
+    },
     "id": "intermediate-predict",
     "libraryId": "intermediate",
-    "word": "predict",
-    "meaning": "预言；预测；预报；预知",
-    "group": 0,
-    "example": {
-      "text": "As Liz had predicted , the rumours were soon forgotten.",
-      "meaning": "正如利兹所预料的，流言很快就被淡忘了。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "saying",
+    "meaning": "谚语；格言",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An old saying",
+      "meaning": "一句古老的谚语",
+      "kind": "phrase"
+    },
     "id": "intermediate-saying",
     "libraryId": "intermediate",
-    "word": "saying",
-    "meaning": "话；言语；俗话；成语",
-    "group": 0,
-    "example": {
-      "text": "Common saying",
-      "meaning": "n. 俗谚",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-france",
     "libraryId": "intermediate",
     "word": "France",
-    "meaning": "法国；法兰西",
+    "meaning": "法国",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "France telecom",
-      "meaning": "法国电信公司",
+      "text": "Made in France",
+      "meaning": "法国制造",
       "kind": "phrase"
     }
   },
   {
+    "word": "specific",
+    "meaning": "具体的；特定的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A specific question",
+      "meaning": "一个具体的问题",
+      "kind": "phrase"
+    },
     "id": "intermediate-specific",
     "libraryId": "intermediate",
-    "word": "specific",
-    "meaning": "特定的；特有的；明确的；具体的",
-    "group": 0,
-    "example": {
-      "text": "Specific gravity",
-      "meaning": "比重",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "super",
+    "meaning": "极好的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A super idea",
+      "meaning": "一个极好的主意",
+      "kind": "phrase"
+    },
     "id": "intermediate-super",
     "libraryId": "intermediate",
-    "word": "super",
-    "meaning": "极好的；上等的；超级的；过分的",
-    "group": 0,
-    "example": {
-      "text": "Super bowl",
-      "meaning": "美国橄榄球超级杯大赛",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "chore",
+    "meaning": "日常杂务",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Household chores",
+      "meaning": "家务事",
+      "kind": "phrase"
+    },
     "id": "intermediate-chore",
     "libraryId": "intermediate",
-    "word": "chore",
-    "meaning": "家庭杂务；困难的工作；令人厌烦的工作",
-    "group": 0,
-    "example": {
-      "text": "Everyday chores like shopping and housework",
-      "meaning": "购物和做家务之类的日常琐事",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-semester",
     "libraryId": "intermediate",
     "word": "semester",
     "meaning": "学期",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Spring semester",
-      "meaning": "春季学期",
+      "text": "Fall semester",
+      "meaning": "秋季学期",
       "kind": "phrase"
     }
   },
@@ -21628,7 +27131,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-strategy",
     "libraryId": "intermediate",
     "word": "strategy",
-    "meaning": "谋略；战略；策略",
+    "meaning": "谋略，战略，策略",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Development strategy",
@@ -21640,23 +27144,25 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-dull",
     "libraryId": "intermediate",
     "word": "dull",
-    "meaning": "乏味的；单调的；晦暗的；愚钝的",
+    "meaning": "乏味的；阴沉的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Life is never dull when Elizabeth is here.",
-      "meaning": "有伊丽莎白在这里生活绝不会无聊。",
-      "kind": "sentence"
+      "text": "A dull lecture",
+      "meaning": "一场乏味的讲座",
+      "kind": "phrase"
     }
   },
   {
     "id": "intermediate-reason",
     "libraryId": "intermediate",
     "word": "reason",
-    "meaning": "推断；分析；推论；推理",
+    "meaning": "原因，理由；理性，理智",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Main reason",
-      "meaning": "主要原因",
+      "text": "For this reason",
+      "meaning": "为此；由于这个原因",
       "kind": "phrase"
     }
   },
@@ -21664,23 +27170,43 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-ring",
     "libraryId": "intermediate",
     "word": "ring",
-    "meaning": "戒指；环；圆圈；铃声",
+    "meaning": "戒指；环；响铃",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Ring road",
-      "meaning": "环形公路",
-      "kind": "phrase"
+      "text": "She wore a silver ring.",
+      "meaning": "她戴着一枚银戒指。",
+      "kind": "sentence",
+      "sense": "戒指",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "环",
+          "partOfSpeech": "n",
+          "text": "The planet has a ring of ice.",
+          "meaning": "这颗行星有一个冰环。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "响铃",
+          "partOfSpeech": "v",
+          "text": "The bell will ring at noon.",
+          "meaning": "铃将在中午响起。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-legend",
     "libraryId": "intermediate",
     "word": "legend",
-    "meaning": "传说；传奇人物；传奇；传奇故事",
+    "meaning": "传说；传奇人物",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Urban legend",
-      "meaning": "n. 都市传奇，传闻",
+      "meaning": "都市传奇",
       "kind": "phrase"
     }
   },
@@ -21688,7 +27214,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-professional",
     "libraryId": "intermediate",
     "word": "professional",
-    "meaning": "职业的；专业的；专业人员；自由职业者",
+    "meaning": "职业的；专业的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Professional development",
@@ -21697,22 +27224,24 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "nineteenth",
+    "meaning": "第十九",
+    "partOfSpeech": "num",
+    "example": {
+      "text": "The nineteenth page",
+      "meaning": "第十九页",
+      "kind": "phrase"
+    },
     "id": "intermediate-nineteenth",
     "libraryId": "intermediate",
-    "word": "nineteenth",
-    "meaning": "第十九；十九分之一",
-    "group": 0,
-    "example": {
-      "text": "The nineteenth to Pethahiah, the twentieth to Jehezekel.",
-      "meaning": "第十九是毗他希雅，第二十是以西结。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-neighbor",
     "libraryId": "intermediate",
     "word": "neighbor",
     "meaning": "邻居；邻国",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Good neighbor",
@@ -21724,11 +27253,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-gentle",
     "libraryId": "intermediate",
     "word": "gentle",
-    "meaning": "温柔的；慈祥的；文雅的；有礼貌的",
+    "meaning": "温柔的；温和的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Gentle slope",
-      "meaning": "缓坡；平缓坡度；平缓倾斜",
+      "text": "Gentle and soft",
+      "meaning": "温柔",
       "kind": "phrase"
     }
   },
@@ -21736,79 +27266,86 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-boil",
     "libraryId": "intermediate",
     "word": "boil",
-    "meaning": "沸腾；煮沸；激动；激昂",
+    "meaning": "沸腾；煮沸",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Bring water to the boil",
-      "meaning": "把水烧开",
+      "text": "Boil some water",
+      "meaning": "烧些水",
       "kind": "phrase"
     }
   },
   {
+    "word": "envelope",
+    "meaning": "信封",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An empty envelope",
+      "meaning": "一个空信封",
+      "kind": "phrase"
+    },
     "id": "intermediate-envelope",
     "libraryId": "intermediate",
-    "word": "envelope",
-    "meaning": "信封；封皮；包膜；[天] 包层",
-    "group": 0,
-    "example": {
-      "text": "Flight envelope",
-      "meaning": "飞行包线",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-turkey",
     "libraryId": "intermediate",
     "word": "turkey",
-    "meaning": "火鸡；[T-] 土耳其；笨蛋；失败之作",
+    "meaning": "火鸡",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Cold turkey",
-      "meaning": "突然完全停止使用毒品",
+      "text": "Roast turkey",
+      "meaning": "烤火鸡；烧火鸡",
       "kind": "phrase"
     }
   },
   {
+    "word": "tasty",
+    "meaning": "美味的；可口的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A tasty meal",
+      "meaning": "一顿美味的饭菜",
+      "kind": "phrase"
+    },
     "id": "intermediate-tasty",
     "libraryId": "intermediate",
-    "word": "tasty",
-    "meaning": "美味的；引起食欲的；好吃的东西；吸引人的东西",
-    "group": 0,
-    "example": {
-      "text": "A simple but tasty meal",
-      "meaning": "简单而可口的饭菜",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "helicopter",
+    "meaning": "直升机",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A rescue helicopter",
+      "meaning": "一架救援直升机",
+      "kind": "phrase"
+    },
     "id": "intermediate-helicopter",
     "libraryId": "intermediate",
-    "word": "helicopter",
-    "meaning": "直升机；[航] 直升飞机；[航] 乘直升飞机；由直升机运送",
-    "group": 0,
-    "example": {
-      "text": "They were succoured from the fire by the rescue helicopter.",
-      "meaning": "他们被援救的直升机从大火中解救了出来。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "are",
+    "meaning": "是",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "You are my friend.",
+      "meaning": "你是我的朋友。",
+      "kind": "sentence"
+    },
     "id": "intermediate-are",
     "libraryId": "intermediate",
-    "word": "are",
-    "meaning": "存在；是；是（be的第二人称单复数现在式）；公亩",
-    "group": 0,
-    "example": {
-      "text": "There are",
-      "meaning": "有",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-disabled",
     "libraryId": "intermediate",
     "word": "disabled",
-    "meaning": "有残疾的；残废的；有缺陷的；使…失去能力（disable的过去分词）",
+    "meaning": "有残疾的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Disabled people",
@@ -21817,26 +27354,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
-    "id": "intermediate-mom",
-    "libraryId": "intermediate",
     "word": "mom",
     "meaning": "妈妈",
-    "group": 0,
+    "partOfSpeech": "n",
     "example": {
-      "text": "Soccer mom",
-      "meaning": "n. 足球妈妈；非常重视小孩休闲活动，亲自开车接送小孩参加运动，活动的母亲",
+      "text": "My mom and dad",
+      "meaning": "我的爸爸妈妈",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-mom",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-tour",
     "libraryId": "intermediate",
     "word": "tour",
-    "meaning": "旅行；旅游；[C] 参观；观光",
+    "meaning": "旅行，旅游",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Tour guide",
-      "meaning": "导游人员",
+      "text": "Tour group",
+      "meaning": "旅行团；旅游团队",
       "kind": "phrase"
     }
   },
@@ -21844,95 +27383,145 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-calm",
     "libraryId": "intermediate",
     "word": "calm",
-    "meaning": "镇静的；镇定的；平静的；无风的",
+    "meaning": "镇静的，镇定的；平静的，无风的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Keep calm",
-      "meaning": "保持冷静",
+      "text": "Calm down",
+      "meaning": "平静下来；镇定下来",
       "kind": "phrase"
     }
   },
   {
-    "id": "intermediate-jazz",
-    "libraryId": "intermediate",
     "word": "jazz",
-    "meaning": "爵士乐的；爵士乐；爵士舞；喧闹",
-    "group": 0,
+    "meaning": "爵士乐",
+    "partOfSpeech": "n",
     "example": {
       "text": "Jazz music",
-      "meaning": "n. 爵士乐",
+      "meaning": "爵士音乐",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-jazz",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
+    "word": "view",
+    "meaning": "景色；观点；观看",
+    "partOfSpeech": "n/v",
+    "example": {
+      "text": "The room has a sea view.",
+      "meaning": "这间房可以看到海景。",
+      "kind": "sentence",
+      "sense": "景色",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "观点",
+          "partOfSpeech": "n",
+          "text": "What is your view on the plan?",
+          "meaning": "你对这个计划有什么看法？",
+          "kind": "sentence"
+        },
+        {
+          "sense": "观看",
+          "partOfSpeech": "v",
+          "text": "You can view the paintings online.",
+          "meaning": "你可以在线欣赏这些画作。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-view",
     "libraryId": "intermediate",
-    "word": "view",
-    "meaning": "考虑；认为；观察；看",
-    "group": 0,
-    "example": {
-      "text": "World view",
-      "meaning": "n. 世界观",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-furniture",
     "libraryId": "intermediate",
     "word": "furniture",
-    "meaning": "家具；〈总称〉 家具；装置；设备",
+    "meaning": "家具",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Furniture design",
-      "meaning": "家具设计",
+      "text": "Living room furniture",
+      "meaning": "起居室家具",
       "kind": "phrase"
     }
   },
   {
+    "word": "donate",
+    "meaning": "捐赠",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Donate books",
+      "meaning": "捐赠书籍",
+      "kind": "phrase"
+    },
     "id": "intermediate-donate",
     "libraryId": "intermediate",
-    "word": "donate",
-    "meaning": "捐赠；赠送",
-    "group": 0,
-    "example": {
-      "text": "Donate money",
-      "meaning": "捐款",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "might",
+    "meaning": "可能；力量",
+    "partOfSpeech": "v/n",
+    "example": {
+      "text": "It might rain this evening.",
+      "meaning": "今晚可能会下雨。",
+      "kind": "sentence",
+      "sense": "可能",
+      "partOfSpeech": "modal verb",
+      "additional": [
+        {
+          "sense": "力量",
+          "partOfSpeech": "n",
+          "text": "He pushed with all his might.",
+          "meaning": "他用尽全力推。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-might",
     "libraryId": "intermediate",
-    "word": "might",
-    "meaning": "可以〔用于礼貌地提出建议〕；力量；威力；权力",
-    "group": 0,
-    "example": {
-      "text": "Might well",
-      "meaning": "有可能",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "worse",
+    "meaning": "更糟的；更差的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Worse weather",
+      "meaning": "更糟的天气",
+      "kind": "phrase"
+    },
     "id": "intermediate-worse",
     "libraryId": "intermediate",
-    "word": "worse",
-    "meaning": "更坏的；更糟的；更差的；更差[坏]的事物",
-    "group": 0,
+    "group": 0
+  },
+  {
+    "word": "volunteer",
+    "meaning": "志愿者",
     "example": {
-      "text": "There’s nothing worse than being robbed while you’re on holiday.",
-      "meaning": "没有比度假时被抢劫更糟的了。",
-      "kind": "sentence"
-    }
+      "text": "A volunteer teacher",
+      "meaning": "一位志愿教师",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-volunteer",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-worst",
     "libraryId": "intermediate",
     "word": "worst",
-    "meaning": "最坏；最差；最糟；最差的",
+    "meaning": "最坏的；最差的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Worst case",
-      "meaning": "最糟糕的情况；最坏条件",
+      "text": "Worst of all",
+      "meaning": "最糟糕的是",
       "kind": "phrase"
     }
   },
@@ -21940,55 +27529,60 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-clothing",
     "libraryId": "intermediate",
     "word": "clothing",
-    "meaning": "服装；衣着；（总称）[服装] 服装；帆装",
+    "meaning": "服装，衣着",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Clothing shop",
-      "meaning": "服装店",
+      "text": "Clothing industry",
+      "meaning": "服装工业",
       "kind": "phrase"
     }
   },
   {
+    "word": "string",
+    "meaning": "细绳；线",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A piece of string",
+      "meaning": "一根细绳",
+      "kind": "phrase"
+    },
     "id": "intermediate-string",
     "libraryId": "intermediate",
-    "word": "string",
-    "meaning": "弦；线；细绳；一串",
-    "group": 0,
-    "example": {
-      "text": "Character string",
-      "meaning": "n. 字符串",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-distance",
     "libraryId": "intermediate",
     "word": "distance",
-    "meaning": "距离；间距；遥远；远方",
+    "meaning": "距离；远方",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Walking distance",
-      "meaning": "步行距离",
+      "text": "At a distance",
+      "meaning": "在远处；有相当距离",
       "kind": "phrase"
     }
   },
   {
+    "word": "color",
+    "meaning": "颜色",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A bright color",
+      "meaning": "一种鲜艳的颜色",
+      "kind": "phrase"
+    },
     "id": "intermediate-color",
     "libraryId": "intermediate",
-    "word": "color",
-    "meaning": "颜色；颜料；肤色；给…着色",
-    "group": 0,
-    "example": {
-      "text": "Color image",
-      "meaning": "彩色图像",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-mars",
     "libraryId": "intermediate",
     "word": "Mars",
     "meaning": "火星",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "The surface of Mars",
@@ -21997,38 +27591,41 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "statement",
+    "meaning": "陈述；声明",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A short statement",
+      "meaning": "简短的声明",
+      "kind": "phrase"
+    },
     "id": "intermediate-statement",
     "libraryId": "intermediate",
-    "word": "statement",
-    "meaning": "陈述；声明；结算单；报表",
-    "group": 0,
-    "example": {
-      "text": "Joint statement",
-      "meaning": "联合声明",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "rise",
+    "meaning": "上升；升起；增加",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Prices are rising.",
+      "meaning": "物价在上涨。",
+      "kind": "sentence"
+    },
     "id": "intermediate-rise",
     "libraryId": "intermediate",
-    "word": "rise",
-    "meaning": "[rose-risen] 升起；上升；起立；起床",
-    "group": 0,
-    "example": {
-      "text": "Rise again",
-      "meaning": "死而复生",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-penny",
     "libraryId": "intermediate",
     "word": "penny",
-    "meaning": "便士；分；（美）分；(英)便士",
+    "meaning": "便士，分",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Pretty penny",
-      "meaning": "一大笔钱；大数目之金钱",
+      "text": "Not a penny",
+      "meaning": "不名一文，一分钱也没有",
       "kind": "phrase"
     }
   },
@@ -22036,95 +27633,128 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-rent",
     "libraryId": "intermediate",
     "word": "rent",
-    "meaning": "租借；租用；出租；出借",
+    "meaning": "租金；出租",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Rent out",
-      "meaning": "租出",
+      "text": "Pay the rent",
+      "meaning": "付租金",
       "kind": "phrase"
     }
   },
   {
-    "id": "intermediate-anxious",
-    "libraryId": "intermediate",
     "word": "anxious",
-    "meaning": "焦虑的；发愁的；令人焦急的；渴望的",
-    "group": 0,
+    "meaning": "焦虑的；担忧的",
+    "partOfSpeech": "adj",
     "example": {
       "text": "Feel anxious",
-      "meaning": "变得着急",
+      "meaning": "感到焦虑",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-anxious",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
+    "word": "slice",
+    "meaning": "薄片；一片",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A slice of bread",
+      "meaning": "一片面包",
+      "kind": "phrase"
+    },
     "id": "intermediate-slice",
     "libraryId": "intermediate",
-    "word": "slice",
-    "meaning": "切成片；削；薄片；切片",
-    "group": 0,
-    "example": {
-      "text": "Thin slice",
-      "meaning": "薄片",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "fax",
+    "meaning": "传真",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Send a fax",
+      "meaning": "发一份传真",
+      "kind": "phrase"
+    },
     "id": "intermediate-fax",
     "libraryId": "intermediate",
-    "word": "fax",
-    "meaning": "传真；传真电文",
-    "group": 0,
-    "example": {
-      "text": "Fax machine",
-      "meaning": "传真机",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "case",
+    "meaning": "情况；案件；箱子；病例",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "That is not always the case.",
+      "meaning": "情况并非总是如此。",
+      "kind": "sentence",
+      "sense": "情况",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "案件",
+          "partOfSpeech": "n",
+          "text": "The police are investigating the case.",
+          "meaning": "警方正在调查这起案件。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "箱子",
+          "partOfSpeech": "n",
+          "text": "He put the violin in its case.",
+          "meaning": "他把小提琴放进琴盒。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "病例",
+          "partOfSpeech": "n",
+          "text": "The doctor is treating a difficult case.",
+          "meaning": "医生正在治疗一个疑难病例。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-case",
     "libraryId": "intermediate",
-    "word": "case",
-    "meaning": "事例；实例；情况；事实",
-    "group": 0,
-    "example": {
-      "text": "In case",
-      "meaning": "conj. 万一；假使",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "phone",
+    "meaning": "电话",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Answer the phone",
+      "meaning": "接电话",
+      "kind": "phrase"
+    },
     "id": "intermediate-phone",
     "libraryId": "intermediate",
-    "word": "phone",
-    "meaning": "打电话；电话；电话机；耳机",
-    "group": 0,
-    "example": {
-      "text": "Phone number",
-      "meaning": "电话号码",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "slide",
+    "meaning": "滑动；滑行",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Slide down a hill",
+      "meaning": "从山坡上滑下来",
+      "kind": "phrase"
+    },
     "id": "intermediate-slide",
     "libraryId": "intermediate",
-    "word": "slide",
-    "meaning": "（使）滑行；（使）滑动；滑梯；滑动",
-    "group": 0,
-    "example": {
-      "text": "Slide show",
-      "meaning": "放映幻灯片",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-style",
     "libraryId": "intermediate",
     "word": "style",
-    "meaning": "风格；文体；式样；类型",
+    "meaning": "风格；款式",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "New style",
-      "meaning": "n. 新历",
+      "text": "A simple style",
+      "meaning": "简洁的风格",
       "kind": "phrase"
     }
   },
@@ -22132,67 +27762,91 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-jungle",
     "libraryId": "intermediate",
     "word": "jungle",
-    "meaning": "丛林；密林；危险地带；丛林的",
+    "meaning": "丛林，密林",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Concrete jungle",
-      "meaning": "水泥丛林；立体丛林；混凝土建成的野兽世界",
+      "meaning": "水泥丛林",
       "kind": "phrase"
     }
   },
   {
+    "word": "suit",
+    "meaning": "套装；适合；诉讼",
+    "partOfSpeech": "n/v",
+    "example": {
+      "text": "He wore a dark suit.",
+      "meaning": "他穿着一套深色套装。",
+      "kind": "sentence",
+      "sense": "套装",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "适合",
+          "partOfSpeech": "v",
+          "text": "This time does not suit me.",
+          "meaning": "这个时间不适合我。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "诉讼",
+          "partOfSpeech": "n",
+          "text": "The company filed a suit.",
+          "meaning": "这家公司提起了诉讼。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-suit",
     "libraryId": "intermediate",
-    "word": "suit",
-    "meaning": "一套衣服；套；适合；使适应",
-    "group": 0,
-    "example": {
-      "text": "Suit oneself",
-      "meaning": "随自己的意愿做事",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-yin",
-    "libraryId": "intermediate",
-    "word": "Yin",
-    "meaning": "阴",
-    "group": 0,
+    "word": "yin",
+    "meaning": "阴（中国哲学概念）",
+    "partOfSpeech": "n",
     "example": {
       "text": "Yin and yang",
       "meaning": "阴和阳",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-yin",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
+    "word": "stress",
+    "meaning": "压力",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Exam stress",
+      "meaning": "考试压力",
+      "kind": "phrase"
+    },
     "id": "intermediate-stress",
     "libraryId": "intermediate",
-    "word": "stress",
-    "meaning": "强调；着重；重读；压力",
-    "group": 0,
-    "example": {
-      "text": "Stress distribution",
-      "meaning": "应力分布",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "display",
+    "meaning": "陈列；展示",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A window display",
+      "meaning": "橱窗陈列",
+      "kind": "phrase"
+    },
     "id": "intermediate-display",
     "libraryId": "intermediate",
-    "word": "display",
-    "meaning": "陈列；展览；显示；表现",
-    "group": 0,
-    "example": {
-      "text": "Display screen",
-      "meaning": "显示屏幕",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-porridge",
     "libraryId": "intermediate",
     "word": "porridge",
-    "meaning": "粥；麦片粥；糊；服刑",
+    "meaning": "稀饭，粥",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Rice porridge",
@@ -22204,11 +27858,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-criticize",
     "libraryId": "intermediate",
     "word": "criticize",
-    "meaning": "批评；评论；非难",
+    "meaning": "批评；指责",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Ron does nothing but criticize and complain all the time.",
-      "meaning": "罗恩什么也不干，只是一味指责和抱怨。",
+      "text": "The new law has been widely criticized.",
+      "meaning": "这项新法律受到了广泛批评。",
       "kind": "sentence"
     }
   },
@@ -22216,7 +27871,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-shut",
     "libraryId": "intermediate",
     "word": "shut",
-    "meaning": "[shut-shut；shutting] 关闭；关上；打烊",
+    "meaning": "关闭；关上",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Shut down",
@@ -22225,50 +27881,54 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "autograph",
+    "meaning": "亲笔签名",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Ask for an autograph",
+      "meaning": "索要一个亲笔签名",
+      "kind": "phrase"
+    },
     "id": "intermediate-autograph",
     "libraryId": "intermediate",
-    "word": "autograph",
-    "meaning": "签名；亲笔签名",
-    "group": 0,
-    "example": {
-      "text": "A shirt autographed by the whole team",
-      "meaning": "一件有全体队员签名的衬衫",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-eleventh",
     "libraryId": "intermediate",
     "word": "eleventh",
-    "meaning": "第十一；第十一(个)",
+    "meaning": "第十一",
+    "partOfSpeech": "num",
     "group": 0,
     "example": {
-      "text": "Eleventh hour",
-      "meaning": "最后一刻；危急之时",
-      "kind": "phrase"
+      "text": "This is his eleventh birthday.",
+      "meaning": "这是他的第十一个生日。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "talent",
+    "meaning": "天赋；才能",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A talent for music",
+      "meaning": "音乐天赋",
+      "kind": "phrase"
+    },
     "id": "intermediate-talent",
     "libraryId": "intermediate",
-    "word": "talent",
-    "meaning": "天资；才能；人才；天才",
-    "group": 0,
-    "example": {
-      "text": "Talent education",
-      "meaning": "才能教育",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-keen",
     "libraryId": "intermediate",
     "word": "keen",
-    "meaning": "热心的；激烈的；敏锐的；敏捷的",
+    "meaning": "热心的；敏锐的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Keen competition",
-      "meaning": "剧烈竞争",
+      "text": "Keen interest",
+      "meaning": "强烈的兴趣",
       "kind": "phrase"
     }
   },
@@ -22276,7 +27936,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-phrase",
     "libraryId": "intermediate",
     "word": "phrase",
-    "meaning": "用语言表达；叙述；短语；词组",
+    "meaning": "短语，词组，用语",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Key phrase",
@@ -22289,6 +27950,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "yoghurt",
     "meaning": "酸奶",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "A bowl of yoghurt",
@@ -22300,7 +27962,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-elementary",
     "libraryId": "intermediate",
     "word": "elementary",
-    "meaning": "基本的；基础的；初级的；小学的",
+    "meaning": "基本的，基础的；初级的，小学的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Elementary school",
@@ -22309,86 +27972,93 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "topic",
+    "meaning": "话题；主题",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An interesting topic",
+      "meaning": "一个有趣的话题",
+      "kind": "phrase"
+    },
     "id": "intermediate-topic",
     "libraryId": "intermediate",
-    "word": "topic",
-    "meaning": "题目；话题；主题；主题（等于theme）",
-    "group": 0,
-    "example": {
-      "text": "Special topic",
-      "meaning": "专题",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "forbid",
+    "meaning": "禁止；不许",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Forbid smoking",
+      "meaning": "禁止吸烟",
+      "kind": "phrase"
+    },
     "id": "intermediate-forbid",
     "libraryId": "intermediate",
-    "word": "forbid",
-    "meaning": "[forbade-forbidden] 不许；禁止；妨碍；阻止",
-    "group": 0,
-    "example": {
-      "text": "Lack of space forbids listing the names of all those who contributed.",
-      "meaning": "由于篇幅限制，无法列出所有捐款人的姓名。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "diet",
+    "meaning": "日常饮食",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A healthy diet",
+      "meaning": "健康的日常饮食",
+      "kind": "phrase"
+    },
     "id": "intermediate-diet",
     "libraryId": "intermediate",
-    "word": "diet",
-    "meaning": "进特种饮食；节食；日常饮食；特种饮食",
-    "group": 0,
-    "example": {
-      "text": "Balanced diet",
-      "meaning": "均衡饮食",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "win",
+    "meaning": "赢；获胜",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Win a game",
+      "meaning": "赢得一场比赛",
+      "kind": "phrase"
+    },
     "id": "intermediate-win",
     "libraryId": "intermediate",
-    "word": "win",
-    "meaning": "〔在竞赛、游戏、选举等中〕获胜；赢；〔尤指在体育比赛中的〕胜利；赢得",
-    "group": 0,
-    "example": {
-      "text": "Win back",
-      "meaning": "重获",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-soccer",
     "libraryId": "intermediate",
     "word": "soccer",
-    "meaning": "足球；英式足球",
+    "meaning": "足球",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Soccer ball",
-      "meaning": "英式足球",
+      "text": "Soccer player",
+      "meaning": "足球运动员；足球选手",
       "kind": "phrase"
     }
   },
   {
+    "word": "amount",
+    "meaning": "数量",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A small amount of water",
+      "meaning": "少量的水",
+      "kind": "phrase"
+    },
     "id": "intermediate-amount",
     "libraryId": "intermediate",
-    "word": "amount",
-    "meaning": "合计；总额；总计；相当于",
-    "group": 0,
-    "example": {
-      "text": "Right amount",
-      "meaning": "适量",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-original",
     "libraryId": "intermediate",
     "word": "original",
-    "meaning": "最初的；原始的；新颖的；有创意的",
+    "meaning": "最初的，原始的；新颖的，有创意的；原创性的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Original image",
-      "meaning": "原始图像",
+      "text": "Original data",
+      "meaning": "原始资料；源数据",
       "kind": "phrase"
     }
   },
@@ -22396,11 +28066,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-album",
     "libraryId": "intermediate",
     "word": "album",
-    "meaning": "粘贴簿；集邮簿；相册；音乐专辑",
+    "meaning": "相册；专辑",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Stamp album",
-      "meaning": "n. 集邮册",
+      "text": "Photo album",
+      "meaning": "相册；相簿",
       "kind": "phrase"
     }
   },
@@ -22408,11 +28079,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-shine",
     "libraryId": "intermediate",
     "word": "shine",
-    "meaning": "照耀；发光；发亮；干得出色",
+    "meaning": "照耀；发光",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Shine through",
-      "meaning": "表现出来",
+      "text": "Shine on",
+      "meaning": "发光；闪耀；照在…上",
       "kind": "phrase"
     }
   },
@@ -22420,11 +28092,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-spread",
     "libraryId": "intermediate",
     "word": "spread",
-    "meaning": "展开；伸开；散布；蔓延",
+    "meaning": "展开，伸开；散布，蔓延；涂，敷",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Spread spectrum",
-      "meaning": "扩展频谱",
+      "text": "Spread out",
+      "meaning": "展开；铺开；伸张",
       "kind": "phrase"
     }
   },
@@ -22432,23 +28105,25 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-shiny",
     "libraryId": "intermediate",
     "word": "shiny",
-    "meaning": "光亮的；有光泽的；反光的",
+    "meaning": "光亮的，有光泽的；反光的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Shiny surface",
-      "meaning": "发光面，光滑面；磨光",
-      "kind": "phrase"
+      "text": "Her hair was thick and shiny.",
+      "meaning": "她的头发浓密且有光泽。",
+      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-headache",
     "libraryId": "intermediate",
     "word": "headache",
-    "meaning": "头痛；令人头痛的人；麻烦；令人头痛之事",
+    "meaning": "头痛；令人头疼的事",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Tension headache",
-      "meaning": "紧张性头痛",
+      "text": "Have a headache",
+      "meaning": "头痛，头疼",
       "kind": "phrase"
     }
   },
@@ -22456,11 +28131,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-sauce",
     "libraryId": "intermediate",
     "word": "sauce",
-    "meaning": "沙司；调味汁；酱汁；佐料",
+    "meaning": "调味汁；酱汁",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Soy sauce",
-      "meaning": "酱",
+      "text": "Tomato sauce",
+      "meaning": "番茄酱",
       "kind": "phrase"
     }
   },
@@ -22468,179 +28144,212 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-awake",
     "libraryId": "intermediate",
     "word": "awake",
-    "meaning": "醒着的；[awoke-awaken] 醒；唤醒；意识到",
+    "meaning": "醒着的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Stay awake",
-      "meaning": "保持清醒；保持醒着的",
+      "meaning": "保持清醒",
       "kind": "phrase"
     }
   },
   {
+    "word": "rank",
+    "meaning": "等级；地位",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The highest rank",
+      "meaning": "最高等级",
+      "kind": "phrase"
+    },
     "id": "intermediate-rank",
     "libraryId": "intermediate",
-    "word": "rank",
-    "meaning": "排列；使排成行；将…分等级；属于某等级",
-    "group": 0,
-    "example": {
-      "text": "First rank",
-      "meaning": "一流的",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-surf",
     "libraryId": "intermediate",
     "word": "surf",
-    "meaning": "冲浪；浏览；拍岸浪花；拍岸涛声",
+    "meaning": "浏览；冲浪",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Surf board",
-      "meaning": "水橇板",
+      "text": "Surf the internet",
+      "meaning": "上网浏览",
       "kind": "phrase"
     }
   },
   {
+    "word": "am",
+    "meaning": "是",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "I am a student.",
+      "meaning": "我是一名学生。",
+      "kind": "sentence"
+    },
     "id": "intermediate-am",
     "libraryId": "intermediate",
-    "word": "am",
-    "meaning": "是；调频；调谐；调幅（ amplitude modulation）",
-    "group": 0,
-    "example": {
-      "text": "Am radio",
-      "meaning": "调频广播",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "fold",
+    "meaning": "折叠",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Fold the paper",
+      "meaning": "折纸",
+      "kind": "phrase"
+    },
     "id": "intermediate-fold",
     "libraryId": "intermediate",
-    "word": "fold",
-    "meaning": "折叠；合拢；褶痕；褶缝",
-    "group": 0,
-    "example": {
-      "text": "Fold belt",
-      "meaning": "褶皱带",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "mysterious",
+    "meaning": "神秘的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A mysterious sound",
+      "meaning": "一个神秘的声音",
+      "kind": "phrase"
+    },
     "id": "intermediate-mysterious",
     "libraryId": "intermediate",
-    "word": "mysterious",
-    "meaning": "神秘的；难以理解的；诡秘的",
-    "group": 0,
-    "example": {
-      "text": "The police are investigating the mysterious deaths of children at the hospital.",
-      "meaning": "警察正在调查这家医院的儿童神秘死亡事件。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "drive",
+    "meaning": "驾驶",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Drive a car",
+      "meaning": "开车",
+      "kind": "phrase"
+    },
     "id": "intermediate-drive",
     "libraryId": "intermediate",
-    "word": "drive",
-    "meaning": "驱赶；驱使；迫使…去〔某处〕；驱车出行",
-    "group": 0,
-    "example": {
-      "text": "Motor drive",
-      "meaning": "电动机",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-homeland",
     "libraryId": "intermediate",
     "word": "homeland",
-    "meaning": "祖国；家乡；故乡",
+    "meaning": "祖国，家乡",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Homeland security",
-      "meaning": "国土安全；国家安全",
-      "kind": "phrase"
+      "text": "Many are planning to return to their homeland.",
+      "meaning": "很多人正计划回到自己的祖国去。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "fool",
+    "meaning": "愚弄",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Do not fool your friends.",
+      "meaning": "不要愚弄你的朋友。",
+      "kind": "sentence"
+    },
     "id": "intermediate-fool",
     "libraryId": "intermediate",
-    "word": "fool",
-    "meaning": "欺骗；愚弄；干蠢事；愚蠢的",
-    "group": 0,
-    "example": {
-      "text": "April fool",
-      "meaning": "愚人节；愚人节中受愚弄者",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "popularity",
+    "meaning": "受欢迎；流行",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The popularity of online learning",
+      "meaning": "在线学习的流行",
+      "kind": "phrase"
+    },
     "id": "intermediate-popularity",
     "libraryId": "intermediate",
-    "word": "popularity",
-    "meaning": "普及；流行；声望；通俗性",
-    "group": 0,
-    "example": {
-      "text": "Link popularity",
-      "meaning": "链接广泛度",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "tooth",
+    "meaning": "牙；牙齿",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A loose tooth",
+      "meaning": "一颗松动的牙齿",
+      "kind": "phrase"
+    },
     "id": "intermediate-tooth",
     "libraryId": "intermediate",
-    "word": "tooth",
-    "meaning": "牙；牙齿；给……装齿；啮合",
-    "group": 0,
-    "example": {
-      "text": "Tooth brush",
-      "meaning": "牙刷",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-set",
     "libraryId": "intermediate",
     "word": "set",
-    "meaning": "〔小心地〕放置；放下；〔物品的〕一套；一副",
+    "meaning": "一套；设置；落下",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Set by",
-      "meaning": "把…留开",
-      "kind": "phrase"
+      "text": "I bought a set of tools.",
+      "meaning": "我买了一套工具。",
+      "kind": "sentence",
+      "sense": "一套",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "设置",
+          "partOfSpeech": "v",
+          "text": "Set the alarm for seven.",
+          "meaning": "把闹钟设到七点。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "落下",
+          "partOfSpeech": "v",
+          "text": "The sun sets behind the hill.",
+          "meaning": "太阳在山后落下。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
+    "word": "outstanding",
+    "meaning": "杰出的；出色的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An outstanding student",
+      "meaning": "一名出色的学生",
+      "kind": "phrase"
+    },
     "id": "intermediate-outstanding",
     "libraryId": "intermediate",
-    "word": "outstanding",
-    "meaning": "杰出的；明显的；未解决的；未偿付的",
-    "group": 0,
-    "example": {
-      "text": "Outstanding work",
-      "meaning": "出色的工作",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "escalator",
+    "meaning": "自动扶梯",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Take the escalator",
+      "meaning": "乘自动扶梯",
+      "kind": "phrase"
+    },
     "id": "intermediate-escalator",
     "libraryId": "intermediate",
-    "word": "escalator",
-    "meaning": "〈美〉自动扶梯",
-    "group": 0,
-    "example": {
-      "text": "Take the escalator to the third floor and it's the last office on the left.",
-      "meaning": "乘电梯到4楼，左边最后的那个办公室就是。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-partner",
     "libraryId": "intermediate",
     "word": "partner",
-    "meaning": "做…的搭档；配偶；搭档；伙伴",
+    "meaning": "配偶，搭档；伙伴，合伙人",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Trade partner",
-      "meaning": "贸易伙伴",
+      "text": "Business partner",
+      "meaning": "商业伙伴",
       "kind": "phrase"
     }
   },
@@ -22649,6 +28358,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "spider",
     "meaning": "蜘蛛",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Spider silk",
@@ -22660,11 +28370,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-beauty",
     "libraryId": "intermediate",
     "word": "beauty",
-    "meaning": "美；美丽；美人；美的东西",
+    "meaning": "美；美人",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Natural beauty",
-      "meaning": "自然美",
+      "text": "Sense of beauty",
+      "meaning": "美感",
       "kind": "phrase"
     }
   },
@@ -22672,11 +28383,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-humorous",
     "libraryId": "intermediate",
     "word": "humorous",
-    "meaning": "幽默的；诙谐的；滑稽的；可笑的",
+    "meaning": "幽默的；诙谐的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Humorous story",
-      "meaning": "幽默小说",
+      "text": "A humorous story",
+      "meaning": "一个幽默故事",
       "kind": "phrase"
     }
   },
@@ -22684,7 +28396,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-scary",
     "libraryId": "intermediate",
     "word": "scary",
-    "meaning": "恐怖的；吓人的；引起惊慌的；可怕的",
+    "meaning": "恐怖的，吓人的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "The book is both scary and funny.",
@@ -22696,11 +28409,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-disadvantage",
     "libraryId": "intermediate",
     "word": "disadvantage",
-    "meaning": "缺点；不利条件；损失；弱点",
+    "meaning": "缺点；不利条件",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Disadvantage factor",
-      "meaning": "不利因素；不利因子",
+      "text": "At a disadvantage",
+      "meaning": "处于不利地位",
       "kind": "phrase"
     }
   },
@@ -22708,7 +28422,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-complain",
     "libraryId": "intermediate",
     "word": "complain",
-    "meaning": "抱怨；诉苦；投诉；控告",
+    "meaning": "抱怨，诉苦；投诉，控告",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Complain about",
@@ -22720,31 +28435,34 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-knife",
     "libraryId": "intermediate",
     "word": "knife",
-    "meaning": "刀；餐刀；匕首；用刀切",
+    "meaning": "刀，餐刀",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Gamma knife",
-      "meaning": "n. 伽玛刀",
+      "text": "Knife and fork",
+      "meaning": "刀叉",
       "kind": "phrase"
     }
   },
   {
+    "word": "refrigerator",
+    "meaning": "冰箱",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Put milk in the refrigerator",
+      "meaning": "把牛奶放进冰箱",
+      "kind": "phrase"
+    },
     "id": "intermediate-refrigerator",
     "libraryId": "intermediate",
-    "word": "refrigerator",
-    "meaning": "电冰箱；冰箱；冷藏库",
-    "group": 0,
-    "example": {
-      "text": "Electric refrigerator",
-      "meaning": "电冰箱",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-oak",
     "libraryId": "intermediate",
     "word": "oak",
-    "meaning": "橡树；橡木；栎属植物；栎木",
+    "meaning": "橡树；橡木",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Red oak",
@@ -22756,43 +28474,47 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-crowd",
     "libraryId": "intermediate",
     "word": "crowd",
-    "meaning": "聚集；群集；挤；推",
+    "meaning": "人群；群众",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Crowd behavior",
-      "meaning": "群众行为",
+      "text": "A crowd of",
+      "meaning": "一大群；许多的",
       "kind": "phrase"
     }
   },
   {
+    "word": "easily",
+    "meaning": "容易地；轻易地",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Easily understood",
+      "meaning": "容易理解的",
+      "kind": "phrase"
+    },
     "id": "intermediate-easily",
     "libraryId": "intermediate",
-    "word": "easily",
-    "meaning": "容易地；不费力地；无疑地；舒适的",
-    "group": 0,
-    "example": {
-      "text": "We found the house easily enough.",
-      "meaning": "我们轻轻松松就找到了房子。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "costume",
+    "meaning": "戏服；服装",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A stage costume",
+      "meaning": "一套舞台服装",
+      "kind": "phrase"
+    },
     "id": "intermediate-costume",
     "libraryId": "intermediate",
-    "word": "costume",
-    "meaning": "戏装；成套服装；服装；服饰",
-    "group": 0,
-    "example": {
-      "text": "Costume design",
-      "meaning": "最佳服装设计",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-hallway",
     "libraryId": "intermediate",
     "word": "hallway",
-    "meaning": "走廊；回廊；门厅；过道",
+    "meaning": "走廊，回廊；门厅，过道",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "They took the lift up to the third floor and walked along the quiet hallway.",
@@ -22805,30 +28527,33 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "verb",
     "meaning": "动词",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Auxiliary verb",
-      "meaning": "助动词",
+      "text": "Verb phrase",
+      "meaning": "动词短语；动词词组",
       "kind": "phrase"
     }
   },
   {
+    "word": "is",
+    "meaning": "是",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "This is my book.",
+      "meaning": "这是我的书。",
+      "kind": "sentence"
+    },
     "id": "intermediate-is",
     "libraryId": "intermediate",
-    "word": "is",
-    "meaning": "存在；是",
-    "group": 0,
-    "example": {
-      "text": "He is",
-      "meaning": "他是…",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-fry",
     "libraryId": "intermediate",
     "word": "fry",
-    "meaning": "油煎；油炸；鱼苗；油炸食物",
+    "meaning": "油炸；油煎",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Deep fry",
@@ -22840,7 +28565,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-announce",
     "libraryId": "intermediate",
     "word": "announce",
-    "meaning": "宣布；声称；预告；述说",
+    "meaning": "宣布，声称；预告",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Announce the results",
@@ -22852,11 +28578,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-operate",
     "libraryId": "intermediate",
     "word": "operate",
-    "meaning": "动手术；起作用；经营；管理",
+    "meaning": "操作；动手术",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Operate mode",
-      "meaning": "操作方式，运算方式；工作状态",
+      "text": "Easy to operate",
+      "meaning": "易操作的",
       "kind": "phrase"
     }
   },
@@ -22864,55 +28591,71 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-begin",
     "libraryId": "intermediate",
     "word": "begin",
-    "meaning": "[began-begun；beginning] 开始；开始；着手",
+    "meaning": "开始",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Begin as",
-      "meaning": "作为…开始",
+      "text": "Begin to do",
+      "meaning": "开始做某事",
       "kind": "phrase"
     }
   },
   {
+    "word": "parrot",
+    "meaning": "鹦鹉",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A green parrot",
+      "meaning": "一只绿色的鹦鹉",
+      "kind": "phrase"
+    },
     "id": "intermediate-parrot",
     "libraryId": "intermediate",
-    "word": "parrot",
-    "meaning": "鹦鹉；学舌者；应声虫；机械模仿别人的人",
-    "group": 0,
-    "example": {
-      "text": "We recited poems parrot fashion.",
-      "meaning": "我们鹦鹉学舌般机械地背诵诗歌。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-become",
     "libraryId": "intermediate",
     "word": "become",
-    "meaning": "[became-become] 变成；成为；开始变得；变得",
+    "meaning": "变成，成为；开始变得",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Become due",
-      "meaning": "到期",
+      "text": "Become a member",
+      "meaning": "成为一名成员/会员",
       "kind": "phrase"
     }
   },
   {
+    "word": "break",
+    "meaning": "打破；休息",
+    "partOfSpeech": "v/n",
+    "example": {
+      "text": "Do not break the glass.",
+      "meaning": "不要打破玻璃。",
+      "kind": "sentence",
+      "sense": "打破",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "休息",
+          "partOfSpeech": "n",
+          "text": "Let us take a short break.",
+          "meaning": "我们短暂休息一下吧。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-break",
     "libraryId": "intermediate",
-    "word": "break",
-    "meaning": "[broke-broken] 打破；损坏；弄坏；破坏",
-    "group": 0,
-    "example": {
-      "text": "Could break",
-      "meaning": "可能破碎",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-cupboard",
     "libraryId": "intermediate",
     "word": "cupboard",
-    "meaning": "柜橱；碗柜；食橱；橱柜",
+    "meaning": "碗柜，橱柜",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "A kitchen cupboard",
@@ -22924,71 +28667,106 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-hide",
     "libraryId": "intermediate",
     "word": "hide",
-    "meaning": "把…藏起来；隐藏；〔可观察鸟兽行动的〕隐匿处；埋伏处",
+    "meaning": "隐藏；兽皮",
+    "partOfSpeech": "v/n",
     "group": 0,
     "example": {
-      "text": "Cattle hide",
-      "meaning": "牛皮",
-      "kind": "phrase"
+      "text": "Hide the key under the mat.",
+      "meaning": "把钥匙藏在垫子下。",
+      "kind": "sentence",
+      "sense": "隐藏",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "兽皮",
+          "partOfSpeech": "n",
+          "text": "The boots are made from cow hide.",
+          "meaning": "这双靴子由牛皮制成。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-sign",
     "libraryId": "intermediate",
     "word": "sign",
-    "meaning": "签；签署；标志；符号",
+    "meaning": "标志；签署；迹象",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "Traffic sign",
-      "meaning": "交通标志",
-      "kind": "phrase"
+      "text": "Read the sign by the road.",
+      "meaning": "读一下路边的标志。",
+      "kind": "sentence",
+      "sense": "标志",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "签署",
+          "partOfSpeech": "v",
+          "text": "Please sign your name here.",
+          "meaning": "请在这里签名。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "迹象",
+          "partOfSpeech": "n",
+          "text": "There is no sign of rain.",
+          "meaning": "没有下雨的迹象。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-author",
     "libraryId": "intermediate",
     "word": "author",
-    "meaning": "作家；作者；创始人；发起者",
+    "meaning": "作家；作者；创始人",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Original author",
-      "meaning": "原著者",
+      "text": "Main author",
+      "meaning": "主要作者",
       "kind": "phrase"
     }
   },
   {
+    "word": "meter",
+    "meaning": "米",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "One meter long",
+      "meaning": "一米长",
+      "kind": "phrase"
+    },
     "id": "intermediate-meter",
     "libraryId": "intermediate",
-    "word": "meter",
-    "meaning": "米；公尺；计量器；计",
-    "group": 0,
-    "example": {
-      "text": "Square meter",
-      "meaning": "n. 平方米",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "infinitive",
+    "meaning": "不定式",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An infinitive verb",
+      "meaning": "一个动词不定式",
+      "kind": "phrase"
+    },
     "id": "intermediate-infinitive",
     "libraryId": "intermediate",
-    "word": "infinitive",
-    "meaning": "原形；不定式",
-    "group": 0,
-    "example": {
-      "text": "But no, all that's left is an infinitive phrase.",
-      "meaning": "但是，没有了。 留下的是一个不定式短语。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-establish",
     "libraryId": "intermediate",
     "word": "establish",
-    "meaning": "建立；设立；确定；证实",
+    "meaning": "建立，设立；确定，证实",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Establish as",
-      "meaning": "确立为…；使成为…",
+      "text": "Establish a business",
+      "meaning": "创办企业",
       "kind": "phrase"
     }
   },
@@ -22996,11 +28774,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-dream",
     "libraryId": "intermediate",
     "word": "dream",
-    "meaning": "梦；梦想；希望；做梦",
+    "meaning": "梦；梦想",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "American dream",
-      "meaning": "美国梦",
+      "text": "A bad dream",
+      "meaning": "一个噩梦",
       "kind": "phrase"
     }
   },
@@ -23008,19 +28787,21 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-essay",
     "libraryId": "intermediate",
     "word": "essay",
-    "meaning": "短文；文章；随笔；散文",
+    "meaning": "短文，文章；随笔，散文",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Essay test",
-      "meaning": "n. 申论方式测验",
-      "kind": "phrase"
+      "text": "We asked Jason to write an essay about his hometown.",
+      "meaning": "我们让杰森写一篇关于他家乡的短文。",
+      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-prediction",
     "libraryId": "intermediate",
     "word": "prediction",
-    "meaning": "预言；预料；预报；预告",
+    "meaning": "预言；预料；预报",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Earthquake prediction",
@@ -23029,26 +28810,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "survey",
+    "meaning": "调查",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A school survey",
+      "meaning": "一次学校调查",
+      "kind": "phrase"
+    },
     "id": "intermediate-survey",
     "libraryId": "intermediate",
-    "word": "survey",
-    "meaning": "调查；检视；测量；勘测",
-    "group": 0,
-    "example": {
-      "text": "Questionnaire survey",
-      "meaning": "问卷调查",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-tense",
     "libraryId": "intermediate",
     "word": "tense",
-    "meaning": "紧张的；拉紧的；绷紧的；拉紧",
+    "meaning": "时态，时",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Past tense",
-      "meaning": "过去式",
+      "text": "Present continuous tense",
+      "meaning": "现在进行时",
       "kind": "phrase"
     }
   },
@@ -23056,47 +28839,87 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-recipe",
     "libraryId": "intermediate",
     "word": "recipe",
-    "meaning": "烹饪法；食谱；方法；秘诀",
+    "meaning": "食谱；秘诀",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Secret recipe",
-      "meaning": "秘方；秘密配方",
+      "text": "Recipe book",
+      "meaning": "食谱书",
       "kind": "phrase"
     }
   },
   {
+    "word": "seal",
+    "meaning": "海豹；密封；印章",
+    "partOfSpeech": "n/v",
+    "example": {
+      "text": "A seal rested on the rock.",
+      "meaning": "一只海豹趴在岩石上休息。",
+      "kind": "sentence",
+      "sense": "海豹",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "密封",
+          "partOfSpeech": "v",
+          "text": "Seal the box with tape.",
+          "meaning": "用胶带封好箱子。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "印章",
+          "partOfSpeech": "n",
+          "text": "The document bears an official seal.",
+          "meaning": "文件上盖着官方印章。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-seal",
     "libraryId": "intermediate",
-    "word": "seal",
-    "meaning": "封；密封；封铅；封条",
-    "group": 0,
-    "example": {
-      "text": "Oil seal",
-      "meaning": "油封",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-bow",
     "libraryId": "intermediate",
     "word": "bow",
-    "meaning": "鞠躬；低头；弓；船首",
+    "meaning": "鞠躬；弓；蝴蝶结",
+    "partOfSpeech": "v/n",
     "group": 0,
     "example": {
-      "text": "Bow down",
-      "meaning": "鞠躬",
-      "kind": "phrase"
+      "text": "He bowed to the audience.",
+      "meaning": "他向观众鞠躬。",
+      "kind": "sentence",
+      "sense": "鞠躬",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "弓",
+          "partOfSpeech": "n",
+          "text": "He pulled the string of his bow.",
+          "meaning": "他拉开了弓弦。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "蝴蝶结",
+          "partOfSpeech": "n",
+          "text": "She tied the ribbon in a bow.",
+          "meaning": "她把丝带系成蝴蝶结。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-fight",
     "libraryId": "intermediate",
     "word": "fight",
-    "meaning": "打（仗）；与（…）作战；战斗；打斗",
+    "meaning": "打（仗），与（…）作战，战斗",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Fight together",
-      "meaning": "一起作战",
+      "text": "Fight against",
+      "meaning": "对抗；与……作斗争",
       "kind": "phrase"
     }
   },
@@ -23104,10 +28927,11 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-homeless",
     "libraryId": "intermediate",
     "word": "homeless",
-    "meaning": "无家的；无家可归的",
+    "meaning": "无家可归的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Thousands of people have been made homeless .",
+      "text": "Thousands of people have been made homeless.",
       "meaning": "成千上万人被逼得无家可归。",
       "kind": "sentence"
     }
@@ -23116,7 +28940,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-clerk",
     "libraryId": "intermediate",
     "word": "clerk",
-    "meaning": "〈美〉店员；办事员；职员；店员",
+    "meaning": "职员；店员",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Bank clerk",
@@ -23125,58 +28950,63 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "Paris",
+    "meaning": "巴黎",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Visit Paris",
+      "meaning": "游览巴黎",
+      "kind": "phrase"
+    },
     "id": "intermediate-paris",
     "libraryId": "intermediate",
-    "word": "Paris",
-    "meaning": "巴黎；巴黎（法国首都）；帕里斯（特洛伊王子）",
-    "group": 0,
-    "example": {
-      "text": "Paris commune",
-      "meaning": "巴黎公社",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "elbow",
+    "meaning": "肘部",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Bend your elbow",
+      "meaning": "弯曲手肘",
+      "kind": "phrase"
+    },
     "id": "intermediate-elbow",
     "libraryId": "intermediate",
-    "word": "elbow",
-    "meaning": "用肘推；用肘挤；肘部；肘",
-    "group": 0,
-    "example": {
-      "text": "Elbow joint",
-      "meaning": "n. 肘关节",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-rocket",
     "libraryId": "intermediate",
     "word": "rocket",
-    "meaning": "迅速上升；猛涨；火箭；飞驰",
+    "meaning": "火箭",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Carrier rocket",
-      "meaning": "n. 运载火箭",
+      "text": "Rocket engine",
+      "meaning": "火箭发动机",
       "kind": "phrase"
     }
   },
   {
+    "word": "scene",
+    "meaning": "场景；景象",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A scene from a film",
+      "meaning": "电影中的一个场景",
+      "kind": "phrase"
+    },
     "id": "intermediate-scene",
     "libraryId": "intermediate",
-    "word": "scene",
-    "meaning": "一场；一个镜头；一节；(戏剧、 事件",
-    "group": 0,
-    "example": {
-      "text": "Night scene",
-      "meaning": "夜景",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-injure",
     "libraryId": "intermediate",
     "word": "injure",
-    "meaning": "伤害；损害；损伤；使受伤",
+    "meaning": "使受伤；损害",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Injure your knee",
@@ -23185,46 +29015,50 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "freeze",
+    "meaning": "结冰；冻结",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Water can freeze.",
+      "meaning": "水会结冰。",
+      "kind": "sentence"
+    },
     "id": "intermediate-freeze",
     "libraryId": "intermediate",
-    "word": "freeze",
-    "meaning": "（使）结冰；（使）冻结；〔价格、工资等的〕冻结；冻结",
-    "group": 0,
-    "example": {
-      "text": "Freeze drying",
-      "meaning": "冷冻干燥",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "province",
+    "meaning": "省",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Shanxi Province",
+      "meaning": "山西省",
+      "kind": "phrase"
+    },
     "id": "intermediate-province",
     "libraryId": "intermediate",
-    "word": "province",
-    "meaning": "省；领域；范围；职权",
-    "group": 0,
-    "example": {
-      "text": "Metallogenic province",
-      "meaning": "成矿区",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "bookcase",
+    "meaning": "书柜",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A wooden bookcase",
+      "meaning": "一个木制书柜",
+      "kind": "phrase"
+    },
     "id": "intermediate-bookcase",
     "libraryId": "intermediate",
-    "word": "bookcase",
-    "meaning": "书柜；书架；[家具] 书柜",
-    "group": 0,
-    "example": {
-      "text": "That selfish student always appropriates the biggest bookcase and desk.",
-      "meaning": "那个自私的学生总是占用最大的书橱和书桌。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-zigzag",
     "libraryId": "intermediate",
     "word": "zigzag",
-    "meaning": "“之”字形的；弯弯曲曲行进；“之”字形；蜿蜒曲折",
+    "meaning": "“之”字形；蜿蜒曲折",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Zigzag course",
@@ -23233,34 +29067,37 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "underwater",
+    "meaning": "在水下",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Swim underwater",
+      "meaning": "在水下游泳",
+      "kind": "phrase"
+    },
     "id": "intermediate-underwater",
     "libraryId": "intermediate",
-    "word": "underwater",
-    "meaning": "在水下；在水中；水下的；水下使用的",
-    "group": 0,
-    "example": {
-      "text": "Underwater robot",
-      "meaning": "水下机器人",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "singular",
+    "meaning": "单数的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A singular noun",
+      "meaning": "一个单数名词",
+      "kind": "phrase"
+    },
     "id": "intermediate-singular",
     "libraryId": "intermediate",
-    "word": "singular",
-    "meaning": "单数的；单一的；非凡的；奇特的",
-    "group": 0,
-    "example": {
-      "text": "Singular number",
-      "meaning": "n. 单数",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-dormitory",
     "libraryId": "intermediate",
     "word": "dormitory",
-    "meaning": "宿舍；学生宿舍；住宅区的；集体寝室",
+    "meaning": "宿舍",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Dormitory building",
@@ -23272,11 +29109,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-seek",
     "libraryId": "intermediate",
     "word": "seek",
-    "meaning": "[sought-sought] 寻找；追求；征求；请求",
+    "meaning": "寻找；追求",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Seek through",
-      "meaning": "v. 搜查遍",
+      "text": "Seek for",
+      "meaning": "寻找；追求",
       "kind": "phrase"
     }
   },
@@ -23285,6 +29123,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "eighteenth",
     "meaning": "第十八",
+    "partOfSpeech": "num",
     "group": 0,
     "example": {
       "text": "I took the elevator to the eighteenth floor.",
@@ -23293,50 +29132,54 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "heel",
+    "meaning": "脚后跟",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A sore heel",
+      "meaning": "疼痛的脚后跟",
+      "kind": "phrase"
+    },
     "id": "intermediate-heel",
     "libraryId": "intermediate",
-    "word": "heel",
-    "meaning": "脚后跟；踵；后跟；倾侧",
-    "group": 0,
-    "example": {
-      "text": "High heel",
-      "meaning": "高跟鞋",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "pierce",
+    "meaning": "刺穿；穿透",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Pierce the skin",
+      "meaning": "刺破皮肤",
+      "kind": "phrase"
+    },
     "id": "intermediate-pierce",
     "libraryId": "intermediate",
-    "word": "pierce",
-    "meaning": "刺穿；刺破；穿透；穿孔",
-    "group": 0,
-    "example": {
-      "text": "Pierce through",
-      "meaning": "突破，穿刺入",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "teenager",
+    "meaning": "青少年",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A friendly teenager",
+      "meaning": "一位友善的青少年",
+      "kind": "phrase"
+    },
     "id": "intermediate-teenager",
     "libraryId": "intermediate",
-    "word": "teenager",
-    "meaning": "十几岁的青少年；十三岁到十九岁的少年；青少年；十几岁的少年",
-    "group": 0,
-    "example": {
-      "text": "A TV sex education series aimed at teenagers",
-      "meaning": "一部针对青少年的性教育电视系列片",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-calendar",
     "libraryId": "intermediate",
     "word": "calendar",
-    "meaning": "日历；月历；日程表；历书",
+    "meaning": "日历，月历；日程表",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Lunar calendar",
-      "meaning": "n. 阴历",
+      "text": "Calendar day",
+      "meaning": "日历日",
       "kind": "phrase"
     }
   },
@@ -23344,35 +29187,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-garage",
     "libraryId": "intermediate",
     "word": "garage",
-    "meaning": "车库；汽车修理行；汽车修理厂；飞机库",
+    "meaning": "车库；汽车修理行",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Underground garage",
-      "meaning": "地下车库",
+      "text": "Underground parking garage",
+      "meaning": "地下车库；地下停车场",
       "kind": "phrase"
     }
   },
   {
+    "word": "slipper",
+    "meaning": "拖鞋",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A slipper under the bed",
+      "meaning": "床下的一只拖鞋",
+      "kind": "phrase"
+    },
     "id": "intermediate-slipper",
     "libraryId": "intermediate",
-    "word": "slipper",
-    "meaning": "用拖鞋打；拖鞋；轻便舞鞋",
-    "group": 0,
-    "example": {
-      "text": "The boy ran away with the big slipper though she was begging.",
-      "meaning": "那个男孩不管她怎么哀求，还是拿着那只大拖鞋跑开了。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-subway",
     "libraryId": "intermediate",
     "word": "subway",
-    "meaning": "地铁；地道；地下过道；地下铁路",
+    "meaning": "地铁；地道，地下过道",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Subway station",
-      "meaning": "n. 地铁车站",
+      "text": "Take the subway",
+      "meaning": "乘地铁",
       "kind": "phrase"
     }
   },
@@ -23380,11 +29226,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-dislike",
     "libraryId": "intermediate",
     "word": "dislike",
-    "meaning": "不喜欢；讨厌；厌恶；嫌恶",
+    "meaning": "不喜欢，讨厌",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "(strongly) dislike",
-      "meaning": "反感；不喜欢",
+      "text": "Dislike the noise",
+      "meaning": "讨厌噪音",
       "kind": "phrase"
     }
   },
@@ -23392,11 +29239,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-amazing",
     "libraryId": "intermediate",
     "word": "amazing",
-    "meaning": "令人惊异的；使吃惊（amaze的ing形式）",
+    "meaning": "令人惊奇的；了不起的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Where amazing happens",
-      "meaning": "奇迹发生之地（NBA季后赛的宣传口号）",
+      "text": "An amazing bargain",
+      "meaning": "令人惊喜的便宜货",
       "kind": "phrase"
     }
   },
@@ -23404,7 +29252,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-fifteenth",
     "libraryId": "intermediate",
     "word": "fifteenth",
-    "meaning": "第十五；十五分之一",
+    "meaning": "第十五",
+    "partOfSpeech": "num",
     "group": 0,
     "example": {
       "text": "They succeeded in the experiment on the fifteenth trial.",
@@ -23416,7 +29265,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-unusual",
     "libraryId": "intermediate",
     "word": "unusual",
-    "meaning": "不平常的；少有的；独特的；与众不同的",
+    "meaning": "不平常的，异常的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Unusual weather",
@@ -23425,34 +29275,66 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "sink",
+    "meaning": "下沉；水槽",
+    "partOfSpeech": "v/n",
+    "example": {
+      "text": "The stone will sink in water.",
+      "meaning": "石头会沉入水中。",
+      "kind": "sentence",
+      "sense": "下沉",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "水槽",
+          "partOfSpeech": "n",
+          "text": "Wash the dishes in the sink.",
+          "meaning": "在水槽里洗碗。",
+          "kind": "sentence"
+        }
+      ]
+    },
     "id": "intermediate-sink",
     "libraryId": "intermediate",
-    "word": "sink",
-    "meaning": "下沉；沉没；洗脸盆；洗涤槽",
-    "group": 0,
-    "example": {
-      "text": "Sink down",
-      "meaning": "沉落",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-degree",
     "libraryId": "intermediate",
     "word": "degree",
-    "meaning": "度；度数；程度；学位",
+    "meaning": "度；程度；学位",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Bachelor's degree",
-      "meaning": "学士学位",
-      "kind": "phrase"
+      "text": "The temperature rose by one degree.",
+      "meaning": "气温上升了一度。",
+      "kind": "sentence",
+      "sense": "度",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "程度",
+          "partOfSpeech": "n",
+          "text": "There is a degree of risk.",
+          "meaning": "存在一定程度的风险。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "学位",
+          "partOfSpeech": "n",
+          "text": "She has a degree in history.",
+          "meaning": "她拥有历史学学位。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-solve",
     "libraryId": "intermediate",
     "word": "solve",
-    "meaning": "解决；处理；解答；解释",
+    "meaning": "解决，处理；解答",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Charlie thinks money will solve all his problems.",
@@ -23461,26 +29343,41 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
-    "id": "intermediate-yang",
+    "word": "support",
+    "meaning": "支持",
+    "example": {
+      "text": "Support your team",
+      "meaning": "支持你的团队",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "intermediate-support",
     "libraryId": "intermediate",
-    "word": "Yang",
-    "meaning": "阳",
-    "group": 0,
+    "group": 0
+  },
+  {
+    "word": "yang",
+    "meaning": "阳（中国哲学概念）",
+    "partOfSpeech": "n",
     "example": {
       "text": "Yin and yang",
       "meaning": "阴和阳",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-yang",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-life",
     "libraryId": "intermediate",
     "word": "life",
-    "meaning": "生命；性命；一生；寿命",
+    "meaning": "生活；生命",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "In life",
-      "meaning": "一生中",
+      "text": "Quality of life",
+      "meaning": "生活质量",
       "kind": "phrase"
     }
   },
@@ -23489,6 +29386,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "cola",
     "meaning": "可乐饮料",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Diet cola",
@@ -23500,35 +29398,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-honey",
     "libraryId": "intermediate",
     "word": "honey",
-    "meaning": "蜜；蜂蜜；甜蜜；宝贝儿",
+    "meaning": "蜂蜜；亲爱的",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Honey bee",
-      "meaning": "n. 蜜蜂",
+      "meaning": "蜜蜂",
       "kind": "phrase"
     }
   },
   {
+    "word": "teach",
+    "meaning": "教；教授",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Teach English",
+      "meaning": "教英语",
+      "kind": "phrase"
+    },
     "id": "intermediate-teach",
     "libraryId": "intermediate",
-    "word": "teach",
-    "meaning": "[taught-taught] 教；讲授；教导；教训",
-    "group": 0,
-    "example": {
-      "text": "Teach oneself",
-      "meaning": "自学",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-argue",
     "libraryId": "intermediate",
     "word": "argue",
-    "meaning": "争论；争吵；争辩；提出理由证明",
+    "meaning": "争论，争吵，争辩；提出理由证明，主张；说服，劝说",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Argue about",
-      "meaning": "争论；议论某事",
+      "text": "Argue with",
+      "meaning": "争论；和…争吵",
       "kind": "phrase"
     }
   },
@@ -23536,11 +29437,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-specially",
     "libraryId": "intermediate",
     "word": "specially",
-    "meaning": "特意地；专门地；格外地；特别地",
+    "meaning": "特意地，专门地；格外地，特别地，特殊地",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
-      "text": "Specially good effect",
-      "meaning": "特效",
+      "text": "Specially trained police dogs",
+      "meaning": "经过专门训练的警犬",
       "kind": "phrase"
     }
   },
@@ -23548,11 +29450,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-accessory",
     "libraryId": "intermediate",
     "word": "accessory",
-    "meaning": "附件；零件；配件；装饰品",
+    "meaning": "附件，零件，配件；装饰品",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Accessory equipment",
-      "meaning": "辅助设备",
+      "text": "Bathroom accessories such as mirrors and towel-rails",
+      "meaning": "镜子和毛巾架等浴室配件",
       "kind": "phrase"
     }
   },
@@ -23560,7 +29463,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-shampoo",
     "libraryId": "intermediate",
     "word": "shampoo",
-    "meaning": "洗发剂；洗涤剂；用洗发剂洗头",
+    "meaning": "洗发剂；洗涤剂",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "What kind of shampoo do you use?",
@@ -23573,6 +29477,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "yogurt",
     "meaning": "酸奶",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "A cup of yogurt",
@@ -23584,23 +29489,36 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-type",
     "libraryId": "intermediate",
     "word": "type",
-    "meaning": "打；类型；种类；铅字",
+    "meaning": "类型；打字",
+    "partOfSpeech": "n/v",
     "group": 0,
     "example": {
-      "text": "New type",
-      "meaning": "新型",
-      "kind": "phrase"
+      "text": "What type of music do you like?",
+      "meaning": "你喜欢哪种音乐？",
+      "kind": "sentence",
+      "sense": "类型",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "打字",
+          "partOfSpeech": "v",
+          "text": "Please type your name here.",
+          "meaning": "请在这里输入你的名字。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-scared",
     "libraryId": "intermediate",
     "word": "scared",
-    "meaning": "惊恐的；恐惧的",
+    "meaning": "惊恐的，恐惧的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Scared to death",
-      "meaning": "吓得要死；被吓死；害怕得要命",
+      "text": "Be scared of",
+      "meaning": "害怕…；对…感到恐惧",
       "kind": "phrase"
     }
   },
@@ -23608,47 +29526,51 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-musician",
     "libraryId": "intermediate",
     "word": "musician",
-    "meaning": "音乐家；乐师；作曲家",
+    "meaning": "音乐家，乐师",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "A talented young musician",
       "meaning": "有天赋的年轻音乐家",
-      "kind": "sentence"
+      "kind": "phrase"
     }
   },
   {
+    "word": "overseas",
+    "meaning": "在国外；到海外",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Study overseas",
+      "meaning": "到海外学习",
+      "kind": "phrase"
+    },
     "id": "intermediate-overseas",
     "libraryId": "intermediate",
-    "word": "overseas",
-    "meaning": "在海外；在国外；海外的；国外的",
-    "group": 0,
-    "example": {
-      "text": "Overseas market",
-      "meaning": "海外市场",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "impress",
+    "meaning": "给……留下深刻印象",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Impress your teacher",
+      "meaning": "给老师留下深刻印象",
+      "kind": "phrase"
+    },
     "id": "intermediate-impress",
     "libraryId": "intermediate",
-    "word": "impress",
-    "meaning": "给…深刻印象；使铭记；盖印；强征",
-    "group": 0,
-    "example": {
-      "text": "Impress upon",
-      "meaning": "使牢记；给…留下印象；留下印记",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-feature",
     "libraryId": "intermediate",
     "word": "feature",
-    "meaning": "特征；特色；特点；面貌",
+    "meaning": "特征；特色",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Feature extraction",
-      "meaning": "特征抽取",
+      "text": "Distinguishing feature",
+      "meaning": "特点；特征",
       "kind": "phrase"
     }
   },
@@ -23656,11 +29578,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-regular",
     "libraryId": "intermediate",
     "word": "regular",
-    "meaning": "规则的；有规律的；定期的；整齐的",
+    "meaning": "规则的；定期的；常规的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Regular meeting",
-      "meaning": "例会",
+      "text": "On a regular basis",
+      "meaning": "定期地；经常地",
       "kind": "phrase"
     }
   },
@@ -23668,7 +29591,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-emotion",
     "libraryId": "intermediate",
     "word": "emotion",
-    "meaning": "感情；激情；情绪；情感",
+    "meaning": "感情；激情；情绪",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Intense emotion",
@@ -23677,130 +29601,141 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "etiquette",
+    "meaning": "礼仪；礼节",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Business etiquette",
+      "meaning": "商务礼仪",
+      "kind": "phrase"
+    },
     "id": "intermediate-etiquette",
     "libraryId": "intermediate",
-    "word": "etiquette",
-    "meaning": "礼节；礼仪",
-    "group": 0,
-    "example": {
-      "text": "Strict rules of professional etiquette",
-      "meaning": "严格的行规",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-queue",
     "libraryId": "intermediate",
     "word": "queue",
-    "meaning": "排队；行列；队列；长队",
+    "meaning": "排队",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Queue up",
-      "meaning": "v. 排队等候",
+      "meaning": "排队等候",
       "kind": "phrase"
     }
   },
   {
-    "id": "intermediate-impolite",
-    "libraryId": "intermediate",
     "word": "impolite",
-    "meaning": "不礼貌的；粗鲁的",
-    "group": 0,
+    "meaning": "不礼貌的",
+    "partOfSpeech": "adj",
     "example": {
       "text": "An impolite remark",
-      "meaning": "无礼的话",
-      "kind": "sentence"
-    }
+      "meaning": "不礼貌的话",
+      "kind": "phrase"
+    },
+    "id": "intermediate-impolite",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
+    "word": "reveal",
+    "meaning": "揭示；透露",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Reveal a secret",
+      "meaning": "透露一个秘密",
+      "kind": "phrase"
+    },
     "id": "intermediate-reveal",
     "libraryId": "intermediate",
-    "word": "reveal",
-    "meaning": "揭露；揭示；泄露；展现",
-    "group": 0,
-    "example": {
-      "text": "Reveal itself",
-      "meaning": "v. 呈现，出现；被认知",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "onion",
+    "meaning": "洋葱",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Cut an onion",
+      "meaning": "切一个洋葱",
+      "kind": "phrase"
+    },
     "id": "intermediate-onion",
     "libraryId": "intermediate",
-    "word": "onion",
-    "meaning": "洋葱；洋葱类植物；洋葱头",
-    "group": 0,
-    "example": {
-      "text": "Green onion",
-      "meaning": "绿洋葱；叶用葱",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-negative",
     "libraryId": "intermediate",
     "word": "negative",
-    "meaning": "否定的；消极的；负的；底片",
+    "meaning": "否定的；消极的；负的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Negative ion",
-      "meaning": "阴离子",
+      "text": "A negative answer",
+      "meaning": "否定的回答",
       "kind": "phrase"
     }
   },
   {
+    "word": "realistic",
+    "meaning": "现实的；切合实际的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A realistic plan",
+      "meaning": "一个切合实际的计划",
+      "kind": "phrase"
+    },
     "id": "intermediate-realistic",
     "libraryId": "intermediate",
-    "word": "realistic",
-    "meaning": "现实的；现实主义的；逼真的；实际的",
-    "group": 0,
-    "example": {
-      "text": "Realistic painting",
-      "meaning": "写实绘画",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "monster",
+    "meaning": "怪物",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A sea monster",
+      "meaning": "海怪",
+      "kind": "phrase"
+    },
     "id": "intermediate-monster",
     "libraryId": "intermediate",
-    "word": "monster",
-    "meaning": "巨大的；庞大的；怪物；妖怪",
-    "group": 0,
-    "example": {
-      "text": "Green-eyed monster",
-      "meaning": "n. 嫉妒",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-tag",
     "libraryId": "intermediate",
     "word": "tag",
-    "meaning": "标签；标牌；给…加上标签；给…挂上标牌",
+    "meaning": "标签，标牌",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Claim tag",
-      "meaning": "n. 行李票",
+      "text": "Price tag",
+      "meaning": "价格标签；标价",
       "kind": "phrase"
     }
   },
   {
+    "word": "blow",
+    "meaning": "吹",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Blow out a candle",
+      "meaning": "吹灭一支蜡烛",
+      "kind": "phrase"
+    },
     "id": "intermediate-blow",
     "libraryId": "intermediate",
-    "word": "blow",
-    "meaning": "〔风〕吹；刮；打击；吹",
-    "group": 0,
-    "example": {
-      "text": "Heavy blow",
-      "meaning": "强力的打击",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-earthquake",
     "libraryId": "intermediate",
     "word": "earthquake",
-    "meaning": "地震；大动荡；大震荡",
+    "meaning": "地震",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Earthquake disaster",
@@ -23809,62 +29744,67 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "towards",
+    "meaning": "朝；向",
+    "partOfSpeech": "prep",
+    "example": {
+      "text": "Walk towards the door",
+      "meaning": "朝门走去",
+      "kind": "phrase"
+    },
     "id": "intermediate-towards",
     "libraryId": "intermediate",
-    "word": "towards",
-    "meaning": "向；朝；面对；接近",
-    "group": 0,
-    "example": {
-      "text": "The money collected will be put towards repairing the church roof.",
-      "meaning": "募集到的钱款将用于修缮教堂屋顶。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-send",
     "libraryId": "intermediate",
     "word": "send",
-    "meaning": "[sent-sent] 送；寄；派遣；打发",
+    "meaning": "寄；发送；派遣",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Send mail",
-      "meaning": "发送邮件",
+      "text": "Send a letter",
+      "meaning": "寄信",
       "kind": "phrase"
     }
   },
   {
+    "word": "purpose",
+    "meaning": "目的；用途",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The purpose of the visit",
+      "meaning": "此次访问的目的",
+      "kind": "phrase"
+    },
     "id": "intermediate-purpose",
     "libraryId": "intermediate",
-    "word": "purpose",
-    "meaning": "目的；意图；用途；效果",
-    "group": 0,
-    "example": {
-      "text": "Main purpose",
-      "meaning": "主要目的",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "flee",
+    "meaning": "逃离；逃走",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Flee from danger",
+      "meaning": "逃离危险",
+      "kind": "phrase"
+    },
     "id": "intermediate-flee",
     "libraryId": "intermediate",
-    "word": "flee",
-    "meaning": "[fled-fled] 逃离；逃跑；逃走；消失",
-    "group": 0,
-    "example": {
-      "text": "Flee from",
-      "meaning": "vt. 从……逃出来",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-hero",
     "libraryId": "intermediate",
     "word": "hero",
-    "meaning": "英雄；勇士；男主角；男主人公",
+    "meaning": "英雄，勇士；男主角，男主人公",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Hero worship",
-      "meaning": "英雄崇拜",
+      "text": "National hero",
+      "meaning": "民族英雄",
       "kind": "phrase"
     }
   },
@@ -23872,31 +29812,34 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-award",
     "libraryId": "intermediate",
     "word": "award",
-    "meaning": "授予；给予；判给；奖",
+    "meaning": "奖；奖品",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Special award",
-      "meaning": "特别奖",
+      "text": "Award ceremony",
+      "meaning": "颁奖仪式，颁奖典礼",
       "kind": "phrase"
     }
   },
   {
+    "word": "organize",
+    "meaning": "组织；安排",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Organize a school trip",
+      "meaning": "组织一次学校旅行",
+      "kind": "phrase"
+    },
     "id": "intermediate-organize",
     "libraryId": "intermediate",
-    "word": "organize",
-    "meaning": "组织；安排；使有条理；使有机化",
-    "group": 0,
-    "example": {
-      "text": "Students need to learn how to organize their work.",
-      "meaning": "学生要学会如何安排好自己的学习。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-disappointing",
     "libraryId": "intermediate",
     "word": "disappointing",
-    "meaning": "令人失望的；令人扫兴的",
+    "meaning": "令人失望的，令人扫兴的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "The Lakers’ loss in the playoffs was very disappointing.",
@@ -23905,38 +29848,41 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "player",
+    "meaning": "运动员；选手",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A football player",
+      "meaning": "一名足球运动员",
+      "kind": "phrase"
+    },
     "id": "intermediate-player",
     "libraryId": "intermediate",
-    "word": "player",
-    "meaning": "选手；队员；做游戏的人；演员",
-    "group": 0,
-    "example": {
-      "text": "Football player",
-      "meaning": "足球运动员",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "cost",
+    "meaning": "费用；价格",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The cost of a ticket",
+      "meaning": "一张票的价格",
+      "kind": "phrase"
+    },
     "id": "intermediate-cost",
     "libraryId": "intermediate",
-    "word": "cost",
-    "meaning": "费用；成本；价格为；需支付〔某一数量的钱〕",
-    "group": 0,
-    "example": {
-      "text": "Production cost",
-      "meaning": "生产成本",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-satisfy",
     "libraryId": "intermediate",
     "word": "satisfy",
-    "meaning": "满足；满意；确信；信服",
+    "meaning": "满足，满意；确信，信服",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Satisfy oneself",
-      "meaning": "v. 彻底弄明白",
+      "text": "Satisfy one's needs",
+      "meaning": "满足某人的需要",
       "kind": "phrase"
     }
   },
@@ -23944,7 +29890,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-really",
     "libraryId": "intermediate",
     "word": "really",
-    "meaning": "真正地；实际上；很；十分",
+    "meaning": "真正地，实际上；很，十分，全然",
+    "partOfSpeech": "adv",
     "group": 0,
     "example": {
       "text": "Really enjoy the trip",
@@ -23953,22 +29900,180 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "challenge",
+    "meaning": "挑战",
+    "example": {
+      "text": "Challenge yourself",
+      "meaning": "挑战你自己",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "intermediate-challenge",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "wild",
+    "meaning": "野生的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A wild animal",
+      "meaning": "一只野生动物",
+      "kind": "phrase"
+    },
     "id": "intermediate-wild",
     "libraryId": "intermediate",
-    "word": "wild",
-    "meaning": "野生的；未驯化的；荒凉的；荒芜的",
-    "group": 0,
+    "group": 0
+  },
+  {
+    "word": "journey",
+    "meaning": "旅程",
     "example": {
-      "text": "Wild flower",
-      "meaning": "野花",
+      "text": "A train journey",
+      "meaning": "一段火车旅程",
       "kind": "phrase"
-    }
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-journey",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "tradition",
+    "meaning": "传统",
+    "example": {
+      "text": "A family tradition",
+      "meaning": "一项家庭传统",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-tradition",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "responsibility",
+    "meaning": "责任",
+    "example": {
+      "text": "Take responsibility",
+      "meaning": "承担责任",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-responsibility",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "achievement",
+    "meaning": "成就",
+    "example": {
+      "text": "A great achievement",
+      "meaning": "一项伟大的成就",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-achievement",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "independence",
+    "meaning": "独立",
+    "example": {
+      "text": "Personal independence",
+      "meaning": "个人独立",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-independence",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "efficient",
+    "meaning": "高效的",
+    "example": {
+      "text": "An efficient worker",
+      "meaning": "一位高效的工作者",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "adj",
+    "id": "intermediate-efficient",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "valuable",
+    "meaning": "有价值的",
+    "example": {
+      "text": "A valuable lesson",
+      "meaning": "宝贵的一课",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "adj",
+    "id": "intermediate-valuable",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "graduate",
+    "meaning": "毕业",
+    "example": {
+      "text": "Graduate from school",
+      "meaning": "从学校毕业",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "intermediate-graduate",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "respect",
+    "meaning": "尊重",
+    "example": {
+      "text": "Respect other people",
+      "meaning": "尊重他人",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-respect",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "USA",
+    "meaning": "美国",
+    "example": {
+      "text": "Travel to the USA",
+      "meaning": "前往美国旅行",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-usa",
+    "libraryId": "intermediate",
+    "group": 0
+  },
+  {
+    "word": "UK",
+    "meaning": "英国",
+    "example": {
+      "text": "Study in the UK",
+      "meaning": "在英国学习",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "intermediate-uk",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-academic",
     "libraryId": "intermediate",
     "word": "academic",
-    "meaning": "学术的；理论的；学院的；大学生",
+    "meaning": "学术的；理论的；学院的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Academic research",
@@ -23977,38 +30082,41 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "access",
+    "meaning": "使用机会；通道",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Access to the library",
+      "meaning": "使用图书馆的机会",
+      "kind": "phrase"
+    },
     "id": "intermediate-access",
     "libraryId": "intermediate",
-    "word": "access",
-    "meaning": "使用；存取；接近；进入",
-    "group": 0,
-    "example": {
-      "text": "Access control",
-      "meaning": "访问控制",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "account",
+    "meaning": "账户",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A bank account",
+      "meaning": "一个银行账户",
+      "kind": "phrase"
+    },
     "id": "intermediate-account",
     "libraryId": "intermediate",
-    "word": "account",
-    "meaning": "账户；解释；账目；账单",
-    "group": 0,
-    "example": {
-      "text": "Your account",
-      "meaning": "您的帐号",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-accurate",
     "libraryId": "intermediate",
     "word": "accurate",
-    "meaning": "正确的；准确的；精确的；正确无误的",
+    "meaning": "正确的，准确的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Accurate measurement",
-      "meaning": "精确测量",
+      "text": "Accurate model",
+      "meaning": "准确的模型",
       "kind": "phrase"
     }
   },
@@ -24016,19 +30124,21 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-acquire",
     "libraryId": "intermediate",
     "word": "acquire",
-    "meaning": "获得；取得；学到；捕获",
+    "meaning": "获得；学到",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Manning hoped to acquire valuable works of art as cheaply as possible.",
-      "meaning": "曼宁希望以尽可能低的价格买到有价值的艺术品。",
-      "kind": "sentence"
+      "text": "Acquire new skills",
+      "meaning": "获得新技能",
+      "kind": "phrase"
     }
   },
   {
     "id": "intermediate-actual",
     "libraryId": "intermediate",
     "word": "actual",
-    "meaning": "真实的；实际的；现行的；目前的",
+    "meaning": "真实的，实际的；现行的，目前的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Actual situation",
@@ -24037,122 +30147,132 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "addition",
+    "meaning": "增加；补充",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A useful addition",
+      "meaning": "一项有用的补充",
+      "kind": "phrase"
+    },
     "id": "intermediate-addition",
     "libraryId": "intermediate",
-    "word": "addition",
-    "meaning": "添加；[数] 加法；增加物；增加",
-    "group": 0,
-    "example": {
-      "text": "Nucleophilic addition",
-      "meaning": "亲核加成",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-adjust",
     "libraryId": "intermediate",
     "word": "adjust",
-    "meaning": "调整；使…适合；校准；适应",
+    "meaning": "调整；适应",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Adjust price",
-      "meaning": "调整价格",
+      "text": "Adjust the seat",
+      "meaning": "调整座椅",
       "kind": "phrase"
     }
   },
   {
+    "word": "admire",
+    "meaning": "欣赏；钦佩",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Admire a beautiful painting",
+      "meaning": "欣赏一幅美丽的画",
+      "kind": "phrase"
+    },
     "id": "intermediate-admire",
     "libraryId": "intermediate",
-    "word": "admire",
-    "meaning": "钦佩；赞美；羡慕；称赞",
-    "group": 0,
-    "example": {
-      "text": "Admire for",
-      "meaning": "vt. 赞赏",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "admission",
+    "meaning": "准许进入；入场",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An admission ticket",
+      "meaning": "一张入场券",
+      "kind": "phrase"
+    },
     "id": "intermediate-admission",
     "libraryId": "intermediate",
-    "word": "admission",
-    "meaning": "承认；入场费；进入许可；坦白",
-    "group": 0,
-    "example": {
-      "text": "No admission",
-      "meaning": "禁止入内",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "admit",
+    "meaning": "承认",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Admit a mistake",
+      "meaning": "承认错误",
+      "kind": "phrase"
+    },
     "id": "intermediate-admit",
     "libraryId": "intermediate",
-    "word": "admit",
-    "meaning": "承认；准许进入；可容纳；准许",
-    "group": 0,
-    "example": {
-      "text": "Admit of",
-      "meaning": "容许，有…的可能",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-analyse",
     "libraryId": "intermediate",
     "word": "analyse",
-    "meaning": "分析；研究；分解；解析",
+    "meaning": "分析",
+    "partOfSpeech": "vt",
     "group": 0,
     "example": {
-      "text": "You need to sit down and analyse why you feel so upset.",
-      "meaning": "你得坐下来想一想自己为什么会那么生气。",
+      "text": "She still needs to analyse the data.",
+      "meaning": "她仍需要分析这些数据。",
       "kind": "sentence"
     }
   },
   {
+    "word": "analysis",
+    "meaning": "分析",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An analysis of the results",
+      "meaning": "对结果的分析",
+      "kind": "phrase"
+    },
     "id": "intermediate-analysis",
     "libraryId": "intermediate",
-    "word": "analysis",
-    "meaning": "分析；分解；验定；解析",
-    "group": 0,
-    "example": {
-      "text": "Data analysis",
-      "meaning": "数据分析",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-announcement",
     "libraryId": "intermediate",
     "word": "announcement",
-    "meaning": "公告；宣告；发表；通告",
+    "meaning": "声明；公告",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Official announcement",
-      "meaning": "正式通知；官方消息",
-      "kind": "phrase"
+      "text": "The minister made the announcement at a news conference.",
+      "meaning": "部长在记者招待会上发表了这项声明。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "anxiety",
+    "meaning": "焦虑；担忧",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Exam anxiety",
+      "meaning": "考试焦虑",
+      "kind": "phrase"
+    },
     "id": "intermediate-anxiety",
     "libraryId": "intermediate",
-    "word": "anxiety",
-    "meaning": "焦虑；渴望；挂念；令人焦虑的事",
-    "group": 0,
-    "example": {
-      "text": "Anxiety neurosis",
-      "meaning": "焦虑性神经机能病",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-apologize",
     "libraryId": "intermediate",
     "word": "apologize",
-    "meaning": "道歉；辩解；赔不是；谢罪",
+    "meaning": "道歉",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Apologize for",
-      "meaning": "道歉",
+      "meaning": "为……道歉",
       "kind": "phrase"
     }
   },
@@ -24160,11 +30280,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-apology",
     "libraryId": "intermediate",
     "word": "apology",
-    "meaning": "道歉；谢罪；辩护；勉强的替代物",
+    "meaning": "道歉；歉意",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "A poor apology",
-      "meaning": "有名无实",
+      "text": "Make an apology",
+      "meaning": "道歉",
       "kind": "phrase"
     }
   },
@@ -24172,11 +30293,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-appearance",
     "libraryId": "intermediate",
     "word": "appearance",
-    "meaning": "外貌；外观；出现；露面",
+    "meaning": "外貌，外观；出现，露面",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "In appearance",
-      "meaning": "adv. 在外表上",
+      "text": "Make one's appearance",
+      "meaning": "登台；出现",
       "kind": "phrase"
     }
   },
@@ -24184,7 +30306,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-application",
     "libraryId": "intermediate",
     "word": "application",
-    "meaning": "应用；申请；应用程序；敷用",
+    "meaning": "应用；申请",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Practical application",
@@ -24196,11 +30319,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-apply",
     "libraryId": "intermediate",
     "word": "apply",
-    "meaning": "申请；涂；敷；应用",
+    "meaning": "申请；应用；涂抹",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Apply oneself",
-      "meaning": "减少对…之消耗量；努力，致力于…",
+      "text": "Apply for a job",
+      "meaning": "申请一份工作",
       "kind": "phrase"
     }
   },
@@ -24208,7 +30332,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-appreciate",
     "libraryId": "intermediate",
     "word": "appreciate",
-    "meaning": "欣赏；感激；领会；鉴别",
+    "meaning": "感激；欣赏；领会",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Thanks ever so much for your help, I really appreciate it.",
@@ -24217,26 +30342,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "approach",
+    "meaning": "方法",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A new approach",
+      "meaning": "一种新方法",
+      "kind": "phrase"
+    },
     "id": "intermediate-approach",
     "libraryId": "intermediate",
-    "word": "approach",
-    "meaning": "方法；途径；接近；着手处理",
-    "group": 0,
-    "example": {
-      "text": "Basic approach",
-      "meaning": "基本方法",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-approval",
     "libraryId": "intermediate",
     "word": "approval",
-    "meaning": "赞成；认可；批准；同意",
+    "meaning": "批准；赞成",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "For approval",
-      "meaning": "提交批准",
+      "text": "Subject to approval",
+      "meaning": "需经批准；以确认为准",
       "kind": "phrase"
     }
   },
@@ -24244,11 +30371,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-approve",
     "libraryId": "intermediate",
     "word": "approve",
-    "meaning": "批准；赞成；为…提供证据；满意",
+    "meaning": "批准；赞成",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Approve of",
-      "meaning": "赞成",
+      "text": "Approve the plan",
+      "meaning": "批准计划",
       "kind": "phrase"
     }
   },
@@ -24256,19 +30384,21 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-argument",
     "libraryId": "intermediate",
     "word": "argument",
-    "meaning": "论证；论据；争吵；内容提要",
+    "meaning": "论据；争论",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Argument list",
-      "meaning": "变元表",
-      "kind": "phrase"
+      "text": "We need to provide a convincing argument as to why the system should be changed.",
+      "meaning": "我们得提出有说服力的论据，证明为何要改变体制。",
+      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-arrange",
     "libraryId": "intermediate",
     "word": "arrange",
-    "meaning": "安排；排列；整理；布置",
+    "meaning": "安排；排列；整理",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Arrange for",
@@ -24277,50 +30407,54 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "arrangement",
+    "meaning": "安排",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A travel arrangement",
+      "meaning": "一项旅行安排",
+      "kind": "phrase"
+    },
     "id": "intermediate-arrangement",
     "libraryId": "intermediate",
-    "word": "arrangement",
-    "meaning": "布置；整理；准备；排列",
-    "group": 0,
-    "example": {
-      "text": "Course arrangement",
-      "meaning": "课程安排",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-assistance",
     "libraryId": "intermediate",
     "word": "assistance",
-    "meaning": "援助；帮助；辅助设备；协助",
+    "meaning": "援助，帮助；辅助设备",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Technical assistance",
-      "meaning": "技术援助",
+      "text": "Be of assistance",
+      "meaning": "有帮助；有好处",
       "kind": "phrase"
     }
   },
   {
+    "word": "audience",
+    "meaning": "观众；听众",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A large audience",
+      "meaning": "众多观众",
+      "kind": "phrase"
+    },
     "id": "intermediate-audience",
     "libraryId": "intermediate",
-    "word": "audience",
-    "meaning": "观众；听众；读者；接见",
-    "group": 0,
-    "example": {
-      "text": "Mass audience",
-      "meaning": "大众受众",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-aware",
     "libraryId": "intermediate",
     "word": "aware",
-    "meaning": "意识到的；知道的；有…方面知识的；懂世故的",
+    "meaning": "意识到的；知道的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Acutely aware",
-      "meaning": "清醒地看到",
+      "text": "Become aware of",
+      "meaning": "知道；发觉",
       "kind": "phrase"
     }
   },
@@ -24328,7 +30462,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-adolescent",
     "libraryId": "intermediate",
     "word": "adolescent",
-    "meaning": "青春期的；未成熟的；青少年；[C]青少年",
+    "meaning": "青少年",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Adolescent health",
@@ -24340,7 +30475,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-ambition",
     "libraryId": "intermediate",
     "word": "ambition",
-    "meaning": "野心；雄心；抱负；志向",
+    "meaning": "雄心；抱负",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "He was young and full of ambition.",
@@ -24352,11 +30488,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-anger",
     "libraryId": "intermediate",
     "word": "anger",
-    "meaning": "怒；愤怒；忿怒；使发怒",
+    "meaning": "愤怒；怒气",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Show anger",
-      "meaning": "显示愤怒",
+      "text": "In anger",
+      "meaning": "生气地，愤怒地",
       "kind": "phrase"
     }
   },
@@ -24364,11 +30501,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-belief",
     "libraryId": "intermediate",
     "word": "belief",
-    "meaning": "相信；信赖；信仰；教义",
+    "meaning": "信念；信仰",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Religious belief",
-      "meaning": "宗教信仰",
+      "text": "Belief in",
+      "meaning": "相信；对…的信仰",
       "kind": "phrase"
     }
   },
@@ -24376,7 +30514,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-brilliant",
     "libraryId": "intermediate",
     "word": "brilliant",
-    "meaning": "灿烂的；闪耀的；杰出的；有才气的",
+    "meaning": "明亮的；杰出的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Brilliant sunshine",
@@ -24388,43 +30527,47 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-colleague",
     "libraryId": "intermediate",
     "word": "colleague",
-    "meaning": "同事；同僚",
+    "meaning": "同事，同僚",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "A colleague of mine from the bank",
       "meaning": "我在银行的一位同事",
-      "kind": "sentence"
+      "kind": "phrase"
     }
   },
   {
     "id": "intermediate-commitment",
     "libraryId": "intermediate",
     "word": "commitment",
-    "meaning": "承诺；保证；委托；承担义务",
+    "meaning": "承诺；投入",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Professional commitment",
-      "meaning": "专业承诺",
+      "text": "Make a commitment",
+      "meaning": "承诺",
       "kind": "phrase"
     }
   },
   {
+    "word": "companion",
+    "meaning": "同伴",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A travelling companion",
+      "meaning": "一位旅伴",
+      "kind": "phrase"
+    },
     "id": "intermediate-companion",
     "libraryId": "intermediate",
-    "word": "companion",
-    "meaning": "同伴；朋友；指南；手册",
-    "group": 0,
-    "example": {
-      "text": "Companion star",
-      "meaning": "伴星",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-compete",
     "libraryId": "intermediate",
     "word": "compete",
-    "meaning": "竞争；比赛；对抗；竞赛",
+    "meaning": "竞争；比赛；对抗",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "He will be competing in the 100-metre race.",
@@ -24433,34 +30576,37 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "competitor",
+    "meaning": "竞争者；对手",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A strong competitor",
+      "meaning": "一位强劲的竞争对手",
+      "kind": "phrase"
+    },
     "id": "intermediate-competitor",
     "libraryId": "intermediate",
-    "word": "competitor",
-    "meaning": "竞争者；对手；敌手",
-    "group": 0,
-    "example": {
-      "text": "Competitor analysis",
-      "meaning": "竞争者分析",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "confirm",
+    "meaning": "确认",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Confirm the date",
+      "meaning": "确认日期",
+      "kind": "phrase"
+    },
     "id": "intermediate-confirm",
     "libraryId": "intermediate",
-    "word": "confirm",
-    "meaning": "确认；确定；证实；批准",
-    "group": 0,
-    "example": {
-      "text": "Confirm in",
-      "meaning": "v. 使更坚定",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-confuse",
     "libraryId": "intermediate",
     "word": "confuse",
-    "meaning": "使混乱；使困惑；使糊涂；搞乱",
+    "meaning": "使混淆，迷惑",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Confuse with",
@@ -24472,11 +30618,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-connection",
     "libraryId": "intermediate",
     "word": "connection",
-    "meaning": "连接；关系；人脉；连接件",
+    "meaning": "连接；关系",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Close connection",
-      "meaning": "紧密联系",
+      "text": "Connection with",
+      "meaning": "与…的关系",
       "kind": "phrase"
     }
   },
@@ -24484,11 +30631,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-considerate",
     "libraryId": "intermediate",
     "word": "considerate",
-    "meaning": "体贴的；体谅的；考虑周到的；替人着想的",
+    "meaning": "体贴的；体谅的；考虑周到的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Considerate towards",
-      "meaning": "体谅；体贴",
+      "text": "Be considerate of",
+      "meaning": "体谅",
       "kind": "phrase"
     }
   },
@@ -24496,7 +30644,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-consult",
     "libraryId": "intermediate",
     "word": "consult",
-    "meaning": "查阅；商量；向…请教；请教",
+    "meaning": "查阅；商量；向…请教",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Consult with",
@@ -24508,7 +30657,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-contribute",
     "libraryId": "intermediate",
     "word": "contribute",
-    "meaning": "贡献；出力；投稿；捐献",
+    "meaning": "贡献，出力；投稿；捐献",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "The three sons also contribute to the family business.",
@@ -24520,7 +30670,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-convince",
     "libraryId": "intermediate",
     "word": "convince",
-    "meaning": "说服；使确信；使信服；使相信",
+    "meaning": "说服；使确信，使信服",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Her arguments didn’t convince everyone, but changes were made.",
@@ -24532,7 +30683,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-curious",
     "libraryId": "intermediate",
     "word": "curious",
-    "meaning": "好奇的；有求知欲的；古怪的；爱挑剔的",
+    "meaning": "好奇的；求知的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Curious about",
@@ -24541,26 +30693,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "debate",
+    "meaning": "辩论；讨论",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Debate a question",
+      "meaning": "辩论一个问题",
+      "kind": "phrase"
+    },
     "id": "intermediate-debate",
     "libraryId": "intermediate",
-    "word": "debate",
-    "meaning": "辩论；争论；讨论；辩论会",
-    "group": 0,
-    "example": {
-      "text": "Public debate",
-      "meaning": "公开辩论",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-demand",
     "libraryId": "intermediate",
     "word": "demand",
-    "meaning": "要求；需要；查询；[经] 需求",
+    "meaning": "需求；要求",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Market demand",
-      "meaning": "市场需求",
+      "text": "Supply and demand",
+      "meaning": "供应与需求",
       "kind": "phrase"
     }
   },
@@ -24568,11 +30722,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-determination",
     "libraryId": "intermediate",
     "word": "determination",
-    "meaning": "决心；果断；测定；意志",
+    "meaning": "决心；确定",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Quantitative determination",
-      "meaning": "定量测定",
+      "text": "Firm determination",
+      "meaning": "坚定的决心",
       "kind": "phrase"
     }
   },
@@ -24580,11 +30735,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-disappoint",
     "libraryId": "intermediate",
     "word": "disappoint",
-    "meaning": "使失望；失望；使受挫折",
+    "meaning": "使失望",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Great things were expected of this band, and they didn’t disappoint.",
-      "meaning": "大家对这支乐队的期望很高，而他们也不负众望。",
+      "text": "I hated to disappoint her.",
+      "meaning": "我不愿意让她失望。",
       "kind": "sentence"
     }
   },
@@ -24592,11 +30748,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-discourage",
     "libraryId": "intermediate",
     "word": "discourage",
-    "meaning": "阻止；使气馁；打消；阻碍",
+    "meaning": "使泄气，使灰心",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Aspirin may discourage tumour growth in some types of cancer.",
-      "meaning": "阿司匹林可能遏制某些恶性肿瘤的生长。",
+      "text": "You should not let one failure discourage you.",
+      "meaning": "你不该失败一次就灰心丧气。",
       "kind": "sentence"
     }
   },
@@ -24605,6 +30762,7 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "eager",
     "meaning": "渴望的；热切的；热心的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Eager for",
@@ -24613,26 +30771,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "embarrass",
+    "meaning": "使尴尬",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Embarrass a friend",
+      "meaning": "使朋友尴尬",
+      "kind": "phrase"
+    },
     "id": "intermediate-embarrass",
     "libraryId": "intermediate",
-    "word": "embarrass",
-    "meaning": "使局促不安；使困窘；阻碍；尴尬",
-    "group": 0,
-    "example": {
-      "text": "The speech was deliberately designed to embarrass the prime minister.",
-      "meaning": "这个发言是故意为难首相。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-familiar",
     "libraryId": "intermediate",
     "word": "familiar",
-    "meaning": "熟悉的；常见的；亲近的；常客",
+    "meaning": "熟悉的；熟知的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Familiar style",
-      "meaning": "简体，非正式文体；家常体",
+      "text": "A familiar voice",
+      "meaning": "熟悉的声音",
       "kind": "phrase"
     }
   },
@@ -24640,11 +30800,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-freedom",
     "libraryId": "intermediate",
     "word": "freedom",
-    "meaning": "自由；自主；直率",
+    "meaning": "自由，自主；直率",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Personal freedom",
-      "meaning": "人身自由",
+      "text": "Freedom of speech",
+      "meaning": "言论自由",
       "kind": "phrase"
     }
   },
@@ -24652,7 +30813,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-generous",
     "libraryId": "intermediate",
     "word": "generous",
-    "meaning": "慷慨的；大方的；宽宏大量的；有雅量的",
+    "meaning": "慷慨的；大方的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Be generous with",
@@ -24661,26 +30823,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "grateful",
+    "meaning": "感激的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Grateful for your help",
+      "meaning": "感激你的帮助",
+      "kind": "phrase"
+    },
     "id": "intermediate-grateful",
     "libraryId": "intermediate",
-    "word": "grateful",
-    "meaning": "感谢的；令人愉快的；宜人的；感激的",
-    "group": 0,
-    "example": {
-      "text": "Grateful for",
-      "meaning": "为…而感谢",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-guidance",
     "libraryId": "intermediate",
     "word": "guidance",
-    "meaning": "指导；引导；领导",
+    "meaning": "指导，引导；领导",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Vocational guidance",
-      "meaning": "就业指导",
+      "text": "Career guidance",
+      "meaning": "就业指导；就业辅导",
       "kind": "phrase"
     }
   },
@@ -24688,7 +30852,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-hesitate",
     "libraryId": "intermediate",
     "word": "hesitate",
-    "meaning": "犹豫；踌躇；含糊；不情愿",
+    "meaning": "犹豫；迟疑",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Don't hesitate",
@@ -24697,26 +30862,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "impression",
+    "meaning": "印象",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A good impression",
+      "meaning": "一个好印象",
+      "kind": "phrase"
+    },
     "id": "intermediate-impression",
     "libraryId": "intermediate",
-    "word": "impression",
-    "meaning": "印象；效果；影响；压痕",
-    "group": 0,
-    "example": {
-      "text": "First impression",
-      "meaning": "第一印象",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-independent",
     "libraryId": "intermediate",
     "word": "independent",
-    "meaning": "独立的；单独的；无党派的；不受约束的",
+    "meaning": "独立的；自主的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Independent director",
-      "meaning": "独立董事",
+      "text": "Independent of",
+      "meaning": "不依赖…的；不受…支配的",
       "kind": "phrase"
     }
   },
@@ -24724,11 +30891,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-inform",
     "libraryId": "intermediate",
     "word": "inform",
-    "meaning": "通知；告诉；报告；向…报告",
+    "meaning": "通知；告诉；报告",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Inform against",
-      "meaning": "检举；告发",
+      "text": "Inform of",
+      "meaning": "通知；报告",
       "kind": "phrase"
     }
   },
@@ -24736,43 +30904,47 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-inspire",
     "libraryId": "intermediate",
     "word": "inspire",
-    "meaning": "激发；鼓舞；启示；产生",
+    "meaning": "激励；启发",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "We need someone who can inspire the team.",
-      "meaning": "我们需要一个能鼓舞团队士气的人。",
-      "kind": "sentence"
+      "text": "Inspire the team",
+      "meaning": "激励团队",
+      "kind": "phrase"
     }
   },
   {
     "id": "intermediate-intend",
     "libraryId": "intermediate",
     "word": "intend",
-    "meaning": "想要；打算；意指；意思是",
+    "meaning": "想要，打算",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Intend to do",
-      "meaning": "想要做；想要做某事",
+      "meaning": "打算做",
       "kind": "phrase"
     }
   },
   {
+    "word": "interrupt",
+    "meaning": "打断",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Do not interrupt me.",
+      "meaning": "不要打断我。",
+      "kind": "sentence"
+    },
     "id": "intermediate-interrupt",
     "libraryId": "intermediate",
-    "word": "interrupt",
-    "meaning": "中断；打断；插嘴；妨碍",
-    "group": 0,
-    "example": {
-      "text": "Interrupt handling",
-      "meaning": "中断处置",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-invitation",
     "libraryId": "intermediate",
     "word": "invitation",
-    "meaning": "邀请；引诱；请帖；邀请函",
+    "meaning": "邀请；请帖",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Invitation letter",
@@ -24785,42 +30957,46 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "kindness",
     "meaning": "仁慈；好意；友好的行为",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Milk of human kindness",
-      "meaning": "人情；恻隐之心",
-      "kind": "phrase"
+      "text": "I can’t thank you enough for your kindness.",
+      "meaning": "你的好意我感激不尽。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "lack",
+    "meaning": "缺乏",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A lack of sleep",
+      "meaning": "睡眠不足",
+      "kind": "phrase"
+    },
     "id": "intermediate-lack",
     "libraryId": "intermediate",
-    "word": "lack",
-    "meaning": "缺乏；不足；没有；需要",
-    "group": 0,
-    "example": {
-      "text": "Lack of money",
-      "meaning": "缺钱",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "willing",
+    "meaning": "愿意的；乐意的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Willing to help",
+      "meaning": "乐意帮忙",
+      "kind": "phrase"
+    },
     "id": "intermediate-willing",
     "libraryId": "intermediate",
-    "word": "willing",
-    "meaning": "乐意的；自愿的；心甘情愿的；决心",
-    "group": 0,
-    "example": {
-      "text": "God willing",
-      "meaning": "如果情况允许的话",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-accommodation",
     "libraryId": "intermediate",
     "word": "accommodation",
     "meaning": "住处；膳宿",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Student accommodation",
@@ -24829,22 +31005,24 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "accompany",
+    "meaning": "陪伴",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Accompany a friend",
+      "meaning": "陪伴一位朋友",
+      "kind": "phrase"
+    },
     "id": "intermediate-accompany",
     "libraryId": "intermediate",
-    "word": "accompany",
-    "meaning": "陪伴；伴随；伴奏；陪同",
-    "group": 0,
-    "example": {
-      "text": "Accompany by",
-      "meaning": "随行，伴奏；在…的陪同下",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-adventure",
     "libraryId": "intermediate",
     "word": "adventure",
-    "meaning": "冒险；冒险精神；投机活动；大胆说出",
+    "meaning": "冒险；惊险活动",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Adventure film",
@@ -24853,26 +31031,28 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "aircraft",
+    "meaning": "飞机；航空器",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A passenger aircraft",
+      "meaning": "一架客机",
+      "kind": "phrase"
+    },
     "id": "intermediate-aircraft",
     "libraryId": "intermediate",
-    "word": "aircraft",
-    "meaning": "飞机；航空器；飞行器",
-    "group": 0,
-    "example": {
-      "text": "Military aircraft",
-      "meaning": "军用飞机",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-alarm",
     "libraryId": "intermediate",
     "word": "alarm",
-    "meaning": "闹钟；警报；警告器；惊慌",
+    "meaning": "警报；闹钟",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Alarm system",
-      "meaning": "报警系统",
+      "text": "Fire alarm system",
+      "meaning": "火警系统",
       "kind": "phrase"
     }
   },
@@ -24880,11 +31060,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-apartment",
     "libraryId": "intermediate",
     "word": "apartment",
-    "meaning": "公寓；房间；一套公寓房间",
+    "meaning": "公寓；房间",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Apartment complex",
-      "meaning": "公寓大楼",
+      "text": "Apartment for rent",
+      "meaning": "出租公寓",
       "kind": "phrase"
     }
   },
@@ -24892,11 +31073,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-arrival",
     "libraryId": "intermediate",
     "word": "arrival",
-    "meaning": "到来；到达；到达者；到达物",
+    "meaning": "到来；到达；到达者",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Arrival time",
-      "meaning": "到达时间",
+      "text": "Date of arrival",
+      "meaning": "到达日期",
       "kind": "phrase"
     }
   },
@@ -24904,7 +31086,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-atmosphere",
     "libraryId": "intermediate",
     "word": "atmosphere",
-    "meaning": "气氛；大气；空气；环境",
+    "meaning": "大气；气氛",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Earth's atmosphere",
@@ -24916,11 +31099,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-baggage",
     "libraryId": "intermediate",
     "word": "baggage",
-    "meaning": "行李；[交] 辎重（军队的）",
+    "meaning": "行李",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Hand baggage",
-      "meaning": "n. 手提行李",
+      "text": "Baggage claim area",
+      "meaning": "行李认领处；取行李处；行李认领区",
       "kind": "phrase"
     }
   },
@@ -24928,7 +31112,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-balcony",
     "libraryId": "intermediate",
     "word": "balcony",
-    "meaning": "阳台；包厢；戏院楼厅；楼厅",
+    "meaning": "阳台；楼座",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Balcony window",
@@ -24940,7 +31125,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-bandage",
     "libraryId": "intermediate",
     "word": "bandage",
-    "meaning": "绷带；用绷带包扎；包带；用绷带绑扎",
+    "meaning": "绷带",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Elastic bandage",
@@ -24949,22 +31135,24 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "blanket",
+    "meaning": "毯子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A warm blanket",
+      "meaning": "一条暖和的毯子",
+      "kind": "phrase"
+    },
     "id": "intermediate-blanket",
     "libraryId": "intermediate",
-    "word": "blanket",
-    "meaning": "毛毯；毯子；毯状物；覆盖层",
-    "group": 0,
-    "example": {
-      "text": "Electric blanket",
-      "meaning": "电热毯",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-bookshelf",
     "libraryId": "intermediate",
     "word": "bookshelf",
     "meaning": "书架",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "The book you gave me is now on the bookshelf.",
@@ -24977,58 +31165,63 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "bookshop",
     "meaning": "书店",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Do you know where I can find a good bookshop?",
-      "meaning": "你知道我在哪里可以找到好书店?",
+      "meaning": "你知道我在哪里能找到一家好书店吗？",
       "kind": "sentence"
     }
   },
   {
+    "word": "budget",
+    "meaning": "预算",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A small budget",
+      "meaning": "一笔小额预算",
+      "kind": "phrase"
+    },
     "id": "intermediate-budget",
     "libraryId": "intermediate",
-    "word": "budget",
-    "meaning": "预算；预算费；安排；预定",
-    "group": 0,
-    "example": {
-      "text": "Budget deficit",
-      "meaning": "预算赤字",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-cafeteria",
     "libraryId": "intermediate",
     "word": "cafeteria",
-    "meaning": "自助餐厅；自助食堂；自助餐馆",
+    "meaning": "自助餐厅",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "The school cafeteria",
       "meaning": "学校餐厅",
-      "kind": "sentence"
+      "kind": "phrase"
     }
   },
   {
+    "word": "carpet",
+    "meaning": "地毯",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A wool carpet",
+      "meaning": "一张羊毛地毯",
+      "kind": "phrase"
+    },
     "id": "intermediate-carpet",
     "libraryId": "intermediate",
-    "word": "carpet",
-    "meaning": "在…上铺地毯；把地毯铺在…上；斥责；地毯",
-    "group": 0,
-    "example": {
-      "text": "Wool carpet",
-      "meaning": "羊毛地毯",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-castle",
     "libraryId": "intermediate",
     "word": "castle",
-    "meaning": "城堡；象棋中的车；置…于城堡中；筑城堡防御",
+    "meaning": "城堡；象棋中的车",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Windsor castle",
-      "meaning": "温莎城堡（英国著名城堡）",
+      "text": "An old castle",
+      "meaning": "一座古老的城堡",
       "kind": "phrase"
     }
   },
@@ -25036,7 +31229,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-celebration",
     "libraryId": "intermediate",
     "word": "celebration",
-    "meaning": "庆典；庆祝会；庆祝；颂扬",
+    "meaning": "庆祝；庆典",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "In celebration of",
@@ -25048,43 +31242,47 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-ceremony",
     "libraryId": "intermediate",
     "word": "ceremony",
-    "meaning": "典礼；仪式；礼节；礼仪",
+    "meaning": "典礼；仪式",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Wedding ceremony",
-      "meaning": "n. 结婚典礼",
+      "text": "A wedding ceremony",
+      "meaning": "一场婚礼",
       "kind": "phrase"
     }
   },
   {
+    "word": "certificate",
+    "meaning": "证书",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A school certificate",
+      "meaning": "一份学校证书",
+      "kind": "phrase"
+    },
     "id": "intermediate-certificate",
     "libraryId": "intermediate",
-    "word": "certificate",
-    "meaning": "发给证明书；以证书形式授权给…；用证书批准；证书",
-    "group": 0,
-    "example": {
-      "text": "Qualification certificate",
-      "meaning": "资格证书",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "clinic",
+    "meaning": "诊所",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A dental clinic",
+      "meaning": "一家牙科诊所",
+      "kind": "phrase"
+    },
     "id": "intermediate-clinic",
     "libraryId": "intermediate",
-    "word": "clinic",
-    "meaning": "临床；诊所；医务室；会诊",
-    "group": 0,
-    "example": {
-      "text": "Outpatient clinic",
-      "meaning": "门诊诊所",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-compass",
     "libraryId": "intermediate",
     "word": "compass",
-    "meaning": "指南针；罗盘；圆规；包围",
+    "meaning": "指南针，罗盘；圆规",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Magnetic compass",
@@ -25096,11 +31294,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-convenience",
     "libraryId": "intermediate",
     "word": "convenience",
-    "meaning": "便利；厕所；便利的事物；方便",
+    "meaning": "便利，方便；厕所",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Convenience store",
-      "meaning": "便利商店",
+      "text": "At your convenience",
+      "meaning": "在你方便的时候",
       "kind": "phrase"
     }
   },
@@ -25108,47 +31307,51 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-cottage",
     "libraryId": "intermediate",
     "word": "cottage",
-    "meaning": "小屋；村舍；（农舍式的）小别墅；小别墅",
+    "meaning": "小屋；村舍",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Cottage industry",
-      "meaning": "家庭手工业",
-      "kind": "phrase"
+      "text": "We’re staying in a holiday cottage in Dorset.",
+      "meaning": "我们住在多塞特的一个度假小别墅里。",
+      "kind": "sentence"
     }
   },
   {
+    "word": "crew",
+    "meaning": "全体船员；机组人员",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A ship's crew",
+      "meaning": "一艘船的全体船员",
+      "kind": "phrase"
+    },
     "id": "intermediate-crew",
     "libraryId": "intermediate",
-    "word": "crew",
-    "meaning": "队；组；全体人员；全体船员",
-    "group": 0,
-    "example": {
-      "text": "Crew member",
-      "meaning": "乘务员",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-currency",
-    "libraryId": "intermediate",
     "word": "currency",
-    "meaning": "货币；通货；通行；流行",
-    "group": 0,
+    "meaning": "货币",
+    "partOfSpeech": "n",
     "example": {
       "text": "Foreign currency",
-      "meaning": "n. 外币",
+      "meaning": "外币",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-currency",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
     "id": "intermediate-customs",
     "libraryId": "intermediate",
     "word": "customs",
-    "meaning": "海关；风俗（custom的复数）；习惯；关税",
+    "meaning": "海关；关税",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Customs officer",
-      "meaning": "海关官员",
+      "text": "Customs clearance",
+      "meaning": "海关放行；结关",
       "kind": "phrase"
     }
   },
@@ -25156,11 +31359,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-departure",
     "libraryId": "intermediate",
     "word": "departure",
-    "meaning": "离开；出发；违背；背离",
+    "meaning": "离开；出发；违背",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Departure gate",
-      "meaning": "登机口",
+      "text": "Point of departure",
+      "meaning": "出发地",
       "kind": "phrase"
     }
   },
@@ -25168,11 +31372,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-destination",
     "libraryId": "intermediate",
     "word": "destination",
-    "meaning": "目的地；终点；目标",
+    "meaning": "目的地，终点",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Final destination",
-      "meaning": "最终目的地",
+      "text": "Port of destination",
+      "meaning": "目的港",
       "kind": "phrase"
     }
   },
@@ -25180,11 +31385,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-downtown",
     "libraryId": "intermediate",
     "word": "downtown",
-    "meaning": "往闹市区；在市区；市中心的；市中心区",
+    "meaning": "市中心的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Downtown area",
-      "meaning": "市中心",
+      "text": "Downtown business district",
+      "meaning": "市中心商业区；城市商业区",
       "kind": "phrase"
     }
   },
@@ -25192,11 +31398,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-emergency",
     "libraryId": "intermediate",
     "word": "emergency",
-    "meaning": "紧急情况；突发事件；非常时刻；紧急的",
+    "meaning": "紧急情况；突发事件；非常时刻",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Emergency response",
-      "meaning": "应急响应",
+      "text": "In an emergency",
+      "meaning": "在紧急情况下",
       "kind": "phrase"
     }
   },
@@ -25204,11 +31411,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-entrance",
     "libraryId": "intermediate",
     "word": "entrance",
-    "meaning": "入口；进入；使出神；使入迷",
+    "meaning": "入口；入场；入学许可",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Entrance examination",
-      "meaning": "入学考试",
+      "text": "College entrance examination",
+      "meaning": "高考；大学入学考试",
       "kind": "phrase"
     }
   },
@@ -25216,47 +31424,51 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-fare",
     "libraryId": "intermediate",
     "word": "fare",
-    "meaning": "经营；进展；遭遇；过活",
+    "meaning": "票价；车费",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Car fare",
-      "meaning": "交通费",
+      "text": "Air fare",
+      "meaning": "飞机票价；航空费用；航空票价",
       "kind": "phrase"
     }
   },
   {
+    "word": "ferry",
+    "meaning": "渡船",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Take a ferry",
+      "meaning": "乘渡船",
+      "kind": "phrase"
+    },
     "id": "intermediate-ferry",
     "libraryId": "intermediate",
-    "word": "ferry",
-    "meaning": "渡船；摆渡；渡口；（乘渡船）渡过",
-    "group": 0,
-    "example": {
-      "text": "Ferry service",
-      "meaning": "轮渡服务",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "forecast",
+    "meaning": "预报",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A weather forecast",
+      "meaning": "一份天气预报",
+      "kind": "phrase"
+    },
     "id": "intermediate-forecast",
     "libraryId": "intermediate",
-    "word": "forecast",
-    "meaning": "预报；预测；预示；预想",
-    "group": 0,
-    "example": {
-      "text": "Demand forecast",
-      "meaning": "需求预测",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-harbour",
     "libraryId": "intermediate",
     "word": "harbour",
-    "meaning": "藏匿；入港停泊；庇护；海港（等于harbor）",
+    "meaning": "港口",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Pearl harbour",
-      "meaning": "珍珠港",
+      "text": "A quiet harbour",
+      "meaning": "一座宁静的港口",
       "kind": "phrase"
     }
   },
@@ -25264,31 +31476,34 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-helmet",
     "libraryId": "intermediate",
     "word": "helmet",
-    "meaning": "钢盔；头盔",
+    "meaning": "头盔；安全帽",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Motorcycle helmet",
-      "meaning": "摩托车头盔",
+      "text": "Safety helmet",
+      "meaning": "安全帽，安全头盔",
       "kind": "phrase"
     }
   },
   {
+    "word": "highway",
+    "meaning": "公路；高速公路",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A busy highway",
+      "meaning": "一条繁忙的公路",
+      "kind": "phrase"
+    },
     "id": "intermediate-highway",
     "libraryId": "intermediate",
-    "word": "highway",
-    "meaning": "公路；大路；捷径",
-    "group": 0,
-    "example": {
-      "text": "National highway",
-      "meaning": "n. 国道",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-luggage",
     "libraryId": "intermediate",
     "word": "luggage",
-    "meaning": "行李；皮箱；〈总称〉 行李；皮包",
+    "meaning": "行李",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Hand luggage",
@@ -25300,11 +31515,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-neighbourhood",
     "libraryId": "intermediate",
     "word": "neighbourhood",
-    "meaning": "邻近；周围；邻居关系；附近一带",
+    "meaning": "街区；邻近地区；社区",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "In the neighbourhood of",
-      "meaning": "大约；在...附近",
+      "text": "A quiet neighbourhood",
+      "meaning": "一个安静的社区",
       "kind": "phrase"
     }
   },
@@ -25313,54 +31529,59 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "pavement",
     "meaning": "人行道",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Asphalt pavement",
-      "meaning": "沥青混凝土路面",
-      "kind": "phrase"
+      "text": "A small group of journalists waited on the pavement outside her house.",
+      "meaning": "有一小群记者守候在她家外面的人行道上。",
+      "kind": "sentence"
     }
   },
   {
     "id": "intermediate-pedestrian",
     "libraryId": "intermediate",
     "word": "pedestrian",
-    "meaning": "徒步的；缺乏想像力的；行人；步行者",
+    "meaning": "行人；步行者",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Pedestrian crossing",
-      "meaning": "人行横道",
+      "text": "Pedestrian street",
+      "meaning": "步行街；行人街道",
       "kind": "phrase"
     }
   },
   {
+    "word": "petrol",
+    "meaning": "汽油",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A petrol station",
+      "meaning": "一个加油站",
+      "kind": "phrase"
+    },
     "id": "intermediate-petrol",
     "libraryId": "intermediate",
-    "word": "petrol",
-    "meaning": "（英）汽油；汽油；(英)汽油",
-    "group": 0,
-    "example": {
-      "text": "Petrol station",
-      "meaning": "n. 加油站",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "platform",
+    "meaning": "站台；平台",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Wait on the platform",
+      "meaning": "在站台上等候",
+      "kind": "phrase"
+    },
     "id": "intermediate-platform",
     "libraryId": "intermediate",
-    "word": "platform",
-    "meaning": "平台；月台；站台；坛",
-    "group": 0,
-    "example": {
-      "text": "Open platform",
-      "meaning": "开放平台",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-postpone",
     "libraryId": "intermediate",
     "word": "postpone",
-    "meaning": "使…延期；把…放在次要地位；把…放在后面；推迟",
+    "meaning": "推迟；延期",
+    "partOfSpeech": "vt",
     "group": 0,
     "example": {
       "text": "Postpone the meeting",
@@ -25369,62 +31590,67 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "receipt",
+    "meaning": "收据",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Keep the receipt",
+      "meaning": "保留收据",
+      "kind": "phrase"
+    },
     "id": "intermediate-receipt",
     "libraryId": "intermediate",
-    "word": "receipt",
-    "meaning": "收到；收据；收入；接收",
-    "group": 0,
-    "example": {
-      "text": "Official receipt",
-      "meaning": "正式收据",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-reservation",
     "libraryId": "intermediate",
     "word": "reservation",
-    "meaning": "预约；预订；保留；预定",
+    "meaning": "预约，预订；保留",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Without reservation",
-      "meaning": "无保留地",
+      "text": "Hotel reservation",
+      "meaning": "酒店预订；订旅馆",
       "kind": "phrase"
     }
   },
   {
+    "word": "schedule",
+    "meaning": "日程表；时间表",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A busy schedule",
+      "meaning": "繁忙的日程安排",
+      "kind": "phrase"
+    },
     "id": "intermediate-schedule",
     "libraryId": "intermediate",
-    "word": "schedule",
-    "meaning": "安排；计划；编制目录；将……列入计划表",
-    "group": 0,
-    "example": {
-      "text": "Project schedule",
-      "meaning": "工程计划",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "transport",
+    "meaning": "交通；运输",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Public transport",
+      "meaning": "公共交通",
+      "kind": "phrase"
+    },
     "id": "intermediate-transport",
     "libraryId": "intermediate",
-    "word": "transport",
-    "meaning": "运输；运输机；狂喜；流放犯",
-    "group": 0,
-    "example": {
-      "text": "Passenger transport",
-      "meaning": "客运",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-agriculture",
     "libraryId": "intermediate",
     "word": "agriculture",
-    "meaning": "农业；农耕；农业生产；农艺",
+    "meaning": "农业；农学",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Modern agriculture",
-      "meaning": "现代农业",
+      "text": "Ministry of agriculture",
+      "meaning": "农业部",
       "kind": "phrase"
     }
   },
@@ -25432,7 +31658,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-ankle",
     "libraryId": "intermediate",
     "word": "ankle",
-    "meaning": "踝关节；踝；脚踝；踝节部",
+    "meaning": "踝关节，踝",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Ankle joint",
@@ -25444,7 +31671,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-astronaut",
     "libraryId": "intermediate",
     "word": "astronaut",
-    "meaning": "宇航员；航天员；太空旅行者；宇宙航行员",
+    "meaning": "宇航员；航天员",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Become an astronaut",
@@ -25457,10 +31685,11 @@ export const INTERMEDIATE_VOCABULARY = [
     "libraryId": "intermediate",
     "word": "astronomy",
     "meaning": "天文学",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Radio astronomy",
-      "meaning": "n. 射电天文学",
+      "text": "Physics and astronomy",
+      "meaning": "物理学和天文学",
       "kind": "phrase"
     }
   },
@@ -25468,7 +31697,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-atom",
     "libraryId": "intermediate",
     "word": "atom",
-    "meaning": "原子；微粒；微量",
+    "meaning": "原子",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Atom bomb",
@@ -25477,46 +31707,50 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "bacterium",
+    "meaning": "细菌",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A harmful bacterium",
+      "meaning": "一种有害细菌",
+      "kind": "phrase"
+    },
     "id": "intermediate-bacterium",
     "libraryId": "intermediate",
-    "word": "bacterium",
-    "meaning": "[微] 细菌；杆菌属；细菌",
-    "group": 0,
-    "example": {
-      "text": "Acetic acid bacterium",
-      "meaning": "醋细菌",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-carbon",
-    "libraryId": "intermediate",
     "word": "carbon",
-    "meaning": "[化学] 碳；碳棒；复写纸；碳的",
-    "group": 0,
+    "meaning": "碳",
+    "partOfSpeech": "n",
     "example": {
       "text": "Carbon dioxide",
       "meaning": "二氧化碳",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-carbon",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
+    "word": "chemical",
+    "meaning": "化学品",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A harmful chemical",
+      "meaning": "一种有害化学品",
+      "kind": "phrase"
+    },
     "id": "intermediate-chemical",
     "libraryId": "intermediate",
-    "word": "chemical",
-    "meaning": "化学制品；化学药品；化学的；化学的 n. 化学制品",
-    "group": 0,
-    "example": {
-      "text": "Chemical industry",
-      "meaning": "化学工业",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-chemist",
     "libraryId": "intermediate",
     "word": "chemist",
-    "meaning": "化学家；化学工作者；药剂师；炼金术士",
+    "meaning": "化学家；药剂师",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Organic chemist",
@@ -25528,31 +31762,34 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-climate",
     "libraryId": "intermediate",
     "word": "climate",
-    "meaning": "气候；风气；思潮；风土",
+    "meaning": "气候；风气",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Global climate",
-      "meaning": "全球气候",
+      "text": "Climate change",
+      "meaning": "气候变化；气候变迁",
       "kind": "phrase"
     }
   },
   {
+    "word": "conservation",
+    "meaning": "保护",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Wildlife conservation",
+      "meaning": "野生动物保护",
+      "kind": "phrase"
+    },
     "id": "intermediate-conservation",
     "libraryId": "intermediate",
-    "word": "conservation",
-    "meaning": "保存；保持；保护；守恒",
-    "group": 0,
-    "example": {
-      "text": "Soil conservation",
-      "meaning": "土壤保持",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-continent",
     "libraryId": "intermediate",
     "word": "continent",
-    "meaning": "大陆；洲；陆地；自制的",
+    "meaning": "大陆；洲",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Antarctic continent",
@@ -25564,11 +31801,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-crop",
     "libraryId": "intermediate",
     "word": "crop",
-    "meaning": "产量；农作物；庄稼；平头",
+    "meaning": "农作物；庄稼",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Crop up",
-      "meaning": "突然出现",
+      "text": "Crop yield",
+      "meaning": "农作物产量",
       "kind": "phrase"
     }
   },
@@ -25576,35 +31814,38 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-damage",
     "libraryId": "intermediate",
     "word": "damage",
-    "meaning": "损害；损毁；赔偿金；毁坏",
+    "meaning": "损害；损毁；赔偿金",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Brain damage",
-      "meaning": "脑损伤",
+      "text": "Cause damage to",
+      "meaning": "对…造成损坏，带来损害",
       "kind": "phrase"
     }
   },
   {
+    "word": "digital",
+    "meaning": "数字的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A digital camera",
+      "meaning": "一台数码相机",
+      "kind": "phrase"
+    },
     "id": "intermediate-digital",
     "libraryId": "intermediate",
-    "word": "digital",
-    "meaning": "数字的；手指的；数字；键",
-    "group": 0,
-    "example": {
-      "text": "Digital library",
-      "meaning": "数字图书馆",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-dinosaur",
     "libraryId": "intermediate",
     "word": "dinosaur",
-    "meaning": "恐龙；过时、落伍的人或事物",
+    "meaning": "恐龙",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "My dinosaur and I go to school.",
-      "meaning": "我的恐龙和我去上学。",
+      "text": "The dinosaur lived millions of years ago.",
+      "meaning": "恐龙生活在数百万年前。",
       "kind": "sentence"
     }
   },
@@ -25612,55 +31853,60 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-disaster",
     "libraryId": "intermediate",
     "word": "disaster",
-    "meaning": "灾难；灾祸；不幸；祸患",
+    "meaning": "灾难；灾祸",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Disaster prevention",
-      "meaning": "防灾",
+      "text": "Recipe for disaster",
+      "meaning": "造成灾难的因素",
       "kind": "phrase"
     }
   },
   {
+    "word": "ecology",
+    "meaning": "生态学",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Study ecology",
+      "meaning": "研究生态学",
+      "kind": "phrase"
+    },
     "id": "intermediate-ecology",
     "libraryId": "intermediate",
-    "word": "ecology",
-    "meaning": "生态学；社会生态学；个体生态学；生态",
-    "group": 0,
-    "example": {
-      "text": "Ecology environment",
-      "meaning": "生态环境",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-electricity",
     "libraryId": "intermediate",
     "word": "electricity",
-    "meaning": "电力；电流；强烈的紧张情绪；电",
+    "meaning": "电；电力",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Generate electricity",
-      "meaning": "发电",
+      "text": "Generation of electricity",
+      "meaning": "发电，电力生产",
       "kind": "phrase"
     }
   },
   {
+    "word": "electronic",
+    "meaning": "电子的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An electronic dictionary",
+      "meaning": "一本电子词典",
+      "kind": "phrase"
+    },
     "id": "intermediate-electronic",
     "libraryId": "intermediate",
-    "word": "electronic",
-    "meaning": "电子的；电子电路；电子器件；电子学",
-    "group": 0,
-    "example": {
-      "text": "Electronic commerce",
-      "meaning": "电子商务",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-engine",
     "libraryId": "intermediate",
     "word": "engine",
-    "meaning": "引擎；发动机；机车；火车头",
+    "meaning": "发动机；引擎",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Search engine",
@@ -25672,31 +31918,34 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-evolution",
     "libraryId": "intermediate",
     "word": "evolution",
-    "meaning": "演变；进化论；进展；进化",
+    "meaning": "进化；演变",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Evolution theory",
-      "meaning": "进化论",
+      "text": "Theory of evolution",
+      "meaning": "进化学说，进化论",
       "kind": "phrase"
     }
   },
   {
+    "word": "explore",
+    "meaning": "探索；考察",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Explore new ideas",
+      "meaning": "探索新想法",
+      "kind": "phrase"
+    },
     "id": "intermediate-explore",
     "libraryId": "intermediate",
-    "word": "explore",
-    "meaning": "探索；探测；探险；仔细查阅",
-    "group": 0,
-    "example": {
-      "text": "I’m going to explore the possibility of a part-time job.",
-      "meaning": "我要好好想想兼职工作的可能性。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-feather",
     "libraryId": "intermediate",
     "word": "feather",
-    "meaning": "羽毛；用羽毛装饰；翎毛；羽状物",
+    "meaning": "羽毛",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "Feather fan",
@@ -25705,50 +31954,54 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "firefighter",
+    "meaning": "消防员",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A brave firefighter",
+      "meaning": "一名勇敢的消防员",
+      "kind": "phrase"
+    },
     "id": "intermediate-firefighter",
     "libraryId": "intermediate",
-    "word": "firefighter",
-    "meaning": "消防队员",
-    "group": 0,
-    "example": {
-      "text": "Locally and from the state standpoint, we had some firefighter jobs that were in jeopardy, up in the hundreds.",
-      "meaning": "站在州政府的立场，我们有一些消防员在危险岗位工作，最多时有数百人。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-flood",
     "libraryId": "intermediate",
     "word": "flood",
-    "meaning": "淹没；充满；溢出；洪水",
+    "meaning": "洪水；泛滥；一大批",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "In flood",
-      "meaning": "在泛滥",
+      "text": "A flood of",
+      "meaning": "一大批…",
       "kind": "phrase"
     }
   },
   {
+    "word": "fuel",
+    "meaning": "燃料",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Save fuel",
+      "meaning": "节省燃料",
+      "kind": "phrase"
+    },
     "id": "intermediate-fuel",
     "libraryId": "intermediate",
-    "word": "fuel",
-    "meaning": "得到燃料；燃料；刺激因素；给…加燃料",
-    "group": 0,
-    "example": {
-      "text": "Fuel cell",
-      "meaning": "燃料电池",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-gravity",
     "libraryId": "intermediate",
     "word": "gravity",
-    "meaning": "重力；地心引力；严重性；庄严",
+    "meaning": "重力；严重性",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Specific gravity",
-      "meaning": "比重",
+      "text": "Force of gravity",
+      "meaning": "重力",
       "kind": "phrase"
     }
   },
@@ -25756,7 +32009,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-harmful",
     "libraryId": "intermediate",
     "word": "harmful",
-    "meaning": "有害的；能造成损害的；致伤的",
+    "meaning": "有害的；能造成损害的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Harmful gas",
@@ -25768,11 +32022,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-harvest",
     "libraryId": "intermediate",
     "word": "harvest",
-    "meaning": "收获；产量；结果；收割",
+    "meaning": "收获；产量；结果",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Bumper harvest",
-      "meaning": "丰收",
+      "text": "Harvest time",
+      "meaning": "收获季节；收割期",
       "kind": "phrase"
     }
   },
@@ -25780,127 +32035,138 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-hurricane",
     "libraryId": "intermediate",
     "word": "hurricane",
-    "meaning": "飓风；暴风；狂风；十二级风",
+    "meaning": "飓风，暴风",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Hurricane katrina",
-      "meaning": "卡特里娜飓风",
+      "text": "A strong hurricane",
+      "meaning": "一场强烈的飓风",
       "kind": "phrase"
     }
   },
   {
+    "word": "hydrogen",
+    "meaning": "氢",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Hydrogen gas",
+      "meaning": "氢气",
+      "kind": "phrase"
+    },
     "id": "intermediate-hydrogen",
     "libraryId": "intermediate",
-    "word": "hydrogen",
-    "meaning": "[化学] 氢；氢",
-    "group": 0,
-    "example": {
-      "text": "Hydrogen peroxide",
-      "meaning": "过氧化氢",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "lightning",
+    "meaning": "闪电",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A flash of lightning",
+      "meaning": "一道闪电",
+      "kind": "phrase"
+    },
     "id": "intermediate-lightning",
     "libraryId": "intermediate",
-    "word": "lightning",
-    "meaning": "闪电的；快速的；闪电；闪电放电",
-    "group": 0,
-    "example": {
-      "text": "Lightning protection",
-      "meaning": "防雷法",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-microscope",
-    "libraryId": "intermediate",
     "word": "microscope",
     "meaning": "显微镜",
-    "group": 0,
+    "partOfSpeech": "n",
     "example": {
-      "text": "Electron microscope",
-      "meaning": "电子显微镜",
+      "text": "Look through a microscope",
+      "meaning": "通过显微镜观察",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-microscope",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
+    "word": "mineral",
+    "meaning": "矿物",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A useful mineral",
+      "meaning": "一种有用的矿物",
+      "kind": "phrase"
+    },
     "id": "intermediate-mineral",
     "libraryId": "intermediate",
-    "word": "mineral",
-    "meaning": "矿物；（英）矿泉水；无机物；苏打水（常用复数表示）",
-    "group": 0,
-    "example": {
-      "text": "Mineral resources",
-      "meaning": "矿藏",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-nuclear",
     "libraryId": "intermediate",
     "word": "nuclear",
-    "meaning": "原子能的；[细胞] 细胞核的；中心的；原子核的",
+    "meaning": "核的；原子能的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Nuclear energy",
-      "meaning": "n. 核能",
+      "text": "Nuclear power station",
+      "meaning": "原子能发电厂",
       "kind": "phrase"
     }
   },
   {
+    "word": "nutrition",
+    "meaning": "营养",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Good nutrition",
+      "meaning": "良好的营养",
+      "kind": "phrase"
+    },
     "id": "intermediate-nutrition",
     "libraryId": "intermediate",
-    "word": "nutrition",
-    "meaning": "营养；营养学；营养品",
-    "group": 0,
-    "example": {
-      "text": "Animal nutrition",
-      "meaning": "动物营养学",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "observe",
+    "meaning": "观察",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Observe the birds",
+      "meaning": "观察鸟儿",
+      "kind": "phrase"
+    },
     "id": "intermediate-observe",
     "libraryId": "intermediate",
-    "word": "observe",
-    "meaning": "庆祝；观察；遵守；看到",
-    "group": 0,
-    "example": {
-      "text": "Observe on",
-      "meaning": "评论",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "oxygen",
+    "meaning": "氧；氧气",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Breathe in oxygen",
+      "meaning": "吸入氧气",
+      "kind": "phrase"
+    },
     "id": "intermediate-oxygen",
     "libraryId": "intermediate",
-    "word": "oxygen",
-    "meaning": "[化学] 氧气；[化学] 氧；氧；氧气",
-    "group": 0,
-    "example": {
-      "text": "Dissolved oxygen",
-      "meaning": "溶解氧",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "physical",
+    "meaning": "身体的；物理的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Physical exercise",
+      "meaning": "体育锻炼",
+      "kind": "phrase"
+    },
     "id": "intermediate-physical",
     "libraryId": "intermediate",
-    "word": "physical",
-    "meaning": "[物] 物理的；身体的；物质的；根据自然规律的",
-    "group": 0,
-    "example": {
-      "text": "Physical chemistry",
-      "meaning": "物理化学",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-reduce",
     "libraryId": "intermediate",
     "word": "reduce",
-    "meaning": "减少；降低；使处于；把…分解",
+    "meaning": "减少；降低；使处于",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Reduce pollution",
@@ -25909,50 +32175,54 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "reliable",
+    "meaning": "可靠的；可信赖的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A reliable friend",
+      "meaning": "一个可靠的朋友",
+      "kind": "phrase"
+    },
     "id": "intermediate-reliable",
     "libraryId": "intermediate",
-    "word": "reliable",
-    "meaning": "可靠的；可信赖的；可靠的人；可依赖的",
-    "group": 0,
-    "example": {
-      "text": "Reliable quality",
-      "meaning": "质量可靠",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-rescue",
     "libraryId": "intermediate",
     "word": "rescue",
-    "meaning": "营救；援救；解救；救援",
+    "meaning": "营救；援救",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Rescue work",
-      "meaning": "n. 救济事业",
+      "text": "Search and rescue",
+      "meaning": "搜索与营救",
       "kind": "phrase"
     }
   },
   {
+    "word": "satellite",
+    "meaning": "卫星",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A weather satellite",
+      "meaning": "一颗气象卫星",
+      "kind": "phrase"
+    },
     "id": "intermediate-satellite",
     "libraryId": "intermediate",
-    "word": "satellite",
-    "meaning": "卫星；人造卫星；随从；卫星国家",
-    "group": 0,
-    "example": {
-      "text": "Satellite communication",
-      "meaning": "卫星通信",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-solar",
     "libraryId": "intermediate",
     "word": "solar",
-    "meaning": "太阳的；日光的；利用太阳光的；与太阳相关的",
+    "meaning": "太阳的；太阳能的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Solar energy",
-      "meaning": "太阳能",
+      "text": "Solar water heater",
+      "meaning": "太阳能热水器",
       "kind": "phrase"
     }
   },
@@ -25960,11 +32230,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-absolute",
     "libraryId": "intermediate",
     "word": "absolute",
-    "meaning": "绝对的；完全的；专制的；绝对",
+    "meaning": "绝对的；完全的；专制的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Absolute value",
-      "meaning": "绝对值",
+      "text": "Absolute power",
+      "meaning": "绝对权力",
       "kind": "phrase"
     }
   },
@@ -25972,7 +32243,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-absorb",
     "libraryId": "intermediate",
     "word": "absorb",
-    "meaning": "吸收；吸引；承受；理解",
+    "meaning": "吸收；吸引",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Absorb water",
@@ -25981,70 +32253,76 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "abstract",
+    "meaning": "抽象的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An abstract idea",
+      "meaning": "一个抽象的概念",
+      "kind": "phrase"
+    },
     "id": "intermediate-abstract",
     "libraryId": "intermediate",
-    "word": "abstract",
-    "meaning": "摘要；抽象；抽象的概念；抽象的",
-    "group": 0,
-    "example": {
-      "text": "Abstract noun",
-      "meaning": "抽象名词",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
-    "id": "intermediate-abundant",
-    "libraryId": "intermediate",
     "word": "abundant",
-    "meaning": "丰富的；充裕的；盛产；大量的",
-    "group": 0,
+    "meaning": "丰富的；充足的",
+    "partOfSpeech": "adj",
     "example": {
       "text": "Abundant rainfall",
-      "meaning": "过量降雨",
+      "meaning": "充沛的降雨",
       "kind": "phrase"
-    }
+    },
+    "id": "intermediate-abundant",
+    "libraryId": "intermediate",
+    "group": 0
   },
   {
+    "word": "accelerate",
+    "meaning": "加速",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Accelerate the car",
+      "meaning": "让汽车加速",
+      "kind": "phrase"
+    },
     "id": "intermediate-accelerate",
     "libraryId": "intermediate",
-    "word": "accelerate",
-    "meaning": "使……加快；使……增速；加速；促进",
-    "group": 0,
-    "example": {
-      "text": "Measures to accelerate the rate of economic growth",
-      "meaning": "加快经济增长速度的措施",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "accumulate",
+    "meaning": "积累",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Accumulate knowledge",
+      "meaning": "积累知识",
+      "kind": "phrase"
+    },
     "id": "intermediate-accumulate",
     "libraryId": "intermediate",
-    "word": "accumulate",
-    "meaning": "累积；积聚；堆积；积累",
-    "group": 0,
-    "example": {
-      "text": "It is unjust that a privileged few should continue to accumulate wealth.",
-      "meaning": "少数特权阶级继续积聚财富，这是不公平的。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "acknowledge",
+    "meaning": "承认",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Acknowledge a mistake",
+      "meaning": "承认一个错误",
+      "kind": "phrase"
+    },
     "id": "intermediate-acknowledge",
     "libraryId": "intermediate",
-    "word": "acknowledge",
-    "meaning": "承认；答谢；报偿；告知已收到",
-    "group": 0,
-    "example": {
-      "text": "Acknowledge receipt",
-      "meaning": "证实收到",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-adapt",
     "libraryId": "intermediate",
     "word": "adapt",
-    "meaning": "使适应；改编；适应；适应于",
+    "meaning": "使适应；改编",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Adapt for",
@@ -26053,146 +32331,158 @@ export const INTERMEDIATE_VOCABULARY = [
     }
   },
   {
+    "word": "adequate",
+    "meaning": "足够的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Adequate time",
+      "meaning": "足够的时间",
+      "kind": "phrase"
+    },
     "id": "intermediate-adequate",
     "libraryId": "intermediate",
-    "word": "adequate",
-    "meaning": "充足的；适当的；胜任的；足够的",
-    "group": 0,
-    "example": {
-      "text": "Adequate preparation",
-      "meaning": "充分准备",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "advertise",
+    "meaning": "为……做广告",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Advertise a new product",
+      "meaning": "为一种新产品做广告",
+      "kind": "phrase"
+    },
     "id": "intermediate-advertise",
     "libraryId": "intermediate",
-    "word": "advertise",
-    "meaning": "通知；为…做广告；使突出；宣传",
-    "group": 0,
-    "example": {
-      "text": "Advertise for",
-      "meaning": "登广告征求（寻找）某物；登招请（待聘等）广告",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "advocate",
+    "meaning": "提倡",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Advocate healthy living",
+      "meaning": "提倡健康生活",
+      "kind": "phrase"
+    },
     "id": "intermediate-advocate",
     "libraryId": "intermediate",
-    "word": "advocate",
-    "meaning": "提倡；主张；拥护；提倡者",
-    "group": 0,
-    "example": {
-      "text": "Devil's advocate",
-      "meaning": "故意持相反意见的人；故意唱反调的人",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "affect",
+    "meaning": "影响",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Affect your health",
+      "meaning": "影响你的健康",
+      "kind": "phrase"
+    },
     "id": "intermediate-affect",
     "libraryId": "intermediate",
-    "word": "affect",
-    "meaning": "影响；感染；感动；假装",
-    "group": 0,
-    "example": {
-      "text": "Trading has been adversely affected by the downturn in consumer spending.",
-      "meaning": "贸易受到消费支出回落的不利影响。",
-      "kind": "sentence"
-    }
+    "group": 0
   },
   {
+    "word": "alternative",
+    "meaning": "可供选择的；替代的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An alternative route",
+      "meaning": "一条替代路线",
+      "kind": "phrase"
+    },
     "id": "intermediate-alternative",
     "libraryId": "intermediate",
-    "word": "alternative",
-    "meaning": "供选择的；选择性的；交替的；二中择一",
-    "group": 0,
-    "example": {
-      "text": "Alternative medicine",
-      "meaning": "非传统医学",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "ancestor",
+    "meaning": "祖先",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Our common ancestor",
+      "meaning": "我们共同的祖先",
+      "kind": "phrase"
+    },
     "id": "intermediate-ancestor",
     "libraryId": "intermediate",
-    "word": "ancestor",
-    "meaning": "始祖；祖先；被继承人；祖宗",
-    "group": 0,
-    "example": {
-      "text": "Ancestor worship",
-      "meaning": "祖先崇拜；祭祖；敬奉祖先",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-annual",
     "libraryId": "intermediate",
     "word": "annual",
-    "meaning": "年度的；每年的；年刊；年鉴",
+    "meaning": "年度的；每年的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Annual meeting",
-      "meaning": "年会",
+      "text": "Annual report",
+      "meaning": "年度报告",
       "kind": "phrase"
     }
   },
   {
+    "word": "apparent",
+    "meaning": "明显的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An apparent mistake",
+      "meaning": "一个明显的错误",
+      "kind": "phrase"
+    },
     "id": "intermediate-apparent",
     "libraryId": "intermediate",
-    "word": "apparent",
-    "meaning": "显然的；表面上的；明显的；清楚的",
-    "group": 0,
-    "example": {
-      "text": "Apparent viscosity",
-      "meaning": "表观粘度",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-appeal",
     "libraryId": "intermediate",
     "word": "appeal",
-    "meaning": "呼吁；恳求；上诉；诉诸",
+    "meaning": "呼吁；上诉",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
-      "text": "Appeal against",
-      "meaning": "提出上诉",
+      "text": "Appeal for help",
+      "meaning": "呼吁援助",
       "kind": "phrase"
     }
   },
   {
+    "word": "aspect",
+    "meaning": "方面",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An important aspect",
+      "meaning": "一个重要方面",
+      "kind": "phrase"
+    },
     "id": "intermediate-aspect",
     "libraryId": "intermediate",
-    "word": "aspect",
-    "meaning": "方面；方向；形势；外貌",
-    "group": 0,
-    "example": {
-      "text": "Aspect ratio",
-      "meaning": "纵横比；屏幕高宽比",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "average",
+    "meaning": "平均的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "The average age",
+      "meaning": "平均年龄",
+      "kind": "phrase"
+    },
     "id": "intermediate-average",
     "libraryId": "intermediate",
-    "word": "average",
-    "meaning": "平均；平均数；海损；平均的",
-    "group": 0,
-    "example": {
-      "text": "Average price",
-      "meaning": "平均价格",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-beneficial",
     "libraryId": "intermediate",
     "word": "beneficial",
-    "meaning": "有益的；有利的；可享利益的；受益的",
+    "meaning": "有益的；有利的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Beneficial owner",
-      "meaning": "受益所有人",
+      "text": "Mutually beneficial",
+      "meaning": "互利的；双赢的",
       "kind": "phrase"
     }
   },
@@ -26200,127 +32490,138 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-benefit",
     "libraryId": "intermediate",
     "word": "benefit",
-    "meaning": "利益；好处；救济金；有益于",
+    "meaning": "利益，好处；救济金",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Economic benefit",
-      "meaning": "经济效益",
+      "text": "Of benefit to",
+      "meaning": "对……有好处",
       "kind": "phrase"
     }
   },
   {
+    "word": "boundary",
+    "meaning": "边界",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A national boundary",
+      "meaning": "一条国界",
+      "kind": "phrase"
+    },
     "id": "intermediate-boundary",
     "libraryId": "intermediate",
-    "word": "boundary",
-    "meaning": "边界；范围；分界线",
-    "group": 0,
-    "example": {
-      "text": "Boundary layer",
-      "meaning": "边界层",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-bravery",
     "libraryId": "intermediate",
     "word": "bravery",
     "meaning": "勇敢；勇气",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "An act of great bravery",
       "meaning": "非常勇敢的行为",
-      "kind": "sentence"
+      "kind": "phrase"
     }
   },
   {
     "id": "intermediate-brief",
     "libraryId": "intermediate",
     "word": "brief",
-    "meaning": "简短的；简洁的；短暂的；草率的",
+    "meaning": "简短的；短暂的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "In brief",
-      "meaning": "简言之",
+      "text": "Brief introduction",
+      "meaning": "简介；简短介绍",
       "kind": "phrase"
     }
   },
   {
+    "word": "broad",
+    "meaning": "宽阔的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A broad river",
+      "meaning": "一条宽阔的河",
+      "kind": "phrase"
+    },
     "id": "intermediate-broad",
     "libraryId": "intermediate",
-    "word": "broad",
-    "meaning": "宽的；辽阔的；显著的；大概的",
-    "group": 0,
-    "example": {
-      "text": "Broad band",
-      "meaning": "宽带",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "broadcast",
+    "meaning": "广播；播送",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Broadcast the news",
+      "meaning": "播送新闻",
+      "kind": "phrase"
+    },
     "id": "intermediate-broadcast",
     "libraryId": "intermediate",
-    "word": "broadcast",
-    "meaning": "播送；播放；（无线电或电视）广播；播撒（种子）",
-    "group": 0,
-    "example": {
-      "text": "Live broadcast",
-      "meaning": "直接广播",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "campaign",
+    "meaning": "活动；运动",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An environmental campaign",
+      "meaning": "一场环保活动",
+      "kind": "phrase"
+    },
     "id": "intermediate-campaign",
     "libraryId": "intermediate",
-    "word": "campaign",
-    "meaning": "作战；参加竞选；参加活动；运动",
-    "group": 0,
-    "example": {
-      "text": "Campaign against",
-      "meaning": "开展反对…的活动",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "candidate",
+    "meaning": "候选人",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A suitable candidate",
+      "meaning": "一位合适的候选人",
+      "kind": "phrase"
+    },
     "id": "intermediate-candidate",
     "libraryId": "intermediate",
-    "word": "candidate",
-    "meaning": "候选人；候补者；应试者；申请求职者",
-    "group": 0,
-    "example": {
-      "text": "Presidential candidate",
-      "meaning": "总统候选人",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "citizen",
+    "meaning": "公民；居民",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A local citizen",
+      "meaning": "一位当地居民",
+      "kind": "phrase"
+    },
     "id": "intermediate-citizen",
     "libraryId": "intermediate",
-    "word": "citizen",
-    "meaning": "公民；市民；老百姓；居民",
-    "group": 0,
-    "example": {
-      "text": "Senior citizen",
-      "meaning": "老年人",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
+    "word": "civilization",
+    "meaning": "文明",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An ancient civilization",
+      "meaning": "一种古代文明",
+      "kind": "phrase"
+    },
     "id": "intermediate-civilization",
     "libraryId": "intermediate",
-    "word": "civilization",
-    "meaning": "文明；文化；开化",
-    "group": 0,
-    "example": {
-      "text": "Spiritual civilization",
-      "meaning": "精神文明",
-      "kind": "phrase"
-    }
+    "group": 0
   },
   {
     "id": "intermediate-classic",
     "libraryId": "intermediate",
     "word": "classic",
-    "meaning": "经典的；古典的；传统的；最优秀的",
+    "meaning": "经典的；古典的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
       "text": "Classic style",
@@ -26332,7 +32633,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-classify",
     "libraryId": "intermediate",
     "word": "classify",
-    "meaning": "分类；分等；把…分类；把…分级",
+    "meaning": "分类；分等",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Classify as",
@@ -26344,19 +32646,32 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-complex",
     "libraryId": "intermediate",
     "word": "complex",
-    "meaning": "复杂的；合成的；复合体；综合设施",
+    "meaning": "复杂的；建筑群",
+    "partOfSpeech": "adj/n",
     "group": 0,
     "example": {
-      "text": "Complex system",
-      "meaning": "复杂系统",
-      "kind": "phrase"
+      "text": "This is a complex problem.",
+      "meaning": "这是个复杂的问题。",
+      "kind": "sentence",
+      "sense": "复杂的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "建筑群",
+          "partOfSpeech": "n",
+          "text": "They built a new shopping complex.",
+          "meaning": "他们建了一个新的购物中心建筑群。",
+          "kind": "sentence"
+        }
+      ]
     }
   },
   {
     "id": "intermediate-concept",
     "libraryId": "intermediate",
     "word": "concept",
-    "meaning": "观念；概念；观点；设想",
+    "meaning": "观念，概念",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
       "text": "New concept",
@@ -26368,7 +32683,8 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-conclude",
     "libraryId": "intermediate",
     "word": "conclude",
-    "meaning": "推断；决定；作结论；结束",
+    "meaning": "结束；得出结论",
+    "partOfSpeech": "v",
     "group": 0,
     "example": {
       "text": "Conclude with",
@@ -26380,11 +32696,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-conclusion",
     "libraryId": "intermediate",
     "word": "conclusion",
-    "meaning": "结论；结局；推论；[C] 结论",
+    "meaning": "结论；结局；推论",
+    "partOfSpeech": "n",
     "group": 0,
     "example": {
-      "text": "Draw conclusion",
-      "meaning": "下结论",
+      "text": "Draw a conclusion",
+      "meaning": "得出结论；作结论",
       "kind": "phrase"
     }
   },
@@ -26392,11 +32709,12 @@ export const INTERMEDIATE_VOCABULARY = [
     "id": "intermediate-reasonable",
     "libraryId": "intermediate",
     "word": "reasonable",
-    "meaning": "合理的；公道的；通情达理的；有道理的",
+    "meaning": "合理的；通情达理的",
+    "partOfSpeech": "adj",
     "group": 0,
     "example": {
-      "text": "Reasonable distribution",
-      "meaning": "合理级配",
+      "text": "Reasonable price",
+      "meaning": "合理价格；价格公道",
       "kind": "phrase"
     }
   }

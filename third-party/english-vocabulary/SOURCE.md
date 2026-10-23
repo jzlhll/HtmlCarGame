@@ -1,63 +1,31 @@
 # 英语词库来源与许可
 
-## 分级与选编
+## 分级依据
 
-四阶段按小学日常表达、中学基础与衔接、大学四级、大学六级递进。小学与初中阶段是适合本游戏字母拼写玩法的项目选编，不声明等同某一教材版本或官方完整考试大纲。
+游戏包含小六500词、初中进阶2200词、四级基础6259词、六级进阶1718词。小学与初中为项目选编，不声明覆盖某版教材；六级仅含新增进阶拼写，不重复四级。
 
-分级参考教育部《义务教育英语课程标准（2022年版）》附录3：二级列505个小学基本词汇，三级共1600词（包含二级505词），允许地方按相关主题补充。课标不提供中文释义及例子。本项目以课标日常生活、学校学习、人与社会、人与自然等主题确定补充范围，自行编写小学释义与例子。
+- 小学与初中参考教育部《义务教育英语课程标准（2022年版）》附录3及阶段词表：[教育部通知](https://www.moe.gov.cn/srcsite/A26/s8001/202204/t20220420_619921.html)、[课标公开PDF](https://www.ictr.edu.cn/Uploads/File/2022/04/28/6.%E4%B9%89%E5%8A%A1%E6%95%99%E8%82%B2%E8%AF%AD%E8%AF%BE%E7%A8%8B%E6%A0%87%E5%87%86%EF%BC%882022%E5%B9%B4%E7%89%88%EF%BC%89.20220428160837.pdf)。初中进阶包含小学500词，并从初高中资料按主题补充。
+- 大学词形与级别依据[《全国大学英语四、六级考试大纲（2016年修订版）》](https://cet.neea.edu.cn/res/Home/1704/55b02330ac17274664f06d9d3db8249d.pdf)，物理页21–149，★标六级，其余为四级。按主词、派生词及合法英美拼法展开，跨级同形词归四级；游戏独立拼写数不等于官方原始词目数。
+- 官方PDF SHA-256：`9166d3c03b7bc43abd9d9df91bd2ef8085b4419286f1e5ca100dea68f3cfd1f1`。分级与筛选依据保存在 `scripts/data/cet-official-2016.js`，小学与中学选词清单见 `src/vocabulary-selections.js`。排除不适合键盘拼写和明确排印错误的词形，官方PDF不随游戏分发。
 
-- [教育部印发通知](https://www.moe.gov.cn/srcsite/A26/s8001/202204/t20220420_619921.html)。
-- [官方课标PDF](https://www.ictr.edu.cn/Uploads/File/2022/04/28/6.%E4%B9%89%E5%8A%A1%E6%95%99%E8%82%B2%E8%8B%B1%E8%AF%AD%E8%AF%BE%E7%A8%8B%E6%A0%87%E5%87%86%EF%BC%882022%E5%B9%B4%E7%89%88%EF%BC%89.20220428160837.pdf)，附录3印刷页87–128；小学词表为87–97页。
-- [教育出版社公开镜像](https://www.esph.com.cn/docs/2025-10/705da262a6e74b088ac658bfe2d757ba.pdf)。
+## 释义、例子与许可
 
-### 小六：500词
+- 社区语料：[KyleBing/english-vocabulary](https://github.com/KyleBing/english-vocabulary)，固定版本 `c4c6c80879ff17d7025c28fb853a4991c8e6be6a`。
+- 使用 `full_line_jsonl/sentence/正序/` 中的初中、高中、四级、六级、考研、托福、SAT资料；后三份只补已有词形的语料，不扩展大学大纲范围。
+- 语料按 BSD-3-Clause 分发，须保留 [LICENSE](LICENSE)。小学英中例子和项目补写例句为原创。
+- 多义词的常用义项参考 Cambridge Dictionary 的 [spring](https://dictionary.cambridge.org/dictionary/english-chinese-simplified/spring)、[bank](https://dictionary.cambridge.org/dictionary/english-chinese-simplified/bank)、[sanction](https://dictionary.cambridge.org/dictionary/english-chinese-simplified/sanction)、[oversight](https://dictionary.cambridge.org/dictionary/english-chinese-simplified/oversight)、[console](https://dictionary.cambridge.org/us/dictionary/english/console)、[vice](https://dictionary.cambridge.org/us/dictionary/english/vice?topic=tools) 等词条，补写例句不复制词典例句。
 
-`src/vocabulary-primary.js` 保留原有191词的词形、ID、释义和分组，按人物家庭、身体家居、学校学习、食物、动物、衣物、出行、自然、时间、日常动作、描述及基础表达等主题增加309词。新增项显式记录在 `src/vocabulary-selections.js`，不按字母截取凑数。原词已包含少量初中拓展，故500是项目练习规模，不冒充课标505词的逐项完整复刻。
+游戏直接使用 `src/vocabulary-primary.js`、`src/vocabulary-intermediate.js`、`src/vocabulary-cet4.js`、`src/vocabulary-cet6.js` 中的最终释义、词性及例子。修改内容直接更新对应词库，不另存修订表、变更词单或统计报告。同词在不同阶段可采用对应义项，学习记录按词库隔离。
 
-500词均有本项目编写的英中例子，优先短语；功能词需要完整语境时使用短句。
+## 导入维护
 
-### 初中进阶：2200词
-
-完整导入下述开源初中词表的有效独立单词：3223行，不区分大小写去重及清理后1981词。保留字母长度2–24的条目，过滤 `I`、`a`、`Mr.`、`adj.`、`x-ray`，以及另有正确 `Russia` 条目时不适合教学的 `Rusia` 地名记录。
-
-在1981词基础上，补入小学500中该来源未收录的16词，再按学习表达、人际成长、生活出行、自然科技、社会思辨五个主题从同来源高中词表显式选入203个衔接词，合计2200词。选择清单记录在 `src/vocabulary-selections.js`，不按字母顺序截取；所有小学500词均包含在2200词内，但学习记录按词库独立。
-
-初中释义优先初中来源，并清理人名杂义；短语与句子可在初中、高中及大学两份来源中同词补充，适龄搭配以项目覆盖表优先。2200是项目进阶选编规模，不是课标官方初中词数。
-
-## 开源数据
-
-- 来源：[KyleBing/english-vocabulary](https://github.com/KyleBing/english-vocabulary)。
-- 固定版本：[`c4c6c80879ff17d7025c28fb853a4991c8e6be6a`](https://github.com/KyleBing/english-vocabulary/tree/c4c6c80879ff17d7025c28fb853a4991c8e6be6a)。
-- 输入文件：`full_line_jsonl/sentence/正序/初中.jsonl`、`高中.jsonl`、`四级.jsonl`、`六级.jsonl`。
-- 许可：BSD-3-Clause，原始版权和许可全文见同目录 [LICENSE](LICENSE)。分发游戏时须一同保留本目录。
-
-四级、六级从完整来源导入2–24个ASCII英文字母组成的独立单词，同库按不区分大小写的拼写去重。每库保持独立条目ID；不同库的重合词分别保留。
-
-| 词库 | 来源行数 | 游戏词数 | 短语 | 句子 |
-| --- | ---: | ---: | ---: | ---: |
-| 小六 | 原191＋主题补选309 | 500 | 483 | 17 |
-| 初中进阶 | 初中3223＋高中主题衔接 | 2200 | 2006 | 194 |
-| 英语四级 | 7508 | 4536 | 3855 | 681 |
-| 英语六级 | 5651 | 3990 | 3057 | 933 |
-
-四级过滤 `a`、`I`、`up-to-date`、`well-known`、`so-called`、`X-ray`、`world-wide`；六级过滤 `air-conditioning`。最长单词分别为 `responsibility`（小六与初中进阶，14字母）、`competitiveness`（四级，15字母）、`disproportionately`（六级，18字母）。
-
-例子优先从同词源数据的短语选择；没有可用短语时选句子，优先短小、含目标词或常见屈折词形、中文非空的例子，降低专业术语与过长内容的优先级。缺例和少量过长、错配的内容由本项目补写。全部11226条游戏词目均有英中例子；导入过程检查必填字段、字母范围、例子含词及重复，任一缺失会直接失败。
-
-少量可确认的源错误由 `src/vocabulary-example-overrides.js` 统一修订，包括 `reservior` → `reservoir`（并入原词）、`Automatically` → `automatically`、`FALSE` → `false`；以及 `biography`、`delightful`、`downfall`、`Venus`、`delusion`、`dictate`、`hospitalize`、`showmanship`、`entrepreneurship`、`valuable` 等错义或首义。中学阶段另采用适龄日常词义与搭配，原有191词释义不受这些修订影响。
-
-## 重复导入
-
-在线导入固定版本：
+`scripts/import-vocabulary.mjs` 保留游戏词库中的已有内容，依据选词清单为新增词形补充内容并校验字段；已有释义和逐义例句不会被源语料覆盖。保留同库词条ID，小学旧词沿用 `practice-*`，其他条目采用“词库＋小写拼写”。
 
 ```sh
 node scripts/import-vocabulary.mjs
+node scripts/import-vocabulary.mjs /path/to/source-directory --check
 ```
 
-离线重建时，将四个原始输入分别保存为 `vocabulary-junior.jsonl`、`vocabulary-senior.jsonl`、`vocabulary-cet4.jsonl` 与 `vocabulary-cet6.jsonl`，通过参数传入所在目录：
+离线目录包含 `vocabulary-junior.jsonl`、`vocabulary-senior.jsonl`、`vocabulary-cet4.jsonl`、`vocabulary-cet6.jsonl`、`vocabulary-postgrad.jsonl`、`vocabulary-toefl.jsonl`、`vocabulary-sat.jsonl`。`--check` 只比较、不写出；可用 `--audit=/tmp/vocabulary-audit.json` 临时排查缺项，源JSONL、PDF和审计报告不提交仓库。
 
-```sh
-node scripts/import-vocabulary.mjs /path/to/source-directory
-```
-
-脚本重写初中进阶和两个大学英语数据模块，保留小学500词及原创例子，校验新增309及衔接203清单。原始大文件和参考PDF无需提交仓库。
+官方清单可用 `scripts/extract-cet-wordlist.py` 配合 Python、pypdf 及上述指纹的原PDF提取；生成到临时目录后再核对选词依据。

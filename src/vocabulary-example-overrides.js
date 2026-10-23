@@ -1,4 +1,4 @@
-// 为缺少可用例子的源词条补写；同时修订少量可确认的错义与拼写。
+// 缺例补写、明确错义修订与适龄短语；同词释义和例子一并保持语义匹配。
 export const VOCABULARY_EXAMPLE_OVERRIDES = {
   "advocator": {
     "text": "An advocator of peace",
@@ -556,8 +556,8 @@ export const VOCABULARY_EXAMPLE_OVERRIDES = {
     "kind": "phrase"
   },
   "proximately": {
-    "text": "proximately caused damage",
-    "meaning": "由直接原因造成的损害",
+    "text": "Proximately caused harm",
+    "meaning": "由直接原因造成的伤害",
     "kind": "phrase"
   },
   "glorify": {
@@ -791,8 +791,8 @@ export const VOCABULARY_EXAMPLE_OVERRIDES = {
     "kind": "phrase"
   },
   "moslem": {
-    "text": "a Moslem community",
-    "meaning": "一个穆斯林社区",
+    "text": "A Moslem scholar",
+    "meaning": "一位穆斯林学者",
     "kind": "phrase"
   },
   "afflict": {
@@ -1289,10 +1289,764 @@ export const VOCABULARY_EXAMPLE_OVERRIDES = {
     "text": "A cup of yogurt",
     "meaning": "一杯酸奶",
     "kind": "phrase"
+  },
+  "mine": {
+    "text": "Work in a mine",
+    "meaning": "在矿井工作",
+    "kind": "phrase"
+  },
+  "wear": {
+    "text": "Wear a coat",
+    "meaning": "穿一件外套",
+    "kind": "phrase"
+  },
+  "ring": {
+    "text": "A wedding ring",
+    "meaning": "一枚结婚戒指",
+    "kind": "phrase"
+  },
+  "bark": {
+    "text": "The bark of a tree",
+    "meaning": "树皮",
+    "kind": "phrase"
+  },
+  "close": {
+    "text": "Close the door",
+    "meaning": "关门",
+    "kind": "phrase"
+  },
+  "sound": {
+    "text": "The sound of rain",
+    "meaning": "雨声",
+    "kind": "phrase"
+  },
+  "spring": {
+    "text": "Flowers in spring",
+    "meaning": "春天的花朵",
+    "kind": "phrase"
+  },
+  "pupil": {
+    "text": "A primary school pupil",
+    "meaning": "一名小学生",
+    "kind": "phrase"
+  },
+  "honor": {
+    "text": "An honor to meet you",
+    "meaning": "很荣幸认识你",
+    "kind": "phrase"
+  },
+  "advisory": {
+    "text": "An advisory committee",
+    "meaning": "咨询委员会",
+    "kind": "phrase"
+  },
+  "second": {
+    "text": "The second chapter",
+    "meaning": "第二章",
+    "kind": "phrase"
+  },
+  "strike": {
+    "text": "A workers' strike",
+    "meaning": "工人罢工",
+    "kind": "phrase"
+  },
+  "mining": {
+    "text": "Coal mining",
+    "meaning": "煤矿开采",
+    "kind": "phrase"
+  },
+  "overexcited": {
+    "text": "Overexcited children",
+    "meaning": "过度兴奋的孩子们",
+    "kind": "phrase"
+  },
+  "microprocessor": {
+    "text": "A powerful microprocessor",
+    "meaning": "一个功能强大的微处理器",
+    "kind": "phrase"
+  },
+  "meantime": {
+    "text": "In the meantime",
+    "meaning": "在此期间",
+    "kind": "phrase"
+  },
+  "oar": {
+    "text": "Row with an oar",
+    "meaning": "用桨划船",
+    "kind": "phrase"
+  },
+  "suit": {
+    "text": "Wear a suit",
+    "meaning": "穿一套西装",
+    "kind": "phrase"
+  },
+  "fridge": {
+    "text": "Keep milk in the fridge",
+    "meaning": "把牛奶放在冰箱里",
+    "kind": "phrase"
+  },
+  "bank": {
+    "text": "A river bank",
+    "meaning": "河岸",
+    "kind": "phrase"
+  },
+  "previously": {
+    "text": "Previously unknown facts",
+    "meaning": "先前未知的事实",
+    "kind": "phrase"
+  },
+  "form": {
+    "text": "Fill in a form",
+    "meaning": "填写一份表格",
+    "kind": "phrase"
+  },
+  "makeup": {
+    "text": "Remove your makeup",
+    "meaning": "卸妆",
+    "kind": "phrase"
+  },
+  "mobility": {
+    "text": "Limited mobility",
+    "meaning": "行动不便",
+    "kind": "phrase"
+  },
+  "stiffness": {
+    "text": "Muscle stiffness",
+    "meaning": "肌肉僵硬",
+    "kind": "phrase"
+  },
+  "gradient": {
+    "text": "A steep gradient",
+    "meaning": "陡峭的坡度",
+    "kind": "phrase"
+  },
+  "bound": {
+    "text": "Be bound to happen",
+    "meaning": "必然发生",
+    "kind": "phrase"
+  },
+  "produce": {
+    "text": "Fresh farm produce",
+    "meaning": "新鲜的农产品",
+    "kind": "phrase"
+  },
+  "race": {
+    "text": "A swimming race",
+    "meaning": "一场游泳比赛",
+    "kind": "phrase"
+  },
+  "light": {
+    "text": "Turn on the light",
+    "meaning": "开灯",
+    "kind": "phrase"
+  },
+  "fan": {
+    "text": "An electric fan",
+    "meaning": "一台电风扇",
+    "kind": "phrase"
+  },
+  "commission": {
+    "text": "Sales commission",
+    "meaning": "销售佣金",
+    "kind": "phrase"
+  },
+  "liability": {
+    "text": "Legal liability",
+    "meaning": "法律责任",
+    "kind": "phrase"
+  },
+  "accommodation": {
+    "text": "Student accommodation",
+    "meaning": "学生宿舍",
+    "kind": "phrase"
+  },
+  "accommodate": {
+    "text": "Accommodate six guests",
+    "meaning": "为六位客人提供住宿",
+    "kind": "phrase"
+  },
+  "coordination": {
+    "text": "Team coordination",
+    "meaning": "团队协调",
+    "kind": "phrase"
+  },
+  "consultancy": {
+    "text": "A management consultancy",
+    "meaning": "一家管理咨询公司",
+    "kind": "phrase"
+  },
+  "sensible": {
+    "text": "A sensible decision",
+    "meaning": "一个明智的决定",
+    "kind": "phrase"
+  },
+  "subject": {
+    "text": "A difficult subject",
+    "meaning": "一门难学的学科",
+    "kind": "phrase"
+  },
+  "raise": {
+    "text": "Raise money for charity",
+    "meaning": "为慈善事业筹款",
+    "kind": "phrase"
+  },
+  "neighbourhood": {
+    "text": "A quiet neighbourhood",
+    "meaning": "一个安静的社区",
+    "kind": "phrase"
+  },
+  "dropout": {
+    "text": "A school dropout",
+    "meaning": "一名辍学者",
+    "kind": "phrase"
+  },
+  "expressiveness": {
+    "text": "The expressiveness of music",
+    "meaning": "音乐的表现力",
+    "kind": "phrase"
+  },
+  "blond": {
+    "text": "Blond hair",
+    "meaning": "金发",
+    "kind": "phrase"
+  },
+  "site": {
+    "text": "A building site",
+    "meaning": "一处建筑工地",
+    "kind": "phrase"
+  },
+  "plain": {
+    "text": "A wide plain",
+    "meaning": "一片广阔的平原",
+    "kind": "phrase"
+  },
+  "negro": {
+    "text": "A Negro spiritual",
+    "meaning": "一首黑人灵歌（传统音乐名称）",
+    "kind": "phrase"
+  },
+  "misled": {
+    "text": "Misled by false information",
+    "meaning": "被虚假信息误导",
+    "kind": "phrase"
+  },
+  "africa": {
+    "text": "A trip to Africa",
+    "meaning": "非洲之行",
+    "kind": "phrase"
+  },
+  "asia": {
+    "text": "Southeast Asia",
+    "meaning": "东南亚",
+    "kind": "phrase"
+  },
+  "america": {
+    "text": "North America",
+    "meaning": "北美洲",
+    "kind": "phrase"
+  },
+  "england": {
+    "text": "A trip to England",
+    "meaning": "英格兰之行",
+    "kind": "phrase"
+  },
+  "france": {
+    "text": "Made in France",
+    "meaning": "法国制造",
+    "kind": "phrase"
+  },
+  "germany": {
+    "text": "Made in Germany",
+    "meaning": "德国制造",
+    "kind": "phrase"
+  },
+  "harbour": {
+    "text": "A quiet harbour",
+    "meaning": "一座宁静的港口",
+    "kind": "phrase"
+  },
+  "january": {
+    "text": "In January",
+    "meaning": "在一月",
+    "kind": "phrase"
+  },
+  "february": {
+    "text": "In February",
+    "meaning": "在二月",
+    "kind": "phrase"
+  },
+  "march": {
+    "text": "In March",
+    "meaning": "在三月",
+    "kind": "phrase"
+  },
+  "april": {
+    "text": "In April",
+    "meaning": "在四月",
+    "kind": "phrase"
+  },
+  "may": {
+    "text": "May I come in?",
+    "meaning": "我可以进来吗？",
+    "kind": "sentence"
+  },
+  "june": {
+    "text": "In June",
+    "meaning": "在六月",
+    "kind": "phrase"
+  },
+  "july": {
+    "text": "In July",
+    "meaning": "在七月",
+    "kind": "phrase"
+  },
+  "august": {
+    "text": "In August",
+    "meaning": "在八月",
+    "kind": "phrase"
+  },
+  "september": {
+    "text": "In September",
+    "meaning": "在九月",
+    "kind": "phrase"
+  },
+  "october": {
+    "text": "In October",
+    "meaning": "在十月",
+    "kind": "phrase"
+  },
+  "november": {
+    "text": "In November",
+    "meaning": "在十一月",
+    "kind": "phrase"
+  },
+  "december": {
+    "text": "In December",
+    "meaning": "在十二月",
+    "kind": "phrase"
+  },
+  "english": {
+    "text": "Speak English",
+    "meaning": "说英语",
+    "kind": "phrase"
+  },
+  "chinese": {
+    "text": "Learn Chinese",
+    "meaning": "学习汉语",
+    "kind": "phrase"
+  },
+  "french": {
+    "text": "Learn French",
+    "meaning": "学习法语",
+    "kind": "phrase"
+  },
+  "german": {
+    "text": "Learn German",
+    "meaning": "学习德语",
+    "kind": "phrase"
+  },
+  "japanese": {
+    "text": "Learn Japanese",
+    "meaning": "学习日语",
+    "kind": "phrase"
+  },
+  "europe": {
+    "text": "Western Europe",
+    "meaning": "西欧",
+    "kind": "phrase"
+  },
+  "britain": {
+    "text": "A trip to Britain",
+    "meaning": "英国之行",
+    "kind": "phrase"
+  },
+  "australia": {
+    "text": "A trip to Australia",
+    "meaning": "澳大利亚之行",
+    "kind": "phrase"
+  },
+  "canada": {
+    "text": "A trip to Canada",
+    "meaning": "加拿大之行",
+    "kind": "phrase"
+  },
+  "china": {
+    "text": "Made in China",
+    "meaning": "中国制造",
+    "kind": "phrase"
+  },
+  "india": {
+    "text": "A trip to India",
+    "meaning": "印度之行",
+    "kind": "phrase"
+  },
+  "japan": {
+    "text": "A trip to Japan",
+    "meaning": "日本之行",
+    "kind": "phrase"
+  },
+  "mediterranean": {
+    "text": "The Mediterranean Sea",
+    "meaning": "地中海",
+    "kind": "phrase"
+  },
+  "atlantic": {
+    "text": "The Atlantic Ocean",
+    "meaning": "大西洋",
+    "kind": "phrase"
+  },
+  "egyptian": {
+    "text": "Ancient Egyptian art",
+    "meaning": "古埃及艺术",
+    "kind": "phrase"
+  },
+  "roman": {
+    "text": "Ancient Roman buildings",
+    "meaning": "古罗马建筑",
+    "kind": "phrase"
+  },
+  "american": {
+    "text": "An American writer",
+    "meaning": "一位美国作家",
+    "kind": "phrase"
+  },
+  "african": {
+    "text": "African wildlife",
+    "meaning": "非洲野生动植物",
+    "kind": "phrase"
+  },
+  "asian": {
+    "text": "Asian countries",
+    "meaning": "亚洲国家",
+    "kind": "phrase"
+  },
+  "australian": {
+    "text": "An Australian city",
+    "meaning": "一座澳大利亚城市",
+    "kind": "phrase"
+  },
+  "canadian": {
+    "text": "A Canadian writer",
+    "meaning": "一位加拿大作家",
+    "kind": "phrase"
+  },
+  "british": {
+    "text": "British history",
+    "meaning": "英国历史",
+    "kind": "phrase"
+  },
+  "indian": {
+    "text": "Indian food",
+    "meaning": "印度食物",
+    "kind": "phrase"
+  },
+  "italian": {
+    "text": "Italian food",
+    "meaning": "意大利食物",
+    "kind": "phrase"
+  },
+  "greek": {
+    "text": "Ancient Greek art",
+    "meaning": "古希腊艺术",
+    "kind": "phrase"
+  },
+  "arabian": {
+    "text": "The Arabian Sea",
+    "meaning": "阿拉伯海",
+    "kind": "phrase"
+  },
+  "bible": {
+    "text": "Read the Bible",
+    "meaning": "阅读圣经",
+    "kind": "phrase"
+  },
+  "christmas": {
+    "text": "At Christmas",
+    "meaning": "在圣诞节期间",
+    "kind": "phrase"
+  },
+  "christian": {
+    "text": "A Christian church",
+    "meaning": "一座基督教堂",
+    "kind": "phrase"
+  },
+  "catholic": {
+    "text": "A Catholic church",
+    "meaning": "一座天主教堂",
+    "kind": "phrase"
+  },
+  "islam": {
+    "text": "The history of Islam",
+    "meaning": "伊斯兰教的历史",
+    "kind": "phrase"
+  },
+  "buddhism": {
+    "text": "The history of Buddhism",
+    "meaning": "佛教的历史",
+    "kind": "phrase"
+  },
+  "easter": {
+    "text": "The Easter holiday",
+    "meaning": "复活节假期",
+    "kind": "phrase"
+  },
+  "thanksgiving": {
+    "text": "Thanksgiving dinner",
+    "meaning": "感恩节晚餐",
+    "kind": "phrase"
+  },
+  "jupiter": {
+    "text": "The moons of Jupiter",
+    "meaning": "木星的卫星",
+    "kind": "phrase"
+  },
+  "saturn": {
+    "text": "The rings of Saturn",
+    "meaning": "土星环",
+    "kind": "phrase"
+  },
+  "mars": {
+    "text": "The surface of Mars",
+    "meaning": "火星表面",
+    "kind": "phrase"
+  },
+  "fahrenheit": {
+    "text": "Degrees Fahrenheit",
+    "meaning": "华氏度",
+    "kind": "phrase"
+  },
+  "latin": {
+    "text": "Learn Latin",
+    "meaning": "学习拉丁语",
+    "kind": "phrase"
+  },
+  "apply": {
+    "text": "Apply for a job",
+    "meaning": "申请一份工作",
+    "kind": "phrase"
+  },
+  "assemble": {
+    "text": "Assemble a model",
+    "meaning": "组装一个模型",
+    "kind": "phrase"
+  },
+  "ease": {
+    "text": "Ease the pain",
+    "meaning": "缓解疼痛",
+    "kind": "phrase"
+  },
+  "entertaining": {
+    "text": "An entertaining story",
+    "meaning": "一个有趣的故事",
+    "kind": "phrase"
+  },
+  "current": {
+    "text": "A strong current",
+    "meaning": "一股强劲的水流",
+    "kind": "phrase"
+  },
+  "character": {
+    "text": "A character in a story",
+    "meaning": "故事中的一个角色",
+    "kind": "phrase"
+  },
+  "negative": {
+    "text": "A negative answer",
+    "meaning": "否定的回答",
+    "kind": "phrase"
+  },
+  "desire": {
+    "text": "A strong desire",
+    "meaning": "强烈的愿望",
+    "kind": "phrase"
+  },
+  "measure": {
+    "text": "Take effective measures",
+    "meaning": "采取有效措施",
+    "kind": "phrase"
+  },
+  "advance": {
+    "text": "In advance",
+    "meaning": "提前",
+    "kind": "phrase"
+  },
+  "alter": {
+    "text": "Alter the plan",
+    "meaning": "改变计划",
+    "kind": "phrase"
+  },
+  "assignment": {
+    "text": "A school assignment",
+    "meaning": "一项学校作业",
+    "kind": "phrase"
+  },
+  "constructive": {
+    "text": "Constructive advice",
+    "meaning": "建设性的意见",
+    "kind": "phrase"
+  },
+  "context": {
+    "text": "In this context",
+    "meaning": "在这一语境下",
+    "kind": "phrase"
+  },
+  "contrast": {
+    "text": "A clear contrast",
+    "meaning": "鲜明的对比",
+    "kind": "phrase"
+  },
+  "delay": {
+    "text": "A flight delay",
+    "meaning": "航班延误",
+    "kind": "phrase"
+  },
+  "determination": {
+    "text": "Firm determination",
+    "meaning": "坚定的决心",
+    "kind": "phrase"
+  },
+  "diversity": {
+    "text": "Cultural diversity",
+    "meaning": "文化多样性",
+    "kind": "phrase"
+  },
+  "division": {
+    "text": "Division of labor",
+    "meaning": "劳动分工",
+    "kind": "phrase"
+  },
+  "favorable": {
+    "text": "Favorable weather",
+    "meaning": "有利的天气",
+    "kind": "phrase"
+  },
+  "familiar": {
+    "text": "A familiar voice",
+    "meaning": "熟悉的声音",
+    "kind": "phrase"
+  },
+  "flexible": {
+    "text": "A flexible schedule",
+    "meaning": "灵活的时间安排",
+    "kind": "phrase"
+  },
+  "grab": {
+    "text": "Grab my hand",
+    "meaning": "抓住我的手",
+    "kind": "phrase"
+  },
+  "intake": {
+    "text": "Daily water intake",
+    "meaning": "每日饮水摄入量",
+    "kind": "phrase"
+  },
+  "item": {
+    "text": "An item on the list",
+    "meaning": "清单上的一项",
+    "kind": "phrase"
+  },
+  "lodge": {
+    "text": "Lodge with a family",
+    "meaning": "寄宿在一户人家",
+    "kind": "phrase"
+  },
+  "means": {
+    "text": "A means of transport",
+    "meaning": "一种交通工具",
+    "kind": "phrase"
+  },
+  "migration": {
+    "text": "Bird migration",
+    "meaning": "鸟类迁徙",
+    "kind": "phrase"
+  },
+  "motivation": {
+    "text": "Learning motivation",
+    "meaning": "学习动机",
+    "kind": "phrase"
+  },
+  "pose": {
+    "text": "Pose a question",
+    "meaning": "提出一个问题",
+    "kind": "phrase"
+  },
+  "preservation": {
+    "text": "Food preservation",
+    "meaning": "食物保存",
+    "kind": "phrase"
+  },
+  "block": {
+    "text": "Block the road",
+    "meaning": "堵住道路",
+    "kind": "phrase"
+  },
+  "associate": {
+    "text": "Associate with friends",
+    "meaning": "和朋友交往",
+    "kind": "phrase"
+  },
+  "alert": {
+    "text": "Stay alert",
+    "meaning": "保持警觉",
+    "kind": "phrase"
+  },
+  "alcohol": {
+    "text": "Alcohol consumption",
+    "meaning": "饮酒",
+    "kind": "phrase"
+  },
+  "administrative": {
+    "text": "Administrative duties",
+    "meaning": "行政工作",
+    "kind": "phrase"
+  },
+  "address": {
+    "text": "An email address",
+    "meaning": "电子邮件地址",
+    "kind": "phrase"
+  },
+  "acute": {
+    "text": "An acute shortage",
+    "meaning": "严重短缺",
+    "kind": "phrase"
+  },
+  "appeal": {
+    "text": "Appeal for help",
+    "meaning": "呼吁援助",
+    "kind": "phrase"
+  },
+  "bureau": {
+    "text": "A travel bureau",
+    "meaning": "一家旅行社",
+    "kind": "phrase"
+  },
+  "choke": {
+    "text": "Choke on food",
+    "meaning": "被食物噎住",
+    "kind": "phrase"
+  },
+  "ensure": {
+    "text": "Ensure safety",
+    "meaning": "确保安全",
+    "kind": "phrase"
+  },
+  "equivalent": {
+    "text": "Equivalent qualifications",
+    "meaning": "同等学历",
+    "kind": "phrase"
+  },
+  "complete": {
+    "text": "Complete the task",
+    "meaning": "完成任务",
+    "kind": "phrase"
   }
 };
 
-export const VOCABULARY_WORD_CORRECTIONS = { reservior: 'reservoir', Automatically: 'automatically', FALSE: 'false' };
+export const VOCABULARY_WORD_CORRECTIONS = {
+  "reservior": "reservoir",
+  "Automatically": "automatically",
+  "FALSE": "false"
+};
 
 export const VOCABULARY_MEANING_CORRECTIONS = {
   "biography": "传记",
@@ -1317,10 +2071,113 @@ export const VOCABULARY_MEANING_CORRECTIONS = {
   "yeah": "是的；对",
   "restroom": "洗手间",
   "yoghurt": "酸奶",
-  "yogurt": "酸奶"
+  "yogurt": "酸奶",
+  "mine": "矿；矿井；我的",
+  "wear": "穿；戴；磨损",
+  "ring": "戒指；环；铃声；响铃",
+  "bark": "树皮；吠叫",
+  "close": "关闭；接近的；紧密的",
+  "sound": "声音；听起来；健全的",
+  "spring": "春天；弹簧；泉水；跳跃",
+  "pupil": "学生；小学生；瞳孔",
+  "honor": "荣誉；荣幸；尊敬",
+  "advisory": "咨询的；顾问的；公告",
+  "second": "第二；秒；支持",
+  "strike": "罢工；打击；敲击",
+  "mining": "采矿；矿业",
+  "overexcited": "过度兴奋的；过度活跃的",
+  "microprocessor": "微处理器",
+  "meantime": "其间；同时",
+  "oar": "桨；橹",
+  "suit": "套装；适合；诉讼",
+  "fridge": "电冰箱",
+  "bank": "银行；河岸；堤岸",
+  "previously": "以前；先前",
+  "form": "表格；形式；形成",
+  "makeup": "化妆品；化妆；组成",
+  "mobility": "活动能力；流动性；移动性",
+  "stiffness": "僵硬；僵硬感；刚度",
+  "gradient": "坡度；梯度",
+  "proximately": "直接地；最接近地",
+  "bound": "必然的；受约束的；界限",
+  "produce": "生产；产生；农产品",
+  "race": "比赛；种族；人类",
+  "light": "光；灯；轻的",
+  "fan": "风扇；迷；爱好者",
+  "commission": "委员会；佣金；委托",
+  "liability": "责任；债务；不利因素",
+  "accommodation": "住处；膳宿",
+  "accommodate": "容纳；为……提供住宿；适应",
+  "coordination": "协调；配合",
+  "consultancy": "咨询；顾问服务；咨询公司",
+  "sensible": "明智的；合理的；可感知的",
+  "subject": "主题；学科；主语",
+  "raise": "举起；提高；筹集；抚养",
+  "neighbourhood": "街区；邻近地区；社区",
+  "dropout": "辍学者；退出者",
+  "expressiveness": "表现力；表达力",
+  "blond": "金发的；金发的人",
+  "site": "地点；场所；网站",
+  "plain": "平原；清楚的；朴素的",
+  "negro": "黑人（过时用语）",
+  "moslem": "穆斯林；穆斯林的（较旧拼法，现多用Muslim）",
+  "shrank": "收缩；缩水（shrink的过去式）",
+  "misled": "误导（mislead的过去式和过去分词）",
+  "connexion": "联系；连接（connection的较旧拼法）",
+  "reflexion": "反射；映像；思考（reflection的较少见拼法）",
+  "england": "英格兰",
+  "apply": "申请；应用；涂抹",
+  "assemble": "组装；集合；召集",
+  "ease": "缓解；减轻；轻松",
+  "entertaining": "有趣的；使人愉快的",
+  "current": "当前的；水流；电流",
+  "character": "性格；角色；文字；特征",
+  "negative": "否定的；消极的；负的",
+  "desire": "渴望；愿望；欲望",
+  "measure": "测量；措施；尺度",
+  "advance": "提前；前进；进展",
+  "alter": "改变；更改",
+  "assignment": "作业；任务；分配",
+  "constructive": "建设性的；有益的",
+  "context": "上下文；语境；背景",
+  "contrast": "对比；反差；对照",
+  "delay": "延误；推迟；耽搁",
+  "determination": "决心；确定",
+  "diversity": "多样性；差异",
+  "division": "除法；分配；部门；分工",
+  "favorable": "有利的；赞成的",
+  "familiar": "熟悉的；熟知的",
+  "flexible": "灵活的；柔韧的",
+  "grab": "抓住；抢夺",
+  "intake": "摄入；摄入量；吸入",
+  "item": "项目；一件物品；一条",
+  "lodge": "暂住；寄宿；提出",
+  "means": "方法；手段；财力",
+  "migration": "迁移；迁徙；移民",
+  "motivation": "动机；动力；激励",
+  "pose": "提出；构成；摆姿势",
+  "preservation": "保存；保护",
+  "block": "阻挡；街区；块",
+  "associate": "联系；交往；同事",
+  "alert": "警觉的；警报；提醒",
+  "alcohol": "酒精；酒",
+  "administrative": "行政的；管理的",
+  "address": "地址；演讲；处理",
+  "acute": "严重的；急性的；敏锐的",
+  "appeal": "呼吁；上诉；吸引力",
+  "bureau": "局；办事处；机构",
+  "choke": "窒息；噎住",
+  "ensure": "确保；保证",
+  "equivalent": "相等的；等效的；等价物",
+  "complete": "完成；完整的",
+  "may": "可以；可能",
+  "chinese": "汉语；中国的；中国人",
+  "french": "法语；法国的；法国人",
+  "german": "德语；德国的；德国人",
+  "japanese": "日语；日本的；日本人",
+  "fahrenheit": "华氏的；华氏温标"
 };
 
-// 中学阶段采用日常主词义和适龄搭配，不改变大学英语库的多义收录。
 export const SCHOOL_EXAMPLE_OVERRIDES = {
   "fourteenth": {
     "text": "The fourteenth chapter",

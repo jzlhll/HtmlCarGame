@@ -47,7 +47,7 @@
 
 Storage.login 恢复账号上次词库，switchLibrary 在当前复习锁清零后才允许切换。二者复用 finishPending 等待旧保存及数据库队列、缓存原映射再关闭旧连接；profileCache 键包含账号和词库。Game 的 session、record、result 均保存 accountId、libraryId；存储层校验词条属于当前词库，拒绝外来写入。例子随结果保存，并可按规范词条恢复。设置对象身份保持不变，Scene 和 Audio 复用同一对象；模型缓存仍为游戏级，不因切库重新生成。
 
-词库在 vocabulary-data.js 注册，getVocabulary 遇到非法 ID 抛错；恢复保存的选择时回退小六。每词含 example.text、example.meaning、example.kind。预习和通关卡片共用词义及例子内容；强制复习按失败词显示例子。选择题干扰项限定当前库，字位在 Scene 初始化时按 VOCAB.maxWordLength 预建；长词题面宽度不超过逻辑可用宽度，显示压缩字母行但保留完整字位。学习重置二次确认后仅清当前账号当前库的 words、attempts、runs 及学习快照、待入库；其他库、设置、成绩、关卡、词池及复习锁保留。
+词库在 vocabulary-data.js 注册，getVocabulary 遇到非法 ID 抛错；恢复保存的选择时回退小六。每词含 example.text、example.meaning、example.kind；多义词的首例及 example.additional 中的补充例句另含 sense 和 partOfSpeech，按义项配对并共用卡片渲染；卡片按 WORD_CARDS 中的例子数量、释义长度及英中加权文本量选择普通／紧凑／密集排版，两组例子起收紧间距，四组或特别长的内容采用更紧凑的字体与义项侧栏；矮窗口进一步缩减预习头部间距。预习卡片内容独立滚动、导航和开始按钮固定可见，复习和通关例句区限制高度并允许滚动，不截断文字。预习和通关卡片共用词义及例子内容；强制复习按失败词显示例子。选择题干扰项限定当前库，字位在 Scene 初始化时按 VOCAB.maxWordLength 预建；长词题面宽度不超过逻辑可用宽度，显示压缩字母行但保留完整字位。学习重置二次确认后仅清当前账号当前库的 words、attempts、runs 及学习快照、待入库；其他库、设置、成绩、关卡、词池及复习锁保留。
 
 历史正确率严格超过 50%、75%、85% 时选词权重分别为 0.5、0.25、0.01，非累计相乘；只影响下局词池。本局词池仍全部用完后再重复。
 
@@ -88,3 +88,5 @@ Boss 顶点、法线和线性顶点色在独立 Worker 中生成并转移，缓�
 题面 `font-size` 和 `line-height` 改为 CSS 根据 `#word-layer` 的 `--word-scale` 计算；仅窗口缩放变化时更新该变量。卡片宽度随实际 `word.width` 变化才写入，选择题高度也只在变化时更新。`will-change` 使用实际运动的 `transform`。粗指针媒体查询在 UI 初始化时保存，监听 change 后刷新界面，帧循环只读现有结果。
 
 启动日志补充 `spaceMilliseconds`、`sceneImportMilliseconds`、`sceneConstructionMilliseconds` 和 `warmupMilliseconds`。资源链耗时可能重叠，不能相加作为总准备时间；`navigationMilliseconds` 从启动模块执行开始计时，不包含此前的 HTML 和模块下载。
+
+词库导入由官方分级清单与内容配对模块驱动：`scripts/extract-cet-wordlist.py` 恢复大纲词形，`scripts/import-vocabulary.mjs` 负责同库去重、字段校验和统一写出前的完整内容检查。六级为新增进阶库；主词、派生词和合法变体按独立拼写计数。词义、词性及英中例子以 `src/vocabulary-*.js` 为准，导入保留已有词条内容，仅为新增词形补充内容；内容缺项不写出词库，`--check` 可核对词形清单、字段和写出格式。

@@ -29,6 +29,7 @@ export const UNDO = { cooldownSeconds: 0.25, poolSize: 4 };
 export const SHELLS = { initialAmmo: 0, cooldownSeconds: 0.4, speedHeightsPerSecond: 1, poolSize: 8 };
 export const ENEMIES = { maxActive: 16, fallDurationSeconds: 18, firstShotDelaySeconds: 2, shotIntervalSeconds: 3, warningSeconds: 0.6, bulletSpeedHeightsPerSecond: 0.18, bulletLifetimeSeconds: 8, bulletPoolSize: 64, killScore: 20, width: 84, height: 76 };
 export const VOCAB = { maxWordLength: 24, usePreviewPool: true };
+export const WORD_CARDS = { compactExampleCount: 2, denseExampleCount: 4, compactTextLength: 180, denseTextLength: 280, compactMeaningLength: 18 };
 export const BACKGROUND = {
   seed: 73129, stars: 1200, glowStars: 240, largeGlows: 60, starTravel: 2400,
   starSizeScale: 1.45, starPalette: [0xffdf93,0x80b8ff,0xe8ae65,0x9e4557],
