@@ -133,7 +133,7 @@ export class Scene {
       model.rotation.set(isGalaxy||isSun||chart?0:.2,isSun||chart?0:plan.tilt+age*.005,isGalaxy?age*.0008:isSun||chart?0:.15);
       model.userData.planet.rotation.y=isSun?plan.tilt+age*.005:0;
     }
-    if(postgame){
+    if(postgame||game.mode==='assembly'&&!menu){
       this.player.visible=false;this.homePreview.visible=false;this.particles.count=0;
       for(const card of this.cards)hidden(card.element,true);
       for(const carrier of this.carriers)carrier.visible=false;

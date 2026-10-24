@@ -9,6 +9,8 @@ export const RENDERING = {
     economy: { label: '省电', maxPixelRatio: 1, maxPixels: 2073600, menuFPS: 30 }
   }
 };
+export const levelMode = level => level%2===0?'assembly':'combat';
+export const ASSEMBLY = { stageSeconds: [180,90], maxChecks: 3, maxChunkLength: 5 };
 export const LEVELS = { durationSeconds: 300, wordCount: 12 };
 export const BOSSES = { miniAt: 90, finalAt: 240, durationSeconds: 60, miniFaces: 3, finalFaces: 4, turnSeconds: 0.6, xRange: 275, yRange: 45.5, xAngularSpeed: 0.16, yAngularSpeed: 0.45, centerY: 350, miniCrates: 3, finalCrates: 5, victorySeconds: 5 };
 export const BOSS_VISUALS = {
@@ -70,6 +72,7 @@ export function validateConfig() {
   if(!Object.hasOwn(RENDERING.qualities,RENDERING.defaultQuality)||!positive(RENDERING.generationBatchMilliseconds))throw new Error('Invalid rendering defaults');
   for(const quality of Object.values(RENDERING.qualities))if(!positive(quality.maxPixelRatio)||!positive(quality.menuFPS)||(quality.maxPixels!==null&&!positive(quality.maxPixels)))throw new Error('Invalid rendering quality configuration');
   for(const value of [BOSSES.xRange,BOSSES.yRange,BOSSES.xAngularSpeed,BOSSES.yAngularSpeed])if(!positive(value))throw new Error('Invalid boss movement configuration');
+  if(ASSEMBLY.stageSeconds.length!==2||!ASSEMBLY.stageSeconds.every(positive)||!Number.isInteger(ASSEMBLY.maxChecks)||ASSEMBLY.maxChecks<1)throw new Error('Invalid assembly stage configuration');
   if (!Number.isInteger(LEVELS.wordCount)||LEVELS.wordCount<Math.max(BOSSES.miniFaces,BOSSES.finalFaces)) throw new Error('Invalid level vocabulary count');
   if(!positive(WORLD.playWidthScale)||WORLD.playWidthScale<1||!positive(LETTERS.shotCountRatio)||LETTERS.shotCountRatio>1||!Number.isInteger(LETTERS.shotCountMultiple)||LETTERS.shotCountMultiple<1)throw new Error('Invalid playfield or letter shot configuration');
   if (!positive(LETTERS.fireIntervalSeconds) || LETTERS.fireIntervalSeconds <= 0.02) throw new Error('Letter interval must exceed 0.02 seconds');
