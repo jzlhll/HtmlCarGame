@@ -1,9 +1,9 @@
 import { LETTER_POINTS,letterShotCount,letterDotCount } from './letter-patterns.js';
 const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const labels={spelling:'单词飞机',choice:'选择题航母',mini:'小 Boss',final:'大 Boss'};
+const labels={spelling:'咬题怪兽',choice:'选择题八爪鱼',mini:'小 Boss',final:'大 Boss'};
 export function captureAttempt(word,bossFinal=false){
-  if(word.kind==='choice')return {model:'choice',mode:word.mode,title:word.mode==='word-to-meaning'?word.entry.word:word.entry.meaning,options:word.options.map((option,index)=>({text:option.text,hits:option.hits,selected:index===word.selectedOption}))};
-  return {model:word.boss?(bossFinal?'final':'mini'):'spelling',cells:[...word.entry.word].map((letter,index)=>{
+  if(word.kind==='choice')return {model:'choice',mode:word.mode,title:word.mode==='spelling-gap'?word.stem:word.mode==='word-to-meaning'?word.entry.word:(word.questionMeaning||word.entry.meaning),meaning:word.questionMeaning||word.entry.meaning,options:word.options.map((option,index)=>({text:option.text,hits:option.hits,selected:index===word.selectedOption}))};
+  return {model:word.boss?(bossFinal?'final':'mini'):'spelling',meaning:word.questionMeaning||word.entry.meaning,cells:[...word.entry.word].map((letter,index)=>{
     const blank=word.blanks.indexOf(index),cell=blank<0?null:word.letters[blank];
     return {given:blank<0,letter:blank<0?letter:cell.letter,count:cell?.count||0,complete:!!cell?.letter&&cell.count>=letterShotCount(cell.letter),litCount:cell?letterDotCount(cell.letter,cell.count):0};
   })};

@@ -53,6 +53,53 @@ function* variant(settings,final){
   for(const t of [.29,.45,.61,.77]){const p=path(t),size=7.4*(1-t)+2;arm.ellipsoid([p[0],p[1],p[2]+19*(1-t)],[size,size*.8,3.6],style.cheek,12,8);yield;arm.ellipsoid([p[0],p[1],p[2]+19*(1-t)+3],[size*.45,size*.36,1],style.dark,10,6);yield;}
   return {core:body.finish(),tentacle:arm.finish()};
 }
-export function* bossModelTasks(settings){const mini=yield* variant(settings,false),final=yield* variant(settings,true);return {mini,final};}
+// 普通题与选择题复用同一准备队列；上颚、下颚和卷选项的触手分别恢复为可复用部件。
+function* targetFace(surface,settings,style,octopus=false){
+  const segments=20,rows=12;
+  surface.ellipsoid([0,octopus?42:39,-12],octopus?[76,65,54]:[184,72,48],style.skin,segments,rows);yield;
+  if(!octopus){surface.ellipsoid([0,-20,29],[166,53,22],style.dark,20,12);yield;}
+  for(const sign of [-1,1]){
+    surface.ellipsoid([sign*(octopus?30:56),octopus?56:65,48],[23,27,13],settings.eyes,18,12);yield;
+    surface.ellipsoid([sign*(octopus?30:56),octopus?55:64,60],[11,18,6],style.dark,14,10);yield;
+    surface.ellipsoid([sign*(octopus?30:56)-5,octopus?63:72,65],[5,6,2],settings.glint,10,8);yield;
+    surface.ellipsoid([sign*(octopus?53:100),octopus?29:38,37],[13,7,4],style.cheek,12,8);yield;
+    if(!octopus){
+      surface.tube(bezier([sign*133,84,-9],[sign*147,106,-7],[sign*151,120,-1],[sign*139,119,4]),t=>12*(1-t)+.5,style.light,settings.tooth,8,12);yield;
+      for(const x of [144,168]){surface.tube(bezier([sign*x,2,47],[sign*x,-9,53],[sign*(x-4),-17,54],[sign*(x-7),-21,51]),t=>8*(1-t)+.5,settings.tooth,settings.tooth,8,8);yield;}
+    }
+  }
+  if(octopus){surface.ellipsoid([0,24,47],[13,10,7],style.dark,12,8);yield;surface.ellipsoid([0,22,54],[5,4,2],settings.tongue,10,8);yield;}
+}
+function* bitingTarget(settings,enemy=false){
+  const style=settings.targets[enemy?'enemy':'word'],body=new Surface(),jaw=new Surface();
+  yield* targetFace(body,settings,style);
+  jaw.ellipsoid([0,-4,0],[180,20,36],style.light,20,12);yield;
+  for(const sign of [-1,1])for(const x of [136,162]){jaw.tube(bezier([sign*x,4,30],[sign*x,13,35],[sign*(x-2),20,36],[sign*(x-4),22,34]),t=>7*(1-t)+.5,settings.tooth,settings.tooth,8,8);yield;}
+  return {core:body.finish(),tentacle:jaw.finish()};
+}
+function* octopusTarget(settings){
+  const style=settings.targets.octopus,body=new Surface(),arms=[];
+  yield* targetFace(body,settings,style,true);
+  // 五根背景触手加三根卷选项的主触手，形成清楚的八爪轮廓。
+  for(let i=0;i<5;i++){
+    const angle=Math.PI*.12+i*Math.PI*.19,sign=i<2?-1:1,x=(i-2)*60;
+    body.tube(bezier([x*.18,8,-45],[x*.5,45,-42],[x+sign*45,15+Math.sin(angle)*30,-30],[x+sign*30,57+Math.sin(angle)*25,-20]),t=>15*Math.pow(1-t,.65)+1,style.skin,style.light,8,18);yield;
+  }
+  for(let i=0;i<3;i++){
+    const arm=new Surface(),center=(i-1)*240,stem=bezier([(i-1)*24,3,-40],[center*.6,-36,-36],[center+116,-78,-16],[center+108,-154,5]);
+    const path=t=>t<.55?stem(t/.55):[center+108*Math.cos(-(t-.55)/.45*Math.PI*.94),-154+64*Math.sin(-(t-.55)/.45*Math.PI*.94),5+10*Math.sin((t-.55)/.45*Math.PI)];
+    arm.tube(path,t=>27-11*t,style.skin,style.light,10,36);yield;
+    for(const t of [.62,.72,.82,.92]){const point=path(t);arm.ellipsoid([point[0],point[1],point[2]+16],[8,6,3],style.cheek,10,6);yield;}
+    arms.push(arm.finish());
+  }
+  return {core:body.finish(),left:arms[0],middle:arms[1],right:arms[2]};
+}
+export function* bossModelTasks(settings){
+  const mini=yield* variant(settings,false),final=yield* variant(settings,true),spelling=yield* bitingTarget(settings),enemy=yield* bitingTarget(settings,true),choice=yield* octopusTarget(settings);
+  return {mini,final,spelling,enemy,choice};
+}
 export function generateBossModels(settings){const tasks=bossModelTasks(settings);let step;do{step=tasks.next();}while(!step.done);return step.value;}
-export function validBossModels(data){return ['mini','final'].every(kind=>['core','tentacle'].every(part=>{const g=data?.[kind]?.[part];return g?.positions instanceof Float32Array&&g.positions.length>0&&g.positions.length%9===0&&g.normals instanceof Float32Array&&g.normals.length===g.positions.length&&g.colors instanceof Float32Array&&g.colors.length===g.positions.length&&g.positions.every(Number.isFinite)&&g.normals.every(Number.isFinite)&&g.colors.every(v=>Number.isFinite(v)&&v>=0&&v<=1);}));}
+export function validBossModels(data){
+  const required={mini:['core','tentacle'],final:['core','tentacle'],spelling:['core','tentacle'],enemy:['core','tentacle'],choice:['core','left','middle','right']};
+  return Object.entries(required).every(([kind,parts])=>parts.every(part=>{const g=data?.[kind]?.[part];return g?.positions instanceof Float32Array&&g.positions.length>0&&g.positions.length%9===0&&g.normals instanceof Float32Array&&g.normals.length===g.positions.length&&g.colors instanceof Float32Array&&g.colors.length===g.positions.length&&g.positions.every(Number.isFinite)&&g.normals.every(Number.isFinite)&&g.colors.every(v=>Number.isFinite(v)&&v>=0&&v<=1);}));
+}

@@ -94,11 +94,11 @@ export class Storage {
   }
   saveSettings(values){Object.assign(this.settings,values);if(this.account){this.accountSettings.set(this.account.id,{...this.settings});this.writeAt(this.accountPrefix,'settings',this.settings);}}
   modeForLevel(level,touchMode=false){
-    if(touchMode||!this.account)return levelMode(level,touchMode);
+    if(!this.account)return levelMode(level,touchMode);
     if(!['combat','assembly'].includes(this.progress.firstMode)){
-      // 已有空战记录能确定原桌面顺序；仅触屏游玩的记录不锁定桌面首关。
-      const previous=[...Object.values(this.levelState.sessions),...this.scores].filter(row=>row.accountId===this.account.id&&row.libraryId===this.libraryId&&row.mode==='combat'&&Number.isInteger(row.level)&&row.level>0).sort((a,b)=>a.level-b.level)[0];
-      this.progress.firstMode=previous?levelMode(previous.level,false,'combat'):Math.random()<.5?'combat':'assembly';
+      // 沿用已有关卡的实际模式推导起点，旧手机进度从最后一次碎片关接续交替。
+      const rows=[...Object.values(this.levelState.sessions),...this.scores].filter(row=>row.accountId===this.account.id&&row.libraryId===this.libraryId&&['combat','assembly'].includes(row.mode)&&Number.isInteger(row.level)&&row.level>0).sort((a,b)=>b.level-a.level),current=this.currentLevel(),previous=current&&current.status!=='completed'&&['combat','assembly'].includes(current.mode)?current:rows[0];
+      this.progress.firstMode=previous?levelMode(previous.level,false,previous.mode):Math.random()<.5?'combat':'assembly';
       this.write('progress',this.progress);
     }
     return levelMode(level,false,this.progress.firstMode);
