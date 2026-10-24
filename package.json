@@ -1,6 +1,6 @@
 {
   "name": "english-air-combat",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "英语空战 · Three.js 英语拼写空战游戏",
   "scripts": {
     "start": "node scripts/serve.mjs",

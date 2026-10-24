@@ -4,7 +4,7 @@
 
 ## 入口与模块
 
-入口 `index.html`，原生 JavaScript ES Modules + Three.js，无编译步骤。 import map 后预加载 `three.module.js` 与 `three.core.js`，`scene.js` 导入和 `prepareAssets()` 并行；场景构造仍等待两者成功。`npm ci` 后以独立 `PORT` 运行 `npm start`，通过 HTTP 加载。程序版本 `v1.1.0`，日常修改不创建发布 tag。
+入口 `index.html`，原生 JavaScript ES Modules + Three.js，无编译步骤。 import map 后预加载 `three.module.js` 与 `three.core.js`，`scene.js` 导入和 `prepareAssets()` 并行；场景构造仍等待两者成功。`npm ci` 后以独立 `PORT` 运行 `npm start`，通过 HTTP 加载。程序版本 `v1.2.0`，日常修改不创建发布 tag。
 
 | 模块 | 职责 |
 | --- | --- |
@@ -36,7 +36,7 @@
 
 ## 状态与时间
 
-资源入口为 preparing／prepareFailed；界面包括 menu、instructions、tutorial、preview、playing、paused、review、recap、won。活动飞行与首页星空沿用 requestAnimationFrame；战斗逐帧提交，菜单在高画质最高 60 帧、标准／省电最高 30 帧，背景累计显示间隔推进时间。覆盖式弹窗（含预习）、暂停和结算按状态、尺寸或设置变化重绘，隐藏页面停止帧调度。复习仍独立按秒唤醒更新界面。复习仅在前台且聚焦时按下一秒边界唤醒，使用实际有效时间推进并保存余时，失焦前结清有效片段，恢复不补算后台时间。只有 playing 推进有效时间。桌面首关随机选空战或碎片，随后交替，碎片关使用 AssemblyRound 两阶段有效计时；触屏碎片关使用 AssemblyRound，点选关使用同一 Game 判题，普通题与 Boss 均直接点选。UI 根据 pointer: coarse 更新设备属性，Game.prepareLevel 固定当前局模式，缩放及游玩中设备属性变化不切换当前局；Game 先分流碎片更新，避免生成射击、Boss 或补给，学习与结算复用现有流程。两阶段完整规则见[交替关卡与碎片模式](../design/english-air-combat/09-交替关卡与碎片模式.md)。`victoryRemaining` 为 null 时运行常规倒计时；大 Boss 所有面结果为 correct 后清场、发五箱并设为 5，仍使用 playing／paused，暂停与失焦沿用既有冻结。此阶段只处理四方向移动、箱子和收藏动画，停止射击及新生成，完整五秒后以 boss-defeated 原因结算；可超过本词库的常规时限，不回退有效时间。重开及切账号清空此阶段并恢复玩家底部位置。暂停冻结移动、验证、转面与收藏动画，失焦清空输入。review 单独推进，页面隐藏或失焦时停止；每秒及 pagehide 保存余时。结束后 review 在错题回顾中推进，结束进入 recap 等待用户继续，再进入 won。无错题直接 recap。result.recapPending 标记尚未查看完的回顾，与剩余复习时间一起保存，零秒仍保留；继续后清除。恢复时按剩余时间进入 review 或 recap，不开放可绕过复习的菜单入口。
+资源入口为 preparing／prepareFailed；界面包括 menu、instructions、tutorial、preview、playing、paused、review、recap、won。活动飞行与首页星空沿用 requestAnimationFrame；战斗逐帧提交，菜单在高画质最高 60 帧、标准／省电最高 30 帧，背景累计显示间隔推进时间。覆盖式弹窗（含预习）、暂停和结算按状态、尺寸或设置变化重绘，隐藏页面停止帧调度。复习仍独立按秒唤醒更新界面。复习仅在前台且聚焦时按下一秒边界唤醒，使用实际有效时间推进并保存余时，失焦前结清有效片段，恢复不补算后台时间。只有 playing 推进有效时间。桌面首关随机选空战或碎片，随后交替，碎片关使用 AssemblyRound 四轮有效计时；触屏碎片关使用 AssemblyRound，点选关使用同一 Game 判题，普通题与 Boss 均直接点选。UI 根据 pointer: coarse 更新设备属性，Game.prepareLevel 固定当前局模式，缩放及游玩中设备属性变化不切换当前局；Game 先分流碎片更新，避免生成射击、Boss 或补给，学习与结算复用现有流程。四轮完整规则见[交替关卡与碎片模式](../design/english-air-combat/09-交替关卡与碎片模式.md)。`victoryRemaining` 为 null 时运行常规倒计时；大 Boss 所有面结果为 correct 后清场、发五箱并设为 5，仍使用 playing／paused，暂停与失焦沿用既有冻结。此阶段只处理四方向移动、箱子和收藏动画，停止射击及新生成，完整五秒后以 boss-defeated 原因结算；可超过本词库的常规时限，不回退有效时间。重开及切账号清空此阶段并恢复玩家底部位置。暂停冻结移动、验证、转面与收藏动画，失焦清空输入。review 单独推进，页面隐藏或失焦时停止；每秒及 pagehide 保存余时。结束后 review 在错题回顾中推进，结束进入 recap 等待用户继续，再进入 won。无错题直接 recap。result.recapPending 标记尚未查看完的回顾，与剩余复习时间一起保存，零秒仍保留；继续后清除。恢复时按剩余时间进入 review 或 recap，不开放可绕过复习的菜单入口。
 
 登录先等待旧保存完成，关闭旧学习库后载入目标账号及其上次词库，设置对象原地更新供场景复用。每关预习先读取未完成／重玩的十二词，或新建并同步保存词池，再完整浏览后开局；新抽词池限定当前词库，小六沿用分组随机整数配额，其他库按本库权重抽取；已保存的十二词继续原样恢复，不因比例调整重抽。本关用同一洗牌袋分配普通题和 Boss 面。Boss 期限与关卡时钟独立；结束统计所有已出现实体，未出现词不计入正确率。普通出题按整局剩余时间及逐格锁定预留完整作答预算。正常飞机最多 2 个可编辑、3 个题面槽；敌机活动池 16，溢出规则事件排队，不能丢失。普通颗粒 64、撤销弹 4、战斗炮弹 8、敌弹 64，幸运箱／收藏飞行槽各 16。容量修改须重新核对最大需求。
 
@@ -116,7 +116,7 @@ UI 初始化匹配主指针 coarse 并设置 Game.touchMode 与 body 的 data-to
 
 ## 空战词库时序
 
-config.js 的 combatTiming(libraryId) 统一计算小六／初中／四级／六级的 270／285／300／315 秒总时长、小 Boss 和大 Boss 出场时机及普通出题间隔。Game 在创建、切账号、预习及恢复回顾时读取该词库配置；start、剩余作答预算、普通出题调度、Boss 出场和截止共用本局 timing。UI 首页和玩法介绍读取同一函数，碎片模式保持独立的 180／90 秒计时。
+config.js 的 combatTiming(libraryId) 统一计算小六／初中／四级／六级的 270／285／300／315 秒总时长、小 Boss 和大 Boss 出场时机及普通出题间隔。Game 在创建、切账号、预习及恢复回顾时读取该词库配置；start、剩余作答预算、普通出题调度、Boss 出场和截止共用本局 timing。UI 首页和玩法介绍读取同一函数，碎片模式保持独立的 每轮 90 秒计时。
 
 每个 Boss 仍保留 60 秒，普通阶段时长为总时长减 120 秒，出题间隔相对四级的 180 秒普通预算同比缩放；不修改飞机下降及键盘输入节奏。新结果保存 durationSeconds，恢复时读取记录自身时长，旧结果缺失字段按原 300 秒兼容，避免用当前词库时长改写旧回顾。程序及模型缓存版本保持不变。
 
@@ -145,3 +145,13 @@ questionMeaning 在 Game.makeWord／makeChoice 中按独立出题随机流抽取
 `question-types.js` 按 `CHOICES.mix` 生成二十题洗牌袋，普通题成功投放才消耗；桌面 14 拼写、3 释义选择、3 挖空选择，手机普通题及 Boss 共用 10／10 配额。`spelling-choice.js` 只处理单词片段、干扰项与唯一正确项，使用独立随机流，题面参数与题型算法不依赖三维模型。算法范围和参考资料见[专题](../design/english-air-combat/10-挖空选择与触屏关卡.md)。
 
 `Game.choiceOnly` 在预习时冻结本局设备输入方式；手机同时只显示一个当前选择题。Scene 预建的选项按钮把题目 ID 与索引交给 `Game.chooseOption`，检查游玩状态、当前题、索引与题目状态后进入原验证流程；暂停、重复与旧题点击均拒绝。手机 Boss 用选择题替代拼写面，周期与 Boss 箱自动飞入收藏，不生成错题敌人；桌面保留射击和敌人。回顾保存挖空 stem、三项与拼回的完整答案。发布白名单包含 question-meaning.js、question-types.js、spelling-choice.js。
+
+## 碎片四轮与均衡轮空
+
+AssemblyRound 开局按固定种子将十二词分为四组三词，预先计算四轮各九词的 entries、释义、碎片和陨石布局，每组只轮空一次。roundIndex 为 0–3，stage 保留 1／2 表示组装／连线以兼容已有记录；学习明细另存 round 为 1–4。每轮九十秒、三次验证，完成、次数用尽和超时只进入下一轮，计时、待选、已解、验证次数及移除集合重新初始化。Game 结果 durationSeconds 为 360，历史成绩继续读取自身字段，不改写旧结果。主动结束只记录当前已出场的九词。
+
+splitWord 保留短词完整，按元音组边界分块，过多边界按长度平衡合并，最多三段；不再按单块最大长度继续细拆。AssemblyView 开局预建四轮 section，激活时切换既有 DOM，重绑当前轮节点与连线端点；隐藏轮不参与交互与布局。手机用 data-playing 独立控制游玩布局：全高题区、单个暂停入口，导航及设置仅在首页／暂停时提供；释义竖屏三行、横屏左侧，碎片独立滚动，验证次数合入提交。选择题取消多余统计和不可操纵的玩家装饰，按可用高度锚定题面。首页显示 4 × 01:30，题面显示第 N／4 轮和本轮剩余验证。
+
+## 岩体与题面装饰
+
+assembly-art.js 提供共用 SVG symbol／渐变定义和岩体实例，不加载外部图片或字体。AssemblyView 在 prepare 时创建定义和四轮装饰，之后只切换题面与状态；暂停／减少动态通过 data-motion 控制 CSS 动画，状态更新位于 version 快速返回之前，故只改暂停或设置也能立即生效。陨石仅内层 SVG 转动，按钮、文字与连线坐标保持稳定；选中及待定项暂停自身装饰，隐藏轮不启动。系统 prefers-reduced-motion 同样停用动画。发布白名单包含 assembly-art.js，不改变模型缓存格式。
