@@ -9,10 +9,10 @@ export const RENDERING = {
     economy: { label: '省电', maxPixelRatio: 1, maxPixels: 2073600, menuFPS: 30 }
   }
 };
-export const levelMode = (level,touchMode=false) => touchMode||level%2===0?'assembly':'combat';
+export const levelMode = (level,touchMode=false,firstMode='combat') => touchMode?'assembly':level%2===1?firstMode:firstMode==='combat'?'assembly':'combat';
 export const ASSEMBLY = { stageSeconds: [180,90], maxChecks: 3, maxChunkLength: 5 };
-export const LEVELS = { durationSeconds: 300, wordCount: 12 };
-export const BOSSES = { miniAt: 90, finalAt: 240, durationSeconds: 60, miniFaces: 3, finalFaces: 4, turnSeconds: 0.6, xRange: 275, yRange: 45.5, xAngularSpeed: 0.16, yAngularSpeed: 0.45, centerY: 350, miniCrates: 3, finalCrates: 5, victorySeconds: 5 };
+export const LEVELS = { durationSeconds: 270, libraryExtraSeconds: {primary:0,intermediate:15,cet4:30,cet6:45}, spawnReferenceDurationSeconds: 300, wordCount: 12 };
+export const BOSSES = { durationSeconds: 60, miniFaces: 3, finalFaces: 4, turnSeconds: 0.6, xRange: 275, yRange: 45.5, xAngularSpeed: 0.16, yAngularSpeed: 0.45, centerY: 350, miniCrates: 3, finalCrates: 5, victorySeconds: 5 };
 export const BOSS_VISUALS = {
   segments: 24, rows: 16, tubeSides: 10, tubeSteps: 24, tentacleSway: 0.055, tentacleSpeed: 1.7,
   mini: { scale: 0.95, yOffset: -10, headScale: 1, tentacleLength: 1, skin: 0x873ad1, light: 0xba7cf2, dark: 0x502175, cheek: 0xec78c7, horn: 0xffd6a0 },
@@ -66,6 +66,12 @@ export const BACKGROUND = {
 };
 export const AUDIO = { masterVolume: 0.35, maxShotsPerSecond: 8, speechRate: 0.75, speechPitch: 1.08, speechVolume: 0.85 };
 export const SCORES = { limit: 10 };
+// 只压缩普通出题时间，两个 Boss 各保留完整作答时段。
+export function combatTiming(libraryId){
+  const extra=LEVELS.libraryExtraSeconds[libraryId];if(!Number.isFinite(extra))throw new Error('Unknown combat timing library: '+libraryId);
+  const durationSeconds=LEVELS.durationSeconds+extra,ordinarySeconds=durationSeconds-BOSSES.durationSeconds*2,scale=ordinarySeconds/(LEVELS.spawnReferenceDurationSeconds-BOSSES.durationSeconds*2);
+  return {durationSeconds,miniAt:ordinarySeconds/2,finalAt:durationSeconds-BOSSES.durationSeconds,spawnIntervalSeconds:WORDS.spawnIntervalSeconds.map(seconds=>seconds*scale)};
+}
 export function validateConfig() {
   const positive = value => Number.isFinite(value) && value > 0;
   for(const {segments,rows} of Object.values(MODEL_GEOMETRY))if(!Number.isInteger(segments)||segments<3||!Number.isInteger(rows)||rows<2||(segments+1)*(rows+1)>65536)throw new Error('Invalid sphere geometry configuration');
@@ -73,6 +79,7 @@ export function validateConfig() {
   for(const quality of Object.values(RENDERING.qualities))if(!positive(quality.maxPixelRatio)||!positive(quality.menuFPS)||(quality.maxPixels!==null&&!positive(quality.maxPixels)))throw new Error('Invalid rendering quality configuration');
   for(const value of [BOSSES.xRange,BOSSES.yRange,BOSSES.xAngularSpeed,BOSSES.yAngularSpeed])if(!positive(value))throw new Error('Invalid boss movement configuration');
   if(ASSEMBLY.stageSeconds.length!==2||!ASSEMBLY.stageSeconds.every(positive)||!Number.isInteger(ASSEMBLY.maxChecks)||ASSEMBLY.maxChecks<1)throw new Error('Invalid assembly stage configuration');
+  for(const id of Object.keys(LEVELS.libraryExtraSeconds)){const timing=combatTiming(id);if(!positive(timing.miniAt)||timing.miniAt+BOSSES.durationSeconds>=timing.finalAt||!timing.spawnIntervalSeconds.every(positive))throw new Error('Invalid combat timing configuration');}
   if (!Number.isInteger(LEVELS.wordCount)||LEVELS.wordCount<Math.max(BOSSES.miniFaces,BOSSES.finalFaces)) throw new Error('Invalid level vocabulary count');
   if(!positive(WORLD.playWidthScale)||WORLD.playWidthScale<1||!positive(LETTERS.shotCountRatio)||LETTERS.shotCountRatio>1||!Number.isInteger(LETTERS.shotCountMultiple)||LETTERS.shotCountMultiple<1)throw new Error('Invalid playfield or letter shot configuration');
   if (!positive(LETTERS.fireIntervalSeconds) || LETTERS.fireIntervalSeconds <= 0.02) throw new Error('Letter interval must exceed 0.02 seconds');

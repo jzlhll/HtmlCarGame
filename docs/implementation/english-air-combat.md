@@ -11,7 +11,7 @@
 | bootstrap.js | 数据初始化、资源准备、固定逻辑步、帧调度、失焦与复习冻结 |
 | config.js | 关卡、Boss、幸运箱、复习、弹体、容量与视觉参数 |
 | input.js | 持键优先级、输入段、数字选格、Shift 炮弹、退格删除、菜单隔离 |
-| assembly.js / assembly-view.js | 桌面偶数关／触屏全部关卡的碎片组装与陨石连线的独立判题、计时、三次验证、预备 DOM 与 SVG 线段 |
+| assembly.js / assembly-view.js | 桌面碎片关／触屏全部关卡的碎片组装与陨石连线的独立判题、计时、三次验证、预备 DOM 与 SVG 线段 |
 | game.js | 关卡词池、飞机与 Boss 状态、幸运箱、碰撞、独立结果、作答快照及单次结算 |
 | recap.js | 作答快照、按词合并去重及星空错题回顾标记 |
 | vocabulary.js / vocabulary-data.js / vocabulary-*.js | 四阶段词表、英中例子、来源、分组配额、当前库历史权重与洗牌袋 |
@@ -35,7 +35,7 @@
 
 ## 状态与时间
 
-资源入口为 preparing／prepareFailed；界面包括 menu、instructions、tutorial、preview、playing、paused、review、recap、won。活动飞行与首页星空沿用 requestAnimationFrame；战斗逐帧提交，菜单在高画质最高 60 帧、标准／省电最高 30 帧，背景累计显示间隔推进时间。覆盖式弹窗（含预习）、暂停和结算按状态、尺寸或设置变化重绘，隐藏页面停止帧调度。复习仍独立按秒唤醒更新界面。复习仅在前台且聚焦时按下一秒边界唤醒，使用实际有效时间推进并保存余时，失焦前结清有效片段，恢复不补算后台时间。只有 playing 推进有效时间。桌面奇数关为空战，偶数关使用 AssemblyRound 两阶段有效计时；触屏全部关卡使用 AssemblyRound。UI 根据 pointer: coarse 更新设备属性，Game.prepareLevel 固定当前局模式，缩放及游玩中设备属性变化不切换当前局；Game 先分流碎片更新，避免生成射击、Boss 或补给，学习与结算复用现有流程。两阶段完整规则见[交替关卡与碎片模式](../design/english-air-combat/09-交替关卡与碎片模式.md)。`victoryRemaining` 为 null 时运行常规倒计时；大 Boss 所有面结果为 correct 后清场、发五箱并设为 5，仍使用 playing／paused，暂停与失焦沿用既有冻结。此阶段只处理四方向移动、箱子和收藏动画，停止射击及新生成，完整五秒后以 boss-defeated 原因结算；可超过常规 300 秒，不回退有效时间。重开及切账号清空此阶段并恢复玩家底部位置。暂停冻结移动、验证、转面与收藏动画，失焦清空输入。review 单独推进，页面隐藏或失焦时停止；每秒及 pagehide 保存余时。结束后 review 在错题回顾中推进，结束进入 recap 等待用户继续，再进入 won。无错题直接 recap。result.recapPending 标记尚未查看完的回顾，与剩余复习时间一起保存，零秒仍保留；继续后清除。恢复时按剩余时间进入 review 或 recap，不开放可绕过复习的菜单入口。
+资源入口为 preparing／prepareFailed；界面包括 menu、instructions、tutorial、preview、playing、paused、review、recap、won。活动飞行与首页星空沿用 requestAnimationFrame；战斗逐帧提交，菜单在高画质最高 60 帧、标准／省电最高 30 帧，背景累计显示间隔推进时间。覆盖式弹窗（含预习）、暂停和结算按状态、尺寸或设置变化重绘，隐藏页面停止帧调度。复习仍独立按秒唤醒更新界面。复习仅在前台且聚焦时按下一秒边界唤醒，使用实际有效时间推进并保存余时，失焦前结清有效片段，恢复不补算后台时间。只有 playing 推进有效时间。桌面首关随机选空战或碎片，随后交替，碎片关使用 AssemblyRound 两阶段有效计时；触屏全部关卡使用 AssemblyRound。UI 根据 pointer: coarse 更新设备属性，Game.prepareLevel 固定当前局模式，缩放及游玩中设备属性变化不切换当前局；Game 先分流碎片更新，避免生成射击、Boss 或补给，学习与结算复用现有流程。两阶段完整规则见[交替关卡与碎片模式](../design/english-air-combat/09-交替关卡与碎片模式.md)。`victoryRemaining` 为 null 时运行常规倒计时；大 Boss 所有面结果为 correct 后清场、发五箱并设为 5，仍使用 playing／paused，暂停与失焦沿用既有冻结。此阶段只处理四方向移动、箱子和收藏动画，停止射击及新生成，完整五秒后以 boss-defeated 原因结算；可超过本词库的常规时限，不回退有效时间。重开及切账号清空此阶段并恢复玩家底部位置。暂停冻结移动、验证、转面与收藏动画，失焦清空输入。review 单独推进，页面隐藏或失焦时停止；每秒及 pagehide 保存余时。结束后 review 在错题回顾中推进，结束进入 recap 等待用户继续，再进入 won。无错题直接 recap。result.recapPending 标记尚未查看完的回顾，与剩余复习时间一起保存，零秒仍保留；继续后清除。恢复时按剩余时间进入 review 或 recap，不开放可绕过复习的菜单入口。
 
 登录先等待旧保存完成，关闭旧学习库后载入目标账号及其上次词库，设置对象原地更新供场景复用。每关预习先读取未完成／重玩的十二词，或新建并同步保存词池，再完整浏览后开局；新抽词池限定当前词库，小六沿用分组随机整数配额，其他库按本库权重抽取；已保存的十二词继续原样恢复，不因比例调整重抽。本关用同一洗牌袋分配普通题和 Boss 面。Boss 期限与关卡时钟独立；结束统计所有已出现实体，未出现词不计入正确率。普通出题按整局剩余时间及逐格锁定预留完整作答预算。正常飞机最多 2 个可编辑、3 个题面槽；敌机活动池 16，溢出规则事件排队，不能丢失。普通颗粒 64、撤销弹 4、战斗炮弹 8、敌弹 64，幸运箱／收藏飞行槽各 16。容量修改须重新核对最大需求。
 
@@ -112,3 +112,21 @@ Scene.resize 将可视逻辑宽度交给 Game.setPlayWidth，活动宽度以原 
 UI 初始化匹配主指针 coarse 并设置 Game.touchMode 与 body 的 data-touch；媒体查询变化只影响后续 prepareLevel，当前 mode 保持。resetAccount 保留设备属性，设备不参与存储键。首页、预习及模式说明读取同一 levelMode(level,touchMode)，已保存结果保留原模式。bootstrap 的 debug=1&touch=1 仅用于桌面验证触屏布局，正式手机无需调试参数。
 
 触屏样式独立按 data-touch 覆盖，避免窄窗口桌面被误判为手机。使用 100dvh 和 safe-area-inset，手机首页隐藏已有飞机装饰的可见性，不改模型与缓存配方。触屏滚动使用原生滚动，不拦截 pointermove；预习只在水平主导的 pointerup 翻卡，pointercancel 清除起点。SVG 连线仍读取同一重排坐标，在 ResizeObserver 中更新；布局调整不生成三维资源。
+
+## 空战词库时序
+
+config.js 的 combatTiming(libraryId) 统一计算小六／初中／四级／六级的 270／285／300／315 秒总时长、小 Boss 和大 Boss 出场时机及普通出题间隔。Game 在创建、切账号、预习及恢复回顾时读取该词库配置；start、剩余作答预算、普通出题调度、Boss 出场和截止共用本局 timing。UI 首页和玩法介绍读取同一函数，碎片模式保持独立的 180／90 秒计时。
+
+每个 Boss 仍保留 60 秒，普通阶段时长为总时长减 120 秒，出题间隔相对四级的 180 秒普通预算同比缩放；不修改飞机下降及键盘输入节奏。新结果保存 durationSeconds，恢复时读取记录自身时长，旧结果缺失字段按原 300 秒兼容，避免用当前词库时长改写旧回顾。程序及模型缓存版本保持不变。
+
+## 随机首关与交替顺序
+
+Storage.modeForLevel 统一供首页和 Game.prepareLevel 调用。首次桌面访问当前账号＋词库时等概率选 combat／assembly，写入现有 progress.firstMode；后续用同一首关模式及关号推导交替序列。触屏直接返回 assembly，不消耗桌面随机选择，也不覆盖已保存首关。账号和词库的现有存储隔离、缓存与异步等待保持。
+
+旧进度缺少 firstMode 时，优先从本账号、本词库最早的有效空战 session 或成绩反推桌面顺序；没有可用桌面记录才随机。随机结果即使持久写入失败也留在当前进度对象，本页重开不会重复抽取。已保存结果的 mode 继续用于回顾，存档与缓存格式版本不变。
+
+## 小六1000词
+
+vocabulary-primary.js 保留原500个对象，并追加500个来自当前初中库的适龄词；追加词使用 primary-小写拼写 ID、primary 词库身份及主练组 group=0，保留规范大小写与双语例子，少量义项和例子按儿童生活情境修订。既有主练／基础／拓展抽词权重保持，三个分组规模为901／59／40，旧词 ID、分组及内容不改，初中词库仍为2200。
+
+新增清单在 vocabulary-selections.js 的 PRIMARY_EXPANSION_GROUPS，按10个主题显式维护。import-vocabulary.mjs --check-primary 可离线核对1000词规模、500个新增词形的初中来源、唯一 ID、字段与例句，不下载词表，也不改其他库。全量导入以原基础500词作为初中词序起点，新增小六词不会重排初中词表；已有词的内容仍优先复用。UI 继续从注册词库的实际 entries.length 显示数量，无新缓存格式、账号迁移或版本递增。

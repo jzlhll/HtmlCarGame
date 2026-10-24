@@ -1,4 +1,4 @@
-import { WORLD,PLAYER,WORDS,LETTERS,UNDO,SHELLS,ENEMIES,LEVELS,BOSSES,SUPPLIES,REVIEW,CHOICES,levelMode } from './config.js';
+import { WORLD,PLAYER,WORDS,LETTERS,UNDO,SHELLS,ENEMIES,LEVELS,BOSSES,SUPPLIES,REVIEW,CHOICES,levelMode,combatTiming,ASSEMBLY } from './config.js';
 import { AssemblyRound } from './assembly.js';
 import { letterShotCount } from './letter-patterns.js';
 import { Vocabulary } from './vocabulary.js';
@@ -12,7 +12,7 @@ const entriesById=new Map(VOCABULARY.map(entry=>[entry.id,entry]));
 const wordWidth=entry=>Math.min(WORLD.width-2*(WORDS.planeWingMargin+24),Math.max(240,entry.word.length*WORDS.cellWidth+40));
 export class Game {
   constructor(storage,audio){
-    this.storage=storage;this.audio=audio;this.mode='combat';this.touchMode=false;this.assembly=null;this.state='preparing';this.words=[];this.enemies=[];this.enemyQueue=[];this.supplies=[];this.supplyQueue=[];this.collections=[];this.victoryRemaining=null;this.records=[];this.boss=null;this.projectiles=new Projectiles();this.player={x:PLAYER.x,y:WORLD.height*PLAYER.yRatio,protection:0};this.input=null;this.level=storage.progress?.selected||1;this.roster=[];this.remaining=LEVELS.durationSeconds;this.elapsed=0;this.ammo=0;this.score=0;this.correct=0;this.wrong=0;this.missed=0;this.hits=0;this.nextId=0;this.result=null;this.ammoFlashUntil=0;this.collected={heart:0,star:0,shell:0};this.displayCollected={...this.collected};this.reviewRemaining=0;this.playWidth=WORLD.width;this.playLeft=0;this.playRight=WORLD.width;
+    this.storage=storage;this.audio=audio;this.timing=combatTiming(storage.libraryId);this.mode='combat';this.touchMode=false;this.assembly=null;this.state='preparing';this.words=[];this.enemies=[];this.enemyQueue=[];this.supplies=[];this.supplyQueue=[];this.collections=[];this.victoryRemaining=null;this.records=[];this.boss=null;this.projectiles=new Projectiles();this.player={x:PLAYER.x,y:WORLD.height*PLAYER.yRatio,protection:0};this.input=null;this.level=storage.progress?.selected||1;this.roster=[];this.remaining=this.timing.durationSeconds;this.elapsed=0;this.ammo=0;this.score=0;this.correct=0;this.wrong=0;this.missed=0;this.hits=0;this.nextId=0;this.result=null;this.ammoFlashUntil=0;this.collected={heart:0,star:0,shell:0};this.displayCollected={...this.collected};this.reviewRemaining=0;this.playWidth=WORLD.width;this.playLeft=0;this.playRight=WORLD.width;
   }
   setPlayWidth(availableWidth){
     const width=Math.max(WORLD.width,Math.min(availableWidth,WORLD.width*WORLD.playWidthScale));if(this.playWidth===width)return;
@@ -26,7 +26,8 @@ export class Game {
   }
   resetAccount(){
     this.input?.clear();this.audio.stop();this.projectiles.clear();
-    Object.assign(this,{state:'menu',mode:'combat',assembly:null,words:[],enemies:[],enemyQueue:[],supplies:[],supplyQueue:[],collections:[],victoryRemaining:null,questionBag:[],choiceModes:[],records:[],boss:null,roster:[],result:null,level:this.storage.progress.selected,remaining:LEVELS.durationSeconds,elapsed:0,ammo:0,score:0,correct:0,wrong:0,missed:0,hits:0,reviewRemaining:0});
+    this.timing=combatTiming(this.storage.libraryId);
+    Object.assign(this,{state:'menu',mode:'combat',assembly:null,words:[],enemies:[],enemyQueue:[],supplies:[],supplyQueue:[],collections:[],victoryRemaining:null,questionBag:[],choiceModes:[],records:[],boss:null,roster:[],result:null,level:this.storage.progress.selected,remaining:this.timing.durationSeconds,elapsed:0,ammo:0,score:0,correct:0,wrong:0,missed:0,hits:0,reviewRemaining:0});
     this.collected={heart:0,star:0,shell:0};this.displayCollected={...this.collected};Object.assign(this.player,{x:PLAYER.x,y:WORLD.height*PLAYER.yRatio,protection:0});
   }
   prepareLevel(level,seed=Date.now(),{retry=false,wordIds=null,sessionId=null}={}){
@@ -35,7 +36,7 @@ export class Game {
     if(saved?.level!==level||saved?.accountId!==this.storage.account.id||saved?.libraryId!==this.storage.libraryId)saved=null;
     const ids=retry&&wordIds?wordIds:saved?.wordIds,valid=Array.isArray(ids)&&ids.length===LEVELS.wordCount&&new Set(ids).size===LEVELS.wordCount&&ids.every(id=>entriesById.get(id)?.libraryId===this.storage.libraryId);
     if(!valid)saved=null;
-    this.level=level;this.mode=levelMode(level,this.touchMode);this.assembly=null;this.libraryId=this.storage.libraryId;this.seed=saved?.seed??seed;this.random=createRandom(this.seed);this.questionRandom=createRandom(this.seed^0x43484F49);this.questionBag=[];this.choiceModes=[];this.wordBlanks=new WordBlanks(createRandom(this.seed^0x424C414E));
+    this.level=level;this.mode=this.storage.modeForLevel(level,this.touchMode);this.assembly=null;this.libraryId=this.storage.libraryId;this.timing=combatTiming(this.libraryId);this.seed=saved?.seed??seed;this.random=createRandom(this.seed);this.questionRandom=createRandom(this.seed^0x43484F49);this.questionBag=[];this.choiceModes=[];this.wordBlanks=new WordBlanks(createRandom(this.seed^0x424C414E));
     this.roster=valid?ids.map(id=>entriesById.get(id)):new Vocabulary(createRandom(this.seed),this.storage).select(LEVELS.wordCount);
     this.vocabulary=new Vocabulary(this.random,this.storage,this.roster);this.sessionId=saved?.id||globalThis.crypto?.randomUUID?.()||Date.now()+'-'+Math.random();
     this.storage.saveLevel({...saved,id:this.sessionId,accountId:this.storage.account.id,libraryId:this.libraryId,level,mode:this.mode,seed:this.seed,wordIds:this.roster.map(entry=>entry.id),status:'prepared',createdAt:saved?.createdAt||Date.now(),runCount:saved?.runCount||0});
@@ -44,7 +45,7 @@ export class Game {
   start(seed){
     if(!this.roster.length)this.prepareLevel(this.level,seed??Date.now());
     this.input?.clear();this.state='playing';this.wordBlanks=new WordBlanks(createRandom(this.seed^0x424C414E));this.questionBag=[];this.choiceModes=[];this.questionRandom=createRandom(this.seed^0x43484F49);this.vocabulary.bag=[];this.words=[];this.enemies=[];this.enemyQueue=[];this.supplies=[];this.supplyQueue=[];this.collections=[];this.victoryRemaining=null;this.records=[];this.boss=null;this.projectiles.clear();Object.assign(this.player,{x:PLAYER.x,y:WORLD.height*PLAYER.yRatio,protection:0});
-    this.remaining=LEVELS.durationSeconds;this.elapsed=0;this.nextSpawn=WORDS.firstSpawnSeconds;this.nextSupply=SUPPLIES.intervalSeconds;this.miniSpawned=false;this.finalSpawned=false;this.nextShot=0;this.undoReady=0;this.shellReady=0;this.ammo=SHELLS.initialAmmo;this.score=0;this.correct=0;this.wrong=0;this.missed=0;this.hits=0;this.ammoFlashUntil=0;this.result=null;this.lastTick=11;this.collected={heart:0,star:0,shell:0};this.displayCollected={...this.collected};this.runId=globalThis.crypto?.randomUUID?.()||Date.now()+'-'+Math.random();this.storage.startLevel(this.sessionId,this.runId);
+    this.remaining=this.timing.durationSeconds;this.elapsed=0;this.nextSpawn=WORDS.firstSpawnSeconds;this.nextSupply=SUPPLIES.intervalSeconds;this.miniSpawned=false;this.finalSpawned=false;this.nextShot=0;this.undoReady=0;this.shellReady=0;this.ammo=SHELLS.initialAmmo;this.score=0;this.correct=0;this.wrong=0;this.missed=0;this.hits=0;this.ammoFlashUntil=0;this.result=null;this.lastTick=11;this.collected={heart:0,star:0,shell:0};this.displayCollected={...this.collected};this.runId=globalThis.crypto?.randomUUID?.()||Date.now()+'-'+Math.random();this.storage.startLevel(this.sessionId,this.runId);
     this.assembly=this.mode==='assembly'?new AssemblyRound(this.roster,this.seed,(...args)=>this.recordAssembly(...args)):null;if(this.assembly)this.remaining=this.assembly.remaining;
   }
   recordAssembly(entry,kind,answer,stage,attempt){
@@ -80,7 +81,7 @@ export class Game {
     if(!this.questionBag.length)this.questionBag=shuffle(Array.from({length:CHOICES.batchSize},(_,i)=>i<CHOICES.batchSize*CHOICES.ratio?'choice':'spelling'),this.questionRandom);
     const isChoice=this.questionBag.at(-1)==='choice',width=isChoice?CHOICES.width:wordWidth(choice.entry),margin=width/2+24;
     let x=null;for(let i=0;i<WORDS.candidateAttempts;i++){const candidate=this.playLeft+margin+this.random()*(this.playWidth-2*margin);if(this.words.every(word=>Math.abs(word.y-WORDS.spawnY)>Math.max(180,word.kind==='choice'?CHOICES.height+CHOICES.carrier.heightPadding:180,isChoice?CHOICES.height:180)||Math.abs(word.x-candidate)>(word.width+width)/2+30)){x=candidate;break;}}
-    if(x===null)return false;const word=isChoice?this.makeChoice(choice.entry,x,WORDS.spawnY):this.makeWord(choice.entry,x,WORDS.spawnY),available=LEVELS.durationSeconds-this.elapsed;if((WORLD.height*WORDS.dangerYRatio-word.y)/word.speed>available){if(isChoice)this.choiceModes.push(word.mode);return false;}this.words.push(word);this.questionBag.pop();choice.commit();return true;
+    if(x===null)return false;const word=isChoice?this.makeChoice(choice.entry,x,WORDS.spawnY):this.makeWord(choice.entry,x,WORDS.spawnY),available=this.timing.durationSeconds-this.elapsed;if((WORLD.height*WORDS.dangerYRatio-word.y)/word.speed>available){if(isChoice)this.choiceModes.push(word.mode);return false;}this.words.push(word);this.questionBag.pop();choice.commit();return true;
   }
   spawnBoss(final){
     const faces=[],used=new Set();for(let i=0;i<(final?BOSSES.finalFaces:BOSSES.miniFaces);i++){const choice=this.vocabulary.next(used);if(!choice)break;used.add(choice.entry.id);faces.push(this.makeWord(choice.entry,480,BOSSES.centerY,true));choice.commit();}
@@ -194,14 +195,14 @@ export class Game {
     if(this.state!=='playing')return;
     if(this.assembly){this.elapsed+=Math.min(dt,this.assembly.remaining);this.assembly.update(dt);this.remaining=this.assembly.remaining;if(this.assembly.done)this.finish('assembly-completed');return;}
     const collecting=this.victoryRemaining!==null;
-    if(!collecting&&this.remaining<=dt+1e-8){this.elapsed=LEVELS.durationSeconds;this.remaining=0;if(this.boss)this.expireBoss();if(this.victoryRemaining===null)this.finish();return;}
+    if(!collecting&&this.remaining<=dt+1e-8){this.elapsed=this.timing.durationSeconds;this.remaining=0;if(this.boss)this.expireBoss();if(this.victoryRemaining===null)this.finish();return;}
     const previousPlayerX=this.player.x,previousPlayerY=this.player.y;this.elapsed+=dt;
-    if(collecting){this.victoryRemaining=Math.max(0,this.victoryRemaining-dt);this.remaining=this.victoryRemaining;}else this.remaining=LEVELS.durationSeconds-this.elapsed;
+    if(collecting){this.victoryRemaining=Math.max(0,this.victoryRemaining-dt);this.remaining=this.victoryRemaining;}else this.remaining=this.timing.durationSeconds-this.elapsed;
     this.player.protection=Math.max(0,this.player.protection-dt);
     const axis=this.input.axis,vertical=collecting?(this.input.verticalAxis||0):0,diagonal=Math.hypot(axis,vertical)||1,speed=PLAYER.moveSpeedWidthsPerSecond*WORLD.width;
     this.player.x=Math.max(this.playLeft+PLAYER.width/2+16,Math.min(this.playRight-PLAYER.width/2-16,this.player.x+axis/diagonal*speed*dt));
     if(collecting)this.player.y=Math.max(PLAYER.height/2+16,Math.min(WORLD.height-PLAYER.height/2-16,this.player.y+vertical/diagonal*speed*dt));
-    if(!collecting&&!this.miniSpawned&&this.elapsed>=BOSSES.miniAt){this.miniSpawned=true;this.spawnBoss(false);}if(!collecting&&!this.finalSpawned&&this.elapsed>=BOSSES.finalAt){this.finalSpawned=true;this.spawnBoss(true);}
+    if(!collecting&&!this.miniSpawned&&this.elapsed>=this.timing.miniAt){this.miniSpawned=true;this.spawnBoss(false);}if(!collecting&&!this.finalSpawned&&this.elapsed>=this.timing.finalAt){this.finalSpawned=true;this.spawnBoss(true);}
     if(this.boss&&this.elapsed>=this.boss.deadline){this.expireBoss();if(this.victoryRemaining!==null)return;}
     if(this.boss){const age=this.elapsed-this.boss.started;const margin=Math.max(...this.boss.faces.map(face=>face.width))/2+24;this.boss.x=Math.max(this.playLeft+margin,Math.min(this.playRight-margin,480+Math.sin(age*BOSSES.xAngularSpeed)*BOSSES.xRange));this.boss.y=BOSSES.centerY+Math.sin(age*BOSSES.yAngularSpeed)*BOSSES.yRange;
       if(!this.boss.activeWord&&this.elapsed>=this.boss.turnUntil)this.boss.activeWord=this.boss.faces.find(face=>!face.recorded)||null;
@@ -210,7 +211,7 @@ export class Game {
     const seconds=Math.ceil(this.remaining);if(seconds<=10&&seconds!==this.lastTick){this.lastTick=seconds;this.audio.play('tick');}
     const actions=this.input.consume();if(!collecting){if(actions.selection!==null&&actions.selection!==undefined)this.selectBlank(actions.selection);const shellFired=actions.shell&&this.shoot('shell');if(actions.undo)this.shoot('undo');if(actions.erase)this.eraseLast(this.target(true));
     if(this.input.letter&&this.elapsed>=this.nextShot&&!actions.undo&&!actions.erase&&!shellFired){this.shoot('letter',this.input.letter,this.input.segment);this.nextShot=Math.max(this.nextShot+LETTERS.fireIntervalSeconds,this.elapsed+.020001);}if(!this.input.letter)this.nextShot=Math.max(this.nextShot,this.elapsed);}
-    if(!collecting&&!this.boss&&this.elapsed>=this.nextSpawn){let made=0;for(let i=0;i<WORDS.spawnCount;i++){if(!this.spawnWord())break;made++;}this.nextSpawn=this.elapsed+(made?between(WORDS.spawnIntervalSeconds,this.random):WORDS.capacityRetrySeconds);}
+    if(!collecting&&!this.boss&&this.elapsed>=this.nextSpawn){let made=0;for(let i=0;i<WORDS.spawnCount;i++){if(!this.spawnWord())break;made++;}this.nextSpawn=this.elapsed+(made?between(this.timing.spawnIntervalSeconds,this.random):WORDS.capacityRetrySeconds);}
     if(!collecting&&this.elapsed>=this.nextSupply){this.dropCrates(1,this.playLeft+70+this.random()*(this.playWidth-140),-SUPPLIES.height/2,false);this.nextSupply+=SUPPLIES.intervalSeconds;}
     for(const word of this.words){word.previousY=word.y;if(word.state==='falling')word.y+=word.speed*dt;}
     for(const enemy of this.enemies){enemy.previousY=enemy.y;enemy.y+=enemy.speed*dt;}
@@ -243,11 +244,11 @@ export class Game {
     for(const crate of [...this.supplies,...this.supplyQueue])this.creditRewardCrate(crate);
     this.supplies=this.supplies.filter(crate=>!crate.auto);this.supplyQueue=this.supplyQueue.filter(crate=>!crate.auto);
     this.input?.clear();this.projectiles.clear();this.audio.stop();this.displayCollected={...this.collected};this.collections=[];
-    const total=this.records.length,mistakes=this.records.filter(row=>row.kind!=='correct');this.result={id:this.runId,accountId:this.storage.account.id,libraryId:this.libraryId,sessionId:this.sessionId,roster:this.roster.map(entry=>entry.id),mode:this.mode,outcome:'won',recapPending:true,reason,level:this.level,time:Date.now(),score:this.score,ammo:this.ammo,elapsed:this.elapsed,correct:this.correct,wrong:this.wrong,incomplete:this.missed,total,uniqueWords:new Set(this.records.map(row=>row.wordId)).size,rosterCount:this.roster.length,accuracy:total?this.correct/total:null,collected:{...this.collected},records:[...this.records],mistakes};
+    const total=this.records.length,mistakes=this.records.filter(row=>row.kind!=='correct');this.result={id:this.runId,accountId:this.storage.account.id,libraryId:this.libraryId,sessionId:this.sessionId,roster:this.roster.map(entry=>entry.id),mode:this.mode,durationSeconds:this.assembly?ASSEMBLY.stageSeconds.reduce((total,seconds)=>total+seconds,0):this.timing.durationSeconds,outcome:'won',recapPending:true,reason,level:this.level,time:Date.now(),score:this.score,ammo:this.ammo,elapsed:this.elapsed,correct:this.correct,wrong:this.wrong,incomplete:this.missed,total,uniqueWords:new Set(this.records.map(row=>row.wordId)).size,rosterCount:this.roster.length,accuracy:total?this.correct/total:null,collected:{...this.collected},records:[...this.records],mistakes};
     this.words=[];this.enemies=[];this.enemyQueue=[];this.supplies=[];this.supplyQueue=[];
     this.reviewRemaining=new Set(mistakes.map(row=>row.wordId)).size*REVIEW.secondsPerWord;this.state=this.reviewRemaining?'review':'recap';this.storage.saveReview(this.result,this.reviewRemaining);this.savePromise=this.storage.saveSession(this.result);
   }
   completeRecap(){if(this.state!=='recap'||!this.result)return;this.result.recapPending=false;this.storage.saveReview(this.result,0);this.state='won';}
-  restoreReview(saved){if(saved.result.accountId!==this.storage.account.id||saved.result.libraryId!==this.storage.libraryId)throw new Error('Review vocabulary mismatch');this.libraryId=this.storage.libraryId;this.mode=saved.result.mode||levelMode(saved.result.level);this.assembly=null;this.victoryRemaining=null;this.result=saved.result;this.result.recapPending=true;this.level=this.result.level;this.elapsed=this.result.elapsed;this.remaining=this.result.reason==='boss-defeated'?0:Math.max(0,LEVELS.durationSeconds-this.elapsed);this.score=this.result.score;this.ammo=this.result.ammo||0;this.correct=this.result.correct;this.wrong=this.result.wrong;this.missed=this.result.incomplete;this.records=this.result.records;this.collected={...this.result.collected};this.displayCollected={...this.collected};this.reviewRemaining=saved.remaining;this.state=this.reviewRemaining>0?'review':'recap';this.lastReviewSecond=Math.ceil(this.reviewRemaining);}
+  restoreReview(saved){if(saved.result.accountId!==this.storage.account.id||saved.result.libraryId!==this.storage.libraryId)throw new Error('Review vocabulary mismatch');this.libraryId=this.storage.libraryId;this.timing=combatTiming(this.libraryId);this.mode=saved.result.mode||levelMode(saved.result.level);this.assembly=null;this.victoryRemaining=null;this.result=saved.result;this.result.recapPending=true;this.level=this.result.level;this.elapsed=this.result.elapsed;this.remaining=this.mode==='assembly'||this.result.reason==='boss-defeated'?0:Math.max(0,(this.result.durationSeconds??LEVELS.spawnReferenceDurationSeconds)-this.elapsed);this.score=this.result.score;this.ammo=this.result.ammo||0;this.correct=this.result.correct;this.wrong=this.result.wrong;this.missed=this.result.incomplete;this.records=this.result.records;this.collected={...this.result.collected};this.displayCollected={...this.collected};this.reviewRemaining=saved.remaining;this.state=this.reviewRemaining>0?'review':'recap';this.lastReviewSecond=Math.ceil(this.reviewRemaining);}
   updateReview(dt){if(this.state!=='review')return;this.reviewRemaining=Math.max(0,this.reviewRemaining-dt);const second=Math.ceil(this.reviewRemaining);if(second!==this.lastReviewSecond){this.lastReviewSecond=second;this.storage.saveReview(this.result,this.reviewRemaining);}if(!this.reviewRemaining){this.state='recap';this.storage.saveReview(this.result,0);}}
 }

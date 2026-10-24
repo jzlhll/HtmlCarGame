@@ -1,4 +1,4 @@
-// 小学日常主题500词；按2022课标二级基础表达选编，释义与例子由本项目编写。
+// 小六1000词：小学基础与初中适龄日常主题选编；来源与许可见 third-party/english-vocabulary。
 export const PRIMARY_VOCABULARY = [
   {
     "id": "practice-cat",
@@ -8326,6 +8326,6991 @@ export const PRIMARY_VOCABULARY = [
     "example": {
       "text": "Visit the zoo",
       "meaning": "参观动物园",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-age",
+    "libraryId": "primary",
+    "word": "age",
+    "meaning": "年龄；时代",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "At the age of ten",
+      "meaning": "十岁时",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-daughter",
+    "libraryId": "primary",
+    "word": "daughter",
+    "meaning": "女儿",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "She’s got two daughters and one son.",
+      "meaning": "她有两个女儿和一个儿子。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "id": "primary-son",
+    "libraryId": "primary",
+    "word": "son",
+    "meaning": "儿子；男孩",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Eldest son",
+      "meaning": "长子",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-grandparent",
+    "libraryId": "primary",
+    "word": "grandparent",
+    "meaning": "祖父母；外祖父母",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "My grandparents live in Sussex.",
+      "meaning": "我的祖父母住在萨塞克斯郡。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "id": "primary-grandchild",
+    "libraryId": "primary",
+    "word": "grandchild",
+    "meaning": "孙子；孙女；外孙子女",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A young grandchild",
+      "meaning": "年幼的孙辈",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-granddaughter",
+    "libraryId": "primary",
+    "word": "granddaughter",
+    "meaning": "孙女；外孙女",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "My granddaughter is five years old.",
+      "meaning": "我的孙女五岁了。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "id": "primary-grandson",
+    "libraryId": "primary",
+    "word": "grandson",
+    "meaning": "孙子；外孙",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "My grandson's birthday was on Tuesday.",
+      "meaning": "我孙子的生日是星期二。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "id": "primary-granny",
+    "libraryId": "primary",
+    "word": "granny",
+    "meaning": "奶奶；外婆",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "My granny lives with us.",
+      "meaning": "我奶奶和我们住在一起。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "id": "primary-dad",
+    "libraryId": "primary",
+    "word": "dad",
+    "meaning": "爸爸",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "She lives with her mom and dad.",
+      "meaning": "她和爸爸妈妈一起住。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "word": "mom",
+    "meaning": "妈妈",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "My mom and dad",
+      "meaning": "我的爸爸妈妈",
+      "kind": "phrase"
+    },
+    "id": "primary-mom",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "kid",
+    "meaning": "孩子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A young kid",
+      "meaning": "一个小孩子",
+      "kind": "phrase"
+    },
+    "id": "primary-kid",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-lady",
+    "libraryId": "primary",
+    "word": "lady",
+    "meaning": "女士；夫人",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "An old lady",
+      "meaning": "一位老太太",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "person",
+    "meaning": "人",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A friendly person",
+      "meaning": "一个友好的人",
+      "kind": "phrase"
+    },
+    "id": "primary-person",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-twin",
+    "libraryId": "primary",
+    "word": "twin",
+    "meaning": "孪生的；双胞胎之一",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Twin sister",
+      "meaning": "双胞胎姐妹",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-neighbor",
+    "libraryId": "primary",
+    "word": "neighbor",
+    "meaning": "邻居；邻国",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Good neighbor",
+      "meaning": "好邻居；睦邻",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-guest",
+    "libraryId": "primary",
+    "word": "guest",
+    "meaning": "客人；嘉宾",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Distinguished guest",
+      "meaning": "嘉宾；上宾；尊贵的客人",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-owner",
+    "libraryId": "primary",
+    "word": "owner",
+    "meaning": "主人；物主",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "The owner of this dog",
+      "meaning": "这只狗的主人",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-pupil",
+    "libraryId": "primary",
+    "word": "pupil",
+    "meaning": "学生；瞳孔",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Each pupil has a book.",
+      "meaning": "每个学生都有一本书。",
+      "kind": "sentence",
+      "sense": "学生",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "瞳孔",
+          "partOfSpeech": "n",
+          "text": "The pupil gets smaller in bright light.",
+          "meaning": "瞳孔在强光下变小。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "word": "classmate",
+    "meaning": "同班同学",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "My new classmate",
+      "meaning": "我的新同学",
+      "kind": "phrase"
+    },
+    "id": "primary-classmate",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "friendship",
+    "meaning": "友谊",
+    "example": {
+      "text": "A lasting friendship",
+      "meaning": "一段长久的友谊",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "primary-friendship",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-friendly",
+    "libraryId": "primary",
+    "word": "friendly",
+    "meaning": "友好的；亲切的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Be friendly with",
+      "meaning": "对……友好；和某人友好相处",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "polite",
+    "meaning": "有礼貌的",
+    "example": {
+      "text": "A polite reply",
+      "meaning": "一个有礼貌的答复",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "adj",
+    "id": "primary-polite",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "honest",
+    "meaning": "诚实的",
+    "example": {
+      "text": "An honest person",
+      "meaning": "一个诚实的人",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "adj",
+    "id": "primary-honest",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-helpful",
+    "libraryId": "primary",
+    "word": "helpful",
+    "meaning": "有帮助的；有用的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Thank you for your advice; it’s been very helpful.",
+      "meaning": "谢谢你的建议，它非常有用。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "word": "brave",
+    "meaning": "勇敢的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A brave child",
+      "meaning": "一个勇敢的孩子",
+      "kind": "phrase"
+    },
+    "id": "primary-brave",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "shy",
+    "meaning": "害羞的；胆怯的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A shy child",
+      "meaning": "一个害羞的孩子",
+      "kind": "phrase"
+    },
+    "id": "primary-shy",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "active",
+    "meaning": "积极的；活跃的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An active student",
+      "meaning": "一名活跃的学生",
+      "kind": "phrase"
+    },
+    "id": "primary-active",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "careless",
+    "meaning": "粗心的；不小心的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A careless mistake",
+      "meaning": "一个粗心造成的错误",
+      "kind": "phrase"
+    },
+    "id": "primary-careless",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-lazy",
+    "libraryId": "primary",
+    "word": "lazy",
+    "meaning": "懒惰的；懒散的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Lazy boy",
+      "meaning": "懒惰的男孩",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-kindness",
+    "libraryId": "primary",
+    "word": "kindness",
+    "meaning": "仁慈；好意；友好的行为",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "I can’t thank you enough for your kindness.",
+      "meaning": "你的好意我感激不尽。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "id": "primary-basket",
+    "libraryId": "primary",
+    "word": "basket",
+    "meaning": "篮子；筐",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Picnic basket",
+      "meaning": "野餐篮",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-bell",
+    "libraryId": "primary",
+    "word": "bell",
+    "meaning": "铃；钟",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Ring the bell",
+      "meaning": "鸣钟；按门铃",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "bottle",
+    "meaning": "瓶子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A bottle of water",
+      "meaning": "一瓶水",
+      "kind": "phrase"
+    },
+    "id": "primary-bottle",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "bowl",
+    "meaning": "碗",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A bowl of rice",
+      "meaning": "一碗米饭",
+      "kind": "phrase"
+    },
+    "id": "primary-bowl",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "brush",
+    "meaning": "刷子；画笔",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A new brush",
+      "meaning": "一把新刷子",
+      "kind": "phrase"
+    },
+    "id": "primary-brush",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-camera",
+    "libraryId": "primary",
+    "word": "camera",
+    "meaning": "照相机；摄影机",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A high-speed camera",
+      "meaning": "一台高速摄像机",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-candle",
+    "libraryId": "primary",
+    "word": "candle",
+    "meaning": "蜡烛",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Candle light",
+      "meaning": "烛光",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-cap",
+    "libraryId": "primary",
+    "word": "cap",
+    "meaning": "盖；帽子",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Bottle cap",
+      "meaning": "瓶盖",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "card",
+    "meaning": "卡片；纸牌",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A birthday card",
+      "meaning": "一张生日贺卡",
+      "kind": "phrase"
+    },
+    "id": "primary-card",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-ceiling",
+    "libraryId": "primary",
+    "word": "ceiling",
+    "meaning": "天花板",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A white ceiling",
+      "meaning": "白色的天花板",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "chalk",
+    "meaning": "粉笔",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A piece of chalk",
+      "meaning": "一支粉笔",
+      "kind": "phrase"
+    },
+    "id": "primary-chalk",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "coin",
+    "meaning": "硬币",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A gold coin",
+      "meaning": "一枚金币",
+      "kind": "phrase"
+    },
+    "id": "primary-coin",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "cooker",
+    "meaning": "炊具；炉灶",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A rice cooker",
+      "meaning": "电饭煲",
+      "kind": "phrase"
+    },
+    "id": "primary-cooker",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "cotton",
+    "meaning": "棉花；棉布",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A cotton shirt",
+      "meaning": "一件棉衬衫",
+      "kind": "phrase"
+    },
+    "id": "primary-cotton",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-cover",
+    "libraryId": "primary",
+    "word": "cover",
+    "meaning": "覆盖；封面",
+    "partOfSpeech": "v/n",
+    "group": 0,
+    "example": {
+      "text": "Snow covers the mountain.",
+      "meaning": "雪覆盖着山。",
+      "kind": "sentence",
+      "sense": "覆盖",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "封面",
+          "partOfSpeech": "n",
+          "text": "The book has a blue cover.",
+          "meaning": "这本书有蓝色的封面。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "id": "primary-crayon",
+    "libraryId": "primary",
+    "word": "crayon",
+    "meaning": "蜡笔，有色粉笔",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "He coloured the picture with crayon.",
+      "meaning": "他用蜡笔给画上色。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "id": "primary-cupboard",
+    "libraryId": "primary",
+    "word": "cupboard",
+    "meaning": "碗柜，橱柜",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A kitchen cupboard",
+      "meaning": "一个厨房橱柜",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-diary",
+    "libraryId": "primary",
+    "word": "diary",
+    "meaning": "日记；日记本",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Keep a diary",
+      "meaning": "记日记",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "doll",
+    "meaning": "玩具娃娃",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A pretty doll",
+      "meaning": "一个漂亮的玩具娃娃",
+      "kind": "phrase"
+    },
+    "id": "primary-doll",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-downstairs",
+    "libraryId": "primary",
+    "word": "downstairs",
+    "meaning": "在楼下；到楼下",
+    "partOfSpeech": "adv",
+    "group": 0,
+    "example": {
+      "text": "Please wait downstairs.",
+      "meaning": "请在楼下等候。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "word": "drawer",
+    "meaning": "抽屉",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Open the drawer",
+      "meaning": "打开抽屉",
+      "kind": "phrase"
+    },
+    "id": "primary-drawer",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-eraser",
+    "libraryId": "primary",
+    "word": "eraser",
+    "meaning": "橡皮；橡皮擦",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A pink eraser",
+      "meaning": "一块粉色橡皮",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-fan",
+    "libraryId": "primary",
+    "word": "fan",
+    "meaning": "风扇；爱好者",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Turn on the fan, please.",
+      "meaning": "请打开风扇。",
+      "kind": "sentence",
+      "sense": "风扇",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "爱好者",
+          "partOfSpeech": "n",
+          "text": "He is a football fan.",
+          "meaning": "他是个足球迷。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "id": "primary-flag",
+    "libraryId": "primary",
+    "word": "flag",
+    "meaning": "旗；旗帜",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A red flag",
+      "meaning": "一面红旗",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-fork",
+    "libraryId": "primary",
+    "word": "fork",
+    "meaning": "叉；餐叉；耙",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Knife and fork",
+      "meaning": "刀叉",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-fridge",
+    "libraryId": "primary",
+    "word": "fridge",
+    "meaning": "电冰箱",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Keep milk in the fridge",
+      "meaning": "把牛奶放在冰箱里",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-furniture",
+    "libraryId": "primary",
+    "word": "furniture",
+    "meaning": "家具",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Living room furniture",
+      "meaning": "起居室家具",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-gift",
+    "libraryId": "primary",
+    "word": "gift",
+    "meaning": "礼物；天赋；赠品",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Gift box",
+      "meaning": "礼品盒；礼物盒；彩盒",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "glass",
+    "meaning": "玻璃；玻璃杯；眼镜",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The table is made of glass.",
+      "meaning": "这张桌子由玻璃制成。",
+      "kind": "sentence",
+      "sense": "玻璃",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "玻璃杯",
+          "partOfSpeech": "n",
+          "text": "She drank a glass of milk.",
+          "meaning": "她喝了一杯牛奶。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "眼镜",
+          "partOfSpeech": "n",
+          "text": "He wears glasses to read.",
+          "meaning": "他戴着眼镜阅读。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "id": "primary-glass",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "glove",
+    "meaning": "手套",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A warm glove",
+      "meaning": "一只保暖的手套",
+      "kind": "phrase"
+    },
+    "id": "primary-glove",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "handbag",
+    "meaning": "手提包",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A leather handbag",
+      "meaning": "一个皮手提包",
+      "kind": "phrase"
+    },
+    "id": "primary-handbag",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "hat",
+    "meaning": "帽子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A blue hat",
+      "meaning": "一顶蓝帽子",
+      "kind": "phrase"
+    },
+    "id": "primary-hat",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "ink",
+    "meaning": "墨水",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Ink in a pen",
+      "meaning": "钢笔里的墨水",
+      "kind": "phrase"
+    },
+    "id": "primary-ink",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-jacket",
+    "libraryId": "primary",
+    "word": "jacket",
+    "meaning": "夹克；短上衣",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Leather jacket",
+      "meaning": "皮夹克",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-jeans",
+    "libraryId": "primary",
+    "word": "jeans",
+    "meaning": "牛仔裤；工装裤",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Blue jeans",
+      "meaning": "牛仔裤；蓝色斜纹布裤子",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-key",
+    "libraryId": "primary",
+    "word": "key",
+    "meaning": "钥匙；关键；按键",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "I lost the key to the door.",
+      "meaning": "我丢了门钥匙。",
+      "kind": "sentence",
+      "sense": "钥匙",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "关键",
+          "partOfSpeech": "n",
+          "text": "Practice is the key to success.",
+          "meaning": "练习是成功的关键。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "按键",
+          "partOfSpeech": "n",
+          "text": "Press any key to continue.",
+          "meaning": "按任意键继续。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "id": "primary-keyboard",
+    "libraryId": "primary",
+    "word": "keyboard",
+    "meaning": "键盘",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Keyboard input",
+      "meaning": "键入，键盘输入",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "kite",
+    "meaning": "风筝",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Fly a kite",
+      "meaning": "放风筝",
+      "kind": "phrase"
+    },
+    "id": "primary-kite",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "lamp",
+    "meaning": "灯",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A desk lamp",
+      "meaning": "一盏台灯",
+      "kind": "phrase"
+    },
+    "id": "primary-lamp",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-lock",
+    "libraryId": "primary",
+    "word": "lock",
+    "meaning": "锁上；锁住",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Lock up",
+      "meaning": "锁起来",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "magazine",
+    "meaning": "杂志",
+    "example": {
+      "text": "A children's magazine",
+      "meaning": "一本儿童杂志",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "primary-magazine",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "mirror",
+    "meaning": "镜子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A wall mirror",
+      "meaning": "一面壁镜",
+      "kind": "phrase"
+    },
+    "id": "primary-mirror",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "model",
+    "meaning": "模型；模特；榜样",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "He built a model of a ship.",
+      "meaning": "他做了一个船的模型。",
+      "kind": "sentence",
+      "sense": "模型",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "模特",
+          "partOfSpeech": "n",
+          "text": "She works as a model.",
+          "meaning": "她是一名模特。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "榜样",
+          "partOfSpeech": "n",
+          "text": "He is a model for younger students.",
+          "meaning": "他是低年级学生的榜样。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "id": "primary-model",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "notebook",
+    "meaning": "笔记本",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Write in a notebook",
+      "meaning": "在笔记本上写字",
+      "kind": "phrase"
+    },
+    "id": "primary-notebook",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "paint",
+    "meaning": "画；给……涂漆",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Paint a picture",
+      "meaning": "画一幅画",
+      "kind": "phrase"
+    },
+    "id": "primary-paint",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "pair",
+    "meaning": "一双；一对",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A pair of shoes",
+      "meaning": "一双鞋",
+      "kind": "phrase"
+    },
+    "id": "primary-pair",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "plate",
+    "meaning": "盘子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A clean plate",
+      "meaning": "一个干净的盘子",
+      "kind": "phrase"
+    },
+    "id": "primary-plate",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "pocket",
+    "meaning": "口袋",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Put it in your pocket",
+      "meaning": "把它放进你的口袋",
+      "kind": "phrase"
+    },
+    "id": "primary-pocket",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-postcard",
+    "libraryId": "primary",
+    "word": "postcard",
+    "meaning": "明信片",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Picture postcard",
+      "meaning": "美术明信片",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-purse",
+    "libraryId": "primary",
+    "word": "purse",
+    "meaning": "钱包；女用小包",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Coin purse",
+      "meaning": "零钱包",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-radio",
+    "libraryId": "primary",
+    "word": "radio",
+    "meaning": "收音机；无线电广播设备",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "On the radio",
+      "meaning": "在广播中",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "raincoat",
+    "meaning": "雨衣",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Put on your raincoat",
+      "meaning": "穿上你的雨衣",
+      "kind": "phrase"
+    },
+    "id": "primary-raincoat",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "rope",
+    "meaning": "绳子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A long rope",
+      "meaning": "一根长绳",
+      "kind": "phrase"
+    },
+    "id": "primary-rope",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "rubber",
+    "meaning": "橡皮；橡胶",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Use a rubber",
+      "meaning": "用橡皮",
+      "kind": "phrase"
+    },
+    "id": "primary-rubber",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-scarf",
+    "libraryId": "primary",
+    "word": "scarf",
+    "meaning": "围巾；头巾",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "He reached up to loosen the scarf around his neck.",
+      "meaning": "他伸出手松开围在脖子上的围巾。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "id": "primary-schoolbag",
+    "libraryId": "primary",
+    "word": "schoolbag",
+    "meaning": "书包",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "She ran back to the classroom to get her schoolbag.",
+      "meaning": "她跑回教室去取书包。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "word": "shelf",
+    "meaning": "架子；搁板",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A book on the shelf",
+      "meaning": "架子上的书",
+      "kind": "phrase"
+    },
+    "id": "primary-shelf",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-shower",
+    "libraryId": "primary",
+    "word": "shower",
+    "meaning": "淋浴；阵雨",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Take a shower",
+      "meaning": "洗淋浴",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-soap",
+    "libraryId": "primary",
+    "word": "soap",
+    "meaning": "肥皂",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Liquid soap",
+      "meaning": "液体肥皂",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "socks",
+    "meaning": "袜子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A pair of socks",
+      "meaning": "一双袜子",
+      "kind": "phrase"
+    },
+    "id": "primary-socks",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-sofa",
+    "libraryId": "primary",
+    "word": "sofa",
+    "meaning": "沙发",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Sofa bed",
+      "meaning": "沙发床，坐卧两用的长沙发",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-spoon",
+    "libraryId": "primary",
+    "word": "spoon",
+    "meaning": "匙，勺子；一杓的量",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Fork and spoon",
+      "meaning": "叉子与勺子",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-stairs",
+    "libraryId": "primary",
+    "word": "stairs",
+    "meaning": "楼梯；梯级",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "The boy thumped down the stairs.",
+      "meaning": "小男孩咚咚地跑下楼梯。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "word": "stamp",
+    "meaning": "邮票",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A postage stamp",
+      "meaning": "一枚邮票",
+      "kind": "phrase"
+    },
+    "id": "primary-stamp",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "string",
+    "meaning": "细绳；线",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A piece of string",
+      "meaning": "一根细绳",
+      "kind": "phrase"
+    },
+    "id": "primary-string",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-suitcase",
+    "libraryId": "primary",
+    "word": "suitcase",
+    "meaning": "手提箱，衣箱",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "It did not take Andrew long to pack a suitcase.",
+      "meaning": "安德鲁没有用多长时间就整理好了手提箱。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "word": "telephone",
+    "meaning": "电话",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Answer the telephone",
+      "meaning": "接电话",
+      "kind": "phrase"
+    },
+    "id": "primary-telephone",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "television",
+    "meaning": "电视；电视机",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Watch television",
+      "meaning": "看电视",
+      "kind": "phrase"
+    },
+    "id": "primary-television",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-towel",
+    "libraryId": "primary",
+    "word": "towel",
+    "meaning": "毛巾；纸巾",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Paper towel",
+      "meaning": "纸巾",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-wallet",
+    "libraryId": "primary",
+    "word": "wallet",
+    "meaning": "钱包，皮夹",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "He took a credit card out of his wallet.",
+      "meaning": "他从钱包里拿出一张信用卡。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "word": "beef",
+    "meaning": "牛肉",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Roast beef",
+      "meaning": "烤牛肉",
+      "kind": "phrase"
+    },
+    "id": "primary-beef",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-biscuit",
+    "libraryId": "primary",
+    "word": "biscuit",
+    "meaning": "饼干",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A packet of chocolate biscuits",
+      "meaning": "一包巧克力饼干",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "bitter",
+    "meaning": "苦的；痛苦的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A bitter taste",
+      "meaning": "苦味",
+      "kind": "phrase"
+    },
+    "id": "primary-bitter",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "butter",
+    "meaning": "黄油",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Bread and butter",
+      "meaning": "面包和黄油",
+      "kind": "phrase"
+    },
+    "id": "primary-butter",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "cabbage",
+    "meaning": "卷心菜；甘蓝",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A fresh cabbage",
+      "meaning": "一棵新鲜卷心菜",
+      "kind": "phrase"
+    },
+    "id": "primary-cabbage",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "candy",
+    "meaning": "糖果",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A candy store",
+      "meaning": "一家糖果店",
+      "kind": "phrase"
+    },
+    "id": "primary-candy",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-cheese",
+    "libraryId": "primary",
+    "word": "cheese",
+    "meaning": "奶酪",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Cream cheese",
+      "meaning": "奶油奶酪",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-chocolate",
+    "libraryId": "primary",
+    "word": "chocolate",
+    "meaning": "巧克力，巧克力糖；巧克力色",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Chocolate ice cream",
+      "meaning": "巧克力冰淇淋",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-chopsticks",
+    "libraryId": "primary",
+    "word": "chopsticks",
+    "meaning": "筷子",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Disposable chopsticks",
+      "meaning": "一次性筷子",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "coffee",
+    "meaning": "咖啡",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A cup of coffee",
+      "meaning": "一杯咖啡",
+      "kind": "phrase"
+    },
+    "id": "primary-coffee",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-cola",
+    "libraryId": "primary",
+    "word": "cola",
+    "meaning": "可乐饮料",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Diet cola",
+      "meaning": "健怡可乐",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-cookie",
+    "libraryId": "primary",
+    "word": "cookie",
+    "meaning": "饼干",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Cookie jar",
+      "meaning": "饼干罐",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "cream",
+    "meaning": "奶油；乳霜",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Add some cream to the soup.",
+      "meaning": "往汤里加一些奶油。",
+      "kind": "sentence",
+      "sense": "奶油",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "乳霜",
+          "partOfSpeech": "n",
+          "text": "She put cream on her hands.",
+          "meaning": "她在手上涂了乳霜。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "id": "primary-cream",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "carrot",
+    "meaning": "胡萝卜",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A fresh carrot",
+      "meaning": "一根新鲜胡萝卜",
+      "kind": "phrase"
+    },
+    "id": "primary-carrot",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "dessert",
+    "meaning": "餐后甜点",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A sweet dessert",
+      "meaning": "一份甜点",
+      "kind": "phrase"
+    },
+    "id": "primary-dessert",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "dish",
+    "meaning": "盘子；一道菜",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A tasty dish",
+      "meaning": "一道可口的菜",
+      "kind": "phrase"
+    },
+    "id": "primary-dish",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-dumpling",
+    "libraryId": "primary",
+    "word": "dumpling",
+    "meaning": "饺子；汤团",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A Chinese dumpling",
+      "meaning": "一个中国饺子",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "fresh",
+    "meaning": "新鲜的；清新的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Fresh bread",
+      "meaning": "新鲜的面包",
+      "kind": "phrase"
+    },
+    "id": "primary-fresh",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-fry",
+    "libraryId": "primary",
+    "word": "fry",
+    "meaning": "油炸；油煎",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Deep fry",
+      "meaning": "油炸",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "hamburger",
+    "meaning": "汉堡包",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A beef hamburger",
+      "meaning": "一个牛肉汉堡包",
+      "kind": "phrase"
+    },
+    "id": "primary-hamburger",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "ham",
+    "meaning": "火腿",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Ham and eggs",
+      "meaning": "火腿和鸡蛋",
+      "kind": "phrase"
+    },
+    "id": "primary-ham",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-honey",
+    "libraryId": "primary",
+    "word": "honey",
+    "meaning": "蜂蜜；亲爱的",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Honey bee",
+      "meaning": "蜜蜂",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "lamb",
+    "meaning": "羔羊；羊羔",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A young lamb",
+      "meaning": "一只小羊羔",
+      "kind": "phrase"
+    },
+    "id": "primary-lamb",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-lemonade",
+    "libraryId": "primary",
+    "word": "lemonade",
+    "meaning": "柠檬水",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A glass of lemonade",
+      "meaning": "一杯柠檬水",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-meal",
+    "libraryId": "primary",
+    "word": "meal",
+    "meaning": "一餐；一顿饭",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A full meal",
+      "meaning": "丰盛的一餐",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "menu",
+    "meaning": "菜单",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A restaurant menu",
+      "meaning": "一份餐馆菜单",
+      "kind": "phrase"
+    },
+    "id": "primary-menu",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "noodle",
+    "meaning": "面条",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Noodle soup",
+      "meaning": "汤面",
+      "kind": "phrase"
+    },
+    "id": "primary-noodle",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "onion",
+    "meaning": "洋葱",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Cut an onion",
+      "meaning": "切一个洋葱",
+      "kind": "phrase"
+    },
+    "id": "primary-onion",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-pancake",
+    "libraryId": "primary",
+    "word": "pancake",
+    "meaning": "薄煎饼",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A pancake for breakfast",
+      "meaning": "早餐的一张薄煎饼",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-pear",
+    "libraryId": "primary",
+    "word": "pear",
+    "meaning": "梨树；梨子",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Pear tree",
+      "meaning": "梨树",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "pie",
+    "meaning": "馅饼",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Apple pie",
+      "meaning": "苹果馅饼",
+      "kind": "phrase"
+    },
+    "id": "primary-pie",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "popcorn",
+    "meaning": "爆米花",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A bag of popcorn",
+      "meaning": "一袋爆米花",
+      "kind": "phrase"
+    },
+    "id": "primary-popcorn",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "pork",
+    "meaning": "猪肉",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Pork and vegetables",
+      "meaning": "猪肉和蔬菜",
+      "kind": "phrase"
+    },
+    "id": "primary-pork",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-porridge",
+    "libraryId": "primary",
+    "word": "porridge",
+    "meaning": "稀饭，粥",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Rice porridge",
+      "meaning": "稀饭",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "salad",
+    "meaning": "沙拉",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A vegetable salad",
+      "meaning": "一份蔬菜沙拉",
+      "kind": "phrase"
+    },
+    "id": "primary-salad",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-salt",
+    "libraryId": "primary",
+    "word": "salt",
+    "meaning": "盐；食盐",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Salt and pepper",
+      "meaning": "盐和胡椒",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "sandwich",
+    "meaning": "三明治",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A cheese sandwich",
+      "meaning": "一个奶酪三明治",
+      "kind": "phrase"
+    },
+    "id": "primary-sandwich",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-sausage",
+    "libraryId": "primary",
+    "word": "sausage",
+    "meaning": "香肠；腊肠",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Beef sausage",
+      "meaning": "牛肉香肠",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-strawberry",
+    "libraryId": "primary",
+    "word": "strawberry",
+    "meaning": "草莓；草莓色",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Strawberry ice cream",
+      "meaning": "草莓冰激凌",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-sugar",
+    "libraryId": "primary",
+    "word": "sugar",
+    "meaning": "糖；食糖",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "White granulated sugar",
+      "meaning": "白砂糖",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-ability",
+    "libraryId": "primary",
+    "word": "ability",
+    "meaning": "能力；才能",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "The ability to swim",
+      "meaning": "游泳的能力",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "able",
+    "meaning": "能够；有能力的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Be able to swim",
+      "meaning": "能够游泳",
+      "kind": "phrase"
+    },
+    "id": "primary-able",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "add",
+    "meaning": "添加；增加",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Add some water",
+      "meaning": "加一些水",
+      "kind": "phrase"
+    },
+    "id": "primary-add",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-art",
+    "libraryId": "primary",
+    "word": "art",
+    "meaning": "艺术；美术；艺术品",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Works of art",
+      "meaning": "艺术品",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "attention",
+    "meaning": "注意力",
+    "example": {
+      "text": "Pay attention",
+      "meaning": "注意",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "primary-attention",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "borrow",
+    "meaning": "借；借用",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Borrow a book",
+      "meaning": "借一本书",
+      "kind": "phrase"
+    },
+    "id": "primary-borrow",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-check",
+    "libraryId": "primary",
+    "word": "check",
+    "meaning": "检查",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Please check your answer.",
+      "meaning": "请检查你的答案。",
+      "kind": "sentence",
+      "sense": "检查",
+      "partOfSpeech": "v"
+    }
+  },
+  {
+    "id": "primary-choice",
+    "libraryId": "primary",
+    "word": "choice",
+    "meaning": "选择；选择权",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Have no choice",
+      "meaning": "没有选择的余地",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-circle",
+    "libraryId": "primary",
+    "word": "circle",
+    "meaning": "圆圈；圈子",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "In a circle",
+      "meaning": "成圆圈",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-collect",
+    "libraryId": "primary",
+    "word": "collect",
+    "meaning": "收集；募捐",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Collect data",
+      "meaning": "收集资料",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-common",
+    "libraryId": "primary",
+    "word": "common",
+    "meaning": "常见的；共同的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "A common mistake",
+      "meaning": "一个常见的错误",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "compare",
+    "meaning": "比较；对照",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Compare the two pictures",
+      "meaning": "比较这两幅图片",
+      "kind": "phrase"
+    },
+    "id": "primary-compare",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "complete",
+    "meaning": "完成",
+    "example": {
+      "text": "Complete the task",
+      "meaning": "完成任务",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "primary-complete",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "composition",
+    "meaning": "作文；作品",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Write a composition",
+      "meaning": "写一篇作文",
+      "kind": "phrase"
+    },
+    "id": "primary-composition",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "conversation",
+    "meaning": "交谈；谈话",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Have a conversation",
+      "meaning": "进行交谈",
+      "kind": "phrase"
+    },
+    "id": "primary-conversation",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "copy",
+    "meaning": "副本；一份",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A copy of the book",
+      "meaning": "这本书的一个副本",
+      "kind": "phrase"
+    },
+    "id": "primary-copy",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-correct",
+    "libraryId": "primary",
+    "word": "correct",
+    "meaning": "正确的；恰当的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "The correct answer",
+      "meaning": "正确答案",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "count",
+    "meaning": "数数；重要",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Count the apples in the basket.",
+      "meaning": "数一数篮子里的苹果。",
+      "kind": "sentence",
+      "sense": "数数",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "重要",
+          "partOfSpeech": "v",
+          "text": "Every minute counts.",
+          "meaning": "每一分钟都很重要。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "id": "primary-count",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "could",
+    "meaning": "能够；可以",
+    "partOfSpeech": "aux",
+    "example": {
+      "text": "Could you help me?",
+      "meaning": "你能帮帮我吗？",
+      "kind": "sentence"
+    },
+    "id": "primary-could",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-course",
+    "libraryId": "primary",
+    "word": "course",
+    "meaning": "课程；进程；一道菜",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "I am taking an English course.",
+      "meaning": "我正在上一门英语课程。",
+      "kind": "sentence",
+      "sense": "课程",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "进程",
+          "partOfSpeech": "n",
+          "text": "The course of events surprised us.",
+          "meaning": "事情的发展进程让我们吃惊。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "一道菜",
+          "partOfSpeech": "n",
+          "text": "Soup was the first course.",
+          "meaning": "第一道菜是汤。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "id": "primary-daily",
+    "libraryId": "primary",
+    "word": "daily",
+    "meaning": "日常的；每日的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Daily life",
+      "meaning": "日常生活",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-dialogue",
+    "libraryId": "primary",
+    "word": "dialogue",
+    "meaning": "对话；意见交换",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A short dialogue",
+      "meaning": "一段简短的对话",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "dictionary",
+    "meaning": "词典；字典",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An English dictionary",
+      "meaning": "一本英语词典",
+      "kind": "phrase"
+    },
+    "id": "primary-dictionary",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "difference",
+    "meaning": "不同；差异",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Find the difference",
+      "meaning": "找出不同之处",
+      "kind": "phrase"
+    },
+    "id": "primary-difference",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-different",
+    "libraryId": "primary",
+    "word": "different",
+    "meaning": "不同的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "In different ways",
+      "meaning": "以不同方式",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-discuss",
+    "libraryId": "primary",
+    "word": "discuss",
+    "meaning": "讨论；商议",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Discuss with",
+      "meaning": "与……讨论",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-divide",
+    "libraryId": "primary",
+    "word": "divide",
+    "meaning": "分开；分配",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Divide the work",
+      "meaning": "分配工作",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-double",
+    "libraryId": "primary",
+    "word": "double",
+    "meaning": "双重的；两倍的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Double effect",
+      "meaning": "双重效果",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "each",
+    "meaning": "每个；各自",
+    "partOfSpeech": "pron",
+    "example": {
+      "text": "Each of us",
+      "meaning": "我们每个人",
+      "kind": "phrase"
+    },
+    "id": "primary-each",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "eighth",
+    "meaning": "第八",
+    "partOfSpeech": "num",
+    "example": {
+      "text": "The eighth floor",
+      "meaning": "第八层",
+      "kind": "phrase"
+    },
+    "id": "primary-eighth",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "encourage",
+    "meaning": "鼓励",
+    "example": {
+      "text": "Encourage your friends",
+      "meaning": "鼓励你的朋友",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "primary-encourage",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "end",
+    "meaning": "结束；末尾",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "At the end of the story",
+      "meaning": "在故事结尾",
+      "kind": "phrase"
+    },
+    "id": "primary-end",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "energy",
+    "meaning": "能源；精力",
+    "example": {
+      "text": "Save energy",
+      "meaning": "节约能源",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "primary-energy",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-enjoy",
+    "libraryId": "primary",
+    "word": "enjoy",
+    "meaning": "享受；喜爱",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Enjoy your life",
+      "meaning": "享受生活",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "enough",
+    "meaning": "足够的；充足的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Enough time",
+      "meaning": "足够的时间",
+      "kind": "phrase"
+    },
+    "id": "primary-enough",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-enter",
+    "libraryId": "primary",
+    "word": "enter",
+    "meaning": "进入；开始；参加",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Enter the contest",
+      "meaning": "加入竞赛；参加比赛",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "example",
+    "meaning": "例子",
+    "example": {
+      "text": "For example",
+      "meaning": "例如",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "primary-example",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "excellent",
+    "meaning": "优秀的；极好的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An excellent idea",
+      "meaning": "一个极好的主意",
+      "kind": "phrase"
+    },
+    "id": "primary-excellent",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "excuse",
+    "meaning": "原谅；宽恕",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Excuse me",
+      "meaning": "打扰一下",
+      "kind": "phrase"
+    },
+    "id": "primary-excuse",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "experiment",
+    "meaning": "实验；试验",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A science experiment",
+      "meaning": "一项科学实验",
+      "kind": "phrase"
+    },
+    "id": "primary-experiment",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "explain",
+    "meaning": "解释",
+    "example": {
+      "text": "Explain the rules",
+      "meaning": "解释规则",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "primary-explain",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-fact",
+    "libraryId": "primary",
+    "word": "fact",
+    "meaning": "事实；真相",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "In fact",
+      "meaning": "事实上",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "fifth",
+    "meaning": "第五",
+    "partOfSpeech": "num",
+    "example": {
+      "text": "The fifth lesson",
+      "meaning": "第五课",
+      "kind": "phrase"
+    },
+    "id": "primary-fifth",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "fill",
+    "meaning": "填满；装满",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Fill the bottle with water",
+      "meaning": "把瓶子装满水",
+      "kind": "phrase"
+    },
+    "id": "primary-fill",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-final",
+    "libraryId": "primary",
+    "word": "final",
+    "meaning": "最终的；决定性的；不可更改的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Final decision",
+      "meaning": "最后决定",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-finish",
+    "libraryId": "primary",
+    "word": "finish",
+    "meaning": "完成；结束",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Finish your homework",
+      "meaning": "完成你的家庭作业",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-first",
+    "libraryId": "primary",
+    "word": "first",
+    "meaning": "首先；第一",
+    "partOfSpeech": "adv",
+    "group": 0,
+    "example": {
+      "text": "First of all",
+      "meaning": "首先",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-fix",
+    "libraryId": "primary",
+    "word": "fix",
+    "meaning": "修理；固定",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Fix the bike",
+      "meaning": "修理自行车",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-follow",
+    "libraryId": "primary",
+    "word": "follow",
+    "meaning": "跟随；遵循",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Follow the trend",
+      "meaning": "跟随时尚",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "fourth",
+    "meaning": "第四",
+    "partOfSpeech": "num",
+    "example": {
+      "text": "The fourth page",
+      "meaning": "第四页",
+      "kind": "phrase"
+    },
+    "id": "primary-fourth",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-grade",
+    "libraryId": "primary",
+    "word": "grade",
+    "meaning": "年级；分数；分级",
+    "partOfSpeech": "n/v",
+    "group": 0,
+    "example": {
+      "text": "She is in the fifth grade.",
+      "meaning": "她在五年级。",
+      "kind": "sentence",
+      "sense": "年级",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "分数",
+          "partOfSpeech": "n",
+          "text": "He got a good grade in English.",
+          "meaning": "他的英语成绩很好。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "分级",
+          "partOfSpeech": "v",
+          "text": "The fruit is graded by size.",
+          "meaning": "水果按大小分级。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "id": "primary-grammar",
+    "libraryId": "primary",
+    "word": "grammar",
+    "meaning": "语法；语法书",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Grammar and vocabulary",
+      "meaning": "语法与词汇",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-group",
+    "libraryId": "primary",
+    "word": "group",
+    "meaning": "组；团体",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A group of",
+      "meaning": "一组，一群",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "guess",
+    "meaning": "猜测；猜想",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Guess the answer",
+      "meaning": "猜答案",
+      "kind": "phrase"
+    },
+    "id": "primary-guess",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "half",
+    "meaning": "一半",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Half an apple",
+      "meaning": "半个苹果",
+      "kind": "phrase"
+    },
+    "id": "primary-half",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-hall",
+    "libraryId": "primary",
+    "word": "hall",
+    "meaning": "大厅；礼堂",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "In the hall",
+      "meaning": "在大厅里；在饭厅",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-homework",
+    "libraryId": "primary",
+    "word": "homework",
+    "meaning": "家庭作业",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Do my homework",
+      "meaning": "做作业",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "improve",
+    "meaning": "改进",
+    "example": {
+      "text": "Improve your English",
+      "meaning": "提高你的英语水平",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "primary-improve",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "important",
+    "meaning": "重要的",
+    "example": {
+      "text": "An important question",
+      "meaning": "一个重要的问题",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "adj",
+    "id": "primary-important",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "information",
+    "meaning": "信息",
+    "example": {
+      "text": "Useful information",
+      "meaning": "有用的信息",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "primary-information",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-ant",
+    "libraryId": "primary",
+    "word": "ant",
+    "meaning": "蚂蚁",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "An ant is carrying a leaf.",
+      "meaning": "一只蚂蚁正搬着一片叶子。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "id": "primary-bamboo",
+    "libraryId": "primary",
+    "word": "bamboo",
+    "meaning": "竹子",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Bamboo shoot",
+      "meaning": "竹笋，笋",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-butterfly",
+    "libraryId": "primary",
+    "word": "butterfly",
+    "meaning": "蝴蝶",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A yellow butterfly",
+      "meaning": "一只黄色的蝴蝶",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "camel",
+    "meaning": "骆驼",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A camel in the desert",
+      "meaning": "沙漠中的一只骆驼",
+      "kind": "phrase"
+    },
+    "id": "primary-camel",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-cloud",
+    "libraryId": "primary",
+    "word": "cloud",
+    "meaning": "云；云朵",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A white cloud",
+      "meaning": "一朵白云",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "coast",
+    "meaning": "海岸；沿海地区",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Along the coast",
+      "meaning": "沿着海岸",
+      "kind": "phrase"
+    },
+    "id": "primary-coast",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-countryside",
+    "libraryId": "primary",
+    "word": "countryside",
+    "meaning": "农村；乡下",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "In the countryside",
+      "meaning": "在乡下",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "deep",
+    "meaning": "深的；深厚的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A deep lake",
+      "meaning": "一个很深的湖",
+      "kind": "phrase"
+    },
+    "id": "primary-deep",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-feather",
+    "libraryId": "primary",
+    "word": "feather",
+    "meaning": "羽毛",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Feather fan",
+      "meaning": "羽毛扇",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-field",
+    "libraryId": "primary",
+    "word": "field",
+    "meaning": "田地；领域",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "In the field",
+      "meaning": "在田野里",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "fox",
+    "meaning": "狐狸",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A red fox",
+      "meaning": "一只赤狐",
+      "kind": "phrase"
+    },
+    "id": "primary-fox",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "giraffe",
+    "meaning": "长颈鹿",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A tall giraffe",
+      "meaning": "一只高高的长颈鹿",
+      "kind": "phrase"
+    },
+    "id": "primary-giraffe",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "goat",
+    "meaning": "山羊",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A white goat",
+      "meaning": "一只白山羊",
+      "kind": "phrase"
+    },
+    "id": "primary-goat",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "ground",
+    "meaning": "地面；理由",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The ball fell to the ground.",
+      "meaning": "球落到了地上。",
+      "kind": "sentence",
+      "sense": "地面",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "理由",
+          "partOfSpeech": "n",
+          "text": "There are grounds for concern.",
+          "meaning": "有理由感到担忧。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "id": "primary-ground",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-hen",
+    "libraryId": "primary",
+    "word": "hen",
+    "meaning": "母鸡",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "The hen laid three eggs.",
+      "meaning": "母鸡下了三个蛋。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "id": "primary-hill",
+    "libraryId": "primary",
+    "word": "hill",
+    "meaning": "小山；丘陵",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Green hill",
+      "meaning": "青山，绿色的小山",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-insect",
+    "libraryId": "primary",
+    "word": "insect",
+    "meaning": "昆虫",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Insect pest",
+      "meaning": "害虫",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-jungle",
+    "libraryId": "primary",
+    "word": "jungle",
+    "meaning": "丛林；密林",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Animals in the jungle",
+      "meaning": "丛林里的动物",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "kangaroo",
+    "meaning": "袋鼠",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A jumping kangaroo",
+      "meaning": "一只跳跃的袋鼠",
+      "kind": "phrase"
+    },
+    "id": "primary-kangaroo",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-land",
+    "libraryId": "primary",
+    "word": "land",
+    "meaning": "陆地；降落",
+    "partOfSpeech": "n/v",
+    "group": 0,
+    "example": {
+      "text": "The sailors finally saw land.",
+      "meaning": "水手们终于看到了陆地。",
+      "kind": "sentence",
+      "sense": "陆地",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "降落",
+          "partOfSpeech": "v",
+          "text": "The plane will land at noon.",
+          "meaning": "飞机将在中午降落。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "word": "lightning",
+    "meaning": "闪电",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A flash of lightning",
+      "meaning": "一道闪电",
+      "kind": "phrase"
+    },
+    "id": "primary-lightning",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "pond",
+    "meaning": "池塘",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A fish in the pond",
+      "meaning": "池塘里的一条鱼",
+      "kind": "phrase"
+    },
+    "id": "primary-pond",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "rainy",
+    "meaning": "多雨的；下雨的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A rainy day",
+      "meaning": "下雨的一天",
+      "kind": "phrase"
+    },
+    "id": "primary-rainy",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "rat",
+    "meaning": "大鼠；老鼠",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A rat in the garden",
+      "meaning": "花园里的一只老鼠",
+      "kind": "phrase"
+    },
+    "id": "primary-rat",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-rock",
+    "libraryId": "primary",
+    "word": "rock",
+    "meaning": "岩石；摇滚乐；摇动",
+    "partOfSpeech": "n/v",
+    "group": 0,
+    "example": {
+      "text": "He sat on a large rock.",
+      "meaning": "他坐在一块大岩石上。",
+      "kind": "sentence",
+      "sense": "岩石",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "摇滚乐",
+          "partOfSpeech": "n",
+          "text": "She listens to rock.",
+          "meaning": "她听摇滚乐。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "摇动",
+          "partOfSpeech": "v",
+          "text": "Rock the baby gently.",
+          "meaning": "轻轻摇晃宝宝。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "id": "primary-rose",
+    "libraryId": "primary",
+    "word": "rose",
+    "meaning": "玫瑰；蔷薇",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Rose garden",
+      "meaning": "玫瑰园；蔷薇园",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-sand",
+    "libraryId": "primary",
+    "word": "sand",
+    "meaning": "沙；沙滩",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A grain of sand",
+      "meaning": "一粒沙子",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "seal",
+    "meaning": "海豹；密封",
+    "partOfSpeech": "n/v",
+    "example": {
+      "text": "A seal rested on the rock.",
+      "meaning": "一只海豹趴在岩石上休息。",
+      "kind": "sentence",
+      "sense": "海豹",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "密封",
+          "partOfSpeech": "v",
+          "text": "Seal the box with tape.",
+          "meaning": "用胶带封好箱子。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "id": "primary-seal",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-shark",
+    "libraryId": "primary",
+    "word": "shark",
+    "meaning": "鲨鱼",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Shark fin",
+      "meaning": "鱼翅",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "shell",
+    "meaning": "外壳",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The egg has a hard shell.",
+      "meaning": "鸡蛋有一层硬壳。",
+      "kind": "sentence",
+      "sense": "外壳",
+      "partOfSpeech": "n"
+    },
+    "id": "primary-shell",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "sky",
+    "meaning": "天空",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A blue sky",
+      "meaning": "蓝天",
+      "kind": "phrase"
+    },
+    "id": "primary-sky",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "snake",
+    "meaning": "蛇",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A long snake",
+      "meaning": "一条长蛇",
+      "kind": "phrase"
+    },
+    "id": "primary-snake",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "snowy",
+    "meaning": "下雪的；多雪的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A snowy day",
+      "meaning": "下雪的一天",
+      "kind": "phrase"
+    },
+    "id": "primary-snowy",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-spider",
+    "libraryId": "primary",
+    "word": "spider",
+    "meaning": "蜘蛛",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Spider silk",
+      "meaning": "蜘蛛丝",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-stone",
+    "libraryId": "primary",
+    "word": "stone",
+    "meaning": "石头；宝石",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Stone by stone",
+      "meaning": "一块石头一块石头地；一点一滴地",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "storm",
+    "meaning": "暴风雨",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A heavy storm",
+      "meaning": "一场猛烈的暴风雨",
+      "kind": "phrase"
+    },
+    "id": "primary-storm",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "stream",
+    "meaning": "小溪；溪流",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A clear stream",
+      "meaning": "一条清澈的小溪",
+      "kind": "phrase"
+    },
+    "id": "primary-stream",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "tail",
+    "meaning": "尾巴",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A long tail",
+      "meaning": "一条长尾巴",
+      "kind": "phrase"
+    },
+    "id": "primary-tail",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "thick",
+    "meaning": "厚的；浓密的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A thick book",
+      "meaning": "一本厚书",
+      "kind": "phrase"
+    },
+    "id": "primary-thick",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-turtle",
+    "libraryId": "primary",
+    "word": "turtle",
+    "meaning": "海龟",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A little turtle",
+      "meaning": "一只小海龟",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "underwater",
+    "meaning": "在水下",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Swim underwater",
+      "meaning": "在水下游泳",
+      "kind": "phrase"
+    },
+    "id": "primary-underwater",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "wave",
+    "meaning": "波浪；挥手",
+    "partOfSpeech": "n/v",
+    "example": {
+      "text": "A large wave hit the boat.",
+      "meaning": "一个大浪打中了船。",
+      "kind": "sentence",
+      "sense": "波浪",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "挥手",
+          "partOfSpeech": "v",
+          "text": "She waved to her friend.",
+          "meaning": "她向朋友挥手。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "id": "primary-wave",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-whale",
+    "libraryId": "primary",
+    "word": "whale",
+    "meaning": "鲸；巨大的东西",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "White whale",
+      "meaning": "白鲸",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-wheat",
+    "libraryId": "primary",
+    "word": "wheat",
+    "meaning": "小麦；小麦色",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Wheat flour",
+      "meaning": "小麦粉",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "wild",
+    "meaning": "野生的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A wild animal",
+      "meaning": "一只野生动物",
+      "kind": "phrase"
+    },
+    "id": "primary-wild",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-wind",
+    "libraryId": "primary",
+    "word": "wind",
+    "meaning": "风；缠绕；蜿蜒",
+    "partOfSpeech": "n/v",
+    "group": 0,
+    "example": {
+      "text": "The wind is strong today.",
+      "meaning": "今天风很大。",
+      "kind": "sentence",
+      "sense": "风",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "缠绕",
+          "partOfSpeech": "v",
+          "text": "Wind the thread around the reel.",
+          "meaning": "把线绕在线轴上。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "蜿蜒",
+          "partOfSpeech": "v",
+          "text": "The road winds through the hills.",
+          "meaning": "道路蜿蜒穿过群山。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "word": "windy",
+    "meaning": "多风的；有风的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A windy day",
+      "meaning": "刮风的一天",
+      "kind": "phrase"
+    },
+    "id": "primary-windy",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "wing",
+    "meaning": "翅膀",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The bird hurt its wing.",
+      "meaning": "鸟弄伤了翅膀。",
+      "kind": "sentence",
+      "sense": "翅膀",
+      "partOfSpeech": "n"
+    },
+    "id": "primary-wing",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "wolf",
+    "meaning": "狼",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A grey wolf",
+      "meaning": "一只灰狼",
+      "kind": "phrase"
+    },
+    "id": "primary-wolf",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "zebra",
+    "meaning": "斑马",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A zebra in the zoo",
+      "meaning": "动物园里的一匹斑马",
+      "kind": "phrase"
+    },
+    "id": "primary-zebra",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-astronaut",
+    "libraryId": "primary",
+    "word": "astronaut",
+    "meaning": "宇航员；航天员",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Become an astronaut",
+      "meaning": "成为宇航员",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-dinosaur",
+    "libraryId": "primary",
+    "word": "dinosaur",
+    "meaning": "恐龙",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "The dinosaur lived millions of years ago.",
+      "meaning": "恐龙生活在数百万年前。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "word": "planet",
+    "meaning": "行星",
+    "example": {
+      "text": "A distant planet",
+      "meaning": "一颗遥远的行星",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "primary-planet",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-rocket",
+    "libraryId": "primary",
+    "word": "rocket",
+    "meaning": "火箭",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Rocket engine",
+      "meaning": "火箭发动机",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "satellite",
+    "meaning": "卫星",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A weather satellite",
+      "meaning": "一颗气象卫星",
+      "kind": "phrase"
+    },
+    "id": "primary-satellite",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-solar",
+    "libraryId": "primary",
+    "word": "solar",
+    "meaning": "太阳的；太阳能的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Solar water heater",
+      "meaning": "太阳能热水器",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-oak",
+    "libraryId": "primary",
+    "word": "oak",
+    "meaning": "橡树；橡木",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Red oak",
+      "meaning": "红橡木",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "polar",
+    "meaning": "极地的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A polar bear",
+      "meaning": "一只北极熊",
+      "kind": "phrase"
+    },
+    "id": "primary-polar",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-harvest",
+    "libraryId": "primary",
+    "word": "harvest",
+    "meaning": "收获；产量；结果",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Harvest time",
+      "meaning": "收获季节；收割期",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "environment",
+    "meaning": "环境",
+    "example": {
+      "text": "Protect the environment",
+      "meaning": "保护环境",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "n",
+    "id": "primary-environment",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-ache",
+    "libraryId": "primary",
+    "word": "ache",
+    "meaning": "疼痛",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Ache all over",
+      "meaning": "全身疼痛",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-back",
+    "libraryId": "primary",
+    "word": "back",
+    "meaning": "背部；后面；支持；回来",
+    "partOfSpeech": "n/v/adv",
+    "group": 0,
+    "example": {
+      "text": "My back hurts today.",
+      "meaning": "我今天背疼。",
+      "kind": "sentence",
+      "sense": "背部",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "后面",
+          "partOfSpeech": "n",
+          "text": "Sit at the back of the room.",
+          "meaning": "坐在房间后面。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "支持",
+          "partOfSpeech": "v",
+          "text": "We back your plan.",
+          "meaning": "我们支持你的计划。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "回来",
+          "partOfSpeech": "adv",
+          "text": "I will be back soon.",
+          "meaning": "我很快会回来。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "word": "brain",
+    "meaning": "脑；大脑",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The human brain",
+      "meaning": "人的大脑",
+      "kind": "phrase"
+    },
+    "id": "primary-brain",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "breath",
+    "meaning": "呼吸；一口气",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Take a deep breath",
+      "meaning": "深吸一口气",
+      "kind": "phrase"
+    },
+    "id": "primary-breath",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-breathe",
+    "libraryId": "primary",
+    "word": "breathe",
+    "meaning": "呼吸",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Breathe deeply",
+      "meaning": "深呼吸",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-chest",
+    "libraryId": "primary",
+    "word": "chest",
+    "meaning": "胸部；箱子",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "He felt a pain in his chest.",
+      "meaning": "他感到胸部疼痛。",
+      "kind": "sentence",
+      "sense": "胸部",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "箱子",
+          "partOfSpeech": "n",
+          "text": "The old chest was full of books.",
+          "meaning": "旧箱子里装满了书。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "id": "primary-cough",
+    "libraryId": "primary",
+    "word": "cough",
+    "meaning": "咳嗽",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Cough syrup",
+      "meaning": "止咳糖浆；咳嗽糖浆",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-danger",
+    "libraryId": "primary",
+    "word": "danger",
+    "meaning": "危险；威胁",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "In danger",
+      "meaning": "处于危险中",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-dangerous",
+    "libraryId": "primary",
+    "word": "dangerous",
+    "meaning": "危险的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Dangerous goods",
+      "meaning": "危险物品",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "dentist",
+    "meaning": "牙医",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Visit the dentist",
+      "meaning": "看牙医",
+      "kind": "phrase"
+    },
+    "id": "primary-dentist",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-dry",
+    "libraryId": "primary",
+    "word": "dry",
+    "meaning": "干的；干燥的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Dry clothes",
+      "meaning": "干衣服",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "elbow",
+    "meaning": "肘部",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Bend your elbow",
+      "meaning": "弯曲手肘",
+      "kind": "phrase"
+    },
+    "id": "primary-elbow",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-fever",
+    "libraryId": "primary",
+    "word": "fever",
+    "meaning": "发烧，发热；狂热",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Have a fever",
+      "meaning": "发烧",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-flu",
+    "libraryId": "primary",
+    "word": "flu",
+    "meaning": "流感",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Have the flu",
+      "meaning": "得了流感，患流感",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-health",
+    "libraryId": "primary",
+    "word": "health",
+    "meaning": "健康",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Good health",
+      "meaning": "身体健康",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "heart",
+    "meaning": "心脏；心",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A healthy heart",
+      "meaning": "一颗健康的心脏",
+      "kind": "phrase"
+    },
+    "id": "primary-heart",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-heat",
+    "libraryId": "primary",
+    "word": "heat",
+    "meaning": "加热；变热",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Heat up",
+      "meaning": "加热",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "ill",
+    "meaning": "生病的；不舒服的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Feel ill",
+      "meaning": "感到不舒服",
+      "kind": "phrase"
+    },
+    "id": "primary-ill",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-illness",
+    "libraryId": "primary",
+    "word": "illness",
+    "meaning": "病；疾病",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A serious illness",
+      "meaning": "严重的疾病",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-medicine",
+    "libraryId": "primary",
+    "word": "medicine",
+    "meaning": "药；医学",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Chinese herbal medicine",
+      "meaning": "中药",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "neck",
+    "meaning": "脖子；颈部",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A long neck",
+      "meaning": "长长的脖子",
+      "kind": "phrase"
+    },
+    "id": "primary-neck",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-pain",
+    "libraryId": "primary",
+    "word": "pain",
+    "meaning": "疼痛；痛苦",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Low back pain",
+      "meaning": "下背痛，下腰痛",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-safety",
+    "libraryId": "primary",
+    "word": "safety",
+    "meaning": "安全；安全性",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Health and safety",
+      "meaning": "健康与安全",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "sick",
+    "meaning": "生病的；恶心的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A sick child",
+      "meaning": "一个生病的孩子",
+      "kind": "phrase"
+    },
+    "id": "primary-sick",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "skin",
+    "meaning": "皮肤",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Soft skin",
+      "meaning": "柔软的皮肤",
+      "kind": "phrase"
+    },
+    "id": "primary-skin",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "stomach",
+    "meaning": "胃；肚子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An empty stomach",
+      "meaning": "空空的肚子",
+      "kind": "phrase"
+    },
+    "id": "primary-stomach",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-throat",
+    "libraryId": "primary",
+    "word": "throat",
+    "meaning": "咽喉，嗓子",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Sore throat",
+      "meaning": "咽喉痛",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "tooth",
+    "meaning": "牙；牙齿",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A loose tooth",
+      "meaning": "一颗松动的牙齿",
+      "kind": "phrase"
+    },
+    "id": "primary-tooth",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-toothache",
+    "libraryId": "primary",
+    "word": "toothache",
+    "meaning": "牙痛，牙疼",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "I had terrible toothache all last night.",
+      "meaning": "昨晚我一整夜牙疼得厉害。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "id": "primary-bandage",
+    "libraryId": "primary",
+    "word": "bandage",
+    "meaning": "绷带",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A clean bandage",
+      "meaning": "一条干净的绷带",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "accept",
+    "meaning": "接受；同意",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Accept an invitation",
+      "meaning": "接受邀请",
+      "kind": "phrase"
+    },
+    "id": "primary-accept",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "act",
+    "meaning": "行动；扮演",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Act in a play",
+      "meaning": "在一部戏剧中表演",
+      "kind": "phrase"
+    },
+    "id": "primary-act",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-action",
+    "libraryId": "primary",
+    "word": "action",
+    "meaning": "行动；行为",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Course of action",
+      "meaning": "做法；行动步骤",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "agree",
+    "meaning": "同意；赞成",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Agree with you",
+      "meaning": "同意你的看法",
+      "kind": "phrase"
+    },
+    "id": "primary-agree",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-aloud",
+    "libraryId": "primary",
+    "word": "aloud",
+    "meaning": "大声地；出声地",
+    "partOfSpeech": "adv",
+    "group": 0,
+    "example": {
+      "text": "Read aloud",
+      "meaning": "大声朗读",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-appear",
+    "libraryId": "primary",
+    "word": "appear",
+    "meaning": "出现；似乎",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Appear at the door",
+      "meaning": "出现在门口",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-arrive",
+    "libraryId": "primary",
+    "word": "arrive",
+    "meaning": "到达；抵达",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Arrive at the station",
+      "meaning": "到达车站",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-away",
+    "libraryId": "primary",
+    "word": "away",
+    "meaning": "离开；远离",
+    "partOfSpeech": "adv",
+    "group": 0,
+    "example": {
+      "text": "Far away from",
+      "meaning": "远离",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-become",
+    "libraryId": "primary",
+    "word": "become",
+    "meaning": "变成，成为；开始变得",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Become a member",
+      "meaning": "成为一名成员/会员",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-begin",
+    "libraryId": "primary",
+    "word": "begin",
+    "meaning": "开始",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Begin to do",
+      "meaning": "开始做某事",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-believe",
+    "libraryId": "primary",
+    "word": "believe",
+    "meaning": "相信；认为",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Believe his story",
+      "meaning": "相信他的话",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "blow",
+    "meaning": "吹",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Blow out a candle",
+      "meaning": "吹灭一支蜡烛",
+      "kind": "phrase"
+    },
+    "id": "primary-blow",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "break",
+    "meaning": "打破；休息",
+    "partOfSpeech": "v/n",
+    "example": {
+      "text": "Do not break the glass.",
+      "meaning": "不要打破玻璃。",
+      "kind": "sentence",
+      "sense": "打破",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "休息",
+          "partOfSpeech": "n",
+          "text": "Let us take a short break.",
+          "meaning": "我们短暂休息一下吧。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "id": "primary-break",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-build",
+    "libraryId": "primary",
+    "word": "build",
+    "meaning": "建立；建筑",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Build a bridge",
+      "meaning": "修建一座桥",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-burn",
+    "libraryId": "primary",
+    "word": "burn",
+    "meaning": "燃烧；烧毁",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "The fire is burning.",
+      "meaning": "火在燃烧。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "id": "primary-call",
+    "libraryId": "primary",
+    "word": "call",
+    "meaning": "打电话；叫；称呼",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Call your mother",
+      "meaning": "给你妈妈打电话",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-camp",
+    "libraryId": "primary",
+    "word": "camp",
+    "meaning": "露营；扎营",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Camp in the forest",
+      "meaning": "在森林里露营",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-cancel",
+    "libraryId": "primary",
+    "word": "cancel",
+    "meaning": "取消；删去",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Cancel the meeting",
+      "meaning": "取消会议",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-care",
+    "libraryId": "primary",
+    "word": "care",
+    "meaning": "关心；照顾",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "I care about my friends.",
+      "meaning": "我关心我的朋友。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "word": "carry",
+    "meaning": "携带；搬运",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Carry a heavy bag",
+      "meaning": "提一个沉重的袋子",
+      "kind": "phrase"
+    },
+    "id": "primary-carry",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-celebrate",
+    "libraryId": "primary",
+    "word": "celebrate",
+    "meaning": "庆祝；庆贺",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Celebrate with",
+      "meaning": "庆祝",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "change",
+    "meaning": "改变；零钱",
+    "partOfSpeech": "v/n",
+    "example": {
+      "text": "We need to change our plan.",
+      "meaning": "我们需要改变计划。",
+      "kind": "sentence",
+      "sense": "改变",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "零钱",
+          "partOfSpeech": "n",
+          "text": "Keep the change, please.",
+          "meaning": "零钱不用找了。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "id": "primary-change",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "chant",
+    "meaning": "吟唱；口号",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A football chant",
+      "meaning": "一句足球助威口号",
+      "kind": "phrase"
+    },
+    "id": "primary-chant",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-chat",
+    "libraryId": "primary",
+    "word": "chat",
+    "meaning": "聊天；闲谈",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Have a chat",
+      "meaning": "聊天；谈天；闲谈",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-cheer",
+    "libraryId": "primary",
+    "word": "cheer",
+    "meaning": "使振作；欢呼",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Cheer you up",
+      "meaning": "让你振作起来",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-choose",
+    "libraryId": "primary",
+    "word": "choose",
+    "meaning": "选择，挑选",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Choose to do",
+      "meaning": "选择去做某事",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-clap",
+    "libraryId": "primary",
+    "word": "clap",
+    "meaning": "鼓掌；拍手",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Clap hands",
+      "meaning": "拍手",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-clear",
+    "libraryId": "primary",
+    "word": "clear",
+    "meaning": "清楚的；晴朗的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Make clear",
+      "meaning": "说明清楚",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-climb",
+    "libraryId": "primary",
+    "word": "climb",
+    "meaning": "爬；攀登；上升",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Climb up",
+      "meaning": "爬上去",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-connect",
+    "libraryId": "primary",
+    "word": "connect",
+    "meaning": "连接；联系",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Connect with",
+      "meaning": "与……联系",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-continue",
+    "libraryId": "primary",
+    "word": "continue",
+    "meaning": "继续，延续；仍旧，连续",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Continue to do",
+      "meaning": "继续做某事",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "cross",
+    "meaning": "穿过；横过",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Cross the road",
+      "meaning": "过马路",
+      "kind": "phrase"
+    },
+    "id": "primary-cross",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-cry",
+    "libraryId": "primary",
+    "word": "cry",
+    "meaning": "哭；喊叫",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "The baby is crying.",
+      "meaning": "婴儿在哭。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "id": "primary-cut",
+    "libraryId": "primary",
+    "word": "cut",
+    "meaning": "切；剪；削减",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Cut the cake",
+      "meaning": "切蛋糕",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-decide",
+    "libraryId": "primary",
+    "word": "decide",
+    "meaning": "决定；下决心",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Decide to do",
+      "meaning": "决定做某事",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-describe",
+    "libraryId": "primary",
+    "word": "describe",
+    "meaning": "描述；形容",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Describe as",
+      "meaning": "描述为",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-dig",
+    "libraryId": "primary",
+    "word": "dig",
+    "meaning": "挖（土等），掘（洞）",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Dig a hole",
+      "meaning": "挖坑",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-dislike",
+    "libraryId": "primary",
+    "word": "dislike",
+    "meaning": "不喜欢，讨厌",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Dislike the noise",
+      "meaning": "讨厌噪音",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-dream",
+    "libraryId": "primary",
+    "word": "dream",
+    "meaning": "梦；梦想",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A bad dream",
+      "meaning": "一个噩梦",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "drop",
+    "meaning": "滴；少量",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A drop of water",
+      "meaning": "一滴水",
+      "kind": "phrase"
+    },
+    "id": "primary-drop",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "drive",
+    "meaning": "驾驶",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Drive a car",
+      "meaning": "开车",
+      "kind": "phrase"
+    },
+    "id": "primary-drive",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "feed",
+    "meaning": "喂养",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Feed the birds",
+      "meaning": "喂鸟",
+      "kind": "phrase"
+    },
+    "id": "primary-feed",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "fetch",
+    "meaning": "去取来；拿来",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Fetch some water",
+      "meaning": "取些水来",
+      "kind": "phrase"
+    },
+    "id": "primary-fetch",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "fold",
+    "meaning": "折叠",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Fold the paper",
+      "meaning": "折纸",
+      "kind": "phrase"
+    },
+    "id": "primary-fold",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "forget",
+    "meaning": "忘记",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Forget a name",
+      "meaning": "忘记一个名字",
+      "kind": "phrase"
+    },
+    "id": "primary-forget",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-hang",
+    "libraryId": "primary",
+    "word": "hang",
+    "meaning": "悬挂",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Hang the coat on the hook",
+      "meaning": "把外套挂在钩子上",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-hide",
+    "libraryId": "primary",
+    "word": "hide",
+    "meaning": "隐藏；兽皮",
+    "partOfSpeech": "v/n",
+    "group": 0,
+    "example": {
+      "text": "Hide the key under the mat.",
+      "meaning": "把钥匙藏在垫子下。",
+      "kind": "sentence",
+      "sense": "隐藏",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "兽皮",
+          "partOfSpeech": "n",
+          "text": "The boots are made from cow hide.",
+          "meaning": "这双靴子由牛皮制成。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "id": "primary-hit",
+    "libraryId": "primary",
+    "word": "hit",
+    "meaning": "打；击中；碰撞",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Hit the mark",
+      "meaning": "打中目标；达到目的；成功",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-hold",
+    "libraryId": "primary",
+    "word": "hold",
+    "meaning": "握住；举行；容纳",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Hold the cup",
+      "meaning": "握住杯子",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-hum",
+    "libraryId": "primary",
+    "word": "hum",
+    "meaning": "哼唱；发出嗡嗡声",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "He began to hum a tune.",
+      "meaning": "他开始哼唱一支曲子。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "id": "primary-hurry",
+    "libraryId": "primary",
+    "word": "hurry",
+    "meaning": "匆忙",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "In a hurry",
+      "meaning": "急忙；匆忙",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "imagine",
+    "meaning": "想象",
+    "example": {
+      "text": "Imagine the future",
+      "meaning": "想象未来",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "v",
+    "id": "primary-imagine",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-inside",
+    "libraryId": "primary",
+    "word": "inside",
+    "meaning": "在里面",
+    "partOfSpeech": "adv",
+    "group": 0,
+    "example": {
+      "text": "Go inside",
+      "meaning": "进去",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-into",
+    "libraryId": "primary",
+    "word": "into",
+    "meaning": "进入；到……里面",
+    "partOfSpeech": "prep",
+    "group": 0,
+    "example": {
+      "text": "Go into",
+      "meaning": "进入",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-kick",
+    "libraryId": "primary",
+    "word": "kick",
+    "meaning": "踢",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Kick the ball",
+      "meaning": "踢球",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "kiss",
+    "meaning": "亲吻",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Kiss the baby",
+      "meaning": "亲吻婴儿",
+      "kind": "phrase"
+    },
+    "id": "primary-kiss",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "knock",
+    "meaning": "敲",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Knock on the door",
+      "meaning": "敲门",
+      "kind": "phrase"
+    },
+    "id": "primary-knock",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-lay",
+    "libraryId": "primary",
+    "word": "lay",
+    "meaning": "放置；铺放",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Lay the book on the table",
+      "meaning": "把书放在桌上",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-leave",
+    "libraryId": "primary",
+    "word": "leave",
+    "meaning": "离开；留下；休假",
+    "partOfSpeech": "v/n",
+    "group": 0,
+    "example": {
+      "text": "We leave at seven.",
+      "meaning": "我们七点离开。",
+      "kind": "sentence",
+      "sense": "离开",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "留下",
+          "partOfSpeech": "v",
+          "text": "Leave your bag here.",
+          "meaning": "把你的包留在这里。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "休假",
+          "partOfSpeech": "n",
+          "text": "She is on leave this week.",
+          "meaning": "她这周休假。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "word": "lend",
+    "meaning": "借给",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Lend me a pencil",
+      "meaning": "借给我一支铅笔",
+      "kind": "phrase"
+    },
+    "id": "primary-lend",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-lie",
+    "libraryId": "primary",
+    "word": "lie",
+    "meaning": "躺；位于；说谎",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Please lie down on the bed.",
+      "meaning": "请躺在床上。",
+      "kind": "sentence",
+      "sense": "躺",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "位于",
+          "partOfSpeech": "v",
+          "text": "The village lies beside the river.",
+          "meaning": "村庄位于河边。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "说谎",
+          "partOfSpeech": "v",
+          "text": "Do not lie to your friends.",
+          "meaning": "不要对朋友说谎。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "id": "primary-lose",
+    "libraryId": "primary",
+    "word": "lose",
+    "meaning": "失去；丢失；输掉",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Lose interest in",
+      "meaning": "对……失去兴趣",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-lost",
+    "libraryId": "primary",
+    "word": "lost",
+    "meaning": "迷路的；丢失的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "A lost child",
+      "meaning": "一个迷路的孩子",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "mend",
+    "meaning": "修补",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Mend a shirt",
+      "meaning": "修补一件衬衫",
+      "kind": "phrase"
+    },
+    "id": "primary-mend",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-mix",
+    "libraryId": "primary",
+    "word": "mix",
+    "meaning": "使混合，配制；相混，搞混",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Mix and match",
+      "meaning": "混合搭配",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "nod",
+    "meaning": "点头",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Nod your head",
+      "meaning": "点头",
+      "kind": "phrase"
+    },
+    "id": "primary-nod",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-obey",
+    "libraryId": "primary",
+    "word": "obey",
+    "meaning": "服从，听从",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Obey the order",
+      "meaning": "听从命令",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-pack",
+    "libraryId": "primary",
+    "word": "pack",
+    "meaning": "打包；塞满",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Pack up",
+      "meaning": "整理；把…打包",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "pay",
+    "meaning": "支付；付款",
+    "partOfSpeech": "v",
+    "example": {
+      "text": "Pay for the ticket",
+      "meaning": "支付票款",
+      "kind": "phrase"
+    },
+    "id": "primary-pay",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-pick",
+    "libraryId": "primary",
+    "word": "pick",
+    "meaning": "挑选；采摘；挖",
+    "partOfSpeech": "v",
+    "group": 0,
+    "example": {
+      "text": "Pick out",
+      "meaning": "挑选出",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "alive",
+    "meaning": "活着的；有活力的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Stay alive",
+      "meaning": "活下来",
+      "kind": "phrase"
+    },
+    "id": "primary-alive",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "alone",
+    "meaning": "独自；单独地",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Stay at home alone",
+      "meaning": "独自在家",
+      "kind": "phrase"
+    },
+    "id": "primary-alone",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "almost",
+    "meaning": "几乎；差不多",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Almost all the students",
+      "meaning": "几乎所有学生",
+      "kind": "phrase"
+    },
+    "id": "primary-almost",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-already",
+    "libraryId": "primary",
+    "word": "already",
+    "meaning": "已经；早已",
+    "partOfSpeech": "adv",
+    "group": 0,
+    "example": {
+      "text": "The performance had already started when we arrived.",
+      "meaning": "我们到达时表演已经开始了。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "word": "along",
+    "meaning": "沿着",
+    "partOfSpeech": "prep",
+    "example": {
+      "text": "Walk along the river",
+      "meaning": "沿河步行",
+      "kind": "phrase"
+    },
+    "id": "primary-along",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-another",
+    "libraryId": "primary",
+    "word": "another",
+    "meaning": "另一个；又一个",
+    "partOfSpeech": "pron",
+    "group": 0,
+    "example": {
+      "text": "One after another",
+      "meaning": "一个接一个地",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-anyone",
+    "libraryId": "primary",
+    "word": "anyone",
+    "meaning": "任何人；任何一个",
+    "partOfSpeech": "pron",
+    "group": 0,
+    "example": {
+      "text": "Can anyone help me?",
+      "meaning": "有人能帮我吗？",
+      "kind": "sentence"
+    }
+  },
+  {
+    "id": "primary-anything",
+    "libraryId": "primary",
+    "word": "anything",
+    "meaning": "任何事物；一切",
+    "partOfSpeech": "pron",
+    "group": 0,
+    "example": {
+      "text": "Anything else",
+      "meaning": "其他任何东西",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "anywhere",
+    "meaning": "在任何地方；到任何地方",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Sit anywhere you like",
+      "meaning": "坐在你喜欢的任何地方",
+      "kind": "phrase"
+    },
+    "id": "primary-anywhere",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-around",
+    "libraryId": "primary",
+    "word": "around",
+    "meaning": "大约；到处；在附近",
+    "partOfSpeech": "adv",
+    "group": 0,
+    "example": {
+      "text": "All around",
+      "meaning": "周围；到处",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "as",
+    "meaning": "像……一样；如同",
+    "partOfSpeech": "conj",
+    "example": {
+      "text": "As tall as you",
+      "meaning": "和你一样高",
+      "kind": "phrase"
+    },
+    "id": "primary-as",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-basic",
+    "libraryId": "primary",
+    "word": "basic",
+    "meaning": "基本的；基础的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Basic principle",
+      "meaning": "基本原理",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-below",
+    "libraryId": "primary",
+    "word": "below",
+    "meaning": "在……下面；低于",
+    "partOfSpeech": "prep",
+    "group": 0,
+    "example": {
+      "text": "Far below",
+      "meaning": "远低于",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-besides",
+    "libraryId": "primary",
+    "word": "besides",
+    "meaning": "此外；而且",
+    "partOfSpeech": "adv",
+    "group": 0,
+    "example": {
+      "text": "Besides, I have no time.",
+      "meaning": "此外，我没有时间。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "word": "bit",
+    "meaning": "一点；少量",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A bit of help",
+      "meaning": "一点帮助",
+      "kind": "phrase"
+    },
+    "id": "primary-bit",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-boring",
+    "libraryId": "primary",
+    "word": "boring",
+    "meaning": "无聊的；令人厌烦的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "So boring",
+      "meaning": "真无聊",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "born",
+    "meaning": "出生的；天生的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Be born in spring",
+      "meaning": "出生在春天",
+      "kind": "phrase"
+    },
+    "id": "primary-born",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "both",
+    "meaning": "两者都",
+    "partOfSpeech": "pron",
+    "example": {
+      "text": "Both of us",
+      "meaning": "我们两个人",
+      "kind": "phrase"
+    },
+    "id": "primary-both",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-bottom",
+    "libraryId": "primary",
+    "word": "bottom",
+    "meaning": "底部；末端",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "At the bottom",
+      "meaning": "在底部；在底端",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "bright",
+    "meaning": "明亮的；聪明的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A bright room",
+      "meaning": "一间明亮的房间",
+      "kind": "phrase"
+    },
+    "id": "primary-bright",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-calm",
+    "libraryId": "primary",
+    "word": "calm",
+    "meaning": "镇静的；平静的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Stay calm",
+      "meaning": "保持镇静",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "cheap",
+    "meaning": "便宜的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A cheap ticket",
+      "meaning": "一张便宜的票",
+      "kind": "phrase"
+    },
+    "id": "primary-cheap",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-comfortable",
+    "libraryId": "primary",
+    "word": "comfortable",
+    "meaning": "舒适的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Comfortable temperature",
+      "meaning": "舒适温度",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-dark",
+    "libraryId": "primary",
+    "word": "dark",
+    "meaning": "黑暗的；深色的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "In the dark",
+      "meaning": "在黑暗中",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-dear",
+    "libraryId": "primary",
+    "word": "dear",
+    "meaning": "亲爱的；尊敬的；昂贵的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Dear Sir or Madam",
+      "meaning": "尊敬的先生或女士",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "empty",
+    "meaning": "空的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An empty box",
+      "meaning": "一个空盒子",
+      "kind": "phrase"
+    },
+    "id": "primary-empty",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-ever",
+    "libraryId": "primary",
+    "word": "ever",
+    "meaning": "曾经；永远",
+    "partOfSpeech": "adv",
+    "group": 0,
+    "example": {
+      "text": "Ever since",
+      "meaning": "从那时起",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-everybody",
+    "libraryId": "primary",
+    "word": "everybody",
+    "meaning": "每个人；人人",
+    "partOfSpeech": "pron",
+    "group": 0,
+    "example": {
+      "text": "Everybody is welcome.",
+      "meaning": "欢迎每一个人。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "id": "primary-everyday",
+    "libraryId": "primary",
+    "word": "everyday",
+    "meaning": "每天的，日常的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Everyday life",
+      "meaning": "日常生活",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "everyone",
+    "meaning": "每个人；人人",
+    "partOfSpeech": "pron",
+    "example": {
+      "text": "Everyone is welcome.",
+      "meaning": "欢迎每个人。",
+      "kind": "sentence"
+    },
+    "id": "primary-everyone",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-everything",
+    "libraryId": "primary",
+    "word": "everything",
+    "meaning": "一切；所有事物",
+    "partOfSpeech": "pron",
+    "group": 0,
+    "example": {
+      "text": "And everything",
+      "meaning": "一切事物；以及其他等等",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-everywhere",
+    "libraryId": "primary",
+    "word": "everywhere",
+    "meaning": "到处；各处",
+    "partOfSpeech": "adv",
+    "group": 0,
+    "example": {
+      "text": "Everywhere you go",
+      "meaning": "无论你去哪里",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "fair",
+    "meaning": "公平的；集市；浅色的",
+    "partOfSpeech": "adj/n",
+    "example": {
+      "text": "We want a fair result.",
+      "meaning": "我们希望得到公平的结果。",
+      "kind": "sentence",
+      "sense": "公平的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "集市",
+          "partOfSpeech": "n",
+          "text": "We bought fruit at the fair.",
+          "meaning": "我们在集市上买了水果。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "浅色的",
+          "partOfSpeech": "adj",
+          "text": "She has fair hair.",
+          "meaning": "她有一头浅色的头发。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "id": "primary-fair",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "fantastic",
+    "meaning": "极好的；了不起的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A fantastic idea",
+      "meaning": "极好的想法",
+      "kind": "phrase"
+    },
+    "id": "primary-fantastic",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-fat",
+    "libraryId": "primary",
+    "word": "fat",
+    "meaning": "脂肪，肥肉",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Body fat",
+      "meaning": "体脂肪；体脂重",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "flat",
+    "meaning": "平坦的；公寓；没气的",
+    "partOfSpeech": "adj/n",
+    "example": {
+      "text": "The land here is flat.",
+      "meaning": "这里的土地很平坦。",
+      "kind": "sentence",
+      "sense": "平坦的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "公寓",
+          "partOfSpeech": "n",
+          "text": "They live in a small flat.",
+          "meaning": "他们住在一套小公寓里。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "没气的",
+          "partOfSpeech": "adj",
+          "text": "My bike has a flat tyre.",
+          "meaning": "我的自行车轮胎没气了。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "id": "primary-flat",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "forward",
+    "meaning": "向前",
+    "partOfSpeech": "adv",
+    "example": {
+      "text": "Move forward",
+      "meaning": "向前移动",
+      "kind": "phrase"
+    },
+    "id": "primary-forward",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "front",
+    "meaning": "前面；前部",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "In front of the school",
+      "meaning": "在学校前面",
+      "kind": "phrase"
+    },
+    "id": "primary-front",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-full",
+    "libraryId": "primary",
+    "word": "full",
+    "meaning": "满的；完整的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "A full bottle",
+      "meaning": "一个装满的瓶子",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-gentle",
+    "libraryId": "primary",
+    "word": "gentle",
+    "meaning": "温柔的；温和的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Gentle and soft",
+      "meaning": "温柔",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-glad",
+    "libraryId": "primary",
+    "word": "glad",
+    "meaning": "高兴的；乐意的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Glad to meet you",
+      "meaning": "见到你很高兴",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-hard",
+    "libraryId": "primary",
+    "word": "hard",
+    "meaning": "坚硬的；困难的；努力地",
+    "partOfSpeech": "adj/adv",
+    "group": 0,
+    "example": {
+      "text": "The stone is very hard.",
+      "meaning": "这块石头很硬。",
+      "kind": "sentence",
+      "sense": "坚硬的",
+      "partOfSpeech": "adj",
+      "additional": [
+        {
+          "sense": "困难的",
+          "partOfSpeech": "adj",
+          "text": "This is a hard question.",
+          "meaning": "这是个难题。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "努力地",
+          "partOfSpeech": "adv",
+          "text": "She works hard every day.",
+          "meaning": "她每天都努力工作。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "id": "primary-heavy",
+    "libraryId": "primary",
+    "word": "heavy",
+    "meaning": "重的；大量的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Heavy traffic",
+      "meaning": "拥挤的交通",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "high",
+    "meaning": "高的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A high mountain",
+      "meaning": "一座高山",
+      "kind": "phrase"
+    },
+    "id": "primary-high",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "if",
+    "meaning": "如果；是否",
+    "partOfSpeech": "conj",
+    "example": {
+      "text": "If it rains, stay inside.",
+      "meaning": "如果下雨，就待在室内。",
+      "kind": "sentence"
+    },
+    "id": "primary-if",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-just",
+    "libraryId": "primary",
+    "word": "just",
+    "meaning": "只是；刚刚；正好",
+    "partOfSpeech": "adv",
+    "group": 0,
+    "example": {
+      "text": "More than just",
+      "meaning": "不只是",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "lively",
+    "meaning": "活泼的；热闹的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A lively discussion",
+      "meaning": "热烈的讨论",
+      "kind": "phrase"
+    },
+    "id": "primary-lively",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-lonely",
+    "libraryId": "primary",
+    "word": "lonely",
+    "meaning": "寂寞的；偏僻的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Feel lonely",
+      "meaning": "感到孤独，感到寂寞",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-lovely",
+    "libraryId": "primary",
+    "word": "lovely",
+    "meaning": "可爱的；美好的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Lovely girl",
+      "meaning": "可爱的姑娘",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "loving",
+    "meaning": "充满爱意的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A loving family",
+      "meaning": "充满爱的家庭",
+      "kind": "phrase"
+    },
+    "id": "primary-loving",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-mad",
+    "libraryId": "primary",
+    "word": "mad",
+    "meaning": "生气的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "He is mad because his toy is broken.",
+      "meaning": "他因为玩具坏了而生气。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "word": "nervous",
+    "meaning": "紧张的",
+    "example": {
+      "text": "Feel nervous",
+      "meaning": "感到紧张",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "adj",
+    "id": "primary-nervous",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "OK",
+    "meaning": "好；可以",
+    "partOfSpeech": "int",
+    "example": {
+      "text": "OK, let's go.",
+      "meaning": "好，我们走吧。",
+      "kind": "sentence"
+    },
+    "id": "primary-ok",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "opposite",
+    "meaning": "对面的；相反的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "The opposite side",
+      "meaning": "对面",
+      "kind": "phrase"
+    },
+    "id": "primary-opposite",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-outgoing",
+    "libraryId": "primary",
+    "word": "outgoing",
+    "meaning": "外向的；友好的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "My sister is outgoing.",
+      "meaning": "我的姐姐性格外向。",
+      "kind": "sentence"
+    }
+  },
+  {
+    "word": "outdoor",
+    "meaning": "户外的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Outdoor activities",
+      "meaning": "户外活动",
+      "kind": "phrase"
+    },
+    "id": "primary-outdoor",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "online",
+    "meaning": "在线的；联网的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An online lesson",
+      "meaning": "一节在线课程",
+      "kind": "phrase"
+    },
+    "id": "primary-online",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "poor",
+    "meaning": "贫穷的；可怜的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A poor family",
+      "meaning": "一个贫困的家庭",
+      "kind": "phrase"
+    },
+    "id": "primary-poor",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "popular",
+    "meaning": "受欢迎的",
+    "example": {
+      "text": "A popular song",
+      "meaning": "一首受欢迎的歌曲",
+      "kind": "phrase"
+    },
+    "partOfSpeech": "adj",
+    "id": "primary-popular",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-amazing",
+    "libraryId": "primary",
+    "word": "amazing",
+    "meaning": "令人惊奇的；了不起的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "An amazing bargain",
+      "meaning": "令人惊喜的便宜货",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-abroad",
+    "libraryId": "primary",
+    "word": "abroad",
+    "meaning": "在国外；到海外",
+    "partOfSpeech": "adv",
+    "group": 0,
+    "example": {
+      "text": "Study abroad",
+      "meaning": "出国留学；海外学习",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "airline",
+    "meaning": "航空公司",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An airline ticket",
+      "meaning": "一张机票",
+      "kind": "phrase"
+    },
+    "id": "primary-airline",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-airplane",
+    "libraryId": "primary",
+    "word": "airplane",
+    "meaning": "飞机",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Fly an airplane",
+      "meaning": "开飞机",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-airport",
+    "libraryId": "primary",
+    "word": "airport",
+    "meaning": "机场",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "At the airport",
+      "meaning": "在机场",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-america",
+    "libraryId": "primary",
+    "word": "America",
+    "meaning": "美国；美洲",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A trip to America",
+      "meaning": "美国之行",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "American",
+    "meaning": "美国的；美国人的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "An American writer",
+      "meaning": "一位美国作家",
+      "kind": "phrase"
+    },
+    "id": "primary-american",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-asia",
+    "libraryId": "primary",
+    "word": "Asia",
+    "meaning": "亚洲",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Southeast Asia",
+      "meaning": "东南亚",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "Asian",
+    "meaning": "亚洲的；亚洲人的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "Asian countries",
+      "meaning": "亚洲国家",
+      "kind": "phrase"
+    },
+    "id": "primary-asian",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-australia",
+    "libraryId": "primary",
+    "word": "Australia",
+    "meaning": "澳大利亚",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A trip to Australia",
+      "meaning": "澳大利亚之行",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-australian",
+    "libraryId": "primary",
+    "word": "Australian",
+    "meaning": "澳大利亚的；澳大利亚人的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "An Australian city",
+      "meaning": "一座澳大利亚城市",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-atlantic",
+    "libraryId": "primary",
+    "word": "Atlantic",
+    "meaning": "大西洋",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "The Atlantic Ocean",
+      "meaning": "大西洋",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-bank",
+    "libraryId": "primary",
+    "word": "bank",
+    "meaning": "银行；河岸",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "I put my money in the bank.",
+      "meaning": "我把钱存进银行。",
+      "kind": "sentence",
+      "sense": "银行",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "河岸",
+          "partOfSpeech": "n",
+          "text": "We sat on the bank of the river.",
+          "meaning": "我们坐在河岸上。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "id": "primary-bridge",
+    "libraryId": "primary",
+    "word": "bridge",
+    "meaning": "桥；桥梁",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Build a bridge",
+      "meaning": "建一座桥",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "building",
+    "meaning": "建筑物；楼房",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A tall building",
+      "meaning": "一幢高楼",
+      "kind": "phrase"
+    },
+    "id": "primary-building",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-canada",
+    "libraryId": "primary",
+    "word": "Canada",
+    "meaning": "加拿大（北美洲国家）",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A trip to Canada",
+      "meaning": "加拿大之行",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-capital",
+    "libraryId": "primary",
+    "word": "capital",
+    "meaning": "首都；大写字母",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Beijing is the capital of China.",
+      "meaning": "北京是中国的首都。",
+      "kind": "sentence",
+      "sense": "首都",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "大写字母",
+          "partOfSpeech": "n",
+          "text": "Write your name in capitals.",
+          "meaning": "用大写字母写下你的名字。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "id": "primary-castle",
+    "libraryId": "primary",
+    "word": "castle",
+    "meaning": "城堡；象棋中的车",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "An old castle",
+      "meaning": "一座古老的城堡",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "centre",
+    "meaning": "中心；中央",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The centre of the room",
+      "meaning": "房间的中央",
+      "kind": "phrase"
+    },
+    "id": "primary-centre",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-club",
+    "libraryId": "primary",
+    "word": "club",
+    "meaning": "俱乐部；球杆",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "She joined a chess club.",
+      "meaning": "她加入了国际象棋俱乐部。",
+      "kind": "sentence",
+      "sense": "俱乐部",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "球杆",
+          "partOfSpeech": "n",
+          "text": "He bought a new golf club.",
+          "meaning": "他买了一根新高尔夫球杆。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "id": "primary-coach",
+    "libraryId": "primary",
+    "word": "coach",
+    "meaning": "教练；长途汽车",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Our coach taught us a new skill.",
+      "meaning": "教练教了我们一项新技巧。",
+      "kind": "sentence",
+      "sense": "教练",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "长途汽车",
+          "partOfSpeech": "n",
+          "text": "We travelled to the city by coach.",
+          "meaning": "我们乘长途汽车去了城里。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "word": "east",
+    "meaning": "东方；东部",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "In the east",
+      "meaning": "在东方",
+      "kind": "phrase"
+    },
+    "id": "primary-east",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-elevator",
+    "libraryId": "primary",
+    "word": "elevator",
+    "meaning": "电梯；升降机",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Take the elevator",
+      "meaning": "乘电梯",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-entrance",
+    "libraryId": "primary",
+    "word": "entrance",
+    "meaning": "入口；入场",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "The entrance to the park",
+      "meaning": "公园入口",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-europe",
+    "libraryId": "primary",
+    "word": "Europe",
+    "meaning": "欧洲",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Western Europe",
+      "meaning": "西欧",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-factory",
+    "libraryId": "primary",
+    "word": "factory",
+    "meaning": "工厂",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Electronics factory",
+      "meaning": "电子厂，电子工厂；无线电元件厂",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "ferry",
+    "meaning": "渡船",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Take a ferry",
+      "meaning": "乘渡船",
+      "kind": "phrase"
+    },
+    "id": "primary-ferry",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-fisherman",
+    "libraryId": "primary",
+    "word": "fisherman",
+    "meaning": "渔民，渔夫，打鱼人",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A local fisherman",
+      "meaning": "一位当地渔民",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-flight",
+    "libraryId": "primary",
+    "word": "flight",
+    "meaning": "航班；飞行",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A direct flight",
+      "meaning": "直达航班",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "foreign",
+    "meaning": "外国的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A foreign language",
+      "meaning": "一门外语",
+      "kind": "phrase"
+    },
+    "id": "primary-foreign",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-france",
+    "libraryId": "primary",
+    "word": "France",
+    "meaning": "法国",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Made in France",
+      "meaning": "法国制造",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "French",
+    "meaning": "法语",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Learn French",
+      "meaning": "学习法语",
+      "kind": "phrase"
+    },
+    "id": "primary-french",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "hometown",
+    "meaning": "家乡；故乡",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Return to my hometown",
+      "meaning": "回到我的家乡",
+      "kind": "phrase"
+    },
+    "id": "primary-hometown",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-hotel",
+    "libraryId": "primary",
+    "word": "hotel",
+    "meaning": "旅馆；宾馆",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A five-star hotel",
+      "meaning": "一家五星级酒店",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-india",
+    "libraryId": "primary",
+    "word": "India",
+    "meaning": "印度（南亚国家）",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A trip to India",
+      "meaning": "印度之行",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-indian",
+    "libraryId": "primary",
+    "word": "Indian",
+    "meaning": "印度的；印第安人的",
+    "partOfSpeech": "adj",
+    "group": 0,
+    "example": {
+      "text": "Indian food",
+      "meaning": "印度食物",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-japan",
+    "libraryId": "primary",
+    "word": "Japan",
+    "meaning": "日本（东亚国家名）",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A trip to Japan",
+      "meaning": "日本之行",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "Japanese",
+    "meaning": "日语",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Learn Japanese",
+      "meaning": "学习日语",
+      "kind": "phrase"
+    },
+    "id": "primary-japanese",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "king",
+    "meaning": "国王",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A wise king",
+      "meaning": "一位英明的国王",
+      "kind": "phrase"
+    },
+    "id": "primary-king",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "queen",
+    "meaning": "女王；王后",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The king and queen",
+      "meaning": "国王和王后",
+      "kind": "phrase"
+    },
+    "id": "primary-queen",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-london",
+    "libraryId": "primary",
+    "word": "London",
+    "meaning": "伦敦",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A trip to London",
+      "meaning": "伦敦之行",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "market",
+    "meaning": "市场",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A local market",
+      "meaning": "一个当地市场",
+      "kind": "phrase"
+    },
+    "id": "primary-market",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-motorcycle",
+    "libraryId": "primary",
+    "word": "motorcycle",
+    "meaning": "摩托车",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A red motorcycle",
+      "meaning": "一辆红色摩托车",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "north",
+    "meaning": "北；北方",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "In the north",
+      "meaning": "在北方",
+      "kind": "phrase"
+    },
+    "id": "primary-north",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "Pacific",
+    "meaning": "太平洋",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The Pacific Ocean",
+      "meaning": "太平洋",
+      "kind": "phrase"
+    },
+    "id": "primary-pacific",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-palace",
+    "libraryId": "primary",
+    "word": "palace",
+    "meaning": "宫殿；王宫",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A royal palace",
+      "meaning": "一座王宫",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "passenger",
+    "meaning": "乘客；旅客",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A passenger on the bus",
+      "meaning": "一位公共汽车乘客",
+      "kind": "phrase"
+    },
+    "id": "primary-passenger",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-passport",
+    "libraryId": "primary",
+    "word": "passport",
+    "meaning": "护照",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Passport number",
+      "meaning": "护照号码",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "pilot",
+    "meaning": "飞行员",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "An airline pilot",
+      "meaning": "一名航空公司飞行员",
+      "kind": "phrase"
+    },
+    "id": "primary-pilot",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-police",
+    "libraryId": "primary",
+    "word": "police",
+    "meaning": "警察；警方",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Local police station",
+      "meaning": "当地警察局",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-pool",
+    "libraryId": "primary",
+    "word": "pool",
+    "meaning": "水池；共用",
+    "partOfSpeech": "n/v",
+    "group": 0,
+    "example": {
+      "text": "They swam in the pool.",
+      "meaning": "他们在池子里游泳。",
+      "kind": "sentence",
+      "sense": "水池",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "共用",
+          "partOfSpeech": "v",
+          "text": "We pool our money to buy books.",
+          "meaning": "我们凑钱买书。",
+          "kind": "sentence"
+        }
+      ]
+    }
+  },
+  {
+    "word": "post",
+    "meaning": "邮寄；柱子；职位",
+    "partOfSpeech": "v/n",
+    "example": {
+      "text": "I will post the letter tomorrow.",
+      "meaning": "我明天寄这封信。",
+      "kind": "sentence",
+      "sense": "邮寄",
+      "partOfSpeech": "v",
+      "additional": [
+        {
+          "sense": "柱子",
+          "partOfSpeech": "n",
+          "text": "The fence has wooden posts.",
+          "meaning": "围栏有木制柱子。",
+          "kind": "sentence"
+        },
+        {
+          "sense": "职位",
+          "partOfSpeech": "n",
+          "text": "She applied for a teaching post.",
+          "meaning": "她申请了一个教师职位。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "id": "primary-post",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "price",
+    "meaning": "价格",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A low price",
+      "meaning": "低廉的价格",
+      "kind": "phrase"
+    },
+    "id": "primary-price",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "public",
+    "meaning": "公共的；公众的",
+    "partOfSpeech": "adj",
+    "example": {
+      "text": "A public library",
+      "meaning": "一座公共图书馆",
+      "kind": "phrase"
+    },
+    "id": "primary-public",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "railway",
+    "meaning": "铁路",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A railway station",
+      "meaning": "一座火车站",
+      "kind": "phrase"
+    },
+    "id": "primary-railway",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-restaurant",
+    "libraryId": "primary",
+    "word": "restaurant",
+    "meaning": "餐馆；饭店",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Chinese restaurant",
+      "meaning": "中餐馆",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "artist",
+    "meaning": "艺术家",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A young artist",
+      "meaning": "一位年轻的艺术家",
+      "kind": "phrase"
+    },
+    "id": "primary-artist",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-author",
+    "libraryId": "primary",
+    "word": "author",
+    "meaning": "作家；作者；创始人",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Main author",
+      "meaning": "主要作者",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "band",
+    "meaning": "乐队；带子",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The band played a new song.",
+      "meaning": "乐队演奏了一首新歌。",
+      "kind": "sentence",
+      "sense": "乐队",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "带子",
+          "partOfSpeech": "n",
+          "text": "She tied her hair with a rubber band.",
+          "meaning": "她用橡皮筋扎起了头发。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "id": "primary-band",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-baseball",
+    "libraryId": "primary",
+    "word": "baseball",
+    "meaning": "棒球",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Baseball game",
+      "meaning": "棒球比赛",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "bicycle",
+    "meaning": "自行车",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Ride a bicycle",
+      "meaning": "骑自行车",
+      "kind": "phrase"
+    },
+    "id": "primary-bicycle",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-chess",
+    "libraryId": "primary",
+    "word": "chess",
+    "meaning": "国际象棋",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Game of chess",
+      "meaning": "国际象棋对局",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-concert",
+    "libraryId": "primary",
+    "word": "concert",
+    "meaning": "音乐会",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A piano concert",
+      "meaning": "一场钢琴音乐会",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "costume",
+    "meaning": "戏服；服装",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A stage costume",
+      "meaning": "一套舞台服装",
+      "kind": "phrase"
+    },
+    "id": "primary-costume",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-drum",
+    "libraryId": "primary",
+    "word": "drum",
+    "meaning": "鼓；鼓声",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Play the drums",
+      "meaning": "打鼓",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-film",
+    "libraryId": "primary",
+    "word": "film",
+    "meaning": "电影；胶卷",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "See a film",
+      "meaning": "看电影",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-gallery",
+    "libraryId": "primary",
+    "word": "gallery",
+    "meaning": "画廊；美术馆",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "National art gallery",
+      "meaning": "国家艺术馆",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-movie",
+    "libraryId": "primary",
+    "word": "movie",
+    "meaning": "电影",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "See a movie",
+      "meaning": "看电影",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-musician",
+    "libraryId": "primary",
+    "word": "musician",
+    "meaning": "音乐家，乐师",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "A talented young musician",
+      "meaning": "有天赋的年轻音乐家",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "photograph",
+    "meaning": "照片",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Take a photograph",
+      "meaning": "拍一张照片",
+      "kind": "phrase"
+    },
+    "id": "primary-photograph",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "player",
+    "meaning": "运动员；选手",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A football player",
+      "meaning": "一名足球运动员",
+      "kind": "phrase"
+    },
+    "id": "primary-player",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "race",
+    "meaning": "比赛；种族",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "She won the race.",
+      "meaning": "她赢得了比赛。",
+      "kind": "sentence",
+      "sense": "比赛",
+      "partOfSpeech": "n",
+      "additional": [
+        {
+          "sense": "种族",
+          "partOfSpeech": "n",
+          "text": "The law protects people of every race.",
+          "meaning": "法律保护各种族的人。",
+          "kind": "sentence"
+        }
+      ]
+    },
+    "id": "primary-race",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "swimming",
+    "meaning": "游泳",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "Go swimming",
+      "meaning": "去游泳",
+      "kind": "phrase"
+    },
+    "id": "primary-swimming",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-tennis",
+    "libraryId": "primary",
+    "word": "tennis",
+    "meaning": "网球",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Play tennis",
+      "meaning": "打网球",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-video",
+    "libraryId": "primary",
+    "word": "video",
+    "meaning": "视频；录像",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Digital video",
+      "meaning": "数字视频，数字录像",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-violin",
+    "libraryId": "primary",
+    "word": "violin",
+    "meaning": "小提琴",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Violin concerto",
+      "meaning": "小提琴协奏曲",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-volleyball",
+    "libraryId": "primary",
+    "word": "volleyball",
+    "meaning": "排球",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Beach volleyball",
+      "meaning": "沙滩排球",
+      "kind": "phrase"
+    }
+  },
+  {
+    "word": "winner",
+    "meaning": "获胜者",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "The winner of the race",
+      "meaning": "比赛获胜者",
+      "kind": "phrase"
+    },
+    "id": "primary-winner",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "word": "writer",
+    "meaning": "作家；作者",
+    "partOfSpeech": "n",
+    "example": {
+      "text": "A famous writer",
+      "meaning": "一位著名的作家",
+      "kind": "phrase"
+    },
+    "id": "primary-writer",
+    "libraryId": "primary",
+    "group": 0
+  },
+  {
+    "id": "primary-adventure",
+    "libraryId": "primary",
+    "word": "adventure",
+    "meaning": "冒险；惊险活动",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Adventure film",
+      "meaning": "惊险片",
+      "kind": "phrase"
+    }
+  },
+  {
+    "id": "primary-album",
+    "libraryId": "primary",
+    "word": "album",
+    "meaning": "相册；专辑",
+    "partOfSpeech": "n",
+    "group": 0,
+    "example": {
+      "text": "Photo album",
+      "meaning": "相册；相簿",
       "kind": "phrase"
     }
   }

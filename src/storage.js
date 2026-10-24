@@ -1,4 +1,4 @@
-import { AUDIO, SCORES, RENDERING } from './config.js';
+import { AUDIO, SCORES, RENDERING, levelMode } from './config.js';
 import { LearningDB } from './learning-db.js';
 import { DEFAULT_VOCABULARY_ID, getVocabulary } from './vocabulary-data.js';
 import { TEST_ACCOUNTS,validateAccountName,randomAccountName,newAccountId } from './accounts.js';
@@ -93,6 +93,16 @@ export class Storage {
     }catch(error){this.warning='当前账号与词库的学习数据库不可用，暂存本页记录';console.warn('Learning database unavailable',error);}
   }
   saveSettings(values){Object.assign(this.settings,values);if(this.account){this.accountSettings.set(this.account.id,{...this.settings});this.writeAt(this.accountPrefix,'settings',this.settings);}}
+  modeForLevel(level,touchMode=false){
+    if(touchMode||!this.account)return levelMode(level,touchMode);
+    if(!['combat','assembly'].includes(this.progress.firstMode)){
+      // 已有空战记录能确定原桌面顺序；仅触屏游玩的记录不锁定桌面首关。
+      const previous=[...Object.values(this.levelState.sessions),...this.scores].filter(row=>row.accountId===this.account.id&&row.libraryId===this.libraryId&&row.mode==='combat'&&Number.isInteger(row.level)&&row.level>0).sort((a,b)=>a.level-b.level)[0];
+      this.progress.firstMode=previous?levelMode(previous.level,false,'combat'):Math.random()<.5?'combat':'assembly';
+      this.write('progress',this.progress);
+    }
+    return levelMode(level,false,this.progress.firstMode);
+  }
   selectLevel(level){this.progress.selected=Math.max(1,Math.min(this.progress.unlocked,level));this.write('progress',this.progress);}
   currentLevel(){const session=this.levelState.sessions[this.levelState.currentId];return this.account&&session&&session.accountId===this.account.id&&session.libraryId===this.libraryId?session:null;}
   saveLevel(session){this.assertContext(session);if(!Array.isArray(session.wordIds)||session.wordIds.some(id=>!this.canonical.has(id)))throw new Error('Session word does not belong to current library');const value={...session,wordIds:[...session.wordIds],updatedAt:Date.now()};this.levelState.sessions[value.id]=value;this.levelState.currentId=value.id;this.write('level-state',this.levelState);return value;}

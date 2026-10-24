@@ -6,7 +6,7 @@ import { CET6_VOCABULARY } from './vocabulary-cet6.js';
 export const DEFAULT_VOCABULARY_ID = 'primary';
 
 export const VOCABULARIES = [
-  { id: 'primary', label: '小六', description: '500词小学基础选编，覆盖日常主题、数词与月份等基础表达。', groupWeights: [.8, .15, .05], entries: PRIMARY_VOCABULARY },
+  { id: 'primary', label: '小六', description: '1000词小学高年级选编，覆盖家庭、校园、饮食、自然与日常交流。', groupWeights: [.8, .15, .05], entries: PRIMARY_VOCABULARY },
   { id: 'intermediate', label: '初中进阶', description: '2200词初中及高中衔接选编，包含全部小六词。', groupWeights: [1, 0, 0], entries: INTERMEDIATE_VOCABULARY },
   { id: 'cet4', label: '英语四级', description: '依2016年官方大纲四级基础部分选编，包含派生词及合法英美拼法。', groupWeights: [1, 0, 0], entries: CET4_VOCABULARY },
   { id: 'cet6', label: '英语六级（进阶）', description: '依官方大纲星号六级部分选编，含派生词，不重复四级基础拼写。', groupWeights: [1, 0, 0], entries: CET6_VOCABULARY },

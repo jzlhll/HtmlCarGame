@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PRIMARY_VOCABULARY } from '../src/vocabulary-primary.js';
 import { VOCABULARY } from '../src/vocabulary-data.js';
-import { PRIMARY_ADDITIONAL_WORDS, INTERMEDIATE_BRIDGE_GROUPS } from '../src/vocabulary-selections.js';
+import { PRIMARY_ADDITIONAL_WORDS, PRIMARY_EXPANSION_GROUPS, INTERMEDIATE_BRIDGE_GROUPS } from '../src/vocabulary-selections.js';
 import { VOCABULARY_WORD_CORRECTIONS } from '../src/vocabulary-example-overrides.js';
 import { CET_OFFICIAL_SOURCE, CET_OFFICIAL_WORDS, CET_OFFICIAL_EXCLUSIONS } from './data/cet-official-2016.js';
 import { CET_CONTENT_SUPPLEMENT } from './data/cet-content-supplement.js';
@@ -20,6 +20,19 @@ import { clean,containsWord,createVocabularyEntry } from './vocabulary-content.m
 const root=path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const commit='c4c6c80879ff17d7025c28fb853a4991c8e6be6a',sourceRoot=`https://raw.githubusercontent.com/KyleBing/english-vocabulary/${commit}`;
 const args=process.argv.slice(2),sourceDirectory=args.find(arg=>!arg.startsWith('--')),checkOnly=args.includes('--check'),auditFile=args.find(arg=>arg.startsWith('--audit='))?.slice(8);
+const primaryExpansionWords=PRIMARY_EXPANSION_GROUPS.flatMap(group=>group.words),expansionSet=new Set(primaryExpansionWords);
+const primaryByWord=new Map(PRIMARY_VOCABULARY.map(entry=>[entry.word.toLowerCase(),entry])),primaryBase=PRIMARY_VOCABULARY.filter(entry=>!expansionSet.has(entry.word.toLowerCase()));
+if(primaryByWord.size!==1000||PRIMARY_VOCABULARY.length!==1000||new Set(PRIMARY_VOCABULARY.map(entry=>entry.id)).size!==1000||primaryBase.length!==500||primaryExpansionWords.length!==500||expansionSet.size!==500||PRIMARY_ADDITIONAL_WORDS.length!==309||PRIMARY_ADDITIONAL_WORDS.some(word=>!primaryByWord.has(word)))throw new Error('Invalid primary selection');
+const intermediateByWord=new Map(VOCABULARY.filter(entry=>entry.libraryId==='intermediate').map(entry=>[entry.word.toLowerCase(),entry]));
+for(const entry of PRIMARY_VOCABULARY){
+  if(entry.libraryId!=='primary'||!/^[a-z]{2,24}$/i.test(entry.word)||!entry.meaning||!/[\u3400-\u9fff]/.test(entry.meaning)||![0,1,2].includes(entry.group))throw new Error('Invalid primary entry: '+entry.id);
+  for(const example of [entry.example,...(entry.example?.additional||[])])if(!example?.text||!example.meaning||!/[\u3400-\u9fff]/.test(example.meaning)||!['phrase','sentence'].includes(example.kind))throw new Error('Invalid primary example: '+entry.id);
+}
+for(const key of primaryExpansionWords){
+  const entry=primaryByWord.get(key),source=intermediateByWord.get(key);
+  if(!entry||!source||entry.id!=='primary-'+key||entry.group!==0||entry.word!==source.word||!entry.partOfSpeech||[entry.example,...(entry.example.additional||[])].some(example=>(!containsWord(example.text,entry.word)||example.sense&&!entry.meaning.split('；').includes(example.sense))))throw new Error('Primary expansion differs from intermediate source: '+key);
+}
+if(args.includes('--check-primary')){console.info('Primary vocabulary verified',JSON.stringify({words:primaryByWord.size,base:primaryBase.length,expansion:primaryExpansionWords.length,themes:PRIMARY_EXPANSION_GROUPS.length}));process.exit(0);}
 const sources=[{id:'cet4',name:'四级'},{id:'cet6',name:'六级'},{id:'junior',name:'初中'},{id:'senior',name:'高中'},{id:'postgrad',name:'考研'},{id:'toefl',name:'托福'},{id:'sat',name:'SAT'}];
 const normalizeWord=word=>VOCABULARY_WORD_CORRECTIONS[word]||word,isWord=word=>/^[a-z]{2,24}$/i.test(word);
 const sourceRows=new Map(),allRecords=new Map(),schoolRecords=new Map();
@@ -51,9 +64,7 @@ for(const level of [4,6]){
   }
   outputs.push({id,entries});
 }
-const primaryByWord=new Map(PRIMARY_VOCABULARY.map(entry=>[entry.word.toLowerCase(),entry]));
-if(primaryByWord.size!==500||PRIMARY_ADDITIONAL_WORDS.length!==309||PRIMARY_ADDITIONAL_WORDS.some(word=>!primaryByWord.has(word)))throw new Error('Invalid primary selection');
-const intermediateWords=new Map(PRIMARY_VOCABULARY.map(entry=>[entry.word.toLowerCase(),entry.word])),juniorWords=new Set();
+const intermediateWords=new Map(primaryBase.map(entry=>[entry.word.toLowerCase(),entry.word])),juniorWords=new Set();
 for(const row of sourceRows.get('junior')){const word=normalizeWord(row.word);if(!isWord(word)||word==='Rusia')continue;const key=word.toLowerCase();juniorWords.add(key);if(!intermediateWords.has(key))intermediateWords.set(key,word);}
 for(const entry of SCHOOL_FOUNDATION_CONTENT){const key=entry.word.toLowerCase();if(!intermediateWords.has(key))intermediateWords.set(key,entry.word);}
 const bridgeWords=INTERMEDIATE_BRIDGE_GROUPS.flatMap(group=>group.words);
