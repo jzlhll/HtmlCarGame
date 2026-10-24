@@ -1,5 +1,5 @@
-// 所有玩法时间均使用有效游玩秒数，空间使用 960×1080 逻辑坐标。
-export const WORLD = { width: 960, height: 1080, step: 1 / 120, maxFrameSeconds: 0.25 };
+// 玩法时间使用有效游玩秒数，空间以 960×1080 为基准，横向范围受可视宽度约束。
+export const WORLD = { width: 960, height: 1080, step: 1 / 120, maxFrameSeconds: 0.25, playWidthScale: 1.25 };
 export const MODEL_GEOMETRY = { sphere: { segments: 48, rows: 24 }, aircraftSphere: { segments: 24, rows: 12 } };
 export const RENDERING = {
   defaultQuality: 'high', generationBatchMilliseconds: 4,
@@ -10,7 +10,7 @@ export const RENDERING = {
   }
 };
 export const LEVELS = { durationSeconds: 300, wordCount: 12 };
-export const BOSSES = { miniAt: 90, finalAt: 240, durationSeconds: 60, miniFaces: 4, finalFaces: 5, turnSeconds: 0.6, xRange: 220, yRange: 35, centerY: 350, miniCrates: 3, finalCrates: 5, victorySeconds: 5 };
+export const BOSSES = { miniAt: 90, finalAt: 240, durationSeconds: 60, miniFaces: 3, finalFaces: 4, turnSeconds: 0.6, xRange: 275, yRange: 45.5, xAngularSpeed: 0.16, yAngularSpeed: 0.45, centerY: 350, miniCrates: 3, finalCrates: 5, victorySeconds: 5 };
 export const BOSS_VISUALS = {
   segments: 24, rows: 16, tubeSides: 10, tubeSteps: 24, tentacleSway: 0.055, tentacleSpeed: 1.7,
   mini: { scale: 0.95, yOffset: -10, headScale: 1, tentacleLength: 1, skin: 0x873ad1, light: 0xba7cf2, dark: 0x502175, cheek: 0xec78c7, horn: 0xffd6a0 },
@@ -18,15 +18,16 @@ export const BOSS_VISUALS = {
   eyes: 0xffe695, iris: 0x70e3af, pupil: 0x21132f, tooth: 0xfff3df, tongue: 0xf184b8, glint: 0xffffff
 };
 export const SUPPLIES = { intervalSeconds: 120, fallSeconds: 22, maxActive: 16, width: 62, height: 62, flightSeconds: 0.75, answerCrates: 2, rewardSwaySeconds: 2, rewardFlightSpeed: 520, rewardFlightSeconds: [0.65,3.2], rewardSwayAmplitude: [12,25], rewardSwaySpeed: [0.7,1.3], rewardArcHeight: 60, burstSeconds: 0.8, burstSpacing: 64, burstSpeed: 70, burstRiseSpeed: 90, spritePadding: 32, spriteMinPixelRatio: 2, shadow: [[0,4,6,'#191000a0'],[0,0,8,'#ffce6747']] };
-export const CHOICES = { ratio: 0.3, batchSize: 10, optionCount: 3, hitsToSelect: 20, width: 720, height: 200, successCrates: SUPPLIES.answerCrates, failureEnemies: 2, carrier: { widthPadding: 48, heightPadding: 70, depth: 38, palette: [0x2b4357,0x577887,0xc2ced1,0x82d8e0] } };
+export const CHOICES = { ratio: 0.3, batchSize: 10, optionCount: 3, hitsToSelect: 20, firePauseSeconds: 0.75, width: 720, height: 200, successCrates: SUPPLIES.answerCrates, failureEnemies: 2, carrier: { widthPadding: 48, heightPadding: 70, depth: 38, palette: [0x2b4357,0x577887,0xc2ced1,0x82d8e0] } };
 export const REVIEW = { secondsPerWord: 10 };
+export const RECAP = { imageWidth: 480, imageHeight: 240, modelPadding: 1.18 };
 export const LEARNING = { pageSize: 100 };
-export const HOME = { words: [{word:'airplane',meaning:'飞机'},{word:'planet',meaning:'行星'},{word:'galaxy',meaning:'银河'}], blanks: 2, driftAmplitude: 6, driftSpeed: 0.8, pitchAmplitude: 0.016, rollAmplitude: 0.024, shipXRatio: 0.17, shipYRatio: 0.66, previewXRatio: 0.86, previewMobileXRatio: 0.78, wordYRatio: 0.65, previewYRatio: 0.46, previewSidePixels: 160, previewMobileSidePixels: 105, previewScales: {enemy:1.6,mini:0.6,final:0.72}, largeBodyMinRadius: 60, largeBodyMaxWidthFraction: 0.42, largeBodyCenterGap: 16, exhaustSeconds: 4.5, exhaustDistance: 64, exhaustOpacity: 0.16 };
+export const HOME = { words: [{word:'airplane',meaning:'飞机'},{word:'planet',meaning:'行星'},{word:'galaxy',meaning:'银河'}], blanks: 2, driftAmplitude: 6, driftSpeed: 0.8, pitchAmplitude: 0.016, rollAmplitude: 0.024, shipXRatio: 0.12, shipYRatio: 0.71, previewXRatio: 0.86, previewMobileXRatio: 0.78, wordYRatio: 0.65, previewYRatio: 0.46, previewSidePixels: 160, previewMobileSidePixels: 105, previewScales: {enemy:1.6,mini:0.6,final:0.72}, largeBodyMinRadius: 60, largeBodyMaxWidthFraction: 0.42, largeBodyCenterGap: 16, exhaustSeconds: 4.5, exhaustDistance: 64, exhaustOpacity: 0.16 };
 export const PLAYER = { x: 480, yRatio: 0.88, moveSpeedWidthsPerSecond: 0.65, invulnerableSeconds: 1.5, width: 52, height: 64 };
-export const WORDS = { firstSpawnSeconds: 3, spawnCount: 1, spawnIntervalSeconds: [10,14], capacityRetrySeconds: 1, maxEditable: 2, maxThreats: 3, fallDurationSeconds: [60,76], dangerYRatio: 0.80, blankCount: [1,4], blankStructuredRatio: 0.8, blankModeBatch: 5, blankMaxFraction: 0.5, verifySeconds: 0.5, inputLockSeconds: 1, successSeconds: 1, successAmmo: 2, successScore: 100, candidateAttempts: 8, cellWidth: 48, cardHeight: 112, planeWingMargin: 35, planeTopMargin: 18, planeBottomMargin: 22, spawnY: 110, thoughtSeconds: 8, moveAllowanceSeconds: 4, retryAllowanceSeconds: 6, urgentSeconds: 10 };
-export const LETTERS = { fireIntervalSeconds: 0.06, speedHeightsPerSecond: 1.3, lifetimeSeconds: 2, poolSize: 64 };
+export const WORDS = { firstSpawnSeconds: 3, spawnCount: 1, spawnIntervalSeconds: [10,14], capacityRetrySeconds: 1, maxEditable: 2, maxThreats: 3, fallDurationSeconds: [60,76], dangerYRatio: 0.80, blankMinCount: 2, blankMaxFraction: 0.5, verifySeconds: 0.5, inputLockSeconds: 0.75, successSeconds: 1, successAmmo: 2, successScore: 100, candidateAttempts: 8, cellWidth: 48, cardHeight: 112, planeWingMargin: 35, planeTopMargin: 18, planeBottomMargin: 22, spawnY: 110, thoughtSeconds: 8, moveAllowanceSeconds: 4, retryAllowanceSeconds: 6, urgentSeconds: 10 };
+export const LETTERS = { shotCountRatio: 0.7, shotCountMultiple: 2, fireIntervalSeconds: 0.06, speedHeightsPerSecond: 1.3, lifetimeSeconds: 2, poolSize: 64 };
 export const UNDO = { cooldownSeconds: 0.25, poolSize: 4 };
-export const SHELLS = { initialAmmo: 0, cooldownSeconds: 0.4, speedHeightsPerSecond: 1, poolSize: 8 };
+export const SHELLS = { initialAmmo: 0, cooldownSeconds: 0.4, speedHeightsPerSecond: 1, poolSize: 8, flightSeconds: [0.35,1.6], arcRange: [90,180], arcDistanceFraction: 0.35, trailPoints: 12, trailIntervalSeconds: 0.035 };
 export const ENEMIES = { maxActive: 16, fallDurationSeconds: 18, firstShotDelaySeconds: 2, shotIntervalSeconds: 3, warningSeconds: 0.6, bulletSpeedHeightsPerSecond: 0.18, bulletLifetimeSeconds: 8, bulletPoolSize: 64, killScore: 20, width: 84, height: 76 };
 export const VOCAB = { maxWordLength: 24, usePreviewPool: true };
 export const WORD_CARDS = { compactExampleCount: 2, denseExampleCount: 4, compactTextLength: 180, denseTextLength: 280, compactMeaningLength: 18 };
@@ -68,7 +69,9 @@ export function validateConfig() {
   for(const {segments,rows} of Object.values(MODEL_GEOMETRY))if(!Number.isInteger(segments)||segments<3||!Number.isInteger(rows)||rows<2||(segments+1)*(rows+1)>65536)throw new Error('Invalid sphere geometry configuration');
   if(!Object.hasOwn(RENDERING.qualities,RENDERING.defaultQuality)||!positive(RENDERING.generationBatchMilliseconds))throw new Error('Invalid rendering defaults');
   for(const quality of Object.values(RENDERING.qualities))if(!positive(quality.maxPixelRatio)||!positive(quality.menuFPS)||(quality.maxPixels!==null&&!positive(quality.maxPixels)))throw new Error('Invalid rendering quality configuration');
+  for(const value of [BOSSES.xRange,BOSSES.yRange,BOSSES.xAngularSpeed,BOSSES.yAngularSpeed])if(!positive(value))throw new Error('Invalid boss movement configuration');
   if (!Number.isInteger(LEVELS.wordCount)||LEVELS.wordCount<Math.max(BOSSES.miniFaces,BOSSES.finalFaces)) throw new Error('Invalid level vocabulary count');
+  if(!positive(WORLD.playWidthScale)||WORLD.playWidthScale<1||!positive(LETTERS.shotCountRatio)||LETTERS.shotCountRatio>1||!Number.isInteger(LETTERS.shotCountMultiple)||LETTERS.shotCountMultiple<1)throw new Error('Invalid playfield or letter shot configuration');
   if (!positive(LETTERS.fireIntervalSeconds) || LETTERS.fireIntervalSeconds <= 0.02) throw new Error('Letter interval must exceed 0.02 seconds');
   for (const values of [WORDS.spawnIntervalSeconds, WORDS.fallDurationSeconds]) if (!values.every(positive) || values[0] > values[1]) throw new Error('Invalid interval range');
   for (const value of [WORDS.spawnCount, WORDS.maxEditable, WORDS.maxThreats, ENEMIES.maxActive, LETTERS.poolSize, SHELLS.poolSize]) if (!Number.isInteger(value) || value <= 0) throw new Error('Invalid entity capacity');
@@ -84,13 +87,14 @@ export function validateConfig() {
     constellationKinds.add(chart.kind);
   }
   if(!positive(BACKGROUND.constellationStarSize)||![BACKGROUND.constellationStarOpacity,BACKGROUND.constellationLineOpacity].every(value=>positive(value)&&value<=1))throw new Error('Invalid constellation appearance');
-  if(!Number.isInteger(CHOICES.batchSize)||CHOICES.batchSize<1||!positive(CHOICES.ratio)||CHOICES.ratio>=1||!Number.isInteger(CHOICES.ratio*CHOICES.batchSize)||CHOICES.optionCount!==3||!Number.isInteger(CHOICES.hitsToSelect)||CHOICES.hitsToSelect<1||!positive(CHOICES.width)||CHOICES.width>WORLD.width-48||!positive(CHOICES.height))throw new Error('Invalid choice question configuration');
+  if(![...SHELLS.flightSeconds,...SHELLS.arcRange,SHELLS.arcDistanceFraction,SHELLS.trailIntervalSeconds].every(positive)||SHELLS.flightSeconds[0]>SHELLS.flightSeconds[1]||SHELLS.arcRange[0]>SHELLS.arcRange[1]||!Number.isInteger(SHELLS.trailPoints)||SHELLS.trailPoints<1)throw new Error('Invalid homing shell configuration');
+  if(!Number.isInteger(CHOICES.batchSize)||CHOICES.batchSize<1||!positive(CHOICES.ratio)||CHOICES.ratio>=1||!Number.isInteger(CHOICES.ratio*CHOICES.batchSize)||CHOICES.optionCount!==3||!Number.isInteger(CHOICES.hitsToSelect)||CHOICES.hitsToSelect<1||!positive(CHOICES.firePauseSeconds)||!positive(CHOICES.width)||CHOICES.width>WORLD.width-48||!positive(CHOICES.height))throw new Error('Invalid choice question configuration');
   for(const value of [SUPPLIES.intervalSeconds,SUPPLIES.burstSeconds,SUPPLIES.rewardSwaySeconds,SUPPLIES.rewardFlightSpeed,...SUPPLIES.rewardFlightSeconds,...SUPPLIES.rewardSwayAmplitude,...SUPPLIES.rewardSwaySpeed,BOSSES.victorySeconds])if(!positive(value))throw new Error('Invalid reward timing');
   for(const value of [SUPPLIES.maxActive,CHOICES.successCrates,CHOICES.failureEnemies,BOSSES.miniCrates,BOSSES.finalCrates])if(!Number.isInteger(value)||value<1)throw new Error('Invalid reward capacity');
   if(SUPPLIES.rewardFlightSeconds[0]>SUPPLIES.rewardFlightSeconds[1])throw new Error('Invalid reward flight range');
-  if(!Number.isInteger(WORDS.blankModeBatch)||WORDS.blankModeBatch<1||!Number.isInteger(WORDS.blankStructuredRatio*WORDS.blankModeBatch)||WORDS.blankStructuredRatio<=0||WORDS.blankStructuredRatio>=1||WORDS.blankMaxFraction<=0||WORDS.blankMaxFraction>.5)throw new Error('Invalid blank selection configuration');
+  if(!Number.isInteger(WORDS.blankMinCount)||WORDS.blankMinCount<2||WORDS.blankMaxFraction<=0||WORDS.blankMaxFraction>.5)throw new Error('Invalid blank selection configuration');
+  if(![RECAP.imageWidth,RECAP.imageHeight].every(value=>Number.isInteger(value)&&value>0)||!positive(RECAP.modelPadding)||RECAP.modelPadding<1)throw new Error('Invalid recap image configuration');
   if(SUPPLIES.maxActive<BOSSES.finalCrates)throw new Error('Reward pool cannot hold final boss crates');
   if (!Number.isInteger(VOCAB.maxWordLength)||VOCAB.maxWordLength<2) throw new Error('Invalid vocabulary word length');
-  if (!WORDS.blankCount.every(value=>Number.isInteger(value)&&value>0)||WORDS.blankCount[0]>WORDS.blankCount[1]) throw new Error('Invalid blank count range');
   if (WORDS.maxEditable > WORDS.maxThreats ) throw new Error('Entity capacity exceeds total capacity');
 }
