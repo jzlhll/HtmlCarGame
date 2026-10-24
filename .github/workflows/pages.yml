@@ -1,43 +1,26 @@
-name: Publish game on release
+name: Package English game
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [codex/english-air-combat]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
-concurrency:
-  group: github-pages
-  cancel-in-progress: false
-
 jobs:
-  deploy:
-    if: ${{ !github.event.release.prerelease }}
+  package:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.release.tag_name }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: node scripts/prepare-pages.mjs
-        env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v4
+      - run: npm run prepare:pages
+      - uses: actions/upload-artifact@v4
         with:
+          name: english-air-combat
           path: .pages-output
-      - name: Deploy game
-        id: deployment
-        uses: actions/deploy-pages@v4
+          include-hidden-files: true
