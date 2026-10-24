@@ -4,7 +4,7 @@
 
 ## 入口与模块
 
-入口 `index.html`，原生 JavaScript ES Modules + Three.js，无编译步骤。 import map 后预加载 `three.module.js` 与 `three.core.js`，`scene.js` 导入和 `prepareAssets()` 并行；场景构造仍等待两者成功。`npm ci` 后以独立 `PORT` 运行 `npm start`，通过 HTTP 加载。程序版本 `v1.2.0`，日常修改不创建发布 tag。
+入口 `index.html`，原生 JavaScript ES Modules + Three.js，无编译步骤。 import map 后预加载 `three.module.js` 与 `three.core.js`，`scene.js` 导入和 `prepareAssets()` 并行；场景构造仍等待两者成功。`npm ci` 后以独立 `PORT` 运行 `npm start`，通过 HTTP 加载。程序版本 `v1.2.1`，日常修改不创建发布 tag。
 
 | 模块 | 职责 |
 | --- | --- |

@@ -41,5 +41,5 @@ export function createSpellingChoice(word,random,knownWords){
   let ticket=random()*candidates.reduce((sum,candidate)=>sum+candidate.weight,0),selected=candidates.at(-1);
   for(const candidate of candidates){ticket-=candidate.weight;if(ticket<0){selected=candidate;break;}}
   const {rule,start,unit,before,after}=selected,wrong=shuffle(selected.incorrect,random).slice(0,2);
-  return {mode:'spelling-gap',rule,blankStart:start,blankLength:unit.length,unit,before,after,stem:before+'___'+after,options:shuffle([{text:unit,completedWord:word,correct:true,hits:0},...wrong],random)};
+  return {mode:'spelling-gap',rule,blankStart:start,blankLength:unit.length,unit,before,after,stem:before+'_'.repeat(unit.length)+after,options:shuffle([{text:unit,completedWord:word,correct:true,hits:0},...wrong],random)};
 }
