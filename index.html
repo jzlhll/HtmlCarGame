@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#080f1a">
-  <meta name="description" content="英语空战：用字母积木拼出单词，驾驶飞机穿越星海。Three.js 五分钟英语拼写游戏。">
+  <meta name="description" content="英语空战：用字母积木拼出单词，驾驶飞机穿越星海。支持键盘空战和手机触屏碎片组词、陨石连线。">
   <title>英语空战 · LETTER WING</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230a1521'/%3E%3Cpath d='M32 7 38 30 56 43 56 48 36 42 38 55 26 55 28 42 8 48 8 43 26 30Z' fill='%2381eedb'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="./src/style.css">
@@ -30,14 +30,13 @@
         <div class="hud-ammo"><span class="eyebrow">炮弹库</span><div><span class="shell-icon">↑</span><strong id="ammo">0</strong></div><small><kbd>Shift</kbd> 发射跟踪弹</small><div class="collection-inventory"><span>♥ <b id="collect-heart">0</b></span><span>★ <b id="collect-star">0</b></span><span>↑ <b id="collect-shell">0</b></span></div></div></section>
       <section id="menu" class="menu-panel">
         <div class="menu-copy"><div class="eyebrow mission-label"><span></span>一场关于单词的星际飞行</div><p class="hero-description">驾驶你的战机，瞄准缺失的字母。<br>让每一颗积木，拼成一次新的发现。</p></div>
-        <div class="menu-launch"><h1 class="home-title">以单词为帆，<br><span>向星海启航。</span></h1><div id="home-launch-controls" hidden><button id="account-button" class="text-button" hidden></button><label class="library-control" for="library-select">词库 <select id="library-select" aria-label="选择词库"></select></label><div class="menu-actions"><button id="start-button" class="primary-button" disabled><span>准备星海中…</span><b>↗</b></button></div><div class="space-hint">或按 <kbd>SPACE</kbd> 开始冒险</div><button id="home-retry" class="text-button" hidden>重玩原来的 12 词</button><div class="mission-facts"><div><strong id="mission-duration">05:00</strong><span id="mission-mode">空战关卡</span></div><div><strong>26<span> 个</span></strong><span id="mission-input">字母积木武器</span></div><div><strong id="mission-level">01</strong><span id="mission-word-count">12 个词</span></div></div></div><section id="home-accounts" aria-label="本地账号" tabindex="-1"><p class="account-loading" role="status">读取本地账号…</p></section></div>
+        <div class="menu-launch"><h1 class="home-title">以单词为帆，<br><span>向星海启航。</span></h1><div id="home-launch-controls" hidden><button id="account-button" class="text-button" hidden></button><label class="library-control" for="library-select">词库 <select id="library-select" aria-label="选择词库"></select></label><div class="menu-actions"><button id="start-button" class="primary-button" disabled><span>准备星海中…</span><b>↗</b></button></div><div class="space-hint">或按 <kbd>SPACE</kbd> 开始冒险</div><button id="home-retry" class="text-button" hidden>重玩原来的 12 词</button><div class="mission-facts"><div><strong id="mission-duration">05:00</strong><span id="mission-mode">空战关卡</span></div><div><strong id="mission-control-value">26<span> 个</span></strong><span id="mission-input">字母积木武器</span></div><div><strong id="mission-level">01</strong><span id="mission-word-count">12 个词</span></div></div></div><section id="home-accounts" aria-label="本地账号" tabindex="-1"><p class="account-loading" role="status">读取本地账号…</p></section></div>
         <div class="hero-notes"><div id="home-preview" class="home-preview" role="img" aria-label="敌机模型"></div><div class="hero-word"><div id="hero-word-letters">( a <span>_</span> r p l <span>_</span> n e )</div><small id="hero-word-meaning">[ 飞机 ]</small></div></div>
         <span class="hero-coordinate">READY FOR TAKEOFF <i>✦</i></span>
         <p class="menu-motto">慢一点，也能飞得更远。</p><div class="menu-bottom"><span><i class="live-dot"></i> 本地账号 · 无需密码</span></div>
       </section>
       <section id="dialog" class="dialog-backdrop" hidden aria-label="游戏面板"><div id="dialog-card" class="dialog-card" role="dialog" aria-modal="true" tabindex="-1"><div id="dialog-content"></div></div></section>
       <div id="loading" class="loading-strip"><div><span id="loading-label">准备星海</span><span id="loading-number">0%</span></div><i><b id="loading-fill"></b></i></div>
-      <div id="compatibility" class="compatibility" hidden>请使用带实体键盘的桌面浏览器游玩，或阅读玩法介绍。</div>
     </section>
     <footer class="site-footer"><div><label class="sound-control"><span id="sound-icon">♪</span><input id="volume" type="range" min="0" max="1" step="0.05" value="0.35" aria-label="音效音量"></label><label class="quality-control">画质 <select id="render-quality" aria-label="画质" title="降低画质可节省耗电，文字保持清晰"></select></label><label class="motion-control"><input id="reduced-motion" type="checkbox"> 减少闪烁</label><span id="version">v1.0.9</span></div></footer>
     <div id="storage-notice" class="storage-notice" role="status" hidden></div>

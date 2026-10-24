@@ -6,7 +6,7 @@ import { Input } from './input.js';
 import { UI } from './ui.js';
 import { prepareAssets } from './assets.js';
 const query=new URLSearchParams(location.search);
-const navigationStart=performance.now(),storage=new Storage(query.get('debug')==='1',query.get('testAccount')),audio=new Audio(storage),game=new Game(storage,audio),ui=new UI(game,storage,audio);
+const navigationStart=performance.now(),storage=new Storage(query.get('debug')==='1',query.get('testAccount')),audio=new Audio(storage),game=new Game(storage,audio),ui=new UI(game,storage,audio,{touchMode:query.get('debug')==='1'&&query.get('touch')==='1'?true:undefined});
 const input=new Input(game,code=>ui.action(code));game.input=input;
 let reviewFocused=document.hasFocus(),scene=null,lastTime=performance.now(),accumulator=0,frameHandle=0,reviewTimer=0,inFrame=false,sceneDirty=true,sceneState='',activeReview=false,lastRenderTime=0,renderAccumulator=0;
 if(query.has('seed')){const seed=Number(query.get('seed'));if(Number.isFinite(seed))ui.seed=seed;}

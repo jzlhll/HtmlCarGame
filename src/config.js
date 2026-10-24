@@ -9,7 +9,7 @@ export const RENDERING = {
     economy: { label: '省电', maxPixelRatio: 1, maxPixels: 2073600, menuFPS: 30 }
   }
 };
-export const levelMode = level => level%2===0?'assembly':'combat';
+export const levelMode = (level,touchMode=false) => touchMode||level%2===0?'assembly':'combat';
 export const ASSEMBLY = { stageSeconds: [180,90], maxChecks: 3, maxChunkLength: 5 };
 export const LEVELS = { durationSeconds: 300, wordCount: 12 };
 export const BOSSES = { miniAt: 90, finalAt: 240, durationSeconds: 60, miniFaces: 3, finalFaces: 4, turnSeconds: 0.6, xRange: 275, yRange: 45.5, xAngularSpeed: 0.16, yAngularSpeed: 0.45, centerY: 350, miniCrates: 3, finalCrates: 5, victorySeconds: 5 };

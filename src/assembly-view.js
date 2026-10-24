@@ -47,7 +47,7 @@ export class AssemblyView {
     const second=Math.ceil(round.remaining);if(this.lastSecond!==second){this.root.querySelector('#assembly-timer').textContent=time(round.remaining);this.lastSecond=second;}
     if(this.lastVersion===round.version)return;this.lastVersion=round.version;
     this.root.dataset.stage=round.stage;this.root.querySelector('#assembly-title').textContent=round.stage===1?'01 / 单词碎片组装':'02 / 陨石连线';
-    this.root.querySelector('#assembly-help').textContent=round.stage===1?'按拼写顺序选择碎片，再点击中文释义。再次点击碎片可反选，点击待定释义可拆开重组。全部分配后提交。':'任选一个中文和一个英文陨石建立待定连线。点击已连接的陨石可撤线重连，全部连完后提交。';
+    this.root.querySelector('#assembly-help').textContent=round.stage===1?(this.game.touchMode?'依次点碎片，再点释义。可反选、拆组；全部配好后提交。':'按拼写顺序选择碎片，再点击中文释义。再次点击碎片可反选，点击待定释义可拆开重组。全部分配后提交。'):(this.game.touchMode?'点单词与释义连线，点已连线陨石可撤线。上下滑动查看。':'任选一个中文和一个英文陨石建立待定连线。点击已连接的陨石可撤线重连，全部连完后提交。');
     this.root.querySelector('#assembly-checks').textContent='剩余验证 '+round.checksLeft+' / '+ASSEMBLY.maxChecks+' 次';
     this.root.querySelector('#assembly-board').hidden=round.stage!==1;this.root.querySelector('#meteor-scroll').hidden=round.stage!==2;
     const used=round.used;
