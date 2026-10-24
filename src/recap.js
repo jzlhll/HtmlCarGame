@@ -1,5 +1,4 @@
 import { LETTER_POINTS,letterShotCount,letterDotCount } from './letter-patterns.js';
-import { CHOICES } from './config.js';
 const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const labels={spelling:'单词飞机',choice:'选择题航母',mini:'小 Boss',final:'大 Boss'};
 export function captureAttempt(word,bossFinal=false){
@@ -11,21 +10,30 @@ export function captureAttempt(word,bossFinal=false){
 }
 function filledMarkup(record){
   const view=record.presentation;
-  if(view?.options)return '<div class="recap-question">'+escape(view.title)+'</div><div class="recap-options">'+view.options.map(option=>'<div class="recap-option'+(option.selected?' selected':'')+'"><span>'+escape(option.text)+'</span><small>'+(option.selected?'当时选择':option.hits?'命中 '+option.hits+'/'+CHOICES.hitsToSelect:'未选择')+'</small></div>').join('')+'</div>';
-  if(!view?.cells)return '<div class="recap-answer" lang="en">'+escape(record.answer)+'</div>';
-  return '<div class="recap-letters" lang="en" aria-label="当时填写：'+escape(record.answer)+'">'+view.cells.map(cell=>{
+  if(view?.options)return '<span class="recap-answer">'+escape(record.answer)+'</span>';
+  if(!view?.cells)return '<span class="recap-answer" lang="en">'+escape(record.answer)+'</span>';
+  return '<span class="recap-letters" lang="en" aria-label="当时填写：'+escape(record.answer)+'">'+view.cells.map(cell=>{
     if(cell.given)return '<span class="recap-given">'+escape(cell.letter)+'</span>';
     const points=LETTER_POINTS[cell.letter],complete=cell.complete??(!!points&&cell.count>=points.length);
     if(!cell.count||!points)return '<span class="recap-blank">_</span>';
     if(complete)return '<span class="recap-filled">'+escape(cell.letter)+'</span>';
     const lit=new Set(points.slice(0,cell.litCount??cell.count).map(point=>point.y*5+point.x));
     return '<span class="recap-partial" aria-label="未填完的 '+escape(cell.letter)+'">'+Array.from({length:35},(_,index)=>'<i'+(lit.has(index)?' class="lit"':'')+'></i>').join('')+'</span>';
-  }).join('')+'</div>';
+  }).join('')+'</span>';
+}
+export function groupRecap(records){
+  const words=new Map();
+  for(const record of records){
+    let group=words.get(record.wordId);
+    if(!group){group={wordId:record.wordId,word:record.word,meaning:record.meaning,models:[],attempts:[],variants:new Map()};words.set(record.wordId,group);}
+    const model=record.presentation?.model||(record.questionType==='choice'?'choice':record.boss?'mini':'spelling');if(!group.models.includes(model))group.models.push(model);
+    const signature=JSON.stringify([record.kind,record.answer,record.presentation?.cells??null]);
+    if(group.variants.has(signature))group.variants.get(signature).count++;
+    else{const attempt={record,count:1};group.variants.set(signature,attempt);group.attempts.push(attempt);}
+  }
+  return [...words.values()];
 }
 export function recapMarkup(records,images={}){
   if(!records.length)return '<div class="recap-empty"><span>✦</span><h3>本关没有错题</h3><p>带着记住的单词，飞向下一片星海。</p></div>';
-  return records.map((record,index)=>{
-    const model=record.presentation?.model||(record.questionType==='choice'?'choice':record.boss?'mini':'spelling');
-    return '<article class="recap-attempt" data-word-id="'+escape(record.wordId)+'"><div class="recap-attempt-heading"><span>'+String(index+1).padStart(2,'0')+' · '+labels[model]+'</span><span class="stat-'+record.kind+'">'+(record.kind==='wrong'?'写错':'没写完')+'</span></div>'+(images[model]?'<img class="recap-model" src="'+images[model]+'" alt="'+labels[model]+'模型">':'')+'<div class="recap-original"><small>当时的作答</small>'+filledMarkup(record)+'</div><div class="recap-correction"><small>正确答案</small><strong lang="en">'+escape(record.word)+'</strong><p>'+escape(record.meaning)+'</p></div></article>';
-  }).join('');
+  return groupRecap(records).map(group=>'<section class="recap-attempt" data-word-id="'+escape(group.wordId)+'"><div class="recap-models">'+group.models.filter(model=>images[model]).map(model=>'<img class="recap-model" src="'+images[model]+'" alt="'+labels[model]+'模型">').join('')+'</div><div class="recap-correct"><small>正确</small><strong lang="en">'+escape(group.word)+'</strong></div><p class="recap-meaning">'+escape(group.meaning)+'</p><div class="recap-errors">'+group.attempts.map(({record,count})=>'<div class="recap-error"><small class="stat-'+record.kind+'">'+(record.kind==='wrong'?'错误':'未完成')+'</small>'+filledMarkup(record)+(count>1?'<small class="recap-repeat">×'+count+'</small>':'')+'</div>').join('')+'</div></section>').join('');
 }

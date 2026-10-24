@@ -190,6 +190,8 @@ export class Scene {
     }finally{this.renderer.setRenderTarget(previousTarget);this.renderer.setClearColor(clearColor,clearAlpha);target.dispose();}
   }
   async warmup(){
+    // 预热仅提交到离屏目标，避免临时放在中央的模型闪到首页。
+    const previousTarget=this.renderer.getRenderTarget(),target=new THREE.WebGLRenderTarget(1,1);target.texture.colorSpace=this.renderer.outputColorSpace;
     // 同时提交全部星座几何及两种星球材质变体，避免将首次上传挪到战斗。
     const charts=[...this.constellationGeometries.values()],models=this.planets.slice(0,charts.length+1),saved=models.map(model=>({model,visibility:[model,...model.children].map(item=>[item,item.visible]),position:model.position.clone(),scale:model.scale.clone(),material:model.userData.planet.material,stars:model.userData.chartStars.geometry,lines:model.userData.chartLines.geometry})),previewVisible=this.homePreview.visible;
     try{
@@ -202,8 +204,9 @@ export class Scene {
       }
       models[0].userData.planet.material=this.planetMaterials[0];
       this.particles.count=1;this.dummy.position.set(-10000,0,0);this.dummy.updateMatrix();this.particles.setMatrixAt(0,this.dummy.matrix);
-      await this.renderer.compileAsync(this.scene,this.camera);this.renderer.render(this.scene,this.camera);await new Promise(resolve=>setTimeout(resolve,0));this.renderer.render(this.scene,this.camera);
+      this.renderer.setRenderTarget(target);await this.renderer.compileAsync(this.scene,this.camera);this.renderer.render(this.scene,this.camera);await new Promise(resolve=>setTimeout(resolve,0));this.renderer.render(this.scene,this.camera);
     }finally{
+      this.renderer.setRenderTarget(previousTarget);target.dispose();
       this.particles.count=0;for(const batch of this.enemyBatches){batch.count=0;batch.visible=false;}
       for(const {model,visibility,position,scale,material,stars,lines} of saved){for(const [item,visible] of visibility)item.visible=visible;model.position.copy(position);model.scale.copy(scale);model.userData.planet.material=material;model.userData.chartStars.geometry=stars;model.userData.chartLines.geometry=lines;}
       for(const model of Object.values(this.monsters))model.group.visible=false;this.carriers[0].visible=false;this.homePreview.visible=previewVisible;

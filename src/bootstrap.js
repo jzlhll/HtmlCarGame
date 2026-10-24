@@ -11,7 +11,7 @@ const input=new Input(game,code=>ui.action(code));game.input=input;
 let reviewFocused=document.hasFocus(),scene=null,lastTime=performance.now(),accumulator=0,frameHandle=0,reviewTimer=0,inFrame=false,sceneDirty=true,sceneState='',activeReview=false,lastRenderTime=0,renderAccumulator=0;
 if(query.has('seed')){const seed=Number(query.get('seed'));if(Number.isFinite(seed))ui.seed=seed;}
 const animated=()=>game.state==='playing'||!ui.dialogMode&&['menu','instructions','tutorial','preparing','prepareFailed','preview'].includes(game.state);
-function requestFrame(redraw=true){sceneDirty=sceneDirty||redraw;if(!scene||inFrame||document.hidden)return;clearTimeout(reviewTimer);reviewTimer=0;if(!frameHandle){if(!activeReview)lastTime=performance.now();frameHandle=requestAnimationFrame(frame);}}
+function requestFrame(redraw=true){sceneDirty=sceneDirty||redraw;if(!scene||!ui.metrics||inFrame||document.hidden)return;clearTimeout(reviewTimer);reviewTimer=0;if(!frameHandle){if(!activeReview)lastTime=performance.now();frameHandle=requestAnimationFrame(frame);}}
 function advanceReview(now){if(activeReview&&game.state==='review')game.updateReview(Math.min(Math.max(0,(now-lastTime)/1000),1.1));lastTime=now;activeReview=game.state==='review'&&!document.hidden&&reviewFocused;}
 function autoPause(){if(game.state==='playing'){game.pause();ui.render();}input.clear();accumulator=0;audio.stop();requestFrame();}
 window.addEventListener('blur',()=>{advanceReview(performance.now());reviewFocused=false;activeReview=false;autoPause();});

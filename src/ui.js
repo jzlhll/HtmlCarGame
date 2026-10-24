@@ -2,7 +2,7 @@ import { LEVELS,LEARNING,REVIEW,HOME,WORDS,CHOICES,SUPPLIES,BOSSES,RENDERING,WOR
 import { VOCABULARY, VOCABULARIES, getVocabulary } from './vocabulary-data.js';
 import { APP_VERSION } from './version.js';
 import { Speech } from './speech.js';
-import { recapMarkup } from './recap.js';
+import { recapMarkup,groupRecap } from './recap.js';
 const $=id=>document.getElementById(id);
 const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const put=(id,value)=>{const element=$(id),text=String(value);if(element.textContent!==text)element.textContent=text;};
@@ -44,8 +44,8 @@ export class UI {
   ready(metrics){this.pendingReview=false;this.metrics=metrics;$('loading').hidden=true;$('start-button').disabled=false;if(this.storage.review)this.game.restoreReview(this.storage.review);else this.game.state='menu';if(!metrics.persistent)this.notice('生成资源仅保存在本页内存中');if(this.storage.warning)this.notice(this.storage.warning);this.render();if(!this.storage.account&&!this.accountMode)this.accounts();}
   failure(error){this.game.state='prepareFailed';this.dialog('failure','<h2>准备遇到问题</h2><p>'+escape(error.message)+'</p><button data-action="reload">重新准备</button>');}
   notice(text){clearTimeout(this.noticeTimer);$('storage-notice').textContent=text;$('storage-notice').hidden=false;this.noticeTimer=setTimeout(()=>$('storage-notice').hidden=true,2800);}
-  dialog(mode,html){this.accountMode='';$('home-accounts').hidden=true;this.dialogMode=mode;if(this.previousFocus===undefined)this.previousFocus=document.activeElement;$('dialog-content').innerHTML=html;$('dialog').hidden=false;$('dialog').dataset.mode=mode;$('dialog-card').dataset.mode=mode;$('dialog-card').scrollTop=0;$('dialog-card').focus();this.invalidate?.();}
-  closeDialog(){this.speech.stop();this.accountMode='';$('home-accounts').hidden=true;this.dialogMode='';$('dialog').hidden=true;this.previousFocus=undefined;$('app').focus();this.invalidate?.();}
+  dialog(mode,html){this.recapResizeObserver?.disconnect();this.accountMode='';$('home-accounts').hidden=true;this.dialogMode=mode;if(this.previousFocus===undefined)this.previousFocus=document.activeElement;$('dialog-content').innerHTML=html;$('dialog').hidden=false;$('dialog').dataset.mode=mode;$('dialog-card').dataset.mode=mode;$('dialog-card').scrollTop=0;$('dialog-card').focus();this.invalidate?.();}
+  closeDialog(){this.recapResizeObserver?.disconnect();this.speech.stop();this.accountMode='';$('home-accounts').hidden=true;this.dialogMode='';$('dialog').hidden=true;this.previousFocus=undefined;$('app').focus();this.invalidate?.();}
   accountPanel(mode,html){
     this.closeDialog();this.accountMode=mode;$('home-accounts').innerHTML=html;$('home-accounts').hidden=false;this.render();$('home-accounts').focus({preventScroll:true});
   }
@@ -113,14 +113,28 @@ export class UI {
     this.dialog('vocabulary','<h2>选择适合自己的词库</h2><div class="vocabulary-catalog">'+VOCABULARIES.map(library=>'<article><h3>'+escape(library.label)+(library.id===this.storage.libraryId?' <small>当前词库</small>':'')+'</h3><p>'+library.entries.length+' 个单词</p><p>'+escape(library.description)+'</p></article>').join('')+'</div><p>登录后可在首页切换词库。每关固定 12 个词，每个词库分别保存关卡进度、成绩和学习记录；同一个词在不同词库中的记录互不影响。预习词卡显示短语及中文，无合适短语时使用例句；通关前回顾原作答及正确答案。</p><p>小六、初中进阶、四级基础、六级进阶按阶段组织。大学词库按官方大纲分级，包含派生词与合法英美拼法；六级进阶只练新增词，不重复四级基础拼写。各库按学习情况抽取。历史正确率高于 50%／75%／85% 时，后续入选权重为 0.5／0.25／0.01。</p><button class="primary-button" data-action="back">返回</button>');
   }
   pause(){this.speech.stop();this.dialog('pause','<h2>游戏已暂停</h2><div class="dialog-actions"><button class="primary-button" data-action="resume">继续飞行 ↗</button><button class="secondary-button" data-action="end">结束本局</button></div>');}
-  failedWords(){const map=new Map();for(const record of this.game.result?.mistakes||[]){if(!map.has(record.wordId))map.set(record.wordId,{...record,attempts:[]});map.get(record.wordId).attempts.push(record);}return [...map.values()];}
+  failedWords(){return groupRecap(this.game.result?.mistakes||[]);}
   recap(){
     const r=this.game.result;if(!r)return;
     if(this.recapId===r.id&&this.dialogMode==='recap'){this.updateReview();return;}
     this.recapId=r.id;this.speech.stop();
-    this.dialog('recap','<header class="recap-heading"><span class="eyebrow">第 '+r.level+' 关 · '+escape(getVocabulary(r.libraryId).label)+'</span><h2>'+(r.mistakes.length?'把错过的单词，重新记住。':'这一程，顺利完成。')+'</h2><p>'+(r.mistakes.length?r.mistakes.length+' 次需要回顾 · 同一个词的每次作答分别保留':'继续下一段星海旅程。')+'</p></header><div id="recap-list" class="recap-list" data-recap-scroll tabindex="0" aria-label="本关错题回顾">'+recapMarkup(r.mistakes,this.recapImages)+'</div><footer class="recap-footer"><div><span id="recap-status"></span><strong id="review-timer"></strong><small id="save-status"></small></div><button class="primary-button" id="recap-continue" data-action="recap-continue">查看通关结果 ↗</button></footer>');
-    this.reviewIndex=-1;this.updateReview();
+    const count=this.failedWords().length;
+    this.dialog('recap','<header class="recap-heading"><h2>'+(count?'本关错词回顾':'这一程，顺利完成。')+'</h2><p>第 '+r.level+' 关 · '+escape(getVocabulary(r.libraryId).label)+(count?' · '+count+' 个单词':'')+'</p></header><div id="recap-field" class="recap-field" data-recap-scroll tabindex="0"><div id="recap-list" class="recap-layout" aria-label="本关合并错词">'+recapMarkup(r.mistakes,this.recapImages)+'</div></div><footer class="recap-footer"><div><span id="recap-status"></span><strong id="review-timer"></strong><small id="save-status"></small></div><button class="primary-button" id="recap-continue" data-action="recap-continue">查看通关结果 ↗</button></footer>');
+    this.reviewIndex=-1;this.updateReview();this.recapResizeObserver=new ResizeObserver(()=>this.fitRecap());this.recapResizeObserver.observe($('recap-field'));this.fitRecap();
     const resultId=r.id,libraryId=r.libraryId,accountId=r.accountId,saved=()=>{if(this.game.result?.id!==resultId||this.storage.libraryId!==libraryId||this.storage.account?.id!==accountId||!$('save-status'))return;put('save-status',this.storage.pendingRun?(this.storage.available?'学习记录已暂存，数据库恢复后重试':'学习记录仅保留在本页内存'):'学习记录已保存');};saved();this.game.savePromise?.then(saved);
+  }
+  fitRecap(){
+    if(this.dialogMode!=='recap')return;const field=$('recap-field'),layout=$('recap-list');if(!field||!layout||!field.clientHeight)return;
+    const count=this.failedWords().length||1,columns=Math.min(count,field.clientWidth>=1000?4:field.clientWidth>=660?3:2);
+    layout.style.gridTemplateColumns='repeat('+columns+',minmax(0,1fr))';
+    // 只按列宽调整长词；超出一屏时保留自然滚动，不缩小整页内容。
+    for(const text of layout.querySelectorAll('.recap-correct strong,.recap-letters,.recap-answer')){
+      text.style.fontSize='';text.style.whiteSpace='';text.style.flexWrap='';
+      if(text.scrollWidth<=text.clientWidth+1)continue;
+      const minimum=text.classList.contains('recap-letters')||text.classList.contains('recap-answer')?13:16;
+      text.style.fontSize=Math.max(minimum,parseFloat(getComputedStyle(text).fontSize)*text.clientWidth/text.scrollWidth)+'px';
+      if(text.scrollWidth>text.clientWidth+1){text.style.whiteSpace='normal';if(text.classList.contains('recap-letters'))text.style.flexWrap='wrap';}
+    }
   }
   result(){
     const r=this.game.result;if(!r)return;this.speech.stop();
