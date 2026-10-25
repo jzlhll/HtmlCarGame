@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">学习航站</string>
+    <string name="home_title">先学一会，再去冒险</string>
+    <string name="home_subtitle">三个小世界，从今天的英语学习开始。</string>
+    <string name="games_title">选择你的旅程</string>
+    <string name="daily_rule">每天有效学习英语15分钟，解锁两个游戏各自的额度。工作日各12分钟，周六、周日各18分钟；次日重新学习。</string>
+    <string name="weekday_label">今日计划 · 工作日</string>
+    <string name="weekend_label">今日计划 · 周末</string>
+    <string name="study_progress">已学 %1$s / 15:00</string>
+    <string name="study_complete">今天的学习目标已完成</string>
+    <string name="english_description">认识单词、点选答案、拼接碎片，再回顾错题。</string>
+    <string name="car_description">在四季道路上驾驶，吞吃车辆并升级座驾。</string>
+    <string name="flight_description">准备起飞、穿越航线，操纵客机平稳着陆。</string>
+    <string name="game_english">英语空战</string>
+    <string name="game_car">四季车途</string>
+    <string name="game_flight">低空穿越</string>
+    <string name="open_english">进入英语学习</string>
+    <string name="open_game">进入游戏</string>
+    <string name="english_unlimited">今日已达标，还可以继续学</string>
+    <string name="english_required">今日必修 · 有效学习15分钟</string>
+    <string name="locked">尚未解锁 · 先完成今天的英语学习</string>
+    <string name="quota_remaining">今日剩余 %1$s</string>
+    <string name="idle_rule">连续30秒没有新操作会自动暂停。首页、普通菜单、后台和暂停不累计学习时间；按住按键自动连发不算新的操作。</string>
+    <string name="connecting_game">正在连接本地游戏…</string>
+    <string name="home">首页</string>
+    <string name="back_home">返回首页</string>
+    <string name="continue_game">继续</string>
+    <string name="close">知道了</string>
+    <string name="paused_title">先停在这里</string>
+    <string name="pause_idle">已经30秒没有新操作。学习计时和游戏都已暂停，准备好后再继续。</string>
+    <string name="pause_connection">暂时收不到游戏状态，已停止计时。点击继续重试；仍无响应时请返回首页重新进入。</string>
+    <string name="pause_quota">这个游戏今天的额度已用完，明天完成英语学习后再来吧。</string>
+    <string name="pause_new_day">新的一天开始了。今天需要重新完成15分钟英语学习，才能解锁另外两个游戏。</string>
+    <string name="pause_clock">设备日期早于已记录日期，请校准日期后继续。</string>
+    <string name="pause_background">应用离开了前台，游戏和计时已暂停。点击继续后恢复。</string>
+    <string name="storage_failure">计时记录暂时无法保存或读取，已停止计时和游戏，请重新打开应用检查。</string>
+    <string name="unavailable">计时记录不可用</string>
+    <string name="webview_upgrade">系统网页组件过旧，无法建立受控游戏连接。请更新 Android System WebView 后再进入。</string>
+    <string name="page_error">本地游戏资源未能加载，请返回首页重新进入。</string>
+    <string name="renderer_error">游戏画面进程已退出，计时已停止，可以重新进入游戏。</string>
+    <string name="study_toolbar">还需 %1$s</string>
+    <string name="quota_toolbar">剩余 %1$s</string>
+</resources>

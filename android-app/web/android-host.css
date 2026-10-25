@@ -1,0 +1,26 @@
+/* Android 副本的竖屏触控区独立占位，保留主场景和仪表的可见范围。 */
+:root { --android-controls-height: 0px; }
+.android-host-failure { position: fixed; inset: 0; z-index: 99999; display: grid; place-items: center; padding: 32px; color: #edf5f0; background: #112d2a; font: 20px/1.7 system-ui, sans-serif; text-align: center; }
+body.android-flight #game { height: calc(100dvh - var(--android-controls-height)); min-height: 0; }
+.android-flight-controls { position: fixed; bottom: 0; left: 0; right: 0; z-index: 40; padding: 10px 16px max(12px, env(safe-area-inset-bottom)); color: #eaf3ed; background: #102a2e; border-top: 1px solid #547570; font-family: system-ui, sans-serif; user-select: none; }
+.android-controls-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.android-controls-bar strong { font-size: 16px; font-weight: 600; }
+.android-controls-bar strong small { margin-left: 10px; font-size: 13px; font-weight: 400; color: #b4c8c4; }
+.android-controls-bar button { min-height: 44px; padding: 8px 14px; color: #d7e7df; border: 1px solid #4d6965; border-radius: 9px; background: #1d3b3e; font-size: 14px; }
+.android-controls-content { display: grid; gap: 8px; margin-top: 8px; }
+.android-flight-switches, .android-flight-movement { display: grid; gap: 7px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.android-flight-movement { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.android-controls-content button { min-width: 0; min-height: 58px; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 8px 4px; touch-action: none; border: 1px solid #486461; border-radius: 9px; background: #213d40; color: #ecf3e9; font: inherit; }
+.android-controls-content button.held { background: #647459; border-color: #d7d89b; }
+.android-controls-content kbd { flex-shrink: 0; min-width: 25px; height: 27px; padding: 0 4px; font-size: 15px; }
+.android-controls-content span { font-size: 13px; line-height: 1.25; }
+.android-controls-content small { display: block; margin-top: 3px; color: #bed1c8; font-size: 12px; }
+body.android-flight .startup-strip { max-width: calc(100% - 24px); overflow-x: auto; justify-content: flex-start; padding-bottom: 5px; }
+@media (max-width: 720px) {
+  .android-flight-controls { padding-left: 10px; padding-right: 10px; }
+  .android-controls-content button { flex-direction: column; gap: 4px; min-height: 63px; }
+  .android-controls-content span { font-size: 11px; }
+  .android-controls-content small { font-size: 11px; }
+  body.android-flight .instruments { left: 10px; right: 10px; bottom: 82px; gap: 7px; }
+  body.android-flight .welcome { max-height: calc(100% - 100px); overflow-y: auto; }
+}
