@@ -10,7 +10,7 @@ export const RENDERING = {
   }
 };
 export const levelMode = (level,touchMode=false,firstMode='combat') => level%2===1?firstMode:firstMode==='combat'?'assembly':'combat';
-export const ASSEMBLY = { stageSeconds: [90,90], roundsPerStage: 2, wordsPerRound: 9, maxParts: 3, maxChecks: 3, visuals: {turnSeconds:[58,94], flightSeconds:1.15, routeObstacleRadius:24, routeClearance:25, routeSamples:40, routeStep:25, routeMargin:45, routeFirst:55, routeSpacing:110} };
+export const ASSEMBLY = { stageSeconds: [90,90], roundsPerStage: 2, stageWordCounts: [6,9], maxParts: 3, maxChecks: 3, visuals: {turnSeconds:[58,94], flightSeconds:1.15, routeObstacleRadius:24, routeClearance:25, routeSamples:40, routeStep:25, routeMargin:45, routeFirst:55, routeSpacing:110} };
 export const LEVELS = { durationSeconds: 270, libraryExtraSeconds: {primary:0,intermediate:15,cet4:30,cet6:45}, spawnReferenceDurationSeconds: 300, wordCount: 12 };
 export const BOSSES = { durationSeconds: 60, miniFaces: 3, finalFaces: 4, turnSeconds: 0.6, xRange: 275, yRange: 45.5, xAngularSpeed: 0.16, yAngularSpeed: 0.45, centerY: 350, miniCrates: 3, finalCrates: 5, victorySeconds: 5 };
 export const BOSS_VISUALS = {
@@ -66,7 +66,7 @@ export const BACKGROUND = {
   textureWidth: 512, textureHeight: 256, galaxyStars: 6000,
   maskOpacity: 0.52, menuMaskOpacity: 0.28
 };
-export const AUDIO = { masterVolume: 0.35, maxShotsPerSecond: 8, speechRate: 0.75, speechPitch: 1.08, speechVolume: 0.85 };
+export const AUDIO = { masterVolume: 0.35, maxShotsPerSecond: 8, speechRate: 0.75, speechPitch: 1.08, speechVolume: 0.85, speechStartMilliseconds: 1400, speechRetryMilliseconds: 80, speechFallbackVoices: 2, speechMaxAttempts: 7 };
 export const SCORES = { limit: 10 };
 // 只压缩普通出题时间，两个 Boss 各保留完整作答时段。
 export function combatTiming(libraryId){
@@ -80,7 +80,7 @@ export function validateConfig() {
   if(!Object.hasOwn(RENDERING.qualities,RENDERING.defaultQuality)||!positive(RENDERING.generationBatchMilliseconds))throw new Error('Invalid rendering defaults');
   for(const quality of Object.values(RENDERING.qualities))if(!positive(quality.maxPixelRatio)||!positive(quality.menuFPS)||(quality.maxPixels!==null&&!positive(quality.maxPixels)))throw new Error('Invalid rendering quality configuration');
   for(const value of [BOSSES.xRange,BOSSES.yRange,BOSSES.xAngularSpeed,BOSSES.yAngularSpeed])if(!positive(value))throw new Error('Invalid boss movement configuration');
-  if(ASSEMBLY.stageSeconds.length!==2||!ASSEMBLY.stageSeconds.every(positive)||!Number.isInteger(ASSEMBLY.maxChecks)||ASSEMBLY.maxChecks<1||ASSEMBLY.roundsPerStage!==2||ASSEMBLY.maxParts!==3||!Number.isInteger(ASSEMBLY.wordsPerRound)||ASSEMBLY.wordsPerRound<1||(LEVELS.wordCount-ASSEMBLY.wordsPerRound)*ASSEMBLY.roundsPerStage*ASSEMBLY.stageSeconds.length!==LEVELS.wordCount)throw new Error('Invalid assembly stage configuration');
+  if(ASSEMBLY.stageSeconds.length!==2||!ASSEMBLY.stageSeconds.every(positive)||!Number.isInteger(ASSEMBLY.maxChecks)||ASSEMBLY.maxChecks<1||ASSEMBLY.roundsPerStage!==2||ASSEMBLY.maxParts!==3||ASSEMBLY.stageWordCounts.length!==2||!ASSEMBLY.stageWordCounts.every(value=>Number.isInteger(value)&&value>0&&value<=LEVELS.wordCount)||ASSEMBLY.stageWordCounts[0]*ASSEMBLY.roundsPerStage!==LEVELS.wordCount||(LEVELS.wordCount-ASSEMBLY.stageWordCounts[1])*ASSEMBLY.roundsPerStage>LEVELS.wordCount)throw new Error('Invalid assembly stage configuration');
   if(ASSEMBLY.visuals.turnSeconds.length!==2||!ASSEMBLY.visuals.turnSeconds.every(positive)||ASSEMBLY.visuals.turnSeconds[0]>ASSEMBLY.visuals.turnSeconds[1])throw new Error('Invalid assembly motion configuration');
   for(const id of Object.keys(LEVELS.libraryExtraSeconds)){const timing=combatTiming(id);if(!positive(timing.miniAt)||timing.miniAt+BOSSES.durationSeconds>=timing.finalAt||!timing.spawnIntervalSeconds.every(positive))throw new Error('Invalid combat timing configuration');}
   if (!Number.isInteger(LEVELS.wordCount)||LEVELS.wordCount<Math.max(BOSSES.miniFaces,BOSSES.finalFaces)) throw new Error('Invalid level vocabulary count');
