@@ -1,121 +1,109 @@
 import { ASSEMBLY } from './config.js';
-import { splitWord } from './assembly.js';
+import { createRandom } from './random.js';
 import { AssemblyFlight } from './assembly-flight.js';
-import { flightSprite,salvageSprite } from './assembly-art.js';
+import { evilSprite,machineSprite,salvageSprite } from './assembly-art.js';
 const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const time=seconds=>{const value=Math.ceil(seconds);return String(Math.floor(value/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');};
 
-// 四轮节点在开局时一起准备，换轮只切换已有题面，选择和连线复用节点。
+// 所有轮次的星球、碎片、回收机、飞机和炮弹均在开局预建。
 export class AssemblyView {
   constructor(root,game,onChange,onNotice){
     Object.assign(this,{root,game,onChange,onNotice});this.flight=new AssemblyFlight(this);
     root.addEventListener('click',event=>{
-      if(game.state!=='playing')return;const button=event.target.closest('button[data-puzzle]');if(!button)return;
-      const round=game.assembly;if(!round)return;
-      if(button.dataset.puzzle==='submit'){
-        if(round.stage===2)this.flight.launch();
-        const result=game.submitAssembly();if(result)this.onNotice(result.advanced?(round.done?'四轮已完成':'第 '+result.round+' 轮结束，开始第 '+(round.roundIndex+1)+' 轮'+(round.stage===1?'碎片拼接':'护航编队')+'！'):'本次答对 '+result.correct+' 个，错误项已释放，请重新选择');
-      }else if(button.dataset.puzzle==='clear')round.clear();
-      else if(button.dataset.puzzle==='fragment'&&!round.pending)this.onNotice('先点击中文释义，再按顺序点击碎片');
-      else round[button.dataset.puzzle](button.dataset.id);
+      const round=game.assembly,button=event.target.closest('button[data-puzzle]');if(game.state!=='playing'||!round||round.introRemaining||!button||button.disabled)return;
+      const action=button.dataset.puzzle;
+      if(action==='submit'){
+        const result=game.submitAssembly();if(result)this.onNotice(result.advanced?(round.done?'四轮已完成':'第 '+result.round+' 轮结束，进入下一轮'):'本次答对 '+result.correct+' 个，错误项已释放，请重新选择');
+      }else if(action==='fire'){if(!round.fire())this.onNotice('先点击一架邪恶飞机瞄准，再点击炮弹机发射');}
+      else if(action==='fragment'&&!round.pending)this.onNotice('先选择底部中文释义回收机，再点击单词碎片');
+      else if(['fragment','meaning','enemy','clear'].includes(action))round[action](button.dataset.id);
       this.onChange();
     });
-    root.addEventListener('scroll',()=>{this.drawLines();},true);
-    this.observer=new ResizeObserver(()=>{this.layoutFragments();this.layoutMeteors();this.drawLines();this.updateLaunch();});this.observer.observe(root);
+    this.observer=new ResizeObserver(()=>this.layout());this.observer.observe(root);
   }
   prepare(round){
-    this.observer.disconnect();this.observer.observe(this.root);
-    this.round=round;this.lastVersion=-1;this.lastSecond=-1;this.lastRoundIndex=-1;this.routes=new Map();
+    this.observer.disconnect();this.observer.observe(this.root);this.round=round;this.lastVersion=-1;this.lastRoundIndex=-1;this.lastSecond=-1;
+    this.root.style.setProperty('--escort-scale',ASSEMBLY.visuals.escortScale);
     const panels=round.rounds.map((content,index)=>{
-      const meanings=content.meanings.map((entry,channel)=>'<button class="meaning-chip radio-channel" data-puzzle="meaning" data-id="'+escape(entry.id)+'"><span class="radio-number" aria-hidden="true">'+String(channel+1).padStart(2,'0')+'</span><span class="meaning-text">'+escape(entry.meaning)+'</span><span class="assembly-answer" lang="en"></span><span class="radio-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button>');
-      return '<section class="assembly-round" data-round-index="'+index+'" hidden><div class="assembly-board radio-board"><div class="radio-scroll" role="group" aria-label="释义频道，可独立滚动"><div class="radio-channels">'+meanings.join('')+'</div></div><div class="radio-tray"><div class="radio-belt"><span>待接收 · 字母信号</span><small>逐片点选 · 可撤回</small></div><div class="fragment-field">'+content.fragments.map((item,part)=>'<button class="metal-fragment shape-'+part%4+'" data-puzzle="fragment" data-id="'+escape(item.id)+'">'+salvageSprite(part)+'<span class="fragment-label" lang="en">'+escape(item.text)+'</span></button>').join('')+'</div></div></div><div class="meteor-scroll" hidden><div class="meteor-field"><svg class="meteor-lines" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">'+content.entries.map(()=>'<path hidden/>').join('')+'</svg>'+content.meteors.map((item)=>'<button class="meteor" data-side="'+item.side+'" data-puzzle="meteor" data-id="'+escape(item.id)+'" title="'+escape(item.text)+'" aria-label="'+escape(item.text)+'">'+flightSprite(item.side==='en'?'fighter':'beacon')+'<span class="meteor-label"'+(item.side==='en'?' lang="en"':'')+'>'+(item.side==='en'?splitWord(item.text).map(escape).join('<wbr>'):escape(item.text))+'</span></button>').join('')+'</div></div></section>';
+      const stage=Math.floor(index/ASSEMBLY.roundsPerStage)+1;
+      if(stage===1)return '<section class="assembly-round" data-round-index="'+index+'" hidden><div class="nova-board"><div class="nova-field" aria-label="超新星单词碎片"><div class="nova-event" aria-hidden="true" style="--planet-hue:'+content.hue+'"><div class="nova-ring"></div><div class="nova-planet"></div><div class="nova-flash"></div></div>'+content.fragments.map((item,part)=>'<button class="metal-fragment nova-fragment" data-puzzle="fragment" data-id="'+escape(item.id)+'">'+salvageSprite(part)+'<span class="fragment-label" lang="en">'+escape(item.text)+'</span></button>').join('')+'</div><div class="collector-dock" role="group" aria-label="中文释义碎片回收机">'+content.meanings.map(entry=>'<button class="recovery-unit" data-puzzle="meaning" data-id="'+escape(entry.id)+'"><span class="collector-meaning">'+escape(entry.meaning)+'</span>'+machineSprite()+'<span class="collector-answer" lang="en"></span></button>').join('')+'</div></div></section>';
+      return '<section class="assembly-round" data-round-index="'+index+'" hidden><div class="escort-board"><div class="enemy-scroll"><div class="enemy-sky" aria-label="十二架邪恶飞机">'+content.enemies.map(enemy=>'<button class="evil-plane" data-puzzle="enemy" data-id="'+escape(enemy.id)+'">'+evilSprite(enemy.skin)+'<span class="enemy-word" lang="en">'+escape(enemy.text)+'</span><span class="attached-meaning"></span></button>').join('')+'</div></div><div class="cannon-dock"><button class="meaning-cannon" data-puzzle="fire" aria-label="炮弹机，点击发射中文释义"><span class="ammo-caption"></span><span class="cannon-pivot">'+machineSprite(true)+'</span><span class="cannon-status"></span></button></div><svg class="aim-guide" aria-hidden="true"><line/></svg><span class="meaning-shell" hidden></span></div></section>';
     });
-    this.root.innerHTML='<header class="assembly-heading"><div><span class="eyebrow">星际联队 · 拼接与护航</span><h2 id="assembly-title"></h2></div><div class="assembly-clock"><strong role="timer" id="assembly-timer"></strong><span id="assembly-checks"></span></div></header><p id="assembly-help" class="assembly-help"></p>'+panels.join('')+'<footer class="assembly-footer"><div><span id="assembly-selection" aria-live="polite"></span><button class="text-button" data-puzzle="clear">清空选择</button></div><button class="primary-button" data-puzzle="submit" id="assembly-submit">提交验证</button></footer>';
+    this.root.innerHTML='<header class="assembly-heading"><div><span class="eyebrow">星际课堂 · 超新星与瞄准</span><h2 id="assembly-title"></h2></div><div class="assembly-clock"><strong role="timer" id="assembly-timer"></strong><span id="assembly-checks"></span></div></header><p id="assembly-help" class="assembly-help"></p><p class="assembly-intro" aria-live="polite"></p>'+panels.join('')+'<footer class="assembly-footer"><div><span id="assembly-selection" aria-live="polite"></span><button class="text-button" data-puzzle="clear">清空拼接</button></div><button class="primary-button" data-puzzle="submit" id="assembly-submit">提交验证</button></footer>';
+    this.views=[...this.root.querySelectorAll('.assembly-round')].map(element=>({element,fragments:[...element.querySelectorAll('.nova-fragment')],collectors:[...element.querySelectorAll('.recovery-unit')],enemies:[...element.querySelectorAll('.evil-plane')]}));
+    for(const field of this.root.querySelectorAll('.nova-field,.enemy-scroll,.enemy-sky'))this.observer.observe(field);
     this.flight.prepare();
-    for(const board of this.root.querySelectorAll('.radio-board'))this.observer.observe(board);
-    this.roundViews=[...this.root.querySelectorAll('.assembly-round')].map(element=>({element,fragments:[...element.querySelectorAll('[data-puzzle="fragment"]')],meanings:[...element.querySelectorAll('[data-puzzle="meaning"]')],meteors:[...element.querySelectorAll('[data-puzzle="meteor"]')],lines:[...element.querySelectorAll('.meteor-lines path')]}));
   }
-  // 为所有碎片一次分配可见网格，剩余高度交给频道列表，避免双层滚动。
+  layout(){
+    if(!this.round||!this.activeView||this.root.hidden)return;
+    if(this.round.stage===1)this.layoutFragments();else this.layoutEnemies();
+    this.flight.measure();this.flight.update();
+  }
   layoutFragments(){
-    if(!this.round||this.round.stage!==1||!this.activeRound)return;
-    const board=this.activeRound.querySelector('.radio-board'),width=board.clientWidth,height=board.clientHeight;
-    if(!width||!height)return;
-    const side=width>=660&&height<380,gap=6,trayWidth=side?Math.floor((width-gap)*.58):width,beltHeight=28;
-    const budget=side?height-beltHeight:height-Math.min(160,Math.max(80,height*.2))-beltHeight-gap;
-    const count=this.round.fragments.length,longest=Math.max(...this.round.fragments.map(item=>item.text.length)),preferred=this.game.touchMode?24:28;
-    let best=null;
-    for(const minimum of [18,12]){
-      for(let columns=1;columns<=Math.min(count,Math.floor(trayWidth/(minimum===18?60:44)));columns++)for(let font=preferred;font>=minimum;font--){
-        const cellWidth=(trayWidth-gap*(columns-1))/columns,lines=Math.ceil(longest*font*.62/(cellWidth-20));
-        const rowHeight=Math.max(44,Math.ceil(font*1.25*lines+18)),rows=Math.ceil(count/columns),needed=rows*rowHeight+(rows-1)*gap;
-        if(needed>budget)continue;
-        const score=font*40-lines*90-needed*.06-Math.abs(cellWidth-110)*.12;
-        if(!best||score>best.score)best={columns,font,rows,needed,score};
+    const field=this.activeView.element.querySelector('.nova-field'),width=field.clientWidth,height=field.clientHeight;if(!width||!height)return;
+    const count=this.round.fragments.length,cell=Math.sqrt(width*height/count),w=Math.min(148,Math.max(54,cell*1.08)),h=Math.min(76,Math.max(44,cell*.64)),random=createRandom(this.round.sceneSeed),points=[];
+    const preferred=this.game.touchMode?ASSEMBLY.visuals.touchFragmentFont:ASSEMBLY.visuals.fragmentFont,longest=Math.max(...this.round.fragments.map(item=>item.text.length));let font=preferred;
+    while(font>12&&Math.ceil(longest*font*.62/(w-12))*font*1.25>h-12)font--;
+    for(const node of this.activeView.fragments){
+      let best=null;
+      for(let attempt=0;attempt<90;attempt++){
+        const x=w/2+8+random()*Math.max(0,width-w-16),y=h/2+6+random()*Math.max(0,height-h-12);
+        const score=points.length?Math.min(...points.map(p=>((x-p.x)/(w+8))**2+((y-p.y)/(h+8))**2)):1;
+        if(!best||score>best.score)best={x,y,score};
       }
-      if(best)break;
+      points.push(best);node.style.width=w+'px';node.style.height=h+'px';node.style.fontSize=font+'px';
     }
-    // 极矮分屏无法保留常规触屏尺寸时，仍按实际格子容纳完整片段。
-    if(!best){const columns=Math.max(1,Math.floor(trayWidth/44)),rows=Math.ceil(count/columns),rowHeight=(budget-(rows-1)*gap)/rows,cellWidth=(trayWidth-gap*(columns-1))/columns;best={columns,rows,font:Math.max(6,Math.floor(Math.min((rowHeight-8)/1.25,(cellWidth-20)/(longest*.62)))),needed:Math.max(0,budget)};}
-    board.dataset.layout=side?'side':'stack';
-    for(const [name,value] of Object.entries({'--signal-columns':best.columns,'--signal-rows':best.rows,'--signal-font':best.font+'px','--signal-tray-height':Math.ceil(best.needed+beltHeight)+'px'}))if(board.style.getPropertyValue(name)!==String(value))board.style.setProperty(name,value);
+    this.fragmentPositions=points;this.fieldSize={width,height};
+    const dock=this.activeView.element.querySelector('.collector-dock'),columns=width>=720?3:2,answerFont=width>=720?21:18;
+    dock.style.setProperty('--collector-columns',columns);dock.style.setProperty('--answer-lines',Math.max(1,Math.ceil(Math.max(...this.round.entries.map(entry=>entry.word.length))*answerFont*.62/(width/columns-24))));
   }
-  layoutMeteors(){
-    if(!this.round||!this.meteorNodes)return;const field=this.activeRound?.querySelector('.meteor-field');if(!field)return;
-    const width=this.root.clientWidth;if(!width)return;
-    const compact=width<580,columns=compact?2:3,rows=Math.ceil(this.round.entries.length/columns),half=50;
-    field.style.minHeight=rows*(this.game.touchMode?150:160)+'px';this.positions=new Map();
-    const sides={en:0,zh:0};
-    this.round.meteors.forEach(item=>{
-      const index=sides[item.side]++,x=(item.side==='en'?0:half)+((index%columns)+.5)/columns*half,y=(Math.floor(index/columns)+.5)/rows*1000;
-      this.positions.set(item.id,{x:x*10,y});const node=this.meteorNodes.find(node=>node.dataset.id===item.id);node.style.left=x+'%';node.style.top=y/10+'%';node.style.width=(44/columns)+'%';node.style.height=(84/rows)+'%';
-    });
-  }
-
-  // 连线只表达待定配对，飞行动画读取同一条自动曲线。
-  routePoint(route,t){
-    const u=1-t;return {x:u*u*u*route.from.x+3*u*u*t*route.controlFrom.x+3*u*t*t*route.controlTo.x+t*t*t*route.to.x,y:u*u*u*route.from.y+3*u*u*t*route.controlFrom.y+3*u*t*t*route.controlTo.y+t*t*t*route.to.y};
-  }
-  drawLines(){
-    if(!this.lines||!this.positions)return;let index=0;this.routes.clear();
-    const field=this.activeRound.querySelector('.meteor-field'),box=field.getBoundingClientRect(),rootBox=this.root.getBoundingClientRect();
-    if(this.round.stage===2)for(const [english,[chinese]] of this.round.assignments){
-      const from=this.positions.get(english),to=this.positions.get(chinese);if(!from||!to)continue;
-      const convert=p=>({x:box.left-rootBox.left+p.x/1000*box.width,y:box.top-rootBox.top+p.y/1000*box.height});
-      this.routes.set(english,{from:convert(from),controlFrom:convert({x:500,y:from.y}),controlTo:convert({x:500,y:to.y}),to:convert(to)});
-      const line=this.lines[index++];line.removeAttribute('hidden');line.setAttribute('d','M'+from.x+' '+from.y+' C500 '+from.y+' 500 '+to.y+' '+to.x+' '+to.y);
-    }
-    for(;index<this.lines.length;index++)this.lines[index].setAttribute('hidden','');
-  }
-  updateLaunch(){
-    const submit=this.root.querySelector('#assembly-submit');if(!submit)return;submit.disabled=!this.round.allAssigned;
-    submit.textContent=(this.round.stage===1?'提交验证':'编队出击')+' · '+this.round.checksLeft+'次';
+  layoutEnemies(){
+    const scroll=this.activeView.element.querySelector('.enemy-scroll'),field=this.activeView.element.querySelector('.enemy-sky'),width=scroll.clientWidth;if(!width)return;
+    const columns=width>=720?4:3,rows=Math.ceil(this.round.enemies.length/columns),cellWidth=width/columns;
+    for(const node of this.activeView.enemies)node.style.width=(cellWidth*.88)+'px';
+    const wordHeight=Math.max(...this.activeView.enemies.map(node=>node.querySelector('.enemy-word').scrollHeight)),meaningFont=width>=720?14:13;
+    const meaningHeight=Math.ceil(Math.max(...this.round.meanings.map(entry=>entry.meaning.length))*meaningFont/(cellWidth*.88-10))*meaningFont*1.3;
+    const preferredModel=84*ASSEMBLY.visuals.escortScale,modelHeight=Math.max(ASSEMBLY.visuals.enemyMinModelHeight,Math.min(preferredModel,scroll.clientHeight/rows*.92-wordHeight-meaningHeight-8));
+    const minimumRow=(wordHeight+meaningHeight+modelHeight+8)/.92,rowHeight=Math.max(minimumRow,Math.min(ASSEMBLY.visuals.enemyRowHeight,scroll.clientHeight/rows)),height=Math.max(scroll.clientHeight,rows*rowHeight);
+    field.style.height=height+'px';field.style.setProperty('--enemy-model-height',modelHeight+'px');field.style.setProperty('--attachment-height',meaningHeight+'px');
+    this.enemyLayout={width,height,columns,rows,cellWidth};
+    this.activeView.enemies.forEach((node,index)=>{node.style.height=(height/rows*.92)+'px';});
   }
   render(){
     const round=this.game.assembly,visible=!!round&&['playing','paused'].includes(this.game.state);this.root.hidden=!visible;if(!visible)return;
     if(this.round!==round)this.prepare(round);
+    let changedRound=false;
     if(this.lastRoundIndex!==round.roundIndex){
-      if(this.activeRound)this.activeRound.hidden=true;
-      const view=this.roundViews[round.roundIndex];this.activeRound=view.element;this.activeRound.hidden=false;this.fragmentNodes=view.fragments;this.meaningNodes=view.meanings;this.meteorNodes=view.meteors;this.lines=view.lines;this.lastRoundIndex=round.roundIndex;this.routes.clear();this.lastVersion=-1;this.lastSecond=-1;
+      if(this.activeView)this.activeView.element.hidden=true;this.activeView=this.views[round.roundIndex];this.activeView.element.hidden=false;this.lastRoundIndex=round.roundIndex;this.lastVersion=-1;this.lastSecond=-1;changedRound=true;
     }
-    this.root.inert=this.game.state!=='playing';this.root.dataset.motion=this.game.storage.settings.reducedMotion?'still':this.game.state==='playing'?'running':'paused';
+    const intro=round.introRemaining>0;
+    this.root.dataset.stage=round.stage;this.root.dataset.intro=String(intro);this.root.dataset.motion=this.flight.still?'still':this.game.state==='playing'?'running':'paused';this.root.inert=this.game.state!=='playing';
     const second=Math.ceil(round.remaining);if(this.lastSecond!==second){this.root.querySelector('#assembly-timer').textContent=time(round.remaining);this.lastSecond=second;}
-    this.flight.update();if(this.lastVersion===round.version)return;this.lastVersion=round.version;
-    this.root.dataset.stage=round.stage;const label=round.stage===1?'组频':'护航',title=this.root.querySelector('#assembly-title');title.textContent=this.game.touchMode?label+' · '+(round.roundIndex+1)+'/'+round.rounds.length:'第 '+(round.roundIndex+1)+' / '+round.rounds.length+' 轮 · '+(round.stage===1?'无线电组频':'护航编队');title.setAttribute('aria-label','第 '+(round.roundIndex+1)+' 轮，共 '+round.rounds.length+' 轮，'+label);
-    this.root.querySelector('#assembly-help').textContent=round.stage===1?'先选中文频道，再逐片接收字母信号；待定单词显示在释义下方。全部拼好后统一验证。':'从左侧单词战机拖向右侧释义航标，或依次点选两端；点击已连线端点可撤回，全部配对后统一验证。';
-    this.root.querySelector('#assembly-checks').textContent='剩余验证 '+round.checksLeft+' / '+ASSEMBLY.maxChecks+' 次';
-    this.activeRound.querySelector('.assembly-board').hidden=round.stage!==1;this.activeRound.querySelector('.meteor-scroll').hidden=round.stage!==2;
-    const used=round.used;
-    const activeParts=round.stage===1?(round.assignments.get(round.pending)||[]):[];
-    for(const node of this.fragmentNodes){const id=node.dataset.id,index=activeParts.indexOf(id);node.hidden=round.removedFragments.has(id);node.classList.toggle('selected',index>=0);node.classList.toggle('pending',used.has(id));node.setAttribute('aria-pressed',String(index>=0));node.disabled=used.has(id)&&index<0;}
-    for(const node of this.meaningNodes){
-      const id=node.dataset.id,answer=round.stage===1?round.answer(id):'',active=round.stage===1&&round.pending===id;
-      node.hidden=round.solved.has(id)&&round.stage===1;node.classList.toggle('pending',round.assignments.has(id));node.classList.toggle('selected',active);node.setAttribute('aria-pressed',String(active));node.querySelector('.assembly-answer').textContent=answer;
-      node.setAttribute('aria-label',node.querySelector('.meaning-text').textContent+(answer?'，待定拼接 '+answer:'')+(active?'，当前释义':''));
+    if(this.lastVersion!==round.version){
+      this.lastVersion=round.version;
+      const title=round.stage===1?'超新星爆发':'护航编队';this.root.querySelector('#assembly-title').textContent=title+' · '+(round.roundIndex+1)+' / '+round.rounds.length;
+      this.root.querySelector('#assembly-help').textContent=round.stage===1?'先选底部中文释义回收机，再按顺序点击星球碎片拼词；全部回收后提交验证。':'先点邪恶飞机瞄准，再点底部炮弹机发射中文；点已贴好的飞机可撤回，全部贴好后提交验证。';
+      this.root.querySelector('.assembly-intro').textContent=intro?(round.stage===1?'超新星即将爆发 · 开场动画不计时':'敌机阵列正在进入 · 开场动画不计时'):'';
+      this.root.querySelector('#assembly-checks').textContent='剩余验证 '+round.checksLeft+' / '+ASSEMBLY.maxChecks+' 次';
+      const used=round.used,parts=round.stage===1?(round.assignments.get(round.pending)||[]):[];
+      for(const node of this.activeView.fragments){const id=node.dataset.id,selected=parts.includes(id);node.hidden=round.removedFragments.has(id);node.classList.toggle('pending',used.has(id));node.classList.toggle('selected',selected);node.disabled=intro||used.has(id)&&!selected;node.setAttribute('aria-pressed',String(selected));}
+      for(const node of this.activeView.collectors){const id=node.dataset.id,selected=id===round.pending;node.hidden=round.solved.has(id);node.disabled=intro;node.classList.toggle('selected',selected);node.querySelector('.collector-answer').textContent=round.answer(id);node.setAttribute('aria-pressed',String(selected));}
+      for(const node of this.activeView.enemies){
+        const id=node.dataset.id,linked=round.assignments.get(id)?.[0],meaning=linked?round.entries.find(entry=>'zh:'+entry.id===linked)?.meaning:'';
+        node.hidden=round.removedMeteors.has(id);node.classList.toggle('aimed',round.pending===id);node.classList.toggle('tagged',!!linked);node.disabled=intro||!!round.shot;node.querySelector('.attached-meaning').textContent=meaning||'';node.setAttribute('aria-pressed',String(round.pending===id));
+        node.setAttribute('aria-label',node.querySelector('.enemy-word').textContent+(meaning?'，已贴中文 '+meaning+'，点击回收':'，点击瞄准'));
+      }
+      const cannon=this.activeView.element.querySelector('.meaning-cannon');
+      if(cannon){
+        const ammo=round.shot?.meaning||round.ammunition;cannon.disabled=intro||!!round.shot||!ammo;cannon.querySelector('.ammo-caption').textContent=ammo?.meaning||'本轮释义已全部发射';
+        cannon.querySelector('.cannon-status').textContent=round.shot?'发射中…':!ammo?'全部贴好，等待提交':round.pending?'点击发射':'先选择目标';
+        this.activeView.element.querySelector('.meaning-shell').textContent=round.shot?.meaning.meaning||'';
+      }
+      const submit=this.root.querySelector('#assembly-submit');submit.disabled=!round.allAssigned;submit.textContent='提交验证 · '+round.checksLeft+'次';
+      const selection=round.stage===1?round.meanings.find(item=>item.id===round.pending)?.meaning:null;
+      this.root.querySelector('#assembly-selection').textContent=intro?'准备进入本轮':round.stage===1?selection||'选择一台碎片回收机':'已贴 '+(round.assignments.size+round.solved.size)+' / '+round.entries.length;
+      const clear=this.root.querySelector('[data-puzzle="clear"]');clear.textContent=round.stage===1?'清空拼接':'取消瞄准';clear.disabled=intro||!!round.shot||(round.stage===1?!parts.length:!round.pending);
     }
-    for(const node of this.meteorNodes){const id=node.dataset.id;node.hidden=round.removedMeteors.has(id)&&round.stage===2;node.classList.toggle('selected',round.pending===id);node.classList.toggle('pending',used.has(id)||round.assignments.has(id));node.setAttribute('aria-pressed',String(round.pending===id));}
-    const submit=this.root.querySelector('#assembly-submit');submit.disabled=!round.allAssigned;submit.textContent=(round.stage===1?'提交验证':'编队出击')+' · '+round.checksLeft+'次';submit.setAttribute('aria-label','提交验证，剩余 '+round.checksLeft+' 次');
-    const selection=round.stage===1?round.meanings.find(item=>item.id===round.pending)?.meaning:round.meteors.find(item=>item.id===round.pending)?.text;
-    this.root.querySelector('#assembly-selection').textContent=selection||(round.stage===1?'先选择中文释义':this.game.touchMode?'战机 → 航标':'待定 '+round.assignments.size+' / '+(round.entries.length-round.solved.size));
-    const clear=this.root.querySelector('[data-puzzle="clear"]');clear.disabled=round.stage===1?!activeParts.length:!round.pending;clear.textContent=round.stage===1?'清空拼接':'取消选择';this.layoutFragments();this.layoutMeteors();this.drawLines();this.updateLaunch();this.flight.update();
+    if(changedRound)this.layout();this.flight.update();
   }
 }

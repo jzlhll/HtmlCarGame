@@ -7,10 +7,17 @@ const outlines=[
   'M15 24 37 8 68 5 94 18 113 42 109 70 87 89 58 95 27 87 8 65 5 42Z',
   'M29 8 62 4 90 17 110 38 115 61 97 81 72 96 42 93 17 80 6 58 10 31Z'
 ];
-// 舰载机、航标与残片均为共享矢量原型，不加载外部模型。
-export function flightSprite(kind='fighter'){
-  const shape=kind==='beacon'?'<ellipse cx="60" cy="48" rx="44" ry="29" fill="#091c32" stroke="#82d9c5" stroke-width="3"/><ellipse cx="60" cy="48" rx="34" ry="22" fill="none" stroke="#417e91" stroke-dasharray="8 5" stroke-width="2"/><path d="M10 48h16m68 0h16M60 10v17m0 42v17" stroke="#b4fbe1" stroke-width="4"/><path d="M52 43l8-8 8 8-8 15Z" fill="#89e8dc"/>':kind==='hangar'?'<path d="M14 16 94 9 111 28 107 79 91 92 18 87 5 66 7 31Z" fill="#1b344a" stroke="#86b5c2" stroke-width="2"/><path d="M20 24 90 20 99 33 96 75 24 78 16 65Z" fill="#0a1729" stroke="#36596b" stroke-width="2"/><path d="M28 30h53M28 69h53M21 37v25m70-25v25" stroke="#72dbc6" stroke-width="2"/><path d="M96 16v12m5 8v21M14 30v27" stroke="#edbb7d" stroke-width="3"/>':'<path d="M51 77 47 99 60 88 73 99 69 77" fill="#48d6e6" opacity=".6"/><path d="M60 4 69 17 73 40 110 65 107 75 73 66 77 85 60 79 43 85 47 66 13 75 10 65 47 40 51 17Z" fill="#aec9db" stroke="#e3f2f6" stroke-width="1.5"/><path d="M60 9 66 25 66 58 60 65 54 58 54 25Z" fill="#19324d"/><path d="M60 18 64 29 64 43 56 43 56 29Z" fill="#65cce1"/><path d="M20 67 45 54m55 13L75 54M51 71h18" stroke="#5d829a" stroke-width="3"/><path d="M38 66v9m44-9v9" stroke="#9df8df" stroke-width="3"/>';
-  return '<svg class="flight-art '+kind+'-art" viewBox="0 0 120 100" aria-hidden="true" focusable="false">'+shape+'</svg>';
+// 三套邪恶战机共用固定矢量皮肤，四轮题面在开局预建。
+export function evilSprite(skin=0){
+  const bodies=[
+    '<path d="M60 8 76 31 79 42 112 57 104 76 78 68 72 91 60 82 48 91 42 68 16 76 8 57 41 42 44 31Z" fill="var(--enemy-body)" stroke="var(--enemy-edge)" stroke-width="2"/><path d="m38 44-15-23 28 14m31 9 15-23-28 14" fill="var(--enemy-edge)"/>',
+    '<path d="m60 9 19 22 9 12 28-9-8 34-24 5-11 19-13-10-13 10-11-19-24-5-8-34 28 9 9-12Z" fill="var(--enemy-body)" stroke="var(--enemy-edge)" stroke-width="2"/><path d="m20 43 24 9-5 13-18-6m79-16-24 9 5 13 18-6" fill="#151b34"/>',
+    '<path d="M60 6 81 33 110 43 114 64 85 78 73 76 60 96 47 76 35 78 6 64 10 43 39 33Z" fill="var(--enemy-body)" stroke="var(--enemy-edge)" stroke-width="2"/><path d="m13 50 24-7-5 23-18-5m93-11-24-7 5 23 18-5" fill="var(--enemy-edge)"/>'
+  ];
+  return '<svg class="evil-art skin-'+skin+'" viewBox="0 0 120 104" aria-hidden="true" focusable="false">'+bodies[skin]+'<path d="m42 41 14 7-11 10-8-8m41-9-14 7 11 10 8-8" fill="#fff0bd"/><path d="m40 38 17 5m23-5-17 5" stroke="#180e27" stroke-width="5" stroke-linecap="round"/><path d="M43 65q17 14 34 0l-8 2-3 8-5-7-5 7-5-8Z" fill="#191526"/><path d="m53 21 7-8 7 8-7 9Z" fill="var(--enemy-edge)"/></svg>';
+}
+export function machineSprite(cannon=false){
+  return '<svg class="machine-art" viewBox="0 0 140 94" aria-hidden="true" focusable="false">'+(cannon?'<path d="M59 59 62 9h16l3 50" fill="#86b9c9" stroke="#d5edf1" stroke-width="2"/><path d="M64 5h12v14H64Z" fill="#263d52"/><circle cx="70" cy="61" r="25" fill="#29465f" stroke="#88bbc9" stroke-width="3"/><circle cx="70" cy="61" r="10" fill="#a9e3ec"/>':'<path d="m31 18 18 22h42l18-22 15 10-24 32H40L16 28Z" fill="#4a7890" stroke="#a7dbe5" stroke-width="2"/><path d="M46 42h48v23H46Z" fill="#a9dcdf"/><path d="M52 48h36v10H52Z" fill="#15344b"/>')+'<path d="m33 64 14-12h46l14 12 7 20H26Z" fill="#233c54" stroke="#7098ae" stroke-width="2"/><path d="M18 78h104v10H18Z" fill="#14293e" stroke="#779bad" stroke-width="2"/><circle cx="39" cy="82" r="5" fill="#9bd5e0"/><circle cx="101" cy="82" r="5" fill="#9bd5e0"/></svg>';
 }
 export function salvageSprite(index){
   const [minimum,maximum]=ASSEMBLY.visuals.turnSeconds,seconds=minimum+index*17%(maximum-minimum+1);

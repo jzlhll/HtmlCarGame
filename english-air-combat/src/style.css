@@ -478,6 +478,9 @@ body[data-touch="true"] .assembly-mode .meteor{padding:4px}
 .assembly-mode .meteor[data-side="zh"]>.flight-art{inset:0 3% 0;width:94%;height:100%;animation:beacon-orbit 65s linear infinite;animation-play-state:paused}
 .assembly-mode .meteor .meteor-label{background:#0b1b2ce8;border:0;border-bottom:1px solid #7ab9c473;box-shadow:none;border-radius:3px;padding:4px 3px;max-height:65%;overflow:auto;font-size:clamp(13px,1.2vw,17px)}
 .assembly-mode .meteor[data-side="en"] .meteor-label{font:600 clamp(13px,1.35vw,19px) ui-monospace,monospace}
+.flight-frame:has(.assembly-mode[data-stage="2"]:not([hidden])){min-height:0}
+.assembly-mode[data-stage="2"] .meteor .meteor-label{max-height:none;overflow:visible;flex-shrink:0}
+.assembly-mode[data-stage="2"] .meteor>.flight-art,.assembly-mode[data-stage="2"] .sortie-craft>.flight-art{scale:var(--escort-scale,.7);transform-origin:center}
 .assembly-mode .meteor.pending{opacity:.65}
 .assembly-mode .meteor.pending:after{border-radius:12px;inset:1px;border-color:#b89bea}
 .meteor-lines path{fill:none;stroke:#ad97e3;stroke-width:1.7;stroke-dasharray:6 6;vector-effect:non-scaling-stroke;opacity:.7}
@@ -548,63 +551,67 @@ body[data-touch="true"][data-playing="true"] .assembly-mode .assembly-board .fra
 .storage-notice{pointer-events:none}
 body:has(.assembly-mode:not([hidden])) .storage-notice{top:56px;bottom:auto;max-width:calc(100vw - 24px);font-size:13px;text-align:center}
 
-/* 碎片无论是否选中都慢转；文字、按钮与选中标记不参与旋转。 */
+/* 碎片无论是否选中都慢转；文字和按钮不参与旋转。 */
 .assembly-mode .metal-fragment .rock-art{width:auto;max-width:86%;height:64%;aspect-ratio:1.2}
 .assembly-mode[data-motion="running"] .assembly-round:not([hidden]) .metal-fragment .rock-art{animation-play-state:running}
 .assembly-mode .metal-fragment.selected{outline:2px solid #ffe09a;outline-offset:-2px;border-radius:10px;background:radial-gradient(ellipse,#8b66344a,transparent 76%);box-shadow:inset 0 0 18px #ffd47a22,0 0 10px #e5b65d33}
 .assembly-mode .metal-fragment.selected .fragment-rock{opacity:1}
 .assembly-mode .metal-fragment.selected .rock-art{filter:drop-shadow(0 0 6px #ffd47abb) brightness(1.35)}
 .assembly-mode .metal-fragment.selected .fragment-label{color:#fff2c9;text-shadow:0 2px 4px #020712,0 0 8px #020712}
-.assembly-mode .metal-fragment.pending:after{content:"已用";position:absolute;z-index:2;right:4px;top:3px;padding:1px 4px;border-radius:4px;font:11px/1.3 system-ui,sans-serif;color:#aebdca;background:#172838;pointer-events:none;text-shadow:none}
-.assembly-mode .metal-fragment.selected:after{content:"已选";color:#32230c;background:#ffe09a}
+.assembly-mode .metal-fragment.pending:after{content:none}
 .assembly-mode .meaning-chip.selected{outline:3px solid #ffe09a;outline-offset:-1px;background:#352c23;box-shadow:inset 4px 0 #ffe09a}
 
-/* 无线电组频：两列频道独立滚动，碎片网格完整留在固定接收区。 */
-#assembly-mode[data-stage="1"] .radio-board{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) var(--signal-tray-height,260px);gap:10px;overflow:hidden;align-content:stretch}
-#assembly-mode[data-stage="1"] .radio-scroll{min-width:0;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#5d9ab5 #14243644;padding:2px 5px 10px 2px;scroll-padding:5px}
-#assembly-mode[data-stage="1"] .radio-channels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px;align-content:start}
-#assembly-mode[data-stage="1"] .radio-channel{display:grid;grid-template-columns:minmax(0,1fr);align-content:start;justify-content:stretch;gap:7px;min-width:0;min-height:90px;padding:8px 31px 12px 30px;border:0;border-bottom:1px solid #6a91aa55;border-radius:0;background:none;box-shadow:none;outline:none;opacity:1;text-align:left;isolation:isolate}
-#assembly-mode[data-stage="1"] .radio-channel:before{content:"";position:absolute;left:0;bottom:-1px;width:26%;height:3px;background:linear-gradient(90deg,#87bed680,transparent)}
-#assembly-mode[data-stage="1"] .radio-channel:after{content:none}
-#assembly-mode[data-stage="1"] .radio-channel.selected{border-bottom-color:#b2eaff;background:linear-gradient(90deg,#21567540,transparent);box-shadow:0 8px 15px -13px #8be3ff;outline:0}
-#assembly-mode[data-stage="1"] .radio-channel.selected:before{width:100%;background:linear-gradient(90deg,#b0e9ffbb,transparent)}
-#assembly-mode[data-stage="1"] .radio-number{position:absolute;top:12px;left:2px;font:11px ui-monospace,monospace;color:#6e9bb6;display:block;overflow:visible}
-#assembly-mode[data-stage="1"] .radio-wave{position:absolute;right:4px;top:34px;display:flex;align-items:center;gap:2px;height:20px;overflow:visible;max-height:none;width:auto}
-#assembly-mode[data-stage="1"] .radio-wave i{display:block;width:2px;height:8px;background:#6f9eb9;opacity:.65}
-#assembly-mode[data-stage="1"] .radio-wave i:nth-child(2){height:15px}#assembly-mode[data-stage="1"] .radio-wave i:nth-child(3){height:20px}#assembly-mode[data-stage="1"] .radio-wave i:nth-child(4){height:12px}
-#assembly-mode[data-stage="1"] .selected .radio-wave i{background:#c0efff;opacity:1;box-shadow:0 0 6px #9bdaff}
-#assembly-mode[data-stage="1"] .radio-channel .meaning-text{font-size:18px;line-height:1.45;color:#d5e8ef;max-height:none;overflow:visible}
-#assembly-mode[data-stage="1"] .radio-channel .assembly-answer{font-size:26px;line-height:1.25;color:#c1bcea;min-height:1.25em;max-height:none;overflow:visible}
-#assembly-mode[data-stage="1"] .radio-channel .assembly-answer:empty:after{content:"· · ·";color:#54758d;letter-spacing:4px}
-#assembly-mode[data-stage="1"] .radio-channel.selected :is(.meaning-text,.assembly-answer){color:#e1f4ff}
-#assembly-mode[data-stage="1"] .radio-tray{display:grid;grid-template-rows:28px minmax(0,1fr);min-height:0;min-width:0;overflow:hidden}
-#assembly-mode[data-stage="1"] .radio-belt{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #6c8bb655;font-size:11px;color:#98b6cb;letter-spacing:1px;gap:8px;white-space:nowrap}
-#assembly-mode[data-stage="1"] .radio-belt>span:before{content:"";display:inline-block;width:5px;height:5px;margin-right:8px;border-radius:50%;background:#bbacf6;box-shadow:0 0 8px #acb6ff88}
-#assembly-mode[data-stage="1"] .radio-belt small{font-size:10px;letter-spacing:0}
-#assembly-mode[data-stage="1"] .radio-tray .fragment-field{display:grid;grid-template-columns:repeat(var(--signal-columns,4),minmax(0,1fr));grid-template-rows:repeat(var(--signal-rows,4),minmax(0,1fr));grid-auto-rows:auto;grid-column:auto;grid-row:auto;gap:6px;height:auto;min-height:0;padding:0;border:0;overflow:hidden;align-content:stretch}
-#assembly-mode[data-stage="1"] .metal-fragment{display:grid;place-items:center;min-width:0;min-height:0;max-height:none;height:auto;padding:7px 5px;font-size:var(--signal-font,24px);touch-action:manipulation}
-#assembly-mode[data-stage="1"] .metal-fragment .fragment-label{display:block;max-width:100%;white-space:normal;overflow-wrap:anywhere;line-height:1.25}
-#assembly-mode[data-stage="1"] .metal-fragment .fragment-rock{filter:hue-rotate(12deg);opacity:.8}
-#assembly-mode[data-stage="1"] .metal-fragment.selected{outline:2px solid #a6e5ff;outline-offset:-3px;border-color:transparent;background:radial-gradient(ellipse,#295c854a,transparent 76%);box-shadow:inset 0 0 18px #8bd3ff22,0 0 8px #82c4ff22}
-#assembly-mode[data-stage="1"] .metal-fragment.selected .fragment-rock{opacity:1}
-#assembly-mode[data-stage="1"] .metal-fragment.selected .rock-art{filter:drop-shadow(0 0 6px #8ad6ffbb) brightness(1.35)}
-#assembly-mode[data-stage="1"] .metal-fragment.selected .fragment-label{color:#edf7ff}
-#assembly-mode[data-stage="1"] .metal-fragment.selected:after{color:#163347;background:#ade3f6;top:1px;right:2px;font-size:10px}
-#assembly-mode[data-stage="1"] .metal-fragment.pending:disabled .fragment-rock{opacity:.22}
-#assembly-mode[data-stage="1"] .assembly-footer .primary-button{background:#b2dded;color:#173047;border-color:#b2dded}
-#assembly-mode[data-stage="1"] .radio-board[data-layout="side"]{grid-template-columns:minmax(0,42fr) minmax(0,58fr);grid-template-rows:minmax(0,1fr);gap:6px}
-body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-board{gap:6px}
-body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-channels{gap:10px 12px}
-body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-channel{min-height:80px;padding:8px 22px 10px 23px;gap:5px}
-body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-channel .meaning-text{font-size:16px;line-height:1.4}
-body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-channel .assembly-answer{font-size:22px;line-height:1.3}
-body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-number{font-size:10px;left:0}
-body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-wave{right:1px;gap:2px;transform:scale(.8);transform-origin:right center}
-body[data-touch="true"] #assembly-mode[data-stage="1"] .assembly-help{max-height:none;overflow:visible;font-size:11px;line-height:1.35}
-body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-belt{font-size:10px;letter-spacing:0}
-body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-belt small{font-size:9px}
-
-#assembly-mode[data-stage="1"] .metal-fragment .fragment-rock{display:block}
-#assembly-mode[data-stage="1"] .metal-fragment .rock-art{position:absolute;left:50%;top:18%;translate:-50% 0;width:auto;height:64%;min-height:0;min-width:0;max-width:86%}
-
-#assembly-mode[data-stage="1"] .metal-fragment:before{content:"";position:absolute;inset:5px 3px;z-index:-1;clip-path:polygon(0 50%,15% 12%,78% 0,100% 45%,85% 88%,22% 100%);background:linear-gradient(140deg,#365c7e70,#132b4760);border:1px solid #729fc044;pointer-events:none}
+/* 超新星与瞄准护航：题面节点预建，位置和动画由有效时间驱动。 */
+.flight-frame:has(.assembly-mode:not([hidden])){min-height:0}
+#assembly-mode .assembly-intro{margin:0;position:absolute;z-index:6;top:104px;left:0;right:0;text-align:center;color:#d2e6f7;font-size:13px;pointer-events:none;text-shadow:0 2px 8px #020914}
+#assembly-mode[data-intro="false"] .assembly-intro{display:none}
+#assembly-mode .assembly-help{max-height:none;overflow:visible}
+#assembly-mode .assembly-heading h2{font-size:clamp(18px,2vw,26px)}
+#assembly-mode .nova-board,#assembly-mode .escort-board{flex:1;min-height:0;min-width:0;position:relative;display:flex;flex-direction:column;gap:10px}
+#assembly-mode .nova-field{flex:1;min-height:0;position:relative;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 50% 45%,#23406422,transparent 68%)}
+#assembly-mode .nova-fragment{position:absolute;left:0;top:0;display:grid;place-items:center;min-width:0;min-height:0;padding:7px 5px;will-change:transform;max-width:none;max-height:none;background:none;border-color:transparent;touch-action:manipulation}
+#assembly-mode .nova-fragment.pending{opacity:.25;outline:0;background:none;box-shadow:none}
+#assembly-mode .nova-fragment.pending:after{content:none}
+#assembly-mode .nova-fragment.pending .fragment-rock{opacity:.8}
+#assembly-mode .nova-fragment.pending .rock-art{filter:none}
+#assembly-mode .nova-fragment.pending .fragment-label{color:#f2f7ff}
+#assembly-mode .nova-fragment .fragment-label{font-size:inherit;line-height:1.25;white-space:normal;overflow-wrap:anywhere}
+#assembly-mode .nova-event{position:absolute;left:50%;top:44%;width:150px;height:150px;translate:-50% -50%;pointer-events:none;z-index:-1}
+#assembly-mode .nova-planet{position:absolute;inset:0;border-radius:50%;background:radial-gradient(ellipse at 28% 25%,hsl(var(--planet-hue) 80% 84%),transparent 40%),repeating-linear-gradient(23deg,transparent 0 17px,#18263b33 20px 25px,transparent 29px 37px),radial-gradient(circle at 34% 30%,hsl(var(--planet-hue) 65% 65%),hsl(var(--planet-hue) 60% 31%) 64%,#091324 91%);box-shadow:inset -18px -12px 25px #030c2677,0 0 38px hsl(var(--planet-hue) 80% 60% / .35);transform:scale(var(--planet-scale,1))}
+#assembly-mode .nova-ring{position:absolute;inset:8%;border:2px solid hsl(var(--planet-hue) 90% 80% / .7);border-radius:50%;transform:scale(calc(.2 + var(--nova-spread,0) * 9));opacity:var(--nova-spread,0);box-shadow:0 0 28px hsl(var(--planet-hue) 80% 60% / .4)}
+#assembly-mode .nova-flash{position:absolute;inset:-40%;border-radius:50%;background:radial-gradient(circle,#fff3d7, hsl(var(--planet-hue) 90% 80% / .6) 24%,transparent 68%);opacity:var(--flash-opacity,0)}
+#assembly-mode .collector-dock{display:grid;grid-template-columns:repeat(var(--collector-columns,3),minmax(0,1fr));gap:8px 14px;max-height:46%;overflow:auto;flex-shrink:0;padding:3px 4px 4px;scrollbar-width:thin}
+#assembly-mode[data-intro="true"] .collector-dock{visibility:hidden}
+#assembly-mode .recovery-unit{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:2px;min-width:0;min-height:84px;padding:5px 10px;background:linear-gradient(0deg,#1b3e5555,transparent 80%);border:0;border-bottom:1px solid #709eb244;border-radius:6px;color:#c8dee8}
+#assembly-mode .recovery-unit.selected{background:linear-gradient(0deg,#376e8b66,transparent);border-bottom-color:#b0e4f3;box-shadow:0 5px 12px -9px #a9e9ff}
+#assembly-mode .collector-meaning{font-size:16px;line-height:1.35;overflow-wrap:anywhere}
+#assembly-mode .recovery-unit .machine-art{width:76px;height:38px;flex-shrink:0}
+#assembly-mode .collector-answer{font:600 21px/1.2 ui-monospace,monospace;color:#e1d4f7;min-height:calc(var(--answer-lines,1) * 1.2em);overflow-wrap:anywhere}
+#assembly-mode .collector-answer:empty:after{content:"· · ·";color:#6b8aa0}
+#assembly-mode .enemy-scroll{flex:1;min-height:0;overflow:auto;scrollbar-width:thin;overscroll-behavior:contain;overflow-x:hidden}
+#assembly-mode .enemy-sky{position:relative;min-height:100%;overflow:hidden}
+#assembly-mode .evil-plane{position:absolute;top:0;left:0;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:3px 5px;gap:2px;border:0;border-radius:12px;background:none;color:#edf3fb;touch-action:manipulation;will-change:transform;transition:opacity .15s}
+#assembly-mode .evil-art{width:calc(var(--enemy-model-height,58.8px) * 120 / 84);height:var(--enemy-model-height,58.8px);flex-shrink:0;overflow:visible;filter:drop-shadow(0 3px 5px #020a1b)}
+#assembly-mode .skin-0{--enemy-body:#9c3454;--enemy-edge:#f3a0ac}
+#assembly-mode .skin-1{--enemy-body:#6844a4;--enemy-edge:#c5b3f0}
+#assembly-mode .skin-2{--enemy-body:#2d777c;--enemy-edge:#9be0ce}
+#assembly-mode .enemy-word{font:600 21px/1.2 ui-monospace,monospace;overflow-wrap:anywhere;max-width:100%;text-shadow:0 2px 5px #020a1b}
+#assembly-mode .evil-plane.aimed{outline:2px dashed #eac886;outline-offset:-2px;background:radial-gradient(ellipse,#89673a22,transparent 70%)}
+#assembly-mode .evil-plane.tagged{opacity:.35}
+#assembly-mode .attached-meaning{font-size:14px;line-height:1.3;max-width:100%;min-height:var(--attachment-height,0px);overflow-wrap:anywhere;color:#c3e7ed}
+#assembly-mode .attached-meaning:empty{display:block;visibility:hidden}
+#assembly-mode .cannon-dock{flex-shrink:0;height:88px;display:flex;justify-content:center;align-items:center;position:relative;z-index:4;border-top:1px solid #7d9bb32a}
+#assembly-mode .meaning-cannon{position:relative;width:min(420px,96%);height:100%;background:none;border:0;color:#d8e9f2;display:flex;align-items:center;justify-content:space-between;flex-direction:column;padding:3px 5px;gap:3px}
+#assembly-mode .meaning-cannon:disabled{opacity:1;cursor:default}
+#assembly-mode .ammo-caption{font-size:18px;line-height:1.3;overflow-wrap:anywhere;text-align:center;z-index:1;text-shadow:0 1px 5px #050b17}
+#assembly-mode .cannon-pivot{position:absolute;bottom:14px;left:50%;translate:-50% 0;width:84px;height:56px;pointer-events:none}
+#assembly-mode .cannon-pivot .machine-art{width:100%;height:100%;transform:rotate(var(--aim-angle,0deg));transform-origin:50% 65%}
+#assembly-mode .cannon-status{font-size:11px;color:#86acbd;margin-top:auto;z-index:1}
+#assembly-mode .aim-guide{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:2}
+#assembly-mode .aim-guide line{stroke:#e9c98b;stroke-width:1;stroke-dasharray:4 8;opacity:.4}
+#assembly-mode .meaning-shell{position:absolute;left:0;top:0;z-index:6;pointer-events:none;border:1px solid #c0e4e8;border-radius:16px;padding:6px 12px;background:#24485fe8;box-shadow:0 0 14px #9ee3ec66;color:#f0fcff;font-size:15px;max-width:200px;text-align:center;overflow-wrap:anywhere}
+#assembly-mode[data-intro="true"] .evil-plane,#assembly-mode[data-intro="true"] .nova-fragment{pointer-events:none}
+#assembly-mode[data-intro="true"] .meaning-cannon{visibility:hidden}
+@media(max-width:719px){#assembly-mode .collector-meaning{font-size:14px}#assembly-mode .collector-answer{font-size:18px}#assembly-mode .recovery-unit{padding:4px 5px;min-height:80px}#assembly-mode .enemy-word{font-size:18px}#assembly-mode .attached-meaning{font-size:13px}#assembly-mode .cannon-dock{height:120px}#assembly-mode .ammo-caption{font-size:16px}}
+body[data-touch="true"] #assembly-mode .assembly-intro{top:76px;font-size:11px}
+@media(orientation:landscape) and (max-height:500px){#assembly-mode .collector-dock{max-height:46%;grid-template-columns:repeat(3,minmax(0,1fr))}#assembly-mode .cannon-dock{height:94px}#assembly-mode .cannon-pivot{height:60px;width:90px;bottom:12px}#assembly-mode .cannon-status{font-size:10px}#assembly-mode .ammo-caption{font-size:14px}}

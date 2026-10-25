@@ -208,7 +208,7 @@ export class Game {
   collect(crate){if(crate.dead||crate.auto)return;crate.dead=true;const type=['heart','star','shell'][Math.floor(this.random()*3)];this.collected[type]++;if(this.collections.length<SUPPLIES.maxActive)this.collections.push({id:crate.id,type,x:crate.x,y:crate.y,age:0});else this.displayCollected[type]++;this.audio.play('success');}
   update(dt){
     if(this.state!=='playing')return;
-    if(this.assembly){this.elapsed+=Math.min(dt,this.assembly.remaining);this.assembly.update(dt);this.remaining=this.assembly.remaining;if(this.assembly.done)this.finish('assembly-completed');return;}
+    if(this.assembly){this.elapsed+=this.assembly.update(dt);this.remaining=this.assembly.remaining;if(this.assembly.done)this.finish('assembly-completed');return;}
     const collecting=this.victoryRemaining!==null;
     if(!collecting&&this.remaining<=dt+1e-8){this.elapsed=this.timing.durationSeconds;this.remaining=0;if(this.boss)this.expireBoss();if(this.victoryRemaining===null)this.finish();return;}
     const previousPlayerX=this.player.x,previousPlayerY=this.player.y;this.elapsed+=dt;

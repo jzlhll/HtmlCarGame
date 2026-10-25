@@ -29,53 +29,58 @@ export function splitWord(word){
   return parts;
 }
 
+// 四轮内容与视觉随机流在开局准备，出场动画不扣答题时间。
 export class AssemblyRound {
   constructor(roster,seed,onRecord){
     this.roster=roster;this.random=createRandom(seed^0x41535345);this.onRecord=onRecord;this.roundIndex=-1;this.done=false;this.version=0;
-    const count=ASSEMBLY.roundsPerStage*ASSEMBLY.stageSeconds.length,spellingCount=ASSEMBLY.stageWordCounts[0],omitted=roster.length-ASSEMBLY.stageWordCounts[1],spellingOrder=shuffle([...roster],this.random),linkingOrder=shuffle([...roster],this.random);
-    if(spellingCount*ASSEMBLY.roundsPerStage!==roster.length||omitted<0||omitted*ASSEMBLY.roundsPerStage>roster.length||new Set(roster.map(entry=>entry.id)).size!==roster.length)throw new Error('Invalid assembly roster coverage');
-    // 拼接两轮各六词且互不重复；连线两轮各九词，轮空的三词必在另一轮出现。
-    this.rounds=Array.from({length:count},(_,index)=>{
-      const stage=Math.floor(index/ASSEMBLY.roundsPerStage),part=index%ASSEMBLY.roundsPerStage,excluded=new Set(linkingOrder.slice(part*omitted,(part+1)*omitted).map(entry=>entry.id)),entries=stage===0?spellingOrder.slice(part*spellingCount,(part+1)*spellingCount):roster.filter(entry=>!excluded.has(entry.id));
-      return {entries,meanings:shuffle([...entries],this.random),fragments:shuffle(entries.flatMap(entry=>splitWord(entry.word).map((text,part)=>({id:entry.id+':'+part,text}))),this.random),meteors:shuffle(entries.flatMap(entry=>[{id:'en:'+entry.id,entryId:entry.id,side:'en',text:entry.word},{id:'zh:'+entry.id,entryId:entry.id,side:'zh',text:entry.meaning}]),this.random)};
+    const spellingCount=ASSEMBLY.stageWordCounts[0],order=shuffle([...roster],this.random),visualRandom=createRandom(seed^0x4e4f5641);
+    if(spellingCount*ASSEMBLY.roundsPerStage!==roster.length||ASSEMBLY.stageWordCounts[1]!==roster.length||new Set(roster.map(entry=>entry.id)).size!==roster.length)throw new Error('Invalid assembly roster coverage');
+    this.rounds=Array.from({length:ASSEMBLY.roundsPerStage*ASSEMBLY.stageSeconds.length},(_,index)=>{
+      const stage=Math.floor(index/ASSEMBLY.roundsPerStage),entries=stage===0?order.slice(index*spellingCount,(index+1)*spellingCount):shuffle([...roster],this.random);
+      return {entries,meanings:shuffle([...entries],this.random),fragments:shuffle(entries.flatMap(entry=>splitWord(entry.word).map((text,part)=>({id:entry.id+':'+part,text}))),this.random),
+        enemies:shuffle([...entries],this.random).map((entry,index)=>({id:'en:'+entry.id,entryId:entry.id,text:entry.word,skin:index%3,phase:visualRandom()*Math.PI*2,period:ASSEMBLY.visuals.enemyPeriodSeconds[0]+visualRandom()*(ASSEMBLY.visuals.enemyPeriodSeconds[1]-ASSEMBLY.visuals.enemyPeriodSeconds[0])})),
+        sceneSeed:Math.floor(visualRandom()*0x7fffffff),hue:Math.floor(visualRandom()*360)};
     });
     this.beginStage();
   }
   beginStage(){
-    this.roundIndex++;this.stage=Math.floor(this.roundIndex/ASSEMBLY.roundsPerStage)+1;this.remaining=ASSEMBLY.stageSeconds[this.stage-1];this.attempts=0;this.pending=null;this.assignments=new Map();this.solved=new Set();this.finishedRecords=new Set();this.removedFragments=new Set();this.removedMeteors=new Set();
-    Object.assign(this,this.rounds[this.roundIndex]);this.version++;
+    this.roundIndex++;this.stage=Math.floor(this.roundIndex/ASSEMBLY.roundsPerStage)+1;this.remaining=ASSEMBLY.stageSeconds[this.stage-1];this.introDuration=ASSEMBLY.introSeconds[this.stage-1];this.introRemaining=this.introDuration;this.time=0;this.attempts=0;this.pending=null;this.shot=null;
+    this.assignments=new Map();this.solved=new Set();this.finishedRecords=new Set();this.removedFragments=new Set();this.removedMeteors=new Set();
+    Object.assign(this,this.rounds[this.roundIndex]);this.enemyAges=new Map(this.enemies.map(enemy=>[enemy.id,0]));this.version++;
   }
-  get allAssigned(){return this.assignments.size+this.solved.size===this.entries.length&&(this.stage===2?!this.pending:this.used.size+this.removedFragments.size===this.fragments.length);}
+  get allAssigned(){return !this.introRemaining&&!this.shot&&this.assignments.size+this.solved.size===this.entries.length&&(this.stage===2||this.used.size+this.removedFragments.size===this.fragments.length);}
   get checksLeft(){return ASSEMBLY.maxChecks-this.attempts;}
   get used(){return new Set([...this.assignments.values()].flat());}
+  get ammunition(){const used=this.used;return this.meanings.find(entry=>!used.has('zh:'+entry.id)&&!this.removedMeteors.has('zh:'+entry.id));}
   fragment(id){
-    if(this.done||this.stage!==1||!this.pending||this.solved.has(this.pending)||!this.fragments.some(item=>item.id===id)||this.removedFragments.has(id))return;
+    if(this.done||this.introRemaining||this.stage!==1||!this.pending||this.solved.has(this.pending)||!this.fragments.some(item=>item.id===id)||this.removedFragments.has(id))return;
     const parts=this.assignments.get(this.pending)||[],index=parts.indexOf(id);
     if(index>=0)parts.splice(index,1);else{if(this.used.has(id))return;parts.push(id);}
     if(parts.length)this.assignments.set(this.pending,parts);else this.assignments.delete(this.pending);
     this.version++;
   }
   meaning(id){
-    if(this.done||this.stage!==1||this.solved.has(id)||!this.entries.some(item=>item.id===id))return;
+    if(this.done||this.introRemaining||this.stage!==1||this.solved.has(id)||!this.entries.some(item=>item.id===id))return;
     this.pending=id;this.version++;
   }
   clear(){
-    if(this.done)return;
+    if(this.done||this.introRemaining||this.shot)return;
     if(this.stage===1){if(!this.pending||!this.assignments.has(this.pending))return;this.assignments.delete(this.pending);}else this.pending=null;
     this.version++;
   }
-  meteor(id){
-    if(this.done||this.stage!==2)return;const item=this.meteors.find(item=>item.id===id);if(!item||this.removedMeteors.has(id))return;
-    const paired=[...this.assignments].find(([key,value])=>key===id||value[0]===id);
-    if(paired){this.assignments.delete(paired[0]);this.pending=null;this.version++;return;}
-    if(this.pending===id)this.pending=null;
-    else if(!this.pending||this.meteors.find(other=>other.id===this.pending).side===item.side)this.pending=id;
-    else{const other=this.meteors.find(other=>other.id===this.pending),english=item.side==='en'?item:other,chinese=item.side==='zh'?item:other;this.assignments.set(english.id,[chinese.id]);this.pending=null;}
+  enemy(id){
+    if(this.done||this.introRemaining||this.stage!==2||this.shot||!this.enemies.some(item=>item.id===id)||this.removedMeteors.has(id))return;
+    if(this.assignments.has(id)){this.assignments.delete(id);this.pending=null;}else this.pending=this.pending===id?null:id;
     this.version++;
   }
+  fire(){
+    if(this.done||this.introRemaining||this.stage!==2||this.shot||!this.pending||this.assignments.has(this.pending)||!this.ammunition)return false;
+    this.shot={enemy:this.pending,meaning:this.ammunition,age:0};this.version++;return true;
+  }
+  drift(enemy){return Math.sin(enemy.phase+(this.enemyAges.get(enemy.id)||0)*Math.PI*2/enemy.period);}
   answer(id){
     if(this.stage===1)return (this.assignments.get(id)||[]).map(key=>this.fragments.find(item=>item.id===key).text).join('');
-    const linked=this.assignments.get('en:'+id)?.[0];return linked?this.meteors.find(item=>item.id===linked).text:'';
+    const linked=this.assignments.get('en:'+id)?.[0];return linked?this.entries.find(entry=>'zh:'+entry.id===linked)?.meaning||'':'';
   }
   record(entry,kind,answer){this.onRecord(entry,kind,answer||'未作答',this.stage,this.attempts,this.roundIndex+1);}
   submit(){
@@ -99,6 +104,16 @@ export class AssemblyRound {
     if(recordUnfinished)for(const entry of this.entries)if(!this.finishedRecords.has(entry.id))this.record(entry,'incomplete',this.answer(entry.id));
     if(this.roundIndex+1<this.rounds.length)this.beginStage();else{this.done=true;this.remaining=0;this.version++;}
   }
-  close(){if(this.done)return;for(const entry of this.entries)if(!this.finishedRecords.has(entry.id))this.record(entry,'incomplete',this.answer(entry.id));this.done=true;this.version++;}
-  update(dt){if(this.done)return;this.remaining=Math.max(0,this.remaining-dt);if(this.remaining<=1e-8)this.advance();}
+  close(){if(this.done)return;for(const entry of this.entries)if(!this.finishedRecords.has(entry.id))this.record(entry,'incomplete',this.answer(entry.id));this.shot=null;this.done=true;this.version++;}
+  update(dt){
+    if(this.done||!Number.isFinite(dt)||dt<=0)return 0;
+    const intro=Math.min(dt,this.introRemaining);this.introRemaining=Math.max(0,this.introRemaining-intro);this.time+=intro;dt-=intro;
+    if(intro&&this.introRemaining<1e-8){this.introRemaining=0;this.version++;}
+    const active=Math.min(dt,this.remaining);this.time+=active;this.remaining=Math.max(0,this.remaining-active);
+    if(this.stage===2){
+      for(const enemy of this.enemies)if(!this.assignments.has(enemy.id)&&!this.removedMeteors.has(enemy.id))this.enemyAges.set(enemy.id,this.enemyAges.get(enemy.id)+active);
+      if(this.shot){this.shot.age+=active;if(this.shot.age>=ASSEMBLY.visuals.flightSeconds){this.assignments.set(this.shot.enemy,['zh:'+this.shot.meaning.id]);this.shot=null;this.pending=null;this.version++;}}
+    }
+    if(this.remaining<=1e-8)this.advance();return active;
+  }
 }
