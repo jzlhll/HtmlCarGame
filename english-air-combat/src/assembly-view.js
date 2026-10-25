@@ -1,21 +1,19 @@
 import { ASSEMBLY } from './config.js';
 import { createRandom } from './random.js';
 import { AssemblyFlight } from './assembly-flight.js';
-import { evilSprite,machineSprite,salvageSprite } from './assembly-art.js';
+import { evilSprite,machineSprite,salvageSprite,novaSprite } from './assembly-art.js';
 const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const time=seconds=>{const value=Math.ceil(seconds);return String(Math.floor(value/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');};
 
 // 所有轮次的星球、碎片、回收机、飞机和炮弹均在开局预建。
 export class AssemblyView {
-  constructor(root,game,onChange,onNotice){
-    Object.assign(this,{root,game,onChange,onNotice});this.flight=new AssemblyFlight(this);
+  constructor(root,game,onChange){
+    Object.assign(this,{root,game,onChange});this.flight=new AssemblyFlight(this);
     root.addEventListener('click',event=>{
       const round=game.assembly,button=event.target.closest('button[data-puzzle]');if(game.state!=='playing'||!round||round.introRemaining||!button||button.disabled)return;
       const action=button.dataset.puzzle;
-      if(action==='submit'){
-        const result=game.submitAssembly();if(result)this.onNotice(result.advanced?(round.done?'四轮已完成':'第 '+result.round+' 轮结束，进入下一轮'):'本次答对 '+result.correct+' 个，错误项已释放，请重新选择');
-      }else if(action==='fire'){if(!round.fire())this.onNotice('先点击一架邪恶飞机瞄准，再点击炮弹机发射');}
-      else if(action==='fragment'&&!round.pending)this.onNotice('先选择底部中文释义回收机，再点击单词碎片');
+      if(action==='submit')game.submitAssembly();
+      else if(action==='fire')round.fire();
       else if(['fragment','meaning','enemy','clear'].includes(action))round[action](button.dataset.id);
       this.onChange();
     });
@@ -26,10 +24,10 @@ export class AssemblyView {
     this.root.style.setProperty('--escort-scale',ASSEMBLY.visuals.escortScale);
     const panels=round.rounds.map((content,index)=>{
       const stage=Math.floor(index/ASSEMBLY.roundsPerStage)+1;
-      if(stage===1)return '<section class="assembly-round" data-round-index="'+index+'" hidden><div class="nova-board"><div class="nova-field" aria-label="超新星单词碎片"><div class="nova-event" aria-hidden="true" style="--planet-hue:'+content.hue+'"><div class="nova-ring"></div><div class="nova-planet"></div><div class="nova-flash"></div></div>'+content.fragments.map((item,part)=>'<button class="metal-fragment nova-fragment" data-puzzle="fragment" data-id="'+escape(item.id)+'">'+salvageSprite(part)+'<span class="fragment-label" lang="en">'+escape(item.text)+'</span></button>').join('')+'</div><div class="collector-dock" role="group" aria-label="中文释义碎片回收机">'+content.meanings.map(entry=>'<button class="recovery-unit" data-puzzle="meaning" data-id="'+escape(entry.id)+'"><span class="collector-meaning">'+escape(entry.meaning)+'</span>'+machineSprite()+'<span class="collector-answer" lang="en"></span></button>').join('')+'</div></div></section>';
-      return '<section class="assembly-round" data-round-index="'+index+'" hidden><div class="escort-board"><div class="enemy-scroll"><div class="enemy-sky" aria-label="十二架邪恶飞机">'+content.enemies.map(enemy=>'<button class="evil-plane" data-puzzle="enemy" data-id="'+escape(enemy.id)+'">'+evilSprite(enemy.skin)+'<span class="enemy-word" lang="en">'+escape(enemy.text)+'</span><span class="attached-meaning"></span></button>').join('')+'</div></div><div class="cannon-dock"><button class="meaning-cannon" data-puzzle="fire" aria-label="炮弹机，点击发射中文释义"><span class="ammo-caption"></span><span class="cannon-pivot">'+machineSprite(true)+'</span><span class="cannon-status"></span></button></div><svg class="aim-guide" aria-hidden="true"><line/></svg><span class="meaning-shell" hidden></span></div></section>';
+      if(stage===1)return '<section class="assembly-round" data-round-index="'+index+'" hidden><div class="nova-board"><div class="nova-backdrop" aria-hidden="true">'+novaSprite(content.sceneSeed,content.hue)+'</div><div class="nova-field" aria-label="超新星单词碎片">'+content.fragments.map((item,part)=>'<button class="metal-fragment nova-fragment" data-puzzle="fragment" data-id="'+escape(item.id)+'">'+salvageSprite(part)+'<span class="fragment-label" lang="en">'+escape(item.text)+'</span></button>').join('')+'</div><div class="collector-dock" role="group" aria-label="中文释义碎片回收机">'+content.meanings.map(entry=>'<button class="recovery-unit" data-puzzle="meaning" data-id="'+escape(entry.id)+'"><span class="collector-meaning">'+escape(entry.meaning)+'</span>'+machineSprite()+'<span class="collector-answer" lang="en"></span></button>').join('')+'</div></div></section>';
+      return '<section class="assembly-round" data-round-index="'+index+'" hidden><div class="escort-board"><div class="enemy-scroll"><div class="enemy-sky" aria-label="十二架邪恶飞机">'+content.enemies.map(enemy=>'<button class="evil-plane" data-puzzle="enemy" data-id="'+escape(enemy.id)+'">'+evilSprite(enemy.skin)+'<span class="enemy-word" lang="en">'+escape(enemy.text)+'</span><span class="attached-meaning"></span></button>').join('')+'</div></div><div class="cannon-dock"><button class="meaning-cannon" data-puzzle="fire" aria-label="炮弹机，点击发射中文释义"><span class="ammo-caption"></span><span class="cannon-pivot">'+machineSprite(true)+'</span></button></div><svg class="aim-guide" aria-hidden="true"><line/></svg><span class="meaning-shell" hidden></span></div></section>';
     });
-    this.root.innerHTML='<header class="assembly-heading"><div><span class="eyebrow">星际课堂 · 超新星与瞄准</span><h2 id="assembly-title"></h2></div><div class="assembly-clock"><strong role="timer" id="assembly-timer"></strong><span id="assembly-checks"></span></div></header><p id="assembly-help" class="assembly-help"></p><p class="assembly-intro" aria-live="polite"></p>'+panels.join('')+'<footer class="assembly-footer"><div><span id="assembly-selection" aria-live="polite"></span><button class="text-button" data-puzzle="clear">清空拼接</button></div><button class="primary-button" data-puzzle="submit" id="assembly-submit">提交验证</button></footer>';
+    this.root.innerHTML='<header class="assembly-heading"><h2 id="assembly-title"></h2><div class="assembly-clock"><strong role="timer" id="assembly-timer"></strong></div></header>'+panels.join('')+'<footer class="assembly-footer"><div><span id="assembly-selection" aria-live="polite"></span><button class="text-button" data-puzzle="clear">清空拼接</button></div><button class="primary-button" data-puzzle="submit" id="assembly-submit">提交验证</button></footer>';
     this.views=[...this.root.querySelectorAll('.assembly-round')].map(element=>({element,fragments:[...element.querySelectorAll('.nova-fragment')],collectors:[...element.querySelectorAll('.recovery-unit')],enemies:[...element.querySelectorAll('.evil-plane')]}));
     for(const field of this.root.querySelectorAll('.nova-field,.enemy-scroll,.enemy-sky'))this.observer.observe(field);
     this.flight.prepare();
@@ -53,7 +51,9 @@ export class AssemblyView {
       }
       points.push(best);node.style.width=w+'px';node.style.height=h+'px';node.style.fontSize=font+'px';
     }
-    this.fragmentPositions=points;this.fieldSize={width,height};
+    this.fragmentPositions=points;this.fieldSize={width,height};this.activeView.novaSettled=false;
+    const motion=createRandom(this.round.sceneSeed^0x5350494e);this.fragmentMotion=points.map(()=>({delay:motion()*.045,arc:(motion()-.5)*.13,spin:(motion()-.5)*440}));
+    const event=this.activeView.element.querySelector('.nova-event');event.style.top=height*.44+'px';event.style.setProperty('--nova-size',Math.min(240,width*.48,height*.72)+'px');event.style.setProperty('--nova-reach',Math.hypot(width,height)*.58+'px');
     const dock=this.activeView.element.querySelector('.collector-dock'),columns=width>=720?3:2,answerFont=width>=720?21:18;
     dock.style.setProperty('--collector-columns',columns);dock.style.setProperty('--answer-lines',Math.max(1,Math.ceil(Math.max(...this.round.entries.map(entry=>entry.word.length))*answerFont*.62/(width/columns-24))));
   }
@@ -82,9 +82,6 @@ export class AssemblyView {
     if(this.lastVersion!==round.version){
       this.lastVersion=round.version;
       const title=round.stage===1?'超新星爆发':'护航编队';this.root.querySelector('#assembly-title').textContent=title+' · '+(round.roundIndex+1)+' / '+round.rounds.length;
-      this.root.querySelector('#assembly-help').textContent=round.stage===1?'先选底部中文释义回收机，再按顺序点击星球碎片拼词；全部回收后提交验证。':'先点邪恶飞机瞄准，再点底部炮弹机发射中文；点已贴好的飞机可撤回，全部贴好后提交验证。';
-      this.root.querySelector('.assembly-intro').textContent=intro?(round.stage===1?'超新星即将爆发 · 开场动画不计时':'敌机阵列正在进入 · 开场动画不计时'):'';
-      this.root.querySelector('#assembly-checks').textContent='剩余验证 '+round.checksLeft+' / '+ASSEMBLY.maxChecks+' 次';
       const used=round.used,parts=round.stage===1?(round.assignments.get(round.pending)||[]):[];
       for(const node of this.activeView.fragments){const id=node.dataset.id,selected=parts.includes(id);node.hidden=round.removedFragments.has(id);node.classList.toggle('pending',used.has(id));node.classList.toggle('selected',selected);node.disabled=intro||used.has(id)&&!selected;node.setAttribute('aria-pressed',String(selected));}
       for(const node of this.activeView.collectors){const id=node.dataset.id,selected=id===round.pending;node.hidden=round.solved.has(id);node.disabled=intro;node.classList.toggle('selected',selected);node.querySelector('.collector-answer').textContent=round.answer(id);node.setAttribute('aria-pressed',String(selected));}
@@ -95,13 +92,11 @@ export class AssemblyView {
       }
       const cannon=this.activeView.element.querySelector('.meaning-cannon');
       if(cannon){
-        const ammo=round.shot?.meaning||round.ammunition;cannon.disabled=intro||!!round.shot||!ammo;cannon.querySelector('.ammo-caption').textContent=ammo?.meaning||'本轮释义已全部发射';
-        cannon.querySelector('.cannon-status').textContent=round.shot?'发射中…':!ammo?'全部贴好，等待提交':round.pending?'点击发射':'先选择目标';
+        const ammo=round.shot?.meaning||round.ammunition;cannon.disabled=intro||!!round.shot||!ammo;cannon.querySelector('.ammo-caption').textContent=ammo?.meaning||'';
         this.activeView.element.querySelector('.meaning-shell').textContent=round.shot?.meaning.meaning||'';
       }
       const submit=this.root.querySelector('#assembly-submit');submit.disabled=!round.allAssigned;submit.textContent='提交验证 · '+round.checksLeft+'次';
-      const selection=round.stage===1?round.meanings.find(item=>item.id===round.pending)?.meaning:null;
-      this.root.querySelector('#assembly-selection').textContent=intro?'准备进入本轮':round.stage===1?selection||'选择一台碎片回收机':'已贴 '+(round.assignments.size+round.solved.size)+' / '+round.entries.length;
+      this.root.querySelector('#assembly-selection').textContent=!intro&&round.stage===2?(round.assignments.size+round.solved.size)+' / '+round.entries.length:'';
       const clear=this.root.querySelector('[data-puzzle="clear"]');clear.textContent=round.stage===1?'清空拼接':'取消瞄准';clear.disabled=intro||!!round.shot||(round.stage===1?!parts.length:!round.pending);
     }
     if(changedRound)this.layout();this.flight.update();

@@ -17,13 +17,28 @@ export class AssemblyFlight {
   }
   nova(round,view){
     const positions=this.view.fragmentPositions,size=this.view.fieldSize;if(!positions||!size)return;
-    const t=clamp(round.time/round.introDuration),spread=clamp((t-.28)/.72),ease=1-(1-spread)**3,still=this.still;
-    const event=view.element.querySelector('.nova-event');event.style.opacity=String(clamp((1-t)/.36));event.style.setProperty('--nova-spread',spread);event.style.setProperty('--planet-scale',String(t<.28?1+t*.8:Math.max(0,1-spread*4)));event.style.setProperty('--flash-opacity',still?'0':String(Math.max(0,1-Math.abs(t-.3)*18)));
+    const t=clamp(round.time/round.introDuration),{burstAt,settleAt}=ASSEMBLY.visuals.nova,still=this.still;
+    if(t>=1&&view.novaSettled)return;
+    const charge=clamp(t/burstAt),burst=clamp((t-burstAt)/(settleAt-burstAt)),ease=1-(1-burst)**3,fade=1-clamp((t-.7)/.3),event=view.element.querySelector('.nova-event');
+    event.style.opacity=t>=1?'0':'1';event.style.setProperty('--charge',charge);event.style.setProperty('--burst',ease);
+    event.style.setProperty('--planet-scale',String(t<burstAt?1+Math.sin(charge*Math.PI)*.08-charge**5*.19:Math.max(0,.81-burst*6)));
+    event.style.setProperty('--planet-alpha',String(1-clamp(burst*9)));event.style.setProperty('--crack-alpha',String(charge**4*(1-clamp(burst*5))));
+    event.style.setProperty('--aura-alpha',String(t<burstAt?.12+charge**2*.45:fade*.32));
+    event.style.setProperty('--core-alpha',String(t<burstAt?charge**7*.3:(1-clamp(burst*1.8))*.95));event.style.setProperty('--flare-alpha',String(t<burstAt?charge**12*.2:Math.max(0,1-burst*4.3)));
+    event.style.setProperty('--spark-alpha',String((burst>0?1:0)*fade));event.style.setProperty('--debris-alpha',String((burst>0?1:0)*(1-clamp((burst-.4)/.6))));
+    event.style.setProperty('--shock-one',String(.75+ease*7));event.style.setProperty('--shock-one-alpha',String((burst>0?1:0)*(1-clamp(burst*1.3))*.85));
+    const second=clamp((burst-.1)/.9);event.style.setProperty('--shock-two',String(.6+(1-(1-second)**3)*6));event.style.setProperty('--shock-two-alpha',String((burst>.1?1:0)*(1-second)*.65));
+    event.style.setProperty('--cloud-alpha',String((burst>0?1:0)*Math.sin(burst*Math.PI)*.4));
     view.fragments.forEach((node,index)=>{
-      const target=positions[index],p=still?1:ease,x=size.width*.5+(target.x-size.width*.5)*p,y=size.height*.44+(target.y-size.height*.44)*p;
-      node.style.transform='translate3d('+x+'px,'+y+'px,0) translate(-50%,-50%) scale('+(still?1:.18+.82*ease)+')';node.style.visibility=spread>0||!round.introRemaining?'visible':'hidden';
+      const target=positions[index],motion=this.view.fragmentMotion[index],q=clamp((t-burstAt-motion.delay)/(settleAt-burstAt-motion.delay)),p=still?1:1-(1-q)**3;
+      const dx=target.x-size.width*.5,dy=target.y-size.height*.44,length=Math.hypot(dx,dy)||1,arc=still?0:Math.sin(q*Math.PI)*(1-q)*Math.min(size.width,size.height)*motion.arc;
+      const x=size.width*.5+dx*p-dy/length*arc,y=size.height*.44+dy*p+dx/length*arc;
+      node.style.transform='translate3d('+x+'px,'+y+'px,0) translate(-50%,-50%) scale('+(still?1:.07+.93*p)+')';node.style.visibility=q>0||!round.introRemaining?'visible':'hidden';
+      node.style.setProperty('--birth-spin',still?'0deg':(1-p)*motion.spin+'deg');node.style.setProperty('--letter-reveal',still?'1':String(clamp((q-.1)/.2)));
     });
+    view.novaSettled=t>=1;
   }
+
   escort(round,view){
     const layout=this.view.enemyLayout;if(!layout)return;
     const {columns,rows,cellWidth,height}=layout,positions=new Map(),intro=round.introRemaining>0,still=this.still;

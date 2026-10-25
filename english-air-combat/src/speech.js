@@ -19,7 +19,10 @@ export class Speech {
   constructor(notice){
     this.notice=notice;this.current=null;this.pendingCancel=null;this.preferred=null;
     window.addEventListener('blur',()=>this.stop());document.addEventListener('visibilitychange',()=>{if(document.hidden)this.stop();});
-    // Android Edge 可能尚未初始化系统语音，页面启动时不枚举声音。
+    const platform=window.navigator;
+    this.defaultFirst=!!platform?.userAgentData?.mobile||/Android|iPhone|iPad|iPod/i.test(platform?.userAgent||'')||(platform?.platform==='MacIntel'&&platform.maxTouchPoints>1);
+    // 移动端保留系统 TTS 首播兼容；桌面先初始化自然英语声音列表。
+    if(!this.defaultFirst&&window.speechSynthesis)this.preferred=this.englishVoices()[0]||null;
   }
   stop(){
     this.pendingCancel?.();this.pendingCancel=null;this.current=null;
@@ -35,20 +38,20 @@ export class Speech {
     this.stop();const synth=window.speechSynthesis;
     if(!synth||typeof synth.speak!=='function'||typeof SpeechSynthesisUtterance==='undefined'){this.notice('此浏览器暂不支持单词朗读');return;}
     const text=String(word||'').trim();if(!text)return;
-    let active=true,timer=null,live=null,started=false;const tried=new Set();
+    let active=true,timer=null,live=null,started=false,voiceListener=null;const tried=new Set();
     const clearAttempt=()=>{
       clearTimeout(timer);timer=null;
+      if(voiceListener){synth.removeEventListener?.('voiceschanged',voiceListener);voiceListener=null;}
       if(live){live.onstart=null;live.onboundary=null;live.onerror=null;live.onend=null;if(this.current===live)this.current=null;}
     };
     const finish=message=>{if(!active)return;active=false;clearAttempt();this.pendingCancel=null;if(message)this.notice(message);};
     this.pendingCancel=()=>{active=false;clearAttempt();};
     const key=plan=>[plan.voice?.voiceURI||plan.voice?.name||'',plan.voice?.lang||'',plan.lang,plan.neutral].join('|');
     const fallback=()=>{
-      // 声音枚举只发生在首次 speak 之后；列表为空也继续尝试系统默认路径。
+      // 桌面优先尝试自然英语声，移动端保留系统默认声音优先。
       if(tried.size>=AUDIO.speechMaxAttempts-1){const plan={lang:'',neutral:true};return tried.has(key(plan))?null:plan;}
-      const voices=this.englishVoices().slice(0,AUDIO.speechFallbackVoices),plans=[
-        {lang:'en',neutral:true},
-        ...voices.map(voice=>({voice,lang:voiceLanguage(voice)||'en',neutral:true})),
+      const voices=this.englishVoices().slice(0,AUDIO.speechFallbackVoices),natural=voices.map(voice=>({voice,lang:voiceLanguage(voice)||'en',neutral:true})),automatic={lang:'en',neutral:true},plans=[
+        ...(this.defaultFirst?[automatic,...natural]:[...natural,automatic]),
         {lang:'en-US',neutral:true},{lang:'en-GB',neutral:true},{lang:'',neutral:true}
       ];
       return plans.find(plan=>!tried.has(key(plan)));
@@ -64,7 +67,7 @@ export class Speech {
       if(['audio-busy','audio-hardware'].includes(error)){finish('系统音频暂不可用，请稍后再试');return;}
       if(document.hidden){finish();return;}
       // 给取消队列一次释放机会，下一次点击、切词或失焦会取消这次回退。
-      timer=setTimeout(()=>{if(!active)return;const plan=fallback();if(plan)attempt(plan);else finish('系统朗读的多种方式均未成功，请检查手机的文字转语音设置');},AUDIO.speechRetryMilliseconds);
+      timer=setTimeout(()=>{if(!active)return;const plan=fallback();if(plan)attempt(plan);else finish('系统朗读未能启动，请检查系统的英语语音设置');},AUDIO.speechRetryMilliseconds);
     };
     const attempt=plan=>{
       if(!active)return;started=false;tried.add(key(plan));
@@ -75,7 +78,7 @@ export class Speech {
         utterance.rate=plan.neutral?1:AUDIO.speechRate;utterance.pitch=plan.neutral?1:AUDIO.speechPitch;utterance.volume=AUDIO.speechVolume;
         const onStarted=()=>{
           if(!active||this.current!==utterance||started)return;started=true;clearTimeout(timer);timer=null;
-          // 成功后才能安全枚举并优选后续播放的自然英语声音。
+          // 移动端在成功启动后优选自然英语声，桌面沿用本次指定的声音。
           this.preferred=plan.lang?(plan.voice||this.englishVoices()[0]||null):null;
           console.info('English word playback started',JSON.stringify({voice:plan.voice?.name||'system-default',language:plan.lang||'system-default',rate:utterance.rate,attempt:tried.size}));
         };
@@ -98,7 +101,18 @@ export class Speech {
         if(utterance)failed('synthesis-failed',utterance);else finish('此浏览器暂时无法创建系统朗读');
       }
     };
-    // 首次播放在点击调用栈内直接进入系统 TTS，不等待声音列表事件。
-    attempt(this.preferred?{voice:this.preferred,lang:voiceLanguage(this.preferred)||'en',neutral:false}:{lang:'en',neutral:false});
+    const voice=this.preferred||(!this.defaultFirst?this.englishVoices()[0]:null);
+    if(voice){attempt({voice,lang:voiceLanguage(voice)||'en',neutral:false});return;}
+    if(this.defaultFirst){attempt({lang:'en',neutral:false});return;}
+    // 桌面空列表先短暂等待加载；取消沿用现有请求清理，不先读出默认音色。
+    const deadline=performance.now()+AUDIO.speechVoicesMilliseconds;
+    const selectVoice=()=>{
+      if(!active||live)return;clearTimeout(timer);timer=null;
+      const available=this.englishVoices()[0];
+      if(available){clearAttempt();attempt({voice:available,lang:voiceLanguage(available)||'en',neutral:false});}
+      else if(performance.now()>=deadline){clearAttempt();attempt({lang:'en',neutral:false});}
+      else timer=setTimeout(selectVoice,AUDIO.speechRetryMilliseconds);
+    };
+    voiceListener=selectVoice;synth.addEventListener?.('voiceschanged',voiceListener);selectVoice();
   }
 }

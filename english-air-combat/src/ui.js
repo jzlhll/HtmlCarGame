@@ -24,7 +24,7 @@ export function formatTime(seconds){const value=Math.max(0,Math.ceil(seconds));r
 export class UI {
   constructor(game,storage,audio,{touchMode}={}){
     Object.assign(this,{game,storage,audio,shownState:'',dialogMode:'',returnState:'menu',noticeTimer:null,seed:null,historyPage:0,historyWordId:null,launching:false,resettingLearning:false,accountBusy:false,accountMode:'',accountReturnState:'menu',draftName:null,pendingAccountId:null});this.speech=new Speech(text=>this.notice(text));this.pendingReview=!!storage.review;this.refreshHeroWord();
-    this.assemblyView=new AssemblyView($('assembly-mode'),game,()=>this.render(),text=>this.notice(text));
+    this.assemblyView=new AssemblyView($('assembly-mode'),game,()=>this.render());
     this.pointerMedia=matchMedia('(pointer: coarse)');this.game.touchMode=touchMode??this.pointerMedia.matches;document.body.dataset.touch=String(this.game.touchMode);this.pointerMedia.addEventListener('change',()=>{this.game.touchMode=touchMode??this.pointerMedia.matches;document.body.dataset.touch=String(this.game.touchMode);this.renderKey='';this.render();});
     $('render-quality').innerHTML=Object.entries(RENDERING.qualities).map(([value,quality])=>'<option value="'+value+'">'+quality.label+'</option>').join('');$('render-quality').value=storage.settings.renderQuality;
     $('library-select').innerHTML=VOCABULARIES.map(library=>'<option value="'+library.id+'">'+escape(library.label)+' · '+library.entries.length+' 词</option>').join('');$('library-select').onchange=event=>this.switchLibrary(event.target.value);

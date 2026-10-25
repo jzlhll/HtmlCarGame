@@ -12,7 +12,7 @@ export const RENDERING = {
 export const levelMode = (level,touchMode=false,firstMode='combat') => level%2===1?firstMode:firstMode==='combat'?'assembly':'combat';
 export const ASSEMBLY = {
   stageSeconds:[90,90],introSeconds:[5,3],roundsPerStage:2,stageWordCounts:[6,12],maxParts:3,maxChecks:3,
-  visuals:{turnSeconds:[58,94],flightSeconds:.65,escortScale:.7,enemyPeriodSeconds:[9,15],enemyDriftRatio:.05,enemyRowHeight:120,enemyMinModelHeight:32,fragmentFont:28,touchFragmentFont:24}
+  visuals:{nova:{burstAt:.32,settleAt:.94,sparks:64,debris:28},turnSeconds:[58,94],flightSeconds:.65,escortScale:.7,enemyPeriodSeconds:[9,15],enemyDriftRatio:.05,enemyRowHeight:120,enemyMinModelHeight:32,fragmentFont:28,touchFragmentFont:24}
 };
 export const LEVELS = { durationSeconds: 270, libraryExtraSeconds: {primary:0,intermediate:15,cet4:30,cet6:45}, spawnReferenceDurationSeconds: 300, wordCount: 12 };
 export const BOSSES = { durationSeconds: 60, miniFaces: 3, finalFaces: 4, turnSeconds: 0.6, xRange: 275, yRange: 45.5, xAngularSpeed: 0.16, yAngularSpeed: 0.45, centerY: 350, miniCrates: 3, finalCrates: 5, victorySeconds: 5 };
@@ -69,7 +69,7 @@ export const BACKGROUND = {
   textureWidth: 512, textureHeight: 256, galaxyStars: 6000,
   maskOpacity: 0.52, menuMaskOpacity: 0.28
 };
-export const AUDIO = { masterVolume: 0.35, maxShotsPerSecond: 8, speechRate: 0.75, speechPitch: 1.08, speechVolume: 0.85, speechStartMilliseconds: 1400, speechRetryMilliseconds: 80, speechFallbackVoices: 2, speechMaxAttempts: 7 };
+export const AUDIO = { masterVolume: 0.35, maxShotsPerSecond: 8, speechRate: 0.75, speechPitch: 1.08, speechVolume: 0.85, speechVoicesMilliseconds: 1000, speechStartMilliseconds: 1400, speechRetryMilliseconds: 80, speechFallbackVoices: 2, speechMaxAttempts: 7 };
 export const SCORES = { limit: 10 };
 // 只压缩普通出题时间，两个 Boss 各保留完整作答时段。
 export function combatTiming(libraryId){
@@ -85,6 +85,8 @@ export function validateConfig() {
   for(const value of [BOSSES.xRange,BOSSES.yRange,BOSSES.xAngularSpeed,BOSSES.yAngularSpeed])if(!positive(value))throw new Error('Invalid boss movement configuration');
   if(ASSEMBLY.stageSeconds.length!==2||!ASSEMBLY.stageSeconds.every(positive)||!Number.isInteger(ASSEMBLY.maxChecks)||ASSEMBLY.maxChecks<1||ASSEMBLY.roundsPerStage!==2||ASSEMBLY.maxParts!==3||ASSEMBLY.stageWordCounts.length!==2||!ASSEMBLY.stageWordCounts.every(value=>Number.isInteger(value)&&value>0&&value<=LEVELS.wordCount)||ASSEMBLY.stageWordCounts[0]*ASSEMBLY.roundsPerStage!==LEVELS.wordCount||ASSEMBLY.stageWordCounts[1]!==LEVELS.wordCount)throw new Error('Invalid assembly stage configuration');
   if(ASSEMBLY.introSeconds.length!==2||!ASSEMBLY.introSeconds.every(positive)||!positive(ASSEMBLY.visuals.flightSeconds)||ASSEMBLY.visuals.enemyPeriodSeconds.length!==2||!ASSEMBLY.visuals.enemyPeriodSeconds.every(positive)||!positive(ASSEMBLY.visuals.enemyDriftRatio)||ASSEMBLY.visuals.enemyDriftRatio>.06||ASSEMBLY.visuals.enemyPeriodSeconds[0]>ASSEMBLY.visuals.enemyPeriodSeconds[1]||!positive(ASSEMBLY.visuals.enemyRowHeight)||!positive(ASSEMBLY.visuals.enemyMinModelHeight)||ASSEMBLY.visuals.enemyMinModelHeight>84*ASSEMBLY.visuals.escortScale||!positive(ASSEMBLY.visuals.fragmentFont)||!positive(ASSEMBLY.visuals.touchFragmentFont))throw new Error('Invalid assembly scene configuration');
+  const nova=ASSEMBLY.visuals.nova;
+  if(!positive(nova.burstAt)||nova.burstAt>=nova.settleAt||nova.settleAt>1||![nova.sparks,nova.debris].every(value=>Number.isInteger(value)&&value>0&&value<=96))throw new Error('Invalid supernova configuration');
   if(!positive(ASSEMBLY.visuals.escortScale)||ASSEMBLY.visuals.escortScale>1)throw new Error('Invalid escort visual scale');
   if(ASSEMBLY.visuals.turnSeconds.length!==2||!ASSEMBLY.visuals.turnSeconds.every(positive)||ASSEMBLY.visuals.turnSeconds[0]>ASSEMBLY.visuals.turnSeconds[1])throw new Error('Invalid assembly motion configuration');
   for(const id of Object.keys(LEVELS.libraryExtraSeconds)){const timing=combatTiming(id);if(!positive(timing.miniAt)||timing.miniAt+BOSSES.durationSeconds>=timing.finalAt||!timing.spawnIntervalSeconds.every(positive))throw new Error('Invalid combat timing configuration');}

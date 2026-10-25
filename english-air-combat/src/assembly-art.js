@@ -1,4 +1,5 @@
 import { ASSEMBLY } from './config.js';
+import { createRandom } from './random.js';
 
 // 共用矢量岩体与刻面，字母和点击区域不随装饰转动。
 const outlines=[
@@ -22,4 +23,12 @@ export function machineSprite(cannon=false){
 export function salvageSprite(index){
   const [minimum,maximum]=ASSEMBLY.visuals.turnSeconds,seconds=minimum+index*17%(maximum-minimum+1);
   return '<span class="fragment-rock salvage-metal" style="--rock-turn:'+seconds+'s;--rock-delay:-'+(index*7%seconds)+'s;--rock-direction:'+(index%2?'reverse':'normal')+';--rock-angle:'+((index%5-2)*3)+'deg" aria-hidden="true"><svg class="rock-art" viewBox="0 0 120 100"><path d="'+outlines[index%4]+'" fill="#29465d" stroke="#82b4c6" stroke-width="2"/><path d="M23 9 50 4 63 30 36 48 9 38Z" fill="#a5cad6" opacity=".3"/><path d="M36 48 63 30 103 25M36 48 29 87M63 30 62 87 86 91" stroke="#9bb3bd" opacity=".35" fill="none"/><path d="M22 70h18m38-45h14m-8 53h12" stroke="#9bf5da" stroke-width="2"/><circle cx="25" cy="24" r="3" fill="#f3cc92"/><circle cx="91" cy="67" r="3" fill="#c3dfdf"/></svg></span>';
+}
+
+// 星球、裂隙、喷流和表面碎块只在开局构造，动画共享父级时间参数。
+export function novaSprite(seed,hue){
+  const random=createRandom(seed^0x42555253),{sparks,debris}=ASSEMBLY.visuals.nova;
+  const rays=Array.from({length:sparks},(_,index)=>'<i class="nova-spark" style="--angle:'+(index*360/sparks+random()*5)+'deg;--travel:'+(random()*.7+.3)+';--length:'+(8+random()*28)+'px;--fade:'+(random()*.6+.4)+'"></i>').join('');
+  const chunks=Array.from({length:debris},(_,index)=>{const angle=index*Math.PI*2/debris+random()*.18;return '<i class="nova-debris" style="--dx:'+Math.cos(angle)+';--dy:'+Math.sin(angle)+';--travel:'+(random()*.6+.22)+';--spin:'+(random()*650-325)+'deg;--chip:'+(7+random()*17)+'px;--fade:'+(random()*.5+.5)+'"></i>';}).join('');
+  return '<div class="nova-event" aria-hidden="true" style="--planet-hue:'+hue+'"><div class="nova-aura"></div><div class="nova-halo"></div><div class="nova-planet"><svg class="nova-fractures" viewBox="0 0 200 200"><path d="M94 0 89 24 110 38 93 68 117 88 108 109 121 133 106 150 110 181 103 200M93 68 62 61 47 83 17 74 0 92M108 109 139 99 150 125 180 119 200 141M110 38 139 31 151 8M47 83 57 115 24 134 0 129M106 150 61 153 45 176 16 181"/></svg></div><div class="nova-ejecta">'+rays+chunks+'</div><div class="nova-core"></div><div class="nova-flare"></div><div class="nova-shockwave shock-one"></div><div class="nova-shockwave shock-two"></div><div class="nova-cloud"></div></div>';
 }
