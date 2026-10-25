@@ -9,7 +9,6 @@ export class AssemblyFlight {
     this.root.addEventListener('pointermove',event=>this.move(event));
     this.root.addEventListener('pointerup',event=>this.up(event));
     this.root.addEventListener('pointercancel',()=>this.cancel());
-    this.root.addEventListener('keydown',event=>{const node=event.target.closest('[data-puzzle="route"]');if(!node||this.game.state!=='playing'||!['ArrowUp','ArrowDown'].includes(event.key))return;event.preventDefault();this.view.moveRoute(node.dataset.id,(this.view.routeY.get(node.dataset.id)??500)+(event.key==='ArrowUp'?-ASSEMBLY.visuals.routeStep:ASSEMBLY.visuals.routeStep));});
     this.root.addEventListener('click',event=>{if(this.suppressClick){this.suppressClick=false;event.stopImmediatePropagation();event.preventDefault();}},true);
   }
   prepare(){
@@ -21,7 +20,7 @@ export class AssemblyFlight {
   nodeAt(x,y){const node=document.elementFromPoint(x,y)?.closest('button[data-puzzle]');return node&&this.root.contains(node)?node:null;}
   down(event){
     const node=event.target.closest('[data-puzzle]');if(this.game.state!=='playing'||!node||node.disabled||event.button!==0)return;
-    if(this.game.assembly.stage!==2||!['meteor','route'].includes(node.dataset.puzzle))return;
+    if(this.game.assembly.stage!==2||node.dataset.puzzle!=='meteor')return;
     this.suppressClick=false;this.gesture={pointer:event.pointerId,node,x:event.clientX,y:event.clientY,dragged:false,nodes:[node],round:this.game.assembly.roundIndex};
   }
   move(event){
@@ -29,7 +28,6 @@ export class AssemblyFlight {
     if(this.game.state!=='playing'||g.round!==this.game.assembly.roundIndex){this.cancel();return;}
     if(!g.dragged&&Math.hypot(event.clientX-g.x,event.clientY-g.y)<8)return;
     if(!g.dragged){g.dragged=true;this.root.setPointerCapture(event.pointerId);}event.preventDefault();
-    if(g.node.dataset.puzzle==='route'){const field=this.view.activeRound.querySelector('.meteor-field').getBoundingClientRect();this.view.moveRoute(g.node.dataset.id,(event.clientY-field.top)/field.height*1000);return;}
     g.x=event.clientX;g.y=event.clientY;
     for(const item of g.nodes)item.classList.add('towing');
     const box=this.root.getBoundingClientRect(),points=g.nodes.map(item=>{const b=item.getBoundingClientRect();return [b.x+b.width/2-box.x,b.y+b.height/2-box.y];});points.push([event.clientX-box.x,event.clientY-box.y]);
@@ -39,8 +37,7 @@ export class AssemblyFlight {
     const g=this.gesture;if(!g||event.pointerId!==g.pointer)return;
     if(g.dragged&&this.game.state==='playing'&&g.round===this.game.assembly.roundIndex){
       const target=this.nodeAt(event.clientX,event.clientY),round=this.game.assembly;
-      if(g.node.dataset.puzzle==='route'){this.suppressClick=true;this.cancel();return;}
-      const occupied=target&&target!==g.node&&(round.assignments.has(target.dataset.id)||round.used.has(target.dataset.id));
+        const occupied=target&&target!==g.node&&(round.assignments.has(target.dataset.id)||round.used.has(target.dataset.id));
       if(occupied){this.suppressClick=true;this.view.onNotice('目标已分配，请先点击撤回，再重新派遣。');this.cancel();return;}
       if(target?.dataset.puzzle==='meteor'&&target.dataset.side!==g.node.dataset.side){
         // 已配对端点先撤销，未配对端点再选中，复用原有一对一规则。

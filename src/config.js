@@ -10,7 +10,7 @@ export const RENDERING = {
   }
 };
 export const levelMode = (level,touchMode=false,firstMode='combat') => level%2===1?firstMode:firstMode==='combat'?'assembly':'combat';
-export const ASSEMBLY = { stageSeconds: [90,90], roundsPerStage: 2, stageWordCounts: [6,9], maxParts: 3, maxChecks: 3, visuals: {turnSeconds:[58,94], flightSeconds:1.15, routeObstacleRadius:24, routeClearance:25, routeSamples:40, routeStep:25, routeMargin:45, routeFirst:55, routeSpacing:110} };
+export const ASSEMBLY = { stageSeconds: [90,90], roundsPerStage: 2, stageWordCounts: [6,9], maxParts: 3, maxChecks: 3, visuals: {turnSeconds:[58,94], flightSeconds:1.15} };
 export const LEVELS = { durationSeconds: 270, libraryExtraSeconds: {primary:0,intermediate:15,cet4:30,cet6:45}, spawnReferenceDurationSeconds: 300, wordCount: 12 };
 export const BOSSES = { durationSeconds: 60, miniFaces: 3, finalFaces: 4, turnSeconds: 0.6, xRange: 275, yRange: 45.5, xAngularSpeed: 0.16, yAngularSpeed: 0.45, centerY: 350, miniCrates: 3, finalCrates: 5, victorySeconds: 5 };
 export const BOSS_VISUALS = {

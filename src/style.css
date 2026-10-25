@@ -431,7 +431,7 @@ body[data-touch="true"][data-playing="true"] .hud-time>strong{font-size:25px;mar
 .assembly-mode .metal-fragment:before{content:none}
 .fragment-rock{position:absolute;inset:0;z-index:-1;display:grid;place-items:center;pointer-events:none;color:#8498ad99}
 .rock-art{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 4px 4px #0008);transform:rotate(var(--rock-angle,0deg));transform-origin:center}
-.fragment-rock .rock-art{width:96%;height:96%;animation:assembly-rock-drift calc(var(--rock-turn) * .18) ease-in-out var(--rock-delay) infinite alternate;animation-play-state:paused}
+.fragment-rock .rock-art{width:96%;height:96%;animation:assembly-fragment-turn var(--rock-turn) linear var(--rock-delay) infinite var(--rock-direction);animation-play-state:paused}
 .fragment-label{position:relative;display:inline-block;padding:2px 3px;line-height:1.15;text-shadow:0 1px 3px #020712,0 0 9px #061226}
 .assembly-mode .metal-fragment small{z-index:2;right:5px;top:0;min-width:17px;line-height:17px;border-radius:50%;background:#a6f6df;color:#102d35;text-shadow:none;font-size:11px;box-shadow:0 0 10px #72e8c947}
 .assembly-mode .metal-fragment small:empty{display:none}
@@ -455,7 +455,7 @@ body[data-touch="true"][data-playing="true"] .hud-time>strong{font-size:25px;mar
 .assembly-mode[data-motion="running"] .assembly-round:not([hidden]) :is(.meteor,.metal-fragment):not(.selected):not(.pending) .rock-art{animation-play-state:running}
 .assembly-mode[data-motion="still"] .rock-art{animation:none}
 @keyframes assembly-asteroid-turn{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes assembly-rock-drift{from{transform:rotate(calc(var(--rock-angle) - 3deg))}to{transform:rotate(calc(var(--rock-angle) + 3deg))}}
+@keyframes assembly-fragment-turn{from{transform:rotate(var(--rock-angle))}to{transform:rotate(calc(var(--rock-angle) + 360deg))}}
 @media(hover:hover){.assembly-mode .meaning-chip:hover{border-color:#ace7db91}.assembly-mode .metal-fragment:hover:not(:disabled) .rock-art{filter:drop-shadow(0 0 4px #a2e4d653)}.assembly-mode .meteor:hover .meteor-label{border-color:#a7dccba1}}
 @media(prefers-reduced-motion:reduce){.assembly-mode .rock-art{animation:none}}
 
@@ -500,13 +500,6 @@ body[data-touch="true"] .assembly-mode .meteor .meteor-label{font-size:13px;line
 body[data-touch="true"] .assembly-mode .meteor[data-side="en"] .meteor-label{font-size:14px}
 @media(max-width:359px){body[data-touch="true"][data-playing="true"] .assembly-mode .meaning-chip{min-height:52px;padding:9px 7px;font-size:12px}.assembly-mode .meaning-chip small{font-size:10px}}
 
-.route-asteroid{position:absolute;left:50%;width:var(--route-rock-size);height:var(--route-rock-size);transform:translate(-50%,-50%);pointer-events:none;opacity:.85}
-.route-asteroid .meteor-rock{display:block;width:100%;height:100%;color:#a28b99}
-.route-handle{position:absolute;left:50%;width:44px;height:44px;padding:0;border:0;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(#8affdcaa 0 7%,#0b2d3caa 10% 32%,transparent 36%);color:#b5ffe8;font-size:22px;cursor:ns-resize;touch-action:none;text-shadow:0 0 6px #8ef8db}
-.route-handle.blocked{color:#ffd694;background:radial-gradient(#ffbf75aa 0 7%,#56351eaa 10% 32%,transparent 36%)}
-.meteor-lines path.blocked{stroke:#f9ae76;stroke-width:2.5}
-.assembly-mode[data-motion="running"] .route-asteroid .rock-art{animation-play-state:running}
-.assembly-mode[data-motion="still"] .route-asteroid .rock-art{animation:none}
 
 .assembly-mode .meteor-scroll,.assembly-mode .fragment-field{overflow-x:hidden}
 .assembly-mode .meteor-field{overflow:hidden}
@@ -554,3 +547,64 @@ body[data-touch="true"][data-playing="true"] .assembly-mode[data-stage="1"] .ass
 body[data-touch="true"][data-playing="true"] .assembly-mode .assembly-board .fragment-field{overflow-x:hidden}
 .storage-notice{pointer-events:none}
 body:has(.assembly-mode:not([hidden])) .storage-notice{top:56px;bottom:auto;max-width:calc(100vw - 24px);font-size:13px;text-align:center}
+
+/* 碎片无论是否选中都慢转；文字、按钮与选中标记不参与旋转。 */
+.assembly-mode .metal-fragment .rock-art{width:auto;max-width:86%;height:64%;aspect-ratio:1.2}
+.assembly-mode[data-motion="running"] .assembly-round:not([hidden]) .metal-fragment .rock-art{animation-play-state:running}
+.assembly-mode .metal-fragment.selected{outline:2px solid #ffe09a;outline-offset:-2px;border-radius:10px;background:radial-gradient(ellipse,#8b66344a,transparent 76%);box-shadow:inset 0 0 18px #ffd47a22,0 0 10px #e5b65d33}
+.assembly-mode .metal-fragment.selected .fragment-rock{opacity:1}
+.assembly-mode .metal-fragment.selected .rock-art{filter:drop-shadow(0 0 6px #ffd47abb) brightness(1.35)}
+.assembly-mode .metal-fragment.selected .fragment-label{color:#fff2c9;text-shadow:0 2px 4px #020712,0 0 8px #020712}
+.assembly-mode .metal-fragment.pending:after{content:"已用";position:absolute;z-index:2;right:4px;top:3px;padding:1px 4px;border-radius:4px;font:11px/1.3 system-ui,sans-serif;color:#aebdca;background:#172838;pointer-events:none;text-shadow:none}
+.assembly-mode .metal-fragment.selected:after{content:"已选";color:#32230c;background:#ffe09a}
+.assembly-mode .meaning-chip.selected{outline:3px solid #ffe09a;outline-offset:-1px;background:#352c23;box-shadow:inset 4px 0 #ffe09a}
+
+/* 无线电组频：两列频道独立滚动，碎片网格完整留在固定接收区。 */
+#assembly-mode[data-stage="1"] .radio-board{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) var(--signal-tray-height,260px);gap:10px;overflow:hidden;align-content:stretch}
+#assembly-mode[data-stage="1"] .radio-scroll{min-width:0;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#5d9ab5 #14243644;padding:2px 5px 10px 2px;scroll-padding:5px}
+#assembly-mode[data-stage="1"] .radio-channels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px;align-content:start}
+#assembly-mode[data-stage="1"] .radio-channel{display:grid;grid-template-columns:minmax(0,1fr);align-content:start;justify-content:stretch;gap:7px;min-width:0;min-height:90px;padding:8px 31px 12px 30px;border:0;border-bottom:1px solid #6a91aa55;border-radius:0;background:none;box-shadow:none;outline:none;opacity:1;text-align:left;isolation:isolate}
+#assembly-mode[data-stage="1"] .radio-channel:before{content:"";position:absolute;left:0;bottom:-1px;width:26%;height:3px;background:linear-gradient(90deg,#87bed680,transparent)}
+#assembly-mode[data-stage="1"] .radio-channel:after{content:none}
+#assembly-mode[data-stage="1"] .radio-channel.selected{border-bottom-color:#b2eaff;background:linear-gradient(90deg,#21567540,transparent);box-shadow:0 8px 15px -13px #8be3ff;outline:0}
+#assembly-mode[data-stage="1"] .radio-channel.selected:before{width:100%;background:linear-gradient(90deg,#b0e9ffbb,transparent)}
+#assembly-mode[data-stage="1"] .radio-number{position:absolute;top:12px;left:2px;font:11px ui-monospace,monospace;color:#6e9bb6;display:block;overflow:visible}
+#assembly-mode[data-stage="1"] .radio-wave{position:absolute;right:4px;top:34px;display:flex;align-items:center;gap:2px;height:20px;overflow:visible;max-height:none;width:auto}
+#assembly-mode[data-stage="1"] .radio-wave i{display:block;width:2px;height:8px;background:#6f9eb9;opacity:.65}
+#assembly-mode[data-stage="1"] .radio-wave i:nth-child(2){height:15px}#assembly-mode[data-stage="1"] .radio-wave i:nth-child(3){height:20px}#assembly-mode[data-stage="1"] .radio-wave i:nth-child(4){height:12px}
+#assembly-mode[data-stage="1"] .selected .radio-wave i{background:#c0efff;opacity:1;box-shadow:0 0 6px #9bdaff}
+#assembly-mode[data-stage="1"] .radio-channel .meaning-text{font-size:18px;line-height:1.45;color:#d5e8ef;max-height:none;overflow:visible}
+#assembly-mode[data-stage="1"] .radio-channel .assembly-answer{font-size:26px;line-height:1.25;color:#c1bcea;min-height:1.25em;max-height:none;overflow:visible}
+#assembly-mode[data-stage="1"] .radio-channel .assembly-answer:empty:after{content:"· · ·";color:#54758d;letter-spacing:4px}
+#assembly-mode[data-stage="1"] .radio-channel.selected :is(.meaning-text,.assembly-answer){color:#e1f4ff}
+#assembly-mode[data-stage="1"] .radio-tray{display:grid;grid-template-rows:28px minmax(0,1fr);min-height:0;min-width:0;overflow:hidden}
+#assembly-mode[data-stage="1"] .radio-belt{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #6c8bb655;font-size:11px;color:#98b6cb;letter-spacing:1px;gap:8px;white-space:nowrap}
+#assembly-mode[data-stage="1"] .radio-belt>span:before{content:"";display:inline-block;width:5px;height:5px;margin-right:8px;border-radius:50%;background:#bbacf6;box-shadow:0 0 8px #acb6ff88}
+#assembly-mode[data-stage="1"] .radio-belt small{font-size:10px;letter-spacing:0}
+#assembly-mode[data-stage="1"] .radio-tray .fragment-field{display:grid;grid-template-columns:repeat(var(--signal-columns,4),minmax(0,1fr));grid-template-rows:repeat(var(--signal-rows,4),minmax(0,1fr));grid-auto-rows:auto;grid-column:auto;grid-row:auto;gap:6px;height:auto;min-height:0;padding:0;border:0;overflow:hidden;align-content:stretch}
+#assembly-mode[data-stage="1"] .metal-fragment{display:grid;place-items:center;min-width:0;min-height:0;max-height:none;height:auto;padding:7px 5px;font-size:var(--signal-font,24px);touch-action:manipulation}
+#assembly-mode[data-stage="1"] .metal-fragment .fragment-label{display:block;max-width:100%;white-space:normal;overflow-wrap:anywhere;line-height:1.25}
+#assembly-mode[data-stage="1"] .metal-fragment .fragment-rock{filter:hue-rotate(12deg);opacity:.8}
+#assembly-mode[data-stage="1"] .metal-fragment.selected{outline:2px solid #a6e5ff;outline-offset:-3px;border-color:transparent;background:radial-gradient(ellipse,#295c854a,transparent 76%);box-shadow:inset 0 0 18px #8bd3ff22,0 0 8px #82c4ff22}
+#assembly-mode[data-stage="1"] .metal-fragment.selected .fragment-rock{opacity:1}
+#assembly-mode[data-stage="1"] .metal-fragment.selected .rock-art{filter:drop-shadow(0 0 6px #8ad6ffbb) brightness(1.35)}
+#assembly-mode[data-stage="1"] .metal-fragment.selected .fragment-label{color:#edf7ff}
+#assembly-mode[data-stage="1"] .metal-fragment.selected:after{color:#163347;background:#ade3f6;top:1px;right:2px;font-size:10px}
+#assembly-mode[data-stage="1"] .metal-fragment.pending:disabled .fragment-rock{opacity:.22}
+#assembly-mode[data-stage="1"] .assembly-footer .primary-button{background:#b2dded;color:#173047;border-color:#b2dded}
+#assembly-mode[data-stage="1"] .radio-board[data-layout="side"]{grid-template-columns:minmax(0,42fr) minmax(0,58fr);grid-template-rows:minmax(0,1fr);gap:6px}
+body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-board{gap:6px}
+body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-channels{gap:10px 12px}
+body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-channel{min-height:80px;padding:8px 22px 10px 23px;gap:5px}
+body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-channel .meaning-text{font-size:16px;line-height:1.4}
+body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-channel .assembly-answer{font-size:22px;line-height:1.3}
+body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-number{font-size:10px;left:0}
+body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-wave{right:1px;gap:2px;transform:scale(.8);transform-origin:right center}
+body[data-touch="true"] #assembly-mode[data-stage="1"] .assembly-help{max-height:none;overflow:visible;font-size:11px;line-height:1.35}
+body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-belt{font-size:10px;letter-spacing:0}
+body[data-touch="true"] #assembly-mode[data-stage="1"] .radio-belt small{font-size:9px}
+
+#assembly-mode[data-stage="1"] .metal-fragment .fragment-rock{display:block}
+#assembly-mode[data-stage="1"] .metal-fragment .rock-art{position:absolute;left:50%;top:18%;translate:-50% 0;width:auto;height:64%;min-height:0;min-width:0;max-width:86%}
+
+#assembly-mode[data-stage="1"] .metal-fragment:before{content:"";position:absolute;inset:5px 3px;z-index:-1;clip-path:polygon(0 50%,15% 12%,78% 0,100% 45%,85% 88%,22% 100%);background:linear-gradient(140deg,#365c7e70,#132b4760);border:1px solid #729fc044;pointer-events:none}
