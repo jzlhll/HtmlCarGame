@@ -6,10 +6,10 @@
 
 ## 启用与更新
 
-1. 将 `.github/workflows/pages.yml`、`scripts/prepare-pages.mjs` 和入口相对路径调整提交到仓库。
+1. 仓库根目录 `.github/workflows/pages.yml` 负责发布，安装依赖与整理步骤均在 `car-game/` 内执行。
 2. 在仓库 Settings → Pages → Build and deployment 中将 Source 设置为 **GitHub Actions**，不使用分支自动发布。
 3. 如果 `github-pages` 环境设置了分支或 tag 限制，允许用于正式发布的 tag。
-4. 以 `src/version.js` 的 `APP_VERSION` 常量创建指向目标提交的同名 tag（当前 `v1.0.9`），并发布正式 Release；不得在发布时另加一个版本。工作流必须包含在该 tag 对应的代码里。
+4. 以 `src/version.js` 的 `APP_VERSION` 常量创建指向目标提交的 `car-game/<APP_VERSION>` tag（当前 `car-game/v1.0.9`），并发布正式 Release；不得在发布时另加一个版本。无前缀 tag 仅在版本唯一匹配可部署工程时兼容。工作流必须包含在该 tag 对应的代码里。
 
 工作流只监听 `release.published`，并排除预发布版本。普通提交、分支推送、仅创建或推送 tag、Release 草稿和预发布版本均不更新网站；发布正式 Release 后，才部署该 Release 的 tag 对应代码。工作流不提供手动发布入口，GitHub 管理员仍可重新运行已有发布任务。删除 Release 不会自动下线网站，修改 Release 说明也不会更新网站。
 

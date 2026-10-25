@@ -1,0 +1,8 @@
+node_modules
+.pages-output/
+.DS_Store
+*.log
+.workbuddy/
+.playwright-cli/
+assets/
+src/resource-sources.js

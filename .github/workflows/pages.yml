@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   deploy:
-    if: ${{ !github.event.release.prerelease }}
+    if: ${{ !github.event.release.prerelease && !startsWith(github.event.release.tag_name, 'english-air-combat/') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -26,18 +26,42 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ github.event.release.tag_name }}
+      - name: Select released game
+        id: game
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          node --input-type=module <<'JS'
+          import { readFileSync, appendFileSync } from 'node:fs';
+          const projects = ['car-game', 'low-altitude-flight'];
+          const parts = process.env.RELEASE_TAG.split('/');
+          if (parts.length > 2) throw new Error('Invalid release tag');
+          const versionTag = parts.at(-1);
+          if (!/^v?\d+\.\d+\.\d+$/.test(versionTag)) throw new Error('Invalid release version');
+          const version = versionTag.replace(/^v/, '');
+          const matches = projects.filter(project =>
+            (parts.length === 1 || project === parts[0]) &&
+            JSON.parse(readFileSync(project + '/package.json', 'utf8')).version === version);
+          if (matches.length !== 1) throw new Error('Release tag must identify exactly one game');
+          appendFileSync(process.env.GITHUB_OUTPUT, `project=${matches[0]}\nversion_tag=v${version}\n`);
+          JS
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: ${{ steps.game.outputs.project }}/package-lock.json
       - run: npm ci
-      - run: node scripts/prepare-pages.mjs
+        working-directory: ${{ steps.game.outputs.project }}
+      - name: Prepare versioned Pages files
+        run: node scripts/prepare-pages.mjs
+        working-directory: ${{ steps.game.outputs.project }}
         env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_TAG: ${{ steps.game.outputs.version_tag }}
+          GITHUB_REF_NAME: ${{ steps.game.outputs.version_tag }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
-          path: .pages-output
+          path: ${{ steps.game.outputs.project }}/.pages-output
       - name: Deploy game
         id: deployment
         uses: actions/deploy-pages@v4
