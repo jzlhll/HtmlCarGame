@@ -463,3 +463,50 @@ body[data-touch="true"] .assembly-mode .meteor{padding:4px}
 .assembly-mode .meteor .meteor-label{padding:4px}
 
 .assembly-mode .meteor .meteor-label{text-wrap:balance}
+
+/* 航母回收区与护航航线：装饰转动，文字和命中面保持稳定。 */
+.assembly-mode .meaning-chip{background:none;border:none;box-shadow:none;padding:17px 16px;min-height:85px;overflow:visible}
+.assembly-mode .meaning-chip:before,.assembly-mode .meaning-chip:after{content:none}
+.flight-art{width:100%;height:100%;overflow:visible;pointer-events:none;filter:drop-shadow(0 4px 5px #0008)}
+.meaning-chip>.flight-art{position:absolute;inset:0;z-index:-1}
+.assembly-mode .meaning-chip.pending{background:none;opacity:.62}
+.assembly-mode .meaning-chip.pending .flight-art{filter:drop-shadow(0 0 6px #78f7cb77)}
+.assembly-mode .meaning-chip>span{position:relative;font-size:inherit}
+.assembly-mode .meaning-chip small{position:relative}
+.assembly-mode .meteor{padding:0;justify-content:flex-end;border-radius:12px;touch-action:none}
+.assembly-mode .meteor>.flight-art{position:absolute;inset:-8% 15% 18%;width:70%;height:85%;opacity:.92;animation:escort-bank 7s ease-in-out infinite alternate;animation-play-state:paused}
+.assembly-mode .meteor[data-side="zh"]>.flight-art{inset:0 3% 0;width:94%;height:100%;animation:beacon-orbit 65s linear infinite;animation-play-state:paused}
+.assembly-mode .meteor .meteor-label{background:#0b1b2ce8;border:0;border-bottom:1px solid #7ab9c473;box-shadow:none;border-radius:3px;padding:4px 3px;max-height:65%;overflow:auto;font-size:clamp(13px,1.2vw,17px)}
+.assembly-mode .meteor[data-side="en"] .meteor-label{font:600 clamp(13px,1.35vw,19px) ui-monospace,monospace}
+.assembly-mode .meteor.pending{opacity:.65}
+.assembly-mode .meteor.pending:after{border-radius:12px;inset:1px;border-color:#b89bea}
+.meteor-lines path{fill:none;stroke:#ad97e3;stroke-width:1.7;stroke-dasharray:6 6;vector-effect:non-scaling-stroke;opacity:.7}
+.meteor-field{background:linear-gradient(90deg,transparent 49.8%,#72c7d422 50%,transparent 50.2%)}
+.assembly-mode .metal-fragment{touch-action:none}
+.assembly-mode .towing .rock-art{filter:drop-shadow(0 0 7px #83ffe4);color:#c6ffe8}
+.sortie-effects{position:absolute;inset:0;z-index:8;pointer-events:none;overflow:hidden}
+.tractor-lines{position:absolute;width:100%;height:100%;overflow:visible}
+.tractor-lines path{stroke:#9bffe1;stroke-width:3;stroke-dasharray:5 4;fill:none;filter:drop-shadow(0 0 3px #58dcb8)}
+.sortie-craft{position:absolute;left:0;top:0;width:44px;height:48px;will-change:transform}
+.assembly-mode[data-motion="running"] .meteor:not(.selected):not(.pending)>.flight-art{animation-play-state:running}
+.assembly-mode[data-motion="still"] .flight-art{animation:none!important}
+@keyframes escort-bank{from{transform:translateY(-2px) rotate(-4deg)}to{transform:translateY(2px) rotate(4deg)}}
+@keyframes beacon-orbit{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.assembly-mode .flight-art{animation:none!important}}
+body[data-touch="true"][data-playing="true"] .assembly-mode .meaning-chip{min-height:64px;padding:12px 10px;font-size:13px}
+body[data-touch="true"][data-playing="true"] .assembly-mode .assembly-help{display:block;font-size:11px;line-height:1.35;max-height:32px;overflow:auto}
+body[data-touch="true"][data-playing="true"] .assembly-mode .meteor{min-height:76px}
+body[data-touch="true"] .assembly-mode .meteor .meteor-label{font-size:13px;line-height:1.35}
+body[data-touch="true"] .assembly-mode .meteor[data-side="en"] .meteor-label{font-size:14px}
+@media(max-width:359px){body[data-touch="true"][data-playing="true"] .assembly-mode .meaning-chip{min-height:52px;padding:9px 7px;font-size:12px}.assembly-mode .meaning-chip small{font-size:10px}}
+
+.route-asteroid{position:absolute;left:50%;width:var(--route-rock-size);height:var(--route-rock-size);transform:translate(-50%,-50%);pointer-events:none;opacity:.85}
+.route-asteroid .meteor-rock{display:block;width:100%;height:100%;color:#a28b99}
+.route-handle{position:absolute;left:50%;width:44px;height:44px;padding:0;border:0;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(#8affdcaa 0 7%,#0b2d3caa 10% 32%,transparent 36%);color:#b5ffe8;font-size:22px;cursor:ns-resize;touch-action:none;text-shadow:0 0 6px #8ef8db}
+.route-handle.blocked{color:#ffd694;background:radial-gradient(#ffbf75aa 0 7%,#56351eaa 10% 32%,transparent 36%)}
+.meteor-lines path.blocked{stroke:#f9ae76;stroke-width:2.5}
+.assembly-mode[data-motion="running"] .route-asteroid .rock-art{animation-play-state:running}
+.assembly-mode[data-motion="still"] .route-asteroid .rock-art{animation:none}
+
+.assembly-mode .meteor-scroll,.assembly-mode .fragment-field{overflow-x:hidden}
+.assembly-mode .meteor-field{overflow:hidden}

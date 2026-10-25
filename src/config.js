@@ -10,14 +10,15 @@ export const RENDERING = {
   }
 };
 export const levelMode = (level,touchMode=false,firstMode='combat') => level%2===1?firstMode:firstMode==='combat'?'assembly':'combat';
-export const ASSEMBLY = { stageSeconds: [90,90], roundsPerStage: 2, wordsPerRound: 9, maxParts: 3, maxChecks: 3, visuals: {turnSeconds:[48,86]} };
+export const ASSEMBLY = { stageSeconds: [90,90], roundsPerStage: 2, wordsPerRound: 9, maxParts: 3, maxChecks: 3, visuals: {turnSeconds:[58,94], flightSeconds:1.15, routeObstacleRadius:24, routeClearance:25, routeSamples:40, routeStep:25, routeMargin:45, routeFirst:55, routeSpacing:110} };
 export const LEVELS = { durationSeconds: 270, libraryExtraSeconds: {primary:0,intermediate:15,cet4:30,cet6:45}, spawnReferenceDurationSeconds: 300, wordCount: 12 };
 export const BOSSES = { durationSeconds: 60, miniFaces: 3, finalFaces: 4, turnSeconds: 0.6, xRange: 275, yRange: 45.5, xAngularSpeed: 0.16, yAngularSpeed: 0.45, centerY: 350, miniCrates: 3, finalCrates: 5, victorySeconds: 5 };
 export const BOSS_VISUALS = {
+  rage: { glowStart: 2, opacity: .22, pulseSpeed: 2.4 },
   segments: 24, rows: 16, tubeSides: 10, tubeSteps: 24, tentacleSway: 0.055, tentacleSpeed: 1.7,
   mini: { scale: 0.95, yOffset: -10, headScale: 1, tentacleLength: 1, skin: 0x873ad1, light: 0xba7cf2, dark: 0x502175, cheek: 0xec78c7, horn: 0xffd6a0 },
   final: { scale: 1.18, yOffset: -20, headScale: 1.09, tentacleLength: 1.08, skin: 0x6526a5, light: 0x9b5ce2, dark: 0x341344, cheek: 0xe562b1, horn: 0xffbd83 },
-  targets: { width: 360, height: 112, choiceWidth: 720, choiceHeight: 240, sway: .018, speed: 1.3, word: {skin:0x317c91,light:0x73c6b9,dark:0x163b56,cheek:0xe8a29e}, enemy: {skin:0xa94b70,light:0xe58e91,dark:0x491d47,cheek:0xffb9a2}, octopus: {skin:0x9964bd,light:0xd49ccf,dark:0x422b68,cheek:0xf4afba} },
+  targets: { width: 360, height: 112, choiceWidth: 720, choiceHeight: 240, sway: .018, speed: 1.3, word: {skin:0x287c88,light:0x68c8af,dark:0x122b49,cheek:0xe893b4}, enemy: {skin:0xa94b70,light:0xe58e91,dark:0x491d47,cheek:0xffb9a2}, octopus: {skin:0x7647ab,light:0xb984d2,dark:0x291c48,cheek:0xf08db9} },
   eyes: 0xffe695, iris: 0x70e3af, pupil: 0x21132f, tooth: 0xfff3df, tongue: 0xf184b8, glint: 0xffffff
 };
 export const SUPPLIES = { intervalSeconds: 120, fallSeconds: 22, maxActive: 16, width: 62, height: 62, flightSeconds: 0.75, answerCrates: 2, rewardSwaySeconds: 2, rewardFlightSpeed: 520, rewardFlightSeconds: [0.65,3.2], rewardSwayAmplitude: [12,25], rewardSwaySpeed: [0.7,1.3], rewardArcHeight: 60, burstSeconds: 0.8, burstSpacing: 64, burstSpeed: 70, burstRiseSpeed: 90, spritePadding: 32, spriteMinPixelRatio: 2, shadow: [[0,4,6,'#191000a0'],[0,0,8,'#ffce6747']] };

@@ -131,7 +131,11 @@ export function* assetTasks(settings){
     for(let y=0;y<settings.textureHeight;y++){for(let x=0;x<settings.textureWidth;x++){
       let band=.87+.06*Math.sin(y*.14+planet)+random()*.06;
       if(planet===4||planet===5)band=.78+.17*Math.sin(y*.24)+.06*Math.sin(y*.67)+random()*.04;
-      for(let c=0;c<3;c++)rgba[(y*settings.textureWidth+x)*4+c]=base[c]*band;
+      const u=x/settings.textureWidth*Math.PI*2,v=y/settings.textureHeight*Math.PI,swirl=Math.sin(u*7+Math.sin(v*9)*1.8)*Math.sin(v*13+Math.cos(u*4));
+      if(planet===4||planet===5){band+=swirl*.055;const spot=Math.exp(-((Math.sin((u-4.1)/2)*7)**2+((v-1.9)*14)**2));band-=spot*(planet===4?.22:.06);}
+      else if(planet===0||planet===3||planet===8){const ridges=Math.sin(u*19+Math.sin(v*23))*Math.sin(v*21+Math.cos(u*13));band+=ridges*.07+swirl*.045;}
+      else band+=swirl*.035;
+      for(let c=0;c<3;c++)rgba[(y*settings.textureWidth+x)*4+c]=Math.max(0,Math.min(255,base[c]*band));
       rgba[(y*settings.textureWidth+x)*4+3]=255;
     }yield;}
     pixels.push(rgba);

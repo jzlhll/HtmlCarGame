@@ -72,21 +72,26 @@ export class Scene {
     const choice=word.kind==='choice',shape=BOSS_VISUALS.targets;
     model.group.position.set(x-WORLD.width/2,WORLD.height/2-y,-12);model.biting.visible=!choice;model.octopus.visible=choice;
     if(choice){
-      model.head.position.y=this.settings.reducedMotion?0:Math.sin(time*shape.speed+word.id)*2;
+      model.head.position.y=this.settings.reducedMotion?0:Math.sin(time*shape.speed+word.id)*2;model.head.rotation.z=this.settings.reducedMotion?0:Math.sin(time*.7+word.id)*.025;
       model.head.material=aimed>=0?this.targetHighlight:this.targetMaterial;
-      model.arms.forEach((arm,index)=>{arm.scale.set(width/shape.choiceWidth,word.height/shape.choiceHeight,1);arm.material=index===aimed?this.targetHighlight:this.targetMaterial;});
+      model.arms.forEach((arm,index)=>{arm.scale.set(width/shape.choiceWidth,word.height/shape.choiceHeight,1);arm.rotation.z=this.settings.reducedMotion?0:Math.sin(time*shape.speed+index*1.5+word.id)*.009;arm.material=index===aimed?this.targetHighlight:this.targetMaterial;});
     }else{
       model.biting.scale.x=word.width/shape.width;
       model.biting.userData.core.rotation.z=this.settings.reducedMotion?0:Math.sin(time*shape.speed+word.id)*shape.sway;
-      model.biting.userData.jaw.position.y=-word.height-7;
+      model.biting.userData.jaw.position.y=-word.height-7-(this.settings.reducedMotion?0:(1+Math.sin(time*1.5+word.id))*2);
     }
   }
   makeMonster(faceCount=BOSSES.finalFaces,final=false){
     const kind=final?'final':'mini',source=this.bossGeometries[kind],group=new THREE.Group(),core=new THREE.Mesh(source.core,this.bossMaterial),tentacles=new THREE.InstancedMesh(source.tentacle,this.bossMaterial,BOSSES.finalFaces);
     tentacles.instanceMatrix.setUsage(THREE.DynamicDrawUsage);tentacles.frustumCulled=false;tentacles.position.set(0,25,-18);group.add(core,tentacles);
-    const model={group,core,tentacles,final};group.userData.monster=model;this.poseMonster(model,faceCount,0,true);return model;
+    const expression=new THREE.Mesh(source.expression0,this.bossMaterial),auraMaterial=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,uniforms:{strength:{value:0}},vertexShader:`varying vec3 facing;varying vec3 sight;void main(){vec4 p=modelViewMatrix*vec4(position,1.);facing=normalMatrix*normal;sight=-p.xyz;gl_Position=projectionMatrix*p;}`,fragmentShader:`uniform float strength;varying vec3 facing;varying vec3 sight;void main(){float rim=pow(1.-abs(dot(normalize(facing),normalize(sight))),2.1);gl_FragColor=vec4(.95,.08,.58,rim*strength);}`}),aura=new THREE.Mesh(this.aircraftSphere,auraMaterial);
+    aura.position.set(0,62,-15);aura.scale.set(final?146:132,final?137:122,100);group.add(aura,expression);
+    const model={group,core,tentacles,final,expression,aura,source};group.userData.monster=model;this.poseMonster(model,faceCount,0,true);return model;
   }
   poseMonster(model,count,time,reducedMotion){
+    const total=model.final?BOSSES.finalFaces:BOSSES.miniFaces,defeated=Math.max(0,total-count),mood=Math.min(3,defeated);
+    model.expression.geometry=model.source['expression'+mood];
+    const rage=BOSS_VISUALS.rage;model.aura.material.uniforms.strength.value=defeated>=rage.glowStart?rage.opacity*(1+(defeated-2)*.35)*(reducedMotion?1:.88+.12*Math.sin(time*rage.pulseSpeed)):0;
     model.tentacles.count=count;
     for(let i=0;i<count;i++){const angle=Math.PI*1.08+(count===1?Math.PI*.42:i/Math.max(1,count-1)*Math.PI*.84),sway=reducedMotion?0:Math.sin(time*BOSS_VISUALS.tentacleSpeed+i*1.7)*BOSS_VISUALS.tentacleSway;this.dummy.position.set(0,0,0);this.dummy.rotation.set(0,Math.sin(time*.8+i)*sway*.7,angle+sway);this.dummy.scale.setScalar(1);this.dummy.updateMatrix();model.tentacles.setMatrixAt(i,this.dummy.matrix);}
     if(count)model.tentacles.instanceMatrix.needsUpdate=true;
@@ -95,7 +100,14 @@ export class Scene {
     this.homePreviewKind=['enemy','mini','final'][Math.floor(Math.random()*3)];
     return this.homePreviewKind==='enemy'?this.makeBitingMonster('enemy'):this.makeMonster(this.homePreviewKind==='final'?BOSSES.finalFaces:BOSSES.miniFaces,this.homePreviewKind==='final').group;
   }
-  makeShip(enemy){const group=new THREE.Group();group.userData.flames=[];const body=new THREE.Mesh(this.hull,enemy?this.materials.enemy:this.materials.body);group.add(body);const cockpit=new THREE.Mesh(this.aircraftSphere,enemy?this.materials.red:this.materials.dark);cockpit.scale.set(8,23,8);cockpit.position.set(0,9,10);group.add(cockpit);for(const x of [-19,19]){const engine=new THREE.Mesh(this.aircraftSphere,enemy?this.materials.enemy:this.materials.dark);engine.scale.set(6,29,7);engine.position.set(x,-17,0);group.add(engine);const flame=new THREE.Mesh(this.aircraftSphere,enemy?this.materials.red:this.materials.flame);flame.scale.set(3,17,3);flame.position.set(x,-52,0);group.add(flame);group.userData.flames.push(flame);}const stripe=new THREE.Mesh(this.cube,enemy?this.materials.red:this.materials.cyan);stripe.scale.set(1.1,12,1);stripe.position.set(0,-23,9);group.add(stripe);if(enemy)for(const x of [-32,32]){const mark=new THREE.Mesh(this.cube,this.materials.red);mark.scale.set(5,1.3,1);mark.position.set(x,-18,9);mark.rotation.z=Math.sign(x)*.3;group.add(mark);}return group;}
+  makeShip(enemy){const group=new THREE.Group();group.userData.flames=[];const body=new THREE.Mesh(this.hull,enemy?this.materials.enemy:this.materials.body);group.add(body);const cockpit=new THREE.Mesh(this.aircraftSphere,enemy?this.materials.red:this.materials.dark);cockpit.scale.set(8,23,8);cockpit.position.set(0,9,10);group.add(cockpit);for(const x of [-19,19]){const engine=new THREE.Mesh(this.aircraftSphere,enemy?this.materials.enemy:this.materials.dark);engine.scale.set(6,29,7);engine.position.set(x,-17,0);group.add(engine);const flame=new THREE.Mesh(this.aircraftSphere,enemy?this.materials.red:this.materials.flame);flame.scale.set(3,17,3);flame.position.set(x,-52,0);group.add(flame);group.userData.flames.push(flame);}const stripe=new THREE.Mesh(this.cube,enemy?this.materials.red:this.materials.cyan);stripe.scale.set(1.1,12,1);stripe.position.set(0,-23,9);group.add(stripe);if(enemy)for(const x of [-32,32]){const mark=new THREE.Mesh(this.cube,this.materials.red);mark.scale.set(5,1.3,1);mark.position.set(x,-18,9);mark.rotation.z=Math.sign(x)*.3;group.add(mark);}for(const sign of [-1,1]){
+      const rail=new THREE.Mesh(this.cube,this.materials.cyan);rail.scale.set(.45,7,.3);rail.position.set(sign*29,-13,7);rail.rotation.z=-sign*.48;group.add(rail);
+      const nozzle=new THREE.Mesh(this.aircraftSphere,this.materials.body);nozzle.position.set(sign*19,-39,0);nozzle.scale.set(6.7,4,7.7);group.add(nozzle);
+      const intake=new THREE.Mesh(this.aircraftSphere,this.materials.cyan);intake.position.set(sign*19,6,5);intake.scale.set(3.8,8,3);group.add(intake);
+      for(let i=0;i<3;i++){const vent=new THREE.Mesh(this.cube,this.materials.dark);vent.scale.set(1.6,.22,.22);vent.position.set(sign*36,-16-i*4,5);vent.rotation.z=-sign*.2;group.add(vent);}
+    }
+    const glass=new THREE.Mesh(this.aircraftSphere,this.materials.cyan);glass.scale.set(5.5,17,2);glass.position.set(-1,11,17);group.add(glass);
+    return group;}
   makeEnemyBatches(){
     return ['core','tentacle'].map(part=>{
       const mesh=new THREE.InstancedMesh(this.bossGeometries.enemy[part],this.targetMaterial,ENEMIES.maxActive);
@@ -229,12 +241,14 @@ export class Scene {
       }
       models[0].userData.planet.material=this.planetMaterials[0];
       this.particles.count=1;this.dummy.position.set(-10000,0,0);this.dummy.updateMatrix();this.particles.setMatrixAt(0,this.dummy.matrix);
-      this.renderer.setRenderTarget(target);await this.renderer.compileAsync(this.scene,this.camera);this.renderer.render(this.scene,this.camera);await new Promise(resolve=>setTimeout(resolve,0));this.renderer.render(this.scene,this.camera);
+      this.renderer.setRenderTarget(target);await this.renderer.compileAsync(this.scene,this.camera);this.renderer.render(this.scene,this.camera);
+      // 所有表情在准备期上传；游玩换面只更换已驻留的几何。
+      for(let mood=1;mood<4;mood++){for(const model of Object.values(this.monsters))model.expression.geometry=model.source['expression'+mood];this.renderer.render(this.scene,this.camera);await new Promise(resolve=>setTimeout(resolve,0));}
     }finally{
       this.renderer.setRenderTarget(previousTarget);target.dispose();
       this.particles.count=0;for(const batch of this.enemyBatches){batch.count=0;batch.visible=false;}
       for(const {model,visibility,position,scale,material,stars,lines} of saved){for(const [item,visible] of visibility)item.visible=visible;model.position.copy(position);model.scale.copy(scale);model.userData.planet.material=material;model.userData.chartStars.geometry=stars;model.userData.chartLines.geometry=lines;}
-      for(const model of Object.values(this.monsters))model.group.visible=false;for(const model of this.wordMonsters)model.group.visible=false;this.homePreview.visible=previewVisible;
+      for(const model of Object.values(this.monsters)){model.group.visible=false;model.expression.geometry=model.source.expression0;}for(const model of this.wordMonsters)model.group.visible=false;this.homePreview.visible=previewVisible;
     }
   }
 }

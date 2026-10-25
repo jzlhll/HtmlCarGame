@@ -48,8 +48,8 @@ export async function prepareAssets(progress){
   progress('准备星海',10);
   try{
     try{db=await openDB();const previous=await transact(db,'readonly',store=>store.get('meta:completed'));upgrading=!!previous?.version&&compareVersion(previous.version,APP_VERSION)<0;if(upgrading)progress('版本升级',15);}catch(error){persistent=false;console.warn('Persistent asset cache unavailable',error);}
-    const bossSettings=Object.fromEntries(Object.entries(BOSS_VISUALS).filter(([name])=>!['tentacleSway','tentacleSpeed'].includes(name)));for(const kind of ['mini','final'])bossSettings[kind]=Object.fromEntries(Object.entries(BOSS_VISUALS[kind]).filter(([name])=>!['scale','yOffset'].includes(name)));
-    const bossKey='boss:'+JSON.stringify({source:RESOURCE_SOURCES.boss,format:1,settings:bossSettings}),recipe=supplySpriteRecipe(),spriteKey='sprite:supply:'+JSON.stringify(recipe);
+    const bossSettings=Object.fromEntries(Object.entries(BOSS_VISUALS).filter(([name])=>!['tentacleSway','tentacleSpeed','rage'].includes(name)));for(const kind of ['mini','final'])bossSettings[kind]=Object.fromEntries(Object.entries(BOSS_VISUALS[kind]).filter(([name])=>!['scale','yOffset'].includes(name)));
+    const bossKey='boss:'+JSON.stringify({source:RESOURCE_SOURCES.boss,format:2,settings:bossSettings}),recipe=supplySpriteRecipe(),spriteKey='sprite:supply:'+JSON.stringify(recipe);
     progress(upgrading?'版本升级 · 准备场景资源':'准备场景资源',20);
     const spaceTask=(async()=>{
       const started=performance.now();let data=null;
