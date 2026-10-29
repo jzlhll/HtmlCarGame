@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1214">
+  <meta name="description" content="撑过20秒：驾驶小飞机躲避四面来袭的弹幕，挑战自己的生存极限。方向键与触屏摇杆操作。">
+  <title>撑过20秒 · LAST VECTOR</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230b1214'/%3E%3Cpath d='m32 8 5 22 20 13v5l-20-6 2 12-7-3-7 3 2-12-20 6v-5l20-13Z' fill='%2380e5bf'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./src/style.css">
+  <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js"}}</script>
+  <link rel="modulepreload" href="./node_modules/three/build/three.module.js">
+  <link rel="modulepreload" href="./node_modules/three/build/three.core.js">
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <a class="brand" href="./" aria-label="撑过20秒首页"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="m20 3 3 14 12 9-13-4 2 12-4-2-4 2 2-12-13 4 12-9Z"/></svg><span>LAST VECTOR<small>撑过20秒</small></span></a>
+      <div class="header-right"><span class="local-label"><i></i> 本地挑战 · 随时起飞</span><button id="sound" class="icon-button" aria-label="关闭音效" aria-pressed="true" title="音效">♪</button></div>
+    </header>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="intro"><p class="eyebrow"><span class="tiny-cross">+</span> BULLET SURVIVAL / 001</p><h1>生存，<br>只差一线。</h1><p class="intro-copy">没有反击，只有闪避。<br>在四面来袭的弹幕中，<br>找到属于你的那条生路。</p></div>
+        <section class="record"><span class="eyebrow">PERSONAL BEST</span><div><strong id="best">00.00</strong><span>秒</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8v5a4 4 0 0 1-8 0Zm0 2H4v2a4 4 0 0 0 4 4m8-6h4v2a4 4 0 0 1-4 4m-4 1v7m-5 2h10"/></svg></div><p id="record-label">标准模式 · 等你刷新纪录</p></section>
+        <section class="difficulty"><span class="section-label">飞行难度</span><div class="mode-group" aria-label="飞行难度"><button data-mode="practice" aria-pressed="false">练习</button><button data-mode="normal" class="selected" aria-pressed="true">标准</button><button data-mode="expert" aria-pressed="false">极限</button></div><p id="mode-description">经典节奏，20 秒见真章。</p></section>
+        <section class="instructions"><span class="section-label">飞行手册</span><div class="instruction-row"><div class="key-arrows"><kbd>↑</kbd><div><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></div></div><p>方向键移动<small>斜向移动，速度保持一致</small></p></div><div class="instruction-row"><kbd class="esc-key">ESC</kbd><p>暂停 / 继续<small>离开窗口时自动暂停</small></p></div><div class="hitbox-note"><span class="hitbox-symbol">✦<i></i></span><p>机身中心白点是判定点<small>机翼擦过子弹，也能安全通过</small></p></div><p class="touch-note">触屏使用下方摇杆控制方向</p></section>
+        <div class="sidebar-bottom"><span class="mini-dot"></span> 专注当下的每一秒。<span>↗</span></div>
+      </aside>
+      <section class="flight-deck" aria-label="弹幕生存挑战">
+        <div class="deck-top"><div><span class="status-dot" id="status-dot"></span><span id="flight-status">待命中</span><span class="deck-separator">/</span><span id="mode-label">标准模式</span></div><button id="pause" class="pause-button" disabled aria-label="暂停游戏">Ⅱ <span>暂停</span></button></div>
+        <div class="hud"><div><span class="eyebrow">SURVIVAL TIME</span><div class="time-line"><strong id="timer" role="timer" aria-label="生存时间">00<span>.00</span></strong><span class="seconds">SEC</span></div></div><div class="target"><span>挑战目标</span><strong>20<span>.00</span><small> 秒</small></strong></div></div>
+        <div class="progress-track" aria-label="20秒挑战进度"><div id="progress"></div><span></span></div>
+        <div class="arena-shell" id="arena-shell">
+          <div class="arena" id="arena"><div class="radar-rings" aria-hidden="true"></div><div id="scene"></div><div class="arena-coordinates top">N 00° 00′ <span>FLIGHT ZONE — 01</span></div><div class="arena-coordinates bottom">120 × 100 <span>保持移动 · 留意四周</span></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <section class="overlay" id="overlay" aria-label="游戏面板"><div class="overlay-card"><span class="overlay-tag" id="overlay-tag">REACTION / FOCUS / SURVIVE</span><h2 id="overlay-title">你能撑过<br><em>20 秒</em>吗？</h2><p id="overlay-description">一架飞机，一次机会。准备好就出发。</p><div id="result-details" class="result-details" hidden></div><button id="start" class="start-button" disabled><span>准备飞行中…</span><b>↗</b></button><p class="start-hint" id="start-hint">按 <kbd>SPACE</kbd> 开始挑战</p></div></section>
+            <div class="countdown" id="countdown" role="status" hidden><strong>4</strong><span>空域展开中</span></div>
+            <div class="milestone" id="milestone" role="status" hidden><span>20 秒挑战达成</span><strong>继续飞，突破自己。</strong></div>
+            <div class="replay-panel" id="replay-panel" hidden><span>上次飞行 · 最后5秒</span><button id="replay-start">开始挑战 ↗</button></div>
+        <div class="touch-controls"><div id="joystick" class="joystick" role="group" aria-label="触屏方向摇杆"><span class="stick-arrow up">↑</span><span class="stick-arrow down">↓</span><span class="stick-arrow left">←</span><span class="stick-arrow right">→</span><div class="joystick-thumb"></div></div><div class="touch-copy">拇指控制方向<small>拖动摇杆移动 · 松手悬停</small></div></div>
+          </div>
+        </div>
+        <div class="deck-bottom"><div><span class="bullet-legend"></span> 场内弹幕 <strong id="bullet-count">000</strong><span class="bottom-divider"></span><span id="stage-label">等待起飞</span></div><span class="flight-id">LV–020 <span>↗</span></span></div>
+
+      </section>
+    </div>
+    <footer class="footer"><span>灵感源自经典，挑战永不落幕。</span><span id="version">LAST VECTOR / v1.0.0</span></footer>
+    <div class="storage-notice" id="storage-notice" role="status" hidden>本地存储不可用，纪录仅在本页保留。</div>
+  </main>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

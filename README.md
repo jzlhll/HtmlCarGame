@@ -1,12 +1,13 @@
 # 浏览器游戏合集
 
-三个独立网页游戏与 Android 容器统一在 `main` 分支维护，各自保留源码、依赖、文档与开发规则。
+四个独立网页游戏与 Android 容器统一在 `main` 分支维护，各自保留源码、依赖、文档与开发规则。
 
 | 目录 | 工程 | 用途 |
 | --- | --- | --- |
 | [car-game](car-game/README.md) | 四季车途 | 车辆成长、吞吃升级与四季道路赛车 |
 | [low-altitude-flight](low-altitude-flight/README.md) | 低空穿越 | 客机起降、航线飞行与键盘字母位置练习 |
 | [english-air-combat](english-air-combat/README.md) | 英语空战 | 拼写空战、释义选择、碎片拼词与错题复习 |
+| [bullet-survival](bullet-survival/README.md) | 撑过20秒 | 方向键／触屏摇杆躲避弹幕、20秒挑战与无尽生存 |
 | [kids-growth-android](kids-growth-android/README.md) | 学习航站 · Android | Kotlin + WebView 离线集成、原生朗读与每日学习／游玩额度 |
 
 网页游戏进入对应目录后安装依赖并启动，例如：
@@ -20,6 +21,8 @@ npm start
 也可双击各网页工程内的 `启动游戏.command`。端口、操作方式和资源准备流程见各自 README；同时运行时为赛车和英语空战指定不同的 `PORT`。
 
 Android 使用 Android Studio 打开 `kids-growth-android/`；编译时自动整理三个游戏，运行及每日管控规则见 [README.md](kids-growth-android/README.md)。
+
+撑过20秒默认端口为 `5176`，启动方式同上；该工程独立运行，尚未接入 Android 容器及自动发布流程。
 
 各网页工程的 `assets/`、`.pages-output/` 和生成的资源指纹不提交。低空穿越启动时自动生成必需资源，其他工程由浏览器在准备阶段生成。
 

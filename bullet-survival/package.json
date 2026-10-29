@@ -1,0 +1,14 @@
+{
+  "name": "bullet-survival",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "撑过20秒 · Three.js 弹幕生存游戏",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "prepare:pages": "node scripts/prepare-pages.mjs"
+  },
+  "dependencies": {
+    "three": "0.186.1"
+  }
+}
