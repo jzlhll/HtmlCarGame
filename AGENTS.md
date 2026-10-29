@@ -4,6 +4,6 @@
 - `low-altitude-flight/`：低空穿越，通过客机起降、航线飞行和键盘操作练习熟悉字母键位。
 - `english-air-combat/`：英语空战，通过拼写空战、释义选择、碎片拼词和错题复习学习英语。
 
-- `android-app/`：学习航站，使用 Kotlin + WebView 集成三个游戏，提供离线打包、原生朗读与每日学习时长管控。
+- `kids-growth-android/`：学习航站，使用 Kotlin + WebView 集成三个游戏，提供离线打包、原生朗读与每日学习时长管控。
 
 各工程独立维护依赖、启动脚本、文档和开发规则；进入对应目录后按其 `AGENTS.md` 和文档入口处理。

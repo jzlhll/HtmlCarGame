@@ -9,7 +9,7 @@ Kotlin + Android WebView 的离线游戏合集，提供英语空战、四季车�
 本机安装调试包的入口：
 
 ```bash
-cd android-app
+cd kids-growth-android
 ./gradlew assembleDebug
 ```
 

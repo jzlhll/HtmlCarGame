@@ -17,7 +17,7 @@ if (requestedGame && !projects.includes(requestedGame)) throw new Error('Unknown
 const selected = requestedGame ? [requestedGame] : projects;
 const output = path.resolve(argumentsList.find(value => value.startsWith('--output='))?.slice(9) || path.join(androidRoot, 'app/build/generated/gameAssets'));
 const buildRoots = [path.join(androidRoot, 'build'), path.join(androidRoot, 'app/build')];
-if (!buildRoots.some(directory => output.startsWith(directory + path.sep))) throw new Error('Output must be inside android-app build directories');
+if (!buildRoots.some(directory => output.startsWith(directory + path.sep))) throw new Error('Output must be inside kids-growth-android build directories');
 const stage = output + '.preparing-' + process.pid;
 const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const threeFiles = ['build/three.module.js', 'build/three.core.js', 'LICENSE'];

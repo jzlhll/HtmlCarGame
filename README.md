@@ -7,7 +7,7 @@
 | [car-game](car-game/README.md) | 四季车途 | 车辆成长、吞吃升级与四季道路赛车 |
 | [low-altitude-flight](low-altitude-flight/README.md) | 低空穿越 | 客机起降、航线飞行与键盘字母位置练习 |
 | [english-air-combat](english-air-combat/README.md) | 英语空战 | 拼写空战、释义选择、碎片拼词与错题复习 |
-| [android-app](android-app/README.md) | 学习航站 · Android | Kotlin + WebView 离线集成、原生朗读与每日学习／游玩额度 |
+| [kids-growth-android](kids-growth-android/README.md) | 学习航站 · Android | Kotlin + WebView 离线集成、原生朗读与每日学习／游玩额度 |
 
 网页游戏进入对应目录后安装依赖并启动，例如：
 
@@ -19,7 +19,7 @@ npm start
 
 也可双击各网页工程内的 `启动游戏.command`。端口、操作方式和资源准备流程见各自 README；同时运行时为赛车和英语空战指定不同的 `PORT`。
 
-Android 使用 Android Studio 打开 `android-app/`；编译时自动整理三个游戏，运行及每日管控规则见 [README.md](android-app/README.md)。
+Android 使用 Android Studio 打开 `kids-growth-android/`；编译时自动整理三个游戏，运行及每日管控规则见 [README.md](kids-growth-android/README.md)。
 
 各网页工程的 `assets/`、`.pages-output/` 和生成的资源指纹不提交。低空穿越启动时自动生成必需资源，其他工程由浏览器在准备阶段生成。
 
