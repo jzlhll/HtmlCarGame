@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishDefinition" load_steps=4 format=3]
+[ext_resource type="Script" path="res://scripts/gameplay/fish_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/fish_atlas.png" id="2"]
+[sub_resource type="AtlasTexture" id="FishTexture"]
+atlas = ExtResource("2")
+region = Rect2(435.0, 436.0, 395.0, 312.0)
+filter_clip = true
+
+[resource]
+script = ExtResource("1")
+id = "butterflyfish"
+display_name = "月纹蝶"
+reward_mode = "inventory"
+p_base = 0.28
+sale_value = 60
+length = 92.0
+collision_ratio = Vector2(0.32, 0.21)
+speed_range = Vector2(50, 80)
+texture = SubResource("FishTexture")
+group_range = Vector2i(1, 2)
+spawn_kind = "medium"

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="NetDefinition" load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/gameplay/net_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/cast_net_hemp.png" id="2"]
+[resource]
+script = ExtResource("1")
+id = "net_yinsuo"
+display_name = "粗绳网"
+icon = ExtResource("2")
+tier = 2
+mesh_texture = ExtResource("2")
+coin_cost = 3
+radius = 80.0
+probability_factor = 1.4
+effect_theme = Color(0.7686274509803922, 0.6823529411764706, 0.5176470588235295, 1)

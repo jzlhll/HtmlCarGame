@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishDefinition" load_steps=4 format=3]
+[ext_resource type="Script" path="res://scripts/gameplay/fish_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/fish_atlas.png" id="2"]
+[sub_resource type="AtlasTexture" id="FishTexture"]
+atlas = ExtResource("2")
+region = Rect2(842.0, 768.0, 412.0, 432.0)
+filter_clip = true
+
+[resource]
+script = ExtResource("1")
+id = "manta_ray"
+display_name = "青翼鳐"
+reward_mode = "inventory"
+p_base = 0.07
+sale_value = 900
+length = 320.0
+collision_ratio = Vector2(0.34, 0.32)
+speed_range = Vector2(43, 57)
+texture = SubResource("FishTexture")
+group_range = Vector2i(1, 1)
+spawn_kind = "large"

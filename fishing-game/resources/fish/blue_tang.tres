@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishDefinition" load_steps=4 format=3]
+[ext_resource type="Script" path="res://scripts/gameplay/fish_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/fish_atlas.png" id="2"]
+[sub_resource type="AtlasTexture" id="FishTexture"]
+atlas = ExtResource("2")
+region = Rect2(0.0, 444.0, 427.0, 300.0)
+filter_clip = true
+
+[resource]
+script = ExtResource("1")
+id = "blue_tang"
+display_name = "蓝绸"
+reward_mode = "inventory"
+p_base = 0.32
+sale_value = 45
+length = 84.0
+collision_ratio = Vector2(0.32, 0.21)
+speed_range = Vector2(85, 120)
+texture = SubResource("FishTexture")
+group_range = Vector2i(3, 6)
+spawn_kind = "school"

@@ -1,0 +1,8 @@
+.godot/
+.tools/
+exports/
+previews/
+*.tmp
+*.log
+.DS_Store
+.local-signing.json

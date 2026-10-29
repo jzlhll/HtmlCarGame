@@ -1,0 +1,35 @@
+config_version=5
+
+[application]
+config/name="潮汐渔场"
+config/version="0.1.0"
+run/main_scene="res://scenes/game.tscn"
+config/features=PackedStringArray("4.5", "GL Compatibility")
+config/icon="res://assets/art/icon.svg"
+config/quit_on_go_back=false
+
+[display]
+window/size/viewport_width=1600
+window/size/viewport_height=900
+window/size/window_width_override=1920
+window/size/window_height_override=1080
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
+window/handheld/orientation=0
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+textures/vram_compression/import_etc2_astc=true
+textures/vram_compression/import_s3tc_bptc=true
+environment/defaults/default_clear_color=Color(0.015, 0.06, 0.10, 1)
+
+[audio]
+default_bus_layout="res://resources/audio_bus.tres"
+
+[gui]
+theme/default_font_multichannel_signed_distance_field=true
+
+[physics]
+common/physics_ticks_per_second=60

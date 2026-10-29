@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="NetDefinition" load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/gameplay/net_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/cast_net_torn.png" id="2"]
+[resource]
+script = ExtResource("1")
+id = "net_qingxi"
+display_name = "破网"
+icon = ExtResource("2")
+tier = 1
+mesh_texture = ExtResource("2")
+coin_cost = 1
+radius = 64.0
+probability_factor = 1.0
+effect_theme = Color(0.6666666666666666, 0.5568627450980392, 0.41568627450980394, 1)

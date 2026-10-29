@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="NetDefinition" load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/gameplay/net_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/cast_net_dragon.png" id="2"]
+[resource]
+script = ExtResource("1")
+id = "net_longxiao"
+display_name = "龙绡网"
+icon = ExtResource("2")
+tier = 6
+mesh_texture = ExtResource("2")
+coin_cost = 18
+radius = 160.0
+probability_factor = 3.2
+effect_theme = Color(0.8666666666666667, 0.7333333333333333, 0.9215686274509803, 1)

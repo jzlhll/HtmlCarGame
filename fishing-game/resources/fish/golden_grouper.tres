@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="FishDefinition" load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/gameplay/fish_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/golden_grouper.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = "golden_grouper"
+display_name = "金纹石斑"
+reward_mode = "inventory"
+p_base = 0.08
+sale_value = 600
+length = 280.0
+collision_ratio = Vector2(0.36, 0.14)
+speed_range = Vector2(43, 57)
+texture = ExtResource("2")
+group_range = Vector2i(1, 1)
+spawn_kind = "large"

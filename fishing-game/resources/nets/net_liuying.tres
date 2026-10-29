@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="NetDefinition" load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/gameplay/net_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/cast_net.png" id="2"]
+[resource]
+script = ExtResource("1")
+id = "net_liuying"
+display_name = "密织网"
+icon = ExtResource("2")
+tier = 3
+mesh_texture = ExtResource("2")
+coin_cost = 5
+radius = 100.0
+probability_factor = 1.8
+effect_theme = Color(0.788235294117647, 0.8470588235294118, 0.7686274509803922, 1)

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="NetDefinition" load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/gameplay/net_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/cast_net_silver.png" id="2"]
+[resource]
+script = ExtResource("1")
+id = "net_yuelan"
+display_name = "银丝网"
+icon = ExtResource("2")
+tier = 4
+mesh_texture = ExtResource("2")
+coin_cost = 8
+radius = 120.0
+probability_factor = 2.2
+effect_theme = Color(0.8117647058823529, 0.8705882352941177, 0.9215686274509803, 1)

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishDefinition" load_steps=4 format=3]
+[ext_resource type="Script" path="res://scripts/gameplay/fish_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/fish_atlas.png" id="2"]
+[sub_resource type="AtlasTexture" id="FishTexture"]
+atlas = ExtResource("2")
+region = Rect2(430.0, 114.0, 415.0, 208.0)
+filter_clip = true
+
+[resource]
+script = ExtResource("1")
+id = "golden_anchovy"
+display_name = "金线小鳀"
+reward_mode = "inventory"
+p_base = 0.5
+sale_value = 18
+length = 54.0
+collision_ratio = Vector2(0.36, 0.14)
+speed_range = Vector2(85, 120)
+texture = SubResource("FishTexture")
+group_range = Vector2i(6, 10)
+spawn_kind = "school"

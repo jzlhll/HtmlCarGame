@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishDefinition" load_steps=4 format=3]
+[ext_resource type="Script" path="res://scripts/gameplay/fish_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/fish_atlas.png" id="2"]
+[sub_resource type="AtlasTexture" id="FishTexture"]
+atlas = ExtResource("2")
+region = Rect2(830.0, 448.0, 424.0, 300.0)
+filter_clip = true
+
+[resource]
+script = ExtResource("1")
+id = "red_bream"
+display_name = "赤霞鲷"
+reward_mode = "inventory"
+p_base = 0.22
+sale_value = 90
+length = 116.0
+collision_ratio = Vector2(0.36, 0.14)
+speed_range = Vector2(50, 80)
+texture = SubResource("FishTexture")
+group_range = Vector2i(1, 1)
+spawn_kind = "medium"

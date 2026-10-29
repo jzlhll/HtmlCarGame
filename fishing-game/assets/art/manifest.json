@@ -1,0 +1,98 @@
+[
+  {
+    "file": "assets/art/cannon.png",
+    "width": 724,
+    "height": 2172,
+    "alpha": true,
+    "source": "OpenAI built-in image_gen.imagegen",
+    "processing": "Original pixels preserved; verified AtlasTexture regions for fish atlas; Godot scales and animates at runtime"
+  },
+  {
+    "file": "assets/art/cast_net.png",
+    "width": 1254,
+    "height": 1254,
+    "alpha": true,
+    "source": "OpenAI built-in image_gen.imagegen",
+    "processing": "Original pixels preserved; verified AtlasTexture regions for fish atlas; Godot scales and animates at runtime"
+  },
+  {
+    "file": "assets/art/cast_net_dragon.png",
+    "width": 1254,
+    "height": 1254,
+    "alpha": true,
+    "source": "OpenAI built-in image_gen.imagegen",
+    "processing": "Original pixels preserved; verified AtlasTexture regions for fish atlas; Godot scales and animates at runtime"
+  },
+  {
+    "file": "assets/art/cast_net_gold.png",
+    "width": 1254,
+    "height": 1254,
+    "alpha": true,
+    "source": "OpenAI built-in image_gen.imagegen",
+    "processing": "Original pixels preserved; verified AtlasTexture regions for fish atlas; Godot scales and animates at runtime"
+  },
+  {
+    "file": "assets/art/cast_net_hemp.png",
+    "width": 1254,
+    "height": 1254,
+    "alpha": true,
+    "source": "OpenAI built-in image_gen.imagegen",
+    "processing": "Original pixels preserved; verified AtlasTexture regions for fish atlas; Godot scales and animates at runtime"
+  },
+  {
+    "file": "assets/art/cast_net_silver.png",
+    "width": 1254,
+    "height": 1254,
+    "alpha": true,
+    "source": "OpenAI built-in image_gen.imagegen",
+    "processing": "Original pixels preserved; verified AtlasTexture regions for fish atlas; Godot scales and animates at runtime"
+  },
+  {
+    "file": "assets/art/cast_net_torn.png",
+    "width": 1254,
+    "height": 1254,
+    "alpha": true,
+    "source": "OpenAI built-in image_gen.imagegen",
+    "processing": "Original pixels preserved; verified AtlasTexture regions for fish atlas; Godot scales and animates at runtime"
+  },
+  {
+    "file": "assets/art/fish_atlas.png",
+    "width": 1254,
+    "height": 1254,
+    "alpha": true,
+    "source": "OpenAI built-in image_gen.imagegen",
+    "processing": "Original pixels preserved; verified AtlasTexture regions for fish atlas; Godot scales and animates at runtime"
+  },
+  {
+    "file": "assets/art/golden_grouper.png",
+    "width": 1774,
+    "height": 887,
+    "alpha": true,
+    "source": "OpenAI built-in image_gen.imagegen",
+    "processing": "Original pixels preserved; verified AtlasTexture regions for fish atlas; Godot scales and animates at runtime"
+  },
+  {
+    "file": "assets/art/great_shark.png",
+    "width": 1983,
+    "height": 793,
+    "alpha": true,
+    "source": "OpenAI built-in image_gen.imagegen",
+    "processing": "Original pixels preserved; verified AtlasTexture regions for fish atlas; Godot scales and animates at runtime"
+  },
+  {
+    "file": "assets/art/seabed.png",
+    "width": 1672,
+    "height": 941,
+    "alpha": false,
+    "source": "OpenAI built-in image_gen.imagegen",
+    "processing": "Original pixels preserved; verified AtlasTexture regions for fish atlas; Godot scales and animates at runtime"
+  },
+  {
+    "file": "assets/art/starwing_bonus.png",
+    "width": 1536,
+    "height": 1024,
+    "alpha": true,
+    "source": "OpenAI built-in image_gen.imagegen",
+    "processing": "Original pixels preserved; verified AtlasTexture regions for fish atlas; Godot scales and animates at runtime"
+  }
+]

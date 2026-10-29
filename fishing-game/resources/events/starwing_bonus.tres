@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EventDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/gameplay/event_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = "starwing_bonus"
+first_interval = Vector2(35, 55)
+interval = Vector2(75, 120)
+warning_seconds = 3.0
+reward = 3600
+reward_seconds = 4.8
+coin_batches = 12
