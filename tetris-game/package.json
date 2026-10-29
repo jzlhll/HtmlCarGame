@@ -1,0 +1,14 @@
+{
+  "name": "tetris-game",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "方块时光 · Three.js 经典与无尽残局俄罗斯方块",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "prepare:pages": "node scripts/prepare-pages.mjs"
+  },
+  "dependencies": {
+    "three": "0.186.1"
+  }
+}

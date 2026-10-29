@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f0e5">
+  <meta name="description" content="方块时光：经典七关与无尽残局，重温掌机里的俄罗斯方块。暂停自动保存，随时回来接着玩。">
+  <title>方块时光 · BRICK TIME</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23e97044'/%3E%3Cpath d='M12 12h18v18H12zm22 0h18v18H34zm0 22h18v18H34z' fill='%23fff8e9'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./src/style.css">
+  <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js"}}</script>
+  <link rel="modulepreload" href="./node_modules/three/build/three.module.js">
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <a class="brand" href="./" aria-label="方块时光首页"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>方块时光<small>BRICK TIME</small></span></a>
+      <div class="header-note"><i></i> 暂停即存档，快乐不散场。</div>
+      <button class="sound-button" id="sound" aria-label="关闭音效" aria-pressed="true">♫ <span>音效开</span></button>
+    </header>
+
+    <div class="layout">
+      <aside class="left-column">
+        <p class="eyebrow">A LITTLE GAME. A GOOD OLD TIME.</p>
+        <h1>再来，<br>一块。</h1>
+        <p class="intro">熟悉的方格，久违的手感。<br>把今天的烦恼，消掉一行。</p>
+        <section class="mode-section" aria-label="游戏模式">
+          <div class="section-heading"><span>选择玩法</span><small>01 / MODE</small></div>
+          <button class="mode-card selected" data-mode="classic" aria-pressed="true"><span class="mode-symbol" aria-hidden="true">▦</span><span><strong>经典七关</strong><small>每关 2 分钟，一路到通关</small></span><b>↗</b></button>
+          <button class="mode-card" data-mode="puzzle" aria-pressed="false"><span class="mode-symbol" aria-hidden="true">✦</span><span><strong>无尽残局</strong><small>随机残局，越玩越有挑战</small></span><b>↗</b></button>
+        </section>
+        <section class="speed-section" id="speed-section" hidden>
+          <div class="section-heading"><label for="initial-speed">开局速度</label><span id="initial-speed-label">01</span></div>
+          <input id="initial-speed" type="range" min="1" max="7" value="1" aria-label="残局开局速度">
+          <div class="range-labels"><span>慢慢来</span><span>挑战手速</span></div>
+          <p>新局生效 · 每 2.5 分钟自动提速</p>
+        </section>
+        <div class="little-note"><span aria-hidden="true">✳</span><p>不急，找准位置。<br><strong>下一块，总有新的可能。</strong></p></div>
+      </aside>
+
+      <section class="machine" aria-label="俄罗斯方块游戏机">
+        <div class="machine-top"><span><i id="power-light"></i> BRICK TIME</span><span id="machine-mode">CLASSIC / 01</span></div>
+        <div class="screen-frame">
+          <div class="screen-top"><span id="status-label">准备就绪</span><span><i></i> 10 × 20</span></div>
+          <div class="board-wrap" id="board-wrap">
+            <div id="scene" role="img" aria-label="10列20行俄罗斯方块棋盘"></div>
+            <div class="board-message" id="board-message" role="status" hidden></div>
+            <section class="overlay" id="overlay" aria-label="游戏状态">
+              <div class="overlay-inner"><span class="overlay-icon" id="overlay-icon" aria-hidden="true">▦</span><p class="eyebrow" id="overlay-kicker">READY WHEN YOU ARE</p><h2 id="overlay-title">好时光，<br>从这一块开始。</h2><p id="overlay-description">七种经典方块，七关小小挑战。</p><button class="primary-button" id="start" disabled>准备画面中… <span>→</span></button><p class="overlay-hint" id="overlay-hint">按 Enter 开始 · 暂停自动保存</p></div>
+            </section>
+          </div>
+          <div class="screen-bottom"><span id="screen-caption">叠好每一块，慢慢来。</span><span>● ● ●</span></div>
+        </div>
+        <div class="machine-toolbar"><button class="machine-button" id="pause" disabled aria-label="暂停并保存">Ⅱ <span>暂停 / 保存</span></button><div class="speaker" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><button class="machine-button" id="new-game">↻ <span>新的一局</span></button></div>
+        <div class="touch-controls" aria-label="触屏操作">
+          <div class="direction-controls"><button data-action="left" aria-label="左移">←</button><button data-action="soft" aria-label="按住加速下落">↓</button><button data-action="right" aria-label="右移">→</button></div>
+          <div class="action-controls"><button data-action="rotate" aria-label="顺时针旋转">↻<small>旋转</small></button><button data-action="drop" aria-label="直接落底">⤓<small>落底</small></button></div>
+        </div>
+        <div class="machine-base"><span>GOOD THINGS FALL INTO PLACE.</span><span>BT–001</span></div>
+      </section>
+
+      <aside class="right-column">
+        <section class="next-card"><div class="section-heading"><span>下一块</span><small>NEXT UP</small></div><div id="next-piece" class="piece-preview" aria-label="下一块方块"></div><p id="next-label">新的可能，正在路上。</p></section>
+        <section class="score-panel" aria-label="本局数据"><div class="score-main"><span class="eyebrow">YOUR SCORE / 得分</span><strong id="score">000000</strong></div><div class="stat-row"><span>已消除行数</span><strong id="lines">000</strong></div><div class="stat-row"><span>当前速度</span><strong id="speed">01</strong></div><div class="stat-row"><span id="progress-label">当前关卡</span><strong id="progress-value">1 <small>/ 7</small></strong></div><div class="time-stat"><div><span id="time-label">本关剩余时间</span><strong id="time-value">02:00</strong></div><div class="progress-track"><i id="time-progress"></i></div></div></section>
+        <section class="bonus-card" id="bonus-card" hidden><div><span class="bonus-star" aria-hidden="true">★</span><strong>五角星 BONUS</strong></div><p>穿过堆叠，找到最深的空洞。<br>停下就能消掉一整行。</p><small id="bonus-status">每隔 2～3 分钟遇见一次惊喜</small></section>
+        <section class="controls-guide"><div class="section-heading"><span>手感说明书</span><small>HOW TO PLAY</small></div><div><span><kbd>←</kbd> <kbd>→</kbd></span><p>左右移动</p></div><div><span><kbd>↑</kbd> / <kbd>X</kbd></span><p>旋转方块</p></div><div><span><kbd>↓</kbd></span><p>按住加速</p></div><div><span><kbd>SPACE</kbd></span><p>直接落底</p></div><div><span><kbd>ESC</kbd> / <kbd>P</kbd></span><p>暂停 / 继续</p></div></section>
+        <p class="save-status" id="save-status" role="status"><span>◇</span> 暂停时自动保存进度</p>
+      </aside>
+    </div>
+    <footer><span>把方块拼好，也把心情放好。</span><span>THREE.JS · <span id="version">v1.0.0</span></span></footer>
+    <div class="toast" id="toast" role="status" hidden></div>
+    <dialog id="restart-dialog"><form method="dialog"><span class="eyebrow">A FRESH START</span><h2>开始新的一局？</h2><p>这会替换当前模式的进度，<br>另一种模式的存档会保留。</p><div><button value="cancel">再想想</button><button value="restart" class="confirm-button">开始新局 →</button></div></form></dialog>
+    <noscript>请启用 JavaScript 后游玩方块时光。</noscript>
+  </main>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
