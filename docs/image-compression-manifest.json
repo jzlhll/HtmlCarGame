@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "compression_date": "2026-10-30",
+  "service": "https://tinypng.com/",
+  "batch_size": 15,
+  "source_commit": "1b652b407b86750f0c2e19d20f691bef0ed4c571",
+  "scope": "本次 Git 跟踪的全部 PNG/JPG 图片；SVG 不在 TinyPNG 支持的压缩格式内。",
+  "processing": "使用网站压缩一次，关闭自动格式转换，下载后原路径替换。尺寸及透明通道保留，颜色和部分 alpha 经有损量化。",
+  "history_cleanup_note": "条目记录本次路径与替换前后 Git blob ID；清洗完整历史时仍需核对历史版本及改名路径。未变化的条目前后 blob 相同。",
+  "summary": {
+    "processed": 13,
+    "changed": 13,
+    "bytes_before": 33915728,
+    "bytes_after": 7228662
+  },
+  "images": [
+    {
+      "path": "fishing-game/assets/art/cannon.png",
+      "changed": true,
+      "before": {
+        "bytes": 1364841,
+        "sha256": "3bae4b1aed7e55810e66a086f218577f08d5c984a2256def7770330a117cafc3",
+        "git_blob": "30622a9cfa1a463e9899ce9ae7c05d0ac04df1e3"
+      },
+      "after": {
+        "bytes": 384005,
+        "sha256": "5c2d50e72e31b74056deb78df8efb7c8b40d717bb1b9a0f02e48c1a4b17df635",
+        "git_blob": "231765b8aec7e2fe78a3f1b160911e39646cc60c"
+      }
+    },
+    {
+      "path": "fishing-game/assets/art/cast_net.png",
+      "changed": true,
+      "before": {
+        "bytes": 3083205,
+        "sha256": "08bf430fa1b5ddaa3b4a103aa947bf2aa2e3da867f66c8a5f3c067eaeda35fe0",
+        "git_blob": "c1dd2678ea4fcd79bf0f1a8b25d123269b784973"
+      },
+      "after": {
+        "bytes": 645321,
+        "sha256": "fc9a1f2eef9c93cca0814bd71cb67e73063eec8b34025c5bc754059bc317a096",
+        "git_blob": "59ff69cc2e7d5a40663f204554aff889ead40d0d"
+      }
+    },
+    {
+      "path": "fishing-game/assets/art/cast_net_dragon.png",
+      "changed": true,
+      "before": {
+        "bytes": 3408694,
+        "sha256": "263a3d338b630929cf3e1df22f1ed081c6269450f160ce6bdb1684b1874649fc",
+        "git_blob": "5a3091ed04c615dcaaea6af071f94d8054aa4b77"
+      },
+      "after": {
+        "bytes": 640786,
+        "sha256": "a4c47af82c3b3e909c33e7ffc2dbd441573e95434c7607588a0cb99eaeac3881",
+        "git_blob": "5505a3d4b7fd0a331c0b59429d452ce3dd40da30"
+      }
+    },
+    {
+      "path": "fishing-game/assets/art/cast_net_gold.png",
+      "changed": true,
+      "before": {
+        "bytes": 3221382,
+        "sha256": "32d446455573f65ba8ddae0fe11f765e5da89732bb0168182ddcf67a91d5f774",
+        "git_blob": "58eeb0b6d2e79b73bdac8c350b6b6fe39b7b5154"
+      },
+      "after": {
+        "bytes": 660465,
+        "sha256": "d6b8c0eb405f3c4e36c5d0181fe599b5f09f038464879c19f51d1c59024e2b3f",
+        "git_blob": "b181f0574c2296b67aca767e4f0eaecd4888a3c4"
+      }
+    },
+    {
+      "path": "fishing-game/assets/art/cast_net_hemp.png",
+      "changed": true,
+      "before": {
+        "bytes": 2961441,
+        "sha256": "274514dcbfd8adda2da1164b490f7438fe42b0daff807059d47a39bb469b2215",
+        "git_blob": "2a5506819cfe6e83f0a638076fdaa6f8a09e7d7f"
+      },
+      "after": {
+        "bytes": 586528,
+        "sha256": "117c9c9993d28e147fe0c9a8ffb71f28243ee693fa2dd0a55dae2db55e5fef38",
+        "git_blob": "fbe9586e8539d99196ba30172085c4af14e41810"
+      }
+    },
+    {
+      "path": "fishing-game/assets/art/cast_net_silver.png",
+      "changed": true,
+      "before": {
+        "bytes": 3240290,
+        "sha256": "d98a19093bcb846e12a7779e0328c1d5c0f996fab25f89c897b8be55f33b253b",
+        "git_blob": "2d4bd621b5e2b7e2bfaf28f0f27f253efde83d78"
+      },
+      "after": {
+        "bytes": 608435,
+        "sha256": "7a1ae5051359f67d82a1755f1035f4cc4f01a19b671b16953fd87cea11a56ea9",
+        "git_blob": "4f152151d65ed3e2ffee41f42b039731ac370111"
+      }
+    },
+    {
+      "path": "fishing-game/assets/art/cast_net_torn.png",
+      "changed": true,
+      "before": {
+        "bytes": 2873849,
+        "sha256": "e314d02ab53d43c65a4c654668281f1ce19f90027ab29aa83e01d38414b2bca2",
+        "git_blob": "50a1100466833104b99e3508e37c0a63503ce844"
+      },
+      "after": {
+        "bytes": 609889,
+        "sha256": "31806e878c7ee1aaad5c72d9fdcbfbf511a070b442ce17d5084280ece9e21329",
+        "git_blob": "11a9bcc0132675e780b675ff025f383ef6e9e5f5"
+      }
+    },
+    {
+      "path": "fishing-game/assets/art/fish_atlas.png",
+      "changed": true,
+      "before": {
+        "bytes": 1594310,
+        "sha256": "4c04a14a65c8847a9f2bb3262fc7a4044bcd19bae6c25d8d644add05f943605d",
+        "git_blob": "6cb8798fc3ca98770ff3206f08260b290c5cb134"
+      },
+      "after": {
+        "bytes": 298391,
+        "sha256": "318570d4ae65703d04c3a5750090533e784ab4bae3aa31db67f78944da162e55",
+        "git_blob": "d900ebc13ca8de58eb89241a934cbf6224aa5a10"
+      }
+    },
+    {
+      "path": "fishing-game/assets/art/golden_grouper.png",
+      "changed": true,
+      "before": {
+        "bytes": 2288762,
+        "sha256": "02351fe515d115d63d81517da6ff1c2444f771693b56c93d925f391a7522918b",
+        "git_blob": "3a45675ef93ed350d128a7ccc968329a43b4e6e0"
+      },
+      "after": {
+        "bytes": 599125,
+        "sha256": "87f85b9a53af06ca34d0b5608db6543c09700c2e7cdb3ae8f08ba69da408bc20",
+        "git_blob": "3f7ce32fa165b3763285d20540cb5ecc14ca423f"
+      }
+    },
+    {
+      "path": "fishing-game/assets/art/great_shark.png",
+      "changed": true,
+      "before": {
+        "bytes": 1324610,
+        "sha256": "920ad006f07bb902508ea120cc600c2589278414298c1711040165be9493e9c6",
+        "git_blob": "5deee4c6d46e4dc49a124d2d488dc660448ea1ac"
+      },
+      "after": {
+        "bytes": 308993,
+        "sha256": "c63e830e464173e79856cec502780d764d9592b5a3539df4a633e56b46703ec0",
+        "git_blob": "ad551fe3b8325864146cfb4bd04df9509946fef0"
+      }
+    },
+    {
+      "path": "fishing-game/assets/art/seabed.png",
+      "changed": true,
+      "before": {
+        "bytes": 2806261,
+        "sha256": "8a3ce440dd4180a8afe9ee0a053529398a13b8db699cec1924735c16328a8696",
+        "git_blob": "def80710c45557be9cda595f33b6f9b05138554b"
+      },
+      "after": {
+        "bytes": 702286,
+        "sha256": "1b7fde8d440bb40d99573641261dd4278fdff853c1fbfb6855d8a30ab5e3a5d7",
+        "git_blob": "c8b71877efa53097ff65e542f2884d53109e4442"
+      }
+    },
+    {
+      "path": "fishing-game/assets/art/starwing_bonus.png",
+      "changed": true,
+      "before": {
+        "bytes": 2562227,
+        "sha256": "356a3c87c0f450372e133df58d939bfb25815fd30f02c1b2ccb76141409062b2",
+        "git_blob": "f229644e98c9c378ec8dacb902801ac448222c55"
+      },
+      "after": {
+        "bytes": 483859,
+        "sha256": "fb36b86fe356579f8ab7a9a90e2766ff580bc7fb0d4a9ba71a9c1c1c319ebcae",
+        "git_blob": "ba67b20de9f2c54869e29acaed12f90639ecf49f"
+      }
+    },
+    {
+      "path": "low-altitude-flight/src/textures/foliage-source-v1.png",
+      "changed": true,
+      "before": {
+        "bytes": 3185856,
+        "sha256": "083555b32af6fff90fbb0528417d2f94e8d60a163bdb52e55ee51984130c35db",
+        "git_blob": "988fd71e2714ae63391b80bb23a3fb9e17720563"
+      },
+      "after": {
+        "bytes": 700579,
+        "sha256": "67f33c891dcdaaabcb118ea079c4dc8c779ea323b366de3fc4ced8f5623e9188",
+        "git_blob": "abf22024ef18bc4169a02a282b865c0eda503c61"
+      }
+    }
+  ],
+  "excluded_svg": [
+    "fishing-game/assets/art/basket.svg",
+    "fishing-game/assets/art/coin_bag.svg",
+    "fishing-game/assets/art/icon.svg",
+    "fishing-game/assets/art/net_leipo.svg",
+    "fishing-game/assets/art/net_liuying.svg",
+    "fishing-game/assets/art/net_longxiao.svg",
+    "fishing-game/assets/art/net_qingxi.svg",
+    "fishing-game/assets/art/net_yinsuo.svg",
+    "fishing-game/assets/art/net_yuelan.svg"
+  ]
+}
