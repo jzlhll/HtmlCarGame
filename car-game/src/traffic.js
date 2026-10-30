@@ -478,7 +478,7 @@ export class Traffic {
         if(car.obstacleHits.has(obstacle.id)||(obstacle.route??null)!==(start.route??null))continue;
         if(Math.abs(obstacle.s-start.s)>VEHICLES[car.rank].length+obstacle.dimensions.length/2+Math.abs(car.s-start.s)+3)continue;
         let event;
-        if(obstacle.kind==='pothole'||obstacle.kind==='mud')event=surfaceContact(start,car,obstacle,this.road);
+        if(obstacle.kind==='mud')event=surfaceContact(start,car,obstacle,this.road);
         else if(obstacle.kind==='roadwork')event=roadworkContact(start,car,obstacle);
         else if(obstacle.kind==='river'){
           const boundary=car.direction>0?obstacle.site.flatStart:obstacle.site.flatEnd;
@@ -506,7 +506,6 @@ export class Traffic {
         else{
           a.speed*=.5;
           if(obstacle.kind==='mud')a.mudUntil=game.activeSeconds+MUD_SECONDS;
-          if(obstacle.kind==='pothole'){startBounce(a,obstacle.drift);a.merge=null;}
         }
       }
     }

@@ -2,12 +2,17 @@ export class Input {
   constructor(game,onAction){this.game=game;this.onAction=onAction;this.keys=new Set();this.letters=[];this.segment=0;this.undo=false;this.erase=false;this.shell=false;this.selection=null;window.addEventListener('keydown',event=>this.down(event));window.addEventListener('keyup',event=>this.up(event));window.addEventListener('blur',()=>this.clear());}
   down(event){
     const code=event.code;if(this.game.state==='review'){if(event.target.closest?.('[data-recap-scroll]'))return;event.preventDefault();return;}
-    if(event.target.closest?.('input,textarea,select,[contenteditable="true"]')||event.ctrlKey||event.metaKey||event.altKey||event.isComposing)return;
+    const setting=this.game.state==='playing'&&this.game.mode==='combat'&&!this.game.choiceOnly&&event.target.closest?.('#volume,#render-quality,#reduced-motion');
+    if((event.target.closest?.('input,textarea,select,[contenteditable="true"]')&&!setting)||event.ctrlKey||event.metaKey||event.altKey||event.isComposing)return;
     if(['ArrowUp','ArrowDown'].includes(code)&&(!['playing','paused'].includes(this.game.state)||this.game.victoryRemaining==null))return;
     const letter=/^Key[A-Z]$/.test(code)?code.slice(3):null,number=/^(Digit|Numpad)[1-4]$/.test(code)?Number(code.at(-1))-1:null;
     if(!letter&&number===null&&!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space','Escape','Backquote','Backspace','ShiftLeft','ShiftRight'].includes(code))return;
     if(event.target.closest?.('button,a')&&code==='Space')return;
-    event.preventDefault();if(event.repeat||this.keys.has(code))return;this.keys.add(code);
+    event.preventDefault();
+    // 桌面空战的游戏键收回页脚设置焦点，文本输入与其他模式仍由控件处理。
+    if(setting)document.getElementById('app').focus({preventScroll:true});
+    // 清空状态后允许持续操作重新登记，暂停、选格及单发操作仍忽略长按。
+    if(this.keys.has(code)||(event.repeat&&(this.game.state!=='playing'||(!letter&&!code.startsWith('Arrow')))))return;this.keys.add(code);
     if(this.game.state!=='playing'){this.onAction(code);return;}
     if(code==='Space'||code==='Escape'){this.onAction(code);return;}
     if(letter){this.letters.push(letter);this.segment++;}

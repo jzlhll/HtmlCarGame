@@ -61,6 +61,49 @@ export function skyEnvironment(){
   const texture=new THREE.DataTexture(data,width,height,THREE.RGBAFormat,THREE.FloatType);texture.mapping=THREE.EquirectangularReflectionMapping;texture.needsUpdate=true;return texture;
 }
 
+// 泥坑、冰面等地面贴片：主瓣加两个偏心卫星瓣并集成不规则水坑轮廓，归一化到最大半径 1，保证不超出椭圆/圆形接触范围。
+export function puddleRadius(seed=1){
+  const phase=seed*2.399963,lobes=[];
+  for(let i=0;i<3;i++){
+    const angle=phase+i*2.4+Math.sin(phase*(i+2))*.9;
+    const dist=i===0?0:.34+.22*Math.sin(phase*3.7+i*5.1);
+    lobes.push([Math.cos(angle)*dist,Math.sin(angle)*dist,.58+.26*Math.sin(phase*1.3+i*2.2),.5+.24*Math.cos(phase*2.1+i*1.7)]);
+  }
+  let max=0;const samples=[];
+  for(let i=0;i<72;i++){
+    const a=i/72*Math.PI*2,ux=Math.cos(a),uy=Math.sin(a);let r=0;
+    for(const [cx,cy,rx,ry] of lobes){
+      const A=ux*ux/(rx*rx)+uy*uy/(ry*ry),B=ux*cx/(rx*rx)+uy*cy/(ry*ry),C=cx*cx/(rx*rx)+cy*cy/(ry*ry)-1;
+      const disc=B*B-A*C;if(disc<=0||A<=0)continue;
+      const t=(B+Math.sqrt(disc))/A;if(t>r)r=t;
+    }
+    samples.push([a,r]);if(r>max)max=r;
+  }
+  if(max<=0)max=1;
+  return a=>{
+    const t=(a/(Math.PI*2)%1+1)%1*72,i=Math.floor(t),f=t-i;
+    const [a0,r0]=samples[i%72],[a1,r1]=samples[(i+1)%72];
+    return (r0*(1-f)+r1*f)/max;
+  };
+}
+export function puddleGeometry(seed=1,segments=36){
+  const radiusAt=puddleRadius(seed),positions=[0,0,0],indices=[];
+  for(let i=0;i<=segments;i++){
+    const a=i/segments*Math.PI*2,r=radiusAt(a);
+    positions.push(Math.cos(a)*r,Math.sin(a)*r,0);
+  }
+  for(let i=1;i<=segments;i++)indices.push(0,i,i+1);
+  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setIndex(indices);geometry.computeVertexNormals();geometry.rotateX(-Math.PI/2);return geometry;
+}
+// 预警圈与贴片共用同一轮廓公式，同 seed 时内外边缘与对应贴片形状一致。
+export function puddleRingGeometry(seed=4,inner=.78,segments=36){
+  const radiusAt=puddleRadius(seed),shape=new THREE.Shape(),hole=new THREE.Path();
+  for(let i=0;i<=segments;i++){const a=i/segments*Math.PI*2,r=radiusAt(a),x=Math.cos(a)*r,y=Math.sin(a)*r;i?shape.lineTo(x,y):shape.moveTo(x,y);}
+  for(let i=segments;i>=0;i--){const a=i/segments*Math.PI*2,r=radiusAt(a)*inner,x=Math.cos(a)*r,y=Math.sin(a)*r;i===segments?hole.moveTo(x,y):hole.lineTo(x,y);}
+  shape.holes.push(hole);
+  const geometry=new THREE.ShapeGeometry(shape);geometry.rotateX(-Math.PI/2);return geometry;
+}
+
 export function organicGeometry(sections,sides=24){
   const curve=new THREE.CatmullRomCurve3(sections.map(([z,width,height,y=0])=>new THREE.Vector3(width,height,y)),false,'catmullrom',.35),positions=[],uvs=[],colors=[],indices=[],rings=sections.length*5;
   for(let row=0;row<=rings;row++){

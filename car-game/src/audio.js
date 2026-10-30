@@ -334,7 +334,6 @@ export class GameAudio {
   // 天降炮弹:下落啸声按落点剩余时长从高频滑向低频再收尾,命中为低频爆响加碎石噪声。
   shellWhistle(seconds){if(!this.context)return;const cfg=AUDIO.shell,dur=clamp(seconds,.4,4);this.tone('sine',cfg.whistleHz,cfg.whistleDropHz,dur,cfg.gain);}
   shellBoom(){if(!this.context)return;const cfg=AUDIO.shell;this.burst(2000,300,'bandpass',.6,.5,cfg.boomGain);this.burst(700,40,'lowpass',.5,1.8,cfg.boomGain,.02);this.tone('sine',70,22,1.4,cfg.boomGain*.7,.02);}
-  bump(){if(!this.context)return;this.tone('sine',130,58,.28,.28);this.burst(260,110,'lowpass',.7,.22,.22,.01);}
   disaster(kind){
     if(!this.context)return;
     const cfg=AUDIO.disasters[kind];

@@ -498,7 +498,7 @@ export const TOURISM = {
   cities: [
     {id:'shenzhen',name:'深圳',english:'Shenzhen',level:1,x:10500,z:-10000,kind:'sail',landmark:'深圳湾春茧',second:'大鹏所城',theme:'fort'},
     {id:'dongguan',name:'东莞',english:'Dongguan',level:1,x:10500,z:-26000,kind:'garden',landmark:'可园',second:'虎门威远炮台',theme:'fort'},
-    {id:'zhaoqing',name:'肇庆',english:'Zhaoqing',level:1,x:-10500,z:-56000,kind:'cliff',landmark:'七星岩',second:'星湖牌坊',theme:'gate'},
+    {id:'foshan',name:'佛山',english:'Foshan',level:1,x:-10500,z:-56000,kind:'temple',landmark:'祖庙',second:'清晖园',theme:'garden'},
     {id:'shaoguan',name:'韶关',english:'Shaoguan',level:2,x:-10500,z:-75000,kind:'temple',landmark:'南华禅寺',second:'风采楼',theme:'gate'},
     {id:'chenzhou',name:'郴州',english:'Chenzhou',level:2,x:10500,z:-83000,kind:'cliff',landmark:'高椅岭',second:'东江湖码头',theme:'marina'},
     {id:'zhangjiajie',name:'张家界',english:'Zhangjiajie',level:2,x:-10500,z:-103000,kind:'arch',landmark:'天门山天门洞',second:'土家吊脚楼',theme:'stilt'},

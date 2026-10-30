@@ -190,7 +190,7 @@ export function tourismParts(city) {
     }
     if(kind==='cliff'){
       for(let i=0;i<7;i++){const dx=(i%4-1.5)*440,dz=Math.floor(i/4)*600,h=330+(i%3)*180;
-        add(name,x+dx,h/2,z+dz,300,h,380,city.id==='zhaoqing'?0x8e9985:0xb26f4a,'rock');}
+        add(name,x+dx,h/2,z+dz,300,h,380,0xb26f4a,'rock');}
       hall(name,x,z-700,420,120,260);return;
     }
     if(kind==='arch'){

@@ -55,7 +55,7 @@ export class WhiteHorseEvent {
     this.buff={from:now,startSpeed:p.speed,peakSpeed:VEHICLES[p.rank].playerMax*WHITE_HORSE.speedMultiplier,shieldUntil:now+WHITE_HORSE.shieldSeconds,until:now+WHITE_HORSE.shieldSeconds+WHITE_HORSE.recoverySeconds};
     // 强化期间不吞吃，饥饿倒计时同步冻结，避免保护罩内因无法补分而死亡。
     game.nextHungerAt=Math.max(now,game.nextHungerAt)+WHITE_HORSE.shieldSeconds;
-    p.mud=0;p.bump=0;p.frozenUntil=0;p.push=0;p.sidePush=0;p.sidePushTime=0;
+    p.mud=0;p.frozenUntil=0;p.push=0;p.sidePush=0;p.sidePushTime=0;
     game.scraping=false;game.nitro.stop();
   }
   shielded(now){return Boolean(this.buff&&now<this.buff.shieldUntil);}

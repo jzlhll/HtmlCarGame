@@ -35,6 +35,8 @@ export const DISASTERS={
     small:{width:[10,16],height:[12,18],length:[10,18]},
     massif:{width:[38,68],height:[22,34],length:[32,54]},
     ridge:{width:[26,42],height:[32,44],length:[42,64]}},
+  // 静态火山按概率贴近主路：山脚向路面内占约 encroachLanes 条车道，仅视觉贴近，不改变碰撞；副路仍保持净空。
+  volcanoScenery:{closeChance:.4,encroachLanes:.5,footprintScale:1.08,clearance:2,sampleStep:10},
   themes:[
     {name:'火山',road:0x6e605a,shoulder:0x51433e,ground:0x3e292b,sky:0x8c4c43,sun:0xffc190},
     {name:'海水',road:0x8a9caa,shoulder:0x566b80,ground:0x167f9e,sky:0xb0d9e8,sun:0xe6f5ff},
@@ -205,7 +207,7 @@ export const ROAD_INFRASTRUCTURE={
   maxGrade:.35, // 坡度上限(垂直/水平),约 19°,防止短坡组合出失真的悬崖。
 };
 // 跨度按公共道路里程计，副路另校验实际弧长；分离距离为中段路面边缘的空隙。
-export const ROAD_FORKS={chance:.8,minSpan:880,maxSpan:1760,minLength:800,maxLength:2000,separationMin:40,separationMax:60,potholeSpacing:22,potholeChance:.7,weatherChance:.8,weatherIntervalMin:3,weatherIntervalMax:7};
+export const ROAD_FORKS={chance:.8,minSpan:880,maxSpan:1760,minLength:800,maxLength:2000,separationMin:40,separationMax:60,weatherChance:.8,weatherIntervalMin:3,weatherIntervalMax:7};
 // 同一车队共享低速目标和短投放净距，普通车流使用独立的生成净距。
 export const SLOW_TRAFFIC={minCount:3,maxCount:7,minSpeed:10,maxSpeed:30,minGap:2.5,maxGap:4,firstSeconds:8,intervalMin:14,intervalMax:24,chance:.65};
 // 横穿奶牛只在平地投放；结构缓冲额外覆盖队员错开与身体纵向范围。

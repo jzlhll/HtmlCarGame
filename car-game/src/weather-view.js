@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { VEHICLES, WEATHER, random, clamp } from './config.js';
+import { puddleGeometry, puddleRingGeometry } from './model-surfaces.js';
 import { DistanceFog } from './distance-fog.js';
 
 const transform=new THREE.Object3D(),point=new THREE.Vector3(),up=new THREE.Vector3(0,1,0),previousPoint=new THREE.Vector3(),nextPoint=new THREE.Vector3();
@@ -22,7 +23,8 @@ export class WeatherView {
     this.snow=new THREE.Points(snowGeometry,new THREE.PointsMaterial({color:0xffffff,map:new THREE.CanvasTexture(snowflake),size:.07,transparent:true,opacity:.9,depthWrite:false,fog:false}));
     camera.add(this.snow);this.snow.frustumCulled=false;this.snow.visible=false;
     this.warning=this.mesh(new THREE.RingGeometry(.75,1,24).rotateX(-Math.PI/2),0xffd25c,12,.85);
-    this.ice=this.mesh(new THREE.CircleGeometry(1,12).rotateX(-Math.PI/2),0x99eaff,12,.65);
+    this.iceWarning=this.mesh(puddleRingGeometry(3),0xffd25c,12,.85);
+    this.ice=this.mesh(puddleGeometry(3),0x99eaff,12,.65);
     this.bolts=this.mesh(new THREE.CylinderGeometry(1,1,1,5),0x70cbff,128,.85);
     this.cores=this.mesh(new THREE.CylinderGeometry(1,1,1,5),0xf4ffff,128,1);
     this.frozen=this.mesh(new THREE.IcosahedronGeometry(1,0),0xa7ecff,90,.35);
@@ -84,13 +86,14 @@ export class WeatherView {
     }else if(season===1){
       this.scene.background.multiplyScalar(.72);this.scene.fog.color.copy(this.scene.background);
     }
-    let warnings=0,ice=0,bolts=0;
+    let warnings=0,ice=0,bolts=0,iceWarns=0;
     if(active)for(const hazard of game.weather.hazards){
       if(now>=hazard.until)continue;
       const p=renderer.local(hazard.s,hazard.d,hazard.route),waiting=now<hazard.from,pulse=1+Math.sin(now*14)*.08;
       if(hazard.kind==='ice'){
-        renderer.instance(this.ice,ice++,p.x,p.y+.035,p.z,1.35,1,1.35,p.heading,p.pitch);
-        if(waiting)renderer.instance(this.warning,warnings++,p.x,p.y+.05,p.z,1.5,1,1.5,p.heading,p.pitch);
+        // 冰面用不规则轮廓并按落点编号旋转，接触判定仍为 1.35 米圆形；预警圈与冰面同轮廓同朝向。
+        renderer.instance(this.ice,ice++,p.x,p.y+.035,p.z,1.35,1,1.35,p.heading+hazard.id*1.31,p.pitch);
+        if(waiting)renderer.instance(this.iceWarning,iceWarns++,p.x,p.y+.05,p.z,1.5,1,1.5,p.heading+hazard.id*1.31,p.pitch);
       }else{
         renderer.instance(this.warning,warnings++,p.x,p.y+.04,p.z,1.4*pulse,1,1.4*pulse,p.heading,p.pitch);
         if(waiting)continue;
@@ -129,7 +132,7 @@ export class WeatherView {
     }
     this.flash.material.opacity=flash;
     const height=2*.7*Math.tan(THREE.MathUtils.degToRad(this.camera.fov/2));this.flash.scale.set(height*this.camera.aspect,height,1);
-    for(const [mesh,count]of [[this.warning,warnings],[this.ice,ice],[this.bolts,bolts],[this.cores,bolts],[this.frozen,frozen],[this.sparks,sparks]]){mesh.count=count;mesh.instanceMatrix.needsUpdate=true;}
+    for(const [mesh,count]of [[this.warning,warnings],[this.iceWarning,iceWarns],[this.ice,ice],[this.bolts,bolts],[this.cores,bolts],[this.frozen,frozen],[this.sparks,sparks]]){mesh.count=count;mesh.instanceMatrix.needsUpdate=true;}
     this.distanceFog.draw(renderer,game,season===0);
   }
 }

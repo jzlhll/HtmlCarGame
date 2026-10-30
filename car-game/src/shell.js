@@ -60,7 +60,7 @@ export class Shelling {
     if(this.craters.length>40)this.craters.shift();
     game.audio?.shellBoom();
     game.renderer?.effect(shell.s,shell.d,'hit',{route:shell.route??null});
-    // 炸毁区域内的一切:系统车、奶牛、天气落点与路面障碍(泥巴、坑洞)。
+    // 炸毁区域内的一切:系统车、奶牛、天气落点与路面障碍(泥巴)。
     for(const car of game.traffic.cars)if(!car.remove&&this.inArea(car,center,half,game.road)){car.remove=true;game.renderer?.effect(car.s,car.d,'wreck',car);}
     for(const cow of game.crossings.cows)if(!cow.hit&&this.inArea(cow,center,half,game.road)){cow.hit=true;game.renderer?.effect(cow.s,cow.d,'hit',{route:cow.route??null});}
     game.weather.hazards=game.weather.hazards.filter(hazard=>!this.inArea(hazard,center,half,game.road));

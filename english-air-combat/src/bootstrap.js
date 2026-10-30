@@ -20,7 +20,7 @@ document.addEventListener('visibilitychange',()=>{advanceReview(performance.now(
 screen.orientation?.addEventListener('change',autoPause);
 function frame(now){
   frameHandle=0;inFrame=true;const delta=Math.max(0,(now-lastTime)/1000);advanceReview(now);
-  if(delta>WORLD.maxFrameSeconds&&game.state==='playing')autoPause();
+  // 前台卡顿只截断超额时间，不暂停；失焦和切后台仍通过 autoPause 冻结。
   if(game.state==='playing'){accumulator+=Math.min(delta,WORLD.maxFrameSeconds);while(accumulator>=WORLD.step){game.update(WORLD.step);accumulator-=WORLD.step;if(game.state!=='playing'){accumulator=0;break;}}}else accumulator=0;
   const moving=animated(),quality=RENDERING.qualities[storage.settings.renderQuality],interval=1000/quality.menuFPS;
   if(moving)renderAccumulator+=Math.min(delta,WORLD.maxFrameSeconds);

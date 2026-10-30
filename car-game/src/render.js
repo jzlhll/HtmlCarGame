@@ -1,13 +1,12 @@
 import * as THREE from 'three';
 import { prepareModelAssets } from './model-generation.js';
 import { MODEL_APPEARANCE, DEATH_ANIMATION, CAR_STYLES, TRUCK_STYLES, TANKER, VEHICLES, TRAFFIC_COLORS, TRAFFIC_DENSITY, DINOSAURS, COINS, ROCKETS, MODEL_PREWARM, SECOND_LEVEL_SCENE, DISASTERS, SHELL, TREE_SCENERY, ROAD_RENDER, RENDER_QUALITY, POLICE, CAMERA, SIDE_IMPACT, laneD, random, clamp, lerp, carColor, DEFAULT_CAR_COLOR } from './config.js';
-import { surfaceMaterial, surfaceTexture, rockGeometry, skyEnvironment } from './model-surfaces.js';
+import { surfaceMaterial, surfaceTexture, rockGeometry, skyEnvironment, puddleGeometry } from './model-surfaces.js';
 import { vehicleModel, cowModel, material, mudCoating, cacheModelBounds } from './models.js';
 import { RoadsideScenery } from './scenery.js';
 import { SceneryWindow } from './scenery-window.js';
 import { RenderQuality } from './render-quality.js';
 import { RoadworksView } from './roadworks-view.js';
-import { BUMP_SECONDS } from './hazards.js';
 import { WeatherView } from './weather-view.js';
 import { TrafficView } from './traffic-view.js';
 import { WhiteHorseView } from './white-horse-view.js';
@@ -85,12 +84,11 @@ export class GameRenderer {
       outer.scale.set(.26,.26,2.3);outer.position.z=1.15;core.scale.set(.13,.13,1.5);core.position.z=.8;jet.add(outer,core);this.exhaust.add(jet);
     }
     this.cowViews=new Map();this.cowPool=[];
-    this.hazardMeshes={
-      rim:new THREE.InstancedMesh(new THREE.RingGeometry(.72,1,12).rotateX(-Math.PI/2),material(0x797565),64),
-      pit:new THREE.InstancedMesh(new THREE.CircleGeometry(.72,12).rotateX(-Math.PI/2),material(0x151c20),64),
-      mud:new THREE.InstancedMesh(new THREE.CircleGeometry(1,14).rotateX(-Math.PI/2),material(0x735139),16),
-      wet:new THREE.InstancedMesh(new THREE.CircleGeometry(1,12).rotateX(-Math.PI/2),material(0x493a28),16),
-    };
+    this.hazardMeshes={};
+    for(const seed of [1,2,3]){
+      this.hazardMeshes['mud'+seed]=new THREE.InstancedMesh(puddleGeometry(seed),material(0x4c331d),16);
+      this.hazardMeshes['wet'+seed]=new THREE.InstancedMesh(puddleGeometry(seed),material(0x2a1c0e),16);
+    }
     for(const mesh of Object.values(this.hazardMeshes)){mesh.count=0;mesh.frustumCulled=false;mesh.receiveShadow=true;this.staticGroup.add(mesh);}
     // 天降炮弹:下落弹体、地面红色预警圈与持久弹坑;弹坑用深色扁盒贴在路面。
     this.shellBomb=new THREE.InstancedMesh(new THREE.SphereGeometry(.5,10,8),new THREE.MeshStandardMaterial({color:0x33383c,roughness:.5}),8);
@@ -254,19 +252,22 @@ export class GameRenderer {
   }
   scenery(s){this.sceneryWindow.draw(this,s);}
   drawHazards(game){
-    let pit=0,mud=0;
+    const counts={};
     for(const hazard of game.hazards.range(game.player.s-80,game.player.s+460)){
+      const seed=1+Math.abs(Math.floor(hazard.s*7+hazard.d*13))%3,mud=counts['mud'+seed]??0;
+      if(mud>=16)continue;
       const point=this.local(hazard.s,hazard.d,hazard.route),width=hazard.dimensions.width/2,length=hazard.dimensions.length/2;
-      if(hazard.kind==='pothole'&&pit<64){
-        this.instance(this.hazardMeshes.rim,pit,point.x,point.y+.04,point.z,width,1,length,point.heading,point.pitch);
-        this.instance(this.hazardMeshes.pit,pit++,point.x,point.y+.03,point.z,width,1,length,point.heading,point.pitch);
-      }else if(hazard.kind==='mud'&&mud<16){
-        this.instance(this.hazardMeshes.mud,mud,point.x,point.y+.035,point.z,width,1,length,point.heading,point.pitch);
-        this.instance(this.hazardMeshes.wet,mud++,point.x,point.y+.045,point.z,width*.62,1,length*.66,point.heading,point.pitch);
-      }
+      // 不规则泥坑：多个偏心圆瓣并集轮廓，按落点选形状变体并旋转，避免相邻泥坑轮廓一致；外沿不超过接触椭圆。
+      this.instance(this.hazardMeshes['mud'+seed],mud,point.x,point.y+.035,point.z,width,1,length,point.heading+hazard.s*.37+hazard.d*1.7,point.pitch);
+      this.instance(this.hazardMeshes['wet'+seed],mud,point.x,point.y+.045,point.z,width*.62,1,length*.66,point.heading+hazard.s*.53+hazard.d*2.3,point.pitch);
+      counts['mud'+seed]=mud+1;
     }
-    for(const [key,count]of [['rim',pit],['pit',pit],['mud',mud],['wet',mud]]){
-      const mesh=this.hazardMeshes[key];mesh.count=count;mesh.visible=count>0;if(count)mesh.instanceMatrix.needsUpdate=true;
+    for(const seed of [1,2,3]){
+      const count=counts['mud'+seed]??0;
+      for(const prefix of ['mud','wet']){
+        const mesh=this.hazardMeshes[prefix+seed];
+        mesh.count=count;mesh.visible=count>0;if(count)mesh.instanceMatrix.needsUpdate=true;
+      }
     }
   }
   acquire(car,lowDetail=false){
@@ -487,8 +488,8 @@ export class GameRenderer {
     if(this.playerRank!==game.player.rank){this.playerMud.dispose();this.scene.remove(this.player);this.player=vehicleModel(game.player.rank,true,carColor(this.carColorId).hex);this.playerMud=mudCoating(this.player);this.player.add(this.exhaust);this.scene.add(this.player);this.playerRank=game.player.rank;this.upgradeTime=.25;}
     this.upgradeTime=Math.max(0,this.upgradeTime-simDt);
     const departing=(exiting||game.state==='LEVEL_CLEAR')&&game.levelExit,visual=departing?game.levelExit:this.renderPlayer;
-    const p=this.local(visual.s,visual.d,visual.route),bump=Math.sin((1-game.player.bump/BUMP_SECONDS)*Math.PI);
-    this.player.position.set(p.x,p.y+(game.player.bump>0?bump*.85:0),p.z);this.player.rotation.set(p.pitch+(game.player.bump>0?bump*.12:0),-p.heading-(visual.yaw||0),!departing?clamp(-(game.player.sidePush||game.player.spin?0:game.input.lateral)*.035-game.player.push*.018,-.12,.12):0,'YXZ');
+    const p=this.local(visual.s,visual.d,visual.route);
+    this.player.position.set(p.x,p.y,p.z);this.player.rotation.set(p.pitch,-p.heading-(visual.yaw||0),!departing?clamp(-(game.player.sidePush||game.player.spin?0:game.input.lateral)*.035-game.player.push*.018,-.12,.12):0,'YXZ');
     this.playerMud.visible=game.player.mud>0;
     if(game.state==='CAUGHT'&&game.caught){
       // 被渔网罩住:catchSeconds 内缩小、旋转并被拉向警车位置。

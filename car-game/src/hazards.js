@@ -1,7 +1,6 @@
-import { random, laneD, VEHICLES, MAX_RANK, ARMORED_RANK, VEHICLE_WIDTH_SCALE, BICYCLE_WIDTH_SCALE, BICYCLE_TIRE_WIDTH, ROAD_CACHE, ROAD_FORKS } from './config.js';
+import { random, laneD, VEHICLES, MAX_RANK, ARMORED_RANK, VEHICLE_WIDTH_SCALE, BICYCLE_WIDTH_SCALE, BICYCLE_TIRE_WIDTH, ROAD_CACHE } from './config.js';
 
 export const MUD_SECONDS=8;
-export const BUMP_SECONDS=.65;
 
 // 轮胎相对坐标只取决于车型，接触查询直接使用标量而不复制运动对象。
 const tireContacts=VEHICLES.map((vehicle,rank)=>{
@@ -43,14 +42,9 @@ export class RoadHazards {
     for(let slot=260;slot<road.length-180;slot+=100){
       const chance=rng(),s=slot+rng()*35;
       if(chance>=.16||road.closures(s-160,320).length||road.roadworks(s-40,s+40).length||road.segment(s).kind==='open')continue;
-      const kind=chance<.10?'pothole':'mud',lanes=road.available(s);
+      const lanes=road.available(s);
       const lane=Math.floor(rng()*lanes),direction=rng()<.5?-1:1;
-      this.plan.push({s,d:laneD(lane,direction),kind,drift:rng()<.5?-1:1,dimensions:{width:kind==='mud'?2.8:2.1,length:kind==='mud'?4:2.6}});
-    }
-    for(const fork of road.forks)for(let s=fork.start+35;s<fork.end-25;s+=ROAD_FORKS.potholeSpacing){
-      if(rng()>ROAD_FORKS.potholeChance)continue;
-      const lane=Math.floor(rng()*fork.lanes),direction=rng()<.5?-1:1;
-      this.plan.push({s,d:laneD(lane,direction),fork:fork.index,kind:'pothole',drift:rng()<.5?-1:1,dimensions:{width:2.1+rng()*.7,length:2.6+rng()*1.2}});
+      this.plan.push({s,d:laneD(lane,direction),kind:'mud',dimensions:{width:2.8,length:4}});
     }
     this.orderedPlan=this.plan.map((hazard,index)=>({hazard,index})).sort((a,b)=>a.hazard.s-b.hazard.s);
   }

@@ -1,7 +1,7 @@
 import { VEHICLES, MAX_RANK, LEVELS, FIRST_LEVEL_EVENTS, SECOND_LEVEL_EVENTS, DISASTERS, TANKER, DEATH_ANIMATION, RULES_VERSION, XP, POINT_LOSS, HUNGER, VEHICLE_DEFENSE, SEASONS, SEASON_CYCLE, PLAYER_START_SPEED, AUTO_ACCELERATION, MANUAL_ACCELERATION, NITRO, REAR_END_INVINCIBLE_SECONDS, DEBUG_REVIVE_SECONDS, RESCUE_LIMIT, REVIVE_CLEAR_AHEAD, ROAD_INFRASTRUCTURE, ROAD_DIFFICULTY, ROADBLOCKS, POLICE, laneD, clamp, lerp, approach, random } from './config.js';
 import { Road } from './road.js';
 import { Traffic } from './traffic.js';
-import { RoadHazards, MUD_SECONDS, BUMP_SECONDS, surfaceContact } from './hazards.js';
+import { RoadHazards, MUD_SECONDS, surfaceContact } from './hazards.js';
 import { sweep, roadworkContact, classify, separation, bounceTravel, advanceBounce, startSpin } from './collision.js';
 import { CrossingCows } from './crossings.js';
 import { Shelling } from './shell.js';
@@ -29,7 +29,7 @@ export class Game {
   constructor(store,input,notify){
     this.store=store;this.keyboardMode=new KeyboardMode();this.input=input;this.notify=notify;this.state='READY';this.carColor=store.getColor();this.deathTime=0;this.pendingRescue=false;this.debugMode=false;this.debugSecondLevel=false;this.debugThirdLevel=false;this.debugRun=false;this.debugInvincibleUntil=0;this.renderer=null;this.onChange=()=>{};this.collisionCandidates=[];this.collisionGroup=[];this.separatedCars=new Set();this.collisionBegin={};this.collisionSites=[];this.collisionWalls=[];this.collisionWorks=[];this.collisionHazards=[];this.preview();
   }
-  preview(){this.renderer?.resetRun();this.seed=6183;this.whiteHorse=new WhiteHorseEvent(this.seed);this.police=new PoliceEvent(this.seed);this.quiz=null;this.failedQuiz=null;this.caught=null;this.rescueUsed=0;this.deathTime=0;this.pendingRescue=false;this.weather=new SeasonalWeather(this.seed);this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};this.traffic=new Traffic(this.road,this.seed);this.level=1;this.levelStartedAt=0;this.levelExit=null;this.renderPreviousPlayer=null;this.dinosaurs=null;this.arsenal=null;this.disasters=null;this.activeSeconds=0;this.nextHungerAt=HUNGER.intervalSeconds;this.startSeason=0;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;this.scraping=false;this.debugRun=false;this.debugInvincibleUntil=0;}
+  preview(){this.renderer?.resetRun();this.seed=6183;this.whiteHorse=new WhiteHorseEvent(this.seed);this.police=new PoliceEvent(this.seed);this.quiz=null;this.failedQuiz=null;this.caught=null;this.rescueUsed=0;this.deathTime=0;this.pendingRescue=false;this.weather=new SeasonalWeather(this.seed);this.road=new Road(this.seed);this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,yaw:0,invincibleUntil:0};this.traffic=new Traffic(this.road,this.seed);this.level=1;this.levelStartedAt=0;this.levelExit=null;this.renderPreviousPlayer=null;this.dinosaurs=null;this.arsenal=null;this.disasters=null;this.activeSeconds=0;this.nextHungerAt=HUNGER.intervalSeconds;this.startSeason=0;this.eaten=Array(MAX_RANK).fill(0);this.highestRank=1;this.scraping=false;this.debugRun=false;this.debugInvincibleUntil=0;}
   async start(level=this.debugThirdLevel?3:this.debugSecondLevel?2:1){
     if(!['READY','RESULT'].includes(this.state)&&!(this.state==='LEVEL_CLEAR'&&level===this.level+1))return;
     if(['READY','RESULT'].includes(this.state)&&!this.keyboardMode.startReady())return;
@@ -42,7 +42,7 @@ export class Game {
     try{
       this.seed=crypto.getRandomValues(new Uint32Array(1))[0];this.runId=crypto.randomUUID();
       this.whiteHorse=new WhiteHorseEvent(this.seed,level);this.police=new PoliceEvent(this.seed,level);this.quiz=null;this.failedQuiz=null;this.caught=null;this.rescueUsed=0;this.weather=new SeasonalWeather(this.seed);
-      this.road=new Road(this.seed,{flat:level===3});this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,bump:0,yaw:0,invincibleUntil:0};
+      this.road=new Road(this.seed,{flat:level===3});this.infrastructure=new RoadInfrastructure(this.road);this.hazards=new RoadHazards(this.road);this.crossings=new CrossingCows(this.road);this.shell=new Shelling(this.seed);this.nitro=new Nitro();this.player={s:0,route:null,distance:0,d:laneD(1),rank:1,speed:PLAYER_START_SPEED,xp:XP[1],defense:VEHICLE_DEFENSE[1].max,push:0,sidePush:0,sidePushTime:0,mud:0,yaw:0,invincibleUntil:0};
       this.level=level;this.levelStartedAt=0;this.levelExit=null;this.renderPreviousPlayer=null;this.activeSeconds=0;
       this.dinosaurs=level===2?new DinosaurEvents(this.road,0):null;
       this.arsenal=level===2?new Arsenal(this.road):null;
@@ -186,19 +186,7 @@ export class Game {
   hitHazard(hazard){
     const p=this.player;
     this.hazards.hits.set(hazard.id,hazard.s);p.speed*=.5;
-    if(hazard.kind==='mud'){this.audio?.mud();p.mud=MUD_SECONDS;p.speed=Math.min(p.speed,this.cap());}
-    else{
-      this.audio?.bump();p.bump=BUMP_SECONDS;
-      const lanes=[];
-      for(let lane=this.road.available(p.s,p.route)-1;lane>=0;lane--)lanes.push(this.road.branchCenter(p.s,p.route)+laneD(lane,-1));
-      for(let lane=0;lane<this.road.available(p.s,p.route);lane++)lanes.push(this.road.branchCenter(p.s,p.route)+laneD(lane));
-      let index=0;
-      for(let i=1;i<lanes.length;i++)if(Math.abs(lanes[i]-p.d)<Math.abs(lanes[index]-p.d))index=i;
-      const direction=index===0?1:index===lanes.length-1?-1:hazard.drift;
-      const distance=Math.abs(lanes[index+direction]-p.d);
-      // 递减横向冲量将车辆推向邻道，保留玩家反向纠偏与连续碰撞。
-      p.push=direction*Math.sqrt(2*4.4*distance);
-    }
+    this.audio?.mud();p.mud=MUD_SECONDS;p.speed=Math.min(p.speed,this.cap());
   }
   hurtSlow(){
     const p=this.player;
@@ -287,7 +275,7 @@ export class Game {
   revive(rescued=false){
     const p=this.player;
     // 保留死亡位置与车型，将总积分恢复到当前车型门槛，保留更高的有效积分。
-    p.xp=Math.min(XP[MAX_RANK],Math.max(XP[p.rank],p.xp));p.defense=VEHICLE_DEFENSE[p.rank].max;p.push=0;p.sidePush=0;p.sidePushTime=0;p.bump=0;p.yaw=0;
+    p.xp=Math.min(XP[MAX_RANK],Math.max(XP[p.rank],p.xp));p.defense=VEHICLE_DEFENSE[p.rank].max;p.push=0;p.sidePush=0;p.sidePushTime=0;p.yaw=0;
     p.frozenUntil=0;p.spin=null;p.wetUntil=0;this.disasters?.resetSlide();
     p.speed=Math.min(Math.max(p.speed,PLAYER_START_SPEED),this.cap());
     p.invincibleUntil=this.activeSeconds+DEBUG_REVIVE_SECONDS;this.debugInvincibleUntil=p.invincibleUntil;
@@ -303,7 +291,6 @@ export class Game {
       if(car.s>=p.s&&car.s<=ahead&&(car.route??null)===(car.s<exit?route:null))car.remove=true;
     this.deathTime=0;this.pendingRescue=false;this.cause=null;this.scraping=false;this.input.clear();this.renderer?.resetEffects();
     this.state=document.hasFocus()&&!document.hidden?'RUNNING':'PAUSED';this.onChange();
-    this.notify((rescued?'回答正确 · 复活保护 ':'调试复活 · 保护 ')+DEBUG_REVIVE_SECONDS+' 秒');
   }
   finish(reason){
     if(this.saved)return;
@@ -547,7 +534,7 @@ export class Game {
     this.weather.advance(this);this.whiteHorse.advance(dt,this);this.police.advance(dt,this);
     const p=this.player,start={...p};
     this.renderPreviousPlayer=start;
-    p.mud=Math.max(0,p.mud-dt);p.bump=Math.max(0,p.bump-dt);
+    p.mud=Math.max(0,p.mud-dt);
     this.releaseNitro(dt);
     const bouncing=Boolean(p.sidePush||p.spin),lateral=bouncing?0:this.input.lateral;
     if(!p.spin){

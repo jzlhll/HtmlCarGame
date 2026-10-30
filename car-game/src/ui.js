@@ -62,7 +62,7 @@ export class UI {
     this.pauseButton.hidden=!['RUNNING','PAUSED'].includes(g.state);
     this.pauseButton.textContent=g.state==='PAUSED'?'继续':'暂停';this.pauseButton.setAttribute('aria-label',g.state==='PAUSED'?'继续游戏':'暂停游戏');
     this.restartButton.disabled=g.state==='PREPARING';
-    for(const [id,compact,full] of [['distance-label','距离','行驶距离'],['elapsed-label','时间','运行时间'],['defense-label','防御','防御力'],['nitro-label','氮气','加速 / 氮气 · ↑']])document.getElementById(id).textContent=mobile?compact:full;
+    for(const [id,compact,full] of [['defense-label','防御','防御力'],['nitro-label','氮气','加速 / 氮气 · ↑']])document.getElementById(id).textContent=mobile?compact:full;
     const rocketButton=this.elements['buy-rocket'],cost=ROCKETS.normalCost;
     rocketButton.textContent=mobile?'火箭炮 · '+cost:'1 · 火箭炮 '+cost+' 金币';
     const description='消耗 '+cost+' 金币发射火箭炮，清理前方 '+ROCKETS.range+' 米自身及左右相邻车道';

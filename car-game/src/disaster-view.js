@@ -1,7 +1,7 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
 import { cachedGeometrySet } from './model-assets.js';
 import { surfaceMaterial, surfaceTexture, rockGeometry } from './model-surfaces.js';
-import { MODEL_APPEARANCE, DISASTERS, VEHICLES, random, clamp, lerp } from './config.js';
+import { MODEL_APPEARANCE, DISASTERS, VEHICLES, LANE_WIDTH, random, clamp, lerp } from './config.js';
 
 // 连续空间噪声让山脊和浪面连成结构，避免逐顶点随机形成碎刺。
 function reliefNoise(x,z,seed=0){
@@ -224,6 +224,23 @@ export class DisasterView {
     }
     return null;
   }
+  // 静态火山默认远离路面；按概率贴近主路，让山脚向内压住外侧车道约一半宽度，仅视觉贴近不改碰撞，副路仍保持净空。
+  volcanoSpot(road,s,side,rng){
+    const settings=DISASTERS.volcanoScenery,radius=MODEL_APPEARANCE.volcanoRadius,edge=road.edge(s);
+    const far=side*(edge+28+rng()*18);
+    const fallback=()=>road.onPavement(s,far,radius*1.3)?{s,d:far,kind:'volcano'}:null;
+    if(rng()>=settings.closeChance)return fallback();
+    const footprint=radius*settings.footprintScale,close=side*(edge+footprint-settings.encroachLanes*LANE_WIDTH);
+    const span=footprint+settings.clearance,from=s-span,to=s+span,center=road.at(s,close),point={};
+    for(const fork of road.forksRange(from,to)){
+      const start=Math.max(from,fork.start),end=Math.min(to,fork.end);
+      for(let station=start;station<=end;station+=settings.sampleStep){
+        road.at(station,road.branchCenter(station,fork.id),fork.id,point);
+        if(Math.hypot(center.x-point.x,center.z-point.z)<footprint+road.edge(station,fork.id)+settings.clearance)return fallback();
+      }
+    }
+    return {s,d:close,kind:'volcano'};
+  }
   drawStatic(renderer,game){
     const size=DISASTERS.sceneryBlock,first=Math.floor((game.player.s-80)/size),last=first+6,environment=game.disasters.environment,quality=renderer.quality?.detailLevel??0;
     if(this.cachedRoad!==game.road||this.cachedRevision!==game.road.revision||this.cachedEnvironment!==environment){
@@ -250,10 +267,7 @@ export class DisasterView {
               for(const side of [-1,1]){
                 if(rng()<.35)continue;
                 if(environment===2){const iceberg=this.iceScenery(game.road,s,side,rng);if(iceberg)layout.push(iceberg);}
-                else{
-                  const d=side*(game.road.edge(s)+28+rng()*18);
-                  if(!game.road.onPavement(s,d,MODEL_APPEARANCE.volcanoRadius*1.3))layout.push({s,d,kind:'volcano'});
-                }
+                else{const spot=this.volcanoSpot(game.road,s,side,rng);if(spot)layout.push(spot);}
               }
             }
             this.layouts.set(block,layout);
